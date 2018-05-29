@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://xiaoyeshiyu.github.io/</loc>
+  <lastmod>2018-05-29T11:59:49+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://xiaoyeshiyu.github.io/categories/</loc>
+  <lastmod>2018-05-29T11:59:49+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://xiaoyeshiyu.github.io/archives/</loc>
+  <lastmod>2018-05-29T11:59:49+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://xiaoyeshiyu.github.io/tags/</loc>
+  <lastmod>2018-05-29T11:59:49+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://xiaoyeshiyu.github.io/404.html</loc>
+  <lastmod>2018-05-29T11:59:41+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://xiaoyeshiyu.github.io/2018/05/18/Neutron%E7%BD%91%E7%BB%9C%E8%A7%A3%E6%9E%90/</loc>
+  <lastmod>2018-05-29T11:59:49+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
+
+</urlset>
