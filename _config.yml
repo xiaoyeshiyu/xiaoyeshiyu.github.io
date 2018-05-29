@@ -5,19 +5,17 @@
 
 # Site
 title: NexT
-subtitle:
-# description: Make my parents proud,and impress the girl I like.
-author: Mitaka Xu
-about: Make my parents proud,and impress the girl I like.
+subtitle: Make my parents proud,and,impress the girl i like.
+description: 熟练拼写Linux中各种高端单词
+author: Shepher Xu
 # Support language: de, en, fr-FR, id, ja, ko, pt-BR, pt, ru, zh-Hans, zh-hk, zh-tw
-language: zh-Hans
+language: en
 date_format: '%Y-%m-%d'
-
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com' and baseurl as '/child'
-url:
-baseurl:
+url: 
+baseurl: 
 permalink: pretty
 
 # Pagination
@@ -88,7 +86,7 @@ keywords: "Jekyll, NexT"
 rss:
 
 # Specify the date when the site was setup
-#since: 2015
+since: 2018
 
 # icon between year and author @Footer
 authoricon: heart
@@ -119,11 +117,11 @@ index_with_subtitle: false
 # When running the site in a subdirectory (e.g. domain.tld/blog), remove the leading slash (/archives -> archives)
 menu:
   home: /
-  categories: /categories/
-# about: /about/
+  #categories: /categories/
+  #about: /about/
   archives: /archives/
   tags: /tags/
-# sitemap: /sitemap.xml
+  sitemap: /sitemap.xml
   commonweal: /404.html
 
 
@@ -214,8 +212,12 @@ font:
 # Social Links
 # Key is the link label showing to end users.
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
-#social:
-  #LinkLabel: Link
+social: 
+  GitHub: https://github.com/xiaoyeshiyu
+  #Twitter: https://twitter.com/xiaoyeshiyu
+  #Weibo: http://weibo.com/活在段子里呀
+  #豆瓣: http://douban.com/people/xiaoyeshiyu
+  #知乎: http://www.zhihu.com/people/xiaoyeshiyu
 
 
 # Social Links Icons
@@ -228,8 +230,10 @@ social_icons:
   # Icon Mappings.
   # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
   GitHub: github
-  Twitter: twitter
-  Weibo: weibo
+  #Twitter: twitter
+  #Weibo2: weibo
+  #豆瓣1: 
+  #知乎:
 
 
 # Sidebar Avatar
@@ -282,11 +286,11 @@ sidebar:
 
 
 # Blog rolls
-#links_title: Links
+links_title: Links
 #links_layout: block
 #links_layout: inline
-#links:
-  #Title: http://example.com/
+links:
+  Chenye(牛逼的): https://chenye2017.github.io/
 
 
 # ---------------------------------------------------------------
@@ -382,14 +386,20 @@ baidu_analytics: 657fd0d2d1643996dcb1f7c3e5fc125d
 # Disqus
 disqus:
   enable: false
-  shortname:
-  count: true
+  shortname: test_shotrname
+  count:
   # hide comments (visitors need to click to load the comments)
   # count need to be false when hide is true
-  hide: false
+  hide: true
 
 # Hypercomments
 #hypercomments_id:
+
+#livere_uid: MTAyMC8zNjkyNS8xMzQ2MQ==
+livere_uid: MTAyMC8zNjkyNy8xMzQ2Mw==
+#上面一个是测试使用，192.168.50.235
+#下面一个是github正式使用
+#
 
 # Gentie productKey
 #gentie_productKey:
@@ -421,11 +431,11 @@ gitalk:
 # Available value:
 #    button | slide
 # Warning: Baidu Share does not support https.
-#baidushare:
-##  type: button
+baidushare:
+  type: button
 
 # Share
-#jiathis:
+#jiathis: true
 # Warning: JiaThis does not support https.
 #add_this_id:
 
@@ -434,7 +444,7 @@ gitalk:
 
 # Google Webmaster tools verification setting
 # See: https://www.google.com/webmasters/
-#google_site_verification:
+google_site_verification: JUqNbUGT3zXmWe5vn2PeXlS2TyBJiTc3DnVOe4dW0B8
 
 # Google Analytics
 #google_analytics:
@@ -498,9 +508,9 @@ rating:
 # Show number of visitors to each article.
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
-  enable: false
-  app_id: #<app_id>
-  app_key: #<app_key>
+  enable: true
+  app_id: 54u9dWuo3mpnYOsAWD5mfKow-gzGzoHsz
+  app_key: pTbNklfgBDCVRqR6cDRftxze
 
 # Show PV/UV of the website/page with busuanzi.
 # Get more information on http://ibruce.info/2015/04/04/busuanzi/
@@ -529,7 +539,7 @@ busuanzi_count:
 
 
 # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO
-baidu_push: false
+baidu_push: true
 
 # Google Calendar
 # Share your recent schedule to others via calendar page
@@ -561,7 +571,7 @@ algolia_search:
 
 # Local search
 local_search:
-  enable: false
+  enable: true
   # if auto, trigger search by changing input
   # if manual, trigger search by pressing enter key or search button
   trigger: auto
@@ -632,7 +642,7 @@ vendors:
   _internal: assets/lib
 
   # Internal version: 2.1.3
-  jquery:
+  jquery: 
 
   # Internal version: 2.1.5
   # See: http://fancyapps.com/fancybox/
@@ -678,7 +688,7 @@ vendors:
 
   # Internal version: 1.0.0
   # https://github.com/hustcc/canvas-nest.js
-  canvas_nest:
+  canvas_nest: 
 
   # three
   three:
@@ -703,6 +713,10 @@ vendors:
   # https://github.com/ethantw/Han
   han:
 
+# Donate 文章末尾显示打赏按钮
+reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+wechatpay: /assets/images/wechatpay.jpg
+alipay: /assets/images/alipay.jpg
 
 # Assets
 css: assets/css
