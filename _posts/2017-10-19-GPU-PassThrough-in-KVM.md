@@ -4,8 +4,8 @@ title: GPU PassThrough in KVM
 description: 近年人工智能、算法、深度学习这些技术非常火，而这些技术在用到计算能力的时候，通常都首选GPU，为了适应多用户共同学习或者处理图形图像的使用环境，基于VM配合GPU就有比较大的优势。本文主要介绍在KVM下，将宿主机上的GPU通过直通的方式提供给客户机。
 
 categories:
- - OpenStack
  - GPU
+ - KVM
 tags:
  - OpenStack
  - KVM
