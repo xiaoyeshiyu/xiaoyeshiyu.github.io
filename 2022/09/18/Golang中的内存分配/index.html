@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在Golang中，内存管理也相当重要，内存如何分配，如何回收。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang中的内存分配">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2022/09/18/Golang%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在Golang中，内存管理也相当重要，内存如何分配，如何回收。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122125380.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918114037273.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918114101148.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122217742.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122239078.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122346214.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918130620395.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131049700.png">
+<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20220918131605478.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131843777.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918132532871.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133110695.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133621387.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133832056.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918134410913.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918134928006.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918135324085.png">
+<meta property="article:published_time" content="2022-09-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T07:49:49.094Z">
+<meta property="article:author" content="Mitaka xu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122125380.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2022/09/18/Golang%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2022/09/18/Golang%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/","path":"2022/09/18/Golang中的内存分配/","title":"Golang中的内存分配"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Golang中的内存分配 | Hexo</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A0%86%E5%92%8C%E6%A0%88%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">堆和栈的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%88"><span class="nav-number">1.1.</span> <span class="nav-text">栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86"><span class="nav-number">1.2.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E6%98%AF%E5%9C%A8%E5%A0%86%E4%B8%8A%E8%BF%98%E6%98%AF%E5%9C%A8%E6%A0%88%E4%B8%8A%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">变量是在堆上还是在栈上？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">逃逸分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B6%85%E8%BF%87%E6%A0%88%E5%B8%A7%EF%BC%88stack-frame%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">超过栈帧（stack frame）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%83%E9%80%B8%E6%A1%88%E4%BE%8B"><span class="nav-number">2.2.</span> <span class="nav-text">逃逸案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E6%A0%88"><span class="nav-number">3.</span> <span class="nav-text">连续栈</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%AE%B5%E6%A0%88"><span class="nav-number">3.1.</span> <span class="nav-text">分段栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E6%A0%88-1"><span class="nav-number">3.2.</span> <span class="nav-text">连续栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%88%E6%89%A9%E5%AE%B9"><span class="nav-number">3.3.</span> <span class="nav-text">栈扩容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84"><span class="nav-number">4.</span> <span class="nav-text">内存结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">4.1.</span> <span class="nav-text">内存管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-number">4.2.</span> <span class="nav-text">内存布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E4%BA%8E32KB%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number">4.3.</span> <span class="nav-text">小于32KB内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E4%BA%8E32KB%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number">4.4.</span> <span class="nav-text">大于32KB内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0size%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number">4.5.</span> <span class="nav-text">0size内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E4%BA%8E16B%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number">4.6.</span> <span class="nav-text">小于16B内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number">4.7.</span> <span class="nav-text">内存分配</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">保持积累，保持学习。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoyeshiyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2022/09/18/Golang%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="保持积累，保持学习。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Golang中的内存分配 | Hexo">
+      <meta itemprop="description" content="在Golang中，内存管理也相当重要，内存如何分配，如何回收。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Golang中的内存分配<a href="https://github.com/user-name/repo-name/tree/branch-name/subdirectory-name/_posts/Golang%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-09-18 00:00:00" itemprop="dateCreated datePublished" datetime="2022-09-18T00:00:00+08:00">2022-09-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-01 15:49:49" itemprop="dateModified" datetime="2023-03-01T15:49:49+08:00">2023-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/develope/" itemprop="url" rel="index"><span itemprop="name">develope</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/09/18/Golang%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" class="post-meta-item leancloud_visitors" data-flag-title="Golang中的内存分配" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">在Golang中，内存管理也相当重要，内存如何分配，如何回收。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="堆和栈的定义"><a href="#堆和栈的定义" class="headerlink" title="堆和栈的定义"></a>堆和栈的定义</h2><p>Go有两个地方可以分配内存：一个全局堆空间用来动态分配内存，另一个是每个goroutine都有的自身栈空间（初始2k大小）</p>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><p>栈区的内存一般由编译器自动进行分配和释放，其中存储着函数的入参以及局部变量，这些参数会随着函数的创建而创建，函数的返回而销毁。（函数内部的局部变量，可能分配在栈上，也可能逃逸到堆上，如果返回这个局部变量的指针到函数外部，就会逃逸到堆上。）</p>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p>堆区的内存（可能由make、new函数申请的变量占用）一般由编译器和工程师自己共同进行管理分配，交给runtime GC来释放。对上分配必须找一块足够大的内存来存放新的变量数据。后续释放时，垃圾回收器扫描堆空间寻找不再被使用的对象。（一个值如果在函数栈外可以被访问到，那么这个对象会被自动分配到堆上，也就是发生了逃逸。）</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122125380.png" alt="image-20220918122125380" style="zoom:33%;" />
+
+<p>栈从内存高位往下使用，堆从内存地位往上使用。</p>
+<p><strong>栈分配廉价，堆分配昂贵。</strong></p>
+<p>1、栈上的变量可以通过地址快速获取；堆上的变量，需要通过堆上的局部变量，再间接访问具体的地址，也就是经历了二次操作。</p>
+<p>2、堆的分配成本更高；栈的内存分配只有goroutine自身使用，所以使用和释放都很快；堆的对象可能被其他的goroutine使用，所以最终还需要靠GC扫描和回收</p>
+<h3 id="变量是在堆上还是在栈上？"><a href="#变量是在堆上还是在栈上？" class="headerlink" title="变量是在堆上还是在栈上？"></a>变量是在堆上还是在栈上？</h3><p>Go的语法没有提到推和栈，而是交给Go编译器决定在哪分配内存，保证程序的正确性。</p>
+<p>从正确的角度来看，使用者不需要知道。GO中的每个变量只要有引用就会一直存在。变量的存储位置（栈还是堆）和语言的语义无关（通过make还是new，不能决定分配在堆上还是在栈上）。</p>
+<p>存储位置对于写出高性能的程序确实有影响。如果可能，Go编译器将为该函数的堆栈帧（stack frame）中的函数分配本地变量。但是如果编译器在函数返回后无法证明变量未被引用，则编译器必须在会被垃圾回收的堆上分配变量以避免悬空指针错误（也就是函数返回后，这个局部变量不会被应用，则会被分配到堆上）。此外，如果局部变量非常大，将它存储在堆上而不是栈上可能更有意义。（goroutine的栈空间是2KB，如果局部变量过大，这是变量放在栈上，会扩栈，而相比之下，放在动态的堆上更好。）</p>
+<p>在当前编译器中，如果变量存在取值，则该变量是堆上分配的<strong>候选变量</strong>（取地址之后，如果函数外部不会访问到，也会分配在栈上）。但是基础的逃逸分析可以即将那些生存不超过函数返回值的变量识别出来，并且因此可以分配在栈上。（这种情况下性能是最好的）</p>
+<h2 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h2><p> 通过检查变量的作用域是否超过了它所在的栈来决定是否将它分配在堆上，其中”变量的作用域超出了它所在的栈“这种行为被称为逃逸。逃逸分析在大多数语言里属于静态分析：在编译期由静态代码分析来决定一个值是否能被分配到栈帧上，还是需要”逃逸“到堆上。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	num := getRandom()</span><br><span class="line">	<span class="built_in">println</span>(num)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getRandom</span><span class="params">()</span></span> *<span class="type">int</span> &#123;</span><br><span class="line">	tmp := rand.Int()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> &amp;tmp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过编译时加<code>-gcflags &quot;-m&quot;</code>参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go build -gcflags &quot;-m -l&quot;        // 其中 -l 取消内联</span><br><span class="line"># gostudy/memeory/shareMemory</span><br><span class="line">./main.go:13:2: moved to heap: tmp</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>减少GC压力，栈上的变量，随着函数退出后系统直接回收，不需要标记后再清除</li>
+<li>减少内存碎片的产生（在栈上，内存分配是连续的）</li>
+<li>减轻分配堆内存的开销，提高程序的运行速度（相比而言，在堆上分配内存，效率更低）</li>
+</ul>
+<h3 id="超过栈帧（stack-frame）"><a href="#超过栈帧（stack-frame）" class="headerlink" title="超过栈帧（stack frame）"></a>超过栈帧（stack frame）</h3><p>当一个函数被调用时，会在两个相关的帧边界进行上下文切换。（main函数调用getRandom函数）</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918114037273.png" alt="image-20220918114037273" style="zoom:50%;" />
+
+<p>从调用函数切换到被调用函数，如果函数调用时需要传递参数，那么这些参数值也要传递到被调用函数的帧边界中。Go语言中帧边界间的数据传递是按值传递的。(值传递，传递指针地址，main中的num变量指向getRandom函数内部，当getRandom函数调用完成，内部的tmp变量也会被擦除，此时num无法访问到值。)</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918114101148.png" alt="image-20220918114101148" style="zoom:50%;" />
+
+<p>任何在函数getRandom中的变量在函数返回时，不能访问。Go查找所有变量超过当前函数栈帧的，把他们分配到堆上，避免outlive变量。</p>
+<p>这种情况下，num变量不能指向之前的栈。</p>
+<p>变量tmp在栈上分配，但是它包含了指向堆内存的地址，所以可以安全的从一个函数的栈帧复制到另外一个函数的栈帧。</p>
+<p>变量tmp此时放在堆区，tmp变量指向堆区的地址，返回地址之后，num也指向堆区的地址。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122217742.png" alt="image-20220918122217742" style="zoom:50%;" />
+
+<h3 id="逃逸案例"><a href="#逃逸案例" class="headerlink" title="逃逸案例"></a>逃逸案例</h3><p> 栈对象逃逸比较典型的就是”多级间接赋值容易导致逃逸“，这里的多级间接指的是，对某个引用类对象中的引用类成员进行复制（Data.Filed &#x3D; value，如果Data，Filed都是引用类型的数据类型，则会导致value逃逸，这里的等号不仅仅是赋值，也表示参数传递。）Go与严重的引用类数据类型有：<code>func,interface,slice,map,chan,*Type</code>：</p>
+<ul>
+<li>一个值被分享到函数栈帧范围之外 </li>
+<li>在for循环外申明，在for循环内分配，同理闭环</li>
+<li>发送指针或者带有指针的值到channel中</li>
+<li>在一个切片上存储指针或带指针的值</li>
+<li>slice的背后数组被重新分配</li>
+<li>在interface类型上调用方法</li>
+</ul>
+<h2 id="连续栈"><a href="#连续栈" class="headerlink" title="连续栈"></a>连续栈</h2><h3 id="分段栈"><a href="#分段栈" class="headerlink" title="分段栈"></a>分段栈</h3><p>Go应用程序运行时，每个goroutine都维护着一个自己的栈区，这个栈只能自己使用而不能被其他goroutine使用。</p>
+<p> 栈区初始大小是2KB（x86_64架构下线程的默认栈2MB），在goroutine运行时，栈区会按照需要增长和收缩，占用的内存最大限制的默认值在64位系统上是1GB。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122239078.png" alt="image-20220918122239078" style="zoom:50%;" />
+
+<p>扩容后，会通过指针指向新的栈，也就是分段栈。</p>
+<p>分段栈的实现方式存在热分裂”hot split”问题。如果栈快满了，那么下一次的函数调用会强制触发栈扩容。</p>
+<p>当函数返回时，新分配的”stack stunk”会被清理掉。如果这个函数调用产生的范围是在一个循环中，会导致严重的性能问题，频繁的alloc&#x2F;free。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">G</span><span class="params">(items []<span class="type">string</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> itmes&#123;</span><br><span class="line">		H(item)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122346214.png" alt="image-20220918122346214" style="zoom:50%;" />
+
+<p>例如循环调用H函数，如果栈空间超过2KB，调用时，会申请新的栈内存分配，调用结束会销毁。</p>
+<p>在Go 1.0-1.2版本中，将栈默认大小改成8KB，降低触发热分裂的问题，但是每个goroutine的内存开销就比较大。而且栈内存使用超过8KB也会出现这个问题。</p>
+<p>直到实现了连续栈（contiguous stack），栈大小才改为2KB。</p>
+<h3 id="连续栈-1"><a href="#连续栈-1" class="headerlink" title="连续栈"></a>连续栈</h3><p>采用复制栈的实现方式，在热分裂场景中不会频繁释放内存，即不像分配一个新的内存块并链接到老的栈内存块，而是会分配一个两倍大的内存块，并把老的内存块内容复制到新的内存块中，当栈缩减回之前大小时，也不会释放。</p>
+<ul>
+<li>runtime.newstack 分配更大的栈内存空间</li>
+<li>runtime.copystack 将旧栈中的内容复制到新栈中</li>
+<li>将指向旧栈对应变量的指针重新指向新栈（老栈中如果使用指针指向地址，拷贝到新栈之后，需要重新指向新的对象地址）</li>
+<li>runtime.stackfree 销毁并回收旧栈的内存空间</li>
+</ul>
+<p>如果栈区的空间使用率不到1&#x2F;4，那么在垃圾回收时，使用runtime.shrinkstack进行栈所用，同样使用copystack。</p>
+<h3 id="栈扩容"><a href="#栈扩容" class="headerlink" title="栈扩容"></a>栈扩容</h3><p>Go 运行时 判断栈空间是否足够，所以在call function 中会插入runtime.morestack，但每个函数调用都判定，成本会比较高。在编译期通过计算sp（栈指针）、func stack framesize（栈空间）确定需要哪个函数调用中插入runtime.morestack。</p>
+<ul>
+<li><p>当函数是叶子节点，且栈帧小于等于112，不插入指令（函数不会调用其他函数，且函数内栈容量较小）</p>
+</li>
+<li><p>当叶子函数栈帧大小为120-128或者 非叶子函数栈帧大小为0-128，SP&lt;stackguard0（插入runtime.morestack检测）</p>
+</li>
+<li><p>当函数栈帧大小为128-4096（已经非常大）</p>
+<p>SP - framesize &lt; stackguard0 - StackSmall </p>
+</li>
+<li><p>大于 StackBig（更大）</p>
+<p>SP - stackguard+StackGuard &lt;&#x3D; framesize + (StackGuard-StackSmall)</p>
+</li>
+</ul>
+<h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><p>内存管理是指对堆上的内存管理。</p>
+<p>TCMalloc 是 Thread Cache Malloc 的简称，是Go内存管理的起源，Go的内存管理是借鉴了TCMalloc：</p>
+<ul>
+<li><p>内存碎片</p>
+<p>随着内存不断的申请和释放，内存上会存在大量的碎片。（例如连续的内存申请之后，中间的内存释放，就会出现内存碎片）内存碎片会降低内存的使用率。为了解决内存碎片，可以将2个连续的未使用的内存块合并，减少碎片</p>
+</li>
+<li><p>大锁</p>
+<p>前面说了，堆上的内存是全局可以访问的。同一进程下所有的线程共享相同的内存空间，他们申请内存时需要加锁，如果不加锁就存在同一块内存被2个线程同时访问的问题。</p>
+</li>
+</ul>
+<h3 id="内存布局"><a href="#内存布局" class="headerlink" title="内存布局"></a>内存布局</h3><p>Go借鉴了TCMalloc的思想，对内存进行管理。</p>
+<p>内存布局中的几个概念：</p>
+<ul>
+<li>page：内存页，一块8K大小的内存空间。Go与操作系统之间的内存申请和释放，都是以Page为单位。</li>
+<li>span：内存块，一个或多个连续的page组成一个span</li>
+<li>sizeclass：空间规格，每个span都带有一个sizeclass，标记改span中的page如何使用。</li>
+<li>object：对象，用来存储一个变量数据内存空间，一个span在初始化时，会被切割成一堆等大的object。假设object的大小是16B，span大小是8K，那么久会把span中的page初始化8K&#x2F;16B&#x3D;512个object。</li>
+</ul>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918130620395.png" alt="image-20220918130620395" style="zoom:50%;" />
+
+<p>例如，一个span中有一个page，这个span是8K，每个Object是8Byte，则可以分为1024个Object。</p>
+<h3 id="小于32KB内存分配"><a href="#小于32KB内存分配" class="headerlink" title="小于32KB内存分配"></a>小于32KB内存分配</h3><p>当程序里发生了小于32kb一下的小内存申请时，Go会从一个叫做mcache的本地缓存给程序分配内存。（P的mcache，好处是一个P同时只能运行一个G，不需要加锁）。这样的内存块叫做mspan，它是要给程序分配内存时的分配单元。</p>
+<p>在Go的调度器模型里，每个线程M会绑定给一个处理器P，在单一粒度的时间里，只能做最多处理运行一个goroutine，每个P都会绑定一个上面说的本地缓存mcache。当需要进行内存分配时，当前运行的goroutine会从mcache中查找可用的mspan。本地mcache里分配内存时不需要加锁，这种分配策略效率更高。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131049700.png" alt="image-20220918131049700" style="zoom: 33%;" />
+
+<p> 先通过对象的大小，查找到具体的分类（二分法），然后在对应的span中申请内存。</p>
+<p>申请内存时都会给他们一个mspan这样的单元会不会产生浪费。</p>
+<p>其实mcache持有的这一系列的mspac并不都是统一大小的，而是啊按照大小，从8byte到32kb分了大概67*2类的mspan（指针类型和非指针类型，所以要乘以2）。</p>
+<p>每个内存页分了多级固定大小的”空闲列表“，这有助于减少碎片。类似的思路在Linux Kernel，Memcache都可以见到Slab-Allactor。</p>
+<img src="../../../../../Library/Application%20Support/typora-user-images/image-20220918131605478.png" alt="image-20220918131605478" style="zoom:25%;" />
+
+<p> 例如一个标记为黄色，代表该内存已经被使用。此时需要找到下一个空闲的object。</p>
+<p>如果分配内存时mcache里没有空闲的对口sizeclass的mspan了，Go里还为每种类别的mspan维护着一个mcentral。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131843777.png" alt="image-20220918131843777" style="zoom:33%;" />
+
+<p>mcentral的作用是为所有mcache提供切分好的mspan资源。每个central会持有一种特定大小的全局mspan列表，包括已分配出去的和未分配出去的。每个mcentral对应一种mspan，当工作线程的mcache中没有合适（也就是特定大小的）的msapn时，就会从mcentral中去获取。</p>
+<p>mcentral被所有的工作线程共同享有，存在多个goroutine竞争的情况，因此从mcentral获取资源时需要加锁。</p>
+<p>mcentral里维护着两个双向链表，nonempty表示链表里还有空闲的mspan待分配。empty表示这条链表里的mspan都被分配了object或缓存mcache中。</p>
+<p>程序申请内存的时候，mcache里已经没有合适的空闲mspan，那么工作线程机会想下图这样去mcentral里去申请。</p>
+<p>mcache从mcentral获取和归还mspan的流程：</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918132532871.png" alt="image-20220918132532871" style="zoom:33%;" />
+
+<ul>
+<li>获取<ul>
+<li>加锁；</li>
+<li>从nonempty链表找到一个可用的mspan；</li>
+<li>并将其从nonempty链表删除；</li>
+<li>将取出的mspan加入到empty链表；</li>
+<li>将mspan返回给工作线程；</li>
+<li>解锁；</li>
+</ul>
+</li>
+<li>归还：<ul>
+<li>加锁；</li>
+<li>将mspan从empty链表删除；</li>
+<li>将mspan加入到nonempty链表；</li>
+<li>解锁；</li>
+</ul>
+</li>
+</ul>
+<p>mcentral是sizeclass相同的span会以链表的形式组织在一起，就是指该span用来存储哪种大小的对象。</p>
+<p>当mcentral也没有空闲的mspan时，会向mheap申请。（mheap内部也维护一些msapn）</p>
+<p>mheap没有资源时，会向操作系统申请新内存。</p>
+<p>mheap主要用于大内存的内存分配，以及管理未切割的mspan，用于给mcentral切割成小对象。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133110695.png" alt="image-20220918133110695" style="zoom:33%;" />
+
+<p>mheap中含有所有规格的mcentral，所以当一个mcache从mcentral申请mspan时，只需要在独立的mcentral中使用锁，并不影响申请其他规格的mspan。</p>
+<p>所有mcentral的集合则存放于mheap中的。mheap里的arena区域是真正的堆区，运行时会将8KB看做一页，这些内存页中存储了所有在堆上初始化的对象，运行时使用二维的runtime.heapArena数组管理所有的内存,每个runtime.heapArena都会管理64MB的内存。</p>
+<p>如果arena区域没有足够的空间，会调用runtime.mheap,sysAlloc从操作系统中申请更多的内存。（如下图Go1.11前的内存布局）</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133621387.png" alt="image-20220918133621387" style="zoom: 33%;" />
+
+<p> 此时内存分配是连续的，1.11之后，做了一些改动</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133832056.png" alt="image-20220918133832056" style="zoom:25%;" />
+
+<p>在mheap中，通过分割成64MB的Arena进行管理。 </p>
+<h3 id="大于32KB内存分配"><a href="#大于32KB内存分配" class="headerlink" title="大于32KB内存分配"></a>大于32KB内存分配</h3><p>超过32KB的内存申请，会直接从堆上（mheap）上分配对应的数据量的内存页（每页是8K）给程序。（因为超过32KB很少会有内存碎片，因此直接从堆上分配即可。）</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918134410913.png" alt="image-20220918134410913" style="zoom: 33%;" />
+
+<p>这个过程，需要所搜到合适的span分配，过程会用到一些搜索算法，Go版本更新过程经历了比较多的改动，有使用空链表，二叉排序树，在1.16版本使用奇数树和pagecache的方式</p>
+<h3 id="0size内存分配"><a href="#0size内存分配" class="headerlink" title="0size内存分配"></a>0size内存分配</h3><p>Go针对没有分配内存的变量做了优化，指向同一个内存地址，nil（0x0）</p>
+<h3 id="小于16B内存分配"><a href="#小于16B内存分配" class="headerlink" title="小于16B内存分配"></a>小于16B内存分配</h3><p>对于小于16B字节的对象（且<strong>无指针</strong>），Go语言将其划分为了tiny对象。划分tiny对象的主要目的是为了处理极小的字符串和独立的转义变量。对json的基准测试表明，使用tiny对象减少了12&amp;的分配次数和20%的堆大小。ting对象会被放入calss为2的span中（Object为16Byte的span）。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918134928006.png" alt="image-20220918134928006" style="zoom:25%;" />
+
+<p>在16Byte的Object中线分配2Byte，再分配4Byte，分配之后，偏移量往后移动。（这个思路就类似于申请一个大的Object，再往这个Object中塞入对象，如果塞不下，就再申请一个）</p>
+<ul>
+<li>首先查看之前分配的元素是否有空余的空间</li>
+<li>如果不够，例如要分配16Byte的大小，或者已经分配了，剩余的不够，这时就需要找到下一个空闲的元素</li>
+</ul>
+<p>tiny分配的第一步是尝试利用分配过的前一个元素的空间，达到节约内存的目录。</p>
+<h3 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h3><p>整体的内存分配是一个分级存储。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918135324085.png" alt="image-20220918135324085" style="zoom: 33%;" />
+
+<p>从P到mcache，从mcache到mcentral，从mcentral到meahp。</p>
+<p>一般小对象通过mspan分内存；大对象则直接由mheap分配内存。</p>
+<ul>
+<li>Go在程序启动时，会向操作系统申请一大块内存，由mheap结构全局管理（现在Go版本不需要连续内存，所以不会申请一大堆内存，而是使用arena管理内存块）</li>
+<li>Go内存管理的基本单元是mspan，每种mspan可以分配特定大小的object</li>
+<li>mcache，mcentral，mheap是Go内存管理的三大组件，mcache管理线程在本地缓存的mspan，mcentral管理全局的mspan供所有线程。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/09/13/Golang%E4%B8%AD%E7%9A%84Goroutine%E5%8E%9F%E7%90%86/" rel="prev" title="Golang中的Goroutine原理">
+                  <i class="fa fa-chevron-left"></i> Golang中的Goroutine原理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/09/19/Golang%E4%B8%AD%E7%9A%84channel/" rel="next" title="Golang中的channel">
+                  Golang中的channel <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/xiaoyeshiyu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

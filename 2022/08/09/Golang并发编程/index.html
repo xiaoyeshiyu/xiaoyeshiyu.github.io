@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="当在同一时间需要处理很多请求时，就需要使用并发模型。对并发编程的友好支持是Golang的优势之一。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang并发编程">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2022/08/09/Golang%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="当在同一时间需要处理很多请求时，就需要使用并发模型。对并发编程的友好支持是Golang的优势之一。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-08-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T07:49:49.099Z">
+<meta property="article:author" content="Mitaka xu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2022/08/09/Golang%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2022/08/09/Golang%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/","path":"2022/08/09/Golang并发编程/","title":"Golang并发编程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Golang并发编程 | Hexo</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E5%92%8C%E5%B9%B6%E8%A1%8C"><span class="nav-number">1.</span> <span class="nav-text">并发和并行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E5%92%8C%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">程序和进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">创建进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%AE%A1%E9%81%93%E9%80%9A%E4%BF%A1"><span class="nav-number">2.2.</span> <span class="nav-text">通过管道通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="nav-number">2.3.</span> <span class="nav-text">进程共享内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%94%81"><span class="nav-number">2.4.</span> <span class="nav-text">进程锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B"><span class="nav-number">2.5.</span> <span class="nav-text">守护进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.6.</span> <span class="nav-text">进程间通信的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pipe"><span class="nav-number">2.6.1.</span> <span class="nav-text">pipe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7"><span class="nav-number">2.6.2.</span> <span class="nav-text">信号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#socket"><span class="nav-number">2.6.3.</span> <span class="nav-text">socket</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91"><span class="nav-number">3.</span> <span class="nav-text">线程并发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#goroutine"><span class="nav-number">3.1.</span> <span class="nav-text">goroutine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5"><span class="nav-number">3.2.</span> <span class="nav-text">线程同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime"><span class="nav-number">3.3.</span> <span class="nav-text">runtime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#channel"><span class="nav-number">3.4.</span> <span class="nav-text">channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%BB%E9%94%81"><span class="nav-number">3.5.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select"><span class="nav-number">3.6.</span> <span class="nav-text">select</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="nav-number">4.</span> <span class="nav-text">线程安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%92%E6%96%A5%E9%94%81"><span class="nav-number">4.1.</span> <span class="nav-text">互斥锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E9%94%81"><span class="nav-number">4.2.</span> <span class="nav-text">读写锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C"><span class="nav-number">4.3.</span> <span class="nav-text">原子操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Once"><span class="nav-number">4.4.</span> <span class="nav-text">Once</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="nav-number">4.5.</span> <span class="nav-text">条件变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0"><span class="nav-number">4.6.</span> <span class="nav-text">临时对象池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84map"><span class="nav-number">4.7.</span> <span class="nav-text">线程安全的map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">4.8.</span> <span class="nav-text">上下文</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">保持积累，保持学习。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoyeshiyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2022/08/09/Golang%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="保持积累，保持学习。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Golang并发编程 | Hexo">
+      <meta itemprop="description" content="当在同一时间需要处理很多请求时，就需要使用并发模型。对并发编程的友好支持是Golang的优势之一。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Golang并发编程<a href="https://github.com/user-name/repo-name/tree/branch-name/subdirectory-name/_posts/Golang%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-08-09 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-09T00:00:00+08:00">2022-08-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-01 15:49:49" itemprop="dateModified" datetime="2023-03-01T15:49:49+08:00">2023-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/develope/" itemprop="url" rel="index"><span itemprop="name">develope</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/08/09/Golang%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Golang并发编程" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">当在同一时间需要处理很多请求时，就需要使用并发模型。对并发编程的友好支持是Golang的优势之一。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h2><p>并发(<code>concurrency</code>)：指的是同一时刻只能有一条指令执行，但是多个进程指令被快速的轮换执行，使得在宏观上具有多个进程同时执行的效果。同一时间点，任务并不会同时执行。</p>
+<p>并行（<code>parallel</code>）：同一时刻，有多条指令在多个处理器上同时执行。同一时间点，任务会同时执行。</p>
+<p>可见，并行建立在多核的场景。<code>Golang</code>实现多核并行 非常容易。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cpunum := runtime.NumCPU()									// 获取CPU核数</span><br><span class="line">fmt.Printf(&quot;CPU核数：%d&quot;, cpunum)</span><br><span class="line">runtime.GOMAXPROCS(cpunum)									// 设置最大并行个数</span><br><span class="line">for i := 0; i &lt; cpunum; i++ &#123;</span><br><span class="line">	go func(i int) &#123;													// 通过 go 关键字开启并行执行</span><br><span class="line">		sum := 0</span><br><span class="line">		for j := 0; j &lt; 10000; j++ &#123;</span><br><span class="line">			sum += j</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Printf(&quot;CPU核：%d，执行结果%d\n&quot;, i, sum)</span><br><span class="line">	&#125;(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="程序和进程"><a href="#程序和进程" class="headerlink" title="程序和进程"></a>程序和进程</h2><p>程序：是指安装在操作系统上的一堆二进制指令组成的可执行文件。</p>
+<p>进程：当程序执行，加载在内存中，占用系统资源，产生一个进程。</p>
+<p>进程状态</p>
+<ul>
+<li>初始态</li>
+<li>就绪态：等待CPU分配</li>
+<li>运行态：占用CPU</li>
+<li>挂起态：等待CPU意外的其他资源释放CPU</li>
+<li>终止态：结束运行</li>
+</ul>
+<p>通过进程并发可能出现的问题：</p>
+<ul>
+<li>系统开销大，占用资源多，</li>
+<li>在unix、linux系统下，会产生孤儿进程和僵尸进程（正常情况下，子进程是通过父进程fork创建的，子进程再创建新进程，父进程无法预测子进程到什么时候结束，进程完成工作终止之后，父进程需要调用系统调用取得子进程的终止状态）（父进程结束，则子进程成为孤儿进程。）（进程终止，父进程尚未回收，子进程残留资源在内核中，变成僵尸进程。）</li>
+</ul>
+<h3 id="创建进程"><a href="#创建进程" class="headerlink" title="创建进程"></a>创建进程</h3><p>创建进程的方法可以通过<code>syscall</code>包的<code>exec</code>函数（<code>linux</code>下可使用<code>syscall</code>）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(syscall.Exec(&quot;/bin/ls&quot;, []string&#123;&quot;l&quot;&#125;, os.Environ()))</span><br></pre></td></tr></table></figure>
+
+<p>还可以通过<code>os/exec</code>包执行外部命令，以及和外部命令交互。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(<span class="string">&quot;code&quot;</span>)	<span class="comment">// 例如启动vscode</span></span><br><span class="line">err := cmd.Run()						<span class="comment">// 运行</span></span><br><span class="line">out, err := cmd.CombinedOutput() 	<span class="comment">// 获取输出或者错误</span></span><br><span class="line">stdoutStderr, err := cmd.Output() <span class="comment">// 获取输出</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>CombinedOutput</code> 的源码，实际是将标准输出和错误输出都输出出来</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cmd)</span></span> CombinedOutput() ([]<span class="type">byte</span>, <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> c.Stdout != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, errors.New(<span class="string">&quot;exec: Stdout already set&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> c.Stderr != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, errors.New(<span class="string">&quot;exec: Stderr already set&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> b bytes.Buffer</span><br><span class="line">	c.Stdout = &amp;b</span><br><span class="line">	c.Stderr = &amp;b</span><br><span class="line">	err := c.Run()</span><br><span class="line">	<span class="keyword">return</span> b.Bytes(), err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取标准输出和错误输出</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">	cmd := exec.Command(<span class="string">&quot;ping&quot;</span>, <span class="string">&quot;abc&quot;</span>, <span class="string">&quot;-c 4&quot;</span>)		<span class="comment">// 执行命令</span></span><br><span class="line">	<span class="keyword">var</span> stdout, stderr bytes.Buffer								<span class="comment">// 创建io.Writer对象</span></span><br><span class="line">	cmd.Stdout = &amp;stdout													<span class="comment">// 绑定输出到io.Writer对象，输出到本程序的输出</span></span><br><span class="line">	cmd.Stderr = &amp;stderr													<span class="comment">// 绑定错误输出到对象</span></span><br><span class="line">	cmd.Run()</span><br><span class="line">	fmt.Println(<span class="string">&quot;stdout: &quot;</span>, stdout.String())</span><br><span class="line">	fmt.Println(<span class="string">&quot;stderr: &quot;</span>, stderr.String())</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line">	cmd := exec.Command(<span class="string">&quot;echo&quot;</span>, <span class="string">&quot;abc&quot;</span>)</span><br><span class="line">	cmd.Stdout = os.Stdout</span><br><span class="line">	cmd.Run()</span><br></pre></td></tr></table></figure>
+
+<p>获取命令行输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(&quot;echo&quot;, &quot;a&quot;, &quot;b&quot;)</span><br><span class="line">fmt.Println(cmd.Args)</span><br></pre></td></tr></table></figure>
+
+<p>获取进程信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(cmd.Env)					// 获取进程的环境变量</span><br><span class="line">cmd.Env = []string&#123;&quot;def&quot;&#125;			// 设置环境变量</span><br><span class="line">fmt.Println(cmd.Process.Pid)	// 进程Pid</span><br><span class="line">fmt.Println(cmd.Path)					// 程序路径</span><br><span class="line">fmt.Println(cmd.ProcessState.String())	// 进程状态</span><br><span class="line">fmt.Println(cmd.ProcessState.Pid())			// 进程Pid</span><br><span class="line">cmd.Process.Kill()											// 杀死进程</span><br></pre></td></tr></table></figure>
+
+<p>进程执行</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmd.Run()						<span class="comment">// 其实是Start和Wait方法实现的。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cmd)</span></span> Run() <span class="type">error</span> &#123;						</span><br><span class="line">	<span class="keyword">if</span> err := c.Start(); err != <span class="literal">nil</span> &#123;		<span class="comment">// 命令运行，不等待执行结果</span></span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> c.Wait()											<span class="comment">// 等待命令完成</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过管道通信"><a href="#通过管道通信" class="headerlink" title="通过管道通信"></a>通过管道通信</h3><p>进程和进程之间通信，方式有很多，可以通过管道。</p>
+<p>通过管道输出</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(<span class="string">&quot;echo&quot;</span>, <span class="string">&quot;-n&quot;</span>, <span class="string">`&#123;&quot;Name&quot;: &quot;Bob&quot;, &quot;Age&quot;: 32&#125;`</span>)</span><br><span class="line">stdout, err := cmd.StdoutPipe()			<span class="comment">// io.ReadCloser对象</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> err := cmd.Start(); err != <span class="literal">nil</span> &#123;		<span class="comment">// 开始运行，过程保证管道可读，如果是cmd.Run()，则执行完成，管道也会关闭</span></span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="type">string</span></span><br><span class="line">	Age  <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> err := json.NewDecoder(stdout).Decode(&amp;person); err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> err := cmd.Wait(); err != <span class="literal">nil</span> &#123;		<span class="comment">// 等待命令执行完成，并且将标准输出和错误输出输出到指定位置</span></span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(<span class="string">&quot;%s is %d years old\n&quot;</span>, person.Name, person.Age)</span><br></pre></td></tr></table></figure>
+
+<p>通过管道输入</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(<span class="string">&quot;cat&quot;</span>)</span><br><span class="line">stdin, err := cmd.StdinPipe()		<span class="comment">// 创建进程输入管道</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> stdin.Close()		<span class="comment">// 管道关闭，命令执行</span></span><br><span class="line">	io.WriteString(stdin, <span class="string">&quot;values written to stdin are passed to cmd&#x27;s standard input&quot;</span>)	<span class="comment">// 使用协程写入</span></span><br><span class="line">&#125;()</span><br><span class="line">out, err := cmd.CombinedOutput()	<span class="comment">// 获取标准输出和错误输出的组合</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, out)</span><br></pre></td></tr></table></figure>
+
+<p>子进程（<code>fork</code>）和孤儿进程</p>
+<p>通过一个进程启动另外一个进程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 子进程代码：</span><br><span class="line">for &#123;</span><br><span class="line">	fmt.Println(&quot;I am living&quot;)</span><br><span class="line">	time.Sleep(10 * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>进程代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(&quot;./living&quot;)</span><br><span class="line">err := cmd.Start()</span><br><span class="line">if err != nil &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(cmd.Process.Pid)</span><br><span class="line">cmd.Stdout = os.Stdout</span><br><span class="line">if err != nil &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">cmd.Process.Kill() // </span><br></pre></td></tr></table></figure>
+
+<p>os.Kill函数注释</p>
+<blockquote>
+<p>Kill causes the Process to exit immediately. Kill does not wait until the Process has actually exited. This only kills the Process itself, not any other processes it may have started.</p>
+</blockquote>
+<p>主进程执行之后，执行不需要等待结果输出，执行完，退出。通过打印子进程的Pid，可以查看到子进程信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># ps aux | grep 6094</span><br><span class="line">6094   0.0  0.0 409202496   3520 s004  S     9:45PM   0:00.01 ./living</span><br></pre></td></tr></table></figure>
+
+<p>此时主进程退出，子进程依然存在，子进程为孤儿进程</p>
+<p>结束孤儿进程的方法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cmd.SysProcAttr = &amp;syscall.SysProcAttr&#123;</span><br><span class="line">	Setpgid: <span class="literal">true</span>,					<span class="comment">// 将该进程设为一个新的进程组</span></span><br><span class="line">&#125;</span><br><span class="line">syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)	<span class="comment">// -cmd.Process.Pid 传入进程组号，</span></span><br></pre></td></tr></table></figure>
+
+<p>创建子进程的另外一种方式</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">process, err := os.StartProcess(<span class="string">&quot;/bin/ls&quot;</span>, []<span class="type">string</span>&#123;<span class="string">&quot;l&quot;</span>&#125;, &amp;os.ProcAttr&#123;Files: []*os.File&#123;os.Stdin, os.Stdout, os.Stderr&#125;&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">state, err := process.Wait()	<span class="comment">// 如果没有wait，则可能出现父进程还在执行，子进程结束完成，但是子进程的进程描述符还在系统中，此时子进程变成僵尸进程。</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Println(err)</span><br><span class="line">	os.Exit(<span class="number">3</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(state.Pid())								<span class="comment">// 子进程pid</span></span><br><span class="line">fmt.Println(state.SystemTime())					<span class="comment">// 子进程系统时间</span></span><br><span class="line">fmt.Println(state.UserTime())						<span class="comment">// 子进程用户时间</span></span><br><span class="line">fmt.Println(state.Success())						<span class="comment">// 子进程是否成功执行</span></span><br><span class="line">fmt.Println(state.ExitCode())						<span class="comment">// 子进程结束码</span></span><br><span class="line">fmt.Println(state.Exited())							<span class="comment">// 子进程是否退出</span></span><br></pre></td></tr></table></figure>
+
+<p>创建子进程的第三种方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pid, err := syscall.ForkExec(&quot;/bin/ls&quot;, []string&#123;&quot;l&quot;&#125;, nil)</span><br></pre></td></tr></table></figure>
+
+<p>通过第三方包实现的方案，可以参考Docker的reexec</p>
+<p>参考资料：</p>
+<p><a target="_blank" rel="noopener" href="https://www.modb.pro/db/139798">docker reexec源码分析</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Gandi/docker/blob/master/reexec/reexec.go">docker reexec源码</a></p>
+<h3 id="进程共享内存"><a href="#进程共享内存" class="headerlink" title="进程共享内存"></a>进程共享内存</h3><p>进程之间共享内存，需要进程在同一台机器上。</p>
+<p><code>Linux</code>下需要通过结合<code>cgo</code>，通过<code>syscall</code>系统调用。参考代码：<a target="_blank" rel="noopener" href="http://www.codebaoku.com/it-go/it-go-61414.html">http://www.codebaoku.com/it-go/it-go-61414.html</a></p>
+<p>windows下可以通过syscall直接创建共享内存，<a target="_blank" rel="noopener" href="https://studygolang.com/articles/13861?utm_source=joyk.com&utm_medium=referral&hmsr=joyk.com">参考代码</a></p>
+<h3 id="进程锁"><a href="#进程锁" class="headerlink" title="进程锁"></a>进程锁</h3><p>启动进程的时候，需要保证一个节点上同时只有一个进程运行，一般通过文件存放进程<code>id</code>实现进程锁。（<code>Linux</code>下，通过<code>syscall.Flock</code>函数）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">LockProcess</span><span class="params">()</span></span> &#123;</span><br><span class="line">	lockFile := <span class="string">&quot;/var/run/xxx.pid&quot;</span>         			</span><br><span class="line">	lock, err := os.Create(lockFile)						<span class="comment">// 创建进程锁文件</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">&quot;create lock file error:&quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> os.Remove(lockFile)										<span class="comment">// 解锁，文件删除</span></span><br><span class="line">	<span class="keyword">defer</span> lock.Close()													<span class="comment">// 文件关闭</span></span><br><span class="line"></span><br><span class="line">	err = syscall.Flock(<span class="type">int</span>(lock.Fd()), syscall.LOCK_EX|syscall.LOCK_NB) <span class="comment">// syscall调用文件锁，作用在文件描述符上</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">&quot;xxx is running,/var/run/xxx.pid exists&quot;</span>)</span><br><span class="line">		os.Exit(<span class="number">1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">		<span class="comment">// todo logic</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以保证该程序多次执行，只会有一个进程。另外一个进程执行时，会出现报错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx is running,/var/run/xxx.pid exists</span><br></pre></td></tr></table></figure>
+
+<p>这个方案也可以用于文件锁，方法是获取文件描述符，<code>syscall.Flock(int(lock.Fd()), syscall.LOCK_EX|syscall.LOCK_NB)</code>实现文件锁。加锁是创建文件锁，解锁时删除文件锁。</p>
+<h3 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h3><p>守护进程是指当一个进程结束，守护进程负责将该进程启动起来。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">RESTART:</span><br><span class="line">	cmd := exec.Command(<span class="string">&quot;./process&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">	cmd.Stdin = os.Stdin</span><br><span class="line">	cmd.Stdout = os.Stdout</span><br><span class="line">	cmd.Stderr = os.Stderr</span><br><span class="line">	err := cmd.Run()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> cmd.Process == <span class="literal">nil</span> || cmd.ProcessState.Exited() &#123;	<span class="comment">// 判断子进程是否退出</span></span><br><span class="line">		<span class="keyword">goto</span> RESTART</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>后台进程和守护进程的开源实现方式：<a target="_blank" rel="noopener" href="https://github.com/zh-five/xdaemon">xdaemon</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/adwpc/pagent">多进程模型pagent</a></p>
+<h3 id="进程间通信的方法"><a href="#进程间通信的方法" class="headerlink" title="进程间通信的方法"></a>进程间通信的方法</h3><p>Linux下进程间通信的方法有两类，一类是传输数据，二类是共享内存：</p>
+<ul>
+<li>管道：pipe，负责传送字节流，</li>
+<li>消息队列：message queue，传输结构化对象</li>
+<li>socket：网络通信</li>
+<li>共享内存区</li>
+<li>信号</li>
+</ul>
+<h4 id="pipe"><a href="#pipe" class="headerlink" title="pipe"></a>pipe</h4><p>主进程通过管道接收子进程的输出：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(<span class="string">&quot;echo&quot;</span>, <span class="string">&quot;-n&quot;</span>, <span class="string">&quot;hello&quot;</span>)</span><br><span class="line">stdoutPipe, _ := cmd.StdoutPipe()</span><br><span class="line">cmd.Start()</span><br><span class="line"></span><br><span class="line">bytes := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">100</span>)</span><br><span class="line">stdoutPipe.Read(bytes)</span><br><span class="line">fmt.Println(<span class="type">string</span>(bytes))</span><br></pre></td></tr></table></figure>
+
+<p>匿名pipe</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cmd := exec.Command(<span class="string">&quot;echo&quot;</span>, <span class="string">&quot;-n&quot;</span>, <span class="string">&quot;hello&quot;</span>)</span><br><span class="line"></span><br><span class="line">buf := bytes.Buffer&#123;&#125;</span><br><span class="line"></span><br><span class="line">cmd.Stdout = &amp;buf</span><br><span class="line"></span><br><span class="line">cmd.Start()</span><br><span class="line">cmd.Wait()</span><br><span class="line">fmt.Println(buf.String())</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>os.pipe</code>管道通信（以文件为主）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">rpipe, wpipe, err := os.Pipe()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">   log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">n, _ := wpipe.WriteString(<span class="string">&quot;abcdef&quot;</span>)</span><br><span class="line">fmt.Println(n)</span><br><span class="line"></span><br><span class="line">out := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">10</span>)</span><br><span class="line">o, _ := rpipe.Read(out)</span><br><span class="line">fmt.Println(o)</span><br><span class="line">fmt.Println(<span class="type">string</span>(out[:o]))</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>io.pipe</code>通信（在内存中）</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">reader, writer := io.Pipe()</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">   data := []<span class="type">byte</span>(<span class="string">&quot;abcdef&quot;</span>)</span><br><span class="line">   n, _ := writer.Write(data)				<span class="comment">// 如果对端没有读取，会阻塞</span></span><br><span class="line">   fmt.Println(n)</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">read := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">10</span>)</span><br><span class="line">r, _ := reader.Read(read)</span><br><span class="line">fmt.Println(r)</span><br><span class="line">fmt.Println(<span class="type">string</span>(read[:r]))</span><br></pre></td></tr></table></figure>
+
+<h4 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sigs := <span class="built_in">make</span>(<span class="keyword">chan</span> os.Signal, <span class="number">1</span>)</span><br><span class="line">done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, <span class="number">1</span>)</span><br><span class="line">signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)		<span class="comment">// 捕获interrupt的信号（ctrl+c）和termina的信号，将信号发送到sigs中</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">   fmt.Println(<span class="string">&quot;running&quot;</span>)				<span class="comment">// 主要逻辑正在执行</span></span><br><span class="line">   sig := &lt;-sigs								<span class="comment">// 接受到信号</span></span><br><span class="line">   fmt.Println(sig)</span><br><span class="line">   done &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;						<span class="comment">// 主要逻辑结束完成</span></span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">&lt;-done													<span class="comment">// 阻塞，等待主要逻辑执行</span></span><br><span class="line">fmt.Println(<span class="string">&quot;exiting&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在进程优雅退出的场景，可以很好的使用到信号通信。</p>
+<p>父进程通知子进程结束</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">	<span class="keyword">var</span> cmdline = <span class="string">`</span></span><br><span class="line"><span class="string">ping baidu.com</span></span><br><span class="line"><span class="string">`</span></span><br><span class="line">	cmd := exec.Command(<span class="string">&quot;bash&quot;</span>, <span class="string">&quot;-c&quot;</span>, cmdline)</span><br><span class="line">	cmd.Stdout = os.Stdout</span><br><span class="line">	err := cmd.Start()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;chlid process running&quot;</span>)		<span class="comment">// 模拟子进程运行</span></span><br><span class="line">		time.Sleep(<span class="number">2</span> * time.Second)</span><br><span class="line">		cmd.Process.Signal(os.Interrupt)				<span class="comment">// 将信号发送给子进程</span></span><br><span class="line">	&#125;()</span><br><span class="line">	err = cmd.Wait()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>扩展阅读：<a target="_blank" rel="noopener" href="https://book.aikaiyuan.com/kernel/7.2.1.htm">信号种类</a></p>
+<h4 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h4><p>例如网络编程，就是通过<code>socket</code>通信</p>
+<p>服务端</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:8081&quot;</span>)		<span class="comment">// 开启监听</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;listening...&quot;</span>)</span><br><span class="line">		accept, err := listener.Accept()								<span class="comment">// 阻塞，等待接收信息</span></span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		read := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">1024</span>)</span><br><span class="line">		_, err = accept.Read(read)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(<span class="string">&quot;get: &quot;</span>, <span class="type">string</span>(read))</span><br><span class="line">		rep := <span class="built_in">append</span>([]<span class="type">byte</span>(<span class="string">&quot;reploy&quot;</span>), read...)</span><br><span class="line">		_, err = accept.Write(rep)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(<span class="string">&quot;send: &quot;</span>, <span class="type">string</span>(rep))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">   <span class="string">&quot;fmt&quot;</span></span><br><span class="line">   <span class="string">&quot;log&quot;</span></span><br><span class="line">   <span class="string">&quot;net&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   dial, err := net.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:8081&quot;</span>)		<span class="comment">// 建立通信</span></span><br><span class="line">   <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      log.Fatal(err)</span><br><span class="line">   &#125;</span><br><span class="line">   w := []<span class="type">byte</span>(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">   _, err = dial.Write(w)</span><br><span class="line">   <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      log.Fatal(err)</span><br><span class="line">   &#125;</span><br><span class="line">   fmt.Println(<span class="string">&quot;send: &quot;</span>, <span class="type">string</span>(w))</span><br><span class="line">   r := <span class="built_in">make</span>([]<span class="type">byte</span>, <span class="number">1024</span>)</span><br><span class="line">   _, err = dial.Read(r)</span><br><span class="line">   <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      log.Fatal(err)</span><br><span class="line">   &#125;</span><br><span class="line">   fmt.Println(<span class="string">&quot;get: &quot;</span>, <span class="type">string</span>(r))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>扩展阅读：<a target="_blank" rel="noopener" href="https://www.liwenzhou.com/posts/Go/15_socket/">网络编程</a></p>
+<h2 id="线程并发"><a href="#线程并发" class="headerlink" title="线程并发"></a>线程并发</h2><p>进程：有独立的地址空间，拥有PCB（进程信息被放在一个叫做进程控制块的数据结构中，也就是PCB(process control block)）。是最小分配资源单位，可看成是只有一个线程的进程。</p>
+<p>线程：轻量级的进程，本质还是进程，是最小的执行单位。有独立的PCB，但是没有独立的地址空间（共享）。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/96092253">进程的概念与PCB</a></p>
+<h3 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h3><p><code>goroutine</code>：<code>Go</code>语言中的轻量级线程，由<code>Go</code>运行时管理，<code>Go</code>会智能的将<code>goroutine</code>中的任务合理的分配给每个CPU。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取CPU逻辑核个数</span></span><br><span class="line">fmt.Println(runtime.NumCPU())</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置可同时执行的最大CPU数，最大并行个数</span></span><br><span class="line">runtime.GOMAXPROCS(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">fmt.Println(runtime.GOOS)					<span class="comment">// 返回go env中的goos</span></span><br><span class="line">fmt.Println(runtime.GOROOT())			<span class="comment">// 返回go env中的goroot</span></span><br></pre></td></tr></table></figure>
+
+<p>通过协程处理函数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// todo </span></span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
+
+<p>由于主<code>goroutine</code>退出，其他的<code>goroutine</code>也会退出。可通过<code>sync.Watigroup</code>将主<code>goroutine</code>等待其他<code>goroutine</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wg := <span class="built_in">new</span>(sync.WaitGroup)</span><br><span class="line">wg.Add(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(wg *sync.WaitGroup)</span></span> &#123;</span><br><span class="line">   <span class="comment">// todo</span></span><br><span class="line">   wg.Done()</span><br><span class="line">&#125;(wg)</span><br><span class="line">wg.Wait()</span><br></pre></td></tr></table></figure>
+
+<h3 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h3><p>作用于注册线程数量，等待线程执行完成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wg := sync.WaitGroup&#123;&#125;</span><br><span class="line">wg.Add(n)								// 注册n个线程，线程数+n</span><br><span class="line">wg.Done()								// 结束一个线程，线程数-1</span><br><span class="line">wg.Wait()								// 等待线程数归0</span><br></pre></td></tr></table></figure>
+
+<h3 id="runtime"><a href="#runtime" class="headerlink" title="runtime"></a>runtime</h3><p>运行时，处理<code>golang</code>运行过程中垃圾回收、协程调度等</p>
+<p>出让当前协程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">go func() &#123;</span><br><span class="line">	for &#123;</span><br><span class="line">		fmt.Println(&quot;子协程&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;()</span><br><span class="line">for &#123;</span><br><span class="line">	runtime.Gosched()				// 让当前协程让出CPU以让其他线程运行，它不会挂起当前线程，因此当前线程会在未来继续执行</span><br><span class="line">	fmt.Println(&quot;主协程&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>终止调用它的<code>goroutine</code>。没有其他<code>goroutine</code>受到影响。<code>Goexit</code>在终止<code>goroutine</code>之前运行所有延迟调用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">go func() &#123;</span><br><span class="line">	for &#123;</span><br><span class="line">		time.Sleep(10 * time.Millisecond)</span><br><span class="line">		fmt.Println(&quot;子协程&quot;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;()</span><br><span class="line">for &#123;</span><br><span class="line">	runtime.Goexit()									// 结束当前协程，后续代码不再执行。（defer内的会执行）</span><br><span class="line">	time.Sleep(10 * time.Millisecond)		</span><br><span class="line">	fmt.Println(&quot;主协程&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="channel"><a href="#channel" class="headerlink" title="channel"></a>channel</h3><p>Go语言的并发模型是<code>CSP</code>，提倡通过通信共享内存，而不是通过共享内存实现通信。<code>channel</code>就是实现协程之间相互通信的载体。<code>channel</code>是一种特殊的类型，通道，遵循先入先出，保证收发顺序，而且是并发安全。</p>
+<p>无缓冲</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ch := make(chan int)</span><br><span class="line"></span><br><span class="line">ch &lt;- 1 // 阻塞，无缓冲channel接受数据时，对端没有接受者，此时会出现阻塞</span><br></pre></td></tr></table></figure>
+
+<p>有缓冲</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ch1 := make(chan int, 1)</span><br><span class="line"></span><br><span class="line">len(ch1), cap(ch1)		// len：返回channel内部数据个数，cap返回channel容量</span><br></pre></td></tr></table></figure>
+
+<p>关闭channel</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">close(ch)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>对一个关闭的通道再次发送值会导致panic</li>
+<li>对一个关闭的通道接收，会一直获取值，直到通道为空</li>
+<li>对一个关闭且没有值的通道执行接收操作，会得到响应类型的零值</li>
+<li>关闭一个已经关闭的通道会<code>panic</code></li>
+<li><code>nil channel</code>关闭出现<code>panic</code>（<code>panic: close of nil channel</code>）</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">fmt.Printf(<span class="string">&quot;len: %d,cap: %d\n&quot;</span>, <span class="built_in">len</span>(ch1), <span class="built_in">cap</span>(ch1))</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		i := &lt;-ch1</span><br><span class="line">		time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">		fmt.Println(<span class="string">&quot;get from channel: &quot;</span>, i)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;()</span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">	ch1 &lt;- i</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">close</span>(ch1)</span><br><span class="line">time.Sleep(<span class="number">5</span> * time.Second)</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">len: 0,cap: 0</span><br><span class="line">get from channel:  0</span><br><span class="line">get from channel:  1</span><br><span class="line">get from channel:  2</span><br><span class="line">get from channel:  3</span><br><span class="line">get from channel:  4</span><br><span class="line">get from channel:  0</span><br><span class="line">get from channel:  0</span><br><span class="line">get from channel:  0</span><br></pre></td></tr></table></figure>
+
+<p><code>for-range</code>读取<code>channel</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		ch &lt;- i</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">close</span>(ch)</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i := <span class="keyword">range</span> ch &#123;													<span class="comment">// 当channel关闭，range结束</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;get from channel: &quot;</span>, i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>单向通道</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chout := <span class="built_in">make</span>(&lt;-<span class="keyword">chan</span> <span class="type">int</span>)			<span class="comment">// 只能接受</span></span><br><span class="line">chin := <span class="built_in">make</span>(<span class="keyword">chan</span>&lt;- <span class="type">int</span>)			<span class="comment">// 只能发送</span></span><br><span class="line">chin &lt;- &lt;-chout								<span class="comment">// 从chout中接收数据，发送到chin</span></span><br></pre></td></tr></table></figure>
+
+<p>作为函数参数，函数声明形参只能接受单向通道，则实参需要是满足方向的channel</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">outchannel</span><span class="params">(ch &lt;-<span class="keyword">chan</span> <span class="type">int</span>)</span></span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)		</span><br><span class="line">	outchannel(chout)</span><br><span class="line">	outchannel(ch)			<span class="comment">// 双向通道，满足读取</span></span><br><span class="line">	outchannel(chin) <span class="comment">// 无法读取出来，cannot use chin (variable of type chan&lt;- int) as type &lt;-chan int in argument to outchannel</span></span><br></pre></td></tr></table></figure>
+
+<p>读取时判断是否是零值</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">i, ok := &lt;-ch1  </span><br><span class="line"><span class="keyword">if</span> ok &#123;				<span class="comment">// 读取channel中的数据，ok为true，零值为false</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;get from channel: &quot;</span>, i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>channel</code>本质是一个指针，作为函数参数传递时，拷贝指针传递。</p>
+<p><code>channel</code>源码，在<code>go/src/runtime/chan.go</code>中</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> hchan <span class="keyword">struct</span> &#123;</span><br><span class="line">   qcount   <span class="type">uint</span>           <span class="comment">// total data in the queue	元素数量</span></span><br><span class="line">   dataqsiz <span class="type">uint</span>           <span class="comment">// size of the circular queue	底层循环数组长度</span></span><br><span class="line">   buf      unsafe.Pointer <span class="comment">// points to an array of dataqsiz elements	// 指向底层循环数组的指针，值针对有缓冲的channel</span></span><br><span class="line">   elemsize <span class="type">uint16</span>					<span class="comment">// chan中元素大小</span></span><br><span class="line">   closed   <span class="type">uint32</span>					<span class="comment">// 是否关闭的标志</span></span><br><span class="line">   elemtype *_type <span class="comment">// element type		元素类型</span></span><br><span class="line">   sendx    <span class="type">uint</span>   <span class="comment">// send index	已发送元素在循环数组中的索引</span></span><br><span class="line">   recvx    <span class="type">uint</span>   <span class="comment">// receive index	已接收元素在循环数组中的索引</span></span><br><span class="line">   recvq    waitq  <span class="comment">// list of recv waiters 等待接受的goroutine队列</span></span><br><span class="line">   sendq    waitq  <span class="comment">// list of send waiters 等待发送的goroutine队列</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// lock protects all fields in hchan, as well as several</span></span><br><span class="line">   <span class="comment">// fields in sudogs blocked on this channel.</span></span><br><span class="line">   <span class="comment">//</span></span><br><span class="line">   <span class="comment">// Do not change another G&#x27;s status while holding this lock</span></span><br><span class="line">   <span class="comment">// (in particular, do not ready a G), as this can deadlock</span></span><br><span class="line">   <span class="comment">// with stack shrinking.</span></span><br><span class="line">   lock mutex			<span class="comment">// 锁，保护hchan中所有字段</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> waitq <span class="keyword">struct</span> &#123;</span><br><span class="line">	first *sudog</span><br><span class="line">	last  *sudog</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> sudog <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">// The following fields are protected by the hchan.lock of the</span></span><br><span class="line">	<span class="comment">// channel this sudog is blocking on. shrinkstack depends on</span></span><br><span class="line">	<span class="comment">// this for sudogs involved in channel ops.</span></span><br><span class="line"></span><br><span class="line">	g *g</span><br><span class="line"></span><br><span class="line">	next *sudog</span><br><span class="line">	prev *sudog</span><br><span class="line">	elem unsafe.Pointer <span class="comment">// data element (may point to stack)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// The following fields are never accessed concurrently.</span></span><br><span class="line">	<span class="comment">// For channels, waitlink is only accessed by g.</span></span><br><span class="line">	<span class="comment">// For semaphores, all fields (including the ones above)</span></span><br><span class="line">	<span class="comment">// are only accessed when holding a semaRoot lock.</span></span><br><span class="line"></span><br><span class="line">	acquiretime <span class="type">int64</span></span><br><span class="line">	releasetime <span class="type">int64</span></span><br><span class="line">	ticket      <span class="type">uint32</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// isSelect indicates g is participating in a select, so</span></span><br><span class="line">	<span class="comment">// g.selectDone must be CAS&#x27;d to win the wake-up race.</span></span><br><span class="line">	isSelect <span class="type">bool</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// success indicates whether communication over channel c</span></span><br><span class="line">	<span class="comment">// succeeded. It is true if the goroutine was awoken because a</span></span><br><span class="line">	<span class="comment">// value was delivered over channel c, and false if awoken</span></span><br><span class="line">	<span class="comment">// because c was closed.</span></span><br><span class="line">	success <span class="type">bool</span></span><br><span class="line"></span><br><span class="line">	parent   *sudog <span class="comment">// semaRoot binary tree</span></span><br><span class="line">	waitlink *sudog <span class="comment">// g.waiting list or semaRoot</span></span><br><span class="line">	waittail *sudog <span class="comment">// semaRoot</span></span><br><span class="line">	c        *hchan <span class="comment">// channel</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>当所有协程都处于阻塞状态，就会出现死锁</p>
+<p>fatal error: all goroutines are asleep - deadlock!</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">string</span>)</span><br><span class="line">ch &lt;- <span class="string">&quot;hello&quot;</span></span><br><span class="line">fmt.Println(&lt;-ch)</span><br></pre></td></tr></table></figure>
+
+<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><p>通过<code>select</code>可以监听<code>channel</code>上的数据流动，并且可以同时监听多个<code>channel</code>。但是只处理一个。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;			<span class="comment">// 自由切换，多路复用</span></span><br><span class="line">  <span class="keyword">case</span> &lt;-ch1:</span><br><span class="line">  <span class="keyword">case</span> &lt;-ch2:</span><br><span class="line">  <span class="keyword">default</span>:		<span class="comment">// 如果所有的chan都阻塞，默认会走default</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果所有的<code>channel</code>阻塞，则会走<code>default</code>逻辑</li>
+<li>如果有<code>channel</code>能读取数据，则读取该<code>channel</code>中的数据</li>
+<li>如果<code>channel close</code>，则会一直读取该<code>channel</code>的数据</li>
+<li>空<code>select</code>会阻塞当前<code>goroutine</code></li>
+<li><code>select</code>存在多个满足的<code>case</code>，则随机选择一个</li>
+<li><code>select</code>只存在一个<code>case</code>，则阻塞住该<code>case</code></li>
+</ul>
+<p>超时处理</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">GOTO:</span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line">      <span class="keyword">select</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> n := &lt;-ch:</span><br><span class="line">         fmt.Println(<span class="string">&quot;get from ch&quot;</span>, n)</span><br><span class="line">      <span class="keyword">case</span> &lt;-time.After(<span class="number">3</span> * time.Second):</span><br><span class="line">         fmt.Println(<span class="string">&quot;timeout&quot;</span>)</span><br><span class="line">         <span class="keyword">break</span> GOTO</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   fmt.Println(<span class="string">&quot;go routine done&quot;</span>)</span><br><span class="line">&#125;()</span><br><span class="line">ch &lt;- <span class="number">1</span></span><br><span class="line">time.Sleep(<span class="number">5</span> * time.Second)</span><br><span class="line">fmt.Println(<span class="string">&quot;main done&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>计时器，处理一个时间</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">t := time.NewTimer(<span class="number">3</span> * time.Second)	<span class="comment">// 3 秒之后发送一个消息到队列</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">   &lt;-t.C														<span class="comment">// 获取消息</span></span><br><span class="line">   fmt.Println(<span class="string">&quot;Timer over&quot;</span>)</span><br><span class="line">&#125;()</span><br><span class="line"><span class="comment">//t.Reset(3 * time.Second)			// 重置定时</span></span><br><span class="line"><span class="comment">//t.Stop()											// 防止定时器触发。如果调用停止计时器，则返回true；如果计时器已过期或已停止，则返回false。Stop不会关闭通道，以防止通道读取错误。</span></span><br><span class="line">time.Sleep(<span class="number">5</span> * time.Second)</span><br><span class="line"><span class="keyword">if</span> t.Stop() &#123;										<span class="comment">// 如果调用停止计时器，则返回true；如果计时器已过期或已停止，则返回false</span></span><br><span class="line">   fmt.Println(<span class="string">&quot;time stop &quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定时器，定时处理一个时间</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">t := time.NewTicker(<span class="number">1</span> * time.Second)	<span class="comment">// 打点器，1秒执行一次</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line">      <span class="keyword">select</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> &lt;-t.C:		<span class="comment">// 没隔一段时间就可以从t.C中获取一个数据</span></span><br><span class="line">         fmt.Println(<span class="string">&quot;time pass&quot;</span>, time.Now())</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;()</span><br><span class="line">time.Sleep(<span class="number">5</span> * time.Second)</span><br></pre></td></tr></table></figure>
+
+<p>延时回调</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">exit := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">fmt.Println(<span class="string">&quot;start&quot;</span>)</span><br><span class="line">time.AfterFunc(<span class="number">3</span>*time.Second, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;		<span class="comment">// 3 秒之后，处理函数</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;boom&quot;</span>)</span><br><span class="line">	exit &lt;- <span class="number">0</span></span><br><span class="line">&#125;)</span><br><span class="line">&lt;-exit</span><br></pre></td></tr></table></figure>
+
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>当多个线程共同访问一个资源，对资源同时进行读写，就会出现资源竞争，导致数据产生错误的结果。</p>
+<p>解决资源竞争的常用方式是锁。</p>
+<p><code>Go</code>的<code>sync</code>包提供了<strong>互斥锁</strong>和<strong>读写锁</strong>，用于处理并发过程中可能出现同时两个或多个协程读写同一个变量的情况。</p>
+<h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><p>互斥锁只能同时被一个<code>goroutine</code>锁定，其他<code>goroutine</code>将阻塞直到互斥锁被解锁（重新争抢对互斥锁的锁定）。</p>
+<p>源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type Mutex struct &#123;</span><br><span class="line">	state int32</span><br><span class="line">	sema  uint32</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>互斥锁是互斥锁。互斥锁的零值是未锁定的互斥锁。</p>
+<p>互斥锁首次使用后不得复制。因此一般初始化指针变量。</p>
+<p>锁定的互斥锁与特定的<code>goroutine</code>不关联。一个<code>goroutine</code>可以重新锁定（锁定）一个<code>RWMutex</code>，然后安排另一个<code>goroutine</code>运行锁定（解锁）它。</p>
+<p>方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func (m *Mutex) Lock() &#123;&#125;			// 加锁，如果已经加了锁，则会阻塞</span><br><span class="line">func (m *Mutex) TryLock() bool &#123;&#125;	// TryLock尝试锁定m并报告它是否成功。很少会用到。</span><br><span class="line">func (m *Mutex) Unlock() &#123;			// 解锁，如果已经解锁，再解锁会panic fatal error: sync: unlock of unlocked mutex</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mu := sync.Mutex&#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">   <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">      mu.Lock()</span><br><span class="line">      <span class="keyword">defer</span> mu.Unlock()</span><br><span class="line">      fmt.Printf(<span class="string">&quot;%d get lock\n&quot;</span>, i)</span><br><span class="line">      time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">      fmt.Printf(<span class="string">&quot;%d release lock\n&quot;</span>, i)</span><br><span class="line">   &#125;(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1 get lock</span><br><span class="line">1 release lock</span><br><span class="line">4 get lock</span><br><span class="line">4 release lock</span><br><span class="line">2 get lock</span><br><span class="line">2 release lock</span><br><span class="line">3 get lock</span><br><span class="line">3 release lock</span><br><span class="line">0 get lock</span><br><span class="line">0 release lock</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，只有获得锁的<code>goroutine</code>释放锁，其他<code>goroutine</code>才能获得锁。</p>
+<h3 id="读写锁"><a href="#读写锁" class="headerlink" title="读写锁"></a>读写锁</h3><ul>
+<li>同时只有一个<code>goroutine</code>能够获得写锁定；</li>
+<li>同时可以有任意多个<code>goroutine</code>获得读锁定；</li>
+<li>同时只能存在写锁定和读锁定（读和写互斥）；</li>
+</ul>
+<p>源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">type RWMutex struct &#123;</span><br><span class="line">	w           Mutex  // held if there are pending writers</span><br><span class="line">	writerSem   uint32 // semaphore for writers to wait for completing readers</span><br><span class="line">	readerSem   uint32 // semaphore for readers to wait for completing writers</span><br><span class="line">	readerCount int32  // number of pending readers</span><br><span class="line">	readerWait  int32  // number of departing readers</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>RWMutex</code>的零值是未锁定的<code>mutex</code>。</p>
+<p>首次使用后不得复制<code>RWMutex</code>。因此一般初始化为指针变量。</p>
+<p>方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">func (rw *RWMutex) RLock() &#123;&#125;					// 加读锁</span><br><span class="line">func (rw *RWMutex) TryRLock() bool &#123;&#125;	// 尝试加读锁，并且返回操作结果</span><br><span class="line">func (rw *RWMutex) RUnlock() &#123;&#125;				// 解读锁，如果解锁时没有读锁，会panic</span><br><span class="line">func (rw *RWMutex) Lock() &#123;&#125;					// 加写锁</span><br><span class="line">func (rw *RWMutex) TryLock() bool &#123;&#125;	// 尝试加写锁，并且返回操作结果</span><br><span class="line">func (rw *RWMutex) Unlock() &#123;&#125;				// 解写锁，如果没有写锁，调用时会panic</span><br><span class="line">func (rw *RWMutex) RLocker() Locker &#123;&#125;	// 返回一个Locker接口，可以调用Lock和Unlock方法</span><br></pre></td></tr></table></figure>
+
+<p>用法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">rw := sync.RWMutex&#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">   <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">      rw.Lock()</span><br><span class="line">      <span class="keyword">defer</span> rw.Unlock()</span><br><span class="line">      fmt.Printf(<span class="string">&quot;%d get write lock\n&quot;</span>, i)</span><br><span class="line">      time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">      fmt.Printf(<span class="string">&quot;%d release write lock\n&quot;</span>, i)</span><br><span class="line">   &#125;(i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">   <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">      rw.RLock()</span><br><span class="line">      <span class="keyword">defer</span> rw.RUnlock()</span><br><span class="line">      fmt.Printf(<span class="string">&quot;%d get read lock\n&quot;</span>, i)</span><br><span class="line">      time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">      fmt.Printf(<span class="string">&quot;%d release read lock\n&quot;</span>, i)</span><br><span class="line">   &#125;(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">0 get write lock</span><br><span class="line">0 release write lock</span><br><span class="line">2 get read lock</span><br><span class="line">1 get read lock</span><br><span class="line">3 get read lock</span><br><span class="line">4 get read lock</span><br><span class="line">0 get read lock</span><br><span class="line">0 release read lock</span><br><span class="line">4 release read lock</span><br><span class="line">1 release read lock</span><br><span class="line">2 release read lock</span><br><span class="line">3 release read lock</span><br><span class="line">1 get write lock</span><br><span class="line">1 release write lock</span><br><span class="line">3 get write lock</span><br><span class="line">3 release write lock</span><br><span class="line">4 get write lock</span><br><span class="line">4 release write lock</span><br><span class="line">2 get write lock</span><br><span class="line">2 release write lock</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，当一个<code>goroutine</code>加上写锁，则既无法再加写锁或者读锁。当写锁释放之后，可以加任意多的读锁，读写锁不能同时加。</p>
+<p>读写锁相比，在读很多，写很少的场景，效率比互斥锁高。</p>
+<ul>
+<li>锁通过阻塞线程解决数据竞态问题</li>
+<li>已经加锁，再加锁会进入阻塞状态</li>
+<li>已经解锁，再解锁，会出现panic，无论是互斥锁还是读写锁</li>
+</ul>
+<h3 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h3><p>原子操作指操作具有原子性，该操作不能被多个<code>goroutine</code>分割，而且相比加锁操作，加锁会涉及上下文切换，原子操作性能更好。原子操作由内置的<code>sync/atomic</code>包提供。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum <span class="type">int64</span> = <span class="number">0</span></span><br><span class="line">wg := sync.WaitGroup&#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++ &#123;</span><br><span class="line">   wg.Add(<span class="number">1</span>)</span><br><span class="line">   <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">      atomic.AddInt64(&amp;(sum), <span class="type">int64</span>(<span class="number">1</span>))</span><br><span class="line">      wg.Done()</span><br><span class="line">   &#125;()</span><br><span class="line">&#125;</span><br><span class="line">wg.Wait()</span><br><span class="line">fmt.Println(sum)</span><br></pre></td></tr></table></figure>
+
+<p><code>atomic</code>包中的方法可以分为以下几类：</p>
+<ul>
+<li>读取</li>
+<li>写入</li>
+<li>交换并且交换</li>
+<li>比较</li>
+<li>增加</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">func StoreInt64(addr *int64, val int64)						// 将val写入addr指向的内存中</span><br><span class="line">func LoadInt64(addr *int64) (val int64)						// 从addr的值中读取</span><br><span class="line">func AddInt64(addr *int64, delta int64) (new int64) 	// 增加，返回增加后的值</span><br><span class="line">SwapInt64(addr *int64, new int64) (old int64)	// 将addr指向的值交换成新的值，返回老值</span><br><span class="line">CompareAndSwapInt64(addr *int64, old int64, new int64) (swapped bool)	// 比较addr指向的值和old是否相等，如果相等，则替换成new值，并且返回true</span><br></pre></td></tr></table></figure>
+
+<h3 id="Once"><a href="#Once" class="headerlink" title="Once"></a>Once</h3><p>保证指定函数代码只执行一次，类似于单例模式，常用语应用启动时的一些全局初始化操作。</p>
+<p>例如通过全局变量实现单例模式</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Tool <span class="keyword">struct</span> &#123;</span><br><span class="line">	values <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance *Tool</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewInstance</span><span class="params">()</span></span> *Tool &#123;</span><br><span class="line">	<span class="keyword">if</span> instance == <span class="literal">nil</span> &#123;</span><br><span class="line">		instance = <span class="built_in">new</span>(Tool)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是在多线程下，可能会多次申请内存，所以需要加锁</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Tool <span class="keyword">struct</span> &#123;</span><br><span class="line">	values <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> instance *Tool</span><br><span class="line"><span class="keyword">var</span> mu *sync.Mutex = <span class="built_in">new</span>(sync.Mutex)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewInstance</span><span class="params">()</span></span> *Tool &#123;</span><br><span class="line">	mu.Lock()</span><br><span class="line">	<span class="keyword">defer</span> mu.Unlock()</span><br><span class="line">	<span class="keyword">if</span> instance == <span class="literal">nil</span> &#123;</span><br><span class="line">		instance = <span class="built_in">new</span>(Tool)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是加锁和解锁会消耗性能</p>
+<p>那么可以转换思路，通过<code>init()</code>函数初始化，其实也是利用了<code>init</code>函数只会执行一次的特点。确定是程序启动时就创建在内存中，无法通过程序判断是否需要使用和初始化。</p>
+<p>优化加锁的方式，双重判断，在第一次创建的时候加锁，后续不加锁。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">func NewInstance() *Tool &#123;</span><br><span class="line">	if instance == nil &#123;</span><br><span class="line">		mu.Lock()</span><br><span class="line">		if instance == nil &#123;</span><br><span class="line">			instance = new(Tool)</span><br><span class="line">		&#125;</span><br><span class="line">		defer mu.Unlock()</span><br><span class="line">	&#125;</span><br><span class="line">	return instance</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者使用sync.Once的方式。源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type Once struct &#123;</span><br><span class="line">	done uint32 // 标记是否已经执行</span><br><span class="line">	m    Mutex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">once := sync.Once&#123;&#125;</span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++ &#123;</span><br><span class="line">   once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;							<span class="comment">// once只有一个方法，就是DO，保证只会执行一次</span></span><br><span class="line">      instance = <span class="built_in">new</span>(Tool)</span><br><span class="line">   &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><p>当<code>channel</code>的消费者比生产者多，可以在对应的共享数据状态发生变化时，通知阻塞在某个条件上的写成。</p>
+<p>例如当<code>channel</code>满了，需要通知生产者不生产，当<code>channel</code>空了，需要通知消费者不消费。</p>
+<p><code>sys.Cond</code>类型代表条件变量，条件变量要与锁一起使用。</p>
+<p>当然，如果使用<code>golang</code>的<code>channel</code>，会自动阻塞，就不需要使用条件变量。这种场景比较适合在限流或者不会自动阻塞的生产者消费者，需要不停的确认状态的情况。</p>
+<p>源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type Cond struct &#123;</span><br><span class="line">	noCopy noCopy</span><br><span class="line"></span><br><span class="line">	// L is held while observing or changing the condition</span><br><span class="line">	L Locker</span><br><span class="line"></span><br><span class="line">	notify  notifyList</span><br><span class="line">	checker copyChecker</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>常用方法有三个：<code>Wait</code> <code>Signal</code> <code>Broadcast</code></p>
+<p>Wait：阻塞等待条件变量满足；释放已经加上的互斥锁（前两这两步相当于一个原子操作）；当被唤醒，Wait函数返回时，解除阻塞并重新获取互斥锁。</p>
+<p>Signal：单发通知，给一个正等待在该条件变量上的线程发送通知</p>
+<p>Broadcast：广播通知，给所有正等待在该条件变量上的线程发送通知</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cond sync.Cond</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">producer</span><span class="params">(out <span class="keyword">chan</span>&lt;- <span class="type">int</span>, index <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line">      cond.L.Lock()</span><br><span class="line">      <span class="keyword">for</span> <span class="built_in">len</span>(out) == <span class="number">10</span> &#123;							<span class="comment">// 不停地判断是否是满的</span></span><br><span class="line">         fmt.Printf(<span class="string">&quot;%d full.\n&quot;</span>, index)</span><br><span class="line">         cond.Wait()										<span class="comment">// 如果是满的，阻塞	// 如果没有cond，则需要循环检测是否是满的，会一直占用CPU资源</span></span><br><span class="line">      &#125;</span><br><span class="line">      num := rand.Intn(<span class="number">1000</span>)</span><br><span class="line">      out &lt;- num</span><br><span class="line">      fmt.Printf(<span class="string">&quot;producer %d send %d to channel\n&quot;</span>, index, num)</span><br><span class="line">      time.Sleep(time.Second)</span><br><span class="line">      cond.L.Unlock()</span><br><span class="line">      cond.Signal()					<span class="comment">// 生产了一个，发送消息，如果是生产者接受，则会继续判断，是否是满的，如果是消费者接受到消息，则消费者会退出阻塞</span></span><br><span class="line">     												<span class="comment">// 这里换成cond.Broadcast 也是合适的。</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">consumer</span><span class="params">(in &lt;-<span class="keyword">chan</span> <span class="type">int</span>, index <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line">      cond.L.Lock()</span><br><span class="line">      <span class="keyword">for</span> <span class="built_in">len</span>(in) == <span class="number">0</span> &#123;							<span class="comment">// 不停地判断是否是空的，如果是空的，阻塞</span></span><br><span class="line">         fmt.Printf(<span class="string">&quot;%d empty.\n&quot;</span>, index)</span><br><span class="line">         cond.Wait()									<span class="comment">// 等待条件变量发送消息</span></span><br><span class="line">      &#125;</span><br><span class="line">      num := &lt;-in</span><br><span class="line">      fmt.Printf(<span class="string">&quot;consumer %d get %d from channel\n&quot;</span>, index, num)</span><br><span class="line">      time.Sleep(time.Second)</span><br><span class="line"></span><br><span class="line">      cond.L.Unlock()</span><br><span class="line">      cond.Signal()</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>, <span class="number">10</span>)</span><br><span class="line">   rand.Seed(time.Now().UnixNano())</span><br><span class="line">   cond.L = <span class="built_in">new</span>(sync.Mutex)</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">      <span class="keyword">go</span> producer(ch, i)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">1</span>; i++ &#123;</span><br><span class="line">      <span class="keyword">go</span> consumer(ch, i)</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">select</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="临时对象池"><a href="#临时对象池" class="headerlink" title="临时对象池"></a>临时对象池</h3><p>当对象过多，频繁<code>GC</code>，会对性能产生影响，此时如果对象可以重复利用，则会大大减少<code>GC</code>的资源消耗。</p>
+<p><code>sync.Pool</code>就是一个临时对象池，可以用来临时存储对象，下次使用从对象池获取，避免重复创建对象。（池化的使用场景例如数据库链接、网络连接，但是这两种场景并不适合使用<code>sync.Pool</code>）。当然，<code>GC</code>会清除<code>sync.Pool</code>缓存的对象，对象的缓存有效期为下一次<code>GC</code>之前。</p>
+<p>获取对象</p>
+<ul>
+<li>尝试从私有对象获取</li>
+<li>私有对象不存在，尝试从当前<code>Processor</code>的共享池获取</li>
+<li>如果当前<code>Processor</code>共享池也是空的，那么尝试去其他<code>Processor</code>的共享池获取</li>
+<li>如果所有池都是空的，最后就用用户指定的<code>New</code>函数产生一个新的对象返回</li>
+</ul>
+<p>其中，私有对象池是协程安全的，<code>Processor</code>访问不需要加锁。共享池是线程不安全的，<code>Processor</code>访问需要加锁。</p>
+<p>放回对象</p>
+<ul>
+<li>如果私有对象不存在，则保存为私有对象</li>
+<li>如果私有对象存在，放入当前Processor子池的共享池中</li>
+</ul>
+<p>源码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Pool <span class="keyword">struct</span> &#123;</span><br><span class="line">	noCopy noCopy</span><br><span class="line"></span><br><span class="line">	local     unsafe.Pointer <span class="comment">// local fixed-size per-P pool, actual type is [P]poolLocal</span></span><br><span class="line">	localSize <span class="type">uintptr</span>        <span class="comment">// size of the local array</span></span><br><span class="line"></span><br><span class="line">	victim     unsafe.Pointer <span class="comment">// local from previous cycle</span></span><br><span class="line">	victimSize <span class="type">uintptr</span>        <span class="comment">// size of victims array</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// New optionally specifies a function to generate</span></span><br><span class="line">	<span class="comment">// a value when Get would otherwise return nil.</span></span><br><span class="line">	<span class="comment">// It may not be changed concurrently with calls to Get.</span></span><br><span class="line">	New <span class="function"><span class="keyword">func</span><span class="params">()</span></span> any		<span class="comment">// 当池子为空，默认通过New函数创建的值返回</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func (p *Pool) Put(x any)		// 放入对象池</span><br><span class="line">func (p *Pool) Get() any		// 从对象池取</span><br></pre></td></tr></table></figure>
+
+<p>例如</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pool := sync.Pool&#123;&#125;</span><br><span class="line">pool.New = <span class="function"><span class="keyword">func</span><span class="params">()</span></span> any &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">&quot;this is default&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">pool.Put(<span class="string">&quot;abc&quot;</span>)</span><br><span class="line"><span class="comment">//runtime.GC()</span></span><br><span class="line">fmt.Println(pool.Get()) <span class="comment">// abc	没有GC，获取的是abc，从对象池中取出来之后，该对象就不存在于对象池中</span></span><br><span class="line"><span class="comment">//fmt.Println(pool.Get()) // gc 之后，获取到的就是 this is default</span></span><br><span class="line">fmt.Println(pool.Get()) <span class="comment">// this is default</span></span><br><span class="line">fmt.Println(pool.Get()) <span class="comment">// this is default</span></span><br></pre></td></tr></table></figure>
+
+<p>因此，<code>sync.Pool</code>适用的场景：</p>
+<ul>
+<li>适用于通过复用，降低复杂对象的创建和<code>GC</code>代价</li>
+<li>协程安全，会有锁的开销（创建对象的开销大还是使用锁的开销大，如果创建开销大，则适合使用<code>sync.Pool</code>）</li>
+<li>生命周期受<code>GC</code>影响，不适合于做连接池等，需自己管理生命周期的资源的池化</li>
+</ul>
+<h3 id="线程安全的map"><a href="#线程安全的map" class="headerlink" title="线程安全的map"></a>线程安全的map</h3><p>map在多线程并发读写时，会<code>panic</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">int</span>)</span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">		m[i] = i</span><br><span class="line">	&#125;(i)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">		fmt.Println(m[i])</span><br><span class="line">	&#125;(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal error: concurrent map writes</span><br></pre></td></tr></table></figure>
+
+<p>这是由于<code>map</code>底层结构体中有<code>falg</code>标志位，当检测到同时写入会<code>panic</code></p>
+<p>可以通过锁实现并发安全的<code>map</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 互斥锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main19</span><span class="params">()</span></span> &#123;</span><br><span class="line">   m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">int</span>)</span><br><span class="line">   mu := <span class="built_in">new</span>(sync.Mutex)</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">         mu.Lock()</span><br><span class="line">         m[i] = i</span><br><span class="line">         mu.Unlock()</span><br><span class="line">      &#125;(i)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">         mu.Lock()</span><br><span class="line">         _ = m[i]</span><br><span class="line">         mu.Unlock()</span><br><span class="line">      &#125;(i)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读写锁</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main20</span><span class="params">()</span></span> &#123;</span><br><span class="line">   m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">int</span>)</span><br><span class="line">   mu := <span class="built_in">new</span>(sync.RWMutex)</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">         mu.Lock()</span><br><span class="line">         m[i] = i</span><br><span class="line">         mu.Unlock()</span><br><span class="line">      &#125;(i)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">      <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">         mu.RLock()</span><br><span class="line">         _ = m[i]</span><br><span class="line">         mu.RUnlock()</span><br><span class="line">      &#125;(i)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>golang中自带线程安全的锁，<code>sync.Map</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Map <span class="keyword">struct</span> &#123;</span><br><span class="line">   mu Mutex</span><br><span class="line"></span><br><span class="line">   read atomic.Value <span class="comment">// readOnly</span></span><br><span class="line"></span><br><span class="line">   dirty <span class="keyword">map</span>[any]*entry</span><br><span class="line"></span><br><span class="line">   misses <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>官方推荐，适用于两种情况：</p>
+<ol>
+<li>当给定的key仅写入一次但多次读取时（如在只增长的缓存中）</li>
+<li>当多个goroutine读取、写入和覆盖不相同的key时</li>
+</ol>
+<p>方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">func (m *Map) Load(key any) (value any, ok bool) &#123;&#125; //返回存储在map中的键的值，如果不存在值，则返回nil。ok结果指示是否在映射中找到值。</span><br><span class="line">func (m *Map) Store(key, value any) &#123;&#125;	// 为key存储一个value</span><br><span class="line">func (m *Map) LoadOrStore(key, value any) (actual any, loaded bool) &#123;&#125; // 返回key的现有值（如果存在）。否则，它存储并返回给定值。如果存储了值，则结果为真，如果没有存储，则为假。</span><br><span class="line">func (m *Map) LoadAndDelete(key any) (value any, loaded bool) &#123;&#125; // 删除键的值，如果有，则返回这个值，如果没有，则返回nil。结果报告key是否存在。</span><br><span class="line">func (m *Map) Delete(key any) &#123;&#125; // 删除一个key和value</span><br><span class="line">func (m *Map) Range(f func(key, value any) bool) &#123;&#125;	// 为map中存在的每个键和值顺序调用f。如果f返回false，range将停止迭代。</span><br></pre></td></tr></table></figure>
+
+<p>使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myMap *sync.Map = &amp;sync.Map&#123;&#125;</span><br><span class="line">myMap.Store(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;1&quot;</span>)									<span class="comment">// 存储 a:1</span></span><br><span class="line">fmt.Println(myMap.Load(<span class="string">&quot;a&quot;</span>))								<span class="comment">// 1 true</span></span><br><span class="line">fmt.Println(myMap.LoadOrStore(<span class="string">&quot;b&quot;</span>, <span class="string">&quot;2&quot;</span>))		<span class="comment">// 2 false</span></span><br><span class="line">fmt.Println(myMap.LoadOrStore(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;11&quot;</span>))		<span class="comment">// 1 true</span></span><br><span class="line">fmt.Println(myMap.LoadAndDelete(<span class="string">&quot;a&quot;</span>))				<span class="comment">// 1 true</span></span><br><span class="line">fmt.Println(myMap.LoadAndDelete(<span class="string">&quot;c&quot;</span>))				<span class="comment">// nil false </span></span><br><span class="line">myMap.Store(<span class="string">&quot;b&quot;</span>, <span class="string">&quot;2&quot;</span>)</span><br><span class="line">myMap.Store(<span class="string">&quot;c&quot;</span>, <span class="string">&quot;3&quot;</span>)</span><br><span class="line">myMap.Store(<span class="string">&quot;d&quot;</span>, <span class="string">&quot;4&quot;</span>)</span><br><span class="line">myMap.Range(<span class="function"><span class="keyword">func</span><span class="params">(key, value any)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	fmt.Println(key, value)										<span class="comment">// 打印 b 2,c 3,d 4 </span></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h3><p>多线程并发过程中，可以通过<code>waitgroup</code>控制主协程等待所有子协程，但是无法通知子协程退出。此时可以通过<code>select + channel</code>的方式。但是当有多个子协程嵌套时，这个方式就不方便。<code>Golang</code>提供<code>Context</code>标准库解决这个问题。</p>
+<p>Context有两个主要的功能：</p>
+<ol>
+<li>通知子协程退出（正常退出、超时退出等）</li>
+<li>传递必要的参数</li>
+</ol>
+<p>创建context</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func Background() Context &#123;&#125; // 返回Context的interface</span><br><span class="line"></span><br><span class="line">实际返回的是 background = new(emptyCtx)</span><br><span class="line">type emptyCtx int </span><br></pre></td></tr></table></figure>
+
+<p>正常退出</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quit</span><span class="params">(ctx context.Context)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> &lt;-ctx.Done():			<span class="comment">// cancel()执行之后，ctx.Done() close</span></span><br><span class="line">			fmt.Println(<span class="string">&quot;cancel&quot;</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			fmt.Println(<span class="string">&quot;running&quot;</span>)</span><br><span class="line">			time.Sleep(time.Second)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main15</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ctx, cancel := context.WithCancel(context.Background())</span><br><span class="line">  <span class="keyword">defer</span> cancel()							<span class="comment">// 函数执行完，执行cancel() cancel()可以重复执行</span></span><br><span class="line">	<span class="keyword">go</span> quit(ctx)</span><br><span class="line">	time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>超时退出</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main16</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ctx, _ := context.WithTimeout(context.Background(), <span class="number">5</span>*time.Second) <span class="comment">// 5s之后，会自动关闭ctx.Done</span></span><br><span class="line">	<span class="keyword">go</span> quit(ctx)</span><br><span class="line">	time.Sleep(<span class="number">10</span> * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>传递参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func WithValue(parent Context, key any, val any) Context</span><br></pre></td></tr></table></figure>
+
+<p>例如通过<code>ctx</code>传参</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">	ctx := context.WithValue(context.Background(), <span class="string">&quot;user&quot;</span>, <span class="string">&quot;mitaka&quot;</span>)</span><br><span class="line">	<span class="keyword">go</span> quit(ctx)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 另一个协程中</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">quit</span><span class="params">(ctx context.Context)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">			fmt.Println(<span class="string">&quot;cancel&quot;</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			fmt.Println(<span class="string">&quot;running&quot;</span>, ctx.Value(<span class="string">&quot;user&quot;</span>)) <span class="comment">// 通过key获取value</span></span><br><span class="line">			time.Sleep(time.Second)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>推荐用法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> favContextKey <span class="type">string</span></span><br><span class="line">f := <span class="function"><span class="keyword">func</span><span class="params">(ctx context.Context, k favContextKey)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> v := ctx.Value(k); v != <span class="literal">nil</span> &#123;			<span class="comment">// 判断是否有值</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;found value:&quot;</span>, v)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">&quot;key not found:&quot;</span>, k)</span><br><span class="line">&#125;</span><br><span class="line">k := favContextKey(<span class="string">&quot;language&quot;</span>)</span><br><span class="line">ctx := context.WithValue(context.Background(), k, <span class="string">&quot;Go&quot;</span>)  <span class="comment">// key 是一个自定义类型的变量</span></span><br><span class="line">f(ctx, k)</span><br><span class="line">f(ctx, favContextKey(<span class="string">&quot;color&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>控制最长运行时间，到某个时间节点退出</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d := time.Now().Add(<span class="number">5</span> * time.Second)</span><br><span class="line">ctx, cancel := context.WithDeadline(context.Background(), d)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/04/Golnag%E6%A0%87%E5%87%86%E5%8C%85%E4%B9%8Bos%E5%8C%85/" rel="prev" title="Golnag标准包之os包">
+                  <i class="fa fa-chevron-left"></i> Golnag标准包之os包
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/09/Gitlab%E7%9A%84CI/" rel="next" title="Gitlab的CI">
+                  Gitlab的CI <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/xiaoyeshiyu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="go语言相比其他语言，其特性就在于goroutine，本篇记录go实现goroutine的原理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang中的Goroutine原理">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2022/09/13/Golang%E4%B8%AD%E7%9A%84Goroutine%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="go语言相比其他语言，其特性就在于goroutine，本篇记录go实现goroutine的原理。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215543926.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215646923.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215706672.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215826739.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215927512.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220051401.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220309784.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220431976.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220551854.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220618390.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220804224.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220949059.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221007188.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221053647.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221140478.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221155964.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221423488.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221444808.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221554930.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221620268.png">
+<meta property="article:published_time" content="2022-09-12T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T07:49:49.092Z">
+<meta property="article:author" content="Mitaka xu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215543926.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2022/09/13/Golang%E4%B8%AD%E7%9A%84Goroutine%E5%8E%9F%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2022/09/13/Golang%E4%B8%AD%E7%9A%84Goroutine%E5%8E%9F%E7%90%86/","path":"2022/09/13/Golang中的Goroutine原理/","title":"Golang中的Goroutine原理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Golang中的Goroutine原理 | Hexo</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#goroutine%E5%92%8C%E7%BA%BF%E7%A8%8Bthread%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.</span> <span class="nav-text">goroutine和线程thread的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#M%EF%BC%9AN%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">M：N模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GMP%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">GMP调度模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A9%E6%9C%9F%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B%EF%BC%8CGM%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">早期调度模型，GM调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GMP%E8%B0%83%E5%BA%A6%E6%A8%A1%E5%9E%8B-1"><span class="nav-number">2.2.</span> <span class="nav-text">GMP调度模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Work-stealing"><span class="nav-number">2.3.</span> <span class="nav-text">Work-stealing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#syscall"><span class="nav-number">2.4.</span> <span class="nav-text">syscall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sysmon"><span class="nav-number">2.6.</span> <span class="nav-text">sysmon</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-Poller"><span class="nav-number">2.7.</span> <span class="nav-text">Network Poller</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scheduler-Affinity"><span class="nav-number">2.8.</span> <span class="nav-text">Scheduler Affinity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#goroutine%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">2.9.</span> <span class="nav-text">goroutine生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#g0"><span class="nav-number">2.10.</span> <span class="nav-text">g0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Schedule"><span class="nav-number">2.11.</span> <span class="nav-text">Schedule</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#goroutine-recycle"><span class="nav-number">2.12.</span> <span class="nav-text">goroutine recycle</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">保持积累，保持学习。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoyeshiyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2022/09/13/Golang%E4%B8%AD%E7%9A%84Goroutine%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="保持积累，保持学习。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Golang中的Goroutine原理 | Hexo">
+      <meta itemprop="description" content="go语言相比其他语言，其特性就在于goroutine，本篇记录go实现goroutine的原理。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Golang中的Goroutine原理<a href="https://github.com/user-name/repo-name/tree/branch-name/subdirectory-name/_posts/Golang%E4%B8%AD%E7%9A%84Goroutine%E5%8E%9F%E7%90%86.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-09-13 00:00:00" itemprop="dateCreated datePublished" datetime="2022-09-13T00:00:00+08:00">2022-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-01 15:49:49" itemprop="dateModified" datetime="2023-03-01T15:49:49+08:00">2023-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/develope/" itemprop="url" rel="index"><span itemprop="name">develope</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/09/13/Golang%E4%B8%AD%E7%9A%84Goroutine%E5%8E%9F%E7%90%86/" class="post-meta-item leancloud_visitors" data-flag-title="Golang中的Goroutine原理" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">go语言相比其他语言，其特性就在于goroutine，本篇记录go实现goroutine的原理。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><code>goroutine</code>是一个与其他<code>goroutines</code>并行运行在同一地址空间的Go函数或方法。一个程序由一个或更多个<code>goroutine</code>组成。它与线程、协程、进程等不同，是一个<code>goroutine</code>。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215543926.png" alt="image-20220913215543926"></p>
+<p>goroutines在同一个用户地址空间里并行独立执行functions，channels则用于goroutines间的通信和同步访问控制。</p>
+<h3 id="goroutine和线程thread的区别"><a href="#goroutine和线程thread的区别" class="headerlink" title="goroutine和线程thread的区别"></a>goroutine和线程thread的区别</h3><ul>
+<li><p>内存占用</p>
+<p>创建一个goroutine的栈内存消耗为2KB，运行过程中，如果栈空间不够荣，会自动扩容</p>
+<p>创建thread为了尽量避免极端情况下操作系统线程栈溢出，默认会分配较大的栈内存（8M），而且还需要一个被称为guard page的区域用户和其他thread的栈空间进行隔离。而栈内存空间一段创建和初始化完成之后其大小就不能再有变化，这决定了在某些特殊场景下系统线程栈还是有溢出的风险。</p>
+</li>
+<li><p>创建、销毁</p>
+<p>线程创建和销毁都会有巨大的消耗，是内核级的交互，线程控制和进程控制很相似。进入内核调度消耗的性能代价比较高</p>
+<p>goroutine是用户态线程，是由go runtime管理，创建和销毁的消耗非常小。</p>
+</li>
+<li><p>调度切换</p>
+<p>线程切换会消耗1000-1500纳秒（上下文保存成本高，较多寄存器，公平性，复杂时间计算统计）。相比而言，goroutine的切换约为200纳秒。</p>
+</li>
+<li><p>复杂性</p>
+<p>线程创建和退出都很复杂，多个thread间通讯复杂（<code>share memory</code>，多线程通信，需要加锁）</p>
+<p>不能大量创建线程，成本高，使用网络多路复用，存在大量callback。（例如早期<code>httpd</code>和<code>nginx</code>，<code>httpd</code>一个请求创建一个进程，<code>nginx</code>是使用多路复用。）对于应用服务线程门槛高，例如需要做第三方库隔离，需要考虑引入线程池等。</p>
+<p>goroutine则是一个线程级别的多路复用，一个goroutine阻塞，会执行其他的goroutine。</p>
+</li>
+</ul>
+<h3 id="M：N模型"><a href="#M：N模型" class="headerlink" title="M：N模型"></a>M：N模型</h3><p>Go创建M个线程（CPU执行调度的单元，内核的task_struct），之后创建的N个goroutine都会依附在这M个线程上执行，即M:N模型。它们可以同时运行，与线程类似，相比之下非常轻量。因此，程序运行时，goroutines的个数远大于线程的个数。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215646923.png" alt="image-20220913215646923"></p>
+<p>同一时刻，一个线程只能跑一个goroutine，当goroutine发生阻塞，go会把当前goroutine调度走，让其他的goroutine来继续执行，而不是让线程阻塞休眠。</p>
+<h2 id="GMP调度模型"><a href="#GMP调度模型" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h2><p>G：goroutine的缩写，每次<code>go func()</code>都代表一个G，无限制</p>
+<p>源码包中<code>runtime/runtime2.go</code>的 <code>type g struct &#123;&#125;</code>中，包含当前goroutine的状态、堆栈、上下文。</p>
+<p>M：工作线程OS thread，也被称为Machine，所有M都有线程栈，M有两种状态，自旋和非自旋</p>
+<p>源码包中<code>runtime/runtime2.go</code>的 <code>type m struct &#123;&#125;</code>中</p>
+<p>如果不对该线程栈提供内存的话，系统会给该线程栈提供内存（不同操作系统提供的线程栈大小不同）。当指定了线程栈，则<code>M.stack-&gt;G.stack</code>，M的PC寄存器指向G提供的函数，然后去执行。</p>
+<p>P：逻辑<code>process</code>，是线程M的执行的上下文</p>
+<p>P的最大作用是拥有各种G对象队列、链表、cache和状态</p>
+<h3 id="早期调度模型，GM调度器"><a href="#早期调度模型，GM调度器" class="headerlink" title="早期调度模型，GM调度器"></a>早期调度模型，GM调度器</h3><p>Go 1.2前的调度器实现，限制了Go并发程序的伸缩性。每个goroutine对应于runtime中的一个抽象结构：G，而thread作为物理CPU的存在而被抽象为一个结构M（Machine）。当goroutine调用一个阻塞的系统调用，运行这个goroutine的线程就会被阻塞，这是至少应该再创建、唤醒一个线程来运行其他没有被阻塞的goroutine。线程这里可以创建不止一个，可以按需不断创建，而活跃的线程的最大个数存储在变量GOMAXPROCS中。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215706672.png" alt="image-20220913215706672"></p>
+<p>问题：</p>
+<ul>
+<li><p>单一的全局互斥锁，和集中状态存储</p>
+<p>导致所有goroutine相关操作，创建、结束、重新调度都要上锁</p>
+</li>
+<li><p>goroutine传递问题</p>
+<p>M经常在M之间传递可运行的goroutine，导致调度延迟增大，以及额外的性能损耗（被一个G创建的G放到全局队列，而不是被当前M调度，本地M执行，产生不必要的开销和延迟）。</p>
+</li>
+<li><p>Per-M持有内存缓存（M.mcache）</p>
+<p>每个M持有mcache和stackalloc，然而只有在M运行Go代码时才需要使用的内存（每个mcache可以高达2MB），当M处于syscall时不需要（处于syscall时被阻塞，没有内存访问，因此不需要）。运行go代码和阻塞在syscall的线程的比例是1:100，造成大量内存浪费（大量的线程在syscall，但是需要使用内存，造成内存浪费）。同时内存亲缘性也较差，G当前在M运行后对M的内存进行了预热，因为现在的G调度到同一个M的概率不高，数据局部性不好。（一个goroutine不会绑定到一个M执行，导致内存预热性价比不高）。</p>
+</li>
+<li><p>严重的线程阻塞、解锁</p>
+<p>系统调用下，工作线程经常被阻塞和取消阻塞，增加了很多开销。比如M找不到G，此时M就会进入频繁阻塞、唤醒（没有新的G需要执行），来进行检查的逻辑，以便及时发现新的G来执行（创建新的goroutine）。</p>
+</li>
+</ul>
+<h3 id="GMP调度模型-1"><a href="#GMP调度模型-1" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h3><p>P：Process，抽象概念，并不是真正的物理CPU。</p>
+<p>源码包中<code>runtime/runtime2.go</code>的 <code>type p struct &#123;&#125;</code>中。</p>
+<p>代表M所需的上下文环境，也是处理用户级代码逻辑的处理器。负责衔接M和G的调度上下文，将等待执行的G与M对接。当P有任务时，需要创建或者唤醒一个M来执行它队列里的任务。所以P&#x2F;M需要绑定，构成一个执行单元。P决定并行任务的数量，可通过runtime.GOMAXPROCS来设定。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215826739.png" alt="image-20220913215826739"></p>
+<p>mcache&#x2F;stackalloc 从M移到了P，而G队列也被分成两类，保留全局G队列，同时每个P都会有一个本地G队列。</p>
+<p>local queue：</p>
+<p>因为P的存在，runtime并不需要做一个集中式的goroutine调度，每一个M都会在P的local queue、global queue或其他P队列中找G执行，减少全局锁对性能的影响。</p>
+<p>当然，P的本地G队列还是可能出现并发访问的场景（也就是work-stealing，当一个P处于饥饿状态，此时可能出现多个P并发访问一个G），为了避免加锁，P的本地队列是一个LockFree的队列，窃取G时使用CAS原子操作来完成。 </p>
+<h3 id="Work-stealing"><a href="#Work-stealing" class="headerlink" title="Work-stealing"></a>Work-stealing</h3><p>工作窃取。</p>
+<p>当一个P执行完本地所有的G之后，并且全局队列为空的时候，会随机挑选一个P，从它的G队列中窃取一半的G（P从local queue中的头部拿任务，从其他的P的local queue尾部抢任务）。如果global queue有，则会从global queue中获取（当前个数&#x2F;GOMAXPROCS）个G 。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215927512.png" alt="image-20220913215927512"></p>
+<p>图中，P0的local queue空闲，此时会从P1的local queue中窃取一半的G</p>
+<p>为了保证公平性，从随机位置P开始，便利的顺序也是一个小于GOMAXPROCS的的，互为质数的步长。</p>
+<p> P的调度算法中，还会每个N轮调度之后，就去全局队列拿一个G。（保证global中的G会被调度）。</p>
+<ul>
+<li>有1&#x2F;61的概率优先从global queue获取G</li>
+<li>然后查看local queue是否有G</li>
+<li>如果没有，再从其他P窃取</li>
+<li>如果没有，获取global queue</li>
+<li>如果没有，获取netpoll</li>
+</ul>
+<p>新建G时，P的本地队列放不下去，已满256个的时候，会放半数G到全局队列中。从syscall阻塞的系统调用返回时，找不到空闲P也会放到全局队列。</p>
+<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p>syscall：系统调用，例如os.Open()函数。</p>
+<p>G调用syscall后，M会与P解绑，然后M和G进入阻塞（G等待syscall返回，M等待G响应），而P此时的状态就是syscall，表明这个P的G正在syscall中，这时的P是不能被调度给别的M的。如果在短时间内阻塞的M就唤醒了，那么M会优先来重新获取这个P，能获取到就继续绑回去，这样有利于数据的局部性。（减少上下文切换）</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220051401.png" alt="image-20220913220051401"></p>
+<p>例如图中，G执行os.Open()，进入syscall，此时如果时间较长，sysmon线程会将p3和M解绑，由其他的M调度P3，保障P3其他的G可以正常执行。</p>
+<p>注意：系统监视器system monitor，称为sysmon，会定时扫描。 执行syscall时，如果某个P的G执行超过一个sysmon tick（10ms），就会把他设为idle，重新调度给需要的M，强制解绑。 也就是说，如果短时间内M没有唤醒（超过sysmon），由于P上有其他的G，因此P会进入idle list，等待被调度（需要M处理P上其他的G）。 </p>
+<p>在 p struc中，维护一个idle P的链表。将P推送给需要的M使用。</p>
+<p> P和M脱离后，目前在idle list中等待被绑定。（例如上面在syscall执行时间超过sysmon）。而syscall结束后M按照如下规则执行，直到满足其中一个条件：</p>
+<ul>
+<li>尝试获取同一个P，恢复执行G（如果短时间，P没有被调度到idle list上或者其他的M上，这样有利于数据亲和）（猜测：G的上下文会保留在P上）</li>
+<li>尝试获取idle list中其他空闲的P，恢复执行G（先从idle list中获取）</li>
+<li>找不到空闲P，把G放回global queue，M放回idle list（P有自身的idle list，M也有自身的idle list）</li>
+</ul>
+<p>当使用syscall，Go无法限制Block OS threads的数量。（GOMAXPROCS只能显示P的数量，不能限制M的数量）</p>
+<p>Tips：使用syscall写程序要认真考虑pthread exhaust的问题。（例如大量的请求，调用syscall，读写文件，而如果读写文件特别慢，syscall响应需要很久，此时就会出现P和M解绑，解绑的P需要被调度则需要创建M，导致资源耗尽）</p>
+<p>Spining thread</p>
+<p>线程自旋。</p>
+<p>线程自旋是相对于线程阻塞而言，表象就是循环执行一个指定逻辑（调度逻辑，目的是不停的寻找G）。这样做的问题显而易见，如果G迟迟不来，CPU会白白浪费在这无意义的计算上。好处也明显，降低了M的上下文切换成本，提高性能。M在这两个地方引入自旋：</p>
+<ul>
+<li>类型1：M不带P的找P挂载，一有P释放就结合（例如syscall导致P释放，此时会有自旋的M绑定P）</li>
+<li>类型2：M带P的找G运行，一有runable的G就执行（例如P没有G执行，此时会有1&#x2F;61往global queue获取G，然后从其他的P窃取，最后获取网络poll）</li>
+</ul>
+<p>为了避免过多的浪费CPU资源，自旋的M最多只允许GOMAXPROCS个。同时当有类型1的自旋M存在时，类型2的自旋M就不阻塞，阻塞会释放P，一释放P就会马上被类型1的自旋M抢走了，所以类型2的自旋不会陷入阻塞。</p>
+<p>在新的G被创建、M进入syscall、M从空闲被激活这三种状态前，调度器会确保至少有一个自旋的M存在（唤醒或者创建一个M），除非没有空闲P。</p>
+<ul>
+<li>当创建新的G，如果有可用P，那么G可以被立即执行，即便不在同一个P也无妨，所以保留一个自旋的M就可以保证新的G很快被运行（此时没有类型1的自旋，只有类型2的自旋。）</li>
+<li>当M进入syscall，意味着M不知道恢复，那么M对应的P剩下的G就需要有新的M执行，所以保留一个自旋的M执行剩下的G（此时只有类型1的自旋，没有类型2的自旋）</li>
+<li>如果M从空闲变成活跃，意味着可能一个处于自旋状态的M进入工作状态，这时要检查并确保还有一个自旋M存在，以防还有G或者还有P空着。</li>
+</ul>
+<p>这种机制，能够保证G被立即调用，提高性能。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><p>单一全局互斥锁和集中状态存储</p>
+<p>G被分成全局队列和P的本地队列，全局队列依旧是全局锁，但是使用场景很少，P本地队列使用无锁队列 ，使用原子操作来面对可能得并发场景。 </p>
+</li>
+<li><p>Goroutine传递问题</p>
+<p>G创建时就在P的本地队列，可以避免G之间传递（窃取除外），G对P的数据局部性好；当G开始执行，syscall返回后M会尝试获取可用P，获取到了的话可以避免在M之间传递。而且优先获取调用阻塞前的P，所以G对M数据局部性好，G对P的数据局部性也好。 </p>
+</li>
+<li><p>Per-M持有内存缓存 M.mcache</p>
+<p>内存mcache只存在P结构中，P最多只有GOMAXPROCS个，远小于M的个数，所以内存没有过多消耗。</p>
+</li>
+<li><p>严重的线程阻塞、解锁</p>
+<p>通过自旋，虽然浪费一点CPU，但是保证了任何时候都有处于等待状态的自旋M，避免在等待可用的P和G时频繁的阻塞和唤醒。</p>
+</li>
+</ul>
+<h3 id="sysmon"><a href="#sysmon" class="headerlink" title="sysmon"></a>sysmon</h3><p>监控线程，不需要 P也可以运行。</p>
+<p>sysmon是一个死循环，每隔20us~10ms循环一次，循环之后sleep一会，周期变动的原因是避免空转。如果循环没有要做的事，sleep的时间会加大。</p>
+<ul>
+<li>释放限制超过5分钟的span物理内存；</li>
+<li>超过2分钟没有垃圾回收，则强制执行gc；</li>
+<li>将长时间未处理的netpoll添加到全局队列；</li>
+<li>向长时间运行的G任务发出抢占调度；</li>
+<li>收回因syscall长时间阻塞的P；</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220309784.png" alt="image-20220913220309784"></p>
+<p>例如图中，由于G7运行时间超过10ms，此时sysmon进程会将G7调度到全局queue中。</p>
+<p>抢占调度：当P在M上执行时间超过10ms，sysmon调用preemptone将G标记为stackPreempt（栈扩容）。Go在检查栈是否溢出的地方判断是否有栈扩容，此时M会保存当前G的上下文，重新进入调度逻辑。（例如1.14以及之前的版本中，for一个死循环，GOMAXPROCS为1，此时会出现死循环）</p>
+<h3 id="Network-Poller"><a href="#Network-Poller" class="headerlink" title="Network Poller"></a>Network Poller</h3><p>Go所有的IO都是阻塞的。然后通过goroutine和channel来处理并发，因此所有的IO逻辑都是直来直去。</p>
+<p>G发起网络IO操作也不会导致M被阻塞（仅阻塞G），从而不会导致大量M被创建出来，将异步IO转换为阻塞IO的部分称为netpoller。打开或接受连接都被设置为非阻塞模式。如果试图对其进行IO操作，并且文件描述符数据还没有准备好G会进入gopark函数，将当前正在执行的G状态保存起来，然后切换到新的堆栈上执行新的G。netpoller等待epoll返回时，会通过sysmon触发或者其他条件，最终处理网络IO。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220431976.png" alt="image-20220913220431976"></p>
+<p>netpoller被调度的三种情况：</p>
+<ul>
+<li>sysmon</li>
+<li>scheduler函数，M找G的调度函数（例如获取到global queue的G）</li>
+<li>GC：start the world</li>
+</ul>
+<h3 id="Scheduler-Affinity"><a href="#Scheduler-Affinity" class="headerlink" title="Scheduler Affinity"></a>Scheduler Affinity</h3><p>调度优先级</p>
+<p>在GM调度器时代，chan 操作导致的切换代价。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220551854.png" alt="image-20220913220551854" style="zoom:50%;" />
+
+<ul>
+<li><p>G7正在等待channel消息，阻塞在chan，一旦收到消息，这个goroutine就会被推到全局队列（可被调度）</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220618390.png" alt="image-20220913220618390" style="zoom:50%;" />
+</li>
+<li><p>M空闲之后，从全局queue中，将GX调度到M上运行，而G8阻塞在chan</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220804224.png" alt="image-20220913220804224" style="zoom:50%;" />
+</li>
+<li><p>G8从chan中获取消息，被调度到全局queue中，此时M调度G7运行。</p>
+</li>
+</ul>
+<p>这种方式没有优先级概念，每次跨M调用，都包含大量的上下文切换。</p>
+<p>GMP模式</p>
+<p> 在chan来回通信的goroutine会导致频繁block，也就是会在local queue中频繁重新排队。然而，由于本地队里是IFIO实现，如果另一个goroutine占用线程，unblock goroutine不能保证尽快运行。而且可能会被其他的P窃取。</p>
+<p>针对这种情况，在Go 1.5版本引入了runnext字段，可以高优先级执行unblock G。当G从chan阻塞中恢复，P会优先调度这个G。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220949059.png" alt="image-20220913220949059" style="zoom:50%;" />
+
+<h3 id="goroutine生命周期"><a href="#goroutine生命周期" class="headerlink" title="goroutine生命周期"></a>goroutine生命周期</h3><p>从一个主函数启动开始</p>
+<ul>
+<li><p>绑定m0和g0，m0就是程序的主线程，程序启动必然会拥有一个主线程，这个就是m0，g0负责调度，也就是schedule()函数</p>
+</li>
+<li><p>创建p，绑定m0和p0，首先会创建GOMAXPROCS个P，存储在sched的空闲链表里面 pidle</p>
+</li>
+<li><p>新建任务g到p0本地队列，m0的g0会创建一个指向runtime.main()的g，并放到p0的本地队列</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221007188.png" alt="image-20220913221007188" style="zoom:50%;" /></li>
+</ul>
+<p>runtime.main()：启动sysmon线程；启动GC协程，执行init函数，执行main.main函数</p>
+<p> 执行main.main函数之后，会创建很多的goroutine，新的goroutine将唤醒P以更好地分发工作。这个P将创建一个与之关联的M绑定到一个OS thread。</p>
+<p>有空闲的P但是没有spinning状态的M时，需要唤醒一个空闲的M或者新建一个。当线程首次创建时，会执行一个特殊的G，也就是g0，负责调度和管理G。 </p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221053647.png" alt="image-20220913221053647" style="zoom:50%;" />
+
+<h3 id="g0"><a href="#g0" class="headerlink" title="g0"></a>g0</h3><p>主要用于执行go.scheduler函数，用于调度G。</p>
+<p>g0基于两种端点将G调度到线程上：</p>
+<ul>
+<li>当G阻塞时：系统调用、互斥锁或chan。阻塞的G进入睡眠模式、进入队列，并允许g0安排和运行等待其他G。（也就是G阻塞，需要切换到其他的G执行）</li>
+<li>函数调用期间，如果G必须扩展内存栈，这个断点允许Go调度另一个G，避免运行G占用CPU。</li>
+</ul>
+<p>这两种情况下，运行调度的g0会将当前G替换成另一个G。然后选择的G替换g0在线程上运行。与常规的G相反，g0有一个固定和更大的栈。</p>
+<p>g0还负责：</p>
+<ul>
+<li><p>Defer函数的分配</p>
+</li>
+<li><p>GC收集、比如STW、扫描G的堆栈和标记、清除操作</p>
+</li>
+<li><p>栈扩容，当需要的时候，由g0进行扩栈操作</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221140478.png" alt="image-20220913221140478" style="zoom:50%;" />
+
+<p>当G7处于waiting状态</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221155964.png" alt="image-20220913221155964" style="zoom:50%;" />
+
+<p>g0负责将本地queue中的G2调度到M上执行，将G7防止parked goroutine队列中。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221423488.png" alt="image-20220913221423488" style="zoom:50%;" />
+
+<p>G2处于完成</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221444808.png" alt="image-20220913221444808" style="zoom:50%;" />
+
+<p>G7恢复运行，G0优先将G7调度到本地队列的前端。</p>
+</li>
+</ul>
+<h3 id="Schedule"><a href="#Schedule" class="headerlink" title="Schedule"></a>Schedule</h3><p>Go中，G的切换很轻便。其中需要保存的状态仅仅设计一下两个：</p>
+<ul>
+<li><p>goroutine在停止运行前执行的指令，程序当前要运行的指令是记录在程序计数器PC中的，G稍后将在同一指令处恢复运行</p>
+</li>
+<li><p>G的堆栈，以便再次运行时还原局部变量</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221554930.png" alt="image-20220913221554930" style="zoom:50%;" /></li>
+</ul>
+<p>切换之前，堆栈将被保存，以便在G再次运行时进行恢复。</p>
+<ul>
+<li>当前g阻塞在chan上，并切换到g0，需要将PC寄存器和堆栈指针一起保存在g的内部结构中；再将g0设置为正在运行的goroutine，用g0的堆栈替换成当前堆栈；</li>
+<li>g0寻找新的goroutine来运行</li>
+<li>g0使用所选的goroutine进行切换，从goroutine内部结构中获取PC寄存器和堆栈指针，程序跳转到对应的pc地址，运行这个goroutine</li>
+</ul>
+<h3 id="goroutine-recycle"><a href="#goroutine-recycle" class="headerlink" title="goroutine recycle"></a>goroutine recycle</h3><p>G很容易创建，容易到可能运行和销毁都会造成浪费，因此每一个P都维护了一个freelist G。当G处理完，则放回freelist local queue。重新生成G的时候可以直接复用。</p>
+<p>当local queue长度超过64个，此时会将一般的free G推送到全局的free list中。</p>
+<p>Global list包含两个队列，一个包含已分配栈的G，一个包含释放过堆栈的G。由于堆栈是动态增长的，因此可能会有一个大栈，因此Go不会保留这些栈，在GC的时候会清除，清除之后，就是没有分配堆栈的G。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221620268.png" alt="image-20220913221620268"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/30/Golang%E4%B8%AD%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2%E4%B9%8Bcontext%E5%8C%85/" rel="prev" title="Golang中上下文切换之context包">
+                  <i class="fa fa-chevron-left"></i> Golang中上下文切换之context包
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/09/18/Golang%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" rel="next" title="Golang中的内存分配">
+                  Golang中的内存分配 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/xiaoyeshiyu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

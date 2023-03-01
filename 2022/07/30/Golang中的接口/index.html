@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="面向对象编程的三大核心：封装、继承、多态。其中封装和继承通过结构体局部引用或者全局引用，接口体方法局部引用或全局引用实现，多态则是通过定义接口，而接口方法可以在多种结构体中实现而实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang中的接口">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2022/07/30/Golang%E4%B8%AD%E7%9A%84%E6%8E%A5%E5%8F%A3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="面向对象编程的三大核心：封装、继承、多态。其中封装和继承通过结构体局部引用或者全局引用，接口体方法局部引用或全局引用实现，多态则是通过定义接口，而接口方法可以在多种结构体中实现而实现。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T07:49:49.096Z">
+<meta property="article:author" content="Mitaka xu">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2022/07/30/Golang%E4%B8%AD%E7%9A%84%E6%8E%A5%E5%8F%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2022/07/30/Golang%E4%B8%AD%E7%9A%84%E6%8E%A5%E5%8F%A3/","path":"2022/07/30/Golang中的接口/","title":"Golang中的接口"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Golang中的接口 | Hexo</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">基本用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%80%BC%E6%8E%A5%E5%8F%97%E8%80%85%E5%92%8C%E6%8C%87%E9%92%88%E6%8E%A5%E5%8F%97%E8%80%85"><span class="nav-number">2.</span> <span class="nav-text">接口的值接受者和指针接受者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A9%BA%E6%8E%A5%E5%8F%A3"><span class="nav-number">3.</span> <span class="nav-text">空接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%96%AD%E8%A8%80%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">接口断言类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.</span> <span class="nav-text">类型断言接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3"><span class="nav-number">6.</span> <span class="nav-text">判断是否实现接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A9%BA%E6%8E%A5%E5%8F%A3%E7%B1%BB%E5%9E%8B%E6%AF%94%E8%BE%83"><span class="nav-number">7.</span> <span class="nav-text">空接口类型比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%BA%95%E5%B1%82%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0"><span class="nav-number">8.</span> <span class="nav-text">接口底层内部实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%B1%BB%E5%9E%8B"><span class="nav-number">8.1.</span> <span class="nav-text">基础类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%88%AB%E5%90%8D%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E"><span class="nav-number">9.</span> <span class="nav-text">类型别名和类型声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3"><span class="nav-number">10.</span> <span class="nav-text">函数实现接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%8A%A8%E6%80%81%E7%B1%BB%E5%9E%8B"><span class="nav-number">11.</span> <span class="nav-text">接口动态类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8D%B0%E5%8A%A8%E6%80%81%E5%9C%B0%E5%9D%80%E5%92%8C%E5%80%BC"><span class="nav-number">12.</span> <span class="nav-text">打印动态地址和值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">13.</span> <span class="nav-text"></span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">保持积累，保持学习。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoyeshiyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2022/07/30/Golang%E4%B8%AD%E7%9A%84%E6%8E%A5%E5%8F%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="保持积累，保持学习。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Golang中的接口 | Hexo">
+      <meta itemprop="description" content="面向对象编程的三大核心：封装、继承、多态。其中封装和继承通过结构体局部引用或者全局引用，接口体方法局部引用或全局引用实现，多态则是通过定义接口，而接口方法可以在多种结构体中实现而实现。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Golang中的接口<a href="https://github.com/user-name/repo-name/tree/branch-name/subdirectory-name/_posts/Golang%E4%B8%AD%E7%9A%84%E6%8E%A5%E5%8F%A3.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-07-30 00:00:00" itemprop="dateCreated datePublished" datetime="2022-07-30T00:00:00+08:00">2022-07-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-01 15:49:49" itemprop="dateModified" datetime="2023-03-01T15:49:49+08:00">2023-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/develope/" itemprop="url" rel="index"><span itemprop="name">develope</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/07/30/Golang%E4%B8%AD%E7%9A%84%E6%8E%A5%E5%8F%A3/" class="post-meta-item leancloud_visitors" data-flag-title="Golang中的接口" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">面向对象编程的三大核心：封装、继承、多态。其中封装和继承通过结构体局部引用或者全局引用，接口体方法局部引用或全局引用实现，多态则是通过定义接口，而接口方法可以在多种结构体中实现而实现。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>接口 <code>interface</code> 是一种类型，一种抽象类型。</p>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">type animal interface &#123;</span><br><span class="line">	Sing()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type dog struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (dog) Sing() &#123;</span><br><span class="line">	fmt.Println(&quot;wangwangwang&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type cat struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (cat) Sing() &#123;</span><br><span class="line">	fmt.Println(&quot;miaomiaomiao&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	var a1 animal = dog&#123;&#125;</span><br><span class="line">	a1.Sing()</span><br><span class="line">	var a2 animal = cat&#123;&#125;</span><br><span class="line">	a2.Sing()</span><br><span class="line">	fmt.Println(a1 == a2) // false</span><br><span class="line">	a2 = dog&#123;&#125;</span><br><span class="line">	a2.Sing()</span><br><span class="line">	fmt.Println(a1 == a2)	// true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接口函数可以分布在父类和子类之间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">type biology interface &#123;</span><br><span class="line">	Sing()</span><br><span class="line">	Run()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type animal struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type dog struct &#123;</span><br><span class="line">	animal</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (animal) Run()  &#123;&#125;</span><br><span class="line"></span><br><span class="line">func (dog) Sing() &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="接口的值接受者和指针接受者"><a href="#接口的值接受者和指针接受者" class="headerlink" title="接口的值接受者和指针接受者"></a>接口的值接受者和指针接受者</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">type animal interface &#123;</span><br><span class="line">	Sing()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type dog struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (dog) Sing() &#123;</span><br><span class="line">	fmt.Println(&quot;wangwangwang&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type cat struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (*cat) Sing() &#123;</span><br><span class="line">	fmt.Println(&quot;miaomiaomiao&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对象的值类型或者指针类型实现了接口中的方法，就算该类型实现了接口。</p>
+<p>接口在调用时跟对象方法一致，如果是作为值接受者，则传递值拷贝，如果是作为指针接受者，则传递指针的拷贝。</p>
+<p>但是接口在赋值时，也就是作为接口的接收者，如果指针接受者实现了这个方法，则必须以指针变量赋值。如果值接受者实现了这个方法，可以将值或者指针作为接收者。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var a1 animal</span><br><span class="line">a1 = dog&#123;&#125;</span><br><span class="line">a1.Sing()</span><br><span class="line">a1 = &amp;dog&#123;&#125;</span><br><span class="line">a1.Sing()</span><br><span class="line">//a1 = cat&#123;&#125; // cannot use cat&#123;&#125; (value of type cat) as type animal in assignment:</span><br><span class="line">//a1.Sing()</span><br></pre></td></tr></table></figure>
+
+<h3 id="空接口"><a href="#空接口" class="headerlink" title="空接口"></a>空接口</h3><p>空接口本身</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var y interface&#123;&#125;</span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, y, y)</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;nil&gt; &lt;nil&gt;</span><br></pre></td></tr></table></figure>
+
+<p>空接口可以接受任意类型变量或者函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var x interface&#123;&#125;</span><br><span class="line">x = &quot;A&quot;</span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, x, x)</span><br><span class="line">x = 123</span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, x, x)</span><br><span class="line">x = func() &#123;&#125;</span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, x, x)</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string A</span><br><span class="line">int 123</span><br><span class="line">func() 0x1002a0030</span><br></pre></td></tr></table></figure>
+
+<p>一个接口的值，简称接口值，由一个具体类型和类型的值两部分组成，这两部分分别成为接口的动态类型和动态值。</p>
+<p>获取接口的类型和接口断言，获取接口类型的值的表达式是<code>x.(T)</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var x interface&#123;&#125;</span><br><span class="line">x = &quot;abc&quot;</span><br><span class="line">if i, ok := x.(string); ok &#123;</span><br><span class="line">	fmt.Printf(&quot;%s&quot;, i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var x interface&#123;&#125;</span><br><span class="line">x = 123</span><br><span class="line">switch x.(type) &#123;  // 此处x一定是一个interface类型，如果去掉x类型声明（var x interface&#123;&#125;），则会报错</span><br><span class="line">case int:</span><br><span class="line">	fmt.Printf(&quot;%T %d\n&quot;, x, x)</span><br><span class="line">case string:</span><br><span class="line">	fmt.Printf(&quot;%T %s\n&quot;, x, x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接口和nil的比较</p>
+<p>只有类型和值都为nil时，这个接口才为nil</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="keyword">interface</span>&#123;&#125; = <span class="literal">nil</span></span><br><span class="line">fmt.Println(x == <span class="literal">nil</span>) 	<span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>当一个接口显式的赋值为nil，此时这个接口的 type 和data 都等于 nil，接口 &#x3D;&#x3D; nil</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> name <span class="keyword">interface</span> &#123;</span><br><span class="line">	Name()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> people <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *people)</span></span> Name() &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> x name = &amp;people&#123;&#125;</span><br><span class="line"> 	fmt.Printf(<span class="string">&quot;%T %v\n&quot;</span>, x, x) <span class="comment">// *main.people &amp;&#123;&#125;</span></span><br><span class="line">	fmt.Println(x == <span class="literal">nil</span>)	 <span class="comment">// false </span></span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+
+<p>当一个接口被赋予一个nil指针，此时接口的data是nil，但是接口的 type不是，此时接口 !&#x3D; nil</p>
+<h3 id="接口断言类型"><a href="#接口断言类型" class="headerlink" title="接口断言类型"></a>接口断言类型</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">type Flyer interface &#123;</span><br><span class="line">	fly()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Walker interface &#123;</span><br><span class="line">	walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Bird struct &#123;</span><br><span class="line">	name string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Pig struct &#123;</span><br><span class="line">	name string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (p Pig) walk() &#123;</span><br><span class="line">	fmt.Printf(&quot;%s is walking\n&quot;, p.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (b Bird) walk() &#123;</span><br><span class="line">	fmt.Printf(&quot;%s is walking\n&quot;, b.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (b Bird) fly() &#123;</span><br><span class="line">	fmt.Printf(&quot;%s is flying\n&quot;, b.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	var w, f interface&#123;&#125;						// w 和 f 都是接口</span><br><span class="line">	w = Pig&#123;name: &quot;pig&quot;&#125;</span><br><span class="line">	f = Bird&#123;name: &quot;bird&quot;&#125;</span><br><span class="line">	s := []interface&#123;&#125;&#123;w, f&#125;</span><br><span class="line">	for _, v := range s &#123;</span><br><span class="line">		if b, ok := v.(Pig); ok &#123;			// 接口断言类型</span><br><span class="line">			b.walk()</span><br><span class="line">		&#125;</span><br><span class="line">		if p, ok := v.(Bird); ok &#123;</span><br><span class="line">			p.fly()</span><br><span class="line">			p.walk()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pig is walking</span><br><span class="line">bird is flying</span><br><span class="line">bird is walking</span><br></pre></td></tr></table></figure>
+
+<h3 id="类型断言接口"><a href="#类型断言接口" class="headerlink" title="类型断言接口"></a>类型断言接口</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var p = Pig&#123;name: &quot;pig&quot;&#125;</span><br><span class="line">var b = Bird&#123;name: &quot;bird&quot;&#125;</span><br><span class="line">s := []interface&#123;&#125;&#123;p, b&#125;</span><br><span class="line">for _, v := range s &#123;</span><br><span class="line">	if f, ok := v.(Flyer); ok &#123;</span><br><span class="line">		f.fly()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	if f, ok := v.(Walker); ok &#123;</span><br><span class="line">		f.walk()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pig is walking</span><br><span class="line">bird is flying</span><br><span class="line">bird is walking</span><br></pre></td></tr></table></figure>
+
+<h3 id="判断是否实现接口"><a href="#判断是否实现接口" class="headerlink" title="判断是否实现接口"></a>判断是否实现接口</h3><p>在第三方包中，通常会有这样的代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var _ I = T</span><br></pre></td></tr></table></figure>
+
+<p>是用来验证<code>T</code>类型是否实现了<code>I</code>方法</p>
+<p>例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">type name interface &#123;</span><br><span class="line">	Name()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type people struct &#123;</span><br><span class="line">	string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (p *people) Name() &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var _ name = people&#123;&#125;</span><br><span class="line">// 编译器报错：cannot use people&#123;&#125; (value of type people) as type name in variable declaration:</span><br><span class="line">	people does not implement name (Name method has pointer receiver)</span><br></pre></td></tr></table></figure>
+
+<h3 id="空接口类型比较"><a href="#空接口类型比较" class="headerlink" title="空接口类型比较"></a>空接口类型比较</h3><p>空接口比较主要是类型是否可以比较。字符串、整形、bool、浮点（注意精确性）、复数、数组（长度类型都一样才能相等）都是可以比较的。</p>
+<p>切片：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">运行时报错：panic: runtime error: comparing uncomparable type []int</span><br></pre></td></tr></table></figure>
+
+<p>map</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">运行时报错：panic: runtime error: comparing uncomparable type map[int]int</span><br></pre></td></tr></table></figure>
+
+<p>channel</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">可以比较，比较的是内存地址</span><br><span class="line">	var a interface&#123;&#125; = make(chan int)</span><br><span class="line">	var b interface&#123;&#125; = make(chan int)</span><br><span class="line">	fmt.Printf(&quot;%v %v\n&quot;, a, b)					// 0x1400010e060 0x1400010e0c0</span><br><span class="line">	fmt.Println(a == b)									// false</span><br></pre></td></tr></table></figure>
+
+<p>结构体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">内部元素能比较即可，如果内部有元素无法比较，则结构体无法比较</span><br><span class="line">由于结构体内部有顺序，有名称，相等的结构体需要有相同的变量内容，变量名称，变量顺序</span><br></pre></td></tr></table></figure>
+
+<p>函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">函数底层是指针，但是不能比较，运行时报错</span><br><span class="line">	var a interface&#123;&#125; = func() &#123;&#125;</span><br><span class="line">	var b interface&#123;&#125; = func() &#123;&#125;</span><br><span class="line">	fmt.Printf(&quot;%v %v\n&quot;, a, b)</span><br><span class="line">	fmt.Println(a == b) 						// panic: runtime error: comparing uncomparable type func()</span><br></pre></td></tr></table></figure>
+
+<h3 id="接口底层内部实现"><a href="#接口底层内部实现" class="headerlink" title="接口底层内部实现"></a>接口底层内部实现</h3><p>接口的底层代码在<code>src/runtime/runtime2.go</code>中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 非空接口</span><br><span class="line">type iface struct &#123;</span><br><span class="line">	tab  *itab							</span><br><span class="line">	data unsafe.Pointer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 空接口</span><br><span class="line">type eface struct &#123;</span><br><span class="line">	_type *_type</span><br><span class="line">	data  unsafe.Pointer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>非空接口初始化的过程是初始化一个iface类型的结构</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type iface struct &#123;</span><br><span class="line">	tab  *itab							// 存放接口自身类型及方法指针信息</span><br><span class="line">	data unsafe.Pointer			// 数据信息</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​	<code>iface</code>的结构有两个指针字段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">itab 用来存放接口自身类型，和绑定的实例类型，以及实例相关的函数指针</span><br><span class="line">data 指向接口绑定的实力的副本，接口的初始化也是一种值烤白</span><br></pre></td></tr></table></figure>
+
+<p><code>data</code>指向具体的实例数据，传递个接口的是值类型，则<code>data</code>指向指的副本，如果传递的是指针类型，<code>data</code>执行的是指针的副本。无论是接口的转换还是函数调用，都是值传递。</p>
+<p><code>itab</code>的数据结构</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">type itab struct &#123;</span><br><span class="line">	inter *interfacetype		// 接口类型元信息的指针</span><br><span class="line">	_type *_type						// 指向接口存放的具体类型元信息的指针，data指针指向的是该类型的值</span><br><span class="line">	hash  uint32 // copy of _type.hash. Used for type switches. // 拷贝的_type.hash.，是类型的hash值，用于接口断言或类型查询快速访问</span><br><span class="line">	_     [4]byte</span><br><span class="line">	fun   [1]uintptr // variable sized. fun[0]==0 means _type does not implement inter. // 指向具体类型的方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> itab这个数据结构是非空接口实现动态调用的基础，itab的信息被编译器和链接器保存了下来，存放在可执行文件的只读存储段中。itab存放在竞态分配的存储空间中，不受GC的限制，内存不会被回收。</p>
+</blockquote>
+<p><code>_type</code>的数据结构</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">type _type struct &#123;</span><br><span class="line">	size       uintptr	// 大小</span><br><span class="line">	ptrdata    uintptr // size of memory prefix holding all pointers</span><br><span class="line">	hash       uint32		// hash</span><br><span class="line">	tflag      tflag		// 类型的特征标记</span><br><span class="line">	align      uint8		// _type作为整体交量存放时的对齐字节数</span><br><span class="line">	fieldAlign uint8		// 当前结构体字段的对齐字节数</span><br><span class="line">	kind       uint8		// 基础类型枚举值和反射中的Kind一致，kind决定了如何解析该类型，例如bool，string等</span><br><span class="line">	// function for comparing objects of this type</span><br><span class="line">	// (ptr to object A, ptr to object B) -&gt; ==?</span><br><span class="line">	equal func(unsafe.Pointer, unsafe.Pointer) bool  // 比较两个类型是否相等的函数</span><br><span class="line">	// gcdata stores the GC type data for the garbage collector.</span><br><span class="line">	// If the KindGCProg bit is set in kind, gcdata is a GC program.</span><br><span class="line">	// Otherwise it is a ptrmask bitmap. See mbitmap.go for details.</span><br><span class="line">	gcdata    *byte		// GC相关信息</span><br><span class="line">	str       nameOff	</span><br><span class="line">	ptrToThis typeOff</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Go是强类型语言，编译器需要为每一个类型维护类型的元信息，也就是<code>_type</code>，其他字段都是以<code>_type</code>为内嵌字段封装而成的结构体</p>
+<p>接口的类型元信息的数据结构</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type interfacetype struct &#123;</span><br><span class="line">	typ     _type		// 类型</span><br><span class="line">	pkgpath name		// 接口所属包的名字信息，名称和描述信息</span><br><span class="line">	mhdr    []imethod	// 接口的方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type imethod struct &#123;</span><br><span class="line">	name nameOff		// 偏移量</span><br><span class="line">	ityp typeOff</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>iface</code>和<code>eface</code>的区别：</p>
+<p><code>eface</code>是没有任何方法集的接口，所以<code>eface</code>内不需要维护和动态内存分配相关的数据结构<code>itab</code>。<code>eface</code>只关心存放的具体类型是什么，具体类型的值是什么。<code>eface</code>是不包含任何方法的空接口。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 非空接口</span><br><span class="line">type iface struct &#123;</span><br><span class="line">	tab  *itab							</span><br><span class="line">	data unsafe.Pointer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 空接口</span><br><span class="line">type eface struct &#123;</span><br><span class="line">	_type *_type</span><br><span class="line">	data  unsafe.Pointer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于空接口没有方法，所以任意类型都实现了空接口，因此空接口可以存储任意类型的数值。</p>
+<h4 id="基础类型"><a href="#基础类型" class="headerlink" title="基础类型"></a>基础类型</h4><p>Go的数据类型都是在<code>_type</code>的基础上，增加一些额外的字段来进行管理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">type arraytype struct &#123;</span><br><span class="line">	typ   _type</span><br><span class="line">	elem  *_type</span><br><span class="line">	slice *_type</span><br><span class="line">	len   uintptr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type chantype struct &#123;</span><br><span class="line">	typ  _type</span><br><span class="line">	elem *_type</span><br><span class="line">	dir  uintptr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type slicetype struct &#123;</span><br><span class="line">	typ  _type</span><br><span class="line">	elem *_type</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更多类型，例如<code>funtype</code>，<code>ptrtype</code>都可在<code>go/src/runtime/type.go</code>中查看。</p>
+<h3 id="类型别名和类型声明"><a href="#类型别名和类型声明" class="headerlink" title="类型别名和类型声明"></a>类型别名和类型声明</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type S string 	 // 声明一种新的类型，S不是stiring类型</span><br><span class="line">type S = string	 // 声明一种别名，S就是stirng</span><br></pre></td></tr></table></figure>
+
+<p>在声明类型的情况下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type S string</span><br><span class="line">s1 := &quot;abc&quot;</span><br><span class="line">var s2 S = &quot;def&quot;</span><br><span class="line">fmt.Println(s1 == s2) // invalid operation: s1 == s2 (mismatched types string and S)</span><br></pre></td></tr></table></figure>
+
+<p>在起别名的情况下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type S = string</span><br><span class="line">s1 := &quot;abc&quot;</span><br><span class="line">var s2 S = &quot;def&quot;</span><br><span class="line">fmt.Println(s1 == s2)	// true</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数实现接口"><a href="#函数实现接口" class="headerlink" title="函数实现接口"></a>函数实现接口</h3><p>函数实现接口的核心是函数实现接口中的方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">type Invoker interface &#123;</span><br><span class="line">	Call(interface&#123;&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Struct struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (s *Struct) Call(p interface&#123;&#125;) &#123;		// 接口体实现方法</span><br><span class="line">	fmt.Println(&quot;from struct&quot;, p)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type FuncCaller func(interface&#123;&#125;)</span><br><span class="line"></span><br><span class="line">func (f FuncCaller) Call(p interface&#123;&#125;) &#123;		// 函数实现方法，实现Call方法中调用具体函数</span><br><span class="line">	f(p)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	var invoker Invoker</span><br><span class="line">	s := new(Struct)</span><br><span class="line">	invoker = s</span><br><span class="line">	invoker.Call(&quot;hello&quot;)</span><br><span class="line"></span><br><span class="line">	invoker = FuncCaller(func(i interface&#123;&#125;) &#123;</span><br><span class="line">		fmt.Println(&quot;function call &quot;, i)</span><br><span class="line">	&#125;)</span><br><span class="line">	invoker.Call(&quot;hello&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="接口动态类型"><a href="#接口动态类型" class="headerlink" title="接口动态类型"></a>接口动态类型</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">type name interface &#123;</span><br><span class="line">	Name()</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> type people struct &#123;</span><br><span class="line">   string</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> func (p *people) Name() &#123;&#125;</span><br><span class="line"></span><br><span class="line">var x name								// 变量x是一个接口，类型和值都是nil</span><br><span class="line">fmt.Println(x == nil)			// true</span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, x, x)</span><br><span class="line">var y *people							// 变量y是一个指针变量，值是0x0</span><br><span class="line">fmt.Println(y == nil)			// true</span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, y, y)</span><br><span class="line">x = y											// 将y赋值给x，此时x有类型，值依然是nil</span><br><span class="line">fmt.Println(x == nil)			// false</span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, x, x)</span><br><span class="line">var z = new(people)				// 变量z初始化people类型，返回这个类型的地址</span><br><span class="line">fmt.Println(z == nil)			// false </span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, z, z)</span><br><span class="line">x = z											// 将变量z的类型和值赋值给x</span><br><span class="line">fmt.Println(x == y)				// false，虽然类型一样，但是指向的底层数据不是同一个，指针不想等</span><br><span class="line">fmt.Printf(&quot;%T %v\n&quot;, x, x) </span><br></pre></td></tr></table></figure>
+
+<p>因此，实现了<code>error</code>接口，但是不能将<code>error</code>和<code>nil</code>直接对比</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">type MyError struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (e MyError) Error() string &#123;</span><br><span class="line">	return &quot;my error&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func Process() error &#123;</span><br><span class="line">	var err *MyError = nil</span><br><span class="line">	return err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	err := Process()	</span><br><span class="line">	fmt.Println(err)						// 返回的err是nil</span><br><span class="line">	fmt.Println(err == nil)			// 但是err和nil不想等，这是因为err中有类型</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="打印动态地址和值"><a href="#打印动态地址和值" class="headerlink" title="打印动态地址和值"></a>打印动态地址和值</h3><p>动态地址和值可以通过<code>unsafe</code>包获取，通过interface的组成可以看到是由两个指针组成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">type eface struct &#123;</span><br><span class="line">	itype uintptr</span><br><span class="line">	data  uintptr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var a interface&#123;&#125; = nil								// type: nil data: nil </span><br><span class="line">var b interface&#123;&#125; = (*int)(nil)				// type: *int data: nil </span><br><span class="line">x := 5</span><br><span class="line">var c interface&#123;&#125; = &amp;x								// type: *int data: 5</span><br><span class="line">ia := *(*eface)(unsafe.Pointer(&amp;a))		// 按照eface的存储方式取值</span><br><span class="line">ib := *(*eface)(unsafe.Pointer(&amp;b))  </span><br><span class="line">ic := *(*eface)(unsafe.Pointer(&amp;c))</span><br><span class="line">fmt.Println(ic)												// &#123;4377462432 1374389948104&#125; 类型和值</span><br><span class="line">ia.data = ic.data</span><br><span class="line">ib.data = ic.data</span><br><span class="line">fmt.Println(ia)												// &#123;0 1374389948104&#125;  值赋值，类型为0</span><br><span class="line">fmt.Println(ib)												// &#123;4377462432 1374389948104&#125; 类型和值都有</span><br><span class="line">fmt.Println(*(*int)(unsafe.Pointer(ic.data))) // 5</span><br></pre></td></tr></table></figure>
+
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/07/30/Golang%E4%B8%AD%E7%9A%84%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86/" rel="prev" title="Golang中的错误处理">
+                  <i class="fa fa-chevron-left"></i> Golang中的错误处理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/07/31/Golang%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="next" title="Golang单元测试">
+                  Golang单元测试 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/xiaoyeshiyu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

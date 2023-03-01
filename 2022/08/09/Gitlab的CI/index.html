@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="​引入自动化测试、自动化构建会大大的提升工作效率，将需要手动执行运行单元测试，需要手动运行打包脚本的工作流程，全部纳入到gitlab或者其他的代码管理工具中。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gitlab的CI">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2022/08/09/Gitlab%E7%9A%84CI/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="​引入自动化测试、自动化构建会大大的提升工作效率，将需要手动执行运行单元测试，需要手动运行打包脚本的工作流程，全部纳入到gitlab或者其他的代码管理工具中。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220808165900505.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220808165922917.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220808170038028.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/03/image-20230301113703324.png">
+<meta property="article:published_time" content="2022-08-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T07:49:49.088Z">
+<meta property="article:author" content="Mitaka xu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220808165900505.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2022/08/09/Gitlab%E7%9A%84CI/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2022/08/09/Gitlab%E7%9A%84CI/","path":"2022/08/09/Gitlab的CI/","title":"Gitlab的CI"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Gitlab的CI | Hexo</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Runner"><span class="nav-number">1.1.</span> <span class="nav-text">安装Runner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Runner%E6%B3%A8%E5%86%8C"><span class="nav-number">1.2.</span> <span class="nav-text">Runner注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEci"><span class="nav-number">1.3.</span> <span class="nav-text">配置ci</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">1.4.</span> <span class="nav-text">流水线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E4%BA%BA%E9%80%9A%E7%9F%A5"><span class="nav-number">1.5.</span> <span class="nav-text">机器人通知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E5%85%85"><span class="nav-number">1.6.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">优化配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E8%A1%8C%E4%B8%AA%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">并行个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%81%E6%AD%A2%E6%95%B0%E6%8D%AE%E8%A6%86%E7%9B%96"><span class="nav-number">2.2.</span> <span class="nav-text">禁止数据覆盖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#golang%E4%BD%BF%E7%94%A8cache"><span class="nav-number">2.3.</span> <span class="nav-text">golang使用cache</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">保持积累，保持学习。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoyeshiyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2022/08/09/Gitlab%E7%9A%84CI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="保持积累，保持学习。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Gitlab的CI | Hexo">
+      <meta itemprop="description" content="​引入自动化测试、自动化构建会大大的提升工作效率，将需要手动执行运行单元测试，需要手动运行打包脚本的工作流程，全部纳入到gitlab或者其他的代码管理工具中。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Gitlab的CI<a href="https://github.com/user-name/repo-name/tree/branch-name/subdirectory-name/_posts/Gitlab%E7%9A%84CI.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-08-09 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-09T00:00:00+08:00">2022-08-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-01 15:49:49" itemprop="dateModified" datetime="2023-03-01T15:49:49+08:00">2023-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/" itemprop="url" rel="index"><span itemprop="name">golang</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/golang/develope/" itemprop="url" rel="index"><span itemprop="name">develope</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/08/09/Gitlab%E7%9A%84CI/" class="post-meta-item leancloud_visitors" data-flag-title="Gitlab的CI" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">​引入自动化测试、自动化构建会大大的提升工作效率，将需要手动执行运行单元测试，需要手动运行打包脚本的工作流程，全部纳入到gitlab或者其他的代码管理工具中。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>​	本文介绍通过<code>Gitlab</code>做<code>CI</code>的整个过程。</p>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><p>手动搭建<code>gitlab</code>和<code>gitlab-runner</code></p>
+<p>依照官方安装指导手册安装，通过<code>docker</code>的方式，简单方便</p>
+<p>安装<code>gitlab</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run --detach \</span><br><span class="line">--hostname 192.168.41.249 \</span><br><span class="line">--publish 10443:443 --publish 1080:80 --publish 1022:22 \</span><br><span class="line">--name gitlab   --restart always \</span><br><span class="line">--volume /home/git/config:/etc/gitlab \</span><br><span class="line">--volume /home/git/logs:/var/log/gitlab \</span><br><span class="line">--volume /home/git/data:/var/opt/gitlab \</span><br><span class="line">--shm-size 256m \</span><br><span class="line">gitlab/gitlab-ee:latest</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>hostname</code>，<code>publish</code>，<code>volume</code>根据实际情况设置。</p>
+<p>修改gitlab的配置文件，由于<code>config</code>目录已经映射到主机上，直接修改主机上的配置即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /home/git/config/gitlab.rb</span><br><span class="line"></span><br><span class="line">external_url &#x27;http://192.168.41.249&#x27;</span><br><span class="line">gitlab_rails[&#x27;gitlab_ssh_host&#x27;] = &#x27;192.168.41.249&#x27;</span><br><span class="line">gitlab_rails[&#x27;gitlab_shell_ssh_port&#x27;] = 1022</span><br></pre></td></tr></table></figure>
+
+<p>由于改动了默认的<code>ssh</code>端口和<code>web</code>端口，在<code>clone</code>推荐目录时，给出来的是默认的IP和端口，而不是上述设置的。因此需要进入到容器中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it gitlab bash</span><br><span class="line">vi /opt/gitlab/embedded/service/gitlab-rails/config/gitlab.yml</span><br><span class="line"></span><br><span class="line">  gitlab:</span><br><span class="line">    host: 192.168.41.249</span><br><span class="line">    port: 1080</span><br><span class="line">    ssh_host: 192.168.41.249</span><br><span class="line">  gitlab_shell:</span><br><span class="line">  	ssh_port: 1022</span><br></pre></td></tr></table></figure>
+
+<p>在容器内，重启服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gitlab-ctl reconfigure</span><br><span class="line">gitlab-ctl restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装Runner"><a href="#安装Runner" class="headerlink" title="安装Runner"></a>安装<code>Runner</code></h3><p>安装<code>gitlab-runner</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name gitlab-runner \</span><br><span class="line">--restart always   \</span><br><span class="line">-v /srv/gitlab-runner/config:/etc/gitlab-runner   \</span><br><span class="line">-v /var/run/docker.sock:/var/run/docker.sock   \</span><br><span class="line">gitlab/gitlab-runner:latest</span><br></pre></td></tr></table></figure>
+
+<p><code>volume</code>根据具体情况设置。</p>
+<h3 id="Runner注册"><a href="#Runner注册" class="headerlink" title="Runner注册"></a><code>Runner</code>注册</h3><p><code>Runner</code>使用<code>docker</code>的执行器，可以将需要的环境打包成一个镜像，例如固定<code>golang</code>版本，提前准备需要的工具。</p>
+<p>准备镜像</p>
+<p><code>Dockerfile</code></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Base image: https://hub.docker.com/_/golang/</span></span><br><span class="line"><span class="keyword">FROM</span> golang:<span class="number">1.19</span>.<span class="number">6</span></span><br><span class="line"><span class="keyword">USER</span> root</span><br><span class="line"><span class="keyword">ENV</span> GOPROXY https://goproxy.cn,direct</span><br><span class="line"></span><br><span class="line"><span class="comment"># install golangci-lint</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.51.2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># install docker</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> curl -O https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz \</span></span><br><span class="line"><span class="language-bash">&amp;&amp; tar zxvf docker-latest.tgz \</span></span><br><span class="line"><span class="language-bash">&amp;&amp; <span class="built_in">cp</span> docker/docker /usr/local/bin/ \</span></span><br><span class="line"><span class="language-bash">&amp;&amp; <span class="built_in">rm</span> -rf docker docker-latest.tgz</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># install expect</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt-get update</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt-get -y install tcl tk expect</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>golangci-lint的版本下载链接需要及时与官网对齐，<code>golangci-lint</code>的官网：<code>https://golangci-lint.run/usage/install/#local-installation</code></p>
+</blockquote>
+<p>构建镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t go-tools:1.19.6 .</span><br></pre></td></tr></table></figure>
+
+<p>例如使用<code>golang 1.19.6</code>版本，通过<code>golint</code>和<code>golangci-lint</code>检查代码。</p>
+<p>安装<code>docker</code>是由于需要再容器中使用宿主的<code>Docker</code>命令，因此需要安装<code>Docker</code>，将宿主机的<code>docker.sock</code>文件挂载到容器内的相同位置。</p>
+<p>生成镜像后，推送到镜像仓，并在<code>gitlab-runner</code>的服务器上拉取改镜像。</p>
+<p>注册<code>runner</code>，直接执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it gitlab-runner gitlab-ci-multi-runner register</span><br></pre></td></tr></table></figure>
+
+<p>在gitlab的<strong>项目-设置-CI&#x2F;CD-Runner</strong>中，可以看到注册<code>Runner</code>的网址和注册令牌。</p>
+<p>按照提示输入相关信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Please enter the gitlab-ci coordinator URL:</span><br><span class="line"># gitlab的url, gitlab-&gt;你的项目-&gt;settings -&gt; CI/CD -&gt;Runners settings</span><br><span class="line">Please enter the gitlab-ci token for this runner:</span><br><span class="line"># gitlab-&gt;你的项目-&gt;settings -&gt; CI/CD -&gt;Runners settings</span><br><span class="line">Please enter the gitlab-ci description for this runner:</span><br><span class="line"># 示例：mitaka-runner1</span><br><span class="line">Please enter the gitlab-ci tags for this runner (comma separated):</span><br><span class="line"># 示例：golang</span><br><span class="line">Whether to run untagged builds [true/false]:</span><br><span class="line"># true	// 可以运行不加tag的builds</span><br><span class="line">Please enter the executor: docker, parallels, shell, kubernetes, docker-ssh, ssh, virtualbox, docker+machine, docker-ssh+machine:</span><br><span class="line"># docker		// 使用容器</span><br><span class="line">Please enter the default Docker image (e.g. ruby:2.1):</span><br><span class="line"># go-tools:1.19.6（之前自己制作的镜像）</span><br></pre></td></tr></table></figure>
+
+<p>注册之后，在<code>Runner</code>管理页面上就可以看到正在运行的<code>Runner</code></p>
+<p><code>runner</code>配置之后，在配置文件中可以看到<code>runner</code>的配置信息，还需要对配置信息做部分修改。</p>
+<p>安装<code>runner</code>时，已经将<code>runner</code>的配置目录映射到主机<code>/srv/gitlab-runner/config</code>，因此，修改对应文件即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /srv/gitlab-runner/config/config.toml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[[runners]]</span></span><br><span class="line">  <span class="attr">name</span> = <span class="string">&quot;mitaka-runner1&quot;</span></span><br><span class="line">  <span class="attr">url</span> = <span class="string">&quot;http://192.168.41.249:1080/&quot;</span></span><br><span class="line">  <span class="attr">token</span> = <span class="string">&quot;7ZSiyUZya9z7zF-fUuxz&quot;</span></span><br><span class="line">  <span class="attr">executor</span> = <span class="string">&quot;docker&quot;</span></span><br><span class="line">  <span class="section">[runners.custom_build_dir]</span></span><br><span class="line">  <span class="section">[runners.cache]</span></span><br><span class="line">    <span class="section">[runners.cache.s3]</span></span><br><span class="line">    <span class="section">[runners.cache.gcs]</span></span><br><span class="line">    <span class="section">[runners.cache.azure]</span></span><br><span class="line">  <span class="section">[runners.docker]</span></span><br><span class="line">    <span class="attr">tls_verify</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">image</span> = <span class="string">&quot;go-tools:1.19.6&quot;</span></span><br><span class="line">    <span class="attr">privileged</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">disable_entrypoint_overwrite</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">oom_kill_disable</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">disable_cache</span> = <span class="literal">false</span></span><br><span class="line">    <span class="attr">volumes</span> = [<span class="string">&quot;/var/run/docker.sock:/var/run/docker.sock&quot;</span>]		// 挂载卷</span><br><span class="line">    <span class="attr">shm_size</span> = <span class="number">0</span></span><br><span class="line">    <span class="attr">extra_hosts</span> = [<span class="string">&quot;192.168.41.249:127.0.0.1&quot;</span>]			// 网络映射，将gitlab主机映射成<span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line">    <span class="attr">network_mode</span> = <span class="string">&quot;host&quot;</span>														// 主机网络模式</span><br><span class="line">    <span class="attr">pull_policy</span> = <span class="string">&quot;if-not-present&quot;</span>									// 镜像不存在，则拉取</span><br></pre></td></tr></table></figure>
+
+<p><code>gitlan-runner</code>在执行时，会根据配置启动一个容器，在这个容器中<code>pull</code>代码，并根据规则检测。</p>
+<p>配置文件修改之后，重启runner</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gitlab-runner restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置ci"><a href="#配置ci" class="headerlink" title="配置ci"></a>配置ci</h3><p>在代码线中，配置<code>.gitlab-ci.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">image:</span> <span class="string">go-tools:1.19.6</span></span><br><span class="line"></span><br><span class="line"><span class="attr">stages:</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="string">build</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">test</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">deploy</span></span><br><span class="line"></span><br><span class="line"><span class="attr">before_script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">export</span> <span class="string">VERSION=`echo</span> <span class="string">$&#123;CI_COMMIT_TAG&#125;</span> <span class="string">|</span> <span class="string">awk</span> <span class="string">-F&quot;_&quot;</span> <span class="string">&#x27;&#123;print $1&#125;&#x27;</span><span class="string">`</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 单元测试</span></span><br><span class="line"><span class="attr">unit_tests:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">test</span></span><br><span class="line">  <span class="attr">script:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="string">make</span> <span class="string">test</span></span><br><span class="line">  <span class="attr">tags:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="string">golang</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 竞态检测</span></span><br><span class="line"><span class="attr">race_detector:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">test</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">make</span> <span class="string">race</span></span><br><span class="line">  <span class="attr">tags:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="string">golang</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 代码覆盖率检测</span></span><br><span class="line"><span class="attr">code_coverage:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">test</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">make</span> <span class="string">coverage</span></span><br><span class="line">  <span class="attr">tags:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="string">golang</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 代码覆盖率导出成html</span></span><br><span class="line"><span class="attr">code_coverage_report:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">test</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">make</span> <span class="string">coverhtml</span></span><br><span class="line">  <span class="attr">only:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">master</span>  </span><br><span class="line">  <span class="attr">tags:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="string">golang</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># golangci-lint代码检测</span></span><br><span class="line"><span class="attr">golangci-lint_code:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">test</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">make</span> <span class="string">golangci-lint</span>  </span><br><span class="line">  <span class="attr">tags:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">golang</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># go build检测</span></span><br><span class="line"><span class="attr">build:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">build</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">pwd</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">go</span> <span class="string">build</span> <span class="string">.</span></span><br><span class="line">  <span class="attr">tags:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">golang</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 制作docker镜像</span></span><br><span class="line"><span class="attr">build_image:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">deploy</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">make</span> <span class="string">build_image</span></span><br><span class="line">  <span class="attr">tags:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">golang</span></span><br></pre></td></tr></table></figure>
+
+<p><code>ci</code>中包括了执行单元测试、竞态检测、代码覆盖率、<code>lint</code>检测、<code>golangci-lint</code>检测、<code>go build</code>检测。</p>
+<p>为了降低ci文件中的复杂度，将过程单元化，放到Makefile中，使用统一的方式调用它们。</p>
+<p><code>Makefile</code></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PROJECT_NAME := <span class="string">&quot;demo&quot;</span></span><br><span class="line">PKG_LIST := <span class="variable">$(<span class="built_in">shell</span> go list ./... | grep -v /vendor/)</span></span><br><span class="line">GO_FILES := <span class="variable">$(<span class="built_in">shell</span> find . -name &#x27;*.go&#x27; | grep -v /vendor/ | grep -v _test.go)</span></span><br><span class="line"></span><br><span class="line"><span class="section">test: ## Run unittests</span></span><br><span class="line">	@go test -v $&#123;PKG_LIST&#125; </span><br><span class="line"></span><br><span class="line"><span class="section">golangci-lint: ## golangci-lint files</span></span><br><span class="line">	@golangci-lint run ./... </span><br><span class="line"></span><br><span class="line"><span class="section">race: ## Run data race detector</span></span><br><span class="line">	@go test -race -short $&#123;PKG_LIST&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">coverage: ## Generate global code coverage report</span></span><br><span class="line">	./scripts/coverage.sh;</span><br><span class="line"></span><br><span class="line"><span class="section">coverhtml: ## Generate global code coverage report in HTML</span></span><br><span class="line">	./scripts/coverage.sh html;</span><br><span class="line">	</span><br><span class="line"><span class="section">build_image:	## Generate docker image</span></span><br><span class="line">	./build_images.sh</span><br></pre></td></tr></table></figure>
+
+<p>检查代码覆盖率的脚本</p>
+<p><code>./scripts/coverage.sh</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment"># Code coverage generation</span></span></span><br><span class="line">COVERAGE_DIR=&quot;$&#123;COVERAGE_DIR:-coverage&#125;&quot;</span><br><span class="line">PKG_LIST=$(go list ./... | grep -v /vendor/)</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Create the coverage files directory</span></span><br><span class="line">mkdir -p &quot;$COVERAGE_DIR&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Create a coverage file <span class="keyword">for</span> each package</span></span><br><span class="line">for package in $&#123;PKG_LIST&#125;; do</span><br><span class="line">    go test -covermode=count -coverprofile &quot;$&#123;COVERAGE_DIR&#125;/$&#123;package##*/&#125;.cov&quot; &quot;$package&quot;</span><br><span class="line">done</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Merge the coverage profile files</span></span><br><span class="line">echo &#x27;mode: count&#x27; &gt;&quot;$&#123;COVERAGE_DIR&#125;&quot;/coverage.cov</span><br><span class="line">tail -q -n +2 &quot;$&#123;COVERAGE_DIR&#125;&quot;/*.cov &gt;&gt;&quot;$&#123;COVERAGE_DIR&#125;&quot;/coverage.cov</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Display the global code coverage</span></span><br><span class="line">go tool cover -func=&quot;$&#123;COVERAGE_DIR&#125;&quot;/coverage.cov</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">If needed, generate HTML report</span></span><br><span class="line">if [ &quot;$1&quot; == &quot;html&quot; ]; then</span><br><span class="line">    go tool cover -html=&quot;$&#123;COVERAGE_DIR&#125;&quot;/coverage.cov -o coverage.html</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Remove the coverage files directory</span></span><br><span class="line">rm -rf &quot;$COVERAGE_DIR&quot;</span><br></pre></td></tr></table></figure>
+
+<p>该代码线在<code>git push</code>之后，会自动执行流水线</p>
+<p><code>./build_images.sh</code>制作镜像的脚本根据实际项目而定，主要逻辑是通过脚本执行<code>Dockerfile</code>，脚本负责指定tag以及将<code>image push</code>到镜像仓。</p>
+<p><code>Ps</code>：后续自动更新到生产环境，也是通过脚本实现，当然也有更好的云原生方案，封装API等，可以根据实际环境实现。</p>
+<h3 id="流水线"><a href="#流水线" class="headerlink" title="流水线"></a>流水线</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220808165900505.png" alt="image-20220808165900505"></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220808165922917.png" alt="image-20220808165922917"></p>
+<p>点击具体的作业，可以查看详细输出。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220808170038028.png" alt="image-20220808170038028"></p>
+<h3 id="机器人通知"><a href="#机器人通知" class="headerlink" title="机器人通知"></a>机器人通知</h3><p>钉钉或者企业微信都可以配置群机器人，通过群机器人<code>web-hook</code>的地址，可以发送部署信息。</p>
+<p>Ps：通过<code>web-hook</code>也可以实现通知，根据具体接口参数二次开发，这里仅介绍通过脚本发送<code>http</code>请求通知群聊机器人。</p>
+<p>参考文本信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">curl &#x27;https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=693axxx6-7aoc-4bc4-97a0-0ec2sifa5aaa&#x27; \</span><br><span class="line">   -H &#x27;Content-Type: application/json&#x27; \</span><br><span class="line">   -d &#x27;</span><br><span class="line">   &#123;</span><br><span class="line">        &quot;msgtype&quot;: &quot;text&quot;,</span><br><span class="line">        &quot;text&quot;: &#123;</span><br><span class="line">            &quot;content&quot;: &quot;hello world&quot;</span><br><span class="line">        &#125;</span><br><span class="line">   &#125;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>实际配置如下</p>
+<p><code>scripts/notice.sh</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">gVersion=2.0</span><br><span class="line">GIT_SHA=$(git rev-parse --short HEAD)</span><br><span class="line">BUILD_NUMBER=$(git <span class="built_in">log</span> | grep -e <span class="string">&#x27;commit [a-zA-Z0-9]*&#x27;</span> | <span class="built_in">wc</span> -l)</span><br><span class="line"></span><br><span class="line">VERSION=v<span class="variable">$&#123;gVersion&#125;</span>.r<span class="variable">$&#123;GIT_SHA&#125;</span>-<span class="variable">$&#123;BUILD_NUMBER&#125;</span></span><br><span class="line"></span><br><span class="line">cmd=$(curl -X POST <span class="string">&#x27;https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=a48cb0d0-5653-4dae-ac41-de047df0fa8f&#x27;</span> \</span><br><span class="line">    -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> \</span><br><span class="line">    -d <span class="string">&quot;</span></span><br><span class="line"><span class="string">   &#123;</span></span><br><span class="line"><span class="string">        \&quot;msgtype\&quot;: \&quot;text\&quot;,</span></span><br><span class="line"><span class="string">        \&quot;text\&quot;: &#123;</span></span><br><span class="line"><span class="string">            \&quot;content\&quot;: \&quot;<span class="variable">$&#123;VERSION&#125;</span>\&quot;,		// 仅发送tag号</span></span><br><span class="line"><span class="string">						\&quot;mentioned_list\&quot;:[\&quot;@all\&quot;]		// 通知所有人</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">   &#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>添加<code>makefile</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">notice:</span><br><span class="line">	./scripts/notice.sh;</span><br></pre></td></tr></table></figure>
+
+<p>增加<code>ci</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 通知</span><br><span class="line">notice:</span><br><span class="line">  stage: notice					// 增加一个stage，成功之后通知。</span><br><span class="line">  script:</span><br><span class="line">    - make notice </span><br><span class="line">  tags:</span><br><span class="line">    - golang </span><br></pre></td></tr></table></figure>
+
+<p>注意：<strong>执行的脚本需要注意一定要有可执行权限</strong></p>
+<p>ps：通知功能可以直接运行脚本先经过测试，能够发送之后再加入到<code>ci</code>中。</p>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>本文简单介绍<code>CI</code>的过程，其中有很多可优化的点，例如：</p>
+<ul>
+<li>CI中的每个板块都要重新启动一个容器，启动容器必然会拉取代码，这个过程可以简化</li>
+<li>消息通知只做了所有过程成功才发起，这个过程可以细化到其他的过程，失败之后也通知，并且通知报错</li>
+</ul>
+<h2 id="优化配置"><a href="#优化配置" class="headerlink" title="优化配置"></a>优化配置</h2><h3 id="并行个数"><a href="#并行个数" class="headerlink" title="并行个数"></a>并行个数</h3><p>调整任务并行个数，某些情况下可以加速执行。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> config.toml</span></span><br><span class="line">concurrent = 1</span><br><span class="line">check_interval = 0</span><br></pre></td></tr></table></figure>
+
+<p><code>concurrent</code>代表1个runner，可以同时执行相同stage的个数。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/03/image-20230301113703324.png" alt="image-20230301113703324"></p>
+<p>例如当Test有四个任务时，将<code>concurrent</code>改为4，一个runnger，可以同时执行这四个任务。</p>
+<h3 id="禁止数据覆盖"><a href="#禁止数据覆盖" class="headerlink" title="禁止数据覆盖"></a>禁止数据覆盖</h3><p>猜测：禁止数据覆盖可以确保并发执行的时候，不会对cache同时操作，导致其他的任务出错的可能。（测试不多，但是有用）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[[runners]]</span><br><span class="line">  name = &quot;runner-01&quot;</span><br><span class="line">  url = &quot;http://192.168.50.2/&quot;</span><br><span class="line">  token = &quot;xWgzycoX_m4fnhAfoZzX&quot;</span><br><span class="line">  executor = &quot;docker&quot;</span><br><span class="line">  [runners.custom_build_dir]</span><br><span class="line">  [runners.cache]</span><br><span class="line">    [runners.cache.s3]</span><br><span class="line">    [runners.cache.gcs]</span><br><span class="line">    [runners.cache.azure]</span><br><span class="line">  [runners.docker]</span><br><span class="line">    tls_verify = false</span><br><span class="line">    image = &quot;go-tools:1.19.6&quot;</span><br><span class="line">    privileged = false</span><br><span class="line">    disable_entrypoint_overwrite = true</span><br><span class="line">    oom_kill_disable = false</span><br><span class="line">    disable_cache = false</span><br><span class="line">    volumes = [&quot;/cache&quot;, &quot;/var/run/docker.sock:/var/run/docker.sock&quot;]</span><br><span class="line">    extra_hosts = [&quot;192.168.51.2:127.0.0.1&quot;]</span><br><span class="line">    network_mode = &quot;host&quot;</span><br><span class="line">    pull_policy = [&quot;if-not-present&quot;]</span><br><span class="line">    shm_size = 0</span><br></pre></td></tr></table></figure>
+
+<p>将<code>disable_entrypoint_overwrite</code>字段改为<code>true</code></p>
+<h3 id="golang使用cache"><a href="#golang使用cache" class="headerlink" title="golang使用cache"></a>golang使用cache</h3><p>使用cache，避免每次执行任务，都需要执行<code>go download</code>下载包</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">image: <span class="keyword">go</span>-tools:<span class="number">1.19</span><span class="number">.6</span></span><br><span class="line"></span><br><span class="line">stages:</span><br><span class="line">  - build</span><br><span class="line">  - test</span><br><span class="line">  - notice</span><br><span class="line"></span><br><span class="line">before_script:</span><br><span class="line">  - export VERSION=<span class="string">`echo $&#123;CI_COMMIT_TAG&#125; | awk -F&quot;_&quot; &#x27;&#123;print $1&#125;&#x27;`</span></span><br><span class="line"></span><br><span class="line"># <span class="keyword">go</span> build检测</span><br><span class="line">build:</span><br><span class="line">  stage: build</span><br><span class="line">  script:</span><br><span class="line">    - <span class="keyword">go</span> env -w GOMODCACHE=$(pwd)/.mod_cache/ GOPROXY=https:<span class="comment">//goproxy.cn,direct</span></span><br><span class="line">    - <span class="keyword">go</span> mod tidy</span><br><span class="line">    - <span class="built_in">make</span> build</span><br><span class="line">  cache:</span><br><span class="line">    key: $(md5sum <span class="keyword">go</span>.mod)</span><br><span class="line">    paths:</span><br><span class="line">      - .mod_cache/</span><br><span class="line">  tags:</span><br><span class="line">    - golang</span><br><span class="line"></span><br><span class="line"># 单元测试</span><br><span class="line">unit_tests:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">    - <span class="keyword">go</span> env -w GOMODCACHE=$(pwd)/.mod_cache/ GOPROXY=https:<span class="comment">//goproxy.cn,direct</span></span><br><span class="line">    - <span class="keyword">go</span> mod tidy</span><br><span class="line">    - <span class="built_in">make</span> test</span><br><span class="line">  cache:</span><br><span class="line">    key: $(md5sum <span class="keyword">go</span>.mod)</span><br><span class="line">    paths:</span><br><span class="line">      - .mod_cache/</span><br><span class="line">  tags:</span><br><span class="line">    - golang</span><br><span class="line"></span><br><span class="line"># 竞态检测</span><br><span class="line">race_detector:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">    - <span class="keyword">go</span> env -w GOMODCACHE=$(pwd)/.mod_cache/ GOPROXY=https:<span class="comment">//goproxy.cn,direct</span></span><br><span class="line">    - <span class="keyword">go</span> mod tidy</span><br><span class="line">    - <span class="built_in">make</span> race</span><br><span class="line">  cache:</span><br><span class="line">    key: $(md5sum <span class="keyword">go</span>.mod)</span><br><span class="line">    paths:</span><br><span class="line">      - .mod_cache/</span><br><span class="line">  tags:</span><br><span class="line">    - golang</span><br><span class="line"></span><br><span class="line"># 代码覆盖率检测</span><br><span class="line">code_coverage:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">    - <span class="keyword">go</span> env -w GOMODCACHE=$(pwd)/.mod_cache/ GOPROXY=https:<span class="comment">//goproxy.cn,direct</span></span><br><span class="line">    - <span class="keyword">go</span> mod tidy</span><br><span class="line">    - <span class="built_in">make</span> coverage</span><br><span class="line">  cache:</span><br><span class="line">    key: $(md5sum <span class="keyword">go</span>.mod)</span><br><span class="line">    paths:</span><br><span class="line">      - .mod_cache/</span><br><span class="line">  tags:</span><br><span class="line">    - golang</span><br><span class="line"></span><br><span class="line"># 代码覆盖率导出成html</span><br><span class="line">code_coverage_report:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">    - <span class="keyword">go</span> env -w GOMODCACHE=$(pwd)/.mod_cache/ GOPROXY=https:<span class="comment">//goproxy.cn,direct</span></span><br><span class="line">    - <span class="keyword">go</span> mod tidy</span><br><span class="line">    - <span class="built_in">make</span> coverhtml</span><br><span class="line">  cache:</span><br><span class="line">    key: $(md5sum <span class="keyword">go</span>.mod)</span><br><span class="line">    paths:</span><br><span class="line">      - .mod_cache/</span><br><span class="line">  only:</span><br><span class="line">    - master</span><br><span class="line">  tags:</span><br><span class="line">    - golang</span><br><span class="line"></span><br><span class="line"># golangci-lint代码检测</span><br><span class="line">golangci-lint_code:</span><br><span class="line">  stage: test</span><br><span class="line">  script:</span><br><span class="line">    - <span class="keyword">go</span> env -w GOMODCACHE=$(pwd)/.mod_cache/ GOPROXY=https:<span class="comment">//goproxy.cn,direct</span></span><br><span class="line">    - <span class="keyword">go</span> mod tidy</span><br><span class="line">    - <span class="built_in">make</span> golangci-lint</span><br><span class="line">  cache:</span><br><span class="line">    key: $(md5sum <span class="keyword">go</span>.mod)</span><br><span class="line">    paths:</span><br><span class="line">      - .mod_cache/</span><br><span class="line">  tags:</span><br><span class="line">    - golang</span><br><span class="line"></span><br><span class="line"># 通知</span><br><span class="line">notice:</span><br><span class="line">  stage: notice</span><br><span class="line">  script:</span><br><span class="line">    - <span class="built_in">make</span> notice</span><br><span class="line">  tags:</span><br><span class="line">    - golang </span><br></pre></td></tr></table></figure>
+
+<p>推荐阅读：</p>
+<p><a target="_blank" rel="noopener" href="https://amazingao.com/posts/2021/01/go/cicd/">Go项目Gitlab CICD提速指南</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/08/09/Golang%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="prev" title="Golang并发编程">
+                  <i class="fa fa-chevron-left"></i> Golang并发编程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/11/Golang%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="next" title="Golang网络编程">
+                  Golang网络编程 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/xiaoyeshiyu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

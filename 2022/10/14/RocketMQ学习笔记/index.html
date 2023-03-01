@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在微服务场景中，解耦能力是非常重要的，常用的解决方案是通过消息队列。具有回查机制和高并发能力的RocketMQ在实现分布式事务功能上有很大的优势。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ学习笔记">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2022/10/14/RocketMQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在微服务场景中，解耦能力是非常重要的，常用的解决方案是通过消息队列。具有回查机制和高并发能力的RocketMQ在实现分布式事务功能上有很大的优势。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l5MzM5NDUyNjg5,size_16,color_FFFFFF,t_70.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221014092057756.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221150174.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221244114.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221314797.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013232752302.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013233303997.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013233325429.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/Rmq-structure.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/fifomessagegroup-aad0a1b7e64089075db956c0eca0cbf4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/p365949.png">
+<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20221014233157476.png">
+<meta property="article:published_time" content="2022-10-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T07:49:49.116Z">
+<meta property="article:author" content="Mitaka xu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l5MzM5NDUyNjg5,size_16,color_FFFFFF,t_70.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2022/10/14/RocketMQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2022/10/14/RocketMQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/","path":"2022/10/14/RocketMQ学习笔记/","title":"RocketMQ学习笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RocketMQ学习笔记 | Hexo</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.2.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%AF%B9%E6%AF%94"><span class="nav-number">1.3.</span> <span class="nav-text">消息队列对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RocketMQ"><span class="nav-number">2.</span> <span class="nav-text">RocketMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF"><span class="nav-number">2.2.1.</span> <span class="nav-text">发送消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%B6%88%E6%81%AF"><span class="nav-number">2.2.2.</span> <span class="nav-text">获取消息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.3.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">消息类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%8F%91%E9%80%81"><span class="nav-number">2.4.1.</span> <span class="nav-text">同步发送</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E5%8F%91%E9%80%81"><span class="nav-number">2.4.2.</span> <span class="nav-text">异步发送</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E5%90%91%E5%8F%91%E9%80%81"><span class="nav-number">2.4.3.</span> <span class="nav-text">单向发送</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E8%A1%8C%E4%B8%BA"><span class="nav-number">2.5.</span> <span class="nav-text">功能行为</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF"><span class="nav-number">2.5.1.</span> <span class="nav-text">普通消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF"><span class="nav-number">2.5.2.</span> <span class="nav-text">顺序消息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#NOTE"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">NOTE</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BB%B6%E6%97%B6%E6%B6%88%E6%81%AF"><span class="nav-number">2.5.3.</span> <span class="nav-text">延时消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="nav-number">2.5.4.</span> <span class="nav-text">事务消息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Go%E6%93%8D%E4%BD%9CRocketMQ"><span class="nav-number">2.6.</span> <span class="nav-text">Go操作RocketMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E7%94%9F%E4%BA%A7%E7%AE%80%E5%8D%95%E6%B6%88%E6%81%AF"><span class="nav-number">2.6.1.</span> <span class="nav-text">同步生产简单消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E8%B4%B9%E6%B6%88%E6%81%AF"><span class="nav-number">2.6.2.</span> <span class="nav-text">消费消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF"><span class="nav-number">2.6.3.</span> <span class="nav-text">发送延迟消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF-1"><span class="nav-number">2.6.4.</span> <span class="nav-text">事务消息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87RocketMQ%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%9A%84%E6%A1%88%E4%BE%8B"><span class="nav-number">2.7.</span> <span class="nav-text">通过RocketMQ分布式事务的案例</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">保持积累，保持学习。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">66</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoyeshiyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2022/10/14/RocketMQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="保持积累，保持学习。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RocketMQ学习笔记 | Hexo">
+      <meta itemprop="description" content="在微服务场景中，解耦能力是非常重要的，常用的解决方案是通过消息队列。具有回查机制和高并发能力的RocketMQ在实现分布式事务功能上有很大的优势。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RocketMQ学习笔记<a href="https://github.com/user-name/repo-name/tree/branch-name/subdirectory-name/_posts/RocketMQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.md" class="post-edit-link" title="Edit this post" rel="noopener" target="_blank"><i class="fa fa-pen-nib"></i></a>
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-10-14 00:00:00" itemprop="dateCreated datePublished" datetime="2022-10-14T00:00:00+08:00">2022-10-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-01 15:49:49" itemprop="dateModified" datetime="2023-03-01T15:49:49+08:00">2023-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/midware/" itemprop="url" rel="index"><span itemprop="name">midware</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/midware/develope/" itemprop="url" rel="index"><span itemprop="name">develope</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/10/14/RocketMQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-meta-item leancloud_visitors" data-flag-title="RocketMQ学习笔记" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">在微服务场景中，解耦能力是非常重要的，常用的解决方案是通过消息队列。具有回查机制和高并发能力的RocketMQ在实现分布式事务功能上有很大的优势。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>消息队列是一种异步的服务间通信方式，适用于无服务器和微服务架构。消息在被处理和删除之前一直存储在队列上。每条消息仅可被一位用户处理一次。消息队列可被用于分离重量级处理、缓冲或批处理工作以及缓解高峰期工作负载。</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ol>
+<li>服务解耦</li>
+<li>流量削峰</li>
+<li>数据分发</li>
+</ol>
+<h3 id="消息队列对比"><a href="#消息队列对比" class="headerlink" title="消息队列对比"></a>消息队列对比</h3><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l5MzM5NDUyNjg5,size_16,color_FFFFFF,t_70.png" alt="img" style="zoom:150%;" />
+
+<h2 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a>RocketMQ</h2><p>RocketMQ是一个纯Java、分布式、队列模型的开源消息中间件，前身是MetaQ，是阿里参考Kafka特点研发的一个队列模型的消息中间件，后开源给apache基金会成为了apache的顶级开源项目，具有高性能、高可靠、高实时、分布式特点。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>因为RocketMQ的安装的东西有三个部分：<strong>namesrv、broker、rocketmq-dashboard</strong> ，用Docker-compose安装起来比较方便。</p>
+<p>配置中的映射文件和日志都是用默认配置，生产环境根据是否需要持久化数据和配置决定</p>
+<p>制作镜像步骤如下，实际使用可直接用docker启动，如果需要固定版本或者定制化，可自制镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/apache/rocketmq-docker.git</span><br><span class="line">cd rocketmq-docker</span><br><span class="line"></span><br><span class="line">cd image-build</span><br><span class="line">// 使用最新版，构建镜像</span><br><span class="line">sh build-image.sh 5.0.0 alpine</span><br><span class="line"></span><br><span class="line">// 准备特定版本</span><br><span class="line">cd ..</span><br><span class="line">chmod 755 stage.sh</span><br><span class="line">./stage.sh 5.0.0</span><br><span class="line"></span><br><span class="line">// 运行单机</span><br><span class="line">cd stages/5.0.0/</span><br><span class="line">./play-docker.sh alpine</span><br><span class="line"></span><br><span class="line">// 生成RocketMQ Dashboard Docker映像，基础镜像只支持centos</span><br><span class="line">// https://dist.apache.org/repos/dist/release/rocketmq/rocketmq-dashboard/ 目录下，只有1.0.0版本</span><br><span class="line">cd image-build &amp;&amp; sh build-image-dashboard.sh 1.0.0 centos</span><br><span class="line">// ps: 注意，官网的dockerfile里面安装java是基于x86_64，如果打镜像的系统不是x86_64，则可能出现java安装失败，报错找不到java包或者路径。</span><br><span class="line">// mac os打镜像有些坑，dashboard的镜像，使用centos服务器打镜像，并用centos服务器启动dashboard</span><br><span class="line">// 如果将srv、broker、dashbord分开安装，后续可能会由于网络问题无法正常操作，因此建议将RocketMQ安装在同一台具备docker能力的centos服务器上。</span><br><span class="line"></span><br><span class="line">// 启动，使用下载的第三方镜像，则也将启动命令换掉，不使用官方的脚本</span><br><span class="line">sh product/start-dashboard.sh 1.0.0</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>docker</code>启动</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/apache/rocketmq.git</span><br><span class="line">// 启动NameServer</span><br><span class="line">docker run -it -d --net=host apache/rocketmq ./mqnamesrv</span><br><span class="line">// 启动Broker</span><br><span class="line">docker run -it -d --net=host --mount source=/tmp/store,target=/home/rocketmq/store apache/rocketmq ./mqbroker -n localhost:9876</span><br><span class="line">// 通过自建镜像或者下载的镜像启动dashboard</span><br><span class="line">docker run -d -it --name rocketmq-dashboard -p 6765:8080 192.168.51.16:9443/dev/rocketmq-dashboard:1.0.0-centos</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>centos</code>服务器<code>6765</code>端口访问管理页面。在<code>OPS</code>中改为<code>Name Server</code>的<code>9876</code>端口，点击<code>Cluster</code>，可以正常看到<code>Broker</code>节点，并且界面不报错，则说明页面访问正常。（例如通过<code>docker</code>启动，网络是<code>host</code>，则填写本机的的<code>9876</code>端口。）</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221014092057756.png" alt="image-20221014092057756"></p>
+<h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><p>新建节点</p>
+<p>点击 <code>Topic - ADD</code></p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221150174.png" alt="image-20221013221150174" style="zoom: 25%;" />
+
+<h4 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h4><p>点击 SEND MESSAGE</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221244114.png" alt="image-20221013221244114"></p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221314797.png" alt="image-20221013221314797" style="zoom:25%;" />
+
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013232752302.png" alt="image-20221013232752302" style="zoom:25%;" />
+
+<p>ps：如果出现报错，需要查看<code>dashbord</code>的<code>log</code>，原因可能是网络不通，亦或是Broker节点磁盘超过<code>85%</code>。</p>
+<h4 id="获取消息"><a href="#获取消息" class="headerlink" title="获取消息"></a>获取消息</h4><p>点击<code>Message-topic</code>，选择对应<code>Topoc：hello_mq</code>，选择时间范围（需要包括发送消息的时间）</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013233303997.png" alt="image-20221013233303997" style="zoom:25%;" />
+
+<p>可以看到刚刚发送的消息，以及消息详情</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013233325429.png" alt="image-20221013233325429" style="zoom:25%;" />
+
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p><code>RocketMQ</code>是一个分布式的消息队列。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/Rmq-structure.png" alt="Rmq-structure.png"></p>
+<ul>
+<li><code>Producer</code>：生产者，消息的发送者，可以做成一个集群</li>
+<li><code>Name Server</code>：类似注册中心，不负责数据和业务逻辑，同步Broker节点的数据信息</li>
+<li><code>Broker</code>：存储、传输消息的节点</li>
+<li><code>Consumer</code>：消费者，消息的接收者，可以做成一个集群</li>
+<li><code>Topic</code>：区分消息的种类，一个发送者可以发送消息给一个或者多个<code>Topic</code>；一个消息的接收者可以订阅一个或多个<code>Topic</code>消息</li>
+<li>Message Queue：相当于<code>Topic</code>的分区，用于并行发送和接收消息</li>
+</ul>
+<h3 id="消息类型"><a href="#消息类型" class="headerlink" title="消息类型"></a>消息类型</h3><h4 id="同步发送"><a href="#同步发送" class="headerlink" title="同步发送"></a>同步发送</h4><ol>
+<li>同步发送，线程阻塞，投递<code>complete</code>，阻塞结束</li>
+<li>如果发送失败，会在默认的超时时间3s内，进行重试，最多重试2次</li>
+<li>投递<code>complete</code>不代表投递成功，要<code>check SendResult.sendStatus</code>来判断是否投递成功</li>
+<li><code>SendResult</code>里面有发送状态的枚举：<code>sendStatus</code>，同步消息投递有一个状态返回值</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">SendStatus</span> &#123;</span><br><span class="line">	SEND_OK,									<span class="comment">// 发送成功</span></span><br><span class="line">	FLUSH_DISK_TIMEOUT,				<span class="comment">// 刷盘超时</span></span><br><span class="line">	FLUSH_SLAVE_TIMEOUT,			<span class="comment">// 同步slave超时</span></span><br><span class="line">	SLAVE_NOT_AVAILABLE,			<span class="comment">// 没有slave</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只有<code>ack</code>的<code>SendStatus=SEND_OK</code>才代表发送消息成功，会停止重试，</p>
+<h4 id="异步发送"><a href="#异步发送" class="headerlink" title="异步发送"></a>异步发送</h4><ol>
+<li>当前线程一定要等待异步线程回调结束再关闭<code>Producer</code>，由于是异步，提前关闭<code>Producer</code>会导致未回调链接就断开。</li>
+<li>异步消息不<code>retry</code>，投递失败就回调，只有消息同步发送才会<code>retry</code></li>
+<li>异步发送一般用于链路耗时较长，对RT响应时间较为敏感的业务场景，例如用户视频上传后通知启动转码服务，转码完后通知推送视频转码结果等。</li>
+</ol>
+<h4 id="单向发送"><a href="#单向发送" class="headerlink" title="单向发送"></a>单向发送</h4><ol>
+<li>消息不可靠，性能高，只负责往服务器发送一条消息，不会重试，也不会对发送失败特殊处理</li>
+<li>次方式发送消息过程耗时短，一般在微秒级别</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>发送方式</th>
+<th>发送TPS</th>
+<th>发送结果反馈</th>
+<th>可靠性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>同步发送</td>
+<td>快</td>
+<td>有</td>
+<td>不丢失</td>
+</tr>
+<tr>
+<td>异步发送</td>
+<td>快</td>
+<td>有</td>
+<td>不丢失</td>
+</tr>
+<tr>
+<td>单向发送</td>
+<td>最快</td>
+<td>无</td>
+<td>可能丢失</td>
+</tr>
+</tbody></table>
+<h3 id="功能行为"><a href="#功能行为" class="headerlink" title="功能行为"></a>功能行为</h3><h4 id="普通消息"><a href="#普通消息" class="headerlink" title="普通消息"></a>普通消息</h4><p>用到最多，生产者关注消息发送成功即可，消费者消费到消息即可。</p>
+<p>这种消息不保证消息的顺序，所以消息可以大规模并发地发送和消费，吞吐量高，合适大部分场景。</p>
+<p>消息被<code>Producer</code>发送到集群中的某个<code>Broker</code>的<code>Topic</code>中某个<code>Queue</code>中，在发送端不保证顺序，只保证发送，因此发送端无法确定消息顺序。</p>
+<p>消息被<code>Consumer</code>集群获取，多个<code>Consumer</code>同时获取多个<code>Queue</code>，因此也无法确保消息的消费顺序。</p>
+<h4 id="顺序消息"><a href="#顺序消息" class="headerlink" title="顺序消息"></a>顺序消息</h4><p>在有序事件处理、撮合交易、数据实时增量同步等场景下，异构系统间需要维持强一致的状态同步，上游的事件变更需要按照顺序传递到下游进行处理。在这类场景下使用 Apache RocketMQ 的顺序消息可以有效保证数据传输的顺序性。</p>
+<p><strong>如何保证消息的顺序性</strong></p>
+<p>Apache RocketMQ 的消息的顺序性分为两部分，<strong>生产顺序性</strong>和<strong>消费顺序性</strong>。</p>
+<ul>
+<li><p><strong>生产顺序性</strong> ：</p>
+<p>Apache RocketMQ 通过生产者和服务端的协议保障单个生产者串行地发送消息，并按序存储和持久化。</p>
+<p>如需保证消息生产的顺序性，则必须满足以下条件：</p>
+<ul>
+<li>单一生产者：消息生产的顺序性仅支持单一生产者，不同生产者分布在不同的系统，即使设置相同的消息组，不同生产者之间产生的消息也无法判定其先后顺序。</li>
+<li>串行发送：Apache RocketMQ 生产者客户端支持多线程安全访问，但如果生产者使用多线程并行发送，则不同线程间产生的消息将无法判定其先后顺序。</li>
+</ul>
+<p>满足以上条件的生产者，将顺序消息发送至 Apache RocketMQ 后，会保证设置了同一消息组的消息，按照发送顺序存储在同一队列中。服务端顺序存储逻辑如下：</p>
+<ul>
+<li>相同消息组的消息按照先后顺序被存储在同一个队列。（通过<code>hash</code>之后<code>shard</code>，可以确保同一类型消息被发送到同一个<code>Group</code>中）</li>
+<li>不同消息组的消息可以混合在同一个队列中，且不保证连续。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/fifomessagegroup-aad0a1b7e64089075db956c0eca0cbf4.png" alt="顺序存储逻辑"></p>
+<p>如上图所示，消息组1和消息组4的消息混合存储在队列1中， Apache RocketMQ 保证消息组1中的消息G1-M1、G1-M2、G1-M3是按发送顺序存储，且消息组4的消息G4-M1、G4-M2也是按顺序存储，但消息组1和消息组4中的消息不涉及顺序关系。</p>
+<ul>
+<li><p><strong>消费顺序性</strong> ：</p>
+<p>Apache RocketMQ 通过消费者和服务端的协议保障消息消费严格按照存储的先后顺序来处理。</p>
+<p>如需保证消息消费的顺序性，则必须满足以下条件：</p>
+<ul>
+<li><p>投递顺序</p>
+<p>Apache RocketMQ 通过客户端SDK和服务端通信协议保障消息按照服务端存储顺序投递，但业务方消费消息时需要严格按照接收—处理—应答的语义处理消息，避免因异步处理导致消息乱序。</p>
+<blockquote>
+<h5 id="NOTE"><a href="#NOTE" class="headerlink" title="NOTE"></a>NOTE</h5><p>消费者类型为PushConsumer时， Apache RocketMQ 保证消息按照存储顺序一条一条投递给消费者，若消费者类型为SimpleConsumer，则消费者有可能一次拉取多条消息。此时，消息消费的顺序性需要由业务方自行保证。消费者类型的具体信息，请参见<a target="_blank" rel="noopener" href="https://rocketmq.apache.org/zh/docs/%E5%8A%9F%E8%83%BD%E8%A1%8C%E4%B8%BA/06consumertype">消费者分类</a>。</p>
+</blockquote>
+</li>
+<li><p>有限重试</p>
+<p>Apache RocketMQ 顺序消息投递仅在重试次数限定范围内，即一条消息如果一直重试失败，超过最大重试次数后将不再重试，跳过这条消息消费，不会一直阻塞后续消息处理。</p>
+<p>对于需要严格保证消费顺序的场景，请务设置合理的重试次数，避免参数不合理导致消息乱序。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>生产顺序性和消费顺序性组合</strong></p>
+<p>如果消息需要严格按照先进先出（FIFO）的原则处理，即先发送的先消费、后发送的后消费，则必须要同时满足生产顺序性和消费顺序性。</p>
+<p>一般业务场景下，同一个生产者可能对接多个下游消费者，不一定所有的消费者业务都需要顺序消费，您可以将生产顺序性和消费顺序性进行差异化组合，应用于不同的业务场景。例如发送顺序消息，但使用非顺序的并发消费方式来提高吞吐能力。更多组合方式如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>生产顺序</th>
+<th>消费顺序</th>
+<th>顺序性效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>设置消息组，保证消息顺序发送。</td>
+<td>顺序消费</td>
+<td>按照消息组粒度，严格保证消息顺序。 同一消息组内的消息的消费顺序和发送顺序完全一致。</td>
+</tr>
+<tr>
+<td>设置消息组，保证消息顺序发送。</td>
+<td>并发消费</td>
+<td>并发消费，尽可能按时间顺序处理。</td>
+</tr>
+<tr>
+<td>未设置消息组，消息乱序发送。</td>
+<td>顺序消费</td>
+<td>按队列存储粒度，严格顺序。 基于 Apache RocketMQ 本身队列的属性，消费顺序和队列存储的顺序一致，但不保证和发送顺序一致。</td>
+</tr>
+<tr>
+<td>未设置消息组，消息乱序发送。</td>
+<td>并发消费</td>
+<td>并发消费，尽可能按照时间顺序处理。</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="延时消息"><a href="#延时消息" class="headerlink" title="延时消息"></a>延时消息</h4><p>定时消息是 Apache RocketMQ 提供的一种高级消息类型，消息被发送至服务端后，在指定时间后才能被消费者消费。通过设置一定的定时时间可以实现分布式场景的延时调度触发效果。</p>
+<blockquote>
+<p>定时消息和延时消息本质相同，都是服务端根据消息设置的定时时间在某一固定时刻将消息投递给消费者消费。因此，下文统一用定时消息描述。</p>
+</blockquote>
+<p>在分布式定时调度触发、任务超时处理等场景，需要实现精准、可靠的定时事件触发。使用 Apache RocketMQ 的定时消息可以简化定时调度任务的开发逻辑，实现高性能、可扩展、高可靠的定时触发能力。</p>
+<p>使用场景：</p>
+<ul>
+<li>分布式定时调度</li>
+<li>任务超时处理，例如订单超时</li>
+</ul>
+<blockquote>
+<p><strong>RocketMQ</strong>发送延时消息时先把消息按照延迟时间段发送到指定的队列中(rocketmq把每种延迟时间段的消息都存放到同一个队列中)然后通过一个定时器进行轮训这些队列，查看消息是否到期，如果到期就把这个消息发送到指定topic的队列中，这样的好处是同一队列中的消息延时时间是一致的，还有一个好处是这个队列中的消息时按照消息到期时间进行递增排序的，说的简单直白就是队列中消息越靠前的到期时间越早。</p>
+</blockquote>
+<h4 id="事务消息"><a href="#事务消息" class="headerlink" title="事务消息"></a>事务消息</h4><ul>
+<li>事务消息：消息队列RocketMQ版提供类似XA或Open XA的分布式事务功能，通过消息队列RocketMQ版事务消息能达到分布式事务的最终一致。</li>
+<li>半事务消息：暂不能投递的消息，生产者已经成功地将消息发送到了消息队列RocketMQ版服务端，但是消息队列RocketMQ版服务端未收到生产者对该消息的二次确认，此时该消息被标记成“暂不能投递”状态，处于该种状态下的消息即半事务消息。</li>
+<li>消息回查：由于网络闪断、生产者应用重启等原因，导致某条事务消息的二次确认丢失，消息队列RocketMQ版服务端通过扫描发现某条消息长期处于“半事务消息”时，需要主动向消息生产者询问该消息的最终状态（Commit或是Rollback），该询问过程即消息回查。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/p365949.png" alt="事务消息"></p>
+<p>事务消息发送步骤如下：</p>
+<ol>
+<li>生产者将半事务消息发送至消息队列<code>RocketMQ</code>版服务端。</li>
+<li>消息队列<code>RocketMQ</code>版服务端将消息持久化成功之后，向生产者返回<code>Ack</code>确认消息已经发送成功，此时消息为半事务消息。</li>
+<li>生产者开始执行本地事务逻辑。</li>
+<li>生产者根据本地事务执行结果向服务端提交二次确认结果（<code>Commit</code>或是<code>Rollback</code>），服务端收到确认结果后处理逻辑如下：<ul>
+<li>二次确认结果为<code>Commit</code>：服务端将半事务消息标记为可投递，并投递给消费者。</li>
+<li>二次确认结果为<code>Rollback</code>：服务端将回滚事务，不会将半事务消息投递给消费者。</li>
+</ul>
+</li>
+<li>在断网或者是生产者应用重启的特殊情况下，若服务端未收到发送者提交的二次确认结果，或服务端收到的二次确认结果为<code>Unknown</code>未知状态，经过固定时间后，服务端将对消息生产者即生产者集群中任一生产者实例发起消息回查。</li>
+</ol>
+<p>事务消息回查步骤如下：</p>
+<ol>
+<li>生产者收到消息回查后，需要检查对应消息的本地事务执行的最终结果。</li>
+<li>生产者根据检查得到的本地事务的最终状态再次提交二次确认，服务端仍按照步骤4对半事务消息进行处理。</li>
+</ol>
+<h3 id="Go操作RocketMQ"><a href="#Go操作RocketMQ" class="headerlink" title="Go操作RocketMQ"></a>Go操作RocketMQ</h3><p>client：<a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq-client-go">RocketMQ Client Go</a></p>
+<p>文档：<a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq-client-go/blob/master/docs/Introduction.md">RocketMQ Go Client Introduction</a></p>
+<p>官方示例非常全：<a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq-client-go/tree/master/examples">example</a></p>
+<h4 id="同步生产简单消息"><a href="#同步生产简单消息" class="headerlink" title="同步生产简单消息"></a>同步生产简单消息</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">	<span class="string">&quot;strconv&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2/primitive&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2/producer&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发送普通消息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	p, _ := rocketmq.NewProducer(</span><br><span class="line">		<span class="comment">// name server IP 和 port</span></span><br><span class="line">		producer.WithNsResolver(primitive.NewPassthroughResolver([]<span class="type">string</span>&#123;<span class="string">&quot;192.168.51.16:9876&quot;</span>&#125;)),</span><br><span class="line">		<span class="comment">// 重试次数</span></span><br><span class="line">		producer.WithRetry(<span class="number">2</span>),</span><br><span class="line">	)</span><br><span class="line">	<span class="comment">// 启动Producer</span></span><br><span class="line">	err := p.Start()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;start producer error: %s&quot;</span>, err.Error())</span><br><span class="line">		os.Exit(<span class="number">1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 指定topic</span></span><br><span class="line">	topic := <span class="string">&quot;hello_mq&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		msg := &amp;primitive.Message&#123;</span><br><span class="line">			Topic: topic,</span><br><span class="line">			Body:  []<span class="type">byte</span>(<span class="string">&quot;Hello RocketMQ Go Client! &quot;</span> + strconv.Itoa(i)),</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 同步发送消息</span></span><br><span class="line">		res, err := p.SendSync(context.Background(), msg)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;send message error: %s\n&quot;</span>, err)</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;send message success: result=%s\n&quot;</span>, res.String())</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 消息发送完成，关闭Producer</span></span><br><span class="line">	err = p.Shutdown()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;shutdown producer error: %s&quot;</span>, err.Error())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">INFO[0000] the topic route info changed                  changeTo=&quot;&#123;\&quot;OrderTopicConf\&quot;:\&quot;\&quot;,\&quot;queueDatas\&quot;:[&#123;\&quot;brokerName\&quot;:\&quot;DEFAULT_BROKER\&quot;,\&quot;readQueueNums\&quot;:4,\&quot;writeQueueNums\&quot;:4,\&quot;perm\&quot;:7,\&quot;topicSynFlag\&quot;:0&#125;],\&quot;brokerDatas\&quot;:[&#123;\&quot;cluster\&quot;:\&quot;DefaultCluster\&quot;,\&quot;brokerName\&quot;:\&quot;DEFAULT_BROKER\&quot;,\&quot;brokerAddrs\&quot;:&#123;\&quot;0\&quot;:\&quot;192.168.51.16:10911\&quot;&#125;&#125;]&#125;&quot; changedFrom=&quot;&lt;nil&gt;&quot; topic=hello_mq</span><br><span class="line">// 发送到的queueId是轮训，也就不会保证顺序性</span><br><span class="line">send message success: result=SendResult [sendStatus=0, msgIds=AC10D3111A7A00000000433007080001, offsetMsgId=C0A8331000002A9F0000000000000000, queueOffset=0, messageQueue=MessageQueue [topic=hello_mq, brokerName=DEFAULT_BROKER, queueId=1]]</span><br><span class="line">send message success: result=SendResult [sendStatus=0, msgIds=AC10D3111A7A0000000043300708000a, offsetMsgId=C0A8331000002A9F00000000000006AE, queueOffset=2, messageQueue=MessageQueue [topic=hello_mq, brokerName=DEFAULT_BROKER, queueId=2]]</span><br><span class="line">INFO[0000] will remove client from clientMap             clientID=172.16.211.17@6778</span><br></pre></td></tr></table></figure>
+
+<h4 id="消费消息"><a href="#消费消息" class="headerlink" title="消费消息"></a>消费消息</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2/consumer&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2/primitive&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	sig := <span class="built_in">make</span>(<span class="keyword">chan</span> os.Signal)</span><br><span class="line">	<span class="comment">// 服务端往客户端推送消息，相对于客户端pull的方式，性能更高</span></span><br><span class="line">	c, _ := rocketmq.NewPushConsumer(</span><br><span class="line">		<span class="comment">// 消费组名称，通过消费组作为消费单位，消费组中的client可以并发消息</span></span><br><span class="line">		consumer.WithGroupName(<span class="string">&quot;testGroup&quot;</span>),</span><br><span class="line">		<span class="comment">// name server 信息</span></span><br><span class="line">		consumer.WithNsResolver(primitive.NewPassthroughResolver([]<span class="type">string</span>&#123;<span class="string">&quot;192.168.51.16:9876&quot;</span>&#125;)),</span><br><span class="line">	)</span><br><span class="line">	<span class="comment">// 订阅topic，将消息通过函数处理</span></span><br><span class="line">	err := c.Subscribe(<span class="string">&quot;hello_mq&quot;</span>, consumer.MessageSelector&#123;&#125;, <span class="function"><span class="keyword">func</span><span class="params">(ctx context.Context,</span></span></span><br><span class="line"><span class="params"><span class="function">		msgs ...*primitive.MessageExt)</span></span> (consumer.ConsumeResult, <span class="type">error</span>) &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="keyword">range</span> msgs &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;subscribe callback: %v \n&quot;</span>, msgs[i])</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// ConsumeSuccess代表，消费成功</span></span><br><span class="line">		<span class="keyword">return</span> consumer.ConsumeSuccess, <span class="literal">nil</span></span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err.Error())</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// Note: start after subscribe</span></span><br><span class="line">	err = c.Start()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err.Error())</span><br><span class="line">		os.Exit(<span class="number">-1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 主goroutine阻塞住</span></span><br><span class="line">	&lt;-sig</span><br><span class="line">	err = c.Shutdown()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;shutdown Consumer error: %s&quot;</span>, err.Error())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="发送延迟消息"><a href="#发送延迟消息" class="headerlink" title="发送延迟消息"></a>发送延迟消息</h4><p>延迟消息用法是 <code>msg.WithDelayTimeLevel(3)</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">	<span class="string">&quot;strconv&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2/primitive&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/apache/rocketmq-client-go/v2/producer&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发送延迟消息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	p, _ := rocketmq.NewProducer(</span><br><span class="line">		<span class="comment">// name server IP 和 port</span></span><br><span class="line">		producer.WithNsResolver(primitive.NewPassthroughResolver([]<span class="type">string</span>&#123;<span class="string">&quot;192.168.51.16:9876&quot;</span>&#125;)),</span><br><span class="line">		<span class="comment">// 重试次数</span></span><br><span class="line">		producer.WithRetry(<span class="number">2</span>),</span><br><span class="line">	)</span><br><span class="line">	<span class="comment">// 启动Producer</span></span><br><span class="line">	err := p.Start()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;start producer error: %s&quot;</span>, err.Error())</span><br><span class="line">		os.Exit(<span class="number">1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 指定topic</span></span><br><span class="line">	topic := <span class="string">&quot;hello_mq&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		msg := &amp;primitive.Message&#123;</span><br><span class="line">			Topic: topic,</span><br><span class="line">			Body:  []<span class="type">byte</span>(<span class="string">&quot;Hello RocketMQ Go Client! &quot;</span> + strconv.Itoa(i)),</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//WithDelayTimeLevel set message delay time to consume. reference delay level definition: 1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h delay level starts from 1. for example, if we set param level=1, then the delay time is 1s.</span></span><br><span class="line">		<span class="comment">// level 3 ,代表10s后才会被发送到消费者</span></span><br><span class="line">		msg.WithDelayTimeLevel(<span class="number">3</span>)</span><br><span class="line">		<span class="comment">// 同步发送消息</span></span><br><span class="line">		res, err := p.SendSync(context.Background(), msg)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;send message error: %s\n&quot;</span>, err)</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;send message success: result=%s\n&quot;</span>, res.String())</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 消息发送完成，关闭Producer</span></span><br><span class="line">	err = p.Shutdown()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;shutdown producer error: %s&quot;</span>, err.Error())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="事务消息-1"><a href="#事务消息-1" class="headerlink" title="事务消息"></a>事务消息</h4><p>构造事务生产者</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewTransactionProducer</span><span class="params">(listener primitive.TransactionListener, opts ...Option)</span></span> (*transactionProducer, <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+
+<p>listener实例实现两个方法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> TransactionListener <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="comment">//  When send transactional prepare(half) message succeed, this method will be invoked to execute local transaction.</span></span><br><span class="line">	<span class="comment">// 当发送事务性准备（半）消息成功时，将调用此方法来执行本地事务。</span></span><br><span class="line">	ExecuteLocalTransaction(*Message) LocalTransactionState</span><br><span class="line"></span><br><span class="line">	<span class="comment">// When no response to prepare(half) message. broker will send check message to check the transaction status, and this</span></span><br><span class="line">	<span class="comment">// method will be invoked to get local transaction status.</span></span><br><span class="line">	<span class="comment">// 当没有响应准备（半）消息时。代理将发送检查消息来检查事务状态，并调用此方法来获取本地事务状态。</span></span><br><span class="line">	CheckLocalTransaction(*MessageExt) LocalTransactionState</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例如</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> OrderListener <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o *OrderListener)</span></span> ExecuteLocalTransaction(*primitive.Message) primitive.LocalTransactionState &#123;</span><br><span class="line">	log.Println(<span class="string">&quot;commit exec success&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 提交</span></span><br><span class="line">	<span class="comment">//return primitive.CommitMessageState</span></span><br><span class="line">	<span class="comment">// 回滚</span></span><br><span class="line">	<span class="comment">//return primitive.RollbackMessageState</span></span><br><span class="line">	<span class="comment">// 通过unknown，进行回查</span></span><br><span class="line">	<span class="keyword">return</span> primitive.UnknowState</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o *OrderListener)</span></span> CheckLocalTransaction(*primitive.MessageExt) primitive.LocalTransactionState &#123;</span><br><span class="line">	<span class="comment">//log.Println(&quot;callbacked and commit ...&quot;)</span></span><br><span class="line">	<span class="comment">// 回调之后提交</span></span><br><span class="line">	<span class="comment">//return primitive.CommitMessageState</span></span><br><span class="line"></span><br><span class="line">	log.Println(<span class="string">&quot;callbacked and rollback ...&quot;</span>)</span><br><span class="line">	<span class="keyword">return</span> primitive.RollbackMessageState</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 发送事务消息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="comment">// 事务生产者</span></span><br><span class="line">	p, _ := producer.NewTransactionProducer(&amp;OrderListener&#123;&#125;,</span><br><span class="line">		<span class="comment">// name server IP 和 port</span></span><br><span class="line">		producer.WithNsResolver(primitive.NewPassthroughResolver([]<span class="type">string</span>&#123;<span class="string">&quot;192.168.51.16:9876&quot;</span>&#125;)),</span><br><span class="line">		<span class="comment">// 重试次数</span></span><br><span class="line">		producer.WithRetry(<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 启动Producer</span></span><br><span class="line">	err := p.Start()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;start producer error: %s&quot;</span>, err.Error())</span><br><span class="line">		os.Exit(<span class="number">1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 指定topic</span></span><br><span class="line">	topic := <span class="string">&quot;hello_mq&quot;</span></span><br><span class="line"></span><br><span class="line">	msg := &amp;primitive.Message&#123;</span><br><span class="line">		Topic: topic,</span><br><span class="line">		Body:  []<span class="type">byte</span>(<span class="string">&quot;Hello RocketMQ Go Client! &quot;</span>),</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 发送事务消息</span></span><br><span class="line">	res, err := p.SendMessageInTransaction(context.Background(), msg)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;send message error: %s\n&quot;</span>, err)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;send message success: result=%s\n&quot;</span>, res.String())</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 阻塞住，让RocketMQ可以执行回查</span></span><br><span class="line">	<span class="keyword">select</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 消息发送完成，关闭Producer</span></span><br><span class="line">	err = p.Shutdown()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;shutdown producer error: %s&quot;</span>, err.Error())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> <strong>注意：</strong>源码中可以看到，默认情况下，连接<code>RocketMQ</code>的client其实都是一份，无论是生产者还是消费者。</p>
+<p>简单生产者</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewProducer</span><span class="params">(opts ...producer.Option)</span></span> (Producer, <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> producer.NewDefaultProducer(opts...)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewDefaultProducer</span><span class="params">(opts ...Option)</span></span> (*defaultProducer, <span class="type">error</span>) &#123;</span><br><span class="line">	...</span><br><span class="line">	producer.client = internal.GetOrNewRocketMQClient(defaultOpts.ClientOptions, producer.callbackCh)</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>事务生产者</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewTransactionProducer</span><span class="params">(listener primitive.TransactionListener, opts ...Option)</span></span> (*transactionProducer, <span class="type">error</span>) &#123;</span><br><span class="line">	producer, err := NewDefaultProducer(opts...)</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewDefaultProducer</span><span class="params">(opts ...Option)</span></span> (*defaultProducer, <span class="type">error</span>) &#123;</span><br><span class="line">  ...</span><br><span class="line">  	producer.client = internal.GetOrNewRocketMQClient(defaultOpts.ClientOptions, producer.callbackCh)</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>消费者</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewPushConsumer</span><span class="params">(opts ...consumer.Option)</span></span> (PushConsumer, <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="keyword">return</span> consumer.NewPushConsumer(opts...)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewPushConsumer</span><span class="params">(opts ...Option)</span></span> (*pushConsumer, <span class="type">error</span>) &#123;</span><br><span class="line">	...</span><br><span class="line">		dc := &amp;defaultConsumer&#123;</span><br><span class="line">		client:         internal.GetOrNewRocketMQClient(defaultOpts.ClientOptions, <span class="literal">nil</span>),</span><br><span class="line">		...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实都是创建client</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// clientMap是一个并发安全的map</span></span><br><span class="line"><span class="keyword">var</span> clientMap sync.Map</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetOrNewRocketMQClient</span><span class="params">(option ClientOptions, callbackCh <span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;)</span></span> RMQClient &#123;</span><br><span class="line">	client := &amp;rmqClient&#123;</span><br><span class="line">		option:       option,</span><br><span class="line">		remoteClient: remote.NewRemotingClient(option.RemotingClientConfig),</span><br><span class="line">		done:         <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;),</span><br><span class="line">	&#125;</span><br><span class="line">  ...  </span><br><span class="line">  <span class="comment">// 通过clientID获取client对象</span></span><br><span class="line">	actual, loaded := clientMap.LoadOrStore(client.ClientID(), client)</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *rmqClient)</span></span> ClientID() <span class="type">string</span> &#123;</span><br><span class="line">	id := c.option.ClientIP + <span class="string">&quot;@&quot;</span></span><br><span class="line">	<span class="keyword">if</span> c.option.InstanceName == <span class="string">&quot;DEFAULT&quot;</span> &#123;</span><br><span class="line">    <span class="comment">// 默认情况下，是以客户端ip地址加上pid组合成clientID</span></span><br><span class="line">		id += strconv.Itoa(os.Getpid())</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		id += c.option.InstanceName</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> c.option.UnitName != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		id += <span class="string">&quot;@&quot;</span> + c.option.UnitName</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> id</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，如果一个进程中同时有多重生产者以及消费者，<code>client</code>是会复用的。</p>
+<p>而 <code>p.Shutdown</code> 方法如下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(pc *pushConsumer)</span></span> Shutdown() <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> err <span class="type">error</span></span><br><span class="line">	pc.closeOnce.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="built_in">close</span>(pc.done)</span><br><span class="line"></span><br><span class="line">		pc.client.UnregisterConsumer(pc.consumerGroup)</span><br><span class="line">		err = pc.defaultConsumer.shutdown()</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *rmqClient)</span></span> UnregisterConsumer(group <span class="type">string</span>) &#123;</span><br><span class="line">  <span class="comment">// shutdown方法，是在syncMap中删除对象</span></span><br><span class="line">	c.consumerMap.Delete(group)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Shutdown</code>方法在<code>syncMap</code>中删除对象，因此，某一个生产者或者消费者<code>Shutdown</code>，则会断开该进程中所有与<code>RocketMQ</code>的连接。</p>
+<h3 id="通过RocketMQ分布式事务的案例"><a href="#通过RocketMQ分布式事务的案例" class="headerlink" title="通过RocketMQ分布式事务的案例"></a>通过RocketMQ分布式事务的案例</h3><p><img src="/../../../../../Library/Application%20Support/typora-user-images/image-20221014233157476.png" alt="image-20221014233157476"></p>
+<p>例如在购物场景中，下单功能：</p>
+<ol>
+<li>查询库存状态</li>
+<li>如果没有库存，则业务返回结果；如果有库存，则执行本地事务</li>
+<li>执行本地事务，创建订单信息，发布事务消息恢复扣减对应订单号的库存，调用库存接口，扣减库存</li>
+<li>执行本地事务成功，则回滚恢复库存扣减的消息</li>
+<li>执行本地事务失败，则提交恢复库存扣减的消息</li>
+<li>库存服务监听回滚topic，更新本地第二张订单和库存的信息，将库存恢复回来，订单状态更新为回滚状态</li>
+</ol>
+<p>下单后的支付功能：</p>
+<ol>
+<li>下单功能的本地事务中，增加延迟信息发送，防止定时内未支付，发送到订单<code>topic</code>中</li>
+<li>当支付成功，通过支付系统回调接口，更新订单状态</li>
+<li>订单服务监听订单<code>topic</code>，获取订单信息，查询订单信息表，获取订单装填，如果已支付，则<code>ConsumeSuccess</code>，如果未支付，将订单信息发送到回滚的<code>topic</code>中，使订单服务回滚库存数量</li>
+<li>如果订单更新过程失败，则将消息设置为重试<code>ConsumeRetryLater</code></li>
+<li>支付系统回调接口，在最大努力通知请款下，一般能够保障订单状态更新成功</li>
+</ol>
+<p>推荐阅读：</p>
+<p><a target="_blank" rel="noopener" href="https://aws.amazon.com/cn/message-queue/">消息队列简介</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.dingsky.com/article/20.html">消息队列详解：ActiveMQ、RocketMQ、RabbitMQ、Kafka</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904008629354504">《浅入浅出》-RocketMQ</a></p>
+<p><a target="_blank" rel="noopener" href="http://rocketmq.apache.org/">RocketMQ官方网站</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq">RocketMQ GitHub</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6997370258507956232">RocketMQ延迟消息实现原理和源码分析</a></p>
+<p><a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/43348.html">事务消息</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wolf-bin/p/15128162.html">RocketMQ 事务消息 </a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/12/%E4%BA%8B%E5%8A%A1%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="prev" title="事务和分布式事务">
+                  <i class="fa fa-chevron-left"></i> 事务和分布式事务
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/15/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="next" title="微服务之可用性">
+                  微服务之可用性 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/xiaoyeshiyu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>
