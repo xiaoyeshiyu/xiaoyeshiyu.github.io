@@ -96,7 +96,7 @@ https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/Golang/
 https://www.xiaoyeshiyu.com/categories/FAE/
 https://www.xiaoyeshiyu.com/categories/k8s/Golang/
 https://www.xiaoyeshiyu.com/categories/Linux/FAE/
+https://www.xiaoyeshiyu.com/categories/Golang/developer/
 https://www.xiaoyeshiyu.com/categories/microservice/
 https://www.xiaoyeshiyu.com/categories/Golang/algorithm/
-https://www.xiaoyeshiyu.com/categories/Golang/developer/
 https://www.xiaoyeshiyu.com/categories/Linux/FAE/

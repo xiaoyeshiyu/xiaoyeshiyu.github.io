@@ -858,6 +858,13 @@
   </url>
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/developer/</loc>
+    <lastmod>2023-03-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/microservice/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -866,13 +873,6 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/Golang/algorithm/</loc>
-    <lastmod>2023-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/developer/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
