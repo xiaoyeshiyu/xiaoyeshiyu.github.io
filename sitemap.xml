@@ -760,14 +760,7 @@
 
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/golang/</loc>
-    <lastmod>2023-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/k8s/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -781,13 +774,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
-    <lastmod>2023-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -795,7 +781,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/developer/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/golang/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -809,21 +795,14 @@
   </url>
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/developer/</loc>
+    <lastmod>2023-03-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/algorithm/</loc>
-    <lastmod>2023-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/k8s/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
-    <lastmod>2023-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/midware/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -837,14 +816,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/k8s/Golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/k8s/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/FAE/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/developer/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -858,14 +837,28 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/algorithm/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/midware/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/developer/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/k8s/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <lastmod>2023-03-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/FAE/</loc>
+    <lastmod>2023-03-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/k8s/Golang/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -873,6 +866,13 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/microservice/</loc>
+    <lastmod>2023-03-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/algorithm/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
