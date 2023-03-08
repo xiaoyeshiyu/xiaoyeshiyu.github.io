@@ -58,8 +58,8 @@ https://www.xiaoyeshiyu.com/2022/JWT/
 https://www.xiaoyeshiyu.com/2022/MongoDB/
 https://www.xiaoyeshiyu.com/2022/k8s-mysql/
 https://www.xiaoyeshiyu.com/2022/k8s-pgsql/
-https://www.xiaoyeshiyu.com/2022/k8s-redis/
 https://www.xiaoyeshiyu.com/2022/kubeadm-k8s/
+https://www.xiaoyeshiyu.com/2022/k8s-redis/
 https://www.xiaoyeshiyu.com/2022/RPC/
 https://www.xiaoyeshiyu.com/2022/http/
 https://www.xiaoyeshiyu.com/2022/Golang/

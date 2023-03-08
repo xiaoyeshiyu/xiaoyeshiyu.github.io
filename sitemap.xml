@@ -774,14 +774,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -795,7 +795,21 @@
   </url>
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/developer/</loc>
+    <lastmod>2023-03-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/Linux/</loc>
+    <lastmod>2023-03-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/developer/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -810,13 +824,6 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/k8s/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
-    <lastmod>2023-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/developer/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -844,13 +851,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Linux/FAE/</loc>
-    <lastmod>2023-03-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/k8s/Golang/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -858,7 +858,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/developer/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Linux/FAE/</loc>
     <lastmod>2023-03-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
