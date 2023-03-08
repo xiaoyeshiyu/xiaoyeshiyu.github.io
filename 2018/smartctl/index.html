@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在TS过程中会碰到很多磁盘异常出现影响系统数据或者生产数据的情况，但是有时候无法判断磁盘出现问题是由于磁盘物理损坏还是磁盘SATA口接触不良导致，这个时候smartctl命令就可以很容易判断出磁盘是否存在物理损坏问题，并且及时作出预警。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用smartctl命令检查磁盘">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2018/smartctl/index.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="在TS过程中会碰到很多磁盘异常出现影响系统数据或者生产数据的情况，但是有时候无法判断磁盘出现问题是由于磁盘物理损坏还是磁盘SATA口接触不良导致，这个时候smartctl命令就可以很容易判断出磁盘是否存在物理损坏问题，并且及时作出预警。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-04-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-08T09:14:14.834Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2018/smartctl/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2018/smartctl/","path":"2018/smartctl/","title":"使用smartctl命令检查磁盘"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用smartctl命令检查磁盘 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8smartctl%E8%BF%9B%E8%A1%8CSMART%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">使用smartctl进行SMART测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Smartmontools"><span class="nav-number">1.1.</span> <span class="nav-text">安装Smartmontools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.</span> <span class="nav-text">可用测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ATA-x2F-SCSI%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.1.</span> <span class="nav-text">ATA &#x2F; SCSI测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9F%AD%E6%9C%9F%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">短期测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%95%BF%E6%9C%9F%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">长期测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ATA%E6%8C%87%E5%AE%9A%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.2.</span> <span class="nav-text">ATA指定测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%BE%93%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">运输测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">选择测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#smartctl%E7%9A%84%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.</span> <span class="nav-text">smartctl的测试程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="nav-number">1.4.</span> <span class="nav-text">查看测试结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-number">1.4.1.</span> <span class="nav-text">处理过程</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2018/smartctl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用smartctl命令检查磁盘 | 小夜时雨">
+      <meta itemprop="description" content="在TS过程中会碰到很多磁盘异常出现影响系统数据或者生产数据的情况，但是有时候无法判断磁盘出现问题是由于磁盘物理损坏还是磁盘SATA口接触不良导致，这个时候smartctl命令就可以很容易判断出磁盘是否存在物理损坏问题，并且及时作出预警。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用smartctl命令检查磁盘
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-04-11 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-11T00:00:00+08:00">2018-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-08 17:14:14" itemprop="dateModified" datetime="2023-03-08T17:14:14+08:00">2023-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/smartctl/" class="post-meta-item leancloud_visitors" data-flag-title="使用smartctl命令检查磁盘" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2018/smartctl/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/smartctl/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">在TS过程中会碰到很多磁盘异常出现影响系统数据或者生产数据的情况，但是有时候无法判断磁盘出现问题是由于磁盘物理损坏还是磁盘SATA口接触不良导致，这个时候smartctl命令就可以很容易判断出磁盘是否存在物理损坏问题，并且及时作出预警。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="使用smartctl进行SMART测试"><a href="#使用smartctl进行SMART测试" class="headerlink" title="使用smartctl进行SMART测试"></a>使用smartctl进行SMART测试</h1><p>所有现代硬盘都可通过<code>SMART</code>属性监视其当前状态。这些值提供有关硬盘各种参数的信息，并可提供有关磁盘剩余寿命或任何可能的错误的信息。此外，可以执行各种<code>SMART</code>测试，以确定磁盘上的任何硬件问题。本文介绍如何使用<strong>smartctl（Smartmontools）</strong>对Linux进行此类测试。</p>
+<h2 id="安装Smartmontools"><a href="#安装Smartmontools" class="headerlink" title="安装Smartmontools"></a>安装Smartmontools</h2><p>Smartmontools可以使用yum直接安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">yum install -y smartmontools</span></span><br></pre></td></tr></table></figure>
+
+<p>要确保硬盘支持SMART并启用，请使用以下命令（本例中为硬盘&#x2F; dev &#x2F; sda）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -i /dev/sda</span></span><br><span class="line">smartctl 6.4 2015-06-04 r4109 [x86_64-linux-3.10.0-514.el7.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-15, Bruce Allen, Christian Franke, www.smartmontools.org</span><br><span class="line"></span><br><span class="line">=== START OF INFORMATION SECTION ===</span><br><span class="line">Device Model:     HGST HUS726030ALE610</span><br><span class="line">Serial Number:    N8GH1H5Y</span><br><span class="line">LU WWN Device Id: 5 000cca 244c6d728</span><br><span class="line">Firmware Version: APBDT7JN</span><br><span class="line">User Capacity:    3,000,592,982,016 bytes [3.00 TB]</span><br><span class="line">Sector Sizes:     512 bytes logical, 4096 bytes physical</span><br><span class="line">Rotation Rate:    7200 rpm</span><br><span class="line">Form Factor:      3.5 inches</span><br><span class="line">Device is:        Not in smartctl database [for details use: -P showall]</span><br><span class="line">ATA Version is:   ACS-2, ATA8-ACS T13/1699-D revision 4</span><br><span class="line">SATA Version is:  SATA 3.1, 6.0 Gb/s (current: 6.0 Gb/s)</span><br><span class="line">Local Time is:    Wed Oct 11 07:09:17 2017 CST</span><br><span class="line">SMART support is: Available - device has SMART capability.</span><br><span class="line">SMART support is: Enabled</span><br></pre></td></tr></table></figure>
+
+<p>上面的参数中，<code>SMART support is: Available - device has SMART capability.</code>显示磁盘SMART是支持的，<code>SMART support is: Enabled</code>是可用的</p>
+<h2 id="可用测试"><a href="#可用测试" class="headerlink" title="可用测试"></a>可用测试</h2><p><code>SMART</code>根据规格类型和<code>SCSI</code>设备提供两种不同的测试。这些测试中的每一个都可以以两种模式进行：</p>
+<ul>
+<li>前景模式</li>
+<li>背景模式</li>
+</ul>
+<p>在<strong>背景模式</strong>下，测试的优先级低，这意味着正常指令继续由硬盘处理。如果硬盘驱动器正忙，则测试暂停，然后以较低的加载速度继续运行，因此<strong>不会中断操作</strong>。<br>在<strong>前景模式</strong>下，所有命令将在测试期间以“检查条件”状态进行应答。因此，仅当不使用硬盘时，才建议使用此模式。<br>原则上，<strong>背景模式</strong>是首选模式。</p>
+<h3 id="ATA-x2F-SCSI测试"><a href="#ATA-x2F-SCSI测试" class="headerlink" title="ATA &#x2F; SCSI测试"></a>ATA &#x2F; SCSI测试</h3><h4 id="短期测试"><a href="#短期测试" class="headerlink" title="短期测试"></a>短期测试</h4><p>短期测试的目标是快速识别有缺陷的硬盘驱动器。因此，短测试的最大运行时间为2分钟。测试通过将磁盘划分成三个不同的段来检查磁盘。测试以下几个方面：</p>
+<ul>
+<li><strong>电气特性</strong>：控制器测试自己的电子元件，由于这是每个制造商特有的，因此无法准确解释正在测试的内容。例如，可以想到测试内部RAM，读&#x2F;写电路或头电子元件。</li>
+<li><strong>机械特性</strong>：要测试的伺服系统和定位机制的确切顺序也是每个制造商特有的。</li>
+<li><strong>读&#x2F;校验</strong>：它将读取磁盘的某个区域并验证某些数据，读取的区域的大小和位置也是每个制造商特有的。</li>
+</ul>
+<h4 id="长期测试"><a href="#长期测试" class="headerlink" title="长期测试"></a>长期测试</h4><p>长期测试被设计为生产中的最终测试，与<strong>短暂测试</strong>相同，有两个差异。<br>第一个：<strong>没有时间限制</strong>，并且在读&#x2F;校验中检查整个磁盘，而不仅仅是一个部分。例如，长期测试可以用于确认短测试的结果。</p>
+<h3 id="ATA指定测试"><a href="#ATA指定测试" class="headerlink" title="ATA指定测试"></a>ATA指定测试</h3><p>此处列出的所有测试仅适用于ATA硬盘驱动器。</p>
+<h4 id="运输测试"><a href="#运输测试" class="headerlink" title="运输测试"></a>运输测试</h4><p>可以执行该测试以确定在几分钟内传输硬盘时的损坏。</p>
+<h4 id="选择测试"><a href="#选择测试" class="headerlink" title="选择测试"></a>选择测试</h4><p>在选定的测试期间，检查指定的逻辑块范围。要扫描的逻辑块以以下格式指定：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -t select,10-20 /dev/sda  <span class="comment">## LBA 10 to LBA 20（incl.）</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -t select,10+11 /dev/sda  <span class="comment">## LBA 10 to LBA 20（incl.）</span></span></span><br><span class="line">smartctl 5.42 2011-10-20 r3458 [x86_64-linux-2.6.32-358.el6.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-11 by Bruce Allen, http://smartmontools.sourceforge.net</span><br><span class="line"></span><br><span class="line">=== START OF OFFLINE IMMEDIATE AND SELF-TEST SECTION ===</span><br><span class="line">Sending command: &quot;Execute SMART Selective self-test routine immediately in off-line mode&quot;.</span><br><span class="line">SPAN         STARTING_LBA           ENDING_LBA</span><br><span class="line">   0                   10                   20</span><br><span class="line">Drive command &quot;Execute SMART Selective self-test routine immediately in off-line mode&quot; successful.</span><br><span class="line">Testing has begun.</span><br></pre></td></tr></table></figure>
+
+<p>也可以有多个范围（最多5个）进行扫描：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -t select,0-10 -t select,10-20 /dev/sda</span></span><br><span class="line">smartctl 5.42 2011-10-20 r3458 [x86_64-linux-2.6.32-358.el6.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-11 by Bruce Allen, http://smartmontools.sourceforge.net</span><br><span class="line"></span><br><span class="line">=== START OF OFFLINE IMMEDIATE AND SELF-TEST SECTION ===</span><br><span class="line">Sending command: &quot;Execute SMART Selective self-test routine immediately in off-line mode&quot;.</span><br><span class="line">SPAN         STARTING_LBA           ENDING_LBA</span><br><span class="line">   0                    0                   10</span><br><span class="line">   1                   10                   20</span><br><span class="line">Drive command &quot;Execute SMART Selective self-test routine immediately in off-line mode&quot; successful.</span><br><span class="line">Testing has begun.</span><br></pre></td></tr></table></figure>
+
+<h2 id="smartctl的测试程序"><a href="#smartctl的测试程序" class="headerlink" title="smartctl的测试程序"></a>smartctl的测试程序</h2><p>在执行测试之前，使用以下命令显示各种测试的持续时间的近似值：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -c /dev/sda</span></span><br><span class="line">smartctl 5.42 2011-10-20 r3458 [x86_64-linux-2.6.32-358.el6.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-11 by Bruce Allen, http://smartmontools.sourceforge.net</span><br><span class="line"></span><br><span class="line">=== START OF READ SMART DATA SECTION ===</span><br><span class="line">General SMART Values:</span><br><span class="line">Offline data collection status:  (0x02)	Offline data collection activity</span><br><span class="line">					was completed without error.</span><br><span class="line">					Auto Offline Data Collection: Disabled.</span><br><span class="line">Self-test execution status:      (   0)	The previous self-test routine completed</span><br><span class="line">					without error or no self-test has ever </span><br><span class="line">					been run.</span><br><span class="line">Total time to complete Offline </span><br><span class="line">data collection: 		(    0) seconds.</span><br><span class="line">Offline data collection</span><br><span class="line">capabilities: 			 (0x7d) SMART execute Offline immediate.</span><br><span class="line">					No Auto Offline data collection support.</span><br><span class="line">					Abort Offline collection upon new</span><br><span class="line">					command.</span><br><span class="line">					Offline surface scan supported.</span><br><span class="line">					Self-test supported.</span><br><span class="line">					Conveyance Self-test supported.</span><br><span class="line">					Selective Self-test supported.</span><br><span class="line">SMART capabilities:            (0x0003)	Saves SMART data before entering</span><br><span class="line">					power-saving mode.</span><br><span class="line">					Supports SMART auto save timer.</span><br><span class="line">Error logging capability:        (0x01)	Error logging supported.</span><br><span class="line">					General Purpose Logging supported.</span><br><span class="line">Short self-test routine </span><br><span class="line">recommended polling time: 	 (   1) minutes.</span><br><span class="line">Extended self-test routine</span><br><span class="line">recommended polling time: 	 (  48) minutes.</span><br><span class="line">Conveyance self-test routine</span><br><span class="line">recommended polling time: 	 (   2) minutes.</span><br><span class="line">SCT capabilities: 	       (0x0025)	SCT Status supported.</span><br><span class="line">					SCT Data Table supported.</span><br></pre></td></tr></table></figure>
+
+<p>以下命令启动所需的测试（在后台模式下）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -t &lt;short|long|conveyance|select&gt; /dev/sda</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以执行“离线”测试。但是，仅进行标准自检（Short Test）。</p>
+<p>示例输出：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -t short /dev/sda</span></span><br><span class="line">smartctl 5.42 2011-10-20 r3458 [x86_64-linux-2.6.32-358.el6.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-11 by Bruce Allen, http://smartmontools.sourceforge.net</span><br><span class="line"></span><br><span class="line">=== START OF OFFLINE IMMEDIATE AND SELF-TEST SECTION ===</span><br><span class="line">Sending command: &quot;Execute SMART Short self-test routine immediately in off-line mode&quot;.</span><br><span class="line">Drive command &quot;Execute SMART Short self-test routine immediately in off-line mode&quot; successful.</span><br><span class="line">Testing has begun.</span><br><span class="line">Please wait 1 minutes for test to complete.</span><br><span class="line">Test will complete after Wed Oct 11 15:40:28 2017</span><br><span class="line"></span><br><span class="line">Use smartctl -X to abort test.</span><br></pre></td></tr></table></figure>
+
+<p>要在前台模式下执行测试，必须在命令中添加“-C”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># smartctl -t &lt;short|long|conveyance|select&gt; -C /dev/sda</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看测试结果"><a href="#查看测试结果" class="headerlink" title="查看测试结果"></a>查看测试结果</h2><p>通常，测试结果包含在以下命令的输出中：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -a /dev/sda</span></span><br><span class="line">smartctl 5.42 2011-10-20 r3458 [x86_64-linux-2.6.32-358.el6.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-11 by Bruce Allen, http://smartmontools.sourceforge.net</span><br><span class="line"></span><br><span class="line">=== START OF INFORMATION SECTION ===</span><br><span class="line">Device Model:     KINGSTON SV300S37A60G</span><br><span class="line">Serial Number:    50026B724A01E182</span><br><span class="line">LU WWN Device Id: 5 0026b7 24a01e182</span><br><span class="line">Firmware Version: 580ABBF0</span><br><span class="line">User Capacity:    60,022,480,896 bytes [60.0 GB]</span><br><span class="line">Sector Size:      512 bytes logical/physical</span><br><span class="line">Device is:        Not in smartctl database [for details use: -P showall]</span><br><span class="line">ATA Version is:   8</span><br><span class="line">ATA Standard is:  ACS-2 revision 3</span><br><span class="line">Local Time is:    Wed Oct 11 15:41:49 2017 CST</span><br><span class="line">SMART support is: Available - device has SMART capability.</span><br><span class="line">SMART support is: Enabled</span><br><span class="line"></span><br><span class="line">=== START OF READ SMART DATA SECTION ===</span><br><span class="line">SMART overall-health self-assessment test result: PASSED</span><br><span class="line"></span><br><span class="line">General SMART Values:</span><br><span class="line">Offline data collection status:  (0x02)	Offline data collection activity</span><br><span class="line">					was completed without error.</span><br><span class="line">					Auto Offline Data Collection: Disabled.</span><br><span class="line">Self-test execution status:      (   0)	The previous self-test routine completed</span><br><span class="line">					without error or no self-test has ever </span><br><span class="line">					been run.</span><br><span class="line">Total time to complete Offline </span><br><span class="line">data collection: 		(    0) seconds.</span><br><span class="line">Offline data collection</span><br><span class="line">capabilities: 			 (0x7d) SMART execute Offline immediate.</span><br><span class="line">					No Auto Offline data collection support.</span><br><span class="line">					Abort Offline collection upon new</span><br><span class="line">					command.</span><br><span class="line">					Offline surface scan supported.</span><br><span class="line">					Self-test supported.</span><br><span class="line">					Conveyance Self-test supported.</span><br><span class="line">					Selective Self-test supported.</span><br><span class="line">SMART capabilities:            (0x0003)	Saves SMART data before entering</span><br><span class="line">					power-saving mode.</span><br><span class="line">					Supports SMART auto save timer.</span><br><span class="line">Error logging capability:        (0x01)	Error logging supported.</span><br><span class="line">					General Purpose Logging supported.</span><br><span class="line">Short self-test routine </span><br><span class="line">recommended polling time: 	 (   1) minutes.</span><br><span class="line">Extended self-test routine</span><br><span class="line">recommended polling time: 	 (  48) minutes.</span><br><span class="line">Conveyance self-test routine</span><br><span class="line">recommended polling time: 	 (   2) minutes.</span><br><span class="line">SCT capabilities: 	       (0x0025)	SCT Status supported.</span><br><span class="line">					SCT Data Table supported.</span><br><span class="line"></span><br><span class="line">SMART Attributes Data Structure revision number: 10</span><br><span class="line">Vendor Specific SMART Attributes with Thresholds:</span><br><span class="line"><span class="meta prompt_">ID# </span><span class="language-bash">ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE</span></span><br><span class="line">  1 Raw_Read_Error_Rate     0x0032   095   095   050    Old_age   Always       -       8601004262</span><br><span class="line">  5 Reallocated_Sector_Ct   0x0033   099   099   003    Pre-fail  Always       -       0</span><br><span class="line">  9 Power_On_Hours          0x0032   085   085   000    Old_age   Always       -       145066815403100</span><br><span class="line"> 12 Power_Cycle_Count       0x0032   100   100   000    Old_age   Always       -       120</span><br><span class="line">171 Unknown_Attribute       0x000a   100   100   000    Old_age   Always       -       0</span><br><span class="line">172 Unknown_Attribute       0x0032   100   100   000    Old_age   Always       -       0</span><br><span class="line">174 Unknown_Attribute       0x0030   000   000   000    Old_age   Offline      -       97</span><br><span class="line">177 Wear_Leveling_Count     0x0000   000   000   000    Old_age   Offline      -       96</span><br><span class="line">181 Program_Fail_Cnt_Total  0x000a   100   100   000    Old_age   Always       -       0</span><br><span class="line">182 Erase_Fail_Count_Total  0x0032   100   100   000    Old_age   Always       -       0</span><br><span class="line">187 Reported_Uncorrect      0x0012   100   100   000    Old_age   Always       -       0</span><br><span class="line">189 High_Fly_Writes         0x0000   029   041   000    Old_age   Offline      -       77312098333</span><br><span class="line">194 Temperature_Celsius     0x0022   029   041   000    Old_age   Always       -       29 (Min/Max 18/41)</span><br><span class="line">195 Hardware_ECC_Recovered  0x001c   102   102   000    Old_age   Offline      -       8601004262</span><br><span class="line">196 Reallocated_Event_Count 0x0033   099   099   003    Pre-fail  Always       -       0</span><br><span class="line">201 Soft_Read_Error_Rate    0x001c   102   102   000    Old_age   Offline      -       8601004262</span><br><span class="line">204 Soft_ECC_Correction     0x001c   102   102   000    Old_age   Offline      -       8601004262</span><br><span class="line">230 Head_Amplitude          0x0013   100   100   000    Pre-fail  Always       -       100</span><br><span class="line">231 Temperature_Celsius     0x0013   091   091   010    Pre-fail  Always       -       0</span><br><span class="line">233 Media_Wearout_Indicator 0x0032   000   000   000    Old_age   Always       -       9261</span><br><span class="line">234 Unknown_Attribute       0x0032   000   000   000    Old_age   Always       -       14820</span><br><span class="line">241 Total_LBAs_Written      0x0032   000   000   000    Old_age   Always       -       14820</span><br><span class="line">242 Total_LBAs_Read         0x0032   000   000   000    Old_age   Always       -       6033</span><br><span class="line"></span><br><span class="line">SMART Error Log not supported</span><br><span class="line">SMART Self-test log structure revision number 1</span><br><span class="line">Num  Test_Description    Status                  Remaining  LifeTime(hours)  LBA_of_first_error</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1  Short offline       Completed without error       00%     13404         -</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2  Selective offline   Completed without error       00%     13404         -</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">3  Selective offline   Completed without error       00%     13404         -</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">4  Selective offline   Completed without error       00%     13404         -</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">5  Short offline       Completed without error       00%     13403         -</span></span><br><span class="line"></span><br><span class="line">SMART Selective self-test log data structure revision number 1</span><br><span class="line"> SPAN  MIN_LBA  MAX_LBA  CURRENT_TEST_STATUS</span><br><span class="line">    1        0       10  Not_testing</span><br><span class="line">    2       10       20  Not_testing</span><br><span class="line">    3        0        0  Not_testing</span><br><span class="line">    4        0        0  Not_testing</span><br><span class="line">    5        0        0  Not_testing</span><br><span class="line">Selective self-test flags (0x0):</span><br><span class="line">  After scanning selected spans, do NOT read-scan remainder of disk.</span><br><span class="line">If Selective self-test is pending on power-up, resume after 0 minute delay.</span><br></pre></td></tr></table></figure>
+
+<p>如果只显示测试结果，也可以使用以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -l selftest /dev/sda</span></span><br><span class="line">smartctl 5.42 2011-10-20 r3458 [x86_64-linux-2.6.32-358.el6.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-11 by Bruce Allen, http://smartmontools.sourceforge.net</span><br><span class="line"></span><br><span class="line">=== START OF READ SMART DATA SECTION ===</span><br><span class="line">SMART Self-test log structure revision number 1</span><br><span class="line">Num  Test_Description    Status                  Remaining  LifeTime(hours)  LBA_of_first_error</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">1  Short offline       Completed without error       00%     13404         -</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">2  Selective offline   Completed without error       00%     13404         -</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">3  Selective offline   Completed without error       00%     13404         -</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">4  Selective offline   Completed without error       00%     13404         -</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">5  Short offline       Completed without error       00%     13403         -</span></span><br></pre></td></tr></table></figure>
+
+<p>显示磁盘全部的健康状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -H /dev/sda</span></span><br><span class="line">smartctl 5.42 2011-10-20 r3458 [x86_64-linux-2.6.32-358.el6.x86_64] (local build)</span><br><span class="line">Copyright (C) 2002-11 by Bruce Allen, http://smartmontools.sourceforge.net</span><br><span class="line"></span><br><span class="line">=== START OF READ SMART DATA SECTION ===</span><br><span class="line">SMART overall-health self-assessment test result: PASSED   ##说明自检通过，磁盘健康</span><br></pre></td></tr></table></figure>
+
+<p>查看磁盘错误日志</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">smartctl -l error  /dev/sdb</span></span><br><span class="line"></span><br><span class="line">Sample Output</span><br><span class="line"></span><br><span class="line">smartctl 6.2 2013-07-26 r3841 [x86_64-linux-3.13.0-32-generic] (local build)</span><br><span class="line">Copyright (C) 2002-13, Bruce Allen, Christian Franke, www.smartmontools.org</span><br><span class="line"></span><br><span class="line">=== START OF READ SMART DATA SECTION ===</span><br><span class="line">SMART Error Log Version: 1</span><br><span class="line">ATA Error Count: 1</span><br><span class="line">	CR = Command Register [HEX]</span><br><span class="line">	FR = Features Register [HEX]</span><br><span class="line">	SC = Sector Count Register [HEX]</span><br><span class="line">	SN = Sector Number Register [HEX]</span><br><span class="line">	CL = Cylinder Low Register [HEX]</span><br><span class="line">	CH = Cylinder High Register [HEX]</span><br><span class="line">	DH = Device/Head Register [HEX]</span><br><span class="line">	DC = Device Command Register [HEX]</span><br><span class="line">	ER = Error register [HEX]</span><br><span class="line">	ST = Status register [HEX]</span><br><span class="line">Powered_Up_Time is measured from power on, and printed as</span><br><span class="line">DDd+hh:mm:SS.sss where DD=days, hh=hours, mm=minutes,</span><br><span class="line">SS=sec, and sss=millisec. It &quot;wraps&quot; after 49.710 days.</span><br><span class="line"></span><br><span class="line">Error 1 occurred at disk power-on lifetime: 10042 hours (418 days + 10 hours)</span><br><span class="line">  When the command that caused the error occurred, the device was active or idle.</span><br><span class="line"></span><br><span class="line">  After command completion occurred, registers were:</span><br><span class="line">  ER ST SC SN CL CH DH</span><br><span class="line">  -- -- -- -- -- -- --</span><br><span class="line">  84 51 00 00 00 00 a0</span><br><span class="line"></span><br><span class="line">  Commands leading to the command that caused the error were:</span><br><span class="line">  CR FR SC SN CL CH DH DC   Powered_Up_Time  Command/Feature_Name</span><br><span class="line">  -- -- -- -- -- -- -- --  ----------------  --------------------</span><br><span class="line">  ec 00 00 00 00 00 a0 08  35d+16:09:47.709  IDENTIFY DEVICE</span><br><span class="line">  ec 00 00 00 00 00 a0 08  35d+16:09:42.437  IDENTIFY DEVICE</span><br><span class="line">  ec 00 00 00 00 00 a0 08  35d+16:09:42.159  IDENTIFY DEVICE</span><br><span class="line">  ef 03 46 00 00 00 a0 08  35d+16:09:42.159  SET FEATURES [Set transfer mode]</span><br><span class="line">  ec 00 00 00 00 00 a0 08  35d+16:09:42.159  IDENTIFY DEVICE</span><br></pre></td></tr></table></figure>
+
+<h3 id="处理过程"><a href="#处理过程" class="headerlink" title="处理过程"></a>处理过程</h3><p>首先通过<code>smartctl -H /dev/sda</code>检查磁盘健康状态，然后<code>smartctl -a /dev/sda</code>查看磁盘详细情况，再对磁盘进行短期测试<code>smartctl -t short /dev/sda</code>，最后查看磁盘测试结果<code>smartctl -l selftest /dev/sda</code>，基本磁盘健康状态就可以定位出来，最后检查磁盘错误日志<code>smartctl -l error  /dev/sdb</code></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/IPMITool/" rel="prev" title="Ipmitool工具的使用方式">
+                  <i class="fa fa-chevron-left"></i> Ipmitool工具的使用方式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/OpenvSwitch/" rel="next" title="Neutron结合OpenvSwitch网络部分浅析">
+                  Neutron结合OpenvSwitch网络部分浅析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

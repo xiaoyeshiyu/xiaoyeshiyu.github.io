@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>小夜时雨</title>
   <icon>https://www.xiaoyeshiyu.com/icon.png</icon>
   <subtitle>君子敬其在己者，而不慕其在天者，是以日进也。</subtitle>
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-03-08T01:40:06.362Z</updated>
+  <updated>2023-03-08T09:10:31.045Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -18,67 +18,44 @@
   
   <entry>
     <title>LeetCode每日一题</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/LeetCode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/LeetCode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/</id>
+    <link href="https://www.xiaoyeshiyu.com/2023/LeetCode/"/>
+    <id>https://www.xiaoyeshiyu.com/2023/LeetCode/</id>
     <published>2023-02-23T16:00:00.000Z</published>
-    <updated>2023-03-08T01:40:06.362Z</updated>
+    <updated>2023-03-08T09:10:31.045Z</updated>
     
     
     <summary type="html">数据结构和算法是很重要的，无论是在工作过程中还是在面试笔试中。这里记录LeetCode每日一题。</summary>
     
     
     
-    <category term="golang" scheme="https://www.xiaoyeshiyu.com/categories/golang/"/>
-    
-    <category term="algorithm" scheme="https://www.xiaoyeshiyu.com/categories/golang/algorithm/"/>
+    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/algorithm/"/>
     
     
   </entry>
   
   <entry>
     <title>Git学习笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/Git%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/Git%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
+    <link href="https://www.xiaoyeshiyu.com/2023/Git/"/>
+    <id>https://www.xiaoyeshiyu.com/2023/Git/</id>
     <published>2023-02-20T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.089Z</updated>
+    <updated>2023-03-08T09:06:01.392Z</updated>
     
     
     <summary type="html">Git是日常工作中很常用的工具，除了程序员，一些文字编辑工作者都可以通过Git加速工作效率。</summary>
     
     
     
-    <category term="golang" scheme="https://www.xiaoyeshiyu.com/categories/golang/"/>
-    
-    <category term="middleware" scheme="https://www.xiaoyeshiyu.com/categories/golang/middleware/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Golang中的sync.Pool</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/Golang%E4%B8%AD%E7%9A%84sync.Pool/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/Golang%E4%B8%AD%E7%9A%84sync.Pool/</id>
-    <published>2023-01-15T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.093Z</updated>
-    
-    
-    <summary type="html">缓冲池在很多时候都会用到，使用缓冲池可以减少创建对象和垃圾回收，可以大大增加处理效率。</summary>
-    
-    
-    
-    <category term="golang" scheme="https://www.xiaoyeshiyu.com/categories/golang/"/>
-    
-    <category term="source code" scheme="https://www.xiaoyeshiyu.com/categories/golang/source-code/"/>
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/developer/"/>
     
     
   </entry>
   
   <entry>
     <title>Golang代码质量持续检测</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/Golang%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E6%8C%81%E7%BB%AD%E6%A3%80%E6%B5%8B/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/Golang%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F%E6%8C%81%E7%BB%AD%E6%A3%80%E6%B5%8B/</id>
+    <link href="https://www.xiaoyeshiyu.com/2023/code-quality/"/>
+    <id>https://www.xiaoyeshiyu.com/2023/code-quality/</id>
     <published>2023-01-15T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.098Z</updated>
+    <updated>2023-03-08T08:55:39.520Z</updated>
     
     
     <summary type="html">手动查看代码和人工查找BUG都会存在效率问题，使用自动化代码检测能够跟大程度提高效率，提升代码质量。</summary>
@@ -91,308 +68,283 @@
   </entry>
   
   <entry>
+    <title>Golang中的sync.Pool</title>
+    <link href="https://www.xiaoyeshiyu.com/2023/sync-pool/"/>
+    <id>https://www.xiaoyeshiyu.com/2023/sync-pool/</id>
+    <published>2023-01-15T16:00:00.000Z</published>
+    <updated>2023-03-08T09:14:43.467Z</updated>
+    
+    
+    <summary type="html">缓冲池在很多时候都会用到，使用缓冲池可以减少创建对象和垃圾回收，可以大大增加处理效率。</summary>
+    
+    
+    
+    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>Redis学习笔记之实用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%AE%9E%E7%94%A8%E7%AF%87/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B9%8B%E5%AE%9E%E7%94%A8%E7%AF%87/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/Redis-adv/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/Redis-adv/</id>
     <published>2022-12-05T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.115Z</updated>
+    <updated>2023-03-08T09:13:19.350Z</updated>
     
     
     <summary type="html">Redis学习笔记之实用篇包含Redis的底层原理以及一些使用场景和解决方案，是基础篇的补充篇。</summary>
     
     
     
-    <category term="database" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
-    
-    <category term="Redis" scheme="https://www.xiaoyeshiyu.com/categories/database/Redis/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>MySQL学习笔记高可用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E9%AB%98%E5%8F%AF%E7%94%A8%E7%AF%87/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E9%AB%98%E5%8F%AF%E7%94%A8%E7%AF%87/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-ha/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/MySQL-ha/</id>
     <published>2022-11-24T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.109Z</updated>
+    <updated>2023-03-08T09:11:43.450Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记高可用篇，主要包含日志、主从复制、备份和恢复。</summary>
     
     
     
-    <category term="databse" scheme="https://www.xiaoyeshiyu.com/categories/databse/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/"/>
-    
-    <category term="mysql" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/mysql/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>MySQL学习笔记事务和锁篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81%E7%AF%87/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81%E7%AF%87/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-tx-lock/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/MySQL-tx-lock/</id>
     <published>2022-11-23T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.106Z</updated>
+    <updated>2023-03-08T09:12:21.464Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记事务和锁篇，主要包含数据库的事务、锁和MVCC机制。</summary>
     
     
     
-    <category term="databse" scheme="https://www.xiaoyeshiyu.com/categories/databse/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/"/>
-    
-    <category term="mysql" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/mysql/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>MySQL学习笔记设计规范和调优篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%E5%92%8C%E8%B0%83%E4%BC%98%E7%AF%87/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%E5%92%8C%E8%B0%83%E4%BC%98%E7%AF%87/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-optimization/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/MySQL-optimization/</id>
     <published>2022-11-20T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.109Z</updated>
+    <updated>2023-03-08T09:12:14.038Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记设计规范和调优篇，主要是数据库、表的设计规范，以及数据库服务端性能调优。</summary>
     
     
     
-    <category term="databse" scheme="https://www.xiaoyeshiyu.com/categories/databse/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/"/>
-    
-    <category term="mysql" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/mysql/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>MySQL学习笔记索引篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E7%B4%A2%E5%BC%95%E7%AF%87/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E7%B4%A2%E5%BC%95%E7%AF%87/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-index/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/MySQL-index/</id>
     <published>2022-11-14T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.108Z</updated>
+    <updated>2023-03-08T09:12:08.398Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记索引篇，主要是索引的设计和使用，查询分析和优化。</summary>
     
     
     
-    <category term="databse" scheme="https://www.xiaoyeshiyu.com/categories/databse/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/"/>
-    
-    <category term="mysql" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/mysql/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>MySQL学习笔记架构篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%9E%B6%E6%9E%84%E7%AF%87/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E6%9E%B6%E6%9E%84%E7%AF%87/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-framework/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/MySQL-framework/</id>
     <published>2022-11-11T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.107Z</updated>
+    <updated>2023-03-08T09:11:36.419Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记架构篇，主要是逻辑架构、存储引擎、索引的数据结构</summary>
     
     
     
-    <category term="databse" scheme="https://www.xiaoyeshiyu.com/categories/databse/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/"/>
-    
-    <category term="mysql" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/mysql/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>MySQL学习笔记高级使用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E9%AB%98%E7%BA%A7%E4%BD%BF%E7%94%A8%E7%AF%87/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E9%AB%98%E7%BA%A7%E4%BD%BF%E7%94%A8%E7%AF%87/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-adv/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/MySQL-adv/</id>
     <published>2022-11-07T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.110Z</updated>
+    <updated>2023-03-08T09:11:23.384Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记高级使用篇，主要是视图、存储、函数、变量、流程和触发器等。</summary>
     
     
     
-    <category term="databse" scheme="https://www.xiaoyeshiyu.com/categories/databse/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/"/>
-    
-    <category term="mysql" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/mysql/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>MySQL学习笔记DQL篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0DQL%E7%AF%87/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0DQL%E7%AF%87/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-dql/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/MySQL-dql/</id>
     <published>2022-10-25T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.105Z</updated>
+    <updated>2023-03-08T09:11:29.545Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记DQL篇，主要是DML、DQL、DDL相关语句和操作。</summary>
     
     
     
-    <category term="databse" scheme="https://www.xiaoyeshiyu.com/categories/databse/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/"/>
-    
-    <category term="mysql" scheme="https://www.xiaoyeshiyu.com/categories/databse/develope/mysql/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>微服务之链路追踪</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/</id>
-    <published>2022-10-15T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.126Z</updated>
-    
-    
-    <summary type="html">在微服务架构中，交互方式变成服务和服务之间的交互，当接口链路过多，此时出现问题会非常不好排查，因此需要引入链路追踪技术，可以查看请求链路中所有经过的服务。</summary>
-    
-    
-    
-    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/develope/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>微服务之网关</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E7%BD%91%E5%85%B3/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E7%BD%91%E5%85%B3/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/gateway/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/gateway/</id>
     <published>2022-10-15T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.125Z</updated>
+    <updated>2023-03-08T09:02:00.264Z</updated>
     
     
     <summary type="html">微服务下，内部网络以gRPC协议相互通信，但是前后端分离下，或者支持多端能力下，会通过http协议的形式暴露给外部。此时多个微服务下，需要对网关进行一致管理，则需要引入API网关。</summary>
     
     
     
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/develope/"/>
+    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>微服务之链路追踪</title>
+    <link href="https://www.xiaoyeshiyu.com/2022/link-tracing/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/link-tracing/</id>
+    <published>2022-10-15T16:00:00.000Z</published>
+    <updated>2023-03-08T09:10:33.678Z</updated>
+    
+    
+    <summary type="html">在微服务架构中，交互方式变成服务和服务之间的交互，当接口链路过多，此时出现问题会非常不好排查，因此需要引入链路追踪技术，可以查看请求链路中所有经过的服务。</summary>
+    
+    
+    
+    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
     
     
   </entry>
   
   <entry>
     <title>微服务之可用性</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%AB%98%E5%8F%AF%E7%94%A8/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%AB%98%E5%8F%AF%E7%94%A8/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/high-availability/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/high-availability/</id>
     <published>2022-10-14T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.127Z</updated>
+    <updated>2023-03-08T09:06:53.710Z</updated>
     
     
     <summary type="html">在微服务架构中，由于服务之间隔离，服务和服务之间的交互变得不确定性，通过熔断、降级、重试可以很好的提高可用性，重试情况下，幂等性是必须解决的一个问题。</summary>
     
     
     
-    <category term="方案" scheme="https://www.xiaoyeshiyu.com/categories/%E6%96%B9%E6%A1%88/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/%E6%96%B9%E6%A1%88/develope/"/>
+    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
     
     
   </entry>
   
   <entry>
     <title>RocketMQ学习笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/RocketMQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/RocketMQ%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/RocketMQ/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/RocketMQ/</id>
     <published>2022-10-13T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.116Z</updated>
+    <updated>2023-03-08T09:13:38.197Z</updated>
     
     
     <summary type="html">在微服务场景中，解耦能力是非常重要的，常用的解决方案是通过消息队列。具有回查机制和高并发能力的RocketMQ在实现分布式事务功能上有很大的优势。</summary>
     
     
     
-    <category term="midware" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/midware/develope/"/>
+    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
     
     
   </entry>
   
   <entry>
     <title>事务和分布式事务</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/%E4%BA%8B%E5%8A%A1%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/%E4%BA%8B%E5%8A%A1%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/Transactions/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/Transactions/</id>
     <published>2022-10-11T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.118Z</updated>
+    <updated>2023-03-08T09:14:54.969Z</updated>
     
     
     <summary type="html">在一些使用数据库的系统中，当数据操作掺杂业务逻辑，需要通过业务逻辑结果判断是否需要修改数据时，可以用到数据库的事务。在分布式的场景下，如果是跨节点交互业务逻辑，需要实现回滚，则需要使用到分布式事务。</summary>
     
     
     
-    <category term="golang" scheme="https://www.xiaoyeshiyu.com/categories/golang/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/golang/develope/"/>
+    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
     
     
   </entry>
   
   <entry>
     <title>ElasticSearch学习笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/ElasticSearch%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/ElasticSearch%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/ElasticSearch/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/ElasticSearch/</id>
     <published>2022-10-09T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.085Z</updated>
+    <updated>2023-03-08T09:05:46.896Z</updated>
     
     
     <summary type="html">ElasticSearch是最为常用的检索数据库，是一种NoSQL，一般用于做不常更新、常检索的场景，例如用于存储日志或者用于商品检索。本文介绍一些常用的es操作步骤和使用golang操作es的方式。</summary>
     
     
     
-    <category term="golang" scheme="https://www.xiaoyeshiyu.com/categories/golang/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/golang/develope/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
     
   </entry>
   
   <entry>
     <title>微服务之负载均衡</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/load-balancing/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/load-balancing/</id>
     <published>2022-10-08T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.125Z</updated>
+    <updated>2023-03-08T09:10:38.062Z</updated>
     
     
     <summary type="html">在gRPC长连接的场景下，如果客户端和服务端都是多个节点，那么则需要处理连接的负载，同时，当服务端扩容，则需要动态调整。</summary>
     
     
     
-    <category term="k8s" scheme="https://www.xiaoyeshiyu.com/categories/k8s/"/>
-    
-    <category term="microservice" scheme="https://www.xiaoyeshiyu.com/categories/k8s/microservice/"/>
+    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
     
     
   </entry>
   
   <entry>
     <title>Golang中的本地锁和分布式锁</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/Golang%E4%B8%AD%E7%9A%84%E6%9C%AC%E5%9C%B0%E9%94%81%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/Golang%E4%B8%AD%E7%9A%84%E6%9C%AC%E5%9C%B0%E9%94%81%E5%92%8C%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</id>
+    <link href="https://www.xiaoyeshiyu.com/2022/lock/"/>
+    <id>https://www.xiaoyeshiyu.com/2022/lock/</id>
     <published>2022-10-07T16:00:00.000Z</published>
-    <updated>2023-03-01T07:49:49.097Z</updated>
+    <updated>2023-03-08T09:10:40.080Z</updated>
     
     
     <summary type="html">并发编程的过程中为了保证数据安全，解决数据竞争带来的问题，通常的解决方案就是使用锁。在单进程内使用局部锁，与在多进程之间使用分布式锁。</summary>
@@ -400,8 +352,6 @@
     
     
     <category term="golang" scheme="https://www.xiaoyeshiyu.com/categories/golang/"/>
-    
-    <category term="develope" scheme="https://www.xiaoyeshiyu.com/categories/golang/develope/"/>
     
     
   </entry>
