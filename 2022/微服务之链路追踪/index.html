@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在微服务架构中，交互方式变成服务和服务之间的交互，当接口链路过多，此时出现问题会非常不好排查，因此需要引入链路追踪技术，可以查看请求链路中所有经过的服务。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务之链路追踪">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在微服务架构中，交互方式变成服务和服务之间的交互，当接口链路过多，此时出现问题会非常不好排查，因此需要引入链路追踪技术，可以查看请求链路中所有经过的服务。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/v2-add7ecc0d6ed9055816676ae4d340644_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/xtrace_dg_workflow.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/v2-0b220d51d67bde76c8a90b49319d31b8_1440w.webp">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-76048afcdf2f349907d716487e6a82a7_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/v2-c5fc90a08c4df8d68b3ce0736521b3b2_1440w.webp">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016002632262.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016160115057.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/architecture-v1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016160207362.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016160308755.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016162504150.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221020154751742.png">
+<meta property="article:published_time" content="2022-10-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T07:49:49.126Z">
+<meta property="article:author" content="Mitaka xu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/v2-add7ecc0d6ed9055816676ae4d340644_1440w.webp">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/","path":"2022/微服务之链路追踪/","title":"微服务之链路追踪"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>微服务之链路追踪 | Hexo</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA%E4%BA%A7%E5%93%81%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">链路追踪产品架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenTracing"><span class="nav-number">1.2.</span> <span class="nav-text">OpenTracing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#OpenTracing-%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">1.2.1.</span> <span class="nav-text">OpenTracing 的优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OpenTracing-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.2.</span> <span class="nav-text">OpenTracing 数据模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E5%92%8C%E6%9C%AF%E8%AF%AD"><span class="nav-number">1.3.</span> <span class="nav-text">概念和术语</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Traces"><span class="nav-number">1.3.1.</span> <span class="nav-text">Traces</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Spans"><span class="nav-number">1.3.2.</span> <span class="nav-text">Spans</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Operation-Names"><span class="nav-number">1.3.3.</span> <span class="nav-text">Operation Names</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Inter-Span-References"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">Inter-Span References</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpanContext"><span class="nav-number">1.3.4.</span> <span class="nav-text">SpanContext</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="nav-number">1.4.</span> <span class="nav-text">主要功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E5%9E%8B"><span class="nav-number">1.5.</span> <span class="nav-text">选型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jaeger"><span class="nav-number">2.</span> <span class="nav-text">Jaeger</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87Go%E6%93%8D%E4%BD%9CJagger"><span class="nav-number">2.3.</span> <span class="nav-text">通过Go操作Jagger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%88%B0gRPC%E4%B8%AD"><span class="nav-number">2.4.</span> <span class="nav-text">应用到gRPC中</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Monitoring"><span class="nav-number">2.4.1.</span> <span class="nav-text">Monitoring</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4"><span class="nav-number">2.4.2.</span> <span class="nav-text">过滤</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">保持积累，保持学习。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoyeshiyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="保持积累，保持学习。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="微服务之链路追踪 | Hexo">
+      <meta itemprop="description" content="在微服务架构中，交互方式变成服务和服务之间的交互，当接口链路过多，此时出现问题会非常不好排查，因此需要引入链路追踪技术，可以查看请求链路中所有经过的服务。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          微服务之链路追踪
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-10-16 00:00:00" itemprop="dateCreated datePublished" datetime="2022-10-16T00:00:00+08:00">2022-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-01 15:49:49" itemprop="dateModified" datetime="2023-03-01T15:49:49+08:00">2023-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">微服务</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/develope/" itemprop="url" rel="index"><span itemprop="name">develope</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/" class="post-meta-item leancloud_visitors" data-flag-title="微服务之链路追踪" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/微服务之链路追踪/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">在微服务架构中，交互方式变成服务和服务之间的交互，当接口链路过多，此时出现问题会非常不好排查，因此需要引入链路追踪技术，可以查看请求链路中所有经过的服务。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>链路追踪是分布式系统下的一个概念，它的目的就是要解决上面所提出的问题，也就是将一次分布式请求还原成调用链路，将一次分布式请求的调用情况集中展示，比如，各个服务节点上的耗时、请求具体到达哪台机器上、每个服务节点的请求状态等等。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/v2-add7ecc0d6ed9055816676ae4d340644_1440w.webp" alt="img"></p>
+<h3 id="链路追踪产品架构"><a href="#链路追踪产品架构" class="headerlink" title="链路追踪产品架构"></a>链路追踪产品架构</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/xtrace_dg_workflow.png" alt="Tracing Analysis Workflow"></p>
+<p>链路追踪的主要工作流程如下：</p>
+<ol>
+<li>客户端的应用程序通过集成链路追踪的多语言客户端SDK上报服务调用数据。链路追踪支持多种开源社区的SDK，且支持OpenTracing标准。</li>
+<li>数据上报至链路追踪控制台后，链路追踪组件进行实时聚合计算和持久化，形成链路明细、性能总览、实时拓扑等监控数据。您可以据此进行问题排查与诊断。</li>
+<li>调用链数据可对接下游阿里云产品，例如LogSearch、CloudMonitor、MaxCompute等，用于离线分析、报警等场景。</li>
+</ol>
+<h3 id="OpenTracing"><a href="#OpenTracing" class="headerlink" title="OpenTracing"></a>OpenTracing</h3><p>为了解决不同的分布式追踪系统 API 不兼容的问题，诞生了 <a href="https://link.zhihu.com/?target=http://opentracing.io/">OpenTracing</a> 规范。<br>OpenTracing 是一个轻量级的标准化层，它位于<strong>应用程序&#x2F;类库</strong>和<strong>追踪或日志分析程序</strong>之间。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/v2-0b220d51d67bde76c8a90b49319d31b8_1440w.webp" alt="img"></p>
+<h4 id="OpenTracing-的优势"><a href="#OpenTracing-的优势" class="headerlink" title="OpenTracing 的优势"></a>OpenTracing 的优势</h4><ul>
+<li>OpenTracing 已进入 CNCF，正在为全球的分布式追踪，提供统一的概念和数据标准。</li>
+<li>OpenTracing 通过提供平台无关、厂商无关的 API，使得开发人员能够方便的添加（或更换）追踪系统的实现。</li>
+</ul>
+<h4 id="OpenTracing-数据模型"><a href="#OpenTracing-数据模型" class="headerlink" title="OpenTracing 数据模型"></a>OpenTracing 数据模型</h4><p>OpenTracing 中的 <strong>Trace</strong>（调用链）通过归属于此调用链的 <strong>Span</strong> 来隐性的定义。<br>特别说明，一条 <strong>Trace</strong>（调用链）可以被认为是一个由多个 <strong>Span</strong> 组成的有向无环图（DAG图），<strong>Span</strong> 与 <strong>Span</strong> 的关系被命名为 <strong>References</strong>。</p>
+<p>例如：下面的示例 <strong>Trace</strong> 就是由8个 <strong>Span</strong> 组成：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-76048afcdf2f349907d716487e6a82a7_1440w.webp" alt="img"></p>
+<p>有些时候，使用下面这种，基于时间轴的时序图可以更好的展现 <strong>Trace</strong>（调用链）：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/v2-c5fc90a08c4df8d68b3ce0736521b3b2_1440w.webp" alt="img"></p>
+<p>每个 <strong>Span</strong> 包含以下的状态:（译者注：由于这些状态会反映在 OpenTracing API 中，所以会保留部分英文说明）</p>
+<ul>
+<li>An operation name，操作名称</li>
+<li>A start timestamp，起始时间</li>
+<li>A finish timestamp，结束时间</li>
+<li><strong>Span Tag</strong>，一组键值对构成的 Span 标签集合。键值对中，键必须为 string，值可以是字符串，布尔，或者数字类型。</li>
+<li><strong>Span Log</strong>，一组 span 的日志集合。每次 log 操作包含一个键值对，以及一个时间戳。</li>
+</ul>
+<p>键值对中，键必须为 string，值可以是任意类型。<br>但是需要注意，不是所有的支持 OpenTracing 的 Tracer，都需要支持所有的值类型。</p>
+<ul>
+<li><strong>SpanContext</strong>，Span 上下文对象 (下面会详细说明)</li>
+<li><strong>References</strong>(Span间关系)，相关的零个或者多个 Span（<strong>Span</strong> 间通过 <strong>SpanContext</strong> 建立这种关系）</li>
+</ul>
+<p>每一个 <strong>SpanContext</strong> 包含以下状态：</p>
+<ul>
+<li>任何一个 OpenTracing 的实现，都需要将当前调用链的状态（例如：trace 和 span 的 id），依赖一个独特的 Span 去跨进程边界传输</li>
+<li><strong>Baggage Items</strong>，Trace 的随行数据，是一个键值对集合，它存在于 trace 中，也需要跨进程边界传输</li>
+</ul>
+<p>更多关于 OpenTracing 数据模型的知识，请参考 <a href="https://link.zhihu.com/?target=https://github.com/opentracing-contrib/opentracing-specification-zh/blob/master/specification.md">OpenTracing语义标准</a>。</p>
+<h3 id="概念和术语"><a href="#概念和术语" class="headerlink" title="概念和术语"></a>概念和术语</h3><h4 id="Traces"><a href="#Traces" class="headerlink" title="Traces"></a>Traces</h4><p>一个trace代表一个潜在的，分布式的，存在并行数据或并行执行轨迹（潜在的分布式、并行）的系统。一个trace可以认为是多个span的有向无环图（DAG）。</p>
+<h4 id="Spans"><a href="#Spans" class="headerlink" title="Spans"></a>Spans</h4><p>一个span代表系统中具有开始时间和执行时长的逻辑运行单元。span之间通过嵌套或者顺序排列建立逻辑因果关系。</p>
+<h4 id="Operation-Names"><a href="#Operation-Names" class="headerlink" title="Operation Names"></a>Operation Names</h4><p>每一个span都有一个操作名称，这个名称简单，并具有可读性高。（例如：一个RPC方法的名称，一个函数名，或者一个大型计算过程中的子任务或阶段）。span的操作名应该是一个抽象、通用的标识，能够明确的、具有统计意义的名称；更具体的子类型的描述，请使用<a target="_blank" rel="noopener" href="https://wu-sheng.gitbooks.io/opentracing-io/content/pages/spec.html#tags">Tags</a></p>
+<p>例如，假设一个获取账户信息的span会有如下可能的名称：</p>
+<table>
+<thead>
+<tr>
+<th align="left">操作名</th>
+<th align="left">指导意见</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>get</code></td>
+<td align="left">太抽象</td>
+</tr>
+<tr>
+<td align="left"><code>get_account/792</code></td>
+<td align="left">太明确</td>
+</tr>
+<tr>
+<td align="left"><code>get_account</code></td>
+<td align="left">正确的操作名，关于<code>account_id=792</code>的信息应该使用<a target="_blank" rel="noopener" href="https://wu-sheng.gitbooks.io/opentracing-io/content/pages/spec.html#tags">Tag</a>操作</td>
+</tr>
+</tbody></table>
+<h5 id="Inter-Span-References"><a href="#Inter-Span-References" class="headerlink" title="Inter-Span References"></a>Inter-Span References</h5><p>一个span可以和一个或者多个span间存在因果关系。OpenTracing定义了两种关系：<code>ChildOf</code> 和 <code>FollowsFrom</code>。<strong>这两种引用类型代表了子节点和父节点间的直接因果关系</strong>。未来，OpenTracing将支持非因果关系的span引用关系。（例如：多个span被批量处理，span在同一个队列中，等等）</p>
+<p><strong><code>ChildOf</code> 引用:</strong> 一个span可能是一个父级span的孩子，即”ChildOf”关系。在”ChildOf”引用关系下，父级span某种程度上取决于子span。下面这些情况会构成”ChildOf”关系：</p>
+<ul>
+<li>一个RPC调用的服务端的span，和RPC服务客户端的span构成ChildOf关系</li>
+<li>一个sql insert操作的span，和ORM的save方法的span构成ChildOf关系</li>
+<li>很多span可以并行工作（或者分布式工作）都可能是一个父级的span的子项，他会合并所有子span的执行结果，并在指定期限内返回</li>
+</ul>
+<p>下面都是合理的表述一个”ChildOf”关系的父子节点关系的时序图。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[-Parent Span---------]</span><br><span class="line">     [-Child Span----]</span><br><span class="line"></span><br><span class="line">[-Parent Span--------------]</span><br><span class="line">     [-Child Span A----]</span><br><span class="line">      [-Child Span B----]</span><br><span class="line">    [-Child Span C----]</span><br><span class="line">     [-Child Span D---------------]</span><br><span class="line">     [-Child Span E----]</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>FollowsFrom</code> 引用:</strong> 一些父级节点不以任何方式依然他们子节点的执行结果，这种情况下，我们说这些子span和父span之间是”FollowsFrom”的因果关系。”FollowsFrom”关系可以被分为很多不同的子类型，未来版本的OpenTracing中将正式的区分这些类型</p>
+<p>下面都是合理的表述一个”FollowFrom”关系的父子节点关系的时序图。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[-Parent Span-]  [-Child Span-]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[-Parent Span--]</span><br><span class="line"> [-Child Span-]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[-Parent Span-]</span><br><span class="line">            [-Child Span-]</span><br></pre></td></tr></table></figure>
+
+<h4 id="SpanContext"><a href="#SpanContext" class="headerlink" title="SpanContext"></a>SpanContext</h4><p>每个span必须提供方法访问<strong>SpanContext</strong>。SpanContext代表跨越进程边界，传递到下级span的状态。(例如，包含<code>&lt;trace_id, span_id, sampled&gt;</code>元组)，并用于封装<strong>Baggage</strong> (关于Baggage的解释，请参考下文)。SpanContext在跨越进程边界，和在追踪图中创建边界的时候会使用。(ChildOf关系或者其他关系，参考<a target="_blank" rel="noopener" href="https://wu-sheng.gitbooks.io/opentracing-io/content/pages/spec.html#references">Span间关系</a> )。</p>
+<h3 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h3><p>链路追踪的主要功能如下：</p>
+<ul>
+<li>分布式调用链查询和诊断：追踪分布式架构中的所有微服务用户请求，并将它们汇总成分布式调用链。</li>
+<li>应用性能实时汇总：通过追踪整个应用程序的用户请求，来实时汇总组成应用程序的单个服务和资源。</li>
+<li>分布式拓扑动态发现：用户的所有分布式微服务应用和相关PaaS产品可以通过链路追踪收集到分布式调用信息。</li>
+<li>多语言开发程序接入：基于OpenTracing标准，兼容开源社区，例如Jaeger、Zipkin。</li>
+<li>丰富的下游对接场景：收集的链路可直接用于日志分析，且可对接到MaxCompute等下游分析平台。</li>
+</ul>
+<h3 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016002632262.png" alt="image-20221016002632262"></p>
+<p>Go技术栈下，推荐使用Go原生的<code>Jaeger</code></p>
+<h2 id="Jaeger"><a href="#Jaeger" class="headerlink" title="Jaeger"></a>Jaeger</h2><p>官方文档比较齐全：<a target="_blank" rel="noopener" href="https://www.jaegertracing.io/">Introduction</a></p>
+<p>中文文档：<a target="_blank" rel="noopener" href="https://rocdu.gitbook.io/jaeger-doc-zh/">https://rocdu.gitbook.io/jaeger-doc-zh/</a></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>安装使用<code>Docker</code>安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name jaeger \</span><br><span class="line">  -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \</span><br><span class="line">  -e COLLECTOR_OTLP_ENABLED=true \</span><br><span class="line">  -p 6831:6831/udp \</span><br><span class="line">  -p 6832:6832/udp \</span><br><span class="line">  -p 5778:5778 \</span><br><span class="line">  -p 16686:16686 \</span><br><span class="line">  -p 4317:4317 \</span><br><span class="line">  -p 4318:4318 \</span><br><span class="line">  -p 14250:14250 \</span><br><span class="line">  -p 14268:14268 \</span><br><span class="line">  -p 14269:14269 \</span><br><span class="line">  -p 9411:9411 \</span><br><span class="line">  jaegertracing/all-in-one:1.38</span><br></pre></td></tr></table></figure>
+
+<p>安装成功后，通过 <code>http://127.0.0.1:16686/search</code>打开管理页面</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016160115057.png" alt="image-20221016160115057" style="zoom:25%;" />
+
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/architecture-v1.png" alt="Architecture"></p>
+<h3 id="通过Go操作Jagger"><a href="#通过Go操作Jagger" class="headerlink" title="通过Go操作Jagger"></a>通过Go操作Jagger</h3><p><a target="_blank" rel="noopener" href="https://github.com/jaegertracing/jaeger-client-go">https://github.com/jaegertracing/jaeger-client-go</a></p>
+<p>示例：<a target="_blank" rel="noopener" href="https://github.com/jaegertracing/jaeger-client-go/blob/master/config/example_test.go">https://github.com/jaegertracing/jaeger-client-go/blob/master/config/example_test.go</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/opentracing/opentracing-go&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-client-go&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-lib/metrics&quot;</span></span><br><span class="line"></span><br><span class="line">	jaegercfg <span class="string">&quot;github.com/uber/jaeger-client-go/config&quot;</span></span><br><span class="line">	jaegerlog <span class="string">&quot;github.com/uber/jaeger-client-go/log&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	cfg := jaegercfg.Configuration&#123;</span><br><span class="line">		<span class="comment">// 采样配置</span></span><br><span class="line">		Sampler: &amp;jaegercfg.SamplerConfig&#123;</span><br><span class="line">			Type:  jaeger.SamplerTypeConst,</span><br><span class="line">			Param: <span class="number">1</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="comment">// 采样报告服务器地址</span></span><br><span class="line">		Reporter: &amp;jaegercfg.ReporterConfig&#123;</span><br><span class="line">			LogSpans:           <span class="literal">true</span>,</span><br><span class="line">			LocalAgentHostPort: <span class="string">&quot;172.16.211.17:6831&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		ServiceName: <span class="string">&quot;mitaka_test&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Example logger and metrics factory. Use github.com/uber/jaeger-client-go/log</span></span><br><span class="line">	<span class="comment">// and github.com/uber/jaeger-lib/metrics respectively to bind to real logging and metrics</span></span><br><span class="line">	<span class="comment">// frameworks.</span></span><br><span class="line">	jLogger := jaegerlog.StdLogger</span><br><span class="line">	jMetricsFactory := metrics.NullFactory</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Initialize tracer with a logger and a metrics factory</span></span><br><span class="line">	<span class="comment">// 注册全局tracer</span></span><br><span class="line">	closer, err := cfg.InitGlobalTracer(</span><br><span class="line">		<span class="string">&quot;mitaka_test&quot;</span>,</span><br><span class="line">		jaegercfg.Logger(jLogger),</span><br><span class="line">		jaegercfg.Metrics(jMetricsFactory),</span><br><span class="line">	)</span><br><span class="line">	<span class="comment">// 或者注册局部tracer，使用全局tracer时需要注意，一定需要首选注册，然后再使用（放在main中初始化），否则后续使用的tracer都是空tracer，无法与其他进程中的tracer关联起来。</span></span><br><span class="line">	<span class="comment">//tracer, closer, err := cfg.NewTracer(jaegercfg.Logger(jLogger),</span></span><br><span class="line">	<span class="comment">//	jaegercfg.Metrics(jMetricsFactory))</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;Could not initialize jaeger tracer: %s&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> closer.Close()</span><br><span class="line"></span><br><span class="line">	tracer := opentracing.GlobalTracer()</span><br><span class="line">	span := tracer.StartSpan(<span class="string">&quot;go-grpc-web&quot;</span>)</span><br><span class="line">	<span class="keyword">defer</span> span.Finish()</span><br><span class="line">	time.Sleep(time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>选择对应<code>service</code>：<code>mitaka_test</code></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016160207362.png" alt="image-20221016160207362"></p>
+<p>点击可查看详情</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016160308755.png" alt="image-20221016160308755"></p>
+<p><code>span</code>嵌套</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">parentSpan := tracer.StartSpan(<span class="string">&quot;main&quot;</span>)</span><br><span class="line"><span class="keyword">defer</span> parentSpan.Finish()</span><br><span class="line"></span><br><span class="line"><span class="comment">// funcA是main的子span</span></span><br><span class="line">spanA := tracer.StartSpan(<span class="string">&quot;funcA&quot;</span>, opentracing.ChildOf(parentSpan.Context()))</span><br><span class="line">time.Sleep(time.Second)</span><br><span class="line">spanA.Finish()</span><br><span class="line"></span><br><span class="line"><span class="comment">// funcB是main的子span</span></span><br><span class="line">spanB := tracer.StartSpan(<span class="string">&quot;funcB&quot;</span>, opentracing.ChildOf(parentSpan.Context()))</span><br><span class="line">time.Sleep(time.Second)</span><br><span class="line">spanB.Finish()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016162504150.png" alt="image-20221016162504150"></p>
+<h3 id="应用到gRPC中"><a href="#应用到gRPC中" class="headerlink" title="应用到gRPC中"></a>应用到gRPC中</h3><p>结合<code>midware</code>,这里推荐使用全局<code>tracer</code></p>
+<p>在go grpc midware官方文档中可以找到支持监控的midware</p>
+<blockquote>
+<h4 id="Monitoring"><a href="#Monitoring" class="headerlink" title="Monitoring"></a>Monitoring</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/grpc-ecosystem/go-grpc-prometheus"><code>grpc_prometheus</code>⚡</a> - Prometheus client-side and server-side monitoring middleware</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/grpc-ecosystem/grpc-opentracing/tree/master/go/otgrpc"><code>otgrpc</code>⚡</a> - <a target="_blank" rel="noopener" href="http://opentracing.io/">OpenTracing</a> client-side and server-side interceptors</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/grpc-ecosystem/go-grpc-middleware/blob/master/tracing/opentracing"><code>grpc_opentracing</code></a> - <a target="_blank" rel="noopener" href="http://opentracing.io/">OpenTracing</a> client-side and server-side interceptors with support for streaming and handler-returned tags</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/open-telemetry/opentelemetry-go-contrib/tree/main/instrumentation/google.golang.org/grpc/otelgrpc"><code>otelgrpc</code></a> - <a target="_blank" rel="noopener" href="https://opentelemetry.io/">OpenTelemetry</a> client-side and server-side interceptors</li>
+</ul>
+</blockquote>
+<p>其中支持OpenTracing的插件有</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/grpc-ecosystem/grpc-opentracing/tree/master/go/otgrpc</span><br><span class="line">https://github.com/grpc-ecosystem/go-grpc-middleware/tree/master/tracing/opentracing</span><br></pre></td></tr></table></figure>
+
+<p>这里使用性能更高的 <code>otgrpc</code>。（官方文旦中使用的是<code>grpc_opentracing</code>）</p>
+<p>从代码上看，<code>otgrpc</code>与 <code>github.com/opentracing-contrib/go-grpc</code>差不多，但是前者<code>stars</code>更多</p>
+<p>安装</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/grpc-ecosystem/grpc-opentracing/<span class="keyword">go</span>/otgrpc</span><br></pre></td></tr></table></figure>
+
+<p>客户端</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;io&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/opentracing/opentracing-go&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-client-go&quot;</span></span><br><span class="line">	jaegercfg <span class="string">&quot;github.com/uber/jaeger-client-go/config&quot;</span></span><br><span class="line">	jaegerlog <span class="string">&quot;github.com/uber/jaeger-client-go/log&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-lib/metrics&quot;</span></span><br><span class="line">	<span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">	<span class="string">&quot;google.golang.org/grpc/credentials/insecure&quot;</span></span><br><span class="line">	<span class="string">&quot;google.golang.org/grpc/status&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;gostudy/920/minegrpc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 1s 超时</span></span><br><span class="line">	ctx, cancel := context.WithTimeout(context.Background(), <span class="number">1</span>*time.Second)</span><br><span class="line">	<span class="keyword">defer</span> cancel()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册全局tracer</span></span><br><span class="line">	closer := initTracer()</span><br><span class="line">	<span class="keyword">defer</span> closer.Close()</span><br><span class="line"></span><br><span class="line">	parentSpan := opentracing.GlobalTracer().StartSpan(<span class="string">&quot;main&quot;</span>)</span><br><span class="line">	<span class="keyword">defer</span> parentSpan.Finish()</span><br><span class="line"></span><br><span class="line">	dial, err := grpc.Dial(<span class="string">&quot;127.0.0.1:8080&quot;</span>,</span><br><span class="line">		<span class="comment">// 配置tracer拦截器</span></span><br><span class="line">		grpc.WithUnaryInterceptor(otgrpc.OpenTracingClientInterceptor(opentracing.GlobalTracer())),</span><br><span class="line">		grpc.WithTransportCredentials(insecure.NewCredentials()))</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> dial.Close()</span><br><span class="line"></span><br><span class="line">	client := minegrpc.NewGreeterClient(dial)</span><br><span class="line"></span><br><span class="line">	ctx = opentracing.ContextWithSpan(ctx, parentSpan)</span><br><span class="line">	reply, err := client.SayHello(ctx, &amp;minegrpc.HelloRequest&#123;Name: <span class="string">&quot;mitaka&quot;</span>&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> e, ok := status.FromError(err); ok &#123;</span><br><span class="line">			fmt.Println(e.Code())</span><br><span class="line">			fmt.Println(e.Message())</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;reply: %v\n&quot;</span>, reply)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">initTracer</span><span class="params">()</span></span> io.Closer &#123;</span><br><span class="line">	cfg := jaegercfg.Configuration&#123;</span><br><span class="line">		<span class="comment">// 采样配置</span></span><br><span class="line">		Sampler: &amp;jaegercfg.SamplerConfig&#123;</span><br><span class="line">			Type:  jaeger.SamplerTypeConst,</span><br><span class="line">			Param: <span class="number">1</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="comment">// 采样报告服务器地址</span></span><br><span class="line">		Reporter: &amp;jaegercfg.ReporterConfig&#123;</span><br><span class="line">			LogSpans:           <span class="literal">true</span>,</span><br><span class="line">			LocalAgentHostPort: <span class="string">&quot;192.168.51.16:6831&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		ServiceName: <span class="string">&quot;mitaka_client&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	jLogger := jaegerlog.StdLogger</span><br><span class="line">	jMetricsFactory := metrics.NullFactory</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册全局tracer</span></span><br><span class="line">	closer, err := cfg.InitGlobalTracer(</span><br><span class="line">		<span class="string">&quot;mitaka_client&quot;</span>,</span><br><span class="line">		jaegercfg.Logger(jLogger),</span><br><span class="line">		jaegercfg.Metrics(jMetricsFactory),</span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;Could not initialize jaeger tracer: %s&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span> io.NopCloser(bytes.NewReader(<span class="literal">nil</span>))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> closer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结合<code>HTTP</code>请求使用<code>tracer</code>：一般而言，前后端分离架构上，前端一般通过<code>HTTP</code>服务请求后端接口，后端微服务之间使用<code>gRPC</code>通信，作为入口是<code>HTTP</code>服务的接口，那么<code>tracer</code>可以在<code>midware</code>时生成：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Tracer</span><span class="params">()</span></span> gin.HandlerFunc &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		span := opentracing.StartSpan(c.Request.URL.String())</span><br><span class="line">		<span class="keyword">defer</span> span.Finish()</span><br><span class="line">		c.Set(<span class="string">&quot;tracer&quot;</span>, opentracing.GlobalTracer())</span><br><span class="line">		c.Set(<span class="string">&quot;span&quot;</span>, span)</span><br><span class="line">		c.Next()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用时，则需要注意，<code>span</code>可以通过<code>context</code>注入</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> i, ok := c.Get(<span class="string">&quot;span&quot;</span>); ok &#123;</span><br><span class="line">	span := i.(opentracing.Span)</span><br><span class="line">	ctx = opentracing.ContextWithSpan(ctx, span)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从官网的例子看，官网推荐使用http客户端和服务端的用法</p>
+<p>客户端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">func makeSomeRequest(ctx context.Context) ... &#123;</span><br><span class="line">    if span := opentracing.SpanFromContext(ctx); span != nil &#123;</span><br><span class="line">        httpClient := &amp;http.Client&#123;&#125;</span><br><span class="line">        httpReq, _ := http.NewRequest(&quot;GET&quot;, &quot;http://myservice/&quot;, nil)</span><br><span class="line"></span><br><span class="line">        // Transmit the span&#x27;s TraceContext as HTTP headers on our</span><br><span class="line">        // outbound request.</span><br><span class="line">        // tracer注入到header中</span><br><span class="line">        opentracing.GlobalTracer().Inject(</span><br><span class="line">            span.Context(),</span><br><span class="line">            opentracing.HTTPHeaders,</span><br><span class="line">            opentracing.HTTPHeadersCarrier(httpReq.Header))</span><br><span class="line"></span><br><span class="line">        resp, err := httpClient.Do(httpReq)</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">http.HandleFunc(&quot;/&quot;, func(w http.ResponseWriter, req *http.Request) &#123;</span><br><span class="line">    var serverSpan opentracing.Span</span><br><span class="line">    appSpecificOperationName := ...</span><br><span class="line">    // 将tracer从header中反序列化出来</span><br><span class="line">    wireContext, err := opentracing.GlobalTracer().Extract(</span><br><span class="line">        opentracing.HTTPHeaders,</span><br><span class="line">        opentracing.HTTPHeadersCarrier(req.Header))</span><br><span class="line">    if err != nil &#123;</span><br><span class="line">        // Optionally record something about err here</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Create the span referring to the RPC client if available.</span><br><span class="line">    // If wireContext == nil, a root span will be created.</span><br><span class="line">    serverSpan = opentracing.StartSpan(</span><br><span class="line">        appSpecificOperationName,</span><br><span class="line">        ext.RPCServerOption(wireContext))</span><br><span class="line"></span><br><span class="line">    defer serverSpan.Finish()</span><br><span class="line"></span><br><span class="line">    ctx := opentracing.ContextWithSpan(context.Background(), serverSpan)</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过源码可以看到</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">OpenTracingClientInterceptor</span><span class="params">(tracer opentracing.Tracer, optFuncs ...Option)</span></span> grpc.UnaryClientInterceptor &#123;</span><br><span class="line">	otgrpcOpts := newOptions()</span><br><span class="line">	otgrpcOpts.apply(optFuncs...)</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">		ctx context.Context,</span></span></span><br><span class="line"><span class="params"><span class="function">		method <span class="type">string</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">		req, resp <span class="keyword">interface</span>&#123;&#125;,</span></span></span><br><span class="line"><span class="params"><span class="function">		cc *grpc.ClientConn,</span></span></span><br><span class="line"><span class="params"><span class="function">		invoker grpc.UnaryInvoker,</span></span></span><br><span class="line"><span class="params"><span class="function">		opts ...grpc.CallOption,</span></span></span><br><span class="line"><span class="params"><span class="function">	)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">		<span class="keyword">var</span> err <span class="type">error</span></span><br><span class="line">		<span class="keyword">var</span> parentCtx opentracing.SpanContext</span><br><span class="line">    <span class="comment">// 获取parent Span</span></span><br><span class="line">		<span class="keyword">if</span> parent := opentracing.SpanFromContext(ctx); parent != <span class="literal">nil</span> &#123;</span><br><span class="line">			parentCtx = parent.Context()</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> otgrpcOpts.inclusionFunc != <span class="literal">nil</span> &amp;&amp;</span><br><span class="line">			!otgrpcOpts.inclusionFunc(parentCtx, method, req, resp) &#123;</span><br><span class="line">			<span class="keyword">return</span> invoker(ctx, method, req, resp, cc, opts...)</span><br><span class="line">		&#125;</span><br><span class="line">		clientSpan := tracer.StartSpan(</span><br><span class="line">			method,</span><br><span class="line">			opentracing.ChildOf(parentCtx),</span><br><span class="line">			ext.SpanKindRPCClient,</span><br><span class="line">			gRPCComponentTag,</span><br><span class="line">		)</span><br><span class="line">		<span class="keyword">defer</span> clientSpan.Finish()</span><br><span class="line">    <span class="comment">// 将tracer和span保存到ctx的元数据中</span></span><br><span class="line">		ctx = injectSpanContext(ctx, tracer, clientSpan)</span><br><span class="line">		<span class="keyword">if</span> otgrpcOpts.logPayloads &#123;</span><br><span class="line">			clientSpan.LogFields(log.Object(<span class="string">&quot;gRPC request&quot;</span>, req))</span><br><span class="line">		&#125;</span><br><span class="line">		err = invoker(ctx, method, req, resp, cc, opts...)</span><br><span class="line">		<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> otgrpcOpts.logPayloads &#123;</span><br><span class="line">				clientSpan.LogFields(log.Object(<span class="string">&quot;gRPC response&quot;</span>, resp))</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			SetSpanTags(clientSpan, err, <span class="literal">true</span>)</span><br><span class="line">			clientSpan.LogFields(log.String(<span class="string">&quot;event&quot;</span>, <span class="string">&quot;error&quot;</span>), log.String(<span class="string">&quot;message&quot;</span>, err.Error()))</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> otgrpcOpts.decorator != <span class="literal">nil</span> &#123;</span><br><span class="line">			otgrpcOpts.decorator(ctx, clientSpan, method, req, resp, err)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>span获取方式</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> parent := opentracing.SpanFromContext(ctx); parent != <span class="literal">nil</span> &#123;</span><br><span class="line">	parentCtx = parent.Context()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SpanFromContext</span><span class="params">(ctx context.Context)</span></span> Span &#123;</span><br><span class="line">    val := ctx.Value(activeSpanKey)</span><br><span class="line">    <span class="keyword">if</span> sp, ok := val.(Span); ok &#123;</span><br><span class="line">      <span class="keyword">return</span> sp</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 是通过context获取，则这里可以将span注入</span></span><br><span class="line">  <span class="function"><span class="keyword">func</span> <span class="title">ContextWithSpan</span><span class="params">(ctx context.Context, span Span)</span></span> context.Context &#123;</span><br><span class="line">    <span class="keyword">if</span> span != <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> tracerWithHook, ok := span.Tracer().(TracerContextWithSpanExtension); ok &#123;</span><br><span class="line">        ctx = tracerWithHook.ContextWithSpanHook(ctx, span)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> context.WithValue(ctx, activeSpanKey, span)</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>从源码中可以看到，<code>tracer</code>使用的是传入的<code>tracer</code>，这里传入<code>global tracer</code>即可。</p>
+<p>作为下游<code>gRPC</code>的服务端，配置<code>tracer</code>的拦截器即可</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;io&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/google/uuid&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/opentracing/opentracing-go&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-client-go&quot;</span></span><br><span class="line">	jaegercfg <span class="string">&quot;github.com/uber/jaeger-client-go/config&quot;</span></span><br><span class="line">	jaegerlog <span class="string">&quot;github.com/uber/jaeger-client-go/log&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-lib/metrics&quot;</span></span><br><span class="line">	<span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;gostudy/920/minegrpc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Service <span class="keyword">struct</span> &#123;</span><br><span class="line">	minegrpc.UnimplementedGreeterServer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> serviceID <span class="type">string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Service)</span></span> SayHello(ctx context.Context, req *minegrpc.HelloRequest) (*minegrpc.HelloReply, <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="comment">// 其他业务逻辑使用span</span></span><br><span class="line">	parentSpan := opentracing.SpanFromContext(ctx)</span><br><span class="line"></span><br><span class="line">	spanA := opentracing.StartSpan(<span class="string">&quot;logic do something&quot;</span>, opentracing.ChildOf(parentSpan.Context()))</span><br><span class="line">	fmt.Println(<span class="string">&quot;logic A do something&quot;</span>)</span><br><span class="line">	time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">	spanA.Finish()</span><br><span class="line"></span><br><span class="line">	spanB := opentracing.StartSpan(<span class="string">&quot;logic do something&quot;</span>, opentracing.ChildOf(parentSpan.Context()))</span><br><span class="line">	fmt.Println(<span class="string">&quot;logic B do something&quot;</span>)</span><br><span class="line">	time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">	spanB.Finish()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> &amp;minegrpc.HelloReply&#123;</span><br><span class="line">		Message: fmt.Sprintf(<span class="string">&quot;i am service %s&quot;</span>, serviceID),</span><br><span class="line">	&#125;, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	log.SetFlags(log.Lshortfile)</span><br><span class="line">	tracerClose := initTracer()</span><br><span class="line">	<span class="keyword">defer</span> tracerClose.Close()</span><br><span class="line"></span><br><span class="line">	newUUID, _ := uuid.NewUUID()</span><br><span class="line">	serviceID = newUUID.String()</span><br><span class="line"></span><br><span class="line">	listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> listener.Close()</span><br><span class="line"></span><br><span class="line">	opentracingOpts := []otgrpc.Option&#123;</span><br><span class="line">		otgrpc.IncludingSpans(<span class="function"><span class="keyword">func</span><span class="params">(parentSpanCtx opentracing.SpanContext, method <span class="type">string</span>, req, resp <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> method == <span class="string">&quot;/grpc.health.v1.Health/Check&quot;</span> &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		&#125;),</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	s := grpc.NewServer(grpc.UnaryInterceptor(</span><br><span class="line">		<span class="comment">// 服务端拦截器，需要注意，拦截器要在GlobalTracer注册之后，不然使用的就是一个nil tracer</span></span><br><span class="line">		otgrpc.OpenTracingServerInterceptor(opentracing.GlobalTracer(), opentracingOpts...)),</span><br><span class="line">	)</span><br><span class="line">	minegrpc.RegisterGreeterServer(s, <span class="built_in">new</span>(Service)) <span class="comment">// 注册calc服务</span></span><br><span class="line"></span><br><span class="line">	log.Fatal(s.Serve(listener))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">initTracer</span><span class="params">()</span></span> io.Closer &#123;</span><br><span class="line">	cfg := jaegercfg.Configuration&#123;</span><br><span class="line">		<span class="comment">// 采样配置</span></span><br><span class="line">		Sampler: &amp;jaegercfg.SamplerConfig&#123;</span><br><span class="line">			Type:  jaeger.SamplerTypeConst,</span><br><span class="line">			Param: <span class="number">1</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="comment">// 采样报告服务器地址</span></span><br><span class="line">		Reporter: &amp;jaegercfg.ReporterConfig&#123;</span><br><span class="line">			LogSpans:           <span class="literal">true</span>,</span><br><span class="line">			LocalAgentHostPort: <span class="string">&quot;192.168.51.16:6831&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		ServiceName: <span class="string">&quot;mitaka_server&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	jLogger := jaegerlog.StdLogger</span><br><span class="line">	jMetricsFactory := metrics.NullFactory</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册全局tracer</span></span><br><span class="line">	closer, err := cfg.InitGlobalTracer(</span><br><span class="line">		<span class="string">&quot;mitaka_server&quot;</span>,</span><br><span class="line">		jaegercfg.Logger(jLogger),</span><br><span class="line">		jaegercfg.Metrics(jMetricsFactory),</span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;Could not initialize jaeger tracer: %s&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span> io.NopCloser(bytes.NewReader(<span class="literal">nil</span>))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> closer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2022/10/20 15:46:38 Initializing logging reporter</span><br><span class="line">2022/10/20 15:46:38 Reporting span 70f332d6ce6d5b42:36bfff52065de34e:70f332d6ce6d5b42:1</span><br><span class="line">reply: message:&quot;i am service 52dc416e-504b-11ed-9d12-be5e6078b62c&quot;</span><br><span class="line">2022/10/20 15:46:38 Reporting span 70f332d6ce6d5b42:70f332d6ce6d5b42:0000000000000000:1</span><br><span class="line">2022/10/20 15:46:38 DEBUG: closing tracer</span><br><span class="line">2022/10/20 15:46:38 DEBUG: closing reporter</span><br></pre></td></tr></table></figure>
+
+<p>服务端</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">logger.go:47: Initializing logging reporter</span><br><span class="line">logic A do something</span><br><span class="line">logger.go:47: Reporting span 70f332d6ce6d5b42:365a31e17a1c09fa:783980e40ebd1267:1</span><br><span class="line">logic B do something</span><br><span class="line">logger.go:47: Reporting span 70f332d6ce6d5b42:1b6b52d51c122cc5:783980e40ebd1267:1</span><br><span class="line">logger.go:47: Reporting span 70f332d6ce6d5b42:783980e40ebd1267:36bfff52065de34e:1</span><br></pre></td></tr></table></figure>
+
+<p>格式为 <code>traceID:spanID:parentID:flags</code></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221020154751742.png" alt="image-20221020154751742"></p>
+<p>源码实现</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">OpenTracingServerInterceptor</span><span class="params">(tracer opentracing.Tracer, optFuncs ...Option)</span></span> grpc.UnaryServerInterceptor &#123;</span><br><span class="line">	otgrpcOpts := newOptions()</span><br><span class="line">	otgrpcOpts.apply(optFuncs...)</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">		ctx context.Context,</span></span></span><br><span class="line"><span class="params"><span class="function">		req <span class="keyword">interface</span>&#123;&#125;,</span></span></span><br><span class="line"><span class="params"><span class="function">		info *grpc.UnaryServerInfo,</span></span></span><br><span class="line"><span class="params"><span class="function">		handler grpc.UnaryHandler,</span></span></span><br><span class="line"><span class="params"><span class="function">	)</span></span> (resp <span class="keyword">interface</span>&#123;&#125;, err <span class="type">error</span>) &#123;</span><br><span class="line">    <span class="comment">// 从元数据中获取span信息</span></span><br><span class="line">		spanContext, err := extractSpanContext(ctx, tracer)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &amp;&amp; err != opentracing.ErrSpanContextNotFound &#123;</span><br><span class="line">			<span class="comment">// <span class="doctag">TODO:</span> establish some sort of error reporting mechanism here. We</span></span><br><span class="line">			<span class="comment">// don&#x27;t know where to put such an error and must rely on Tracer</span></span><br><span class="line">			<span class="comment">// implementations to do something appropriate for the time being.</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> otgrpcOpts.inclusionFunc != <span class="literal">nil</span> &amp;&amp;</span><br><span class="line">			!otgrpcOpts.inclusionFunc(spanContext, info.FullMethod, req, <span class="literal">nil</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> handler(ctx, req)</span><br><span class="line">		&#125;</span><br><span class="line">		serverSpan := tracer.StartSpan(</span><br><span class="line">     	<span class="comment">// grpc调用，span名称是grpc全称，后续可以用于过滤一些请求，不记录到trace中</span></span><br><span class="line">			info.FullMethod,</span><br><span class="line">			ext.RPCServerOption(spanContext),</span><br><span class="line">			gRPCComponentTag,</span><br><span class="line">		)</span><br><span class="line">		<span class="keyword">defer</span> serverSpan.Finish()</span><br><span class="line"></span><br><span class="line">		ctx = opentracing.ContextWithSpan(ctx, serverSpan)</span><br><span class="line">		<span class="keyword">if</span> otgrpcOpts.logPayloads &#123;</span><br><span class="line">			serverSpan.LogFields(log.Object(<span class="string">&quot;gRPC request&quot;</span>, req))</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="comment">// 处理请求</span></span><br><span class="line">		resp, err = handler(ctx, req)</span><br><span class="line">		<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> otgrpcOpts.logPayloads &#123;</span><br><span class="line">				serverSpan.LogFields(log.Object(<span class="string">&quot;gRPC response&quot;</span>, resp))</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			SetSpanTags(serverSpan, err, <span class="literal">false</span>)</span><br><span class="line">			serverSpan.LogFields(log.String(<span class="string">&quot;event&quot;</span>, <span class="string">&quot;error&quot;</span>), log.String(<span class="string">&quot;message&quot;</span>, err.Error()))</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> otgrpcOpts.decorator != <span class="literal">nil</span> &#123;</span><br><span class="line">			otgrpcOpts.decorator(ctx, serverSpan, info.FullMethod, req, resp, err)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> resp, err</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所有的<code>span</code>是服务和服务之间传递，实际上，<code>span</code>可以在服务内部使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">parentSpan := opentracing.SpanFromContext(ctx)</span><br><span class="line">span := opentracing.GlobalTracer().StartSpan(<span class="string">&quot;do something&quot;</span>, opentracing.ChildOf(parentSpan.Context()))</span><br><span class="line"><span class="keyword">defer</span> span.Finish()</span><br></pre></td></tr></table></figure>
+
+<p>应用到<code>http</code>中</p>
+<p>服务端</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;io&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/opentracing/opentracing-go&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/opentracing/opentracing-go/ext&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-client-go&quot;</span></span><br><span class="line">	jaegercfg <span class="string">&quot;github.com/uber/jaeger-client-go/config&quot;</span></span><br><span class="line">	jaegerlog <span class="string">&quot;github.com/uber/jaeger-client-go/log&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-lib/metrics&quot;</span></span><br><span class="line">	<span class="string">&quot;golang.org/x/sync/errgroup&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	closer := initTracer()</span><br><span class="line">	<span class="keyword">defer</span> closer.Close()</span><br><span class="line"></span><br><span class="line">	engine := gin.Default()</span><br><span class="line">	<span class="comment">// 通过midware实现tracer功能</span></span><br><span class="line">	engine.Use(tracerMidware())</span><br><span class="line">	engine.GET(<span class="string">&quot;/hello/http&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">var</span> ctx context.Context</span><br><span class="line">		spanCtx, ok := c.Get(<span class="string">&quot;span_ctx&quot;</span>)</span><br><span class="line">		<span class="keyword">if</span> ok &#123;</span><br><span class="line">			ctx = spanCtx.(context.Context)</span><br><span class="line">		&#125;</span><br><span class="line">		parentSpan := opentracing.SpanFromContext(ctx)</span><br><span class="line"></span><br><span class="line">		eg, ctx := errgroup.WithContext(ctx)</span><br><span class="line">		eg.Go(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">error</span> &#123;</span><br><span class="line">			spanA := opentracing.StartSpan(<span class="string">&quot;do something A&quot;</span>, opentracing.ChildOf(parentSpan.Context()))</span><br><span class="line">			time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">			spanA.Finish()</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">		&#125;)</span><br><span class="line">		eg.Go(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">error</span> &#123;</span><br><span class="line">			spanA := opentracing.StartSpan(<span class="string">&quot;do something A&quot;</span>, opentracing.ChildOf(parentSpan.Context()))</span><br><span class="line">			time.Sleep(<span class="number">100</span> * time.Millisecond)</span><br><span class="line">			spanA.Finish()</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">		&#125;)</span><br><span class="line">		_ = eg.Wait()</span><br><span class="line">		c.JSON(http.StatusOK, <span class="string">&quot;I am gin server&quot;</span>)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	engine.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">tracerMidware</span><span class="params">()</span></span> gin.HandlerFunc &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">var</span> span opentracing.Span</span><br><span class="line">		operationName := c.Request.URL.Path</span><br><span class="line">		<span class="comment">// 从header中获取tracer信息</span></span><br><span class="line">		wireContext, err := opentracing.GlobalTracer().Extract(</span><br><span class="line">			opentracing.HTTPHeaders,</span><br><span class="line">			opentracing.HTTPHeadersCarrier(c.Request.Header))</span><br><span class="line">		<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="comment">// 获取到，则使用客户端传入的span</span></span><br><span class="line">			span = opentracing.StartSpan(</span><br><span class="line">				operationName, ext.RPCServerOption(wireContext))</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 如果没有获取到，则开启一个root span</span></span><br><span class="line">			span = opentracing.StartSpan(operationName)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">defer</span> span.Finish()</span><br><span class="line">		ctx := opentracing.ContextWithSpan(context.Background(), span)</span><br><span class="line">		c.Set(<span class="string">&quot;span_ctx&quot;</span>, ctx)</span><br><span class="line">		c.Next()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">initTracer</span><span class="params">()</span></span> io.Closer &#123;</span><br><span class="line">	cfg := jaegercfg.Configuration&#123;</span><br><span class="line">		<span class="comment">// 采样配置</span></span><br><span class="line">		Sampler: &amp;jaegercfg.SamplerConfig&#123;</span><br><span class="line">			Type:  jaeger.SamplerTypeConst,</span><br><span class="line">			Param: <span class="number">1</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="comment">// 采样报告服务器地址</span></span><br><span class="line">		Reporter: &amp;jaegercfg.ReporterConfig&#123;</span><br><span class="line">			LogSpans:           <span class="literal">true</span>,</span><br><span class="line">			LocalAgentHostPort: <span class="string">&quot;192.168.51.16:6831&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		ServiceName: <span class="string">&quot;mitaka_server&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	jLogger := jaegerlog.StdLogger</span><br><span class="line">	jMetricsFactory := metrics.NullFactory</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册全局tracer</span></span><br><span class="line">	closer, err := cfg.InitGlobalTracer(</span><br><span class="line">		<span class="string">&quot;mitaka_server&quot;</span>,</span><br><span class="line">		jaegercfg.Logger(jLogger),</span><br><span class="line">		jaegercfg.Metrics(jMetricsFactory),</span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;Could not initialize jaeger tracer: %s&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span> io.NopCloser(bytes.NewReader(<span class="literal">nil</span>))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> closer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;io&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/opentracing/opentracing-go&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-client-go&quot;</span></span><br><span class="line">	jaegercfg <span class="string">&quot;github.com/uber/jaeger-client-go/config&quot;</span></span><br><span class="line">	jaegerlog <span class="string">&quot;github.com/uber/jaeger-client-go/log&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/uber/jaeger-lib/metrics&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	closer := initTracer()</span><br><span class="line">	<span class="keyword">defer</span> closer.Close()</span><br><span class="line"></span><br><span class="line">	span := opentracing.StartSpan(<span class="string">&quot;client make a requet&quot;</span>)</span><br><span class="line">	<span class="keyword">defer</span> span.Finish()</span><br><span class="line"></span><br><span class="line">	httpClient := &amp;http.Client&#123;&#125;</span><br><span class="line">	httpReq, _ := http.NewRequest(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;http://127.0.0.1:8080/hello/http?a=v&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 发送请求时，将tracer注入到header中</span></span><br><span class="line">	opentracing.GlobalTracer().Inject(</span><br><span class="line">		span.Context(),</span><br><span class="line">		opentracing.HTTPHeaders,</span><br><span class="line">		opentracing.HTTPHeadersCarrier(httpReq.Header))</span><br><span class="line"></span><br><span class="line">	resp, err := httpClient.Do(httpReq)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	data, _ := io.ReadAll(resp.Body)</span><br><span class="line">	fmt.Println(<span class="type">string</span>(data))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">initTracer</span><span class="params">()</span></span> io.Closer &#123;</span><br><span class="line">	cfg := jaegercfg.Configuration&#123;</span><br><span class="line">		<span class="comment">// 采样配置</span></span><br><span class="line">		Sampler: &amp;jaegercfg.SamplerConfig&#123;</span><br><span class="line">			Type:  jaeger.SamplerTypeConst,</span><br><span class="line">			Param: <span class="number">1</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="comment">// 采样报告服务器地址</span></span><br><span class="line">		Reporter: &amp;jaegercfg.ReporterConfig&#123;</span><br><span class="line">			LogSpans:           <span class="literal">true</span>,</span><br><span class="line">			LocalAgentHostPort: <span class="string">&quot;192.168.51.16:6831&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		ServiceName: <span class="string">&quot;mitaka_client&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	jLogger := jaegerlog.StdLogger</span><br><span class="line">	jMetricsFactory := metrics.NullFactory</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册全局tracer</span></span><br><span class="line">	closer, err := cfg.InitGlobalTracer(</span><br><span class="line">		<span class="string">&quot;mitaka_client&quot;</span>,</span><br><span class="line">		jaegercfg.Logger(jLogger),</span><br><span class="line">		jaegercfg.Metrics(jMetricsFactory),</span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Printf(<span class="string">&quot;Could not initialize jaeger tracer: %s&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span> io.NopCloser(bytes.NewReader(<span class="literal">nil</span>))</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> closer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h4><p>当一些探测请求发过来时，默认情况下也会记录到链路追踪，这里就可以使用过滤器过滤掉，例如健康检查</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过option实现</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">OpenTracingServerInterceptor</span><span class="params">(tracer opentracing.Tracer, optFuncs ...Option)</span></span> grpc.UnaryServerInterceptor &#123;&#125;</span><br><span class="line"><span class="keyword">type</span> Option <span class="function"><span class="keyword">func</span><span class="params">(o *options)</span></span></span><br><span class="line"><span class="comment">// 通过过滤功能</span></span><br><span class="line"><span class="keyword">type</span> SpanInclusionFunc <span class="function"><span class="keyword">func</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">	parentSpanCtx opentracing.SpanContext,</span></span></span><br><span class="line"><span class="params"><span class="function">	method <span class="type">string</span>,</span></span></span><br><span class="line"><span class="params"><span class="function">	req, resp <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">bool</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// IncludingSpans binds a IncludeSpanFunc to the options</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IncludingSpans</span><span class="params">(inclusionFunc SpanInclusionFunc)</span></span> Option &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(o *options)</span></span> &#123;</span><br><span class="line">		o.inclusionFunc = inclusionFunc</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体实现</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">opentracingOpts := []otgrpc.Option&#123;</span><br><span class="line">	otgrpc.IncludingSpans(<span class="function"><span class="keyword">func</span><span class="params">(parentSpanCtx opentracing.SpanContext, method <span class="type">string</span>, req, resp <span class="keyword">interface</span>&#123;&#125;)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> method == <span class="string">&quot;/grpc.health.v1.Health/Check&quot;</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	&#125;),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">s := grpc.NewServer(grpc.UnaryInterceptor(</span><br><span class="line">	otgrpc.OpenTracingServerInterceptor(opentracing.GlobalTracer(), opentracingOpts...)),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>推荐阅读：</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/344020712">什么是链路追踪？分布式系统如何实现链路追踪？</a></p>
+<p><a target="_blank" rel="noopener" href="https://help.aliyun.com/product/90275.html">链路追踪Tracing Analysis</a></p>
+<p><a target="_blank" rel="noopener" href="http://icyfenix.cn/distribution/observability/tracing.html">链路追踪</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.51cto.com/knifeedge/5268671">链路追踪–选型&#x2F;对比&#x2F;工具&#x2F;方案&#x2F;分布式</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.gitbook.com/book/wu-sheng/opentracing-io">opentracing文档中文版 ( 翻译 ) 吴晟</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/caoweixiong/p/14475815.html">分布式服务调用链路追踪——方案选型</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jaegertracing/jaeger">jaeger</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jaegertracing.io/">www.jaegertracing.io/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B9%8B%E7%BD%91%E5%85%B3/" rel="prev" title="微服务之网关">
+                  <i class="fa fa-chevron-left"></i> 微服务之网关
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0DQL%E7%AF%87/" rel="next" title="MySQL学习笔记DQL篇">
+                  MySQL学习笔记DQL篇 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/xiaoyeshiyu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

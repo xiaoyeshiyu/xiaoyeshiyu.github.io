@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是学习MySQL的笔记设计规范和调优篇，主要是数据库、表的设计规范，以及数据库服务端性能调优。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL学习笔记设计规范和调优篇">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%E5%92%8C%E8%B0%83%E4%BC%98%E7%AF%87/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这是学习MySQL的笔记设计规范和调优篇，主要是数据库、表的设计规范，以及数据库服务端性能调优。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121173644172.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215107751.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215137546.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215437352.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215458407.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215640824.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215723143.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121220014166.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121220031790.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121221557837.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221122162926181.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221122162959378.png">
+<meta property="article:published_time" content="2022-11-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-01T07:49:49.109Z">
+<meta property="article:author" content="Mitaka xu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121173644172.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%E5%92%8C%E8%B0%83%E4%BC%98%E7%AF%87/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%E5%92%8C%E8%B0%83%E4%BC%98%E7%AF%87/","path":"2022/MySQL学习笔记设计规范和调优篇/","title":"MySQL学习笔记设计规范和调优篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MySQL学习笔记设计规范和调优篇 | Hexo</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hexo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8C%83%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">范式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%AE%E5%92%8C%E7%9B%B8%E5%85%B3%E5%B1%9E%E6%80%A7%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">键和相关属性的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E8%8C%83%E5%BC%8F%EF%BC%881NF%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">第一范式（1NF）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E8%8C%83%E5%BC%8F%EF%BC%882NF%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">第二范式（2NF）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E8%8C%83%E5%BC%8F%EF%BC%883NF%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">第三范式（3NF）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E8%8C%83%E5%BC%8F%E5%8C%96"><span class="nav-number">1.6.</span> <span class="nav-text">反范式化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BCNF"><span class="nav-number">1.7.</span> <span class="nav-text">BCNF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E8%8C%83%E5%BC%8F%EF%BC%884NF%EF%BC%89"><span class="nav-number">1.8.</span> <span class="nav-text">第四范式（4NF）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E8%8C%83%E5%BC%8F%EF%BC%885NF%EF%BC%89%E3%80%81%E5%9F%9F%E9%94%AE%E8%8C%83%E5%BC%8F"><span class="nav-number">1.9.</span> <span class="nav-text">第五范式（5NF）、域键范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">1.10.</span> <span class="nav-text">案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ER%E6%A8%A1%E5%9E%8B%EF%BC%88Entity-Relationship%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">ER模型（Entity-Relationship）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%A1%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">数据表的设计原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E8%B1%A1%E7%BC%96%E5%86%99%E5%BB%BA%E8%AE%AE"><span class="nav-number">4.</span> <span class="nav-text">数据库对象编写建议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%BA%93"><span class="nav-number">4.1.</span> <span class="nav-text">关于库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%A1%A8%E3%80%81%E5%88%97"><span class="nav-number">4.2.</span> <span class="nav-text">关于表、列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E7%B4%A2%E5%BC%95"><span class="nav-number">4.3.</span> <span class="nav-text">关于索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL%E7%BC%96%E5%86%99"><span class="nav-number">4.4.</span> <span class="nav-text">SQL编写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B6%E4%BB%96%E8%B0%83%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-number">5.</span> <span class="nav-text">数据库其他调优策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%BD%8D%E9%97%AE%E9%A2%98"><span class="nav-number">5.1.</span> <span class="nav-text">定位问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E4%BC%98%E7%BB%B4%E5%BA%A6%E5%92%8C%E6%AD%A5%E9%AA%A4"><span class="nav-number">5.2.</span> <span class="nav-text">调优维度和步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96MySQL%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">5.3.</span> <span class="nav-text">优化MySQL服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A1%AC%E4%BB%B6"><span class="nav-number">5.3.1.</span> <span class="nav-text">优化服务器硬件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96MySQL%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">5.3.2.</span> <span class="nav-text">优化MySQL的参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BB%93%E6%9E%84"><span class="nav-number">5.4.</span> <span class="nav-text">优化数据库结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%86%E5%88%86%E8%A1%A8%EF%BC%9A%E5%86%B7%E7%83%AD%E6%95%B0%E6%8D%AE%E5%88%86%E7%A6%BB"><span class="nav-number">5.4.1.</span> <span class="nav-text">拆分表：冷热数据分离</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E4%B8%AD%E9%97%B4%E8%A1%A8"><span class="nav-number">5.4.2.</span> <span class="nav-text">增加中间表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0%E5%86%97%E4%BD%99%E5%AD%97%E6%AE%B5"><span class="nav-number">5.4.3.</span> <span class="nav-text">增加冗余字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">5.4.4.</span> <span class="nav-text">优化数据类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%8F%92%E5%85%A5%E8%AE%B0%E5%BD%95%E7%9A%84%E9%80%9F%E5%BA%A6"><span class="nav-number">5.5.</span> <span class="nav-text">优化插入记录的速度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%9D%9E%E7%A9%BA%E7%BA%A6%E6%9D%9F"><span class="nav-number">5.6.</span> <span class="nav-text">使用非空约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E8%A1%A8%E3%80%81%E6%A3%80%E6%9F%A5%E8%A1%A8%E4%B8%8E%E4%BC%98%E5%8C%96%E8%A1%A8"><span class="nav-number">5.7.</span> <span class="nav-text">分析表、检查表与优化表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E8%A1%A8"><span class="nav-number">5.7.1.</span> <span class="nav-text">分析表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E8%A1%A8"><span class="nav-number">5.7.2.</span> <span class="nav-text">检查表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E8%A1%A8"><span class="nav-number">5.7.3.</span> <span class="nav-text">优化表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E8%A1%A8%E4%BC%98%E5%8C%96"><span class="nav-number">5.8.</span> <span class="nav-text">大表优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E8%B0%83%E4%BC%98%E7%AD%96%E7%95%A5"><span class="nav-number">5.9.</span> <span class="nav-text">其他调优策略</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">保持积累，保持学习。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">67</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xiaoyeshiyu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%E5%92%8C%E8%B0%83%E4%BC%98%E7%AF%87/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+      <meta itemprop="description" content="保持积累，保持学习。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MySQL学习笔记设计规范和调优篇 | Hexo">
+      <meta itemprop="description" content="这是学习MySQL的笔记设计规范和调优篇，主要是数据库、表的设计规范，以及数据库服务端性能调优。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL学习笔记设计规范和调优篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-11-21 00:00:00" itemprop="dateCreated datePublished" datetime="2022-11-21T00:00:00+08:00">2022-11-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-01 15:49:49" itemprop="dateModified" datetime="2023-03-01T15:49:49+08:00">2023-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/databse/" itemprop="url" rel="index"><span itemprop="name">databse</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/databse/develope/" itemprop="url" rel="index"><span itemprop="name">develope</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/databse/develope/mysql/" itemprop="url" rel="index"><span itemprop="name">mysql</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%E5%92%8C%E8%B0%83%E4%BC%98%E7%AF%87/" class="post-meta-item leancloud_visitors" data-flag-title="MySQL学习笔记设计规范和调优篇" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83%E5%92%8C%E8%B0%83%E4%BC%98%E7%AF%87/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/MySQL学习笔记设计规范和调优篇/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">这是学习MySQL的笔记设计规范和调优篇，主要是数据库、表的设计规范，以及数据库服务端性能调优。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="范式"><a href="#范式" class="headerlink" title="范式"></a>范式</h2><p>在关系型数据库中，关于数据表设计的基本原则、规则就成为范式（Normal Form，简称NF）。</p>
+<p>关系型数据库有六种常见范式，按照范式级别，从低到高分别是：第一范式（1NF）、第二范式（2NF）、第三范式（3NF）、巴斯-科德范式（BCNF）、第四范式（4NF）、和第五范式（5NF，又称完美范式）。</p>
+<p>数据库的范式设计越高阶，冗余度越低，同时高阶的范式一定符合低阶范式的要求。一般来说，在关系型数据库设计中，最高也就遵循到BCNF，普遍还是3NF，但是有些时候为了提高某些查询性能，还会破坏范式规则，也就是反规范化。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121173644172.png" alt="image-20221121173644172"></p>
+<h3 id="键和相关属性的概念"><a href="#键和相关属性的概念" class="headerlink" title="键和相关属性的概念"></a>键和相关属性的概念</h3><p>范式的定义会使用到主键和候选键，数据库中的键（Key）由一个或者多个属性组成。数据表中常用的几种键和属性的定义：</p>
+<ul>
+<li>超键：能唯一标识元组的属性集叫做超键（例如包含主键或者唯一键，加上其他字段，都可以叫做超键）</li>
+<li>候选键：如果超键不包括多余的属性，那么这个超键就是候选键（最小的超键，例如唯一键）</li>
+<li>主键：用户可以从候选键中选择一个作为主键</li>
+<li>外键：如果数据表R1中的某属性集不是R1的主键，而是另一个数据表R2的主键，那么这个属性集就是数据表R1的外键</li>
+<li>主属性：包含在任一候选键中的属性称为主属性（例如可作为主键以及唯一键的列的属性）</li>
+<li>非主属性：与主属性相对，指的是不包含在任何一个候选键中的属性</li>
+</ul>
+<p>通常，也将候选键称为<strong>码</strong>，把主键也成为<strong>主码</strong>。因为键可能是由多个属性组成的，针对单个属性，还可以用主属性和非主属性来区分。</p>
+<h3 id="第一范式（1NF）"><a href="#第一范式（1NF）" class="headerlink" title="第一范式（1NF）"></a>第一范式（1NF）</h3><p>第一范式主要是确保数据表中的每个字段的值必须具有<strong>原子性</strong>，也就是说数据表中每个字段为不可再拆分的最小数据单元。</p>
+<p>例如员工的手机号有两个，这个时候可以将这条记录拆开成两条记录，每条记录一个手机号，这种就不符合1NF。</p>
+<p>属性的原子性是主观性的，取决于应用程序是否需要分别处理，例如将姓名是否拆开取决于是否单独处理姓或者单独处理名（检索条件、更新）。</p>
+<h3 id="第二范式（2NF）"><a href="#第二范式（2NF）" class="headerlink" title="第二范式（2NF）"></a>第二范式（2NF）</h3><p>在1NF上的基础上，第二范式满足数据表中的每一条数据记录，都是可唯一标识的。而且所有非主键字段，都必须<strong>完全依赖主键</strong>，不能只依赖之间的一部分。</p>
+<p>例如联合主键，多个字段唯一确定一条数据，这个时候是<strong>完全依赖</strong>主键。</p>
+<p>在联合主键中，某一个字段就可以唯一确定一条数据，这个时候就是<strong>部分依赖</strong>。部分依赖的情况下，可以拆分出多个表。</p>
+<p>对于非主属性来说，并非完全依赖候选键，这样会产生的问题：</p>
+<ol>
+<li>数据冗余</li>
+<li>插入异常</li>
+<li>删除异常</li>
+<li>更新异常</li>
+</ol>
+<p>将表拆开之后，没张数据表都符合第二范式，避免异常情况。</p>
+<p>1NF强调字段属性的原子性，2NF强调一张表就是一个独立的对象，一张表只表达一个意思。</p>
+<p>2NF要求实体的属性完全依赖主关键字。如果存在不完全依赖，那么这个属性和住关键字的这一部分应该分离出来形成一个新的实体，新实体与原实体之间是一对多的关系。</p>
+<h3 id="第三范式（3NF）"><a href="#第三范式（3NF）" class="headerlink" title="第三范式（3NF）"></a>第三范式（3NF）</h3><p>在1NF和2NF的基础上，确保数据表中的每一个非主键字段都和主键字段直接相关，也就是说，<strong>要求数据表中的所有非主键字段不能依赖于其他非主键字段</strong>。（即，不能存在非主属性A依赖于非主属性B，非主属性B依赖于主键C的情况，即存在<code>A-&gt;B-&gt;C</code>的决定关系）通俗地讲，该规则的意思是所有非主键属性之间不能有依赖关系，必须相互独立。</p>
+<p>这里的主键可以扩展为候选键。</p>
+<p>符合3NF后的数据模型通俗地讲，2NF和3NF通常以这句话概括：“每个非键属性依赖于键，依赖于整个键，并且除了键别无他物。”</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>第一范式，确保每列的原子性。</p>
+<p>第二范式，确保每列都和主键完全依赖。</p>
+<p>第三范式，确保每列都和主键列直接相关，而不是间接相关。</p>
+<p>范式的优点：有助于消除数据库中的数据冗余，3NF通常被认为在性能、扩展性和数据完整性方面达到了最好的平衡。</p>
+<p>范式的缺点：降低查询的效率，查询时可能需要关联多张表查询，还可能使一些索引失效。</p>
+<p>实际开发过程中，可能会为了性能和读取效率违反范式话的原则，通过增加少量的冗余或重复的数据来提高数据库的读性能，减少关联查询，JOIN表的次数，实现空间换取时间的目的。因此在实际的设计过程中要理论结合实际，灵活运用。</p>
+<h3 id="反范式化"><a href="#反范式化" class="headerlink" title="反范式化"></a>反范式化</h3><p>当读取数据时产生大量的关键查询，影响数据库整体性能，此时反范式化也是一种优化思路，例如增加冗余字段来提高数据库的读性能。</p>
+<p>例如经常查询员工表时，要获取<code>department_name</code>，需要联表查询，经常查询的话，就可以在员工表上增加<code>department_name</code>字段，不用每次查询都联表。</p>
+<p>反范式化的问题：</p>
+<ol>
+<li>存储空间变大</li>
+<li>一个表中的一个字段更改了，另外一个冗余表的字段也要更改</li>
+<li>如果采用存储过程来支持数据的更新、删除等额外操作，如果更新频繁，会非常消耗系统资源</li>
+<li>在数据量小的情况下，反范式不能体现性能的优势，可能还会让数据库的设计更加复杂</li>
+</ol>
+<p>使用场景：</p>
+<p>当冗余信息有价值或者能大幅度提高查询效率的时候，采取反范式化更有优势。</p>
+<p>增加冗余字段的建议：</p>
+<ul>
+<li>冗余字段不需要经常修改</li>
+<li>冗余字段查询的时候不可或缺</li>
+</ul>
+<p>例如：历史快照、历史数据的数据仓库的设计。（数据仓的目的在于分析数据，而数据库设计的目的在于捕获数据；数据仓库存储一般是历史数据，数据库对数据的增删改实时性要求强；数据仓库设计上更偏向采用反范式设计，数据库设计需要尽量避免冗余。）</p>
+<h3 id="BCNF"><a href="#BCNF" class="headerlink" title="BCNF"></a>BCNF</h3><p>在3NF的基础上进行了改进，使得数据库冗余度更小，提出巴斯范式（巴斯-科德范式）BCNF，称为是修正的第三范式，或扩充的第三方是。</p>
+<p>若一个关系达到了第三范式，并且它只有一个候选键，或者它的每个候选键都是单属性，则该关系自然达到BCNF。</p>
+<p>在3NF的基础上，消除了主属性对候选键的部分依赖或者传递依赖关系。</p>
+<p>如果在关系R中，U为主键，A属性是主键的一个属性，若存在A-&gt;Y，Y为主属性，则该关系不属于BCNF。</p>
+<h3 id="第四范式（4NF）"><a href="#第四范式（4NF）" class="headerlink" title="第四范式（4NF）"></a>第四范式（4NF）</h3><p>多值依赖的概念：</p>
+<ul>
+<li><strong>多值依赖</strong>即属性之间的一对多关系，记为<code>K-&gt;-&gt;A</code></li>
+<li><strong>函数依赖</strong>事实上是单值依赖，所以不能表达属性值之间的一对多关系</li>
+<li><strong>平凡的多值依赖</strong>：全集<code>U=K+A</code>，一个K可以对应于多个A，即K-&gt;-&gt;A。此时整个表就是一组一对多关系。</li>
+<li><strong>非平凡的多值依赖</strong>：全集<code>U=K+A+B</code>，一个K可以对应于多个A，也可以对应于多个B，A与B互相独立，即K-&gt;-&gt;A，K-&gt;-&gt;B。整个表有多组一对多关系，且有：“一”部分是相同的属性集合，“多”部分是相互独立的属性集合。</li>
+</ul>
+<p>第四范式在满足BCNF的基础上，消除非平凡且非函数依赖的多值依赖。（即把同一表内的多对多关系删除。）</p>
+<p>例如职工表（职工编号、职工孩子姓名、职工选修课程），一个职工有多个孩子，多个课程，不符合4NF。此时可以将表分为两个表，职工表一（职工编号、职工孩子姓名），职工表二（职工编号、职工选修课程），符合4NF。</p>
+<h3 id="第五范式（5NF）、域键范式"><a href="#第五范式（5NF）、域键范式" class="headerlink" title="第五范式（5NF）、域键范式"></a>第五范式（5NF）、域键范式</h3><p>在4NF基础之上，还有第五范式（5NF）和域键范式（DKNF）。</p>
+<p>5NF：满足4NF的基础上，消除不是由候选键所蕴含的连接依赖。如果关系模式R中的每一个连接依赖均由R的候选键所隐含，乘次关系模式符合5NF。</p>
+<p>函数依赖是多指依赖的一种特殊情况，而多值依赖实际上是连接依赖的一种特殊情况。但连接依赖不像函数依赖和多值依赖可以由语义直接导出，而是在关系连接运算时才反映出来。存在连接依赖的关系模式仍可能遇到数据冗余及插入、修改、删除异常等问题。</p>
+<p>5NF处理的是无损连接问题，这个范式基本没有实际意义，因为无损连接很少出现，而且难以察觉。而域键范式试图定义一个终极范式，该范式考虑所有的依赖和约束类型，但是实用价值也是最小的，只存在理论研究中。</p>
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>例如进货单表</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215107751.png" alt="image-20221121215107751"></p>
+<p>迭代1次：考虑1NF：将property拆开</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215137546.png" alt="image-20221121215137546"></p>
+<p>迭代2次：考虑2NF：定义主键，将单号和条码标识每一条记录，并且部分字段依赖他们单独的字段，因此拆开成三张表</p>
+<p>进货单头表：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215437352.png" alt="image-20221121215437352"></p>
+<p>进货单明细表：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215458407.png" alt="image-20221121215458407"></p>
+<p>商品信息表：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215640824.png" alt="image-20221121215640824"></p>
+<p>在商品信息表中，可能出现重复条形码，因此最好是增加一个自增主键。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121215723143.png" alt="image-20221121215723143"></p>
+<p>迭代3次：考虑3NF，解决依赖关系，将进货单头表中供应商编号和供应商名称的冗余性去掉。</p>
+<p>供货商表：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121220014166.png" alt="image-20221121220014166"></p>
+<p>进货单头表：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121220031790.png" alt="image-20221121220031790"></p>
+<p>但是在进货单明细表中，进货价、数量、进货金额有冗余性，这里就可以反范式化，以业务为主，实际使用时，会经常用到进货价和进货金额，这里就可以不拆开。</p>
+<h2 id="ER模型（Entity-Relationship）"><a href="#ER模型（Entity-Relationship）" class="headerlink" title="ER模型（Entity-Relationship）"></a>ER模型（Entity-Relationship）</h2><p>通过ER模型（实体关系模型）可以看到数据库全貌，可以看到数据表、表中字段、数据表与数据表之间的关系。<strong>ER模型是用来描述现实生活中客观存在的事务、事务的属性，以及事物之间关系的一种数据模型。在开发基于数据库的信息系统的设计阶段，通常是用ER模型来描述信息需求和信息特性，帮助我们理清业务逻辑，从而设计优秀的数据库</strong>。</p>
+<p>ER模型的要素：</p>
+<p><strong>实体</strong>：可以看做数据对象，用矩形表示。实体分为两类，强实体和若实体：强实体指不依赖于其他实体的实体；弱实体指的是对另一个实体有很强的依赖关系的实体。</p>
+<p><strong>属性</strong>：指实体的特性，在ER模型中用椭圆形表示</p>
+<p><strong>关系</strong>：指实体之间的联系，在ER模型中用菱形表示</p>
+<p>从系统整体的角度出发，可以独立存在的是实体，不可再分的是属性。也就是说，属性不能包含其他属性。</p>
+<p>关系的类型：</p>
+<p><strong>一对一</strong>：实体之间的关系是一一对应的。</p>
+<p><strong>一对多</strong>：一遍的实体通过关系，对应多个另外一边的实体。</p>
+<p><strong>多对多</strong>：关系两边的实体都可以通过啊滚西对应多个对方的实体。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221121221557837.png" alt="image-20221121221557837"></p>
+<p>ER模型可以通过<code>PowerDesigner 15</code>更清晰的表现出来</p>
+<h2 id="数据表的设计原则"><a href="#数据表的设计原则" class="headerlink" title="数据表的设计原则"></a>数据表的设计原则</h2><ol>
+<li><strong>数据表的个数越少越好</strong>：RDBMS的核心在于实体和联系的定义，也就是ER图，数据表越少，证明实体和联系设计得越简介，既方便理解又方便操作。</li>
+<li><strong>数据表中的字段个数越少越好</strong>：字段个数越多，数据冗余的可能性越大，通常会在数据冗余和检索效率中进行平衡。</li>
+<li><strong>数据表中联合主键的字段个越少越好</strong>：联合主键中的字段越多，占用索引空间越大。</li>
+<li><strong>使用主键和外键越多越好</strong>：数据库的设计实际上是定义各种表以及各种字段之间的关系。这些关系越多，证明这些实体之间的冗余度越低，利用度越高。</li>
+</ol>
+<h2 id="数据库对象编写建议"><a href="#数据库对象编写建议" class="headerlink" title="数据库对象编写建议"></a>数据库对象编写建议</h2><h3 id="关于库"><a href="#关于库" class="headerlink" title="关于库"></a>关于库</h3><ol>
+<li><p>【强制】库的名称必须控制在32个字符以内，只能使用英文字母、数字和下划线，建议以英文字母开头。</p>
+</li>
+<li><p>【强制】库名中英文<strong>一律小写</strong>，不同单词采用下划线分割，须见名知意。</p>
+</li>
+<li><p>【强制】库的名称格式：<strong>业务系统名称_子系统名称</strong>。</p>
+</li>
+<li><p>【强制】库名<strong>禁止使用关键字</strong>（如type、order等）</p>
+</li>
+<li><p>【强制】创建数据库时必须<strong>显式指定字符集</strong>，并且字符集只能是utf8或者utf8mb4。</p>
+<p>例如 <code>create database dbtest default character set &#39;utf8&#39;;</code></p>
+</li>
+<li><p>【建议】对于程序连接数据库账号，遵循权限最小原则。</p>
+<p>使用数据库账号只能子啊一个DB下使用，不准跨库。程序使用的账号，原则上不准有drop权限。</p>
+</li>
+<li><p>【建议】临时库以<code>tmp_</code>为前缀，并以日期为后缀；</p>
+<p>​               备份库以<code>bak_</code>为前缀，并以日期为后缀。</p>
+</li>
+</ol>
+<h3 id="关于表、列"><a href="#关于表、列" class="headerlink" title="关于表、列"></a>关于表、列</h3><ol>
+<li><p>【强制】表和列的名称必须控制在32个字符以内，表名只能使用英文字母、数字和下划线，建议以英文字母开头。</p>
+</li>
+<li><p>【强制】表名、列名一律小写，不同单词采用下划线分割。须见名知意。</p>
+</li>
+<li><p>【强制】表名要求有模块名强相关，同一模块的表名尽量使用统一前缀，比如<code>crm_fund_item</code></p>
+</li>
+<li><p>【强制】创建表时必须显式指定字符集为<code>utf8</code>或<code>utf8mb4</code>。</p>
+</li>
+<li><p>【强制】表名、列名禁止使用关键字（如type、order等）。</p>
+</li>
+<li><p>【强制】创建表时必须显式指定表存储引擎类型。如无特殊需求，一律为InnoDB。</p>
+</li>
+<li><p>【强制】建表必须有comment。</p>
+</li>
+<li><p>【强制】字段命名应尽可能使用表达实际含义的英文单词或缩写。如公司ID，不要使用<code>corporation_id</code>，而用<code>corp_id</code>即可</p>
+</li>
+<li><p>【强制】布尔值类型的字段命名为<code>is_描述</code>。如<code>member</code>表上表时是否为<code>enable</code>的会员的字段命名为<code>is_enable</code>。</p>
+</li>
+<li><p>【强制】禁止在数据库中存储图片、文件等大的二进制数据</p>
+<p>通常文件很大，短时间内造成数据量快速增长，数据库读取数据时，通常会进行大量随机<code>I/O</code>操作，文件很大时，<code>I/O</code>操作很耗时。通常存储于文件服务器，数据库只存储文件地址信息。</p>
+</li>
+<li><p>【建议】建表时关于主键：<strong>表必须有主键</strong></p>
+<ol>
+<li>强制要求主键为id，类型为int或bigint，且为auto_increment建议使用unsigned无符号型。</li>
+<li>标识表里每一行主体的字段不要设为主键，建议设为其他字段如<code>user_id</code>,<code>order_id</code>等，并建立<code>unique key</code>索引。因为如果设为主键且主键值为随机插入，则会导致<code>InnoDB</code>内部页分裂和大量随机<code>I/O</code>，性能下降。</li>
+</ol>
+</li>
+<li><p>【建议】核心表（如用户表）必须有行数据的创建时间字段（<code>create_time</code>)和最后更新时间字段(<code>update_time</code>)，便于查问题。</p>
+</li>
+<li><p>【建议】表中所有字段尽量都是<code>NOT NULL</code>属性，业务可以根据需要定义<code>default</code>值。</p>
+<p>因为NULL值会存在每一行都会占用额外存储空间、数据迁移容易出错、聚合函数计算结果偏差等问题。</p>
+</li>
+<li><p>【建议】所有存储相同数据的<strong>列名和列类型必须一致</strong>（一般作为关键列，如果查询时关联列类型不一致会自动进行数据类型隐式转换，会造成列上的索引失效，导致查询效率低）</p>
+</li>
+<li><p>【建议】中间表（或临时表）用于保留中间结果集，名称以<code>tmp_</code>开头</p>
+<p>备份表用于备份或抓取源表快照，名称以<code>bak_</code>开头。中间表和备份表定期清理。</p>
+</li>
+<li><p>【建议】造表时，可以使用可视化工具，可以确保表、字段相关的约定都能设置上。</p>
+</li>
+</ol>
+<h3 id="关于索引"><a href="#关于索引" class="headerlink" title="关于索引"></a>关于索引</h3><ol>
+<li><p>【强制】<code>InnoDB</code>表必须主键为<code>id int/bigint auto_increment</code>，且主键值禁止被更新。</p>
+</li>
+<li><p>【强制】<code>InnoDB</code>和<code>MyISAM</code>存储引擎表，索引类型必须为<code>BTREE</code></p>
+</li>
+<li><p>【建议】主键的名称以<code>pk_</code>开头，唯一键以<code>uni_</code>或者<code>uk_</code>开头，普通索引以<code>idx_</code>开头，一律使用小写格式，以字段的名称或缩写作为后缀。</p>
+</li>
+<li><p>【建议】多单词组成的<code>columnname</code>，取前几个单词首字母，加末字母组成<code>column_name</code>，例如<code>sample</code>表<code>member_id</code>上的索引：<code>idx_sample_mid</code></p>
+</li>
+<li><p>【建议】单个表上的索引个数<strong>不能超过6个</strong></p>
+</li>
+<li><p>【建议】在建立索引时，多考虑建立<strong>联合索引</strong>，并把区分度最高的字段放在最前面</p>
+</li>
+<li><p>【建议】在多表JOIN的SQL里，保证被驱动表的连接列上有索引，这样JOIN执行效率最高</p>
+</li>
+<li><p>【建议】建表或加索引时，保证表里互相不存在<strong>冗余索引</strong>。</p>
+<p>比如表里已经存在key(a,b)，则key(a)为冗余索引，需要删除。</p>
+</li>
+</ol>
+<h3 id="SQL编写"><a href="#SQL编写" class="headerlink" title="SQL编写"></a>SQL编写</h3><ol>
+<li><p>【强制】程序端<code>SELECT</code>语句必须指定具体字段名称，禁止写成<code>*</code>。</p>
+</li>
+<li><p>【建议】程序端<code>INSERT</code>语句指定具体字段名称，不要写成<code>INSERT INTO t1 VALUES(...)</code>。</p>
+</li>
+<li><p>【建议】除静态表或小表（100行以内），<code>DML</code>语句必须有<code>WHERE</code>条件，且使用索引查找。</p>
+</li>
+<li><p>【建议】<code>INSERT INTO ... VALUES(xx),(xx)...</code> 这里的xx的值不要超过5000个。值过多虽然上线很快，但会引起主从同步延迟。</p>
+</li>
+<li><p>【建议】<code>SELECT</code>语句不要使用<code>UNION</code>，推荐使用<code>UNION ALL</code>，并且<code>UNION</code>子句个数限制在5个以内。</p>
+</li>
+<li><p>【建议】线上环境，多表<code>JOIN</code>不要超过5个表</p>
+</li>
+<li><p>【建议】减少使用<code>ORDER BY</code>，和业务沟通能不排序就不排序，或将排序放到程序端去做。<code>ORDER BY、GROUP BY、DISTINCT</code>这些语句较为耗费CPU。</p>
+</li>
+<li><p>【建议】包含了<code>ORDER BY、GROUP BY、DISTINCT</code>这些查询的语句，<code>WHERE</code>条件过滤出来的结果集请保持在<code>1000</code>行以内，否则<code>SQL</code>会很慢。</p>
+</li>
+<li><p>【建议】对单表的多次<code>alter</code>操作必须合并为一次。</p>
+<p>对超过100W行的大表进行<code>alter table</code>要谨慎操作，因为这个过程会产生<strong>表锁</strong>，期间阻塞对该表的所有写入，对业务可能会产生极大影响。</p>
+</li>
+<li><p>【建议】批量操作数据时，需要控制事务处理的间隔时间，b进行必要的sleep。</p>
+</li>
+<li><p>【建议】事务包含SQL不超过5个。</p>
+<p>较长的SQL数据会导致锁数据较久，MySQL内部缓存、连接消耗过多等问题。</p>
+</li>
+<li><p>【建议】事务里更新语句尽量基于主键或<code>UNIQUE KEY</code>，如<code>UPDATE ... WHERE id=xxx</code>；</p>
+<p>否则会产生间隙锁，内部扩大锁定范围，导致系统性能下降，产生死锁。</p>
+</li>
+</ol>
+<h2 id="数据库其他调优策略"><a href="#数据库其他调优策略" class="headerlink" title="数据库其他调优策略"></a>数据库其他调优策略</h2><p>调优目标：</p>
+<ol>
+<li>节省系统资源，增大吞吐量</li>
+<li>提高响应速度</li>
+<li>减少系统瓶颈，提高MySQL整体性能</li>
+</ol>
+<h3 id="定位问题"><a href="#定位问题" class="headerlink" title="定位问题"></a>定位问题</h3><ul>
+<li>产品使用反馈：用户反馈的结果其实是页面响应、接口响应</li>
+<li>日志分析：查看操作日志和系统日志</li>
+<li>服务器资源使用监控：CPU、内存、I&#x2F;O等使用情况</li>
+<li>数据库内存状况监控：<code>活动会话（Active Session）监控</code></li>
+<li>其他：对事务、锁等待进行监控</li>
+</ul>
+<h3 id="调优维度和步骤"><a href="#调优维度和步骤" class="headerlink" title="调优维度和步骤"></a>调优维度和步骤</h3><ol>
+<li><p>选择适合的DBMS：针对性的事务性处理、安全性要求选择不同的DBMS；针对数据处理和使用，选择不同的数据库，键值对、文档型、搜索引擎、列式存储和图形数据库。</p>
+</li>
+<li><p>优化表设计：</p>
+<ol>
+<li>遵循第三范式</li>
+<li>如果查询过多，需要使用多表联查，则可以采用反范式进行优化</li>
+<li>表字段数据类型选择</li>
+</ol>
+</li>
+<li><p>优化逻辑查询：分为逻辑查询优化和物理查询优化，对SQL进行重写，SQL的查询重写包括了子查询优化、等价谓词重写、视图重写、条件简化、连接消除和嵌套连接消除等。</p>
+</li>
+<li><p>优化物理查询：正确使用索引。</p>
+</li>
+<li><p>使用<code>Redis</code>或<code>Memcached</code>作为缓存：对于响应要求高的场景（响应时间短，吞吐量大），可以考虑内存数据库。</p>
+</li>
+<li><p>库级优化：考虑主从架构</p>
+<ol>
+<li>读写分离：master负责写请求，slave负责读请求。（双主双从）</li>
+<li>数据分片：数据库分库分表</li>
+</ol>
+</li>
+</ol>
+<h3 id="优化MySQL服务器"><a href="#优化MySQL服务器" class="headerlink" title="优化MySQL服务器"></a>优化MySQL服务器</h3><p>一方面是针对硬件进行优化，另外一方面是对MySQL服务的参数进行优化。</p>
+<h4 id="优化服务器硬件"><a href="#优化服务器硬件" class="headerlink" title="优化服务器硬件"></a>优化服务器硬件</h4><ol>
+<li>配置较大的内存：缓存越大，减少磁盘IO，性能也就越高。</li>
+<li>配置高速磁盘系统：磁盘IO高，响应速度也更快。</li>
+<li>合理分布磁盘IO：将磁盘IO分散在多个设备上，提高并行操作能力。</li>
+<li>配置多处理器：MySQL是多线程的数据库，多处理器可同时执行多个线程。</li>
+</ol>
+<h4 id="优化MySQL的参数"><a href="#优化MySQL的参数" class="headerlink" title="优化MySQL的参数"></a>优化MySQL的参数</h4><p>配置参数都在<code>my.cnf</code>或者<code>my.ini</code>文件的<code>[mysqld]</code>组中。</p>
+<ol>
+<li><code>innodb_buffer_pool_size</code>：表和索引的最大缓存</li>
+<li><code>key_buffer_size</code>：索引缓冲区的大小</li>
+<li><code>table_cache</code>：同时打开表的个数</li>
+<li><code>query_cache_size</code>：查询缓存的大小 （MySQL 8.0失效）</li>
+<li><code>query_cache_type</code>：查询缓存类型</li>
+<li><code>sort_buffer_size</code>：需要进行排序的线程分配的缓冲区的大小</li>
+<li><code>join_buffer_size</code>：联合查询操作所能使用的缓冲区大小</li>
+<li><code>read_buffer_size</code>：每个线程连续扫描时为扫描的每个表分配的缓冲区的大小（字节）</li>
+<li><code>innodb_flush_log_at_trx_commit</code>：表示何时将缓冲区的数据写入日志文件</li>
+<li><code>Innodb_log_buffer_size</code> ：事务日志所使用的缓冲区</li>
+<li><code>max_connections</code>：允许连接到MySQL数据库的最大数量</li>
+<li><code>back_log</code>：用于控制MySQL监听TCP端口时设置的积压请求栈大小</li>
+<li><code>thread_cache_size</code>：线程池缓存线程数量的大小</li>
+<li><code>wait_timetou</code>：一个请求的最大连接时间</li>
+<li><code>interactive_timeout</code>：表示服务器在关闭连接钱等待行动的秒数 </li>
+<li><code>innodb_buffer_pool_instance</code>：将InnoDB的缓存区分成几个部分，可以提高系统的并行处理能力。</li>
+</ol>
+<h3 id="优化数据库结构"><a href="#优化数据库结构" class="headerlink" title="优化数据库结构"></a>优化数据库结构</h3><h4 id="拆分表：冷热数据分离"><a href="#拆分表：冷热数据分离" class="headerlink" title="拆分表：冷热数据分离"></a>拆分表：冷热数据分离</h4><p>操作频次很高的数据称为热数据，频次很低的数据称为冷数据，冷热数据分离，可以减小表的宽度。</p>
+<ol>
+<li>减少磁盘<code>I/O</code>，保证热数据的内存缓存命中率</li>
+<li>更有效的利用缓存，避免读入无用的冷数据</li>
+</ol>
+<h4 id="增加中间表"><a href="#增加中间表" class="headerlink" title="增加中间表"></a>增加中间表</h4><p>把需要经常联合查询的数据插入中间表中，然后将原来的联合查询改为对中间表的查询，以此来提高查询效率。</p>
+<p>但是需要注意：在修改、删除时，要保证数据的一致性。</p>
+<h4 id="增加冗余字段"><a href="#增加冗余字段" class="headerlink" title="增加冗余字段"></a>增加冗余字段</h4><p>将多表查询改成使用冗余字段，利用反范式化。</p>
+<h4 id="优化数据类型"><a href="#优化数据类型" class="headerlink" title="优化数据类型"></a>优化数据类型</h4><p>优先选择符合存储需要的最小的数据类型。</p>
+<p>情况1：对整数类型数据进行优化。可以使用INT，对于非负的数据，使用无符号整形。</p>
+<p>情况2：既可以使用文本类型也可以使用整数类型的字段，要选择整数类型。相比，整数类型占用存储空间更少。</p>
+<p>情况3：避免使用TEXT、BLOB数据类型：内存临时表不支持这两种类型，在排序等操作时，就不能使用内存临时表，而是使用磁盘临时表。对于这种数据，MySQL还要进行二次查询，会导致SQL性能变差。如果一定要用，建立将TEXT、BLOB列分离到单独的扩展表中，查询时只获取需要的列。</p>
+<p>情况4：避免使用<code>ENUM</code>类型：修改<code>ENUM</code>值需要使用ALTER语句，<code>ENUM</code>类型的<code>ORDER BY</code>效率很低，需要额外操作。使用TINYINT代替ENUM类型。</p>
+<p>情况5：使用TIMESTAMP存储时间：相比DATETIME占用8个字节，TIMESTAMP占4个字节，并且具有自动赋值以及自动更新的特性。</p>
+<p>情况6：用DECIMAL代替FLOAT和DOUBLE存储精确浮点数：DECIMAL更精确。</p>
+<h3 id="优化插入记录的速度"><a href="#优化插入记录的速度" class="headerlink" title="优化插入记录的速度"></a>优化插入记录的速度</h3><p>插入记录时，影响插入速度的主要是索引、唯一性校验、一次插入记录条数等。根据这些情况可以分别进行优化，这里分为MyISAM和InnoDB。</p>
+<ol>
+<li>MyISAM的表：<ol>
+<li>禁用索引：<code>alter table table_name disable keys;</code>插入之后，再开启索引：<code>alter table table_name enable keys;</code></li>
+<li>禁用唯一性检查：插入数据时，MySQL会对插入的记录进行唯一性检查，这种检查会降低插入速度。禁用<code>set unique_checks=0;</code>，启用 <code>set unique_checks=1;</code></li>
+<li>使用批量插入：减少网络<code>IO</code>交互次数、解析次数、优化次数。</li>
+<li>使用 <code>LOAD DATA INFILE</code> 批量导入：导入速度比INSERT语句快。</li>
+</ol>
+</li>
+<li>InnoDB的表：<ol>
+<li>禁用唯一性检查</li>
+<li>禁用外键检查</li>
+<li>禁用自动提交：<code>DML</code>默认执行一次会提交一次，提交一次就会刷盘一次，比较浪费<code>IO</code>，插入数据之前禁用自动提交，<code>set autocommit=0;</code>插入之后恢复自动提交，<code>set autocommit=1;</code></li>
+</ol>
+</li>
+</ol>
+<h3 id="使用非空约束"><a href="#使用非空约束" class="headerlink" title="使用非空约束"></a>使用非空约束</h3><p>如果业务允许，尽量建议使用非空约束。好处是</p>
+<ol>
+<li>进行比较和计算时，省去对NULL值的字段判断是否为空的开销，提高存储效率</li>
+<li>非空字段也容易创建索引。NULL列需要额外的空间来保存，使用非空约束，可以节省存储空间，每个字段1个bit</li>
+</ol>
+<h3 id="分析表、检查表与优化表"><a href="#分析表、检查表与优化表" class="headerlink" title="分析表、检查表与优化表"></a>分析表、检查表与优化表</h3><h4 id="分析表"><a href="#分析表" class="headerlink" title="分析表"></a>分析表</h4><p>分析表主要是分析关键字的分布。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 取消将ANALYZE语句写到binlog中，以便在主从架构中，从服务器能够同步数据</span></span><br><span class="line">ANALYZE <span class="keyword">LOCAL</span> <span class="keyword">TABLE</span> employee;</span><br><span class="line">ANALYZE NO_WRITE_TO_BINLOG <span class="keyword">TABLE</span> employee;</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>ANALYZE TABLE</code>语句的过程中，数据库系统会自动对表加一个<code>只读锁</code>，可以用于<code>MyISAM</code>存储引擎和<code>InnoDB</code>引擎，不能作用于视图。执行语句过程中，会更新索引的区分度（<code>cardinality</code>的值），该值越接近表中的总行数，则在表连接查询或者索引查询时，就越优先被优化器选择使用。</p>
+<h4 id="检查表"><a href="#检查表" class="headerlink" title="检查表"></a>检查表</h4><p>检查表主要是检查表是否存在错误。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 检查表 </span></span><br><span class="line"><span class="keyword">CHECK</span> <span class="keyword">TABLE</span> employee;</span><br><span class="line"><span class="comment">-- OPTION参数只能针对 MyISAM 表 </span></span><br><span class="line"><span class="comment">-- 不扫描行，不检查错误的连接</span></span><br><span class="line"><span class="keyword">CHECK</span> <span class="keyword">TABLE</span> employee OPTION<span class="operator">=</span>QUICK;</span><br><span class="line"><span class="comment">-- 只检查没有被正确关闭的表 </span></span><br><span class="line"><span class="keyword">CHECK</span> <span class="keyword">TABLE</span> employee OPTION<span class="operator">=</span>FAST;</span><br><span class="line"><span class="comment">-- 只检查上次检查后被更改的表和没有被正确关闭的表 </span></span><br><span class="line"><span class="keyword">CHECK</span> <span class="keyword">TABLE</span> employee OPTION<span class="operator">=</span>CHANGED;</span><br><span class="line"><span class="comment">-- 扫描行，以验证被删除的连接是有效的，也可以计算各行的关键字校验和，并使用计算除的校验和验证这一点。</span></span><br><span class="line"><span class="keyword">CHECK</span> <span class="keyword">TABLE</span> employee OPTION<span class="operator">=</span>MEDIUM;</span><br><span class="line"><span class="comment">-- 对每行的所有关键字进行一个全面的关键字查找。这可以确保表是100%一致的，但是画的时间较长 </span></span><br><span class="line"><span class="keyword">CHECK</span> <span class="keyword">TABLE</span> employee OPTION<span class="operator">=</span>EXTENDED;</span><br></pre></td></tr></table></figure>
+
+<p>在执行过程中，会对表加一个<code>只读锁</code>。对于<code>MyISAM</code>类型的表，可以更新关键字统计数据。<code>CHECK TABLE</code>也可以检查视图是否具有错误，比如视图定义中引用的表已经不存在。</p>
+<h4 id="优化表"><a href="#优化表" class="headerlink" title="优化表"></a>优化表</h4><p>优化表主要是消除删除或者更新造成的空间浪费。当表进行大量删除，或者更新，使用优化表可以整理碎片。只针对<code>VARCHAR</code>,<code>BLOB</code>,<code>TEXT</code>类型的字段。</p>
+<p>方式1：<code>OPTIMIZE TABLE</code></p>
+<p>使用 <code>OPTIMIZE TABLE</code>语句的过程中，数据库系统会自动对表加一个<code>只读锁</code>，可以用于<code>MyISAM</code>存储引擎和<code>InnoDB</code>引擎。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 针对 InnoDB </span></span><br><span class="line">OPTIMIZE <span class="keyword">TABLE</span> employee; </span><br><span class="line"><span class="comment">-- Table does not support optimize, doing recreate + analyze instead</span></span><br><span class="line"><span class="comment">-- 说明InnoDB的优化方式，是先创建一个新表，然后拷贝表到新表中</span></span><br><span class="line"><span class="comment">-- 官方文档这个就是优化信息，而不是报错 </span></span><br></pre></td></tr></table></figure>
+
+<h3 id="大表优化"><a href="#大表优化" class="headerlink" title="大表优化"></a>大表优化</h3><p>当MySQL单表记录数过大时，数据库的CRUD性能会明显下降。一些常见的优化措施如下：</p>
+<ol>
+<li><p>限定查询的范围</p>
+<p>禁止不带任何限制数据范围条件的查询语句。例如查询历史订单时，可以控制一个月的范围。</p>
+</li>
+<li><p>读写分离</p>
+<p>主库负责写，从库负责读。</p>
+<ul>
+<li><p>一主一从</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221122162926181.png" alt="image-20221122162926181"></p>
+<ul>
+<li><p>双主双从</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221122162959378.png" alt="image-20221122162959378"></p>
+</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>垂直拆分：当数据量达到<strong>千万级</strong>以上，需要把一个数据库切成多分，放到不同的数据库服务器上，减少对单一数据库服务器的访问压力。</li>
+</ol>
+<p> 如果数据表过多，可以采用<strong>垂直分库</strong>，将关联的数据表不是在同一个数据库上。</p>
+<p> 如果表中的列过多，可以采用<strong>垂直分表</strong>，将一张数据表拆分成多张数据表，把经常一起使用的列放到同一张表里。</p>
+<p> 垂直拆分的优点：数据列变小，查询时减少读取<code>Block</code>的次数，减少<code>I/O</code>次数。</p>
+<p> 垂直拆分的缺点：主键会出现冗余，并引起JOIN操作。</p>
+<ol start="4">
+<li>水平拆分：</li>
+</ol>
+<ul>
+<li>尽量控制单表数据量的大小，建议控制在<strong>1000万以内</strong>。</li>
+<li>将大的数据表按照某个属性维度拆分不同的小表，例如时间、主键取模</li>
+<li>水平拆分最好分库，提升MySQL并发能力</li>
+</ul>
+<p> 水平拆分能够支撑非常大的数据量存储，但<strong>分片事务难以解决，跨节点Join性能较差</strong>，有利有弊。</p>
+<p> 补充一下数据库分片的两种常见方案：</p>
+<ul>
+<li>客户端代理：分片逻辑在应用端，通过第三方封装的插件实现。例如当当网的<code>Sharding-JDBC</code></li>
+<li>中间件代理：在应用和数据中间加了一个代理层。分片逻辑统一维护在中间件服务中。例如<code>Mycat</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="其他调优策略"><a href="#其他调优策略" class="headerlink" title="其他调优策略"></a>其他调优策略</h3><ol>
+<li><p>服务器语句超时处理：在MySQL 8.0中可以设置服务器语句超时的限制，单位可以达到毫秒级。当中断的执行语句超过设置的毫秒数后，服务器将终止查询影响不大的事务或连接，然后报错给客户端</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 全局配置，不会对已经连接的会话生效，而是对后续连接的会话生效</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> max_execution_time<span class="operator">=</span><span class="number">2000</span>;</span><br><span class="line"><span class="comment">-- 会话配置</span></span><br><span class="line"><span class="keyword">SET</span> SESSION max_execution_time<span class="operator">=</span><span class="number">2000</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建全局通用表空间：MySQL 8.0中可以通过全局表空间让所有的数据库的表共享，相比独立表空间，使用手动创建共享表空间可以节约元数据方面的内存。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建名为 mitaka1 共享表空间  </span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span>SPACE mitaka1 <span class="keyword">ADD</span> datafile <span class="string">&#x27;mitaka1.ibd&#x27;</span> file_block_size<span class="operator">=</span><span class="number">16</span>k;</span><br><span class="line"><span class="comment">-- 指定表空间  </span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t11(</span><br><span class="line">id <span class="type">INT</span>,</span><br><span class="line">`name` <span class="type">VARCHAR</span>(<span class="number">10</span>)</span><br><span class="line">)ENGINE<span class="operator">=</span>INNODB <span class="keyword">DEFAULT</span> charset utf8mb4 TABLESPACE mitaka1;</span><br><span class="line"><span class="comment">-- 也可以增加表到全局表空间 </span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> t1 TABLESPACE mitaka1;</span><br><span class="line"><span class="comment">-- 释放全局表空间  </span></span><br><span class="line"><span class="keyword">DROP</span> TABLESPACE mitaka1;</span><br><span class="line"><span class="comment">-- 需要先删除表 3120 - Tablespace `mitaka1` is not empty.</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> t11;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>隐藏索引对调优的帮助：MySQL 8.0中可以将所以设置为隐藏，可以用于测试这个索引是否有作用。</p>
+<p>需要注意：</p>
+<ol>
+<li>即使隐藏的索引，也会实时更新</li>
+<li>主键不能设置为 <code>invisible</code></li>
+</ol>
+</li>
+</ol>
+<p>推荐阅读：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zdwzzu2006/article/details/7984878">PowerDesigner 15 概述</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E7%B4%A2%E5%BC%95%E7%AF%87/" rel="prev" title="MySQL学习笔记索引篇">
+                  <i class="fa fa-chevron-left"></i> MySQL学习笔记索引篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/MySQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81%E7%AF%87/" rel="next" title="MySQL学习笔记事务和锁篇">
+                  MySQL学习笔记事务和锁篇 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/xiaoyeshiyu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
