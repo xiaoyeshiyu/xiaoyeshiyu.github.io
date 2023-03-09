@@ -91,12 +91,12 @@ https://www.xiaoyeshiyu.com/categories/developer/
 https://www.xiaoyeshiyu.com/categories/Linux/
 https://www.xiaoyeshiyu.com/categories/algorithm/
 https://www.xiaoyeshiyu.com/categories/k8s/database/
-https://www.xiaoyeshiyu.com/categories/midware/
 https://www.xiaoyeshiyu.com/categories/database/Golang/
-https://www.xiaoyeshiyu.com/categories/FAE/
-https://www.xiaoyeshiyu.com/categories/k8s/Golang/
-https://www.xiaoyeshiyu.com/categories/microservice/
 https://www.xiaoyeshiyu.com/categories/Linux/FAE/
 https://www.xiaoyeshiyu.com/categories/Golang/developer/
-https://www.xiaoyeshiyu.com/categories/Linux/FAE/
+https://www.xiaoyeshiyu.com/categories/midware/
+https://www.xiaoyeshiyu.com/categories/FAE/
+https://www.xiaoyeshiyu.com/categories/k8s/Golang/
 https://www.xiaoyeshiyu.com/categories/Golang/algorithm/
+https://www.xiaoyeshiyu.com/categories/microservice/
+https://www.xiaoyeshiyu.com/categories/Linux/FAE/
