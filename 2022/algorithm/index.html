@@ -111,7 +111,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015232107090-1920702011.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015232453668-1397662527.gif">
 <meta property="article:published_time" content="2022-06-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-03-09T01:52:01.381Z">
+<meta property="article:modified_time" content="2023-03-14T08:45:49.992Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
 <meta name="twitter:card" content="summary">
@@ -316,7 +316,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-03-09 09:52:01" itemprop="dateModified" datetime="2023-03-09T09:52:01+08:00">2023-03-09</time>
+      <time title="Modified: 2023-03-14 16:45:49" itemprop="dateModified" datetime="2023-03-14T16:45:49+08:00">2023-03-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1622,8 +1622,17 @@
 <p>解法1：DP，代表当前字符串长度的最长有效括号长度，状态转移方程，是指右括号结尾，加上左边的符合长度以及做括号，或者左边括号+左边的dp</p>
 </li>
 <li><p>最大矩阵：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9tYXhpbWFsLXJlY3RhbmdsZS8=">https://leetcode.cn/problems/maximal-rectangle/<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：数据降维和单调栈，先将二维数据降低到多个一维，然后题目变成计算柱状图中最大的矩形。</p>
+<p>这里需要额外注意计算柱状图的解法：</p>
+<ol>
+<li>使用单调递增栈</li>
+<li>每一个<code>index</code>都会入栈，也会出栈</li>
+<li>出栈的时候，计算面积，因为此时，右边界就是i，高度就是自身的高度，左边界就是新的栈顶，这里需要注意，面积的算法是<code>(i - stack[len(stack)-1]-1) * array[out]</code>，有一个<code>-1</code></li>
+<li>便利完了之后，还需要处理最终的栈，将栈中所有元素依次出栈，出栈的时候计算面积，计算方式与上面一样，只是右边界变成了<code>len(array)</code></li>
+</ol>
 </li>
 <li><p>不同的子序列：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9kaXN0aW5jdC1zdWJzZXF1ZW5jZXMv">https://leetcode.cn/problems/distinct-subsequences/<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：dp，二维数组，从空字符串开始，一直到最终两个字符串的结果，当字符相等，<code>dp[i][j] = dp[i-1][j] + dp[i-1][j-1]</code>，当字符不想等，<code>dp[i][j] = dp[i-1][j]</code></p>
 </li>
 <li><p>赛车：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9yYWNlLWNhci8=">https://leetcode.cn/problems/race-car/<i class="fa fa-external-link-alt"></i></span></p>
 <p>解法1：DP，记录到target的次数，首先记录一直加速的情况下，可以达到的距离，加速1次，2次，3次。。。到达的距离，这些点的次数最小就是一直加速。继续加速的下一个地方，就是<code>position</code>，如果是终点，则直接返回。开始便利dp，从2开始。状态转移，从第2个位置开始，走到第i个位置时，要么是加速到k+1次之后，往回走，也是重复子问题；要么走到终点找不到往回走的点，此时就是在position位置返回；要么是加速k-1次之后，往回走，往回走0次、1次、2次，然后重复子问题。至于说往回走多少步，就需要便利。最终结果取dp的target位。</p>
@@ -1671,6 +1680,7 @@
 <p>解法3：字母对应下标统计，找到第一个下标是1的字母</p>
 </li>
 <li><p>字符串转换整数：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9zdHJpbmctdG8taW50ZWdlci1hdG9pLw==">https://leetcode.cn/problems/string-to-integer-atoi/<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：便利字符串，通过条件判断出现各种符号时的逻辑</p>
 </li>
 <li><p>最长公共前缀：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9sb25nZXN0LWNvbW1vbi1wcmVmaXgvZGVzY3JpcHRpb24v">https://leetcode.cn/problems/longest-common-prefix/description/<i class="fa fa-external-link-alt"></i></span></p>
 <p>解法1：纯暴力，选取第一个字符串为初始共同序列和长度，以此遍历第二个字符串，并且更新长度。</p>
