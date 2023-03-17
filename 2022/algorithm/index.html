@@ -111,7 +111,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015232107090-1920702011.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015232453668-1397662527.gif">
 <meta property="article:published_time" content="2022-06-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-03-14T08:45:49.992Z">
+<meta property="article:modified_time" content="2023-03-17T09:58:29.461Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
 <meta name="twitter:card" content="summary">
@@ -316,7 +316,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-03-14 16:45:49" itemprop="dateModified" datetime="2023-03-14T16:45:49+08:00">2023-03-14</time>
+      <time title="Modified: 2023-03-17 17:58:29" itemprop="dateModified" datetime="2023-03-17T17:58:29+08:00">2023-03-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1790,6 +1790,8 @@
 <p>解法1：双指针，如果字符相等，则移动指针，如果字符不相等，则删除左边或者右边指针的字符，判断接下来的字符是否是回文串。</p>
 </li>
 <li><p>通配符匹配：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy93aWxkY2FyZC1tYXRjaGluZy8=">https://leetcode.cn/problems/wildcard-matching/<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：DP，二维数组，记录两个长度下是否可以匹配。分情况讨论，如果都是字母，相等，则为<code>dp[i][j]=dp[i-1][j-1]</code>；如果是<code>*</code>，<code>dp[i][0]</code>则是<code>dp[i-1][0]</code>，否则就剩下是<code>?</code>，<code>dp[i][j] = dp[i-1][j] || dp[i][j-1]</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= m; i++ &#123;</span><br><span class="line">   dp[i] = <span class="built_in">make</span>([]<span class="type">bool</span>,n+<span class="number">1</span>)</span><br><span class="line">   <span class="keyword">if</span> p[i<span class="number">-1</span>] == <span class="string">&#x27;*&#x27;</span> &#123;</span><br><span class="line">      dp[i][<span class="number">0</span>] = dp[i<span class="number">-1</span>][<span class="number">0</span>]</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">for</span> j := <span class="number">1</span>; j &lt;= n; j++ &#123;</span><br><span class="line">      <span class="keyword">if</span> unicode.IsLetter(<span class="type">rune</span>(p[i<span class="number">-1</span>])) &#123;</span><br><span class="line">         <span class="keyword">if</span> p[i<span class="number">-1</span>] == s[j<span class="number">-1</span>] &#123;</span><br><span class="line">            dp[i][j] = dp[i<span class="number">-1</span>][j<span class="number">-1</span>]</span><br><span class="line">         &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            dp[i][j] = <span class="literal">false</span></span><br><span class="line">         &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> p[i<span class="number">-1</span>] == <span class="string">&#x27;*&#x27;</span> &#123;</span><br><span class="line">         dp[i][j] = dp[i<span class="number">-1</span>][j] || dp[i][j<span class="number">-1</span>]</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         dp[i][j] = dp[i<span class="number">-1</span>][j<span class="number">-1</span>]</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>最长有效括号：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9sb25nZXN0LXZhbGlkLXBhcmVudGhlc2VzLw==">https://leetcode.cn/problems/longest-valid-parentheses/<i class="fa fa-external-link-alt"></i></span></p>
 <p>解法1：动态规划，记录到<code>i</code>角标的字符串的最长有效括号长度字符只能是<code>)</code>才可能是一个有效的字符，然后判断<code>i-1</code>是否是<code>(</code>，是则代表是一个有效括号，然后再判断<code>dp[i-2]</code>的长度，以及有效长度的左边，肯定是一个无效的括号，判断这个无效的括号是否可以跟<code>i</code>组成有效的括号，最终结果返回<code>dp[i-1]</code></p>
