@@ -4,7 +4,7 @@
   <url>
     <loc>https://www.xiaoyeshiyu.com/2023/LeetCode/</loc>
     
-    <lastmod>2023-04-10</lastmod>
+    <lastmod>2023-04-11</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -781,13 +781,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/algorithm/</loc>
-    <lastmod>2023-04-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/algorithm/</loc>
     <lastmod>2023-04-11</lastmod>
     <changefreq>weekly</changefreq>
@@ -795,7 +788,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/algorithm/</loc>
     <lastmod>2023-04-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -809,14 +802,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/developer/</loc>
-    <lastmod>2023-04-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
     <lastmod>2023-04-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -837,7 +823,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/database/Golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/golang/</loc>
     <lastmod>2023-04-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -845,6 +831,20 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/k8s/database/</loc>
+    <lastmod>2023-04-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/developer/</loc>
+    <lastmod>2023-04-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/database/Golang/</loc>
     <lastmod>2023-04-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
