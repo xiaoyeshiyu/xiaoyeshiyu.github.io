@@ -68,7 +68,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221101182301229.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221101182331051.png">
 <meta property="article:published_time" content="2022-07-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-03-08T09:13:02.938Z">
+<meta property="article:modified_time" content="2023-05-30T09:29:59.731Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
 <meta name="twitter:card" content="summary">
@@ -273,7 +273,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-03-08 17:13:02" itemprop="dateModified" datetime="2023-03-08T17:13:02+08:00">2023-03-08</time>
+      <time title="Modified: 2023-05-30 17:29:59" itemprop="dateModified" datetime="2023-05-30T17:29:59+08:00">2023-05-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -531,6 +531,15 @@
 <p>multiple：是否批量nack，当<code>multiple</code>为<code>true</code>时，将不确认当前消息和所有同channel上先前未确认的消息。这对于批量处理消息很有用。</p>
 <p>requeue：是否返回给队列，当<code>requeue</code>为<code>true</code>时，请求消息队列将此消息传递给其他消费者（如果只有一个消费者，那么会放入队尾）。如果不可能或<code>requeue</code>为false，则消息将被丢弃或传递到服务器配置的死信队列。</p>
 <p>此方法不能用于将客户端不希望处理的消息选择或重新入队，而是通知服务器客户端此时无法处理此消息。<br>每次未自动确认的消息都必须调用Delivery.Ack，Delivery.Reject，Delivery.Nack。</p>
+<p>通过Acknowledger接口拒绝委派的否定确认。<br>如果requeue为true，则将此消息排队，以便在其他通道上传递给使用者。如果重新排队为false或服务器无法对此消息进行排队，则会将其删除。<br>如果您正在批量处理交付，并且您的服务器支持它，请选择Delivery.Nack。<br>每个未自动确认的交付都必须调用Delivery.Ack、Delivery.Reject或Delivery.Nack。</p>
+<blockquote>
+<p>Reject和Nack<br>消息确认可以让RabbitMQ知道消费者已经接受并处理完消息。但是如果消息本身或者消息的处理过程出现问题怎么办？需要一种机制，通知RabbitMQ，这个消息，我无法处理，请让别的消费者处理。这里就有两种机制，Reject和Nack。</p>
+<p>Reject</p>
+<p>Reject在拒绝消息时，可以使用requeue标识，告诉RabbitMQ是否需要重新发送给别的消费者。不重新发送，一般这个消息就会被RabbitMQ丢弃。Reject一次只能拒绝一条消息。</p>
+<p>Nack</p>
+<p>Nack则可以一次性拒绝多个消息。这是RabbitMQ对AMQP规范的一个扩展。</p>
+<p>通过RejectRequeuConsumer可以看到当requeue参数设置为true时，消息发生了重新投递。</p>
+</blockquote>
 <h3 id="TTL队列、消息"><a href="#TTL队列、消息" class="headerlink" title="TTL队列、消息"></a>TTL队列、消息</h3><p>TTL是Time To Live的缩写，也就是生存时间。</p>
 <p>消息的过期时间，可以在发送消息时指定；</p>
 <p>队列的过期时间，从消息入队开始计算，超过队列的超时时间，那么消息会自动清除。</p>
