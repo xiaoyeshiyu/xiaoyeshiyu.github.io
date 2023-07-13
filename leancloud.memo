@@ -4,6 +4,7 @@
 {"title":"Ipmitool工具的使用方式","url":"/2017/IPMITool/"},
 {"title":"使用Wireshark分析TCP ACK回复问题","url":"/2017/Wireshark-TCP-ACK/"},
 {"title":"实例使用crash分析Kdump转储kernel崩溃内核","url":"/2017/crash-dump/"},
+{"title":"ipmi 管理工具的使用方式","url":"/2017/ipmi/"},
 {"title":"通过KVM创建qcow2镜像文件","url":"/2017/kvm-qcow2/"},
 {"title":"rbd中通过hack卷ID实现快速克隆虚拟机","url":"/2017/rbd-hack/"},
 {"title":"用Wireshark分析SMB2数据传输出现断层实例","url":"/2017/wireshark-SMB2/"},
