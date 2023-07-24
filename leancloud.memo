@@ -68,6 +68,7 @@
 {"title":"k8s使用NFS作为sc","url":"/2022/nfs-sc/"},
 {"title":"Golnag标准包之os包","url":"/2022/os/"},
 {"title":"快速排序、二分法以及一些变形的思考","url":"/2022/quick-sort/"},
+{"title":"Golang中的反射","url":"/2022/reflect/"},
 {"title":"Golang中的反射","url":"/2022/reflex/"},
 {"title":"Golang中结构体内存分配","url":"/2022/runtime-memory-allocation/"},
 {"title":"微服务之服务发现","url":"/2022/service-discovery/"},
