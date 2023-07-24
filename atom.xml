@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-07-24T07:09:28.906Z</updated>
+  <updated>2023-07-24T14:10:31.573Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>微服务</title>
+    <link href="https://www.xiaoyeshiyu.com/post/ff69.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/ff69.html</id>
+    <published>2023-07-23T16:00:00.000Z</published>
+    <updated>2023-07-24T14:10:31.573Z</updated>
+    
+    
+    <summary type="html">微服务当前大热，几乎所有的厂商都希望把服务微服务化，减少服务之间耦合，加快开发、迭代速度。学习微服务设计就是必不可免的一件事。</summary>
+    
+    
+    
+    <category term="k8s" scheme="https://www.xiaoyeshiyu.com/categories/k8s/"/>
+    
+    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/k8s/microservice/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>排序算法</title>
@@ -337,23 +356,6 @@
     
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>微服务之负载均衡</title>
-    <link href="https://www.xiaoyeshiyu.com/post/941b.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/941b.html</id>
-    <published>2022-10-08T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.900Z</updated>
-    
-    
-    <summary type="html">在gRPC长连接的场景下，如果客户端和服务端都是多个节点，那么则需要处理连接的负载，同时，当服务端扩容，则需要动态调整。</summary>
-    
-    
-    
-    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
     
     
   </entry>
