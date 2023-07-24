@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="作为超融合三大资源之一的网络资源，使用OpenvSwitch应该是最多的，毕竟OpenvSwitch无论是在支撑性上还是在本身具有的高特性上，对于Neutrino来说都是一个非常好的选择。在这种网络环境下，宿主机是如何将虚拟机流量通过虚拟交换机或者虚拟路由器一步步转发到外网的，这篇文章主要是讲述虚拟机到虚拟交换机br-int以及外部虚拟交换机br-ex到物理网卡之间的联系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Neutron结合OpenvSwitch网络部分浅析">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/ae9a.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="作为超融合三大资源之一的网络资源，使用OpenvSwitch应该是最多的，毕竟OpenvSwitch无论是在支撑性上还是在本身具有的高特性上，对于Neutrino来说都是一个非常好的选择。在这种网络环境下，宿主机是如何将虚拟机流量通过虚拟交换机或者虚拟路由器一步步转发到外网的，这篇文章主要是讲述虚拟机到虚拟交换机br-int以及外部虚拟交换机br-ex到物理网卡之间的联系。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/05/CtNvz2.png">
+<meta property="article:published_time" content="2018-05-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-08T09:12:33.408Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/05/CtNvz2.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/ae9a.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/ae9a.html","path":"post/ae9a.html","title":"Neutron结合OpenvSwitch网络部分浅析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Neutron结合OpenvSwitch网络部分浅析 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Screenshots"><span class="nav-number">1.</span> <span class="nav-text">Screenshots</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VM%E5%88%B0%E8%99%9A%E6%8B%9F%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">VM到虚拟交换机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TAP-device"><span class="nav-number">2.1.</span> <span class="nav-text">TAP device</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-Bridge"><span class="nav-number">2.2.</span> <span class="nav-text">Linux Bridge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VETH"><span class="nav-number">2.3.</span> <span class="nav-text">VETH</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenvSwitch%E8%99%9A%E6%8B%9F%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">OpenvSwitch虚拟交换机</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DHCP"><span class="nav-number">3.1.</span> <span class="nav-text">DHCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VROUTER"><span class="nav-number">3.2.</span> <span class="nav-text">VROUTER</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/ae9a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Neutron结合OpenvSwitch网络部分浅析 | 小夜时雨">
+      <meta itemprop="description" content="作为超融合三大资源之一的网络资源，使用OpenvSwitch应该是最多的，毕竟OpenvSwitch无论是在支撑性上还是在本身具有的高特性上，对于Neutrino来说都是一个非常好的选择。在这种网络环境下，宿主机是如何将虚拟机流量通过虚拟交换机或者虚拟路由器一步步转发到外网的，这篇文章主要是讲述虚拟机到虚拟交换机br-int以及外部虚拟交换机br-ex到物理网卡之间的联系。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Neutron结合OpenvSwitch网络部分浅析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-05-18 00:00:00" itemprop="dateCreated datePublished" datetime="2018-05-18T00:00:00+08:00">2018-05-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-08 17:12:33" itemprop="dateModified" datetime="2023-03-08T17:12:33+08:00">2023-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/OpenStack/" itemprop="url" rel="index"><span itemprop="name">OpenStack</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/ae9a.html" class="post-meta-item leancloud_visitors" data-flag-title="Neutron结合OpenvSwitch网络部分浅析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/ae9a.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/ae9a.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">作为超融合三大资源之一的网络资源，使用OpenvSwitch应该是最多的，毕竟OpenvSwitch无论是在支撑性上还是在本身具有的高特性上，对于Neutrino来说都是一个非常好的选择。在这种网络环境下，宿主机是如何将虚拟机流量通过虚拟交换机或者虚拟路由器一步步转发到外网的，这篇文章主要是讲述虚拟机到虚拟交换机br-int以及外部虚拟交换机br-ex到物理网卡之间的联系。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Screenshots"><a href="#Screenshots" class="headerlink" title="Screenshots"></a>Screenshots</h2><ul>
+<li><p>内涵最多的图</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/05/CtNvz2.png" alt="CtNvz2"></p>
+</li>
+</ul>
+<h2 id="VM到虚拟交换机"><a href="#VM到虚拟交换机" class="headerlink" title="VM到虚拟交换机"></a>VM到虚拟交换机</h2><h3 id="TAP-device"><a href="#TAP-device" class="headerlink" title="TAP device"></a>TAP device</h3><p>查看<code>instance</code>硬件信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 ~]# virsh list</span><br><span class="line"> Id    Name                           State</span><br><span class="line">----------------------------------------------------</span><br><span class="line"> 14944 instance-00000070              running</span><br><span class="line"> 18862 instance-0000002d              running</span><br><span class="line"> 18893 instance-00000076              running</span><br></pre></td></tr></table></figure>
+
+<p>以实例<code>14944</code>为例子，查看实例<code>14944</code>具体硬件信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 ~]# virsh edit 14944</span><br><span class="line">&lt;interface type=&#x27;bridge&#x27;&gt;</span><br><span class="line">  &lt;mac address=&#x27;fa:16:3e:52:43:c5&#x27;/&gt;</span><br><span class="line">  &lt;source bridge=&#x27;qbr85bcbfb0-bc&#x27;/&gt;</span><br><span class="line">  &lt;target dev=&#x27;tap85bcbfb0-bc&#x27;/&gt;</span><br><span class="line">  &lt;model type=&#x27;virtio&#x27;/&gt;</span><br><span class="line">  &lt;address type=&#x27;pci&#x27; domain=&#x27;0x0000&#x27; bus=&#x27;0x00&#x27; slot=&#x27;0x03&#x27; function=&#x27;0x0&#x27;/&gt;</span><br><span class="line">&lt;/interface&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到<code>instance</code>的虚拟网卡MAC地址为<code>fa:16:3e:52:43:c5</code>，连接到的<code>bridge</code>为<code>qbr85bcbfb0-bc</code>，<code>target device</code>也就是对应物理机上的虚拟显卡为<code>tap85bcbfb0-bc</code>。</p>
+<p>查看物理机上的网卡</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 ~]# ip a</span><br><span class="line">42: tap85bcbfb0-bc: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc pfifo_fast master qbr85bcbfb0-bc state UNKNOWN qlen 1000</span><br><span class="line">    link/ether fe:16:3e:52:43:c5 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet6 fe80::fc16:3eff:fe52:43c5/64 scope link</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+
+<p>可以看到物理机上<code>tap85bcbfb0-bc</code>网卡的MAC地址为<code>fe:16:3e:52:43:c5</code>，对应的也就是<code>instance 14944</code>的虚拟网卡。</p>
+<ul>
+<li>TAP设备主要是用来让宿主机可以接收到数据帧。</li>
+</ul>
+<h3 id="Linux-Bridge"><a href="#Linux-Bridge" class="headerlink" title="Linux Bridge"></a>Linux Bridge</h3><p>上面看到<code>instance 14944</code>的网卡连接的bridge是<code>qbr85bcbfb0-bc</code><br>查看网桥</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 ~]# brctl show</span><br><span class="line">bridge name	bridge id		STP enabled	interfaces</span><br><span class="line">qbr09d052bf-16		8000.b216e6c26e13	no		qvb09d052bf-16</span><br><span class="line">qbr263b3957-09		8000.d6a957a5b378	no		qvb263b3957-09</span><br><span class="line">							tap263b3957-09</span><br><span class="line">qbr2d4a7a05-ea		8000.2afc1c44c8a4	no		qvb2d4a7a05-ea</span><br><span class="line">							tap2d4a7a05-ea</span><br><span class="line">qbr85bcbfb0-bc		8000.c67808b20c2e	no		qvb85bcbfb0-bc</span><br><span class="line">							tap85bcbfb0-bc</span><br><span class="line">qbrf010b8f6-df		8000.de5f220adb0c	no		qvbf010b8f6-df</span><br><span class="line">							tapf010b8f6-df</span><br></pre></td></tr></table></figure>
+<p><code>qbr85bcbfb0-bc</code>上，有两个接口，一个是<code>qvb85bcbfb0-bc</code>，一个是<code>tap85bcbfb0-bc</code>。也就是说，<code>instance 14944</code>连接在虚拟网桥<code>qbr85bcbfb0-bc</code>上。</p>
+<ul>
+<li>Linux Bridge类似一个集线器，用来过渡物理机到宿主机的数据帧。</li>
+</ul>
+<h3 id="VETH"><a href="#VETH" class="headerlink" title="VETH"></a>VETH</h3><p>查看物理机网络<code>qvb85bcbfb0-bc</code>网卡的详细信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 ~]# ip a | grep qvb85bcbfb0-bc</span><br><span class="line">40: qvo85bcbfb0-bc@qvb85bcbfb0-bc: &lt;BROADCAST,MULTICAST,PROMISC,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue master ovs-system state UP qlen 1000</span><br><span class="line">41: qvb85bcbfb0-bc@qvo85bcbfb0-bc: &lt;BROADCAST,MULTICAST,PROMISC,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue master qbr85bcbfb0-bc state UP qlen 1000</span><br></pre></td></tr></table></figure>
+<p>很明显，这两个网卡有关联。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 ~]# ethtool -S qvo85bcbfb0-bc</span><br><span class="line">NIC statistics:</span><br><span class="line">     peer_ifindex: 41</span><br><span class="line">[root@node2 ~]# ethtool -S qvb85bcbfb0-bc</span><br><span class="line">NIC statistics:</span><br><span class="line">     peer_ifindex: 40</span><br></pre></td></tr></table></figure>
+<p><code>qvo85bcbfb0-bc</code>和<code>qvb85bcbfb0-bc</code>属于一对peer，可以理解为一个网线的两端，也就是说一根网线的一端<code>qvb85bcbfb0-bc</code>连接在虚拟网桥<code>qbr85bcbfb0-bc</code>上，而另外的一端<code>qvo85bcbfb0-bc</code>则是连接在<code>OpenvSwitch</code>的<code>br-int</code>上。</p>
+<ul>
+<li>VETH可以直接理解为一个网线，一端连接在虚拟网桥上，另一端连接在虚拟交换机上，实现数据流的传递</li>
+</ul>
+<h2 id="OpenvSwitch虚拟交换机"><a href="#OpenvSwitch虚拟交换机" class="headerlink" title="OpenvSwitch虚拟交换机"></a>OpenvSwitch虚拟交换机</h2><p>查看OpenvSwitch的路由器的详细信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">[root@node2 ~]# ovs-vsctl show</span><br><span class="line">4ece5774-21aa-4ff6-8e7e-343983396eee</span><br><span class="line">    Manager &quot;ptcp:6640:127.0.0.1&quot;</span><br><span class="line">        is_connected: true</span><br><span class="line">    Bridge br-tun</span><br><span class="line">        Controller &quot;tcp:127.0.0.1:6633&quot;</span><br><span class="line">            is_connected: true</span><br><span class="line">        fail_mode: secure</span><br><span class="line">        Port &quot;vxlan-0a0a0a01&quot;</span><br><span class="line">            Interface &quot;vxlan-0a0a0a01&quot;</span><br><span class="line">                type: vxlan</span><br><span class="line">                options: &#123;df_default=&quot;true&quot;, in_key=flow, local_ip=&quot;10.10.10.2&quot;, out_key=flow, remote_ip=&quot;10.10.10.1&quot;&#125;</span><br><span class="line">        Port patch-int</span><br><span class="line">            Interface patch-int</span><br><span class="line">                type: patch</span><br><span class="line">                options: &#123;peer=patch-tun&#125;</span><br><span class="line">        Port br-tun</span><br><span class="line">            Interface br-tun</span><br><span class="line">                type: internal</span><br><span class="line">    Bridge br-int</span><br><span class="line">        Controller &quot;tcp:127.0.0.1:6633&quot;</span><br><span class="line">            is_connected: true</span><br><span class="line">        fail_mode: secure</span><br><span class="line">        Port int-br-ex</span><br><span class="line">            Interface int-br-ex</span><br><span class="line">                type: patch</span><br><span class="line">                options: &#123;peer=phy-br-ex&#125;</span><br><span class="line">        Port &quot;qvoe0f204ea-12&quot;</span><br><span class="line">            tag: 4095</span><br><span class="line">            Interface &quot;qvoe0f204ea-12&quot;</span><br><span class="line">                error: &quot;could not open network device qvoe0f204ea-12 (No such device)&quot;</span><br><span class="line">        Port br-int</span><br><span class="line">            Interface br-int</span><br><span class="line">                type: internal</span><br><span class="line">        Port &quot;qr-764aecf0-56&quot;</span><br><span class="line">            tag: 1</span><br><span class="line">            Interface &quot;qr-764aecf0-56&quot;</span><br><span class="line">                type: internal</span><br><span class="line">        Port &quot;tapd87312fd-34&quot;</span><br><span class="line">            tag: 1</span><br><span class="line">            Interface &quot;tapd87312fd-34&quot;</span><br><span class="line">                type: internal</span><br><span class="line">        Port &quot;qvo09d052bf-16&quot;</span><br><span class="line">            tag: 2</span><br><span class="line">            Interface &quot;qvo09d052bf-16&quot;</span><br><span class="line">        Port &quot;qvof010b8f6-df&quot;</span><br><span class="line">            tag: 2</span><br><span class="line">            Interface &quot;qvof010b8f6-df&quot;</span><br><span class="line">        Port &quot;qvo85bcbfb0-bc&quot;</span><br><span class="line">            tag: 1</span><br><span class="line">            Interface &quot;qvo85bcbfb0-bc&quot;</span><br><span class="line">        Port patch-tun</span><br><span class="line">            Interface patch-tun</span><br><span class="line">                type: patch</span><br><span class="line">                options: &#123;peer=patch-int&#125;</span><br><span class="line">        Port &quot;tap3287c19b-e3&quot;</span><br><span class="line">            tag: 2</span><br><span class="line">            Interface &quot;tap3287c19b-e3&quot;</span><br><span class="line">                type: internal</span><br><span class="line">        Port &quot;qvo2d4a7a05-ea&quot;</span><br><span class="line">            tag: 2</span><br><span class="line">            Interface &quot;qvo2d4a7a05-ea&quot;</span><br><span class="line">        Port &quot;qvo263b3957-09&quot;</span><br><span class="line">            tag: 1</span><br><span class="line">            Interface &quot;qvo263b3957-09&quot;</span><br><span class="line">    Bridge br-ex</span><br><span class="line">        Controller &quot;tcp:127.0.0.1:6633&quot;</span><br><span class="line">            is_connected: true</span><br><span class="line">        fail_mode: secure</span><br><span class="line">        Port phy-br-ex</span><br><span class="line">            Interface phy-br-ex</span><br><span class="line">                type: patch</span><br><span class="line">                options: &#123;peer=int-br-ex&#125;</span><br><span class="line">        Port br-ex</span><br><span class="line">            Interface br-ex</span><br><span class="line">                type: internal</span><br><span class="line">        Port &quot;enp4s0f1&quot;</span><br><span class="line">            Interface &quot;enp4s0f1&quot;</span><br><span class="line">    Bridge br-vlan</span><br><span class="line">        Port br-vlan</span><br><span class="line">            Interface br-vlan</span><br><span class="line">                type: internal</span><br><span class="line">    ovs_version: &quot;2.5.0&quot;</span><br></pre></td></tr></table></figure>
+<p>上面的信息主要包含这么几点：</p>
+<pre><code>qvo85bcbfb0-bc连接在桥br-int上；
+br-int通过int-br-ex和phy-br-ex这对配对接口相连；
+br-ex中有物理网卡enp4s0f1接口，如果enp4s0f1网口连接外部网络设备交换机，则可以实现虚拟机br-ex和外网直通；
+br-int和br-tun通过patch-int和patch-tun这对配对接口相连；
+br-tun中的接口vxlan-0a0a0a01通过ip tunnel以及内部IP，连接到集群中另外一台物理设备上，实现不同宿主机上虚拟机网络的互通。
+</code></pre>
+<ul>
+<li>OpenvSwitch主要是通过不同功能的交换机之间的相互连接，从而实现虚拟机和外部网络的通信，进一步实现SDN，即软件定义网络。</li>
+</ul>
+<p>上文中一些网络接口可以这么理解：</p>
+<pre><code>    软件+ID
+</code></pre>
+<p>比如说：</p>
+<pre><code>  qbr85bcbfb0-bc：qbr为qemu bridge + ID
+  tap85bcbfb0-bc：tap为tap设备  + ID
+  qvb85bcbfb0-bc：qvb为qemu virtual bridge  +ID
+  qvo85bcbfb0-bc：qvo为qemu virtual OpenvSwitch +ID
+</code></pre>
+<h3 id="DHCP"><a href="#DHCP" class="headerlink" title="DHCP"></a>DHCP</h3><p>先查看到DHCP的空间位置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive01 ~]# ip netns ls</span><br><span class="line">qdhcp-624031b6-981c-480c-94ee-f9459d1c07ed</span><br><span class="line">qdhcp-d72f0c1e-cc46-4d8f-a918-60c0088cc60a</span><br></pre></td></tr></table></figure>
+
+<p>选取上面一个DHCP查看详细信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive01 ~]# ip netns exec qdhcp-624031b6-981c-480c-94ee-f9459d1c07ed ip a</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN qlen 1</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">28: tap42681808-04: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UNKNOWN qlen 1000</span><br><span class="line">    link/ether fa:16:3e:1c:f9:38 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.100.100/24 brd 192.168.100.255 scope global tap42681808-04</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet 169.254.169.254/16 brd 169.254.255.255 scope global tap42681808-04</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::f816:3eff:fe1c:f938/64 scope link </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+
+<p>可以看到的是IP地址会从<code>tap42681808-04</code>发送出去，并且网段为<code>192.168.100.0/24</code>网段</p>
+<p>查看<code>OpenvSwitch</code>上<code>tap42681808-04</code>的信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Bridge br-int</span><br><span class="line">    Port &quot;tap42681808-04&quot;</span><br><span class="line">        tag: 3</span><br><span class="line">        Interface &quot;tap42681808-04&quot;</span><br><span class="line">            type: internal</span><br></pre></td></tr></table></figure>
+
+<p><code>tap42681808-04</code>打的标签为3号，新建虚拟机的时候选择网卡网段，对应的就是tag</p>
+<p><em>目前笔者比较好奇的是：多节点情况下，不同节点的tag ID只是本地有效，节点之间通过vxlan连接，而不是像交换机直接用<code>trunk</code>连接，每台交换机的vlan ID是互通的。</em></p>
+<h3 id="VROUTER"><a href="#VROUTER" class="headerlink" title="VROUTER"></a>VROUTER</h3><p>先查看VROUTER的网络位置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive02 ~]# ip netns ls</span><br><span class="line">qrouter-8800b853-2938-4ecc-89ce-a7189f78ef0c</span><br><span class="line">qdhcp-0be33604-c845-4e71-9e88-ba1facec20e9</span><br></pre></td></tr></table></figure>
+
+<p>查看VROUTER详细信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive02 ~]# ip netns exec qrouter-8800b853-2938-4ecc-89ce-a7189f78ef0c ip a</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN qlen 1</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">15: qr-0fd24acc-81: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1450 qdisc noqueue state UNKNOWN qlen 1000</span><br><span class="line">    link/ether fa:16:3e:c0:e6:7e brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.0.1/24 brd 192.168.0.255 scope global qr-0fd24acc-81</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::f816:3eff:fec0:e67e/64 scope link </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">27: qg-ae1e7daf-58: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UNKNOWN qlen 1000</span><br><span class="line">    link/ether fa:16:3e:4c:e7:29 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.10.9/24 brd 192.168.10.255 scope global qg-ae1e7daf-58</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::f816:3eff:fe4c:e729/64 scope link </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+
+<p>查看VROUTER路由详细信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive02 ~]# ip netns exec qrouter-8800b853-2938-4ecc-89ce-a7189f78ef0c route</span><br><span class="line">Kernel IP routing table</span><br><span class="line">Destination     Gateway         Genmask         Flags Metric Ref    Use Iface</span><br><span class="line">default         gateway         0.0.0.0         UG    0      0        0 qg-ae1e7daf-58</span><br><span class="line">192.168.0.0     0.0.0.0         255.255.255.0   U     0      0        0 qr-0fd24acc-81</span><br><span class="line">192.168.10.0    0.0.0.0         255.255.255.0   U     0      0        0 qg-ae1e7daf-58</span><br></pre></td></tr></table></figure>
+
+<p>可以看到的是，路由器有两个接口，一个连接内部网络，图上的为<code>192.168.0.0/24</code>网段，一个为外部网络，图上为<code>192.168.10.0/24</code>，其中，内部网络可以连接多个，但是外部网络只能连接一个。外部网络可以是直接连接外网的<code>br-ex</code>网桥上的物理网卡接口；也可以是带有vlan ID的子网网段，相对应的，连接的外部网络设备上需要有带上该ID的vlan接口。</p>
+<p><strong>DHCP服务是如何跨国tag对虚拟机提供IP地址的？虚拟机的网络流量是如果可以从<code>br-int</code>流向<code>br-ex</code>再流向外网的？</strong></p>
+<p>先直接给答案：主要是通过iptables做转发，本篇主要讲解虚拟机通外网流量的流向，具体iptables是如何转发，通过iptables又可以实现哪些功能，后面还有一篇会详细讲解。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/7b65.html" rel="prev" title="使用smartctl命令检查磁盘">
+                  <i class="fa fa-chevron-left"></i> 使用smartctl命令检查磁盘
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/a441.html" rel="next" title="通过TCPdump等工具排查网络问题以及优化">
+                  通过TCPdump等工具排查网络问题以及优化 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

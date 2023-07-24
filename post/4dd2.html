@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这是学习MySQL的笔记架构篇，主要是逻辑架构、存储引擎、索引的数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL学习笔记架构篇">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/4dd2.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="这是学习MySQL的笔记架构篇，主要是逻辑架构、存储引擎、索引的数据结构">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112122337220.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112122405043.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112123841729.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112124617740.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112124803162.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112223544373.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112223655736.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112224227279.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112230501414.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112230927518.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112232526729.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221113135351758.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221113141912427.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114110046705.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114110254441.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114110704707.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114110833872.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114145615952.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114150049332.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114151023560.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114153018184.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114153827053.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114154223489.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114170427069.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114171718620.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114172335350.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114200214549.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114201552971.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114204039108.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114211020179.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114211901755.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114211940150.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114212206401.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114212404226.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114212821219.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114215355682.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114215847632.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114220646813.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114220705153.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114224323600.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221115202419761.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221115204751646.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221115204850330.png">
+<meta property="article:published_time" content="2022-11-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-08T09:11:36.419Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112122337220.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/4dd2.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/4dd2.html","path":"post/4dd2.html","title":"MySQL学习笔记架构篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MySQL学习笔记架构篇 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">MySQL逻辑架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-Server%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">MySQL Server三层架构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%B1%82"><span class="nav-number">1.1.1.</span> <span class="nav-text">连接层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%B1%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">服务层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E6%93%8E%E5%B1%82"><span class="nav-number">1.1.3.</span> <span class="nav-text">引擎层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.1.4.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">SQL执行流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">SQL执行原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%86%B2%E6%B1%A0"><span class="nav-number">3.</span> <span class="nav-text">数据库缓冲池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E6%B1%A0"><span class="nav-number">3.1.</span> <span class="nav-text">缓冲池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E6%B1%A0%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="nav-number">3.2.</span> <span class="nav-text">缓冲池读取数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E3%80%81%E8%AE%BE%E7%BD%AE%E7%BC%93%E5%86%B2%E6%B1%A0%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="nav-number">3.3.</span> <span class="nav-text">查看、设置缓冲池的大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AABuffer-Pool%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.4.</span> <span class="nav-text">多个Buffer Pool实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F"><span class="nav-number">3.5.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-number">4.</span> <span class="nav-text">存储引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB%E5%BC%95%E6%93%8E"><span class="nav-number">4.1.</span> <span class="nav-text">InnoDB引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM%E5%BC%95%E6%93%8E"><span class="nav-number">4.2.</span> <span class="nav-text">MyISAM引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Archive-%E5%BC%95%E6%93%8E"><span class="nav-number">4.3.</span> <span class="nav-text">Archive 引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blackhole-%E5%BC%95%E6%93%8E"><span class="nav-number">4.4.</span> <span class="nav-text">Blackhole 引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSV-%E5%BC%95%E6%93%8E"><span class="nav-number">4.5.</span> <span class="nav-text">CSV 引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory-%E5%BC%95%E6%93%8E"><span class="nav-number">4.6.</span> <span class="nav-text">Memory 引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Federated-%E5%BC%95%E6%93%8E"><span class="nav-number">4.7.</span> <span class="nav-text">Federated 引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Merge-%E5%BC%95%E6%93%8E"><span class="nav-number">4.8.</span> <span class="nav-text">Merge 引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NDB-%E5%BC%95%E6%93%8E"><span class="nav-number">4.9.</span> <span class="nav-text">NDB 引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM%E5%92%8CInnoDB%E5%AF%B9%E6%AF%94"><span class="nav-number">4.10.</span> <span class="nav-text">MyISAM和InnoDB对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">5.</span> <span class="nav-text">索引的数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%8F%8A%E5%85%B6%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">5.1.</span> <span class="nav-text">索引及其优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E7%82%B9"><span class="nav-number">5.1.1.</span> <span class="nav-text">有点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">5.1.2.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB%E7%B4%A2%E5%BC%95%E7%9A%84%E6%8E%A8%E6%BC%94"><span class="nav-number">6.</span> <span class="nav-text">InnoDB索引的推演</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E4%B8%80%E4%B8%AA%E9%A1%B5%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE"><span class="nav-number">6.1.</span> <span class="nav-text">在一个页中的查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%BE%88%E5%A4%9A%E9%A1%B5%E4%B8%AD%E6%9F%A5%E6%89%BE"><span class="nav-number">6.2.</span> <span class="nav-text">在很多页中查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%B4%A2%E5%BC%95%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="nav-number">6.3.</span> <span class="nav-text">简单索引设计方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%8E%92%E5%BA%8F"><span class="nav-number">6.3.1.</span> <span class="nav-text">数据排序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%99%E6%89%80%E6%9C%89%E9%A1%B5%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E7%9B%AE%E5%BD%95%E9%A1%B9"><span class="nav-number">6.3.2.</span> <span class="nav-text">给所有页建立一个目录项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InnoDB%E4%B8%AD%E7%9A%84%E7%B4%A2%E5%BC%95%E6%96%B9%E6%A1%88"><span class="nav-number">6.4.</span> <span class="nav-text">InnoDB中的索引方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E4%B8%80%E6%AC%A1%EF%BC%9A%E7%9B%AE%E5%BD%95%E9%A1%B9%E8%AE%B0%E5%BD%95%E7%9A%84%E9%A1%B5"><span class="nav-number">6.4.1.</span> <span class="nav-text">迭代一次：目录项记录的页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A32%E6%AC%A1%EF%BC%9A%E5%A4%9A%E4%B8%AA%E7%9B%AE%E5%BD%95%E9%A1%B9%E8%AE%B0%E5%BD%95%E7%9A%84%E9%A1%B5"><span class="nav-number">6.4.2.</span> <span class="nav-text">迭代2次：多个目录项记录的页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A33%E6%AC%A1%EF%BC%9A%E7%9B%AE%E5%BD%95%E9%A1%B9%E8%AE%B0%E5%BD%95%E9%A1%B5%E7%9A%84%E7%9B%AE%E5%BD%95%E9%A1%B5"><span class="nav-number">6.4.3.</span> <span class="nav-text">迭代3次：目录项记录页的目录页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-Tree"><span class="nav-number">6.4.4.</span> <span class="nav-text">B+Tree</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">7.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">7.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E7%BA%A7%E7%B4%A2%E5%BC%95"><span class="nav-number">7.2.</span> <span class="nav-text">二级索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E5%B0%8F%E7%BB%93"><span class="nav-number">7.3.</span> <span class="nav-text">聚簇索引和非聚簇小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95"><span class="nav-number">7.4.</span> <span class="nav-text">联合索引</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB%E7%9A%84B-%E6%A0%91%E7%B4%A2%E5%BC%95%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">8.</span> <span class="nav-text">InnoDB的B+树索引注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E9%A1%B5%E9%9D%A2%E6%97%A0%E6%B3%95%E5%8F%98%E5%8A%A8"><span class="nav-number">8.1.</span> <span class="nav-text">根页面无法变动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E8%8A%82%E7%82%B9%E4%B8%AD%E7%9B%AE%E5%BD%95%E9%A1%B9%E8%AE%B0%E5%BD%95%E7%9A%84%E5%94%AF%E4%B8%80%E6%80%A7"><span class="nav-number">8.2.</span> <span class="nav-text">内节点中目录项记录的唯一性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E9%A1%B5%E9%9D%A2%E6%9C%80%E5%B0%91%E5%AD%98%E5%82%A82%E6%9D%A1%E8%AE%B0%E5%BD%95"><span class="nav-number">8.3.</span> <span class="nav-text">一个页面最少存储2条记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#B-%E6%A0%91%E6%9F%A5%E6%89%BE%E8%A1%8C%E8%AE%B0%E5%BD%95%EF%BC%8C%E6%9C%80%E5%A4%9A%E5%8F%AA%E9%9C%80%E8%A6%811-3%E6%AC%A1%E7%A3%81%E7%9B%98I-O"><span class="nav-number">8.3.1.</span> <span class="nav-text">B+树查找行记录，最多只需要1~3次磁盘I&#x2F;O</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyISAM%E7%B4%A2%E5%BC%95%E5%8E%9F%E7%90%86"><span class="nav-number">9.</span> <span class="nav-text">MyISAM索引原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM%E7%B4%A2%E5%BC%95%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">9.1.</span> <span class="nav-text">MyISAM索引的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyISAM%E4%B8%8EInnoDB%E5%AF%B9%E6%AF%94"><span class="nav-number">9.2.</span> <span class="nav-text">MyISAM与InnoDB对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BB%A3%E4%BB%B7"><span class="nav-number">10.</span> <span class="nav-text">索引的代价</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%80%89%E6%8B%A9%E7%9A%84%E5%90%88%E7%90%86%E6%80%A7"><span class="nav-number">11.</span> <span class="nav-text">MySQL数据结构选择的合理性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E8%A1%A8%E9%81%8D%E5%8E%86"><span class="nav-number">11.1.</span> <span class="nav-text">全表遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash%E7%BB%93%E6%9E%84"><span class="nav-number">11.2.</span> <span class="nav-text">Hash结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91"><span class="nav-number">11.3.</span> <span class="nav-text">二叉搜索树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">11.3.1.</span> <span class="nav-text">二叉搜索树的特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E8%A7%84%E5%88%99"><span class="nav-number">11.3.2.</span> <span class="nav-text">查找规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AVL%E6%A0%91"><span class="nav-number">11.4.</span> <span class="nav-text">AVL树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Tree-1"><span class="nav-number">11.5.</span> <span class="nav-text">B-Tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Tree-2"><span class="nav-number">11.6.</span> <span class="nav-text">B+Tree</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="nav-number">12.</span> <span class="nav-text">InnoDB数据存储结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E4%B8%8E%E5%86%85%E5%AD%98%E4%BA%A4%E4%BA%92%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8D%95%E4%BD%8D%EF%BC%9A%E9%A1%B5"><span class="nav-number">12.1.</span> <span class="nav-text">磁盘与内存交互的基本单位：页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B5%E7%BB%93%E6%9E%84%E6%A6%82%E8%BF%B0"><span class="nav-number">12.2.</span> <span class="nav-text">页结构概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B5%E7%9A%84%E5%A4%A7%E5%B0%8F"><span class="nav-number">12.3.</span> <span class="nav-text">页的大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B5%E7%9A%84%E4%B8%8A%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-number">12.4.</span> <span class="nav-text">页的上层结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B5%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="nav-number">12.5.</span> <span class="nav-text">页的内部结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#File-Header%E5%92%8CFile-Trailer"><span class="nav-number">12.5.1.</span> <span class="nav-text">File Header和File Trailer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Free-Space%E3%80%81User-Records%E3%80%81Infimum-Supremum"><span class="nav-number">12.5.2.</span> <span class="nav-text">Free Space、User Records、Infimum+Supremum</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Page-Header%E3%80%81Page-Directory"><span class="nav-number">12.5.3.</span> <span class="nav-text">Page Header、Page Directory</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB%E8%A1%8C%E6%A0%BC%E5%BC%8F%EF%BC%88%E8%AE%B0%E5%BD%95%E6%A0%BC%E5%BC%8F%EF%BC%89"><span class="nav-number">13.</span> <span class="nav-text">InnoDB行格式（记录格式）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Compact"><span class="nav-number">13.1.</span> <span class="nav-text">Compact</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic%E5%92%8CCompressed%E8%A1%8C%E6%A0%BC%E5%BC%8F"><span class="nav-number">13.2.</span> <span class="nav-text">Dynamic和Compressed行格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redundant"><span class="nav-number">13.3.</span> <span class="nav-text">Redundant</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BA%E3%80%81%E6%AE%B5%E4%B8%8E%E7%A2%8E%E7%89%87%E5%8C%BA"><span class="nav-number">14.</span> <span class="nav-text">区、段与碎片区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA"><span class="nav-number">14.1.</span> <span class="nav-text">区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AE%B5"><span class="nav-number">14.2.</span> <span class="nav-text">段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A2%8E%E7%89%87%E5%8C%BA"><span class="nav-number">14.3.</span> <span class="nav-text">碎片区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E7%A9%BA%E9%97%B4"><span class="nav-number">15.</span> <span class="nav-text">表空间</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/4dd2.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MySQL学习笔记架构篇 | 小夜时雨">
+      <meta itemprop="description" content="这是学习MySQL的笔记架构篇，主要是逻辑架构、存储引擎、索引的数据结构">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL学习笔记架构篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-11-12 00:00:00" itemprop="dateCreated datePublished" datetime="2022-11-12T00:00:00+08:00">2022-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-08 17:11:36" itemprop="dateModified" datetime="2023-03-08T17:11:36+08:00">2023-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/4dd2.html" class="post-meta-item leancloud_visitors" data-flag-title="MySQL学习笔记架构篇" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/4dd2.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/4dd2.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">这是学习MySQL的笔记架构篇，主要是逻辑架构、存储引擎、索引的数据结构</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="MySQL逻辑架构"><a href="#MySQL逻辑架构" class="headerlink" title="MySQL逻辑架构"></a>MySQL逻辑架构</h2><p>MySQL是一个<code>C/S</code>架构，客户端向服务端发送一段SQL语句，服务端处理后，返回给客户端处理结果。</p>
+<p><em>针对MySQL 5版本。图中包含了MySQL 8已经抛弃的查询缓存。</em></p>
+<p>服务端处理客户端请求流程：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112122337220.png" alt="image-20221112122337220"></p>
+<p>具体展开：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112122405043.png" alt=" "></p>
+<p><code>Connectors</code>：客户端程序</p>
+<p><code>Management Services &amp; Utilities</code>：基础服务组件</p>
+<p><code>Connection Pool</code>：连接池，提供多个客户端与服务端交互的线程</p>
+<p><code>SQL Interface</code>：SQL接口，接收SQL指令，返回查询结果</p>
+<p><code>Parser</code>：解析器，解析SQL指令，语法解析、语义解析，生成语法树</p>
+<p><code>Optimizer</code>：优化器，对SQL语句进行优化，SQL核心组件</p>
+<p><code>Caches &amp; Buffers</code>：查询缓存，以key-value的方式缓存查询结果（由于数据会变化，实际命中缓存概率低，MySQL 8版本去掉了）</p>
+<p><code>Pluggable Storage Engines</code>：插入式的存储引擎</p>
+<p><code>File system</code>：文件系统，存储引擎与文件系统进行交互</p>
+<p><code>Files &amp; Logs</code>：日志文件</p>
+<h3 id="MySQL-Server三层架构"><a href="#MySQL-Server三层架构" class="headerlink" title="MySQL Server三层架构"></a>MySQL Server三层架构</h3><h4 id="连接层"><a href="#连接层" class="headerlink" title="连接层"></a>连接层</h4><p>客户端与服务端建立TCP连接，为了解决TCP无限创建与TCP频繁创建、销毁带来的资源耗尽、性能下降问题，MySQL服务器有<strong>TCP连接池</strong>限制连接数，采用<strong>长连接模式</strong>复用TCP连接，来解决上述问题。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112123841729.png" alt="image-20221112123841729"></p>
+<p>TCP连接收到请求后，必须要分配一个线程专门与这个客户端交互，所以还会有个线程池，每一个连接从线程池中获取线程，省去了创建和销毁线程的开销。</p>
+<p>连接管理的职责是负责认证、管理连接、获取权限信息。</p>
+<h4 id="服务层"><a href="#服务层" class="headerlink" title="服务层"></a>服务层</h4><p>服务器会解析查询并创建相应的内部解析树，并对其完成相应的优化，如确定查询表的顺序，是否利用索引等，最后生成相应的执行操作。</p>
+<p>主要包含<code>SQL Interface</code>，<code>Parser</code>，<code>Optimizer，</code>Caches &amp; Buffers&#96;。</p>
+<h4 id="引擎层"><a href="#引擎层" class="headerlink" title="引擎层"></a>引擎层</h4><p>插件式的存储引擎架构将查询处理和其他的系统任务以及数据的存储提取相分离，可以根据业务的需求和实际需要选择合适的存储引擎。</p>
+<p>插件式存储引擎层，<strong>真正的负责了MySQL中数据的存储和提取，对物理服务器级别维护的底层数据执行操作</strong>，服务器通过API与存储引擎进行通信。不同的存储引擎具有的功能不同。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> ENGINES;</span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line"><span class="operator">|</span> Engine             <span class="operator">|</span> Support <span class="operator">|</span> Comment                                                        <span class="operator">|</span> Transactions <span class="operator">|</span> XA   <span class="operator">|</span> Savepoints <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line"><span class="operator">|</span> ndbcluster         <span class="operator">|</span> <span class="keyword">NO</span>      <span class="operator">|</span> Clustered, fault<span class="operator">-</span>tolerant tables                               <span class="operator">|</span> <span class="keyword">NULL</span>         <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span> <span class="keyword">NULL</span>       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> FEDERATED          <span class="operator">|</span> <span class="keyword">NO</span>      <span class="operator">|</span> Federated MySQL storage engine                                 <span class="operator">|</span> <span class="keyword">NULL</span>         <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span> <span class="keyword">NULL</span>       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> MEMORY             <span class="operator">|</span> YES     <span class="operator">|</span> Hash based, stored <span class="keyword">in</span> memory, useful <span class="keyword">for</span> temporary tables      <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> InnoDB             <span class="operator">|</span> <span class="keyword">DEFAULT</span> <span class="operator">|</span> Supports transactions, <span class="type">row</span><span class="operator">-</span>level locking, <span class="keyword">and</span> <span class="keyword">foreign</span> keys     <span class="operator">|</span> YES          <span class="operator">|</span> YES  <span class="operator">|</span> YES        <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> PERFORMANCE_SCHEMA <span class="operator">|</span> YES     <span class="operator">|</span> Performance Schema                                             <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> MyISAM             <span class="operator">|</span> YES     <span class="operator">|</span> MyISAM storage engine                                          <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> ndbinfo            <span class="operator">|</span> <span class="keyword">NO</span>      <span class="operator">|</span> MySQL Cluster <span class="keyword">system</span> information storage engine                <span class="operator">|</span> <span class="keyword">NULL</span>         <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span> <span class="keyword">NULL</span>       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> MRG_MYISAM         <span class="operator">|</span> YES     <span class="operator">|</span> Collection <span class="keyword">of</span> identical MyISAM tables                          <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> BLACKHOLE          <span class="operator">|</span> YES     <span class="operator">|</span> <span class="operator">/</span>dev<span class="operator">/</span><span class="keyword">null</span> storage engine (anything you write <span class="keyword">to</span> it disappears) <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> CSV                <span class="operator">|</span> YES     <span class="operator">|</span> CSV storage engine                                             <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> ARCHIVE            <span class="operator">|</span> YES     <span class="operator">|</span> Archive storage engine                                         <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line"><span class="number">11</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.02</span> sec)</span><br></pre></td></tr></table></figure>
+
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>简化后</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112124617740.png" alt="image-20221112124617740"></p>
+<ol>
+<li>连接层：客户端和服务端建立连接，客户端发送SQL至服务器端；</li>
+<li>SQL层：对SQL语句进行查询处理；与数据库文件的存储方式无关；</li>
+<li>存储引擎层：与数据库文件打交道，负责数据的存储和读取</li>
+</ol>
+<h2 id="SQL执行流程"><a href="#SQL执行流程" class="headerlink" title="SQL执行流程"></a>SQL执行流程</h2><p>执行流程</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112124803162.png" alt="image-20221112124803162"></p>
+<p>MySQL查询流程：</p>
+<ol>
+<li><p>查询缓存：如果Server在查询缓存中发现了同样的一条SQL语句，就会直接将结果返回给客户端；如果没有，就进入解析器阶段。因为查询缓存效率不高（1、如果查询字段更新，2、带有一些函数，类似<code>now()</code>，都无法命中。另外，当更新、插入等操作修改数据，让查询缓存失效，此时对于数据库会有性能损耗，因此弊大于利），在MySQL 8.0之后就抛弃了这个功能。</p>
+</li>
+<li><p>解析器：对SQL语句做解析。</p>
+<p>SQL语句的解析分为此法分析和语法分析。</p>
+<p>首先做<strong>词法分析</strong>，识别SQL中的字符串分别是什么，代表什么</p>
+<p>接着做<strong>语法分析</strong>，根据词法分析的结果，<strong>语法分析器</strong>（比如<code>Sison</code>）会根据语法规则，判断你输入的这个SQL语句是否满足MySQL语法。</p>
+<p>语法树：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112223544373.png" alt="image-20221112223544373"></p>
+<p>SQL词法分析的过程步骤：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112223655736.png" alt="image-20221112223655736"></p>
+</li>
+<li><p>优化器：确定SQL语句的执行路径，比如是根据<strong>全表检索</strong>，还是根据<strong>索引检索</strong>等，优化器最终会生成一个执行计划。</p>
+<p>一条查询可以有很多种执行方式，最后都返回相同的结果。优化器的作用就是找出最好的执行计划。</p>
+<p>查询优化器分为物理查询优化器和逻辑查询优化器。</p>
+</li>
+<li><p>执行器：在执行之前需要判断该用户是否具备权限。如果没有就返回权限错误，如果具备权限，就执行优化器生成的执行计划。8.0版本以下，如果设置了查询缓存，则也会将查询语句和结果存储到缓存中。</p>
+</li>
+</ol>
+<p>SQL语句在MySQL中的流程是：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112224227279.png" alt="image-20221112224227279"></p>
+<h3 id="SQL执行原理"><a href="#SQL执行原理" class="headerlink" title="SQL执行原理"></a>SQL执行原理</h3><p>针对MySQL 8.0版本。</p>
+<ol>
+<li><p>查看是否开启计划，开启时，手机SQL执行时所使用的资源情况</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看记录过程是否开启</span></span><br><span class="line"><span class="comment">-- 0 代表没有开启，1代表开启</span></span><br><span class="line"><span class="keyword">SELECT</span> @<span class="variable">@profiling</span>;</span><br><span class="line"><span class="comment">-- 或者查看会话配置</span></span><br><span class="line"><span class="keyword">SELECT</span> @<span class="variable">@session</span>.profiling;</span><br><span class="line"><span class="comment">-- 临时修改，永久修改需要修改配置文件 /etc/my.cnf</span></span><br><span class="line"><span class="keyword">SET</span> @<span class="variable">@profiling</span><span class="operator">=</span><span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>使用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 使用分析</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employee;</span><br><span class="line"><span class="comment">-- 查看所有查询的资源使用情况</span></span><br><span class="line"><span class="keyword">SHOW</span> PROFILES;</span><br><span class="line"><span class="comment">-- 查看最近一次</span></span><br><span class="line"><span class="keyword">SHOW</span> PROFILE;</span><br><span class="line"><span class="keyword">SHOW</span> PROFILE <span class="keyword">FOR</span> QUERY <span class="number">92</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------------------+----------+</span></span><br><span class="line"><span class="operator">|</span> Status                         <span class="operator">|</span> Duration <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------------------+----------+</span></span><br><span class="line"><span class="operator">|</span> starting                       <span class="operator">|</span> <span class="number">0.000090</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> Executing hook <span class="keyword">on</span> transaction  <span class="operator">|</span> <span class="number">0.000005</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> starting                       <span class="operator">|</span> <span class="number">0.000010</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> checking permissions           <span class="operator">|</span> <span class="number">0.000008</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> Opening tables                 <span class="operator">|</span> <span class="number">0.000049</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> init                           <span class="operator">|</span> <span class="number">0.000008</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">System</span> lock                    <span class="operator">|</span> <span class="number">0.000011</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> optimizing                     <span class="operator">|</span> <span class="number">0.000006</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> statistics                     <span class="operator">|</span> <span class="number">0.000024</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> preparing                      <span class="operator">|</span> <span class="number">0.000128</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> executing                      <span class="operator">|</span> <span class="number">0.000086</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">end</span>                            <span class="operator">|</span> <span class="number">0.000006</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> query <span class="keyword">end</span>                      <span class="operator">|</span> <span class="number">0.000005</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> waiting <span class="keyword">for</span> handler <span class="keyword">commit</span>     <span class="operator">|</span> <span class="number">0.000012</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> closing tables                 <span class="operator">|</span> <span class="number">0.000010</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> freeing items                  <span class="operator">|</span> <span class="number">0.000093</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> cleaning up                    <span class="operator">|</span> <span class="number">0.000024</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------------------+----------+</span></span><br><span class="line"><span class="number">17</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span>, <span class="number">1</span> warning (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p>还可以增加更多资源，以便查看</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看CPU时间，阻塞时间</span></span><br><span class="line"><span class="keyword">SHOW</span> PROFILE cpu,block io <span class="keyword">FOR</span> QUERY <span class="number">2</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------------------+----------+----------+------------+--------------+---------------+</span></span><br><span class="line"><span class="operator">|</span> Status                         <span class="operator">|</span> Duration <span class="operator">|</span> CPU_user <span class="operator">|</span> CPU_system <span class="operator">|</span> Block_ops_in <span class="operator">|</span> Block_ops_out <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------------------+----------+----------+------------+--------------+---------------+</span></span><br><span class="line"><span class="operator">|</span> starting                       <span class="operator">|</span> <span class="number">0.000090</span> <span class="operator">|</span> <span class="number">0.000046</span> <span class="operator">|</span>   <span class="number">0.000043</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> Executing hook <span class="keyword">on</span> transaction  <span class="operator">|</span> <span class="number">0.000005</span> <span class="operator">|</span> <span class="number">0.000003</span> <span class="operator">|</span>   <span class="number">0.000002</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> starting                       <span class="operator">|</span> <span class="number">0.000010</span> <span class="operator">|</span> <span class="number">0.000005</span> <span class="operator">|</span>   <span class="number">0.000004</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> checking permissions           <span class="operator">|</span> <span class="number">0.000008</span> <span class="operator">|</span> <span class="number">0.000004</span> <span class="operator">|</span>   <span class="number">0.000004</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> Opening tables                 <span class="operator">|</span> <span class="number">0.000049</span> <span class="operator">|</span> <span class="number">0.000025</span> <span class="operator">|</span>   <span class="number">0.000024</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> init                           <span class="operator">|</span> <span class="number">0.000008</span> <span class="operator">|</span> <span class="number">0.000004</span> <span class="operator">|</span>   <span class="number">0.000004</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">System</span> lock                    <span class="operator">|</span> <span class="number">0.000011</span> <span class="operator">|</span> <span class="number">0.000006</span> <span class="operator">|</span>   <span class="number">0.000005</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> optimizing                     <span class="operator">|</span> <span class="number">0.000006</span> <span class="operator">|</span> <span class="number">0.000003</span> <span class="operator">|</span>   <span class="number">0.000003</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> statistics                     <span class="operator">|</span> <span class="number">0.000024</span> <span class="operator">|</span> <span class="number">0.000013</span> <span class="operator">|</span>   <span class="number">0.000011</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> preparing                      <span class="operator">|</span> <span class="number">0.000128</span> <span class="operator">|</span> <span class="number">0.000128</span> <span class="operator">|</span>   <span class="number">0.000000</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> executing                      <span class="operator">|</span> <span class="number">0.000086</span> <span class="operator">|</span> <span class="number">0.000086</span> <span class="operator">|</span>   <span class="number">0.000000</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">end</span>                            <span class="operator">|</span> <span class="number">0.000006</span> <span class="operator">|</span> <span class="number">0.000006</span> <span class="operator">|</span>   <span class="number">0.000000</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> query <span class="keyword">end</span>                      <span class="operator">|</span> <span class="number">0.000005</span> <span class="operator">|</span> <span class="number">0.000005</span> <span class="operator">|</span>   <span class="number">0.000000</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> waiting <span class="keyword">for</span> handler <span class="keyword">commit</span>     <span class="operator">|</span> <span class="number">0.000012</span> <span class="operator">|</span> <span class="number">0.000012</span> <span class="operator">|</span>   <span class="number">0.000000</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> closing tables                 <span class="operator">|</span> <span class="number">0.000010</span> <span class="operator">|</span> <span class="number">0.000010</span> <span class="operator">|</span>   <span class="number">0.000000</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> freeing items                  <span class="operator">|</span> <span class="number">0.000093</span> <span class="operator">|</span> <span class="number">0.000093</span> <span class="operator">|</span>   <span class="number">0.000000</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> cleaning up                    <span class="operator">|</span> <span class="number">0.000024</span> <span class="operator">|</span> <span class="number">0.000025</span> <span class="operator">|</span>   <span class="number">0.000000</span> <span class="operator">|</span>            <span class="number">0</span> <span class="operator">|</span>             <span class="number">0</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------------------+----------+----------+------------+--------------+---------------+</span></span><br><span class="line"><span class="number">17</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span>, <span class="number">1</span> warning (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="数据库缓冲池"><a href="#数据库缓冲池" class="headerlink" title="数据库缓冲池"></a>数据库缓冲池</h2><p><code>InnoDB</code>存储引擎是以页为单位来管理存储空间的，为了让数据表或者索引中的数据随时被使用，DBMS会申请<strong>占用内存来作为数据缓冲池</strong>，在真正访问呢页面之前，需要把磁盘上的页缓存到内存中的<code>Buffer Pool</code>之后才可以访问。减少与磁盘直接进行<code>I/O</code>的时间，提升SQL语句的查询性能。</p>
+<h3 id="缓冲池"><a href="#缓冲池" class="headerlink" title="缓冲池"></a>缓冲池</h3><p>InnoDB的缓冲池存放信息如下：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112230501414.png" alt="image-20221112230501414"></p>
+<p><strong>缓存原则</strong>：</p>
+<p>依据<code>位置 * 频次</code>这个原则</p>
+<ul>
+<li>位置：决定效率，提供缓冲池就是为了在内存中可以直接访问数据</li>
+<li>频次：决定优先级顺序，磁盘中的部分数据才会缓存，会优先对使用频次高的热数据进行加载</li>
+</ul>
+<p><strong>缓冲池的预读特性</strong>：</p>
+<p>缓存一些数据时，会遵循局部性原理，<strong>大概率还会使用它周围的一些数据</strong>，因此采用预读的机制提前加载，减少未来可能得磁盘<code>I/O</code>操作。</p>
+<h3 id="缓冲池读取数据"><a href="#缓冲池读取数据" class="headerlink" title="缓冲池读取数据"></a>缓冲池读取数据</h3><p>缓冲池读取诗句的结构图如下：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112230927518.png" alt="image-20221112230927518"></p>
+<p>对数据库中的记录进行修改的时候，首先会修改缓冲池页面里的记录信息，然后数据库会以<strong>一定的频率</strong>刷新到磁盘上，采用一种叫做<code>checkpoint的机制</code>将数据回写到磁盘上。</p>
+<p>比如当缓冲池不够用时，需要释放一些不常用的页，此时就可以强行采用<code>checkpoint</code>的方式，将不常用的<strong>脏页</strong>回写到磁盘上，然后从缓冲池将这些页释放掉。这里的脏页指的是缓冲池中被修改过的页，与磁盘上的数据页不一致。</p>
+<h3 id="查看、设置缓冲池的大小"><a href="#查看、设置缓冲池的大小" class="headerlink" title="查看、设置缓冲池的大小"></a>查看、设置缓冲池的大小</h3><p><code>MyISAM</code>存储引擎，只缓存索引，不缓存数据，对应的键缓存参数为 <code>key_buffer_size</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%key_buffer_size%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------+---------+</span></span><br><span class="line"><span class="operator">|</span> Variable_name   <span class="operator">|</span> <span class="keyword">Value</span>   <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------+---------+</span></span><br><span class="line"><span class="operator">|</span> key_buffer_size <span class="operator">|</span> <span class="number">8388608</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------+---------+</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p><code>InnoDB</code>存储引擎，通过 <code>innodb_buffer_pool_size</code> 变量查看缓冲池的大小</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看缓存大小</span></span><br><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%innodb_buffer_pool_size%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------+-----------+</span></span><br><span class="line"><span class="operator">|</span> Variable_name           <span class="operator">|</span> <span class="keyword">Value</span>     <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------+-----------+</span></span><br><span class="line"><span class="operator">|</span> innodb_buffer_pool_size <span class="operator">|</span> <span class="number">134217728</span> <span class="operator">|</span>   <span class="comment">-- 128M</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------+-----------+</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br><span class="line"><span class="comment">-- 修改缓存大小</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> innodb_buffer_pool_size <span class="operator">=</span> <span class="number">134217728</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="多个Buffer-Pool实例"><a href="#多个Buffer-Pool实例" class="headerlink" title="多个Buffer Pool实例"></a>多个Buffer Pool实例</h3><p><code>Buffer Pool</code>缓冲池本质是<code>InnoDB</code>向操作系统申请的一块连续的内存空间，多线程环境下，访问<code>Buffer Pool</code>需要加锁。在多线程高并发时，单一的<code>Buffer Pool</code>会造成性能瓶颈，因此<code>Buffer Pool</code>特别大时，可以把他们拆分成若干个小的<code>Buffer Pool</code>，每个<code>Buffer Pool</code>称为一个实例，有独立的内存空间，独立的管理各种链表。</p>
+<p>通过修改配置文件中的<code>innodb_buffer_pool_instances</code>的值修改<code>Buffer Pool</code>个数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%innodb_buffer_pool_instances%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">------------------------------+-------+</span></span><br><span class="line"><span class="operator">|</span> Variable_name                <span class="operator">|</span> <span class="keyword">Value</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------------------------------+-------+</span></span><br><span class="line"><span class="operator">|</span> innodb_buffer_pool_instances <span class="operator">|</span> <span class="number">1</span>     <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------------------------------+-------+</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p>缓冲池总容量不变，设置之后，每个<code>Buffer Pool</code>带下平摊。</p>
+<p><code>Buffer Pool</code>实例不是越多越好，分别管理各个<code>Buffer Pool</code>也是需要性能开销的。</p>
+<p><code>InnoDB</code>规定：当 <code>innodb_buffer_pooLsize</code>的值小于<strong>1G</strong>的时候设置多个实例是无效的，<code>InnoDB</code>会默认把<code>innodb_buffer_poolinstances</code> 的值修改为1。而我们鼓励在<code>Buffer Pool</code>大于或等于<strong>1G</strong>的时候设置多个<code>Buffer Pool</code>实例。</p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ol>
+<li>查询数据时，会先在缓冲池查询，如果缓冲池不存在，则存储引擎会先将数据从磁盘加载到缓冲池中，然后将数据返回给客户端。</li>
+<li>修改数据时，如果数据不在缓冲池，则存储引擎会先将数据从磁盘加载到缓冲池中，修改内存的数据。被修改后的数据会在之后统一输入磁盘</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221112232526729.png" alt="image-20221112232526729"></p>
+<p>也就是说，如果缓冲池数据修改成功，但是没来得及刷盘，此时如果MySQL宕机，这部分数据将永久丢失。或者在事务操作时，部分事务落盘，部分事务没有落盘，此时MySQL宕机，无法保持事务的<code>ACID</code>。</p>
+<p>因此需要通过<code>Redo Log</code> 和 <code>Undo Log</code>解决上述两个问题。</p>
+<h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p>存储引擎的功能是存取数据，按照生成的执行计划调用底层存储引擎提供的API。其实存储引擎就是指<strong>表的类型</strong>，数据的存储方式。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> ENGINES;</span><br><span class="line"><span class="comment">-- 引擎 							是否支持		描述																														是否支持事务			是否支持分布式事务  检查点</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line"><span class="operator">|</span> Engine             <span class="operator">|</span> Support <span class="operator">|</span> Comment                                                        <span class="operator">|</span> Transactions <span class="operator">|</span> XA   <span class="operator">|</span> Savepoints <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line"><span class="operator">|</span> ndbcluster         <span class="operator">|</span> <span class="keyword">NO</span>      <span class="operator">|</span> Clustered, fault<span class="operator">-</span>tolerant tables                               <span class="operator">|</span> <span class="keyword">NULL</span>         <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span> <span class="keyword">NULL</span>       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> FEDERATED          <span class="operator">|</span> <span class="keyword">NO</span>      <span class="operator">|</span> Federated MySQL storage engine                                 <span class="operator">|</span> <span class="keyword">NULL</span>         <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span> <span class="keyword">NULL</span>       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> MEMORY             <span class="operator">|</span> YES     <span class="operator">|</span> Hash based, stored <span class="keyword">in</span> memory, useful <span class="keyword">for</span> temporary tables      <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> InnoDB             <span class="operator">|</span> <span class="keyword">DEFAULT</span> <span class="operator">|</span> Supports transactions, <span class="type">row</span><span class="operator">-</span>level locking, <span class="keyword">and</span> <span class="keyword">foreign</span> keys     <span class="operator">|</span> YES          <span class="operator">|</span> YES  <span class="operator">|</span> YES        <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> PERFORMANCE_SCHEMA <span class="operator">|</span> YES     <span class="operator">|</span> Performance Schema                                             <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> MyISAM             <span class="operator">|</span> YES     <span class="operator">|</span> MyISAM storage engine                                          <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> ndbinfo            <span class="operator">|</span> <span class="keyword">NO</span>      <span class="operator">|</span> MySQL Cluster <span class="keyword">system</span> information storage engine                <span class="operator">|</span> <span class="keyword">NULL</span>         <span class="operator">|</span> <span class="keyword">NULL</span> <span class="operator">|</span> <span class="keyword">NULL</span>       <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> MRG_MYISAM         <span class="operator">|</span> YES     <span class="operator">|</span> Collection <span class="keyword">of</span> identical MyISAM tables                          <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> BLACKHOLE          <span class="operator">|</span> YES     <span class="operator">|</span> <span class="operator">/</span>dev<span class="operator">/</span><span class="keyword">null</span> storage engine (anything you write <span class="keyword">to</span> it disappears) <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> CSV                <span class="operator">|</span> YES     <span class="operator">|</span> CSV storage engine                                             <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">|</span> ARCHIVE            <span class="operator">|</span> YES     <span class="operator">|</span> Archive storage engine                                         <span class="operator">|</span> <span class="keyword">NO</span>           <span class="operator">|</span> <span class="keyword">NO</span>   <span class="operator">|</span> <span class="keyword">NO</span>         <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">--------------------+---------+----------------------------------------------------------------+--------------+------+------------+</span></span><br><span class="line"><span class="number">11</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.02</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p>查看默认存储引擎。5.5版本默认使用<code>MyISAM</code>，之后默认存储引擎改成<code>InnoDB</code>。创建表时没有指定存储引擎，则使用默认存储引擎。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看默认存储引擎</span></span><br><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%storage_engine%&#x27;</span>;</span><br><span class="line"><span class="comment">-- 或者</span></span><br><span class="line"><span class="keyword">SELECT</span> @<span class="variable">@default</span>_storage_engine;</span><br></pre></td></tr></table></figure>
+
+<p>修改默认存储引擎</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 临时修改</span></span><br><span class="line"><span class="keyword">SET</span> default_storage_engine<span class="operator">=</span>MyISAM;</span><br><span class="line"><span class="comment">-- 或者永久修改，修改 /etc/my.cnf 配置文件 </span></span><br></pre></td></tr></table></figure>
+
+<p>创建表时指定存储引擎</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> test1(id <span class="type">INT</span>) ENGINE<span class="operator">=</span>MyISAM;</span><br></pre></td></tr></table></figure>
+
+<h3 id="InnoDB引擎"><a href="#InnoDB引擎" class="headerlink" title="InnoDB引擎"></a><code>InnoDB</code>引擎</h3><p>具备外键支持功能的事务存储引擎</p>
+<ul>
+<li><p>MySQL 版本大于5.5之后，默认采用<code>InnoDB</code>引擎</p>
+</li>
+<li><p><code>InnoDB</code>是MySQL的默认事务型引擎，用来处理大量的短期（<code>short-lived</code>）事务，可以确保事务的完整提交(<code>commit</code>)和回滚(<code>rollback</code>)</p>
+</li>
+<li><p>相比更新、删除操作，<code>InnoDB</code>更有优势（<code>MyISAM</code>在增加和查询更有优势）</p>
+</li>
+<li><p>数据文件结构</p>
+<p><code>表名.frm</code> 存储表结构（MySQL 8.0时，合并到<code>表名.ibd</code>中）</p>
+<p><code>表名.ibd</code> 存储数据和索引</p>
+</li>
+<li><p><code>InnoDB</code>是为处理巨大数据量的最大性能设计</p>
+</li>
+</ul>
+<p>  在以前的版本中，字典数据以元数据文件、非事务表来存储，现在这些元数据文件被删除了</p>
+<ul>
+<li>相比<code>MyISAM</code>，<code>InnoDB</code>写的处理效率差一些，并且会占用更多的磁盘空间以保存数据和索引</li>
+<li>相比<code>MyISAM</code>只缓存索引，<code>InnoDB</code>缓存索引和真实数据，对内存要求高，而且内存大小对性能有决定性的影响</li>
+</ul>
+<h3 id="MyISAM引擎"><a href="#MyISAM引擎" class="headerlink" title="MyISAM引擎"></a><code>MyISAM</code>引擎</h3><p>主要的非事务处理存储引擎。</p>
+<ul>
+<li><p><code>MyISAM</code>提供了大量的特性，包括全文索引、压缩、空间函数（<code>GIS</code>）等，但<code>MyISAM</code>不支持事务，行级锁，外键，以及没有<code>undo</code>日志和<code>redo</code>日志，可能出现崩溃后无法安全恢复</p>
+</li>
+<li><p>MySQL 5.5之前默认的存储引擎</p>
+</li>
+<li><p>优势是访问速度快，在<code>select</code>和<code>insert</code>下性能更高</p>
+</li>
+<li><p>针对数据统计有额外的常数存储，<code>count(*)</code>查询效率很高</p>
+</li>
+<li><p>数据文件结构</p>
+<ul>
+<li><code>表名.frm</code> 存储表结构</li>
+<li><code>表名.MYD</code> 存储数据 <code>MYData</code></li>
+<li><code>表名.MYI</code> 存储索引 <code>MYIndex</code></li>
+</ul>
+</li>
+<li><p>应用场景：只读应用或者以读为主的业务</p>
+</li>
+</ul>
+<h3 id="Archive-引擎"><a href="#Archive-引擎" class="headerlink" title="Archive 引擎"></a><code>Archive</code> 引擎</h3><p>用于数据存档</p>
+<ul>
+<li>仅支持插入和查询（行被插入后不能再修改）</li>
+<li>在MySQL 5.5以后支持<code>索引</code>功能</li>
+<li>拥有很好的压缩机制，使用<code>zlib压缩库</code>，在记录请求的时候实时进行压缩，经常被用来作为仓库使用</li>
+<li>创建<code>Archive</code>表时，存储引擎会创建名称以表名开头的文件，数据文件的扩展名为.ARZ</li>
+<li>根据英文的测试结果来看，同样的数据量下，<code>Archive</code>表比<code>MyISAM</code>表小大约75%，比支持事务处理的<code>InnoDB</code>表小大约83%</li>
+<li><code>Archive</code>存储引擎采用了行级锁，支持<code>auto_increment</code>列属性，<code>auto_increment</code>列可以具有唯一索引或非唯一索引，尝试在任何其他列上创建索引会导致错误</li>
+<li><code>Archive</code>表适合日志和数据采集（档案）类应用；<strong>合适存储大量的独立的座位历史记录的数据</strong>。拥有很高的插入速度，但是对查询的支持较差。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>支持</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B树索引</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>备份&#x2F;时间点恢复（在服务器中实现，而不是在存储引擎中）</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>集群数据库支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>聚集索引</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>压缩数据</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>数据缓存</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>加密数据（加密功能在服务器中实现）</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>外键支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>全文检索索引</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>地理空间数据类型支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>地理空间索引支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>哈希索引</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>锁粒度</td>
+<td>行锁</td>
+</tr>
+<tr>
+<td><code>MVCC</code></td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>存储限制</td>
+<td>没有任何限制</td>
+</tr>
+<tr>
+<td>交易</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>更新数据字典的统计信息</td>
+<td>支持</td>
+</tr>
+</tbody></table>
+<h3 id="Blackhole-引擎"><a href="#Blackhole-引擎" class="headerlink" title="Blackhole 引擎"></a><code>Blackhole</code> 引擎</h3><p>丢弃写操作，读操作会返回空内容。</p>
+<ul>
+<li><code>Blackhole</code> 引擎没有实现任何存储机制，会丢弃所有插入的数据，不做任何保存</li>
+<li>服务器会记录<code>Blackhole</code>表的日志，可以用于复制数据到备库，或者简单的记录日志，这种应用方式会碰到很多问题，因此并不推荐。</li>
+</ul>
+<h3 id="CSV-引擎"><a href="#CSV-引擎" class="headerlink" title="CSV 引擎"></a><code>CSV</code> 引擎</h3><p>存储数据时，以逗号分隔各个数据项。</p>
+<ul>
+<li><code>CSV</code>引擎可以将普通的<code>CSV</code>文件作为MySQL的表来处理，但不支持索引</li>
+<li><code>CSV</code>引擎可以作为一种数据交换的机制，非常有用</li>
+<li><code>CSV</code>存储的数据直接可以在操作系统里，用文本编辑器，或者<code>excel</code>读取</li>
+<li>对于数据的快速导入、导出有明显优势</li>
+</ul>
+<p>创建<code>CSV</code>表时，服务器会创建一个纯文本数据文件，名称以表名开头并带有<code>.CSV</code>扩展名。当数据存储到表中时，存储引擎将其以逗号分隔值格式保存到数据文件中。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建CSV表 </span></span><br><span class="line"><span class="comment">-- 所有字段都不能为空 </span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> csv_demo(id <span class="type">INT</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span>,name <span class="type">CHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>) ENGINE<span class="operator">=</span>csv;</span><br><span class="line"><span class="comment">-- 插入数据 </span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> csv_demo <span class="keyword">VALUES</span>(<span class="number">1</span>,<span class="string">&#x27;mitaka&#x27;</span>),(<span class="number">2</span>,<span class="string">&#x27;xiaoyeshiyu&#x27;</span>);</span><br><span class="line"><span class="comment">-- 获取数据</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> csv_demo;</span><br></pre></td></tr></table></figure>
+
+<p>查看文件信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">-rw-r-----  1 mysql mysql 2.4K Nov 13 05:31 csv_demo_542.sdi</span><br><span class="line">drwxr-x---  2 mysql mysql 4.0K Nov 13 05:31 .</span><br><span class="line">-rw-r-----  1 mysql mysql   27 Nov 13 05:32 csv_demo.CSV</span><br><span class="line">-rw-r-----  1 mysql mysql   35 Nov 13 05:32 csv_demo.CSM</span><br><span class="line"></span><br><span class="line">cat csv_demo.CSV</span><br><span class="line">1,&quot;mitaka&quot;</span><br><span class="line">2,&quot;xiaoyeshiyu&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Memory-引擎"><a href="#Memory-引擎" class="headerlink" title="Memory 引擎"></a><code>Memory</code> 引擎</h3><p>置于内存的表。</p>
+<p><code>Memory</code>采用的逻辑介质是<strong>内存</strong>，<strong>响应速度很快</strong>，但是当<code>mysqld</code>守护<strong>进程崩溃的时候数据会丢失</strong>。另外，要求存储的数据时数据长度不变的格式，比如，<code>Blob</code>和<code>text</code>类型的数据不可用（长度不固定）。</p>
+<p>主要特征：</p>
+<ul>
+<li><p><code>Memory</code>同时支持<strong>哈希（HASH）索引</strong>和<strong>B+树索引</strong></p>
+<ul>
+<li>哈希索引相等的比较快，但是对于范围的比较慢很多</li>
+<li><strong>默认使用哈希索引</strong>，速度比使用<code>B+</code>树快</li>
+<li>如果要使用<code>B+</code>树，可以创建索引时选择使用</li>
+</ul>
+</li>
+<li><p><code>Memory</code>表至少比<code>MyISAM</code>表要快一个数量级</p>
+</li>
+<li><p><code>Memory</code>表的大小<strong>受到限制</strong>，表的大小主要取决于两个参数，分别是<code>max_rows</code>和<code>max_heap_table_size</code>。其中<code>max_rows</code>可以在创建表时指定；<code>max_heap_table_size</code>默认16MB，可以根据需要扩大</p>
+</li>
+<li><p>数据文件与索引文件分开存储</p>
+<ul>
+<li>每个基于<code>Memory</code>存储引擎的表实际对应一个磁盘文件，该文件的文件名与表名相同，类型为**<code>frm</code>类型**，该文件中只存储表的结构，而其数据文件都是存储在内存中的。</li>
+<li>有利于数据的快速处理，提供整个表的处理效率</li>
+</ul>
+</li>
+<li><p>缺点是数据容易丢失，生命周期短。</p>
+</li>
+</ul>
+<p>使用场景：</p>
+<ul>
+<li>数据比较小，而且频繁的进行访问，在内存中存放数据，数据量受限于内存。</li>
+<li>如果数据是临时的，而且必须立即可用，那么就可以放在内存中</li>
+<li>数据丢失影响不大</li>
+</ul>
+<h3 id="Federated-引擎"><a href="#Federated-引擎" class="headerlink" title="Federated 引擎"></a><code>Federated</code> 引擎</h3><p>访问远程表，是访问其他<code>MySQL</code>服务器的一个代理，尽管该引擎看起来提供了一种很好的跨服务器的灵活性，但经常带来问题，因此默认禁用。</p>
+<h3 id="Merge-引擎"><a href="#Merge-引擎" class="headerlink" title="Merge 引擎"></a><code>Merge</code> 引擎</h3><p>管理多个<code>MyISAM</code>表构成的表集合</p>
+<h3 id="NDB-引擎"><a href="#NDB-引擎" class="headerlink" title="NDB 引擎"></a><code>NDB</code> 引擎</h3><p>MySQL集群专用存储引擎，也叫做<code>NDB Cluster</code>存储引擎，主要用于<code>MySQL Cluster</code> 分布式存储环境。</p>
+<h3 id="MyISAM和InnoDB对比"><a href="#MyISAM和InnoDB对比" class="headerlink" title="MyISAM和InnoDB对比"></a><code>MyISAM</code>和<code>InnoDB</code>对比</h3><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>MyISAM</th>
+<th>InnoDB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>外键</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>事务</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>行表锁</td>
+<td>表锁，即使操作一条记录也会锁住整个表，不适合高并发的操作</td>
+<td>行锁，操作时只锁某一行，不影响其他行，适合高并发的操作</td>
+</tr>
+<tr>
+<td>缓存</td>
+<td>只缓存索引，不缓存真实数据</td>
+<td>缓存数据和索引，对内存要求高，而且内存大小决定性能</td>
+</tr>
+<tr>
+<td>自带系统表使用</td>
+<td>Y</td>
+<td>N</td>
+</tr>
+<tr>
+<td>关注点</td>
+<td>性能：节省资源、消耗少、简单业务</td>
+<td>事务：并发写、事务、更大资源</td>
+</tr>
+<tr>
+<td>默认安装</td>
+<td>Y</td>
+<td>Y</td>
+</tr>
+<tr>
+<td>默认使用</td>
+<td>MySQL 5.5版本之前</td>
+<td>MySQL 5.5 版本之后</td>
+</tr>
+</tbody></table>
+<h2 id="索引的数据结构"><a href="#索引的数据结构" class="headerlink" title="索引的数据结构"></a>索引的数据结构</h2><p>索引时存储引擎用于快速找到数据记录的一种数据结构，就好比书的目录。MySQL进行数据查找时，首先查看查询条件是否命中某条索引，符合则<strong>通过索引查找</strong>相关数据，如果不符合则需要<strong>全表扫描</strong>，也就是需要一条一条查找记录，直到找到与条件符合的记录。</p>
+<p>相比顺序查找，时间复杂度是<code>o(n)</code>，使用<strong>二叉树</strong>的数据结构更适合查找，时间复杂度是<code>o(logn)</code>(2为底n的对数)。 </p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221113135351758.png" alt="image-20221113135351758"></p>
+<p>使用索引的好处就是减少磁盘<code>I/O</code>的次数，加快查询速率。</p>
+<h3 id="索引及其优缺点"><a href="#索引及其优缺点" class="headerlink" title="索引及其优缺点"></a>索引及其优缺点</h3><p>索引<code>Index</code>是帮助MySQL高效获取数据的数据结构。</p>
+<p>索引的本质：<strong>索引是数据结构</strong>。为了排好序的快速查找数据结构，满足特定查找算法，这些数据结构以某种方式指向数据，可以在这些数据结构的基础上实现高级查找算法。</p>
+<p><strong>索引时在存储引擎中实现的</strong>，因此每种存储引擎的索引不一定完全相同，而且每种存储引擎不一定支持所有索引类型。同时，存储引擎可以定义每个表的<strong>最大索引数</strong>和<strong>最大索引长度</strong>。所有存储引擎支持每个表上限至少16个索引，总索引长度上限至少为256字节。有些存储引擎支持更多的索引数和更大的索引长度。</p>
+<h4 id="有点"><a href="#有点" class="headerlink" title="有点"></a>有点</h4><ul>
+<li><strong>提高检索效率</strong>，降低<code>I/O</code>成本</li>
+<li>通过创建唯一索引，可以保证数据库表中的每一行<strong>数据的唯一性</strong></li>
+<li><strong>加速表和表之间的连接</strong>，有依赖关系的子表和父表联合查询时，可以提高查询速度</li>
+<li>使用分组和排序子句进行数据查询时，可以<strong>减少查询中分组和排序的时间</strong>，降低CPU消耗</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>创建和维护索引需要消耗时间，并且随着数据量的增加，耗费的时间也会增加</li>
+<li>索引需要占用磁盘空间</li>
+<li>降低更新表的速度，对表中数据增加、删除和修改时，索引也要动态维护，降低了数据的维护速度</li>
+</ul>
+<p>提示：</p>
+<p>索引可以提高查询速度，但是会影响插入速度，这种情况下，最好的办法是先删除表中的索引，插入之后，再创建索引。</p>
+<h2 id="InnoDB索引的推演"><a href="#InnoDB索引的推演" class="headerlink" title="InnoDB索引的推演"></a><code>InnoDB</code>索引的推演</h2><p>索引是在存储引擎中创建，这里以<code>InnoDB</code>的索引为例。</p>
+<p>数据库中数据的基本存储单位是数据页。查找一条数据是通过某一列的条件进行查找。</p>
+<h3 id="在一个页中的查找"><a href="#在一个页中的查找" class="headerlink" title="在一个页中的查找"></a>在一个页中的查找</h3><p>如果数据很少，在一页中存储</p>
+<ul>
+<li><p>以主键为搜索条件</p>
+<p>在页目录中使用<strong>二分法</strong>快速定位到对应的槽，然后遍历该槽对应分组中的记录即可快速找到指定的记录。</p>
+</li>
+<li><p>以其他列作为搜索条件</p>
+<p>其他列没有在索引中，而且没有顺序，这种情况只能从最小记录开始依次遍历单链表（减少内存占用，而且不需要存储时连续）中的每条记录，然后对比是否符合搜索条件。</p>
+</li>
+</ul>
+<h3 id="在很多页中查找"><a href="#在很多页中查找" class="headerlink" title="在很多页中查找"></a>在很多页中查找</h3><p>数据量很多时，需要将数据进行分页存储</p>
+<ol>
+<li>定位到所在页</li>
+<li>在所在页查找</li>
+</ol>
+<p>此时只能从第一页沿着双向链表一直往下找，在每一页中根据查找方式去查找指定的记录。因为要遍历所有的数据页，这种方式很耗时，因此需要索引。</p>
+<h3 id="简单索引设计方案"><a href="#简单索引设计方案" class="headerlink" title="简单索引设计方案"></a>简单索引设计方案</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> index_demo1(</span><br><span class="line">c1 <span class="type">INT</span>,</span><br><span class="line">c2 <span class="type">INT</span>,</span><br><span class="line">c3 <span class="type">VARCHAR</span>(<span class="number">1</span>),</span><br><span class="line"><span class="comment">-- 将 c1 列设置为主键</span></span><br><span class="line"><span class="keyword">PRIMARY</span> KEY(c1)</span><br><span class="line"><span class="comment">-- 设置表存储的行格式，为 Compact </span></span><br><span class="line">) ROW_FORMAT <span class="operator">=</span> Compact;</span><br></pre></td></tr></table></figure>
+
+<p><code>Compact</code>行格式存储记录示意图：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221113141912427.png" alt="image-20221113141912427"></p>
+<ul>
+<li><code>record_type</code>：记录头信息的一项属性，表示记录的类型，0表示普通记录，2表示最小记录，3表示最大记录，1表示目录项记录</li>
+<li><code>next_record</code>：记录头信息的一项属性，表示下一条地址相对于本条记录的地址偏移量，例如链表，指向下一个记录</li>
+<li><code>各个列的值</code>：例如<code>index_demo1</code>表中三列，c1列，c2列，c3列</li>
+<li><code>其他信息</code>：除了上述3中信息以外的所有信息，包括其他隐藏列的值以及记录的额外信息</li>
+</ul>
+<p>如果横过来看，这些记录在页里的示意图：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114110046705.png" alt="image-20221114110046705"></p>
+<p>如果插入一些记录</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> index_demo1 <span class="keyword">VALUES</span>(<span class="number">1</span>,<span class="number">4</span>,<span class="string">&#x27;u&#x27;</span>),(<span class="number">3</span>,<span class="number">9</span>,<span class="string">&#x27;d&#x27;</span>),(<span class="number">5</span>,<span class="number">3</span>,<span class="string">&#x27;y&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="数据排序"><a href="#数据排序" class="headerlink" title="数据排序"></a>数据排序</h4><p>这些记录按照主键值的大小串联成一个单向链表：（真实页可能会存放数千条记录，这里假设只存储能3条）</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114110254441.png" alt="image-20221114110254441"></p>
+<p>由于设置主键，因此即使操作上没有顺序插入，在存储的时候，还是会按照顺序排列。</p>
+<p>在存储3条记录之后，如果还要再存储数据，则需要再分配一个新页</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> index_demo1 <span class="keyword">VALUES</span>(<span class="number">4</span>,<span class="number">4</span>,<span class="string">&#x27;a&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>分配新页之后，数据页编号可能不连续，也需要一个<strong>双向链表</strong>维护关系。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114110704707.png" alt="image-20221114110704707"></p>
+<p>又因为主键插入4，小于5，所以不符合下一数据页中记录的主键必须大于上一页记录主键的要求，因此，插入4记录的时候，还需要一次记录移动，将数据5从页10移动到页28</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114110833872.png" alt="image-20221114110833872"></p>
+<p>对页中的记录进行增删改的操作过程中，必须通过一些诸如记录移动的操作来时钟保证这个状态一直成立：下一页的主键必须大于上一页的主键。将记录移动的操作这个过程称为<strong>页分裂</strong>。</p>
+<h4 id="给所有页建立一个目录项"><a href="#给所有页建立一个目录项" class="headerlink" title="给所有页建立一个目录项"></a>给所有页建立一个目录项</h4><p>由于数据页的编号不一定连续，所以向<code>index_demo1</code>表中插入许多记录后，可能出现这样的效果</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114145615952.png" alt="image-20221114145615952"></p>
+<p>如果想从这么多页中根据主键值<strong>快速定位某些记录所在的页</strong>，可以给页加一个<strong>目录</strong>，每页一个目录项，每个目录项包括：</p>
+<ul>
+<li>页的用户记录中最小的主键值，用<code>key</code>表示</li>
+<li>页号，用<code>page_no</code>表示</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114150049332.png" alt="image-20221114150049332"></p>
+<p>当通过主键<code>c1</code>字段查询时，首先与目录项进行匹配查询，获取到对应的<code>page_no</code>后，再在对应页中查询。这个过程实际上是用<strong>两次二分查找法</strong>。</p>
+<p>针对数据页做的简易目录就是这样，这个目录就是<strong>索引</strong>。</p>
+<h3 id="InnoDB中的索引方案"><a href="#InnoDB中的索引方案" class="headerlink" title="InnoDB中的索引方案"></a><code>InnoDB</code>中的索引方案</h3><p>上述的目录项还可以优化：</p>
+<ul>
+<li>无法用连续地址空间存储</li>
+<li>数据量大时，内存占用大</li>
+<li>插入、删除时改动量大</li>
+</ul>
+<p>因此，可以将目录项也做成<strong>单向链表</strong>，称为目录页。这样的数据，也可以通过<code>Compact</code>行格式存储，<code>record_type</code>为1。</p>
+<h4 id="迭代一次：目录项记录的页"><a href="#迭代一次：目录项记录的页" class="headerlink" title="迭代一次：目录项记录的页"></a>迭代一次：目录项记录的页</h4><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114151023560.png" alt="image-20221114151023560"></p>
+<p>通过页30存储目录项记录。<strong>目录项记录</strong>和<strong>普通的用户记录</strong>不同点：</p>
+<ul>
+<li><strong>目录项记录</strong>的<code>record_type</code>值是1，而<strong>普通用户记录</strong>的<code>record_type</code>值是0</li>
+<li><strong>目录项记录</strong>只有主键值和页的编号两个列，<strong>普通用户记录</strong>的列是用户自定义的，可能包含很多列，另外还有<code>InnoDB</code>自己添加的隐藏列。</li>
+<li>记录头信息里还有一个叫<code>min_rec_mask</code>的属性，只有在存储目<strong>录项记录</strong>的页中的主键值最小的目录项记录的<code>min_rec_mask</code>值为1，其他别的记录的<code>min_rec_mask</code>值都是0</li>
+</ul>
+<p>相同点：</p>
+<ul>
+<li>使用一样的数据页</li>
+<li>都会为主键值生成<code>Page Directory</code>（页目录），从而在按照主键值进行查找时可以使用<strong>二分法</strong>来加快查询速度。</li>
+</ul>
+<p>再次查找主键为20的记录，可以分成两步：</p>
+<ol>
+<li>先到存储目录项记录的页，也就是页30中通过二分法快速定位到对应目录项，定位到页29</li>
+<li>到存储用户记录的页2通过二分法快速定位到主键为20的记录</li>
+</ol>
+<h4 id="迭代2次：多个目录项记录的页"><a href="#迭代2次：多个目录项记录的页" class="headerlink" title="迭代2次：多个目录项记录的页"></a>迭代2次：多个目录项记录的页</h4><p>由于一个页只有<code>16KB</code>大小，存放的目录项记录也是有限的，如果表中数据很多，以至于一个数据页不足以存放所有的目录项记录，此时，就需要分配一个新的目录项记录的页。</p>
+<p>假设一个存储目录项记录的页最多只能存储4条目录项记录</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114153018184.png" alt="image-20221114153018184"></p>
+<p>新增加的目录项记录的页之间，使用双链表进行关联。</p>
+<p>此时查询操作则需要<strong>先确定目录项记录页</strong>，判断主键值是否在页30的最大值和最小值之间，如果不在，则去下一页中查询。查询到所在数据页之后，再到存储页中查询</p>
+<h4 id="迭代3次：目录项记录页的目录页"><a href="#迭代3次：目录项记录页的目录页" class="headerlink" title="迭代3次：目录项记录页的目录页"></a>迭代3次：目录项记录页的目录页</h4><p>由于页不连续，因此在目录项记录页定位数据时，也需要依次遍历，无法快速定位，这时就需要为这些存储目录项记录的页再生成一个更高级的目录，就像是一个多级目录一样，大目录里嵌套小目录，小目录里才是实际的数据。</p>
+<blockquote>
+<p>ps：实际B+树还会在非聚簇索引下，在目录项记录页中存储主键。</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114153827053.png" alt="image-20221114153827053"></p>
+<p>如图，生成一个存储更高级目录项的<strong>页33</strong>，这个页中的两条记录分别代表页30和页32，如果记录的值在<code>[1,320)</code>之间，则到页30中查找更详细的目录项记录，如果主键<code>不小于320</code>，则在页32中查找。</p>
+<p>随着这个记录的增加，目录层级也会继续增加，如果简化一下，则为下图：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114154223489.png" alt="image-20221114154223489"></p>
+<p>这个数据结构，就是**B+**树。</p>
+<h4 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B+Tree"></a>B+Tree</h4><p>不存是存放<strong>用户记录</strong>的数据页，还是存放<strong>目录项记录</strong>的数据页，这些数据页都称为节点。</p>
+<p>实际记录用户记录其实都存放在B+树的最底层的节点上，这些节点也被称为<strong>叶子节点</strong>，其余用来存放目录项的节点称为<strong>非叶子节点</strong>或者<strong>内节点</strong>，B+树最上边的那个节点称为<strong>根节点</strong>。</p>
+<p>一个B+树的节点可以分成好多层，最下面的称为<strong>0层</strong>，之后依次往上加。如果每层的一个节点可以存储的数据为n，则m层的B+树可以存储的数据条目则是<code>n^m</code>。一般情况下，根据数据量和查询次数，不会超过4层，层数越少，查询效率越高。</p>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>索引按照物理实现方式，可以分为两种，聚簇（聚集）索引和非聚簇（非聚集）索引。非聚簇索引也成为二级索引或者辅助索引。</p>
+<blockquote>
+<p>术语“聚簇”表示数据行和相邻的键值聚簇地存储在一起</p>
+</blockquote>
+<h3 id="聚簇索引"><a href="#聚簇索引" class="headerlink" title="聚簇索引"></a>聚簇索引</h3><p>聚簇索引并不是一种单独的索引类型，而是<strong>一种数据存储方式</strong>（所有的用户记录都存储在了叶子节点），也就是<strong>索引即数据，数据即索引</strong>。（<code>InnoDB</code>的数据存储方式时将数据和索引都存放在<code>.ibd</code>文件中。）</p>
+<p>特定：</p>
+<ol>
+<li><p>使用记录主键值的大小进行记录和页的排序，包括三个方面的含义：</p>
+<ul>
+<li><strong>页内</strong>的记录是按照主键的大小顺序排成一个<strong>单向链表</strong></li>
+<li>各个存放<strong>用户记录的页</strong>也是根据页中用户记录的主键大小顺序排成一个<strong>双向链表</strong></li>
+<li>存放<strong>目录项记录的页</strong>分为不同的层次，同一层次中的页也是根据页中目录项记录的主键大小顺序排成一个<strong>双向链表</strong></li>
+</ul>
+</li>
+<li><p>B+树的<strong>叶子节点</strong>存储的是完整的用户记录。</p>
+</li>
+</ol>
+<p>具有这两种特性的B+树称为<strong>聚簇索引</strong>，所有完整的用户记录都存放在这个聚簇索引的叶子节点处。这种聚簇索引不需要显式使用<code>INDEX</code>语句创建，<code>InnoDB</code>存储引擎会<strong>自动创建聚簇索引</strong>。</p>
+<p>优点：</p>
+<ul>
+<li><strong>数据访问更快</strong>，将索引和聚簇索引都存放在同一个B+树上，从聚簇索引中获取数据比非聚簇索引更快。</li>
+<li>聚簇索引对于主键的<strong>排序查找</strong>和<strong>范围查找</strong>速度非常快</li>
+<li>按照聚簇索引排列顺序，查询显式一定范围数据时，由于数据紧密相连，数据库不用从多个数据块（也就是大量的页）中提取数据，索引<strong>节省了大量的IO操作</strong>。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li><strong>插入速度严重依赖插入顺序</strong>，按照主键的顺序插入是最快的，否则会出现页分裂，严重影响性能。因此，对于<code>InnoDB</code>表，一般都会自定义一个自增的ID列为主键。</li>
+<li><strong>更新主键的代价很高</strong>，因为会导致更新的行移动。因此一般定义<code>InnoDB</code>的主键为不可更新列</li>
+<li><strong>二级索引访问需要两次索引查找</strong>，第一次找到主键值，第二次根据主键值找到行数据</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>对于MySQL数据库目前<strong>只有<code>InnoDB</code>存储引擎支持聚簇索引</strong>，<code>MyISAM</code>并不支持聚簇索引。（<code>MyISAM</code>数据、索引、表结构分开存储）</li>
+<li>数据物理存储排序方式只有一种，所以<strong>每个MySQL的表只能有一个聚簇索引</strong>，一般情况下<strong>就是该表的主键</strong></li>
+<li>如果没有定义主键，<code>InnoDB</code>会选择<strong>非空的唯一索引</strong>替代，如果没有这样的索引，<code>InnoDB</code>会隐式的定义一个主键来作为聚簇索引</li>
+<li>为了充分利用聚簇索引的聚簇特性，<code>InnoDB</code>表的主键列尽量<strong>选用有序的顺序id</strong>，而不建议用无序的id，比如<code>UUID</code>、<code>MD5</code>、<code>HASH</code>、<code>字符串列</code>作为主键无法保证数据的顺序增长。</li>
+</ul>
+<h3 id="二级索引"><a href="#二级索引" class="headerlink" title="二级索引"></a>二级索引</h3><p>也称为辅助索引、非聚簇索引</p>
+<p>聚簇索引<strong>只能在搜索条件是主键值时</strong>才能发挥作用，因为B+树中的数据都是按照主键进行排序的。</p>
+<p>如果<strong>通过其他列作为搜索条件</strong>，就需<strong>多建几颗B+树</strong>，不同的B+树中的数据采用不同的排序规则。比如用<code>c2</code>列的大小作为数据页、页中记录的排序规则，再建一颗<code>B+</code>树。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114170427069.png" alt="image-20221114170427069"></p>
+<p>与聚簇索引的不同点</p>
+<ul>
+<li>使用记录<code>c2</code>列的大小进行记录和页的排序：<ul>
+<li>页内记录按照<code>c2</code>列的大小顺序排列成一个<strong>单向链表</strong></li>
+<li>各个存放<strong>用户记录的页</strong>也是根据页中记录的c2列大小顺序排成一个<strong>双向链表</strong></li>
+<li>存放<strong>目录项记录的页</strong>分为不同的层次，同层页根据页中目录项记录的<code>c2</code>列大小顺序排成一个双向链表</li>
+</ul>
+</li>
+<li>B+树的叶子节点存储的并不是完整的用户记录，而只是<strong>c2列+主键</strong>这两个列的值</li>
+<li>目录项记录中不再是<strong>主键+页号</strong>的搭配，变成<strong>c2列+页号</strong>的搭配。</li>
+</ul>
+<p>如果通过<code>c2</code>列的值查找某些记录，可以通过新的B+树，通过查找c2列的值查找目录项记录页，通过目录项记录的页查找叶子节点，通过叶子节点中的记录获取对应主键，再通过主键在聚簇索引中查找数据。</p>
+<p>非聚簇索引没有唯一和非空约束，因此通过<code>上一个最小值&lt;= 查询值 &lt;= 下一个最小值</code>来查询，而且查询结果可能会有多个。</p>
+<p>通过非聚簇索引查询到主键，再通过主键查询聚簇索引的过程，称为<strong>回表</strong>。也就是根据<code>c2</code>列的值查询一条完整的用户记录需要使用到2课B+树。</p>
+<blockquote>
+<p>造成回表的原因：</p>
+<p>如果将数据都放到二级索引中，会造成数据冗余，很占据存储空间。</p>
+</blockquote>
+<p>非聚簇索引的存在不影响数据在聚簇索引中的组织，所以一张表就可以有多个非聚簇索引。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114171718620.png" alt="image-20221114171718620"></p>
+<h3 id="聚簇索引和非聚簇小结"><a href="#聚簇索引和非聚簇小结" class="headerlink" title="聚簇索引和非聚簇小结"></a>聚簇索引和非聚簇小结</h3><ol>
+<li>聚簇索引的<strong>叶子节点存储的是数据记录</strong>，非聚簇索引<strong>叶子节点存储的是数据位置</strong>，非聚簇索引不会影响数据表的物理存储顺序</li>
+<li>一个表<strong>只能有一个聚簇索引</strong>，因为只能有一种排序存储方式，但可以有<strong>多个非聚簇索引</strong>，也就是多个索引目录提供数据检索</li>
+<li>使用聚簇索引的时候，数据的<strong>查询效率高</strong>，但如果对数据进行插入、删除、更新等操作，效率会比非聚簇索引低。（非聚簇索引在这个过程中可能不会发生变化）</li>
+</ol>
+<h3 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h3><p>可以同时给多个列的大小作为排序规则，也就是同时为多个列建立索引，比如说B+树按照<strong>c2和c3列的大小进行排序</strong>，这个包含两层含义：</p>
+<ul>
+<li>先把记录和页按照<code>c2</code>列进行排序</li>
+<li>在记录的c2列相同的情况下，采用c3列进行排序</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114172335350.png" alt="image-20221114172335350"></p>
+<p>如图：</p>
+<ul>
+<li>每条目录项记录都由c<code>2,c3,页号</code>这三个部分组成，各条记录先按照<code>c2</code>列的值进行排序，相同时，则按照<code>c3</code>列的值进行排序</li>
+<li>B+树的叶子节点记录<code>c2,c3,主键c1</code>组成</li>
+</ul>
+<p>以c2和c3列的大小为排序规则建立的B+树称为联合索引，本质上是一个<strong>二级索引</strong>，与分别创建c2和c3索引意义不同</p>
+<ul>
+<li>建立联合索引只会建1棵B+树（其实实际上可以理解为创建了一个<code>c2索引</code>和一个<code>c2,c3索引</code>）</li>
+<li>为c2和c3列分别建立索引会分别以<code>c2</code>和<code>c3</code>列排序规则创建2棵<code>B+树</code></li>
+</ul>
+<h2 id="InnoDB的B-树索引注意事项"><a href="#InnoDB的B-树索引注意事项" class="headerlink" title="InnoDB的B+树索引注意事项"></a>InnoDB的B+树索引注意事项</h2><h3 id="根页面无法变动"><a href="#根页面无法变动" class="headerlink" title="根页面无法变动"></a>根页面无法变动</h3><p>创建<code>B+树</code>的过程：</p>
+<ul>
+<li>为表创建<code>B+树</code>索引（聚簇索引不是人为创建的，默认就有）时，都会为这个索引创建一个<strong>根节点</strong>页面。最开始表中没有数据时，每个<code>B+树</code>索引对应的根节点中既没有用户记录，也没有目录项记录。</li>
+<li>插入用户记录时，<strong>先把用户记录存储到这个根节点中</strong></li>
+<li>当根节点中的可<strong>用空间用完</strong>时，继续插入记录，此时会将根节点中的所有记录<strong>复制到一个新的页</strong>。此时插入的记录根据键值（聚簇索引则为主键，非聚簇索引则为对应列值）大小分配到新的页中，而根<strong>节点升级为存储目录项记录</strong>的页。</li>
+</ul>
+<p>也就是说，<code>B+树</code>创建时，就不会移动，根节点的页号会被记录到某个地方，然后<code>InnoDB</code>引擎使用到这个索引的时候，都会从固定的地方取出根节点的页号，从而访问这个索引。</p>
+<h3 id="内节点中目录项记录的唯一性"><a href="#内节点中目录项记录的唯一性" class="headerlink" title="内节点中目录项记录的唯一性"></a>内节点中目录项记录的唯一性</h3><p>内节点（非叶子节点）中的目录项记录要唯一（主要是针对非聚簇索引）。</p>
+<p>为了在非聚簇索引的目录项数据一致时，插入新的数据，并且确定新数据插入所在页（例如当有两个页都存在同样的二级索引），此时需要能够区分该页，因此，内节点上还需要记录一个唯一字段，也就是主键。</p>
+<p>非聚簇索引的内节点目录项记录的实际内容：</p>
+<ul>
+<li>索引列的值</li>
+<li>主键值</li>
+<li>页号</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114200214549.png" alt="image-20221114200214549"></p>
+<h3 id="一个页面最少存储2条记录"><a href="#一个页面最少存储2条记录" class="headerlink" title="一个页面最少存储2条记录"></a>一个页面最少存储2条记录</h3><p>为了实现快速查找，不会出现目录层级查找很多之后，存放真实数据的目录中只存放一条数据，因此<code>InnoDB</code>的一个数据页至少可以存放两条数据。</p>
+<h4 id="B-树查找行记录，最多只需要1-3次磁盘I-O"><a href="#B-树查找行记录，最多只需要1-3次磁盘I-O" class="headerlink" title="B+树查找行记录，最多只需要1~3次磁盘I/O"></a>B+树查找行记录，最多只需要1~3次磁盘<code>I/O</code></h4><p>页的大小为<code>16KB</code>，主键一般是<code>INT</code>，一个页存储主键和指针（都按照<code>8Byte</code>计算），那么可以存储的键值个数为<code>16KB/8Byte = 1000</code> 个，一个三层B+树可以存储<code>10^9</code>的数据，而且通常填不满。<code>B+tree</code>一般高度是<code>2~4</code>，而且根节点不会变动，一般会常驻内存，因此通常需要<code>1~3</code>次磁盘<code>I/O</code>操作。</p>
+<h2 id="MyISAM索引原理"><a href="#MyISAM索引原理" class="headerlink" title="MyISAM索引原理"></a>MyISAM索引原理</h2><p>B树索引适用存储引擎：</p>
+<table>
+<thead>
+<tr>
+<th>索引&#x2F;存储引擎</th>
+<th>MyISAM</th>
+<th>InnoDB</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B-Tree索引</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+</tbody></table>
+<p>即使多个存储引擎支持同一种类型的索引，但是他们的原理不同。<code>InnoDB</code>和<code>MyISAM</code>默认的索引是<code>Btree</code>索引；而Memory默认索引是<code>Hash</code>索引。</p>
+<p><code>MyISAM</code>引擎使用<code>B+Tree</code>作为索引结构，叶子节点的<strong>data域</strong>存放的是<strong>数据记录的地址</strong>。</p>
+<h3 id="MyISAM索引的原理"><a href="#MyISAM索引的原理" class="headerlink" title="MyISAM索引的原理"></a>MyISAM索引的原理</h3><p><code>MyISAM</code>表结构</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">-</span>rw<span class="operator">-</span>r<span class="comment">-----  1 mysql mysql 2.4K Nov 11 14:26 myisam1_539.sdi		// 元数据，列的信息：列名，属性，约束等	</span></span><br><span class="line"><span class="operator">-</span>rw<span class="operator">-</span>r<span class="comment">-----  1 mysql mysql 1.0K Nov 11 14:26 myisam1.MYI				// 索引</span></span><br><span class="line"><span class="operator">-</span>rw<span class="operator">-</span>r<span class="comment">-----  1 mysql mysql    0 Nov 11 14:26 myisam1.MYD				// 数据</span></span><br></pre></td></tr></table></figure>
+
+<p><code>MyISAM</code>的索引方案虽然也是树形结构，但是却是将<strong>数据和索引分开存储</strong>。</p>
+<ul>
+<li>将表中的记录<strong>按照记录的插入顺序</strong>单独存储在一个文件中，称之为<strong>数据文件</strong>。这个文件不划分为若干个数据页，有多少记录就往这个文件中塞多少记录就成了。由于在<strong>插入数据的时候并没有刻意按照主键大小排序</strong>，所以不能在这些数据上使用二分查找法。</li>
+<li><code>MyISAM</code>存储引擎会把索引信息另外存储到一个称为<strong>索引文件</strong>的另外一个文件中。<code>MyISAM</code>会单独为表的主键创建一个索引，只是索引的叶子节点中存储的不是完整的用户记录，而是<strong>主键值+数据记录地址</strong>的组合。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114201552971.png" alt="image-20221114201552971"></p>
+<p>在<code>MyISAM</code>中，主键索引和二级索引在结构上没有任何区别，只是主键索引要求<code>key</code>是唯一的，而二级索引的<code>key</code>可以重复。</p>
+<p><code>MyISAM</code>中索引检索的算法为：</p>
+<p>首先按照<code>B+Tree</code>搜索算法搜索索引，如果指定的<code>key</code>存在，则取出其<code>data</code>域值，然后以<code>data</code>域的值为地址，读取相应数据记录。</p>
+<h3 id="MyISAM与InnoDB对比"><a href="#MyISAM与InnoDB对比" class="headerlink" title="MyISAM与InnoDB对比"></a><code>MyISAM</code>与<code>InnoDB</code>对比</h3><p><code>MyISAM</code>的索引方式都是非聚簇的，<code>InnoDB</code>包含1个聚簇索引。</p>
+<ol>
+<li><p><code>InnoDB</code>存储引擎中，只需要对主键值对聚簇索引进行一次查找就能找到对应的记录，在<code>MyISAM</code>中却需要一次<strong>回表操作</strong>，也就是<code>MyISAM</code>中建立的索引相当于都是<strong>二级索引</strong></p>
+</li>
+<li><p><code>InnoDB</code>的数据文件本身就是索引文件，<code>MyISAM</code>索引文件和数据文件分离，索引文件仅保存数据记录的地址</p>
+</li>
+<li><p><code>InnoDB</code>的非聚簇索引<code>data</code>域存储相应记录<strong>主键的值</strong>，<code>MyISAM</code>索引记录的是<strong>地址</strong>。<code>InnoDB</code>的所有非聚簇索引都是引用主键作为<strong>data域</strong></p>
+</li>
+<li><p><code>MyISAM</code>的回表操作是<strong>十分快速</strong>的，因为拿着地址偏移量直接到文件中读取数据。<code>InnoDB</code>则是通过获取主键之后再去聚簇索引中找记录，相比而言，速度比不上直接用地址访问。</p>
+</li>
+<li><p><code>InnoDB</code>要求表<strong>必须有主键</strong>（<code>MyISAM</code>可以没有），如果没有显示指定，则MySQL会自动选择一个可以非空且唯一标识数据记录的列作为主键。如果不存在，则MySQL会自动为<code>InnoDB</code>生成一个隐含字段作为主键，这个字段长度为6个字节，类型为长整形。</p>
+</li>
+</ol>
+<p>在<code>InnoDB</code>中，不建议使用过场的字段作为主键，因为会浪费二级索引的存储空间。</p>
+<p>同时主键的字段不要使用非单调字段，因为新插入数据时可能导致页分裂。使用自增字段作为主键是一个很好的选择。</p>
+<h2 id="索引的代价"><a href="#索引的代价" class="headerlink" title="索引的代价"></a>索引的代价</h2><p>创建索引在时间和空间上都会有消耗：</p>
+<ul>
+<li><p>空间上的代价</p>
+<p>每建立一个索引都需要建立一个B+树，每一颗B+树的每一个节点都是一个数据页，一个页默认会占用<code>16KB</code>的存储空间，<strong>B+树越大越多，占用的存储空间就越大</strong></p>
+</li>
+<li><p>时间上的代价</p>
+<p>每次对表<strong>增、删、改</strong>时，都需要修改B+树索引。不论是叶子节点中的记录还是内节点中的记录，这些节点内部的记录是<strong>单向链表</strong>，<strong>增、删、改</strong>操作可能会对节点和记录的排序造成破坏。因此存储引擎需要额外的时间进行一些<strong>记录位移，页面分裂，页面回收</strong>等操作来维护好节点和记录的排序。索引越多，每个索引对应对应的B+树都要进行相应的维护。</p>
+</li>
+</ul>
+<p>索引建立的越多，也就越占用存储空间，增删改性能也就越差，因此创建索引需要谨慎。</p>
+<h2 id="MySQL数据结构选择的合理性"><a href="#MySQL数据结构选择的合理性" class="headerlink" title="MySQL数据结构选择的合理性"></a>MySQL数据结构选择的合理性</h2><p>如果让索引的数据结构尽量减少磁盘的IO操作，消耗的时间也就越小，也就是说，<strong>磁盘的I&#x2F;O操作次数</strong>对索引的使用效率至关重要。</p>
+<p>查找都是索引操作，当数据量大的时候，索引大小可能达到G单位级。为了减少索引在内存中的占用，<strong>数据库索引是存储在外部磁盘上的</strong>。因此利用索引查询的时候，只能逐一加载，也就是MySQL衡量查询效率的标准就是<strong>磁盘I&#x2F;O次数</strong>。</p>
+<h3 id="全表遍历"><a href="#全表遍历" class="headerlink" title="全表遍历"></a>全表遍历</h3><p>没有索引，全量遍历，效率低下</p>
+<h3 id="Hash结构"><a href="#Hash结构" class="headerlink" title="Hash结构"></a>Hash结构</h3><p><code>Hash</code>本身是一个函数，又被成为散列函数，可以帮助大幅提升检索数据的效率。</p>
+<p><code>Hash</code>算法是通过某种确定性的算法，例如<code>MD5，SHA1，SHA2，SHA3</code>，将输入转变为输出。相同的输入永远可以得到相同的输出。</p>
+<p>加速查找速度的数据结构，常见的有两类：</p>
+<ol>
+<li><p>树，例如平衡二叉搜索树，查询、插入、修改、删除的平均时间复杂度都是<code>o(log2N)</code></p>
+</li>
+<li><p>哈希，例如<code>HashMap</code>，查询、插入、修改、删除的平均时间复杂度都是<code>o(1)</code></p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114204039108.png" alt="image-20221114204039108"></p>
+<p>采用<code>Hash</code>进行检索，效率很高，一次检索就可以得到数据。相比B+树需要自顶向下依次查找，多次访问才能找到数据，中间需要经过多次I&#x2F;O操作，效率上来说，<strong>Hash比B+树快</strong>。</p>
+<p>但是Hash索引不适合作为MySQL索引结构，原因如下：</p>
+<ol>
+<li><code>Hash</code>索引仅能满足<code>=</code>和<code>IN</code>，如果进行范围查询，<code>Hash</code>索引的时间复杂度会退化为<code>o(n)</code>，而树型的有序特性，依然能够保持<code>o(log2N)</code>的效率。</li>
+<li><code>Hash</code>索引，数据存储没有顺序，在<code>ORDER BY</code>的情况下，还需要重新排序</li>
+<li>对于联合索引的情况，<code>Hash</code>值是将联合索引键合并后一起计算的，无法单独的一个键或者几个索引进行查询</li>
+<li>等于等值查询来说，<code>Hash</code>效率通常更高，但是在<strong>索引列的重复值如果很多，效率也会低很多</strong>（<code>hash</code>取模之后，还是单向链表存储）。</li>
+</ol>
+<p>Hash索引适用存储引擎：</p>
+<table>
+<thead>
+<tr>
+<th>索引&#x2F;存储引擎</th>
+<th>MyISAM</th>
+<th>InnoDB</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HASH索引</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+</tbody></table>
+<p><code>Hash</code>索引适用性：</p>
+<p>在<strong>键值型数据库</strong>中，更有优势，例如<code>Redis</code>存储的核心就是<code>Hash</code>表。</p>
+<p>MySQL中<code>Memory</code>存储引擎支持Hash存储，在查询临时表时，就可以选择<code>Memory</code>引擎，将某个字段设置为<code>Hash</code>索引，当字段重复度低，并且需要经常进行<strong>等值查询</strong>时，采用<code>Hash</code>索引是个不错的选择。</p>
+<p>另外，<code>InnoDB</code>本身不支持<code>Hash</code>索引，但是提供<strong>自适应Hash索引</strong>。如果某个数据经常被访问，当满足一定条件时，就会将这个数据页的地址存放到<code>Hash</code>表中。下次查询的时候，就可以直接找到这个页面的位置，这样让<code>B+树</code>也具备<code>Hash</code>索引的优点。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114211020179.png" alt="image-20221114211020179"></p>
+<p>自适应<code>Hash</code>索引的目的是方便根据SQL的查询条件加速定位到叶子节点，特别是<code>B+树</code>比较深的时候，通过自适应<code>Hash</code>索引可以明显提高数据的检索效率。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看是否开启自适应Hash，默认打开</span></span><br><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%innodb_adaptive_hash_index&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="二叉搜索树"><a href="#二叉搜索树" class="headerlink" title="二叉搜索树"></a>二叉搜索树</h3><h4 id="二叉搜索树的特点"><a href="#二叉搜索树的特点" class="headerlink" title="二叉搜索树的特点"></a>二叉搜索树的特点</h4><ul>
+<li>一个节点只能有两个子节点，也就是一个节点度不能超过2</li>
+<li>左子节点&lt;本节点；右子节点&gt;&#x3D;本节点</li>
+</ul>
+<h4 id="查找规则"><a href="#查找规则" class="headerlink" title="查找规则"></a>查找规则</h4><ol>
+<li>如果key大于根节点，则在右子树查找</li>
+<li>如果key小于根节点，则在左子树查找</li>
+<li>如果等于根节点，返回这个节点</li>
+</ol>
+<p>如果数据是顺序的，而且数据非常多，二叉树可能就会退化成一条链表，此时时间复杂度就从<code>o(log2N)</code>降低到<code>o(n)</code>。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114211901755.png" alt="image-20221114211901755"></p>
+<p>为了提高查询效率，就需要<strong>减少磁盘IO数</strong>，可以<strong>降低树的高度</strong>，树的每层分叉越多越好。</p>
+<h3 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h3><p>为了解决上述退化成链表的问题，提出了平衡二叉搜索树（<code>Balanced Binary Tree</code>），又称为<code>AVL树</code>（有别于AVL算法），它在二叉搜索树的基础上增加了约束。</p>
+<p><strong>它是一颗空树，或它的左右两个子树的高度差的绝对值不超过1，并且左右两个子树都是一颗平衡二叉树。</strong></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114211940150.png" alt="image-20221114211940150"></p>
+<p>此时，时间复杂度就是<code>o(log2N)</code>，需要通过5次<code>I/O</code>操作。虽然平衡二叉树效率高，但是树深度也高，因此，效率也不会很高。</p>
+<p>此时，可以将二叉树改成<strong>M叉树</strong>（M&gt;2），例如三叉树</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114212206401.png" alt="image-20221114212206401"></p>
+<p>高度降低，<strong>I&#x2F;O</strong>就减少。这样引申出来，将树的高度降低下来，就是<code>B-Tree</code>。</p>
+<h3 id="B-Tree-1"><a href="#B-Tree-1" class="headerlink" title="B-Tree"></a>B-Tree</h3><p>B树英文是<code>Balance-Tree</code>，也就是多路平衡查找树，简写<code>B-Tree</code>（横杠代表两个单词连起来，不是减号），它的高度远远小于平衡二叉树。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114212404226.png" alt="image-20221114212404226"></p>
+<p>B树每一个节点最多可以包括M个子节点，<code>M称为B树的阶</code>。每个磁盘块中包括了<strong>关键字</strong>和<strong>子节点的指针</strong>。</p>
+<p>B树特点：</p>
+<ol>
+<li>B树在插入和删除节点时，如果导致树不平衡，就通过自动调整节点的位置来保持树的自平衡</li>
+<li>关键字集合分布在整课树中，即叶子节点和非叶子节点都存放数据，搜索有可能在非叶子节点结束</li>
+<li>其搜索性能等价于在关键字全集内左一次二分查找</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114212821219.png" alt="image-20221114212821219"></p>
+<h3 id="B-Tree-2"><a href="#B-Tree-2" class="headerlink" title="B+Tree"></a>B+Tree</h3><p>B+树也是一种多路搜索树，<strong>基于B树做出了改进</strong>，称为<code>B+树</code>（加，plus，加强版），主流的<code>DBMS</code>都支持<code>B+树</code>的索引方式，例如MySQL。先比<code>B-Tree</code>，**<code>B+Tree</code>更适合文件索引系统**。</p>
+<p><code>B+树</code>和<code>B树</code>的差异：</p>
+<ol>
+<li><code>B+树</code>中，有K个孩子的节点就有k个关键字，也就是孩子数量&#x3D;关键字数，而B树中，孩子数&#x3D;关键字+1</li>
+<li><code>B+树</code>中，非叶子结点的关键字也会同时存在子节点中，而且在子节点中所有关键字最大（或最小）</li>
+<li><code>B+树</code>中，非叶子结点仅用于索引，不保存数据记录，跟记录有关的都记录在叶子节点中，而B树，非叶子节点既保存索引，也保存数据记录</li>
+<li><code>B+树</code>中，所有关键字都在叶子节点出现，叶子节点构成一个有序链表，而叶子节点本身按照关键字的大小从小到大顺序链接</li>
+<li><code>B+树</code>中，节点和节点之间，通过双向指针链接，能够加快检索效率，而<code>B树</code>中没有</li>
+</ol>
+<p>相比B树，<code>B+树</code>的中间节点不直接存储数据，好处是</p>
+<ul>
+<li><code>B+树</code>查询效率更稳定</li>
+<li><code>B+树</code>查询效率更高</li>
+<li>范围查询上，<code>B+树</code>的效率页比B树高</li>
+</ul>
+<blockquote>
+<p>B树和<code>B+树</code>都可以作为索引的数据结构，在MySQL中采用的是<code>B+树</code>。但B树和<code>B+树</code>各有应用场景。</p>
+</blockquote>
+<h2 id="InnoDB数据存储结构"><a href="#InnoDB数据存储结构" class="headerlink" title="InnoDB数据存储结构"></a>InnoDB数据存储结构</h2><p><code>InnoDB</code>数据存储结构，也就是<strong>页</strong>。</p>
+<p>索引结构提供高效的索引方式，不过索引信息以及数据记录都是保存在文件上的，确切说是存储在页结构中。另一方面，索引是在存储引擎中实现的，<code>MySQL</code>服务器上的存储引擎负责<strong>对表中数据的读取和写入</strong>工作，不同的存储引擎中存放的格式不同，这里主要学习适用性最广的<code>InnoDB</code>存储引擎。</p>
+<h3 id="磁盘与内存交互的基本单位：页"><a href="#磁盘与内存交互的基本单位：页" class="headerlink" title="磁盘与内存交互的基本单位：页"></a>磁盘与内存交互的基本单位：页</h3><p><code>InnoDB</code>将数据划分为若干个页，<code>InnoDB</code>中也的大小默认是16KB。</p>
+<p>以<strong>页</strong>作为磁盘和内存之间交互的<strong>基本单位</strong>，也就是一次最少从磁盘读取16KB的内容到内存，一次最少把内存中的16KB内容刷新到磁盘中。</p>
+<p><strong>数据库中，不论读一行还是读多行，都是将这些行所在的页进行加载。数据库管理存储空间的基本单位是页（Page），数据库IO操作的最小单位是页。一个页中可以存储多个行记录。</strong></p>
+<blockquote>
+<p>记录时按照行存储，但是读取不以行为单位。</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114215355682.png" alt="image-20221114215355682"></p>
+<h3 id="页结构概述"><a href="#页结构概述" class="headerlink" title="页结构概述"></a>页结构概述</h3><p>页可以<strong>不在物理结构上相连</strong>，只要通过<strong>双向链表</strong>相关联即可。每个数据页中的记录会按照主键值从小到大的顺序组成一个<strong>单向链表</strong>，每个数据页都会为存储在它里边的记录生成一个<strong>页目录</strong>，在通过主键查找某条记录的时候，可以在页目录中使用<strong>二分法</strong>快速定位到对应的槽，然后再便利该槽对应分组中的记录即可快速找到指定的记录。</p>
+<h3 id="页的大小"><a href="#页的大小" class="headerlink" title="页的大小"></a>页的大小</h3><p>不同的<code>DBMS</code>的页的大小不同，MySQL中<code>InnoDB</code>存储引擎，默认页大小是<code>16KB</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 获取页大小</span></span><br><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%innodb_page_size%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">------------------+-------+</span></span><br><span class="line"><span class="operator">|</span> Variable_name    <span class="operator">|</span> <span class="keyword">Value</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------------------+-------+</span></span><br><span class="line"><span class="operator">|</span> innodb_page_size <span class="operator">|</span> <span class="number">16384</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">------------------+-------+</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="页的上层结构"><a href="#页的上层结构" class="headerlink" title="页的上层结构"></a>页的上层结构</h3><p>在数据库中，还存在区，段和表空间的概念。行、也、区、段、表空间如下</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114215847632.png" alt="image-20221114215847632"></p>
+<p>行：是数据条目一行一行存储</p>
+<p>页：一个页中保存多行数据</p>
+<p>区 <code>Extent</code>：<code>InnoDB</code>存储引擎中，一个区分配<code>64</code>个连续的页，一个区大小是<code>1MB</code></p>
+<p>段 <code>Segment</code>：由一个或多个区组成，区在文件系统时一个连续分配的空间（InnoDB中是连续的64个页），不过在段中不要求区与区之间相邻。<strong>段是数据库中的分配单位，不同类型数据库对象以不同的段形式存在</strong>。当创建数据表、索引时，会相应创建对应的段，比如创建一张表时会创建一个表段，创建一个索引时会创建一个索引段。</p>
+<p>表空间 <code>Tablespace</code>：是一个逻辑容器，表空间存储的对象是段，在一个表空间中可以有一个或多个段，但是一个短只能属于一个表空间。数据库由一个或多个表空间组成，表空间从管理上可以划分为系统表空间<code>ibdata1</code>、用户表空间、撤销表空间、临时表空间等。</p>
+<h3 id="页的内部结构"><a href="#页的内部结构" class="headerlink" title="页的内部结构"></a>页的内部结构</h3><p>页按照类型划分，常见有数据页，系统页，<code>Undo</code>页和事务数据页等，数据页例如保存<code>B+树</code>节点的页，最常使用。</p>
+<p>数据页的<code>16KB</code>大小的存储空间被划分为七个部分：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114220646813.png" alt="image-20221114220646813"></p>
+<p>这7个部分作用如下</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114220705153.png" alt="image-20221114220705153"></p>
+<p>可以将7个结构分成3个部分。</p>
+<h4 id="File-Header和File-Trailer"><a href="#File-Header和File-Trailer" class="headerlink" title="File Header和File Trailer"></a>File Header和File Trailer</h4><p>首先是文件<strong>通用部分</strong>，<strong>文件头</strong>和<strong>文件尾</strong></p>
+<p>文件头：描述一些针对各种页的描述信息，页的编号，页的类型，上一页，下一页，当前页的校验和（头尾都有校验和，如果头尾校验和相同，则代表数据完全同步成功，校验方式采用Hash算法），页面被最后修改时对应的日志序列位置（头尾都有日志序列位置，保证数据完整性和一致性）。</p>
+<h4 id="Free-Space、User-Records、Infimum-Supremum"><a href="#Free-Space、User-Records、Infimum-Supremum" class="headerlink" title="Free Space、User Records、Infimum+Supremum"></a>Free Space、User Records、Infimum+Supremum</h4><p>主要是用于存储记录，<code>Free Space</code>（空闲空间）、<code>User Records</code>（用户记录）、<code>Infimum+Supremum</code>（最大最小记录）。</p>
+<p><code>User Records</code> 用户记录就是记录的数据。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221114224323600.png" alt="image-20221114224323600"></p>
+<h4 id="Page-Header、Page-Directory"><a href="#Page-Header、Page-Directory" class="headerlink" title="Page Header、Page Directory"></a>Page Header、Page Directory</h4><p><code>Page Header</code>（页面头部）、<code>Page Directory</code>（页目录）。</p>
+<p>页中数据进行分组，除了第一组，其余组的记录数尽量平分，页目录用来存储每组最后一条记录的地址偏移量，按照先后顺序存储起来，每组的偏移量也称为槽（<code>slot</code>），相当于指针指向每组中的最后一个数据。页目录存储的就是槽的信息。</p>
+<p>页面头部存储页目录中的槽数量，还为使用的最小地址，本也中记录的数量（包含最大、最小和删除的），第一个已经标记为删除的记录地址，已删除记录占用的字节数，最后插入记录的位置，记录插入的方向，一个方向连续插入的记录数量，该页中记录的数量（不包含最大、最小和删除的），修改当前页的最大事务id，当前页在B+树中所处的层级，索引ID，<code>B+树</code>叶子段的头部信息，<code>B+树</code>非叶子节点的头部信息，</p>
+<h2 id="InnoDB行格式（记录格式）"><a href="#InnoDB行格式（记录格式）" class="headerlink" title="InnoDB行格式（记录格式）"></a>InnoDB行格式（记录格式）</h2><p>数据以行为单位插入表，在磁盘上的存放方式也被称为<code>行格式</code>或者<code>记录格式</code>。<code>InnoDB</code>存储引擎设计了4中不同类型的行格式：<code>Compact</code>，<code>Redundant</code>，<code>Dynamic</code>，<code>Compressed</code></p>
+<p>查看默认行格式</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> @<span class="variable">@innodb</span>_default_row_format;</span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------+</span></span><br><span class="line"><span class="operator">|</span> @<span class="variable">@innodb</span>_default_row_format <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">dynamic</span>                     <span class="operator">|</span> <span class="comment">-- 动态</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------------+</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line"><span class="comment">-- 查看表的具体行格式</span></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">TABLE</span> STATUS <span class="keyword">LIKE</span> <span class="string">&#x27;employee&#x27;</span>\G</span><br><span class="line"><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span> <span class="number">1.</span> <span class="type">row</span> <span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span><span class="operator">*</span></span><br><span class="line">           Name: employee</span><br><span class="line">         Engine: InnoDB</span><br><span class="line">        Version: <span class="number">10</span></span><br><span class="line">     Row_format: <span class="keyword">Dynamic</span></span><br><span class="line">           <span class="keyword">Rows</span>: <span class="number">18</span></span><br><span class="line"> Avg_row_length: <span class="number">910</span></span><br><span class="line">    Data_length: <span class="number">16384</span></span><br><span class="line">Max_data_length: <span class="number">0</span></span><br><span class="line">   Index_length: <span class="number">49152</span></span><br><span class="line">      Data_free: <span class="number">0</span></span><br><span class="line"> Auto_increment: <span class="number">20</span></span><br><span class="line">    Create_time: <span class="number">2022</span><span class="number">-10</span><span class="number">-27</span> <span class="number">09</span>:<span class="number">10</span>:<span class="number">10</span></span><br><span class="line">    Update_time: <span class="keyword">NULL</span></span><br><span class="line">     Check_time: <span class="keyword">NULL</span></span><br><span class="line">      <span class="keyword">Collation</span>: utf8mb4_0900_ai_ci</span><br><span class="line">       Checksum: <span class="keyword">NULL</span></span><br><span class="line"> Create_options:</span><br><span class="line">        Comment:</span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.03</span> sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Compact"><a href="#Compact" class="headerlink" title="Compact"></a>Compact</h3><p>MySQL 5.1版本的默认行格式。一条完整的记录可以被分为记录的额外信息和记录的真实数据两大部分。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221115202419761.png" alt="image-20221115202419761"></p>
+<p>边长字段长度列表：例如<code>varchar</code>这样的变长字段，这个字段记录所有变长字段的真实数据占用的字节长度，形成一个边长字段长度列表</p>
+<p><code>NULL</code>值列表：将<code>NULL</code>值的列统一管理起来，目的是为了记录<code>NULL</code>列之后的偏移量</p>
+<p>记录头信息：就是上面的<code>User Records</code>信息，主要用来记录该条信息的一系列状态</p>
+<p>记录的真实数据：除了真实的数据之外，还有三个隐藏列：<code>row_id</code>(行ID)，<code>transaction_id</code>(事务ID)，<code>roll_pointer</code>(回滚指针)。</p>
+<ul>
+<li><code>row_id</code>：行ID，唯一标识一条记录，如果表没有手动指定主键，则会选取一个Unique键作为主键，如果连Unique键都没有定义的话，则会为表默认添加一个名为<code>row_id</code>的隐藏列作为主键。</li>
+<li><code>transaction_id</code>，<code>roll_pointer</code>：事务ID和回滚指针，主要用于事务相关操作。</li>
+</ul>
+<h3 id="Dynamic和Compressed行格式"><a href="#Dynamic和Compressed行格式" class="headerlink" title="Dynamic和Compressed行格式"></a><code>Dynamic</code>和<code>Compressed</code>行格式</h3><p>这两个行格式差别不大，而且根<code>Compact</code>格式也差别不大。</p>
+<p><code>InnoDB</code>存储引擎可以将一条记录中的某些数据存储在真正的数据页面之外。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建 65535长度的VARCHAR会报错</span></span><br><span class="line"><span class="comment">-- &gt; 1118 - Row size too large. The maximum row size for the used table type, not counting BLOBs, is 65535. This includes storage overhead, check the manual. You have to change some columns to TEXT or BLOBs</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> varchar_size_demo(</span><br><span class="line">c <span class="type">VARCHAR</span>(<span class="number">65535</span>)</span><br><span class="line">) CHARSET <span class="operator">=</span> ASCII row_format<span class="operator">=</span>compact; </span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> varchar_size_demo(</span><br><span class="line">c <span class="type">VARCHAR</span>(<span class="number">65532</span>) <span class="comment">-- 实际上最大长度是65532，原因是要加上2个字节长度的变长字段的长度+ 1个字节的NULL值标识 </span></span><br><span class="line">) CHARSET<span class="operator">=</span>ASCII ROW_FORMAT<span class="operator">=</span>COMPACT; </span><br></pre></td></tr></table></figure>
+
+<p>而一个页16KB，存储16384个字节，可能出现一个字段的长度就超过1页，这种现象就是<strong>行溢出</strong>。</p>
+<p>在<code>Compact</code>和<code>Redundant</code>行格式中，会将部分数据存储在页中，剩余数据分散存储在几个其他的页中，而且记录其他的页的地址。</p>
+<p><code>Dynamic</code>和<code>Compressed</code>在处理行溢出的情况下，处理过程不一样，他们是将存放在<code>BLOB</code>中的数据采用完全的行溢出方式，实际的数据都存放在<code>Off Page</code>（溢出页）中。而且<code>Compressed</code>在存储行数据时，会以<code>zlib</code>的算法进行压缩，因此对于<code>BLOB</code>、<code>TEXT</code>、<code>VARCHAR</code>这类大长度类型的数据能够进行非常有效的存储。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221115204751646.png" alt="image-20221115204751646"></p>
+<h3 id="Redundant"><a href="#Redundant" class="headerlink" title="Redundant"></a><code>Redundant</code></h3><p>是MySQL 5.0版本之前<code>InnoDB</code>的行记录存储方式。</p>
+<p>与<code>Compact</code>区别主要是记录的额外信息有区别。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221115204850330.png" alt="image-20221115204850330"></p>
+<h2 id="区、段与碎片区"><a href="#区、段与碎片区" class="headerlink" title="区、段与碎片区"></a>区、段与碎片区</h2><h3 id="区"><a href="#区" class="headerlink" title="区"></a>区</h3><p>B+树的每一层中的页都会形成一个双向链表，如果以页来分类存储空间，双向链表之间的物理距离可能非常远，而顺序<code>I/O</code>可以加速页和页之间的寻址和访问，因此引入区的概念，一个区的可以存储<code>64</code>个页，也就是<code>64 * 16KB = 1MB</code>，当数据量大时，为索引分配空间就可以以区为单位，消除随机<code>IO</code>，提高性能。 </p>
+<p>区可以分为4中类型：</p>
+<ul>
+<li>空闲的区</li>
+<li>有剩余空间的碎片区</li>
+<li>没有剩余空间的碎片区</li>
+<li>附属于某个段的区</li>
+</ul>
+<h3 id="段"><a href="#段" class="headerlink" title="段"></a>段</h3><p><code>InnoDB</code>对<code>B+树</code>的<strong>叶子节点</strong>和<strong>非叶子节点</strong>是会区别对待的，存放叶子节点的区的集合就算是一个段，存放非叶子区的集合也是一个段。</p>
+<p>除了存放叶子节点的段称为<strong>数据段</strong>，存放非叶子节点的段称为<strong>索引段</strong>，还有存储一些特殊数据定义的<strong>回滚段</strong>。</p>
+<p>段其实不是对应表空间中某一个连续的物理区域，而是一个逻辑的概念，由若干个零散的页面以及一些完整的区组成。</p>
+<h3 id="碎片区"><a href="#碎片区" class="headerlink" title="碎片区"></a>碎片区</h3><p>默认情况下，只存储了几条记录的小表，不一定会存储2M（叶子节点的区和非叶子节点的区，占用2M）的存储空间，针对这种数据量较小的表浪费空间的情况，<code>InnoDB</code>提出碎片区的概念。一个碎片区中，不是所有页都是存储同一个段的数据，而是可以用于不同的目的，比如有些页存放于段A，有些页存放于段B，有些页哪个段都不属于。碎片去直属于表空间，并不属于任何一个段。</p>
+<h2 id="表空间"><a href="#表空间" class="headerlink" title="表空间"></a>表空间</h2><p>表空间可以看做是<code>InnoDB</code>存储引擎逻辑结构的最高层，所有的数据都存放于表空间</p>
+<ul>
+<li>系统表空间：存放的元数据，例如所有表、列、索引、索引对应的列、外键、外键对应的列、表空间等的信息</li>
+<li>独立表空间：每一个表有一个独立的表空间，由段、区、页组成。</li>
+<li>撤销表空间：</li>
+<li>临时表空间：</li>
+</ul>
+<p>查看表空间类型</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%innodb_file_per_table%&#x27;</span>;</span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------+-------+</span></span><br><span class="line"><span class="operator">|</span> Variable_name         <span class="operator">|</span> <span class="keyword">Value</span> <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------+-------+</span></span><br><span class="line"><span class="operator">|</span> innodb_file_per_table <span class="operator">|</span> <span class="keyword">ON</span>    <span class="operator">|</span>  <span class="comment">-- ON代表使用独立表空间</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-----------------------+-------+</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.02</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p>用户不能直接访问<code>InnoDB</code>的系统表，但可以通过<code>information_schema</code>表获取一些系统信息</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use information_schema;</span><br><span class="line"><span class="keyword">show</span> tables;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<p>推荐阅读：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9qdWVqaW4uY24vcG9zdC82OTc0MjI1MzUzMzcxOTc1Njkz">MySQL系列（4）— InnoDB数据页结构<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/dc39.html" rel="prev" title="MySQL学习笔记高级使用篇">
+                  <i class="fa fa-chevron-left"></i> MySQL学习笔记高级使用篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/b3f4.html" rel="next" title="MySQL学习笔记索引篇">
+                  MySQL学习笔记索引篇 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

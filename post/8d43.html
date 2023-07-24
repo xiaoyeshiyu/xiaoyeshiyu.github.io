@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="有时候需要判断设备是否处于死机状态，或者需要修改IP地址，但是又不想往机房里面跑，搬显示器等设备，那么此时通过 ipmi 或者 bmc 进入到设备 ipmi 界面，进行管理是一个非常不错的选择。但是一般配置IPMI地址需要进入到BIOS中配置，而进入到BIOS中是需要重启设备的，而ipmitool这个命令就可以在不重启设备的前提下实现这个效果，对临场判断以及解决问题有很大的帮助。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ipmi 管理工具的使用方式">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/8d43.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="有时候需要判断设备是否处于死机状态，或者需要修改IP地址，但是又不想往机房里面跑，搬显示器等设备，那么此时通过 ipmi 或者 bmc 进入到设备 ipmi 界面，进行管理是一个非常不错的选择。但是一般配置IPMI地址需要进入到BIOS中配置，而进入到BIOS中是需要重启设备的，而ipmitool这个命令就可以在不重启设备的前提下实现这个效果，对临场判断以及解决问题有很大的帮助。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-12-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-13T03:03:17.686Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/8d43.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/8d43.html","path":"post/8d43.html","title":"ipmi 管理工具的使用方式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ipmi 管理工具的使用方式 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#immi-%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">immi 管理工具的使用方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IPMI%E8%A7%A3%E8%AF%BB"><span class="nav-number">1.1.</span> <span class="nav-text">IPMI解读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">系统管理命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E7%B1%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">管理类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%94%B5%E6%BA%90%E6%8E%A7%E5%88%B6%E7%B1%BB"><span class="nav-number">1.2.2.</span> <span class="nav-text">远程电源控制类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%8A%B6%E6%80%81%E7%B1%BB"><span class="nav-number">1.2.3.</span> <span class="nav-text">读取系统状态类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%97%A5%E5%BF%97%E7%B1%BB"><span class="nav-number">1.2.4.</span> <span class="nav-text">系统日志类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.5.</span> <span class="nav-text">网络接口相关命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9C%8B%E9%97%A8%E7%8B%97%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="nav-number">1.2.6.</span> <span class="nav-text">看门狗相关命令</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/8d43.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ipmi 管理工具的使用方式 | 小夜时雨">
+      <meta itemprop="description" content="有时候需要判断设备是否处于死机状态，或者需要修改IP地址，但是又不想往机房里面跑，搬显示器等设备，那么此时通过 ipmi 或者 bmc 进入到设备 ipmi 界面，进行管理是一个非常不错的选择。但是一般配置IPMI地址需要进入到BIOS中配置，而进入到BIOS中是需要重启设备的，而ipmitool这个命令就可以在不重启设备的前提下实现这个效果，对临场判断以及解决问题有很大的帮助。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ipmi 管理工具的使用方式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-12-11 00:00:00" itemprop="dateCreated datePublished" datetime="2017-12-11T00:00:00+08:00">2017-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-07-13 11:03:17" itemprop="dateModified" datetime="2023-07-13T11:03:17+08:00">2023-07-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/FAE/" itemprop="url" rel="index"><span itemprop="name">FAE</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/8d43.html" class="post-meta-item leancloud_visitors" data-flag-title="ipmi 管理工具的使用方式" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/8d43.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/8d43.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">有时候需要判断设备是否处于死机状态，或者需要修改IP地址，但是又不想往机房里面跑，搬显示器等设备，那么此时通过 ipmi 或者 bmc 进入到设备 ipmi 界面，进行管理是一个非常不错的选择。但是一般配置IPMI地址需要进入到BIOS中配置，而进入到BIOS中是需要重启设备的，而ipmitool这个命令就可以在不重启设备的前提下实现这个效果，对临场判断以及解决问题有很大的帮助。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="immi-管理工具的使用方式"><a href="#immi-管理工具的使用方式" class="headerlink" title="immi 管理工具的使用方式"></a>immi 管理工具的使用方式</h1><h2 id="IPMI解读"><a href="#IPMI解读" class="headerlink" title="IPMI解读"></a>IPMI解读</h2><p>IPMI（IntelligentPlatform Management Interface）即智能平台管理接口是使硬件管理具备“智能化”的新一代通用接口标准。用户可以利用 IPMI 监视服务器的物理特征，如温度、电压、电扇工作状态、电源供应以及机箱入侵等。ipmi 最大的优势在于它是独立于 CPU BIOS 和 OS 的，所以用户无论在开机还是关机的状态下，只要接通电源就可以实现对服务器的监控。ipmi 是一种规范的标准，其中最重要的物理部件就是BMC(Baseboard Management Controller)，一种嵌入式管理微控制器，它相当于整个平台管理的“大脑”，通过它 ipmi 可以监控各个传感器的数据并记录各种事件的日志。 </p>
+<p>ipmitool是一种可用在 Linux&#x2F;Unix 系统下的基于命令行方式的 ipmi 平台管理工具。它支持 ipmi 1.5 和ipmi 2.0 规范（最新的规范为 ipmi 2.0）。利用它可以实现获取传感器的信息、显示系统日志内容、网络远程开关机等功能。其主要功能包括读取和显示传感器数据（SDR），显示System Evernt Log（SEL）的内容，显示打印Field Replaceable Unit（FRU）信息，读取和设置BMC模块的LAN配置，远程控制服务器主机的电源。 </p>
+<p>ipmitool支持IPMI-over-LAN和系统Kernel中的设备驱动（openIPMI in Linux, BMC in Solaris, openIPMI in FreeBSD) 接口。即可以本地运行，也可以在远程机器上运行，实现对服务器主机的管理和控制。</p>
+<h2 id="系统管理命令"><a href="#系统管理命令" class="headerlink" title="系统管理命令"></a>系统管理命令</h2><h3 id="管理类"><a href="#管理类" class="headerlink" title="管理类"></a>管理类</h3><ol>
+<li>查看设备信息</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool chassis status </span><br><span class="line">System Power         : on</span><br><span class="line">Power Overload       : false</span><br><span class="line">Power Interlock      : inactive</span><br><span class="line">Main Power Fault     : false</span><br><span class="line">Power Control Fault  : false</span><br><span class="line">Power Restore Policy : previous</span><br><span class="line">Last Power Event     : </span><br><span class="line">Chassis Intrusion    : inactive</span><br><span class="line">Front-Panel Lockout  : inactive</span><br><span class="line">Drive Fault          : false</span><br><span class="line">Cooling/Fan Fault    : false</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>查看BMC的信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool mc info </span><br><span class="line">Device ID                 : 32</span><br><span class="line">Device Revision           : 1</span><br><span class="line">Firmware Revision         : 3.45</span><br><span class="line">IPMI Version              : 2.0</span><br><span class="line">Manufacturer ID           : 10876</span><br><span class="line">Manufacturer Name         : Supermicro</span><br><span class="line">Product ID                : 2097 (0x0831)</span><br><span class="line">Product Name              : Unknown (0x831)</span><br><span class="line">Device Available          : yes</span><br><span class="line">Provides Device SDRs      : no</span><br><span class="line">Additional Device Support :</span><br><span class="line">    Sensor Device</span><br><span class="line">    SDR Repository Device</span><br><span class="line">    SEL Device</span><br><span class="line">    FRU Inventory Device</span><br><span class="line">    IPMB Event Receiver</span><br><span class="line">    IPMB Event Generator</span><br><span class="line">    Chassis Device</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看IPMI用户</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool user list </span><br><span class="line">ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit</span><br><span class="line">2   ADMIN            true    false      false      Unknown (0x00)</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>增加用户</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool user set name 3 test1</span><br><span class="line">[root@hyhive ~]# ipmitool user list </span><br><span class="line">ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit</span><br><span class="line">2   ADMIN            true    false      false      Unknown (0x00)</span><br><span class="line">3   test1            true    false      false      Unknown (0x00)</span><br><span class="line">[root@hyhive ~]# ipmitool user set password 3 test1</span><br><span class="line">[root@hyhive ~]# ipmitool user priv 3 20 </span><br><span class="line">[root@hyhive ~]# ipmitool user list </span><br><span class="line">ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit</span><br><span class="line">2   ADMIN            true    false      false      Unknown (0x00)</span><br><span class="line">3   test1            true    false      false      ADMINISTRATOR</span><br><span class="line">[root@hyhive ~]# ipmitool -U test1 -P test1 user list </span><br><span class="line">ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit</span><br><span class="line">2   ADMIN            true    false      false      Unknown (0x00)</span><br><span class="line">3   test1            true    false      false      ADMINISTRATOR</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>重设密码</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool user set password 2 ADMIN</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 2指的是user ID，ADMIN指的是之后的密码</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="远程电源控制类"><a href="#远程电源控制类" class="headerlink" title="远程电源控制类"></a>远程电源控制类</h3><ol>
+<li>查看服务器当前开电状态</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool power status </span><br><span class="line">Chassis Power is on</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>服务器的开机，关机，reset和power cycle</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool power </span><br><span class="line">chassis power Commands: status, on, off, cycle, reset, diag, soft</span><br></pre></td></tr></table></figure>
+
+<p>power cycle 和power reset的区别在于前者从掉电到上电有１秒钟的间隔，而后者是很快上电</p>
+<h3 id="读取系统状态类"><a href="#读取系统状态类" class="headerlink" title="读取系统状态类"></a>读取系统状态类</h3><ol>
+<li>显示系统所有传感器列表</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool sensor list </span><br><span class="line">CPU1 Temp        | 44.000     | degrees C  | ok    | 0.000     | 0.000     | 0.000     | 98.000    | 103.000   | 103.000   </span><br><span class="line">CPU2 Temp        | 44.000     | degrees C  | ok    | 0.000     | 0.000     | 0.000     | 98.000    | 103.000   | 103.000   </span><br><span class="line">PCH Temp         | 49.000     | degrees C  | ok    | 0.000     | 5.000     | 16.000    | 90.000    | 95.000    | 100.000   </span><br><span class="line">System Temp      | 34.000     | degrees C  | ok    | -10.000   | -5.000    | 0.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">Peripheral Temp  | 49.000     | degrees C  | ok    | -10.000   | -5.000    | 0.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">Vcpu1VRM Temp    | 45.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 95.000    | 100.000   | 105.000   </span><br><span class="line">Vcpu2VRM Temp    | 46.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 95.000    | 100.000   | 105.000   </span><br><span class="line">VmemABVRM Temp   | 36.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 95.000    | 100.000   | 105.000   </span><br><span class="line">VmemCDVRM Temp   | 39.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 95.000    | 100.000   | 105.000   </span><br><span class="line">VmemEFVRM Temp   | 47.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 95.000    | 100.000   | 105.000   </span><br><span class="line">VmemGHVRM Temp   | 40.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 95.000    | 100.000   | 105.000   </span><br><span class="line">P1-DIMMA1 Temp   | 36.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">P1-DIMMB1 Temp   | 36.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">P1-DIMMC1 Temp   | 41.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">P1-DIMMD1 Temp   | 39.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">P2-DIMME1 Temp   | 43.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">P2-DIMMF1 Temp   | 40.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">P2-DIMMG1 Temp   | 36.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">P2-DIMMH1 Temp   | 37.000     | degrees C  | ok    | -5.000    | 0.000     | 5.000     | 80.000    | 85.000    | 90.000    </span><br><span class="line">FAN1             | na         |            | na    | na        | na        | na        | na        | na        | na        </span><br><span class="line">FAN2             | 3100.000   | RPM        | ok    | 300.000   | 500.000   | 700.000   | 25300.000 | 25400.000 | 25500.000 </span><br><span class="line">FAN3             | 3000.000   | RPM        | ok    | 300.000   | 500.000   | 700.000   | 25300.000 | 25400.000 | 25500.000 </span><br><span class="line">FAN4             | 3100.000   | RPM        | ok    | 300.000   | 500.000   | 700.000   | 25300.000 | 25400.000 | 25500.000 </span><br><span class="line">FAN5             | 3200.000   | RPM        | ok    | 300.000   | 500.000   | 700.000   | 25300.000 | 25400.000 | 25500.000 </span><br><span class="line">FAN6             | 3100.000   | RPM        | ok    | 300.000   | 500.000   | 700.000   | 25300.000 | 25400.000 | 25500.000 </span><br><span class="line">FANA             | na         |            | na    | na        | na        | na        | na        | na        | na        </span><br><span class="line">FANB             | na         |            | na    | na        | na        | na        | na        | na        | na        </span><br><span class="line">12V              | 12.189     | Volts      | ok    | 10.173    | 10.299    | 10.740    | 12.945    | 13.260    | 13.386    </span><br><span class="line">5VCC             | 5.052      | Volts      | ok    | 4.246     | 4.298     | 4.480     | 5.390     | 5.546     | 5.598     </span><br><span class="line">3.3VCC           | 3.401      | Volts      | ok    | 2.789     | 2.823     | 2.959     | 3.554     | 3.656     | 3.690     </span><br><span class="line">VBAT             | 2.898      | Volts      | ok    | 2.326     | 2.430     | 2.508     | 3.678     | 3.782     | 3.886     </span><br><span class="line">Vcpu1            | 1.818      | Volts      | ok    | 1.242     | 1.260     | 1.395     | 1.899     | 2.088     | 2.106     </span><br><span class="line">Vcpu2            | 1.818      | Volts      | ok    | 1.242     | 1.260     | 1.395     | 1.899     | 2.088     | 2.106     </span><br><span class="line">VDIMMAB          | 1.209      | Volts      | ok    | 0.948     | 0.975     | 1.047     | 1.344     | 1.425     | 1.443     </span><br><span class="line">VDIMMCD          | 1.209      | Volts      | ok    | 0.948     | 0.975     | 1.047     | 1.344     | 1.425     | 1.443     </span><br><span class="line">VDIMMEF          | 1.218      | Volts      | ok    | 0.948     | 0.975     | 1.047     | 1.344     | 1.425     | 1.443     </span><br><span class="line">VDIMMGH          | 1.209      | Volts      | ok    | 0.948     | 0.975     | 1.047     | 1.344     | 1.425     | 1.443     </span><br><span class="line">5VSB             | 5.026      | Volts      | ok    | 4.246     | 4.298     | 4.480     | 5.390     | 5.546     | 5.598     </span><br><span class="line">3.3VSB           | 3.248      | Volts      | ok    | 2.789     | 2.823     | 2.959     | 3.554     | 3.656     | 3.690     </span><br><span class="line">1.5V PCH         | 1.518      | Volts      | ok    | 1.320     | 1.347     | 1.401     | 1.644     | 1.671     | 1.698     </span><br><span class="line">1.2V BMC         | 1.227      | Volts      | ok    | 1.020     | 1.047     | 1.092     | 1.344     | 1.371     | 1.398     </span><br><span class="line">1.05V PCH        | 1.068      | Volts      | ok    | 0.870     | 0.897     | 0.942     | 1.194     | 1.221     | 1.248     </span><br><span class="line">Chassis Intru    | 0x0        | discrete   | 0x0000| na        | na        | na        | na        | na        | na        </span><br><span class="line">PS2 Status       | 0x1        | discrete   | 0x0100| na        | na        | na        | na        | na        | na        </span><br><span class="line">PS1 Status       | 0x1        | discrete   | 0x0100| na        | na        | na        | na        | na        | na   </span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>读取系统传感器SDR信息</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool sdr info </span><br><span class="line">SDR Version                         : 0x51</span><br><span class="line">Record Count                        : 52</span><br><span class="line">Free Space                          : 1634 bytes</span><br><span class="line">Most recent Addition                : </span><br><span class="line">Most recent Erase                   : </span><br><span class="line">SDR overflow                        : no</span><br><span class="line">SDR Repository Update Support       : non-modal</span><br><span class="line">Delete SDR supported                : yes</span><br><span class="line">Partial Add SDR supported           : yes</span><br><span class="line">Reserve SDR repository supported    : yes</span><br><span class="line">SDR Repository Alloc info supported : yes</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>读取系统所有SDR列表</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool sdr list </span><br><span class="line">CPU1 Temp        | 44 degrees C      | ok</span><br><span class="line">CPU2 Temp        | 45 degrees C      | ok</span><br><span class="line">PCH Temp         | 49 degrees C      | ok</span><br><span class="line">System Temp      | 34 degrees C      | ok</span><br><span class="line">Peripheral Temp  | 49 degrees C      | ok</span><br><span class="line">Vcpu1VRM Temp    | 46 degrees C      | ok</span><br><span class="line">Vcpu2VRM Temp    | 47 degrees C      | ok</span><br><span class="line">VmemABVRM Temp   | 36 degrees C      | ok</span><br><span class="line">VmemCDVRM Temp   | 39 degrees C      | ok</span><br><span class="line">VmemEFVRM Temp   | 48 degrees C      | ok</span><br><span class="line">VmemGHVRM Temp   | 41 degrees C      | ok</span><br><span class="line">P1-DIMMA1 Temp   | 36 degrees C      | ok</span><br><span class="line">P1-DIMMB1 Temp   | 36 degrees C      | ok</span><br><span class="line">P1-DIMMC1 Temp   | 41 degrees C      | ok</span><br><span class="line">P1-DIMMD1 Temp   | 39 degrees C      | ok</span><br><span class="line">P2-DIMME1 Temp   | 43 degrees C      | ok</span><br><span class="line">P2-DIMMF1 Temp   | 41 degrees C      | ok</span><br><span class="line">P2-DIMMG1 Temp   | 37 degrees C      | ok</span><br><span class="line">P2-DIMMH1 Temp   | 37 degrees C      | ok</span><br><span class="line">FAN1             | no reading        | ns</span><br><span class="line">FAN2             | 3100 RPM          | ok</span><br><span class="line">FAN3             | 3000 RPM          | ok</span><br><span class="line">FAN4             | 3100 RPM          | ok</span><br><span class="line">FAN5             | 3200 RPM          | ok</span><br><span class="line">FAN6             | 3100 RPM          | ok</span><br><span class="line">FANA             | no reading        | ns</span><br><span class="line">FANB             | no reading        | ns</span><br><span class="line">12V              | 12.19 Volts       | ok</span><br><span class="line">5VCC             | 5.05 Volts        | ok</span><br><span class="line">3.3VCC           | 3.40 Volts        | ok</span><br><span class="line">VBAT             | 2.90 Volts        | ok</span><br><span class="line">Vcpu1            | 1.82 Volts        | ok</span><br><span class="line">Vcpu2            | 1.82 Volts        | ok</span><br><span class="line">VDIMMAB          | 1.21 Volts        | ok</span><br><span class="line">VDIMMCD          | 1.21 Volts        | ok</span><br><span class="line">VDIMMEF          | 1.22 Volts        | ok</span><br><span class="line">VDIMMGH          | 1.21 Volts        | ok</span><br><span class="line">5VSB             | 5.03 Volts        | ok</span><br><span class="line">3.3VSB           | 3.25 Volts        | ok</span><br><span class="line">1.5V PCH         | 1.52 Volts        | ok</span><br><span class="line">1.2V BMC         | 1.23 Volts        | ok</span><br><span class="line">1.05V PCH        | 1.07 Volts        | ok</span><br><span class="line">Chassis Intru    | 0x00              | ok</span><br><span class="line">PS2 Status       | 0x01              | ok</span><br><span class="line">PS1 Status       | 0x01              | ok</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>显示系统可替代器件列表</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool fru list </span><br><span class="line">FRU Device Description : Builtin FRU Device (ID 0)</span><br><span class="line"> Board Mfg Date        : Mon Jan  1 08:00:00 1996</span><br><span class="line"> Board Mfg             : Supermicro</span><br><span class="line"> Board Serial          :           </span><br><span class="line"> Product Serial        :    </span><br></pre></td></tr></table></figure>
+
+<h3 id="系统日志类"><a href="#系统日志类" class="headerlink" title="系统日志类"></a>系统日志类</h3><ol>
+<li>显示所有系统事件日志</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool sel elist </span><br><span class="line">   1 | 07/04/2017 | 10:22:47 | OS Boot | Installation started () | Asserted</span><br><span class="line">   2 | 07/04/2017 | 10:27:15 | OS Boot | Installation completed () | Asserted</span><br><span class="line">   3 | 07/05/2017 | 15:37:08 | Unknown #0xff |  | Asserted</span><br><span class="line">   4 | 07/05/2017 | 15:38:37 | Unknown #0xff |  | Asserted</span><br><span class="line">   5 | 07/05/2017 | 15:54:47 | OS Boot | Installation started () | Asserted</span><br><span class="line">   6 | 07/05/2017 | 15:58:44 | OS Boot | Installation completed () | Asserted</span><br><span class="line">   7 | 07/10/2017 | 11:14:00 | Power Supply PS1 Status | Failure detected () | Asserted</span><br><span class="line">   8 | 07/10/2017 | 11:14:37 | Power Supply PS1 Status | Failure detected () | Deasserted</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>显示当前BMC时间</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool sel time get </span><br><span class="line">08/31/2017 19:18:21</span><br></pre></td></tr></table></figure>
+
+<h3 id="网络接口相关命令"><a href="#网络接口相关命令" class="headerlink" title="网络接口相关命令"></a>网络接口相关命令</h3><ol>
+<li>显示channel 1的相关配置</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool lan print 1 </span><br><span class="line">Set in Progress         : Set Complete</span><br><span class="line">Auth Type Support       : NONE MD2 MD5 PASSWORD </span><br><span class="line">Auth Type Enable        : Callback : MD2 MD5 PASSWORD </span><br><span class="line">                        : User     : MD2 MD5 PASSWORD </span><br><span class="line">                        : Operator : MD2 MD5 PASSWORD </span><br><span class="line">                        : Admin    : MD2 MD5 PASSWORD </span><br><span class="line">                        : OEM      : MD2 MD5 PASSWORD </span><br><span class="line">IP Address Source       : DHCP Address</span><br><span class="line">IP Address              : 192.168.10.239</span><br><span class="line">Subnet Mask             : 255.255.255.0</span><br><span class="line">MAC Address             : ac:1f:6b:15:dc:96</span><br><span class="line">SNMP Community String   : public</span><br><span class="line">IP Header               : TTL=0x00 Flags=0x00 Precedence=0x00 TOS=0x00</span><br><span class="line">BMC ARP Control         : ARP Responses Enabled, Gratuitous ARP Disabled</span><br><span class="line">Default Gateway IP      : 192.168.10.1</span><br><span class="line">Default Gateway MAC     : 00:00:00:00:00:00</span><br><span class="line">Backup Gateway IP       : 0.0.0.0</span><br><span class="line">Backup Gateway MAC      : 00:00:00:00:00:00</span><br><span class="line">802.1q VLAN ID          : Disabled</span><br><span class="line">802.1q VLAN Priority    : 0</span><br><span class="line">RMCP+ Cipher Suites     : 1,2,3,6,7,8,11,12</span><br><span class="line">Cipher Suite Priv Max   : XaaaXXaaaXXaaXX</span><br><span class="line">                        :     X=Cipher Suite Unused</span><br><span class="line">                        :     c=CALLBACK</span><br><span class="line">                        :     u=USER</span><br><span class="line">                        :     o=OPERATOR</span><br><span class="line">                        :     a=ADMIN</span><br><span class="line">                        :     O=OEM</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>设置channel 1 的IP地址</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool lan set 1 ipaddr 192.168.20.238</span><br><span class="line">Setting LAN IP Address to 192.168.20.238</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>设置channel 1 的netmask</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool lan set 1 netmask 255.255.0.0</span><br><span class="line">Setting LAN Subnet Mask to 255.255.0.0</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>设置channel 1的网关</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool lan set 1 defgw ipaddr 192.168.10.1</span><br><span class="line">Setting LAN Default Gateway IP to 192.168.10.1</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>设置channel 1的ip为自动获取</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool lan set 1 ipsrc dhcp </span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>设置channel 1 的ip为静态</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool lan set 1 ipsrc static </span><br></pre></td></tr></table></figure>
+
+<ol start="7">
+<li>显示系统默认channel</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool channel info </span><br><span class="line">Channel 0xf info:</span><br><span class="line">  Channel Medium Type   : System Interface</span><br><span class="line">  Channel Protocol Type : KCS</span><br><span class="line">  Session Support       : session-less</span><br><span class="line">  Active Session Count  : 0</span><br><span class="line">  Protocol Vendor ID    : 7154</span><br><span class="line">[root@hyhive ~]# ipmitool channel info 1</span><br><span class="line">Channel 0x1 info:</span><br><span class="line">  Channel Medium Type   : 802.3 LAN</span><br><span class="line">  Channel Protocol Type : IPMB-1.0</span><br><span class="line">  Session Support       : multi-session</span><br><span class="line">  Active Session Count  : 0</span><br><span class="line">  Protocol Vendor ID    : 7154</span><br><span class="line">  Volatile(active) Settings</span><br><span class="line">    Alerting            : enabled</span><br><span class="line">    Per-message Auth    : enabled</span><br><span class="line">    User Level Auth     : enabled</span><br><span class="line">    Access Mode         : always available</span><br><span class="line">  Non-Volatile Settings</span><br><span class="line">    Alerting            : enabled</span><br><span class="line">    Per-message Auth    : enabled</span><br><span class="line">    User Level Auth     : enabled</span><br><span class="line">    Access Mode         : always available</span><br></pre></td></tr></table></figure>
+
+<h3 id="看门狗相关命令"><a href="#看门狗相关命令" class="headerlink" title="看门狗相关命令"></a>看门狗相关命令</h3><blockquote>
+<p>watchdog一般是一个硬件模块。在嵌入式操作系统中，常见的应用场景是系统长期运行且无人看守，当出现出现系统死机时，watchdog就会自动帮你重启系统。</p>
+</blockquote>
+<ol>
+<li>读取当前看门狗配置</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool mc watchdog get </span><br><span class="line">Watchdog Timer Use:     Reserved (0x00)</span><br><span class="line">Watchdog Timer Is:      Stopped</span><br><span class="line">Watchdog Timer Actions: No action (0x00)</span><br><span class="line">Pre-timeout interval:   0 seconds</span><br><span class="line">Timer Expiration Flags: 0x00</span><br><span class="line">Initial Countdown:      0 sec</span><br><span class="line">Present Countdown:      0 sec</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>关掉看门狗</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool mc watchdog off </span><br><span class="line">Watchdog Timer Shutoff successful -- timer stopped</span><br><span class="line">[root@hyhive ~]# ipmitool mc watchdog get </span><br><span class="line">Watchdog Timer Use:     SMS/OS (0x04)</span><br><span class="line">Watchdog Timer Is:      Stopped</span><br><span class="line">Watchdog Timer Actions: No action (0x00)</span><br><span class="line">Pre-timeout interval:   0 seconds</span><br><span class="line">Timer Expiration Flags: 0x00</span><br><span class="line">Initial Countdown:      300 sec</span><br><span class="line">Present Countdown:      300 sec</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在最近设置的计数器的基础上重启看门狗</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@hyhive ~]# ipmitool mc watchdog reset</span><br><span class="line">IPMI Watchdog Timer Reset -  countdown restarted!</span><br><span class="line">[root@hyhive ~]# ipmitool mc watchdog get </span><br><span class="line">Watchdog Timer Use:     SMS/OS (0x44)</span><br><span class="line">Watchdog Timer Is:      Started/Running</span><br><span class="line">Watchdog Timer Actions: No action (0x00)</span><br><span class="line">Pre-timeout interval:   0 seconds</span><br><span class="line">Timer Expiration Flags: 0x00</span><br><span class="line">Initial Countdown:      300 sec</span><br><span class="line">Present Countdown:      298 sec</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/7992.html" rel="prev" title="搭建DevStack环境">
+                  <i class="fa fa-chevron-left"></i> 搭建DevStack环境
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/7b65.html" rel="next" title="使用smartctl命令检查磁盘">
+                  使用smartctl命令检查磁盘 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

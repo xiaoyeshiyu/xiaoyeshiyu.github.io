@@ -18,8 +18,8 @@
   
   <entry>
     <title>排序算法</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/sort/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/sort/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/ef35.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/ef35.html</id>
     <published>2023-06-20T16:00:00.000Z</published>
     <updated>2023-06-21T09:58:00.032Z</updated>
     
@@ -37,8 +37,8 @@
   
   <entry>
     <title>LeetCode每日一题</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/LeetCode/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/LeetCode/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/fe74.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/fe74.html</id>
     <published>2023-02-23T16:00:00.000Z</published>
     <updated>2023-04-14T01:46:16.255Z</updated>
     
@@ -54,8 +54,8 @@
   
   <entry>
     <title>Git学习笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/Git/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/Git/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
     <published>2023-02-20T16:00:00.000Z</published>
     <updated>2023-06-20T08:41:30.620Z</updated>
     
@@ -71,8 +71,8 @@
   
   <entry>
     <title>Golang代码质量持续检测</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/code-quality/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/code-quality/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/48a2.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/48a2.html</id>
     <published>2023-01-15T16:00:00.000Z</published>
     <updated>2023-03-08T08:55:39.520Z</updated>
     
@@ -88,8 +88,8 @@
   
   <entry>
     <title>Golang中的sync.Pool</title>
-    <link href="https://www.xiaoyeshiyu.com/2023/sync-pool/"/>
-    <id>https://www.xiaoyeshiyu.com/2023/sync-pool/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/dbf7.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/dbf7.html</id>
     <published>2023-01-15T16:00:00.000Z</published>
     <updated>2023-03-08T09:14:43.467Z</updated>
     
@@ -105,8 +105,8 @@
   
   <entry>
     <title>Redis学习笔记之实用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/Redis-adv/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/Redis-adv/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/c187.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/c187.html</id>
     <published>2022-12-05T16:00:00.000Z</published>
     <updated>2023-03-08T09:13:19.350Z</updated>
     
@@ -122,8 +122,8 @@
   
   <entry>
     <title>MySQL学习笔记高可用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-ha/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL-ha/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/a820.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/a820.html</id>
     <published>2022-11-24T16:00:00.000Z</published>
     <updated>2023-03-08T09:11:43.450Z</updated>
     
@@ -139,8 +139,8 @@
   
   <entry>
     <title>MySQL学习笔记事务和锁篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-tx-lock/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL-tx-lock/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/fa7d.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/fa7d.html</id>
     <published>2022-11-23T16:00:00.000Z</published>
     <updated>2023-03-08T09:12:21.464Z</updated>
     
@@ -156,8 +156,8 @@
   
   <entry>
     <title>MySQL学习笔记设计规范和调优篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-optimization/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL-optimization/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/de27.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/de27.html</id>
     <published>2022-11-20T16:00:00.000Z</published>
     <updated>2023-03-08T09:12:14.038Z</updated>
     
@@ -173,8 +173,8 @@
   
   <entry>
     <title>MySQL学习笔记索引篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-index/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL-index/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/b3f4.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/b3f4.html</id>
     <published>2022-11-14T16:00:00.000Z</published>
     <updated>2023-03-08T09:12:08.398Z</updated>
     
@@ -190,8 +190,8 @@
   
   <entry>
     <title>MySQL学习笔记架构篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-framework/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL-framework/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/4dd2.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/4dd2.html</id>
     <published>2022-11-11T16:00:00.000Z</published>
     <updated>2023-03-08T09:11:36.419Z</updated>
     
@@ -207,8 +207,8 @@
   
   <entry>
     <title>MySQL学习笔记高级使用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-adv/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL-adv/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/dc39.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/dc39.html</id>
     <published>2022-11-07T16:00:00.000Z</published>
     <updated>2023-03-08T09:11:23.384Z</updated>
     
@@ -224,8 +224,8 @@
   
   <entry>
     <title>MySQL学习笔记DQL篇</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/MySQL-dql/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/MySQL-dql/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/4c06.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/4c06.html</id>
     <published>2022-10-25T16:00:00.000Z</published>
     <updated>2023-05-15T09:58:59.527Z</updated>
     
@@ -241,8 +241,8 @@
   
   <entry>
     <title>微服务之网关</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/gateway/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/gateway/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/a6e3.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/a6e3.html</id>
     <published>2022-10-15T16:00:00.000Z</published>
     <updated>2023-03-08T09:02:00.264Z</updated>
     
@@ -258,8 +258,8 @@
   
   <entry>
     <title>微服务之链路追踪</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/link-tracing/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/link-tracing/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/a70a.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/a70a.html</id>
     <published>2022-10-15T16:00:00.000Z</published>
     <updated>2023-03-08T09:10:33.678Z</updated>
     
@@ -275,8 +275,8 @@
   
   <entry>
     <title>微服务之可用性</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/high-availability/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/high-availability/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/b0f4.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/b0f4.html</id>
     <published>2022-10-14T16:00:00.000Z</published>
     <updated>2023-03-08T09:06:53.710Z</updated>
     
@@ -292,8 +292,8 @@
   
   <entry>
     <title>RocketMQ学习笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/RocketMQ/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/RocketMQ/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/db4a.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/db4a.html</id>
     <published>2022-10-13T16:00:00.000Z</published>
     <updated>2023-03-08T09:13:38.197Z</updated>
     
@@ -309,8 +309,8 @@
   
   <entry>
     <title>事务和分布式事务</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/Transactions/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/Transactions/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/72b7.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/72b7.html</id>
     <published>2022-10-11T16:00:00.000Z</published>
     <updated>2023-03-08T09:14:54.969Z</updated>
     
@@ -326,8 +326,8 @@
   
   <entry>
     <title>ElasticSearch学习笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/ElasticSearch/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/ElasticSearch/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/714.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/714.html</id>
     <published>2022-10-09T16:00:00.000Z</published>
     <updated>2023-03-08T09:05:46.896Z</updated>
     
@@ -343,8 +343,8 @@
   
   <entry>
     <title>微服务之负载均衡</title>
-    <link href="https://www.xiaoyeshiyu.com/2022/load-balancing/"/>
-    <id>https://www.xiaoyeshiyu.com/2022/load-balancing/</id>
+    <link href="https://www.xiaoyeshiyu.com/post/941b.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/941b.html</id>
     <published>2022-10-08T16:00:00.000Z</published>
     <updated>2023-03-08T09:10:38.062Z</updated>
     

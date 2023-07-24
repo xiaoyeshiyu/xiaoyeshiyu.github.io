@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="作为一个OpenStack的初学者，要真真切切的狂舔OpenStack就必须要亲手搭建以及学习OpenStack中各个组建，以及各个组建相互之间的关系和调用，这个时候DevStack就是最好的选择。虽然网上有很多教程，但还是有一些由于OpenStack更新出现的新的坑没有人填，本文主要是记录17年底手动搭建DevStack过程，以及总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建DevStack环境">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/7992.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="作为一个OpenStack的初学者，要真真切切的狂舔OpenStack就必须要亲手搭建以及学习OpenStack中各个组建，以及各个组建相互之间的关系和调用，这个时候DevStack就是最好的选择。虽然网上有很多教程，但还是有一些由于OpenStack更新出现的新的坑没有人填，本文主要是记录17年底手动搭建DevStack过程，以及总结。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cl.ly/3R1U1o191m30/Image%202017-09-01%20at%205.27.37%20PM.png">
+<meta property="og:image" content="https://cl.ly/17303l261C2E/Image%202017-09-03%20at%207.44.23%20PM.png">
+<meta property="article:published_time" content="2017-12-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-03-08T09:04:23.903Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cl.ly/3R1U1o191m30/Image%202017-09-01%20at%205.27.37%20PM.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/7992.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/7992.html","path":"post/7992.html","title":"搭建DevStack环境"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>搭建DevStack环境 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">快速开始</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Linux"><span class="nav-number">1.1.</span> <span class="nav-text">安装Linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="nav-number">1.2.</span> <span class="nav-text">环境搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%98%B6%E6%AE%B5"><span class="nav-number">1.3.</span> <span class="nav-text">安装阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAlocal-conf%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.4.</span> <span class="nav-text">创建local.conf配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="nav-number">1.5.</span> <span class="nav-text">开始安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E6%80%BB%E7%BB%93"><span class="nav-number">2.</span> <span class="nav-text">错误总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BA%E7%8E%B0-generate-subunit"><span class="nav-number">2.1.</span> <span class="nav-text">出现 generate-subunit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BA%E7%8E%B0nova-api-did-not-start"><span class="nav-number">2.2.</span> <span class="nav-text">出现nova-api did not start</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BA%E7%8E%B0keystone-not-start"><span class="nav-number">2.3.</span> <span class="nav-text">出现keystone not start</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E4%B8%AA%E8%8A%82%E7%82%B9%E5%87%BA%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">第二个节点出现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-number">3.</span> <span class="nav-text">安装成功</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stack-sh%E4%B8%AD%E7%9A%84%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">stack.sh中的执行顺序：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/7992.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="搭建DevStack环境 | 小夜时雨">
+      <meta itemprop="description" content="作为一个OpenStack的初学者，要真真切切的狂舔OpenStack就必须要亲手搭建以及学习OpenStack中各个组建，以及各个组建相互之间的关系和调用，这个时候DevStack就是最好的选择。虽然网上有很多教程，但还是有一些由于OpenStack更新出现的新的坑没有人填，本文主要是记录17年底手动搭建DevStack过程，以及总结。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          搭建DevStack环境
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-12-07 00:00:00" itemprop="dateCreated datePublished" datetime="2017-12-07T00:00:00+08:00">2017-12-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-03-08 17:04:23" itemprop="dateModified" datetime="2023-03-08T17:04:23+08:00">2023-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/OpenStack/" itemprop="url" rel="index"><span itemprop="name">OpenStack</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/7992.html" class="post-meta-item leancloud_visitors" data-flag-title="搭建DevStack环境" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/7992.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/7992.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">作为一个OpenStack的初学者，要真真切切的狂舔OpenStack就必须要亲手搭建以及学习OpenStack中各个组建，以及各个组建相互之间的关系和调用，这个时候DevStack就是最好的选择。虽然网上有很多教程，但还是有一些由于OpenStack更新出现的新的坑没有人填，本文主要是记录17年底手动搭建DevStack过程，以及总结。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><h3 id="安装Linux"><a href="#安装Linux" class="headerlink" title="安装Linux"></a>安装Linux</h3><p>DevStack环境适用于Ubuntu 16.04&#x2F;17.04,Fedore 24&#x2F;25,CentOS&#x2F;RHEL 7,Debian和OpenSUSE。</p>
+<p>下面使用的是CentOS 7.3</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# cat /etc/redhat-release </span><br><span class="line">CentOS Linux release 7.3.1611 (Core) </span><br><span class="line">[root@Mitaka ~]# uname -a </span><br><span class="line">Linux Mitaka 3.10.0-514.el7.x86_64 #1 SMP Tue Nov 22 16:42:41 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
+
+<p>网络状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# ifconfig </span><br><span class="line">ens160: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.50.97  netmask 255.255.255.0  broadcast 192.168.50.255</span><br><span class="line">        inet6 fe80::7314:f764:fe81:8e4a  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 00:0c:29:34:45:7b  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 104399  bytes 151291538 (144.2 MiB)</span><br><span class="line">        RX errors 0  dropped 32  overruns 0  frame 0</span><br><span class="line">        TX packets 55598  bytes 4009855 (3.8 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>安装git</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# yum install -y git </span><br></pre></td></tr></table></figure>
+
+<p>关闭selinux、iptables</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka keystone]# systemctl stop firewalld </span><br><span class="line">[root@Mitaka keystone]# systemctl disable firewalld</span><br><span class="line">[root@Mitaka keystone]# setenforce 0 </span><br><span class="line">[root@Mitaka keystone]# cat /etc/sysconfig/selinux </span><br><span class="line"></span><br><span class="line">	SELINUX=disabled</span><br></pre></td></tr></table></figure>
+
+<p>使用豆瓣pip源头</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# mkdir -p ~/.pip</span><br><span class="line">[root@Mitaka ~]# cat ~/.pip/pip.conf </span><br><span class="line">[global]</span><br><span class="line">index-url = http://mirrors.aliyun.com/pypi/simple/  </span><br><span class="line">[install] </span><br><span class="line">trusted-host = mirrors.aliyun.com</span><br></pre></td></tr></table></figure>
+
+<p>使用阿里yum源</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# yum install -y wget </span><br><span class="line">[root@Mitaka ~]# wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">[root@Mitaka ~]# yum clean all </span><br><span class="line">[root@Mitaka ~]# yum makecache </span><br><span class="line">[root@Mitaka ~]# yum install epel-release -y</span><br><span class="line">[root@Mitaka ~]# yum install python-pip -y</span><br><span class="line">[root@Mitaka ~]# pip install --upgrade pip</span><br><span class="line">[root@Mitaka ~]# pip install -U os-testr</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装阶段"><a href="#安装阶段" class="headerlink" title="安装阶段"></a>安装阶段</h3><p>创建stack用户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# useradd -s /bin/bash -d /opt/stack -m stack</span><br><span class="line">[root@Mitaka ~]# echo &quot;stack ALL=(ALL) NOPASSWD: ALL&quot; | sudo tee /etc/sudoers.d/stack</span><br></pre></td></tr></table></figure>
+
+<p>下载DevStack</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# sudo su - stack</span><br><span class="line">[stack@Mitaka ~]$ cd</span><br><span class="line">[stack@Mitaka ~]$ git clone https://git.openstack.org/openstack-dev/devstack</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建local-conf配置文件"><a href="#创建local-conf配置文件" class="headerlink" title="创建local.conf配置文件"></a>创建local.conf配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[stack@Mitaka ~]$ cd devstack/</span><br><span class="line">[stack@Mitaka devstack]$ cat local.conf </span><br><span class="line">[[local|localrc]]</span><br><span class="line">ADMIN_PASSWORD=daemon</span><br><span class="line">DATABASE_PASSWORD=$ADMIN_PASSWORD</span><br><span class="line">RABBIT_PASSWORD=$ADMIN_PASSWORD</span><br><span class="line">SERVICE_PASSWORD=$ADMIN_PASSWORD</span><br></pre></td></tr></table></figure>
+
+<h3 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[stack@Mitaka devstack]$ ./stack.sh </span><br></pre></td></tr></table></figure>
+
+<p>这个过程会持续15-20分钟，这个时间取决于网络下载速度。</p>
+<h2 id="错误总结"><a href="#错误总结" class="headerlink" title="错误总结"></a>错误总结</h2><p>当安装出现问题的时候，首先清除当前环境，然后修改配置文件之后再次执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[stack@Mitaka devstack]$ ./unstack.sh </span><br><span class="line">[stack@Mitaka devstack]$ ./stack.sh </span><br></pre></td></tr></table></figure>
+
+<h3 id="出现-generate-subunit"><a href="#出现-generate-subunit" class="headerlink" title="出现 generate-subunit"></a>出现 generate-subunit</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2016-07-27 08:40:04.711 | ./stack.sh:686:git_clone</span><br><span class="line">2016-07-27 08:40:04.711 | /devstack/functions-common:444:git_timed</span><br><span class="line">2016-07-27 08:40:04.711 | /devstack/functions-common:510:die</span><br><span class="line">2016-07-27 08:40:04.713 | [ERROR] /devstack/functions-common:510 git call failed: [git clone git://git.openstack.org/openstack/requirements.git /opt/stack/requirements]</span><br><span class="line">2016-07-27 08:40:05.715 | Error on exit</span><br><span class="line">2016-07-27 08:40:05.716 | ./stack.sh: line 463: generate-subunit: command not found</span><br></pre></td></tr></table></figure>
+
+<p>解决办法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# yum install python-pip -y</span><br><span class="line">[root@Mitaka ~]# pip install --upgrade pip</span><br><span class="line">[root@Mitaka ~]# pip install -U os-testr</span><br></pre></td></tr></table></figure>
+
+<h3 id="出现nova-api-did-not-start"><a href="#出现nova-api-did-not-start" class="headerlink" title="出现nova-api did not start"></a>出现nova-api did not start</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ERROR] /opt/stack/devstack/lib/nova:816 nova-api did not start</span><br></pre></td></tr></table></figure>
+
+<p>根据</p>
+<blockquote>
+<p><span class="exturl" data-url="aHR0cDovL29wZW5zdGFjay4xMDkzMS5uNy5uYWJibGUuY29tL2Nhbi10LWluc3RhbGwtZGV2c3RhY2stbm92YS1hcGktZGlkLW5vdC1zdGFydC10ZDE3MjgwLmh0bWw=">http://openstack.10931.n7.nabble.com/can-t-install-devstack-nova-api-did-not-start-td17280.html<i class="fa fa-external-link-alt"></i></span>  </p>
+</blockquote>
+<p>所描述</p>
+<p><img src="https://cl.ly/3R1U1o191m30/Image%202017-09-01%20at%205.27.37%20PM.png" alt="nova-api did not start"></p>
+<p>解决办法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka nova]# pip install oslo.config</span><br></pre></td></tr></table></figure>
+
+<h3 id="出现keystone-not-start"><a href="#出现keystone-not-start" class="headerlink" title="出现keystone not start"></a>出现keystone not start</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ERROR] /opt/stack/devstack/lib/keystone:567 keystone did not start</span><br></pre></td></tr></table></figure>
+
+<p>解决办法：</p>
+<p>在local.conf中添加</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HOST_IP=192.168.50.97</span><br><span class="line">SERVICE_HOST=127.0.0.1</span><br></pre></td></tr></table></figure>
+
+<h3 id="第二个节点出现"><a href="#第二个节点出现" class="headerlink" title="第二个节点出现"></a>第二个节点出现</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">2017-12-08 03:39:15.552 | +functions:wait_for_compute:455            echo &#x27;Didn&#x27;\&#x27;&#x27;t find service registered by hostname after 60 seconds&#x27;</span><br><span class="line">2017-12-08 03:39:15.552 | Didn&#x27;t find service registered by hostname after 60 seconds</span><br><span class="line">2017-12-08 03:39:15.558 | +functions:wait_for_compute:456            openstack --os-cloud devstack-admin --os-region RegionOne compute service list</span><br><span class="line">2017-12-08 03:39:18.400 | +----+------------------+---------+----------+---------+-------+----------------------------+</span><br><span class="line">2017-12-08 03:39:18.400 | | ID | Binary           | Host    | Zone     | Status  | State | Updated At                 |</span><br><span class="line">2017-12-08 03:39:18.400 | +----+------------------+---------+----------+---------+-------+----------------------------+</span><br><span class="line">2017-12-08 03:39:18.400 | |  3 | nova-scheduler   | stack01 | internal | enabled | up    | 2017-12-07T09:25:01.000000 |</span><br><span class="line">2017-12-08 03:39:18.400 | |  5 | nova-consoleauth | stack01 | internal | enabled | up    | 2017-12-07T09:24:59.000000 |</span><br><span class="line">2017-12-08 03:39:18.401 | |  6 | nova-conductor   | stack01 | internal | enabled | up    | 2017-12-07T09:24:57.000000 |</span><br><span class="line">2017-12-08 03:39:18.401 | |  1 | nova-conductor   | stack01 | internal | enabled | up    | 2017-12-07T09:24:57.000000 |</span><br><span class="line">2017-12-08 03:39:18.401 | |  2 | nova-compute     | stack01 | nova     | enabled | up    | 2017-12-07T09:25:05.000000 |</span><br><span class="line">2017-12-08 03:39:18.401 | +----+------------------+---------+----------+---------+-------+----------------------------+</span><br><span class="line">2017-12-08 03:39:18.488 | +functions:wait_for_compute:458            return 124</span><br><span class="line">2017-12-08 03:39:18.496 | +lib/nova:is_nova_ready:1                  exit_trap</span><br><span class="line">2017-12-08 03:39:18.504 | +./stack.sh:exit_trap:493                  local r=124</span><br><span class="line">2017-12-08 03:39:18.512 | ++./stack.sh:exit_trap:494                  jobs -p</span><br><span class="line">2017-12-08 03:39:18.520 | +./stack.sh:exit_trap:494                  jobs=</span><br><span class="line">2017-12-08 03:39:18.528 | +./stack.sh:exit_trap:497                  [[ -n &#x27;&#x27; ]]</span><br><span class="line">2017-12-08 03:39:18.535 | +./stack.sh:exit_trap:503                  &#x27;[&#x27; -f /tmp/tmp.rcd8I7zW4x &#x27;]&#x27;</span><br><span class="line">2017-12-08 03:39:18.541 | +./stack.sh:exit_trap:504                  rm /tmp/tmp.rcd8I7zW4x</span><br><span class="line">2017-12-08 03:39:18.549 | +./stack.sh:exit_trap:508                  kill_spinner</span><br><span class="line">2017-12-08 03:39:18.556 | +./stack.sh:kill_spinner:407               &#x27;[&#x27; &#x27;!&#x27; -z &#x27;&#x27; &#x27;]&#x27;</span><br><span class="line">2017-12-08 03:39:18.563 | +./stack.sh:exit_trap:510                  [[ 124 -ne 0 ]]</span><br><span class="line">2017-12-08 03:39:18.569 | +./stack.sh:exit_trap:511                  echo &#x27;Error on exit&#x27;</span><br><span class="line">2017-12-08 03:39:18.569 | Error on exit</span><br></pre></td></tr></table></figure>
+
+<p>解决办法</p>
+<p>暂无，最新的坑，暂时没有看到有人填。</p>
+<h2 id="安装成功"><a href="#安装成功" class="headerlink" title="安装成功"></a>安装成功</h2><p>安装成功之后，界面会显示</p>
+<p><img src="https://cl.ly/17303l261C2E/Image%202017-09-03%20at%207.44.23%20PM.png" alt="DevStack安装成功图"></p>
+<h2 id="stack-sh中的执行顺序："><a href="#stack-sh中的执行顺序：" class="headerlink" title="stack.sh中的执行顺序："></a>stack.sh中的执行顺序：</h2><ol>
+<li>支持OS类型包括Ubuntu 12.04或以上；Fedora F18或以上</li>
+<li>禁止使用root运行</li>
+<li>读取local.conf</li>
+<li>检查stackrc文件是否存在</li>
+<li>检查Devstack是不是已经在运行。如果在运行，则退出</li>
+<li>配置目标安装目录，包括创建目录，设置权限</li>
+<li>配置hostname，logging等</li>
+<li>读取各组件的安装和启动script</li>
+<li>如果没有配置密码，则需要用户输入各密码</li>
+<li>配置数据库</li>
+<li>配置Keystone</li>
+<li>安装各pre-condition包</li>
+<li>安装client包</li>
+<li>安装和配置keystone，swift，glance，cinder，neutron，nova，horizon，ceilometer，heat，CA</li>
+<li>配置数据库</li>
+<li>配置screen</li>
+<li>创建个组件使用的账号</li>
+<li>初始化和启动horizon</li>
+<li>启动swift，glance，</li>
+<li>安装images</li>
+<li>启动swift，nova_api，neutron，nova，cinder，ceilometer，heat</li>
+</ol>
+<p>参考资料：</p>
+<blockquote>
+<p><span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhaWhhaWZlaS9hcnRpY2xlL2RldGFpbHMvNDA4OTM4MjM=">http://blog.csdn.net/zhaihaifei/article/details/40893823<i class="fa fa-external-link-alt"></i></span></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/572c.html" rel="prev" title="通过KVM创建qcow2镜像文件">
+                  <i class="fa fa-chevron-left"></i> 通过KVM创建qcow2镜像文件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/8d43.html" rel="next" title="ipmi 管理工具的使用方式">
+                  ipmi 管理工具的使用方式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
