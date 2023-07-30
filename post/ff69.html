@@ -50,7 +50,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220227998.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220753448.png">
 <meta property="article:published_time" content="2023-07-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-26T03:56:54.846Z">
+<meta property="article:modified_time" content="2023-07-26T07:04:46.338Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
 <meta name="twitter:card" content="summary">
@@ -181,7 +181,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">84</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -255,7 +255,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-07-26 11:56:54" itemprop="dateModified" datetime="2023-07-26T11:56:54+08:00">2023-07-26</time>
+      <time title="Modified: 2023-07-26 15:04:46" itemprop="dateModified" datetime="2023-07-26T15:04:46+08:00">2023-07-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -609,7 +609,7 @@
 <p>跨服务传递请求携带上下文（context），数据隔离的流量路由方案。</p>
 <p>利用服务发现注册租户信息，注册成特定的租户。</p>
 <p>多租户需要全链路覆盖。不然到某个节点请求就会被丢掉，也无法做好链路追踪和全链路压测。</p>
-<h1 id="微服务的特性"><a href="#微服务的特性" class="headerlink" title="微服务的特性"></a>微服务的特性</h1><h3 id="隔离"><a href="#隔离" class="headerlink" title="隔离"></a>隔离</h3><p>隔离本质上是对系统或资源的分割，</p>
+<h1 id="微服务的特性"><a href="#微服务的特性" class="headerlink" title="微服务的特性"></a>微服务的特性</h1><h3 id="隔离"><a href="#隔离" class="headerlink" title="隔离"></a>隔离</h3><p>隔离本质上是对系统或资源的分割</p>
 <h3 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h3><p>通过超时机制，可以有效的回收无法访问的到的请求使用的资源。</p>
 <p>超时的机制是通过<code>context</code>在<code>gRPC</code>中传递，或者在<code>HTTP</code>请求中的<code>header</code>中加入<code>xxx-timeout</code>字段实现，在服务内部通过<code>context</code>传递维护超时机制，进程之间通过设定最大超时时间和剩余时间取最小值，实现超时控制。</p>
 <h3 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h3><p>过载保护是对令牌桶和漏桶的一种优化机制。</p>
@@ -647,6 +647,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/post/5700.html" rel="next" title="Go中Error的处理">
+                  Go中Error的处理 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>

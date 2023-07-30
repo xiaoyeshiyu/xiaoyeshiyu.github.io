@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-07-26T03:56:54.846Z</updated>
+  <updated>2023-07-28T09:36:40.516Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,28 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Go中Error的处理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/5700.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/5700.html</id>
+    <published>2023-07-25T16:00:00.000Z</published>
+    <updated>2023-07-28T09:36:40.516Z</updated>
+    
+    
+    <summary type="html">Golang中error是一个非常常见的返回值，如何高效和简便的处理error是一门重要学问。</summary>
+    
+    
+    
+    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>微服务</title>
     <link href="https://www.xiaoyeshiyu.com/post/ff69.html"/>
     <id>https://www.xiaoyeshiyu.com/post/ff69.html</id>
     <published>2023-07-23T16:00:00.000Z</published>
-    <updated>2023-07-26T03:56:54.846Z</updated>
+    <updated>2023-07-26T07:04:46.338Z</updated>
     
     
     <summary type="html">微服务当前大热，几乎所有的厂商都希望把服务微服务化，减少服务之间耦合，加快开发、迭代速度。学习微服务设计是必不可免的一件事。</summary>
@@ -339,23 +356,6 @@
     
     
     <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>ElasticSearch学习笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/post/714.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/714.html</id>
-    <published>2022-10-09T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.863Z</updated>
-    
-    
-    <summary type="html">ElasticSearch是最为常用的检索数据库，是一种NoSQL，一般用于做不常更新、常检索的场景，例如用于存储日志或者用于商品检索。本文介绍一些常用的es操作步骤和使用golang操作es的方式。</summary>
-    
-    
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
     
     
   </entry>
