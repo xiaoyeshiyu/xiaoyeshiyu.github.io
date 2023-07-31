@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-07-30T09:14:58.033Z</updated>
+  <updated>2023-07-31T01:49:24.165Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/5700.html"/>
     <id>https://www.xiaoyeshiyu.com/post/5700.html</id>
     <published>2023-07-25T16:00:00.000Z</published>
-    <updated>2023-07-30T09:14:58.033Z</updated>
+    <updated>2023-07-31T01:49:24.165Z</updated>
     
     
     <summary type="html">Golang中error是一个非常常见的返回值，如何高效和简便的处理error是一门重要学问。</summary>

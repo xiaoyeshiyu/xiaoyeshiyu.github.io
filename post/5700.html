@@ -83,7 +83,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230728145057902.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230728145128349.png">
 <meta property="article:published_time" content="2023-07-25T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-30T09:14:58.033Z">
+<meta property="article:modified_time" content="2023-07-31T01:49:24.165Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
 <meta name="twitter:card" content="summary">
@@ -288,7 +288,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-07-30 17:14:58" itemprop="dateModified" datetime="2023-07-30T17:14:58+08:00">2023-07-30</time>
+      <time title="Modified: 2023-07-31 09:49:24" itemprop="dateModified" datetime="2023-07-31T09:49:24+08:00">2023-07-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -332,19 +332,19 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h1><p>Go Error是一个普通接口</p>
+        <h1 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h1><p>Go <code>Error</code>是一个普通接口</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The error built-in interface type is the conventional interface for</span></span><br><span class="line"><span class="comment">// representing an error condition, with the nil value representing no error.</span></span><br><span class="line"><span class="keyword">type</span> <span class="type">error</span> <span class="keyword">interface</span> &#123;</span><br><span class="line">	Error() <span class="type">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>errors包中的error</p>
+<p><code>errors</code>包中的<code>error</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> errors</span><br><span class="line"></span><br><span class="line"><span class="comment">// New returns an error that formats as the given text.</span></span><br><span class="line"><span class="comment">// Each call to New returns a distinct error value even if the text is identical.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">New</span><span class="params">(text <span class="type">string</span>)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;errorString&#123;text&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// errorString is a trivial implementation of error.</span></span><br><span class="line"><span class="keyword">type</span> errorString <span class="keyword">struct</span> &#123;</span><br><span class="line">	s <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *errorString)</span></span> Error() <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> e.s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>返回一个errorString结构体的指针，指针实现error的interface</p>
-<p>基础库中大量自定义的error</p>
+<p>返回一个<code>errorString</code>结构体的指针，指针实现<code>error</code>的<code>interface</code></p>
+<p>基础库中大量自定义的<code>error</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ErrTooLarge is passed to panic if memory cannot be allocated to store data in a buffer.</span></span><br><span class="line"><span class="keyword">var</span> ErrTooLarge = errors.New(<span class="string">&quot;bytes.Buffer: too large&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> errNegativeRead = errors.New(<span class="string">&quot;bytes.Buffer: reader returned negative count from Read&quot;</span>)</span><br></pre></td></tr></table></figure>
 
 <h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">New</span><span class="params">(text <span class="type">string</span>)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;errorString&#123;text&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>errors.New()中返回的是指针，如果不使用指针，则会出现相同的字符串，会判断成两个error相等。</p>
+<p><code>errors.New()</code>中返回的是指针，如果不使用指针，则会出现相同的字符串，会判断成两个<code>error</code>相等。</p>
 <p>例如只使用一个字符串作为对象：</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230726160017104.png" alt="image-20230726160017104" style="zoom:50%;" />
 
@@ -355,7 +355,7 @@
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Output:</span><br><span class="line">	Error: EOF</span><br></pre></td></tr></table></figure>
 
-<p>当使用对象进行比较时，会比较结构体中的字段（前提是结构体中不包含不能比较的字段，例如map、slice、channel），如果每个字段都相等，则代表这两个对象相等。</p>
+<p>当使用对象进行比较时，会比较结构体中的字段（前提是结构体中不包含不能比较的字段，例如<code>map</code>、<code>slice</code>、<code>channel</code>），如果每个字段都相等，则代表这两个对象相等。</p>
 <p>当取地址进行比较时，会比较指针所指向的内存地址，可以唯一标识这个error。</p>
 <h2 id="Error-vs-Exception"><a href="#Error-vs-Exception" class="headerlink" title="Error vs Exception"></a>Error vs Exception</h2><p>各个语言的演进历史：</p>
 <ul>
@@ -364,81 +364,81 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ngx_int_t</span> <span class="title function_">ngx_create_path</span><span class="params">(<span class="type">ngx_file_t</span> *file, <span class="type">ngx_path_t</span> *path)</span>;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>C++</p>
-<p>引入exception，但是无法知道被调用方会抛出什么异常</p>
+<p>引入<code>exception</code>，但是无法知道被调用方会抛出什么异常</p>
 </li>
 <li><p>Java</p>
-<p>与C一样，单返回值，引入checked exception，方法的所有者必须申明，调用者必须处理。</p>
+<p>与C一样，单返回值，引入<code>checked exception</code>，方法的所有者必须申明，调用者必须处理。</p>
 <p>在启动时排除大量的异常是司空见惯的事情，并在它们的调用堆栈中尽职地记录下来。</p>
 <p>Java异常不再是异常，而是司空见惯。从良性到灾难性都有使用，异常的严重性由函数的调用者来区分。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.Error &amp; java.RuntimeException</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p>Go 处理异常逻辑是不引入 exception ，支持多参数返回，所以很容易实现error interface的对象，交由调用者来判定。</p>
-<p>如果一个函数返回（value，error）（一般error放在最后），通常不能直接使用value，而是必须先判断error。当error为nil时，才可以使用value。</p>
-<p>Go中有panic的机制，而且也不与其他语言的exception一样。当抛出异常时，相当于把exception扔给了调用者来处理。Go中的panic是灾难性的，而不是一个良性的exception。</p>
-<p>Go panic以为 fatal error（严重性问题，服务挂掉）。不能假设调用者来解决panic，意味着代码不能继续运行。</p>
-<p>使用多个返回值和一个简单的约定，Go解决了让程序员知道什么时候出了问题，并为真正的异常情况保留了panic。</p>
-<p>应该返回panic的情况：</p>
+<p>Go 处理异常逻辑是不引入 <code>exception</code> ，支持多参数返回，所以很容易实现<code>error interface</code>的对象，交由调用者来判定。</p>
+<p>如果一个函数返回（<code>value</code>，<code>error</code>）（一般error放在最后），通常不能直接使用<code>value</code>，而是必须先判断<code>error</code>。当<code>error</code>为<code>nil</code>时，才可以使用<code>value</code>。</p>
+<p>Go中有<code>panic</code>的机制，而且也不与其他语言的<code>exception</code>一样。当抛出异常时，相当于把<code>exception</code>扔给了调用者来处理。Go中的<code>panic</code>是灾难性的，而不是一个良性的<code>exception</code>。</p>
+<p>Go <code>panic</code>以为<code> fatal error</code>（严重性问题，服务挂掉）。不能假设调用者来解决<code>panic</code>，意味着代码不能继续运行。</p>
+<p>使用多个返回值和一个简单的约定，Go解决了让程序员知道什么时候出了问题，并为真正的异常情况保留了<code>panic</code>。</p>
+<p>应该返回<code>panic</code>的情况：</p>
 <ul>
-<li>强依赖下游服务，并且下游服务异常，在启动时应该panic</li>
-<li>配置文件中的配置不是一个合理值，在启动时可以panic，避免使用时无法定位报错位置</li>
+<li>强依赖下游服务，并且下游服务异常，在启动时应该<code>panic</code></li>
+<li>配置文件中的配置不是一个合理值，在启动时可以<code>panic</code>，避免使用时无法定位报错位置</li>
 <li>init函数中报错，避免无法定位报错</li>
 </ul>
-<h3 id="Panic"><a href="#Panic" class="headerlink" title="Panic"></a>Panic</h3><p>对于真正意外的情况，表示不可恢复的程序错误，例如索引越界、不可恢复的环境问题、栈溢出，才使用panic。对于其他的错误情况，应该是期望使用error来进行判定。</p>
+<h3 id="Panic"><a href="#Panic" class="headerlink" title="Panic"></a>Panic</h3><p>对于真正意外的情况，表示不可恢复的程序错误，例如索引越界、不可恢复的环境问题、栈溢出，才使用<code>panic</code>。对于其他的错误情况，应该是期望使用<code>error</code>来进行判定。</p>
 <blockquote>
 <p><em>you only need to check the error value if you care about the result.</em> <em>– Dave</em></p>
 <p><em>This</em> <em><span class="exturl" data-url="aHR0cHM6Ly9kZXZibG9ncy5taWNyb3NvZnQuY29tL29sZG5ld3RoaW5nLz9wPTM2Njkz">blog post <i class="fa fa-external-link-alt"></i></span></em> from Microsoft’s engineering blog in 2005 still holds true today, namely:</p>
 <p><em>My point isn’t that exceptions are bad. My point is that exceptions are too hard and I’m not smart enough to handle them.</em></p>
 </blockquote>
-<p>Go使用error的优势：</p>
+<p>Go使用<code>error</code>的优势：</p>
 <ul>
-<li>简单，通过error可以直观的判断逻辑是否错误</li>
-<li>考虑失败，而不是成功（plan for failure，not success），优先处理error</li>
-<li>没有隐藏的控制流，代码层面直观，不像try-cache</li>
-<li>完全交给开发控制error，针对自身逻辑实现error判断控制流程</li>
-<li>Error are values，在Go中，error也是一个值</li>
+<li>简单，通过<code>error</code>可以直观的判断逻辑是否错误</li>
+<li>考虑失败，而不是成功（plan for failure，not success），优先处理<code>error</code></li>
+<li>没有隐藏的控制流，代码层面直观，不像<code>try-cache</code></li>
+<li>完全交给开发控制<code>error</code>，针对自身逻辑实现<code>error</code>判断控制流程</li>
+<li>Error are values，在Go中，<code>error</code>也是一个值</li>
 </ul>
-<h2 id="Error-Type"><a href="#Error-Type" class="headerlink" title="Error Type"></a>Error Type</h2><p>通过自定义内部错误，可以很好的用来处理error</p>
+<h2 id="Error-Type"><a href="#Error-Type" class="headerlink" title="Error Type"></a>Error Type</h2><p>通过自定义内部错误，可以很好的用来处理<code>error</code></p>
 <h3 id="特定错误"><a href="#特定错误" class="headerlink" title="特定错误"></a>特定错误</h3><p>Sentinel Error</p>
-<p>预定义的特定错误，称为 sentinel error，这个名字来源于计算机编程中使用的一个特定值来表示不可能进行进一步处理的做法。</p>
+<p>预定义的特定错误，称为 <code>sentinel error</code>，这个名字来源于计算机编程中使用的一个特定值来表示不可能进行进一步处理的做法。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> err == ErrSomething &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>类似的 io.EOF ，更底层的 syscall.ENOENT 。</p>
-<p>使用 sentinel 值是最不灵活的错误处理策略，因为调用方必须使用 &#x3D;&#x3D; 将结果与预先声明的值进行比较。当想提供更多的上下文时，就会出现一个问题，因为返回一个不同的错误将破坏相等性检查。</p>
-<p>甚至一些有意义的 fmt.Errorf 携带一些上下文，也会破坏调用者的 &#x3D;&#x3D; ，调用者被迫查看 err.Error() 方法的输出，以查看它是否与特定的字符串匹配。</p>
+<p>类似的<code>io.EOF</code>，更底层的 <code>syscall.ENOENT </code>。</p>
+<p>使用 <code>sentinel</code> 值是最不灵活的错误处理策略，因为调用方必须使用 &#x3D;&#x3D; 将结果与预先声明的值进行比较。当想提供更多的上下文时，就会出现一个问题，因为返回一个不同的错误将破坏相等性检查。</p>
+<p>甚至一些有意义的 <code>fmt.Errorf </code>携带一些上下文，也会破坏调用者的 &#x3D;&#x3D; ，调用者被迫查看 <code>err.Error()</code> 方法的输出，以查看它是否与特定的字符串匹配。</p>
 <ul>
-<li><p>不依赖检查 error.Error 的特定字符串</p>
-<p>不应该依赖检测 error.Error 的输出，Error 方法存在于 error 接口主要是用于方便程序员使用。但不是程序（便携测试可能会依赖这个返回）。这个输出的字符串用于记录日志、输出到 stdout 等。</p>
+<li><p>不依赖检查 <code>error.Error</code> 的特定字符串</p>
+<p>不应该依赖检测 <code>error.Error</code> 的输出，<code>Error</code> 方法存在于 <code>error</code> 接口主要是用于方便程序员使用。但不是程序（便携测试可能会依赖这个返回）。这个输出的字符串用于记录日志、输出到 <code>stdout</code> 等。</p>
 </li>
-<li><p>sentinel errors 成为API公共部分</p>
-<p>如果公共函数或方法返回一个特定值的错误，那么该值必须是公共的，当让要有文档记录，这会增加API的表面积</p>
-<p>如果API定义了一个返回特定错误的interface，则该接口的所有实现都将被限制为仅返回该错误，即使它们可以提供更具描述性的错误。</p>
-<p>比如 io.Reader，像 io.Copy 这类函数需要 reader 的实现者比如返回 io.EOF 来告诉电泳者有更多数据了，但这又不是错误。</p>
+<li><p><code>sentinel errors</code> 成为<code>API</code>公共部分</p>
+<p>如果公共函数或方法返回一个特定值的错误，那么该值必须是公共的，当让要有文档记录，这会增加<code>API</code>的表面积</p>
+<p>如果API定义了一个返回特定错误的<code>interface</code>，则该接口的所有实现都将被限制为仅返回该错误，即使它们可以提供更具描述性的错误。</p>
+<p>比如 <code>io.Reader</code>，像 <code>io.Copy </code>这类函数需要 <code>reader</code> 的实现者比如返回 <code>io.EOF </code>来告诉电泳者有更多数据了，但这又不是错误。</p>
 </li>
-<li><p>sentinel errors 在两个包之间创建了依赖</p>
-<p>sentinel errors 最糟糕的问题是它们在它们两个包之间创建了源代码依赖关系。例如，检查错误是否等于 io.EOF ，那么代码就必须导入io包。同理，当项目中的许多包导出错误值时，存在耦合，项目中的其他包必须导入这些错误值才能检查特定的错误条件（ in the form of an import loop）环形依赖。</p>
+<li><p><code>sentinel errors</code> 在两个包之间创建了依赖</p>
+<p><code>sentinel errors</code> 最糟糕的问题是它们在它们两个包之间创建了源代码依赖关系。例如，检查错误是否等于<code>io.EOF</code>，那么代码就必须导入<code>io</code>包。同理，当项目中的许多包导出错误值时，存在耦合，项目中的其他包必须导入这些错误值才能检查特定的错误条件（ in the form of an import loop）环形依赖。</p>
 </li>
-<li><p>尽可能避免 sentinel errors</p>
+<li><p>尽可能避免 <code>sentinel errors </code></p>
 </li>
 </ul>
-<p>结论是避免在编写的代码中使用 sentinel errors。在标准库中有一些使用它们的情况，这不是应该模仿的模式。</p>
-<h3 id="错误类型"><a href="#错误类型" class="headerlink" title="错误类型"></a>错误类型</h3><p>Error types</p>
-<p>Error type 是实现了 error 接口的自定义错误类型，例如以下代码</p>
+<p>结论是避免在编写的代码中使用<code> sentinel errors</code>。在标准库中有一些使用它们的情况，这不是应该模仿的模式。</p>
+<h3 id="错误类型"><a href="#错误类型" class="headerlink" title="错误类型"></a>错误类型</h3><p><code>Error types</code></p>
+<p>Error type 是实现了 <code>error</code> 接口的自定义错误类型，例如以下代码</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727171615286.png" alt="image-20230727171615286" style="zoom:50%;" />
 
-<p>因为 MyError 是一个type，调用者可以使用断言转换成这个类型，来获取更多上下文。</p>
+<p>因为 <code>MyError</code> 是一个<code>type</code>，调用者可以使用断言转换成这个类型，来获取更多上下文。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727171741749.png" alt="image-20230727171741749" style="zoom:50%;" />
 
 <p>与错误值相比，错误类型的一大改进是它们能够包装底层错误，以提供更多的上下文。</p>
-<p>例如下面这个例如，os.PathError 提供了底层执行了什么操作、哪个路径有什么问题</p>
+<p>例如下面这个例如，<code>os.PathError</code> 提供了底层执行了什么操作、哪个路径有什么问题</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727171907207.png" alt="image-20230727171907207" style="zoom:50%;" />
 
-<p>调用者要使用类型断言和类型 switch ，就要让自定义的error变为public。这种模型会导致和调用着产生强耦合，从而导致API变得脆弱。</p>
-<p>结论是尽量避免使用error types，虽然错误类型比 sentinel errors 更好，因为它们可以捕获关于出错的更多上下文，但是error types 共享 error values 许多相同的问题。</p>
+<p>调用者要使用类型断言和类型 <code>switch</code> ，就要让自定义的<code>error</code>变为<code>public</code>。这种模型会导致和调用着产生强耦合，从而导致API变得脆弱。</p>
+<p>结论是尽量避免使用<code>error types</code>，虽然错误类型比 <code>sentinel errors</code> 更好，因为它们可以捕获关于出错的更多上下文，但是<code>error types</code> 共享 <code>error values</code> 许多相同的问题。</p>
 <p>因此，建议是避免错误类型，或者至少避免将它们作为公共API的一部分。</p>
 <h3 id="非透明的错误"><a href="#非透明的错误" class="headerlink" title="非透明的错误"></a>非透明的错误</h3><p>Opaque errors</p>
 <p>这是最灵活的错误处理策略，因为它要求代码和调用者之间的耦合最少。</p>
 <p>这种风格称之为不透明错误处理，因为调用者虽然知道发生了错误，但是无法看到错误内部。作为调用者，关于操作的结果，只能知道起作用了，或者没有起作用（成功还是失败）</p>
-<p>这就是不透明错误处理的全部功能-只需返回错误，而不加设其内容。调用者只需要判断error是否为nil。</p>
+<p>这就是不透明错误处理的全部功能-只需返回错误，而不加设其内容。调用者只需要判断<code>error</code>是否<code>为nil</code>。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727172547821.png" alt="image-20230727172547821" style="zoom:50%;" />
 
 <ul>
@@ -446,7 +446,7 @@
 </ul>
 <p>在少数情况下，这种二分错误处理方式是不够的，例如，与进程外的世界进行交互（如网络活动），需要调用方调查错误的性质，以确定重试改操作是否合理。在这种情况下，可以断言错误实现了特定的行为，而不是断言错误是特定的值或类型。</p>
 <p>例如：</p>
-<p>go&#x2F;src&#x2F;net&#x2F;net.go</p>
+<p><code>go/src/net/net.go</code></p>
 <p>自定义Error接口</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// An Error represents a network error.</span></span><br><span class="line"><span class="keyword">type</span> Error <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="type">error</span></span><br><span class="line">	Timeout() <span class="type">bool</span> <span class="comment">// Is the error a timeout?</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Deprecated: Temporary errors are not well-defined.</span></span><br><span class="line">	<span class="comment">// Most &quot;temporary&quot; errors are timeouts, and the few exceptions are surprising.</span></span><br><span class="line">	<span class="comment">// Do not use this method.</span></span><br><span class="line">	Temporary() <span class="type">bool</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -454,14 +454,14 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> timeout <span class="keyword">interface</span> &#123;</span><br><span class="line">	Timeout() <span class="type">bool</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *OpError)</span></span> Timeout() <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> ne, ok := e.Err.(*os.SyscallError); ok &#123;</span><br><span class="line">		t, ok := ne.Err.(timeout)</span><br><span class="line">		<span class="keyword">return</span> ok &amp;&amp; t.Timeout()</span><br><span class="line">	&#125;</span><br><span class="line">	t, ok := e.Err.(timeout)</span><br><span class="line">	<span class="keyword">return</span> ok &amp;&amp; t.Timeout()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> temporary <span class="keyword">interface</span> &#123;</span><br><span class="line">	Temporary() <span class="type">bool</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *OpError)</span></span> Temporary() <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="comment">// Treat ECONNRESET and ECONNABORTED as temporary errors when</span></span><br><span class="line">	<span class="comment">// they come from calling accept. See issue 6163.</span></span><br><span class="line">	<span class="keyword">if</span> e.Op == <span class="string">&quot;accept&quot;</span> &amp;&amp; isConnError(e.Err) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ne, ok := e.Err.(*os.SyscallError); ok &#123;</span><br><span class="line">		t, ok := ne.Err.(temporary)</span><br><span class="line">		<span class="keyword">return</span> ok &amp;&amp; t.Temporary()</span><br><span class="line">	&#125;</span><br><span class="line">	t, ok := e.Err.(temporary)</span><br><span class="line">	<span class="keyword">return</span> ok &amp;&amp; t.Temporary()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>使用</p>
-<p>go&#x2F;src&#x2F;net&#x2F;http&#x2F;server.go</p>
+<p><code>go/src/net/http/server.go</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ne, ok := err.(net.Error); ok &amp;&amp; ne.Temporary() &#123;</span><br><span class="line">	<span class="keyword">if</span> tempDelay == <span class="number">0</span> &#123;</span><br><span class="line">		tempDelay = <span class="number">5</span> * time.Millisecond</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		tempDelay *= <span class="number">2</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> max := <span class="number">1</span> * time.Second; tempDelay &gt; max &#123;</span><br><span class="line">		tempDelay = max</span><br><span class="line">	&#125;</span><br><span class="line">	srv.logf(<span class="string">&quot;http: Accept error: %v; retrying in %v&quot;</span>, err, tempDelay)</span><br><span class="line">	time.Sleep(tempDelay)</span><br><span class="line">	<span class="keyword">continue</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="优秀的Error处理方式"><a href="#优秀的Error处理方式" class="headerlink" title="优秀的Error处理方式"></a>优秀的Error处理方式</h1><h2 id="缩进式"><a href="#缩进式" class="headerlink" title="缩进式"></a>缩进式</h2><p>Indented flow is for errors</p>
 <p>无错误的正常流程代码，将成为一条直线，而不是缩进的代码</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727195737286.png" alt="image-20230727195737286" style="zoom: 33%;" />
 
-<p>正常情况下，应该是正常逻辑的代码，成为一条直线，当有error出现时，这条直线出现分叉。</p>
+<p>正常情况下，应该是正常逻辑的代码，成为一条直线，当有<code>error</code>出现时，这条直线出现分叉。</p>
 <h2 id="消除错误"><a href="#消除错误" class="headerlink" title="消除错误"></a>消除错误</h2><p>eliminate error handling by eliminating errors</p>
 <p>通过消除错误，或者减少对错误的判断，可以达到减少代码的目的</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727195831152.png" alt="image-20230727195831152" style="zoom:33%;" />
@@ -470,23 +470,23 @@
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727195837322.png" alt="image-20230727195837322" style="zoom:33%;" />
 
 <p>官方处理error的demo：</p>
-<p>统计 io.Reader 读取内容的行数</p>
+<p>统计<code>io.Reader</code>读取内容的行数</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727195953936.png" alt="image-20230727195953936" style="zoom:33%;" />
 
 <p>粗看没有问题，但是可以优化</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727200215714.png" alt="image-20230727200215714" style="zoom:33%;" />
 
-<p>go&#x2F;src&#x2F;bufio&#x2F;scan.go</p>
+<p><code>go/src/bufio/scan.go</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Scanner)</span></span> Scan() <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> s.done &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	s.scanCalled = <span class="literal">true</span></span><br><span class="line">	<span class="comment">// Loop until we have a token.</span></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="comment">// See if we can get a token with what we already have.</span></span><br><span class="line">		<span class="comment">// If we&#x27;ve run out of data but have an error, give the split function</span></span><br><span class="line">		<span class="comment">// a chance to recover any remaining, possibly empty token.</span></span><br><span class="line">		<span class="keyword">if</span> s.end &gt; s.start || s.err != <span class="literal">nil</span> &#123;</span><br><span class="line">			advance, token, err := s.split(s.buf[s.start:s.end], s.err != <span class="literal">nil</span>)</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> err == ErrFinalToken &#123;</span><br><span class="line">					s.token = token</span><br><span class="line">					s.done = <span class="literal">true</span></span><br><span class="line">					<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">				&#125;</span><br><span class="line">				s.setErr(err)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> !s.advance(advance) &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">			s.token = token</span><br><span class="line">			<span class="keyword">if</span> token != <span class="literal">nil</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> s.err == <span class="literal">nil</span> || advance &gt; <span class="number">0</span> &#123;</span><br><span class="line">					s.empties = <span class="number">0</span></span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					<span class="comment">// Returning tokens not advancing input at EOF.</span></span><br><span class="line">					s.empties++</span><br><span class="line">					<span class="keyword">if</span> s.empties &gt; maxConsecutiveEmptyReads &#123;</span><br><span class="line">						<span class="built_in">panic</span>(<span class="string">&quot;bufio.Scan: too many empty tokens without progressing&quot;</span>)</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// We cannot generate a token with what we are holding.</span></span><br><span class="line">		<span class="comment">// If we&#x27;ve already hit EOF or an I/O error, we are done.</span></span><br><span class="line">		<span class="keyword">if</span> s.err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="comment">// Shut it down.</span></span><br><span class="line">			s.start = <span class="number">0</span></span><br><span class="line">			s.end = <span class="number">0</span></span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// Must read more data.</span></span><br><span class="line">		<span class="comment">// First, shift data to beginning of buffer if there&#x27;s lots of empty space</span></span><br><span class="line">		<span class="comment">// or space is needed.</span></span><br><span class="line">		<span class="keyword">if</span> s.start &gt; <span class="number">0</span> &amp;&amp; (s.end == <span class="built_in">len</span>(s.buf) || s.start &gt; <span class="built_in">len</span>(s.buf)/<span class="number">2</span>) &#123;</span><br><span class="line">			<span class="built_in">copy</span>(s.buf, s.buf[s.start:s.end])</span><br><span class="line">			s.end -= s.start</span><br><span class="line">			s.start = <span class="number">0</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// Is the buffer full? If so, resize.</span></span><br><span class="line">		<span class="keyword">if</span> s.end == <span class="built_in">len</span>(s.buf) &#123;</span><br><span class="line">			<span class="comment">// Guarantee no overflow in the multiplication below.</span></span><br><span class="line">			<span class="keyword">const</span> maxInt = <span class="type">int</span>(^<span class="type">uint</span>(<span class="number">0</span>) &gt;&gt; <span class="number">1</span>)</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">len</span>(s.buf) &gt;= s.maxTokenSize || <span class="built_in">len</span>(s.buf) &gt; maxInt/<span class="number">2</span> &#123;</span><br><span class="line">				s.setErr(ErrTooLong)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">			newSize := <span class="built_in">len</span>(s.buf) * <span class="number">2</span></span><br><span class="line">			<span class="keyword">if</span> newSize == <span class="number">0</span> &#123;</span><br><span class="line">				newSize = startBufSize</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> newSize &gt; s.maxTokenSize &#123;</span><br><span class="line">				newSize = s.maxTokenSize</span><br><span class="line">			&#125;</span><br><span class="line">			newBuf := <span class="built_in">make</span>([]<span class="type">byte</span>, newSize)</span><br><span class="line">			<span class="built_in">copy</span>(newBuf, s.buf[s.start:s.end])</span><br><span class="line">			s.buf = newBuf</span><br><span class="line">			s.end -= s.start</span><br><span class="line">			s.start = <span class="number">0</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// Finally we can read some input. Make sure we don&#x27;t get stuck with</span></span><br><span class="line">		<span class="comment">// a misbehaving Reader. Officially we don&#x27;t need to do this, but let&#x27;s</span></span><br><span class="line">		<span class="comment">// be extra careful: Scanner is for safe, simple jobs.</span></span><br><span class="line">		<span class="keyword">for</span> loop := <span class="number">0</span>; ; &#123;</span><br><span class="line">			n, err := s.r.Read(s.buf[s.end:<span class="built_in">len</span>(s.buf)])</span><br><span class="line">			<span class="keyword">if</span> n &lt; <span class="number">0</span> || <span class="built_in">len</span>(s.buf)-s.end &lt; n &#123;</span><br><span class="line">				s.setErr(ErrBadReadCount)</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			s.end += n</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">				s.setErr(err)</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> n &gt; <span class="number">0</span> &#123;</span><br><span class="line">				s.empties = <span class="number">0</span></span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			loop++</span><br><span class="line">			<span class="keyword">if</span> loop &gt; maxConsecutiveEmptyReads &#123;</span><br><span class="line">				s.setErr(io.ErrNoProgress)</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>Scanner 中包含错误，Scan()可以返回是否含有下一行。</p>
-<p>将数据写到 io.Writer中</p>
+<p><code>Scanner</code> 中包含错误，<code>Scan()</code>可以返回是否含有下一行。</p>
+<p>将数据写到<code> io.Writer</code>中</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727200320199.png" alt="image-20230727200320199" style="zoom: 50%;" />
 
-<p>也可以再优化，将 io.Writer 和 error 合并在一起</p>
+<p>也可以再优化，将<code>io.Writer</code>和 <code>error</code> 合并在一起</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727200519358.png" alt="image-20230727200519358" style="zoom:33%;" />
 
-<p>后续使用时，就可以不需要判断error，直接将error返回，交给上层一次性判断即可</p>
+<p>后续使用时，就可以不需要判断<code>error</code>，直接将<code>error</code>返回，交给上层一次性判断即可</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727200728044.png" alt="image-20230727200728044" style="zoom: 50%;" />
 
 <h2 id="包装错误"><a href="#包装错误" class="headerlink" title="包装错误"></a>包装错误</h2><p>Wrap errors</p>
@@ -504,7 +504,7 @@
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727203658059.png" alt="image-20230727203658059"></p>
 <p>如果上层调用时，调用者也打印日志</p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727203804797.png" alt="image-20230727203804797"></p>
-<p>或者更难以确定的是main中也打印错误日志</p>
+<p>或者更难以确定的是<code>main</code>中也打印错误日志</p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230727203845864.png" alt="image-20230727203845864"></p>
 <p>此时会有大量的重复日志打印出来：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unable to write: io.EOF</span><br><span class="line">could not write config: io.EOF</span><br></pre></td></tr></table></figure>
