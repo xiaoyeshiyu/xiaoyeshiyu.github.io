@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在业务开发过程中，有效的使用错误码可以很好的优化交互逻辑，并且可以更加规范的进行错误处理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="错误码实践">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/f595.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="在业务开发过程中，有效的使用错误码可以很好的优化交互逻辑，并且可以更加规范的进行错误处理。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731194139890.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731194245327.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731195918838.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731200212655.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731200304546.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731201129010.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731201339765.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731201436856.png">
+<meta property="article:published_time" content="2023-07-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-01T09:14:54.676Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731194139890.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/f595.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/f595.html","path":"post/f595.html","title":"错误码实践"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>错误码实践 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83"><span class="nav-number">1.</span> <span class="nav-text">设计规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%A0%81%E5%88%86%E9%85%8D"><span class="nav-number">3.</span> <span class="nav-text">错误码分配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%A0%81%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.</span> <span class="nav-text">错误码转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E5%8E%9F%E5%9B%A0"><span class="nav-number">5.</span> <span class="nav-text">引入原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%A0%81%E8%AE%B0%E5%BD%95"><span class="nav-number">6.</span> <span class="nav-text">错误码记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97"><span class="nav-number">6.1.</span> <span class="nav-text">日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tracing"><span class="nav-number">6.2.</span> <span class="nav-text">tracing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#metrics"><span class="nav-number">6.3.</span> <span class="nav-text">metrics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">7.</span> <span class="nav-text">一些注意事项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-code"><span class="nav-number">8.</span> <span class="nav-text">HTTP code</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%80%83"><span class="nav-number">9.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%90%BD%E5%9C%B0"><span class="nav-number">10.</span> <span class="nav-text">落地</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/f595.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="错误码实践 | 小夜时雨">
+      <meta itemprop="description" content="在业务开发过程中，有效的使用错误码可以很好的优化交互逻辑，并且可以更加规范的进行错误处理。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          错误码实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-07-31 00:00:00" itemprop="dateCreated datePublished" datetime="2023-07-31T00:00:00+08:00">2023-07-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-08-01 17:14:54" itemprop="dateModified" datetime="2023-08-01T17:14:54+08:00">2023-08-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/developer/" itemprop="url" rel="index"><span itemprop="name">开发技巧</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/f595.html" class="post-meta-item leancloud_visitors" data-flag-title="错误码实践" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/f595.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/f595.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">在业务开发过程中，有效的使用错误码可以很好的优化交互逻辑，并且可以更加规范的进行错误处理。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>错误码是基于<code>Error</code>实现，<code>error</code>是一个普通接口，错误码不仅仅需要实现<code>error</code>接口，还需要涉及到使用规范、分配、转换和记录。</p>
+<h1 id="设计规范"><a href="#设计规范" class="headerlink" title="设计规范"></a>设计规范</h1><ul>
+<li>全局唯一（全公司唯一或者全部门唯一，视作用域和推动能力而定）</li>
+<li>区别错误类型<ul>
+<li>输入错误还是内部错误 - client params error 、server intenrnel error </li>
+<li>A模块错误还是B模块错误</li>
+</ul>
+</li>
+<li>可扩展性<ul>
+<li>增加应用</li>
+<li>增加模块</li>
+</ul>
+</li>
+<li>智能化错误码分配<ul>
+<li>API平台或者项目管理平台统一分配错误段</li>
+<li>应用内集中定义错误码</li>
+</ul>
+</li>
+<li>错误码转换，由code转换为可读的字符串</li>
+<li>error 记录：logging、tracing、metrics</li>
+</ul>
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>错误码可以由几个部分组成</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731194139890.png" alt="image-20230731194139890"></p>
+<ul>
+<li><p>family：错误族，或者大类。用于标记整体装提啊。一般参考HTTP。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731194245327.png" alt="image-20230731194245327" style="zoom: 50%;" />
+
+<ol>
+<li><p>采用一位，例如HTTP，2xx 表示成功，4xx表示客户端错误，5xx表示系统错误</p>
+</li>
+<li><p>采用三位：例如直接使用HTTP的方案</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kYXRhdHJhY2tlci5pZXRmLm9yZy9kb2MvaHRtbC9yZmM3MjMxI3NlY3Rpb24tNg==">https://datatracker.ietf.org/doc/html/rfc7231#section-6<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ol>
+</li>
+</ul>
+<p>​	注意：表达的是相似语义，比如说409是 Conflict 语义，那么这个时候可以考虑 409 来表达手机号码重复之类的错误。</p>
+<p>​	可以根据需啊哟设计自己的族。例如用666代表不可挽回的严重错误，需要立刻人手工处理的错误。</p>
+<ul>
+<li><p>application 和 module：应用和模块。</p>
+<p>一般来说，只有超大型的服务才需要考虑两个都存在。一般情况下，使用一个字段就可以。结合自己公司的情况，一般来说是两位起步。</p>
+<p>application 和 module 也可用domain来替换</p>
+</li>
+<li><p>biz code：具体代码层级错误。</p>
+<p>要留出足够长度，两位起步</p>
+</li>
+<li><p>保留段。即全局范围内，具有特殊含义的一些错误码。</p>
+<p>有一种实践是，永远用0来表达成功。这种情况下，调用方只需要简单判断是否为0就可以知道请求是否成功，能极大简化调用方代码。</p>
+<p>注意：保留段的数量要少，方便开发记住。</p>
+</li>
+</ul>
+<h1 id="错误码分配"><a href="#错误码分配" class="headerlink" title="错误码分配"></a>错误码分配</h1><p>案例1：用一个wiki，每次自己创建应用，或者设计模块的时候，去wiki上更新一下。</p>
+<ul>
+<li>X 01 0000 - X 01 9999 &#x3D;&gt; 用户xxx</li>
+<li>X 02 0000 - X 02 9999 &#x3D;&gt; 订单xxx</li>
+</ul>
+<p>案例2：用一个数据库，每次创建应用，或者设计模块的时候，数据库更新一下错误码段</p>
+<ul>
+<li>使用数据库方便后续智能分配</li>
+</ul>
+<p>案例3：公司内部有创建项目脚本，运行时自动分配一个（使用代码脚手架，自动创建）</p>
+<p>案例4：公公司有创建项目的平台和流程，自动分配好一个段（例如有开发平台，自动化能力高）</p>
+<p>安全特性：</p>
+<ul>
+<li>提交代码的时候有钩子检查错误码是否超出范围，是否符合规范</li>
+<li>编译IDL文件（比如说proto）的时候，可以检查定义的错误码是否超出范围，是否符合规范</li>
+</ul>
+<h1 id="错误码转换"><a href="#错误码转换" class="headerlink" title="错误码转换"></a>错误码转换</h1><ul>
+<li><p>某些时候，下游好几个，对应于业务上的一种错误。这个时候可以尝试做转换</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731195918838.png" alt="image-20230731195918838" style="zoom:50%;" />
+</li>
+<li><p><code>error</code>跨端传递之后，在客户端这边是不能使用<code>errors.Is</code>来检测</p>
+</li>
+</ul>
+<h1 id="引入原因"><a href="#引入原因" class="headerlink" title="引入原因"></a>引入原因</h1><p>引入Cause，实际上就是为了将<code>error</code>串起来，在某些时候会将下游的错误码转换为内部的状态码，然后暴露给上游，这个时候可能会期望在<code>error</code>里面保留了引起错误的原因。</p>
+<p>例如下游某个应用来了 501001，在内部被转换成 502011，某些时候，在DEBUG的时候，可能需要判断是哪个下游错误，导致报错，因此需要知道cause（原因）</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731200212655.png" alt="image-20230731200212655"></p>
+<h1 id="错误码记录"><a href="#错误码记录" class="headerlink" title="错误码记录"></a>错误码记录</h1><h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><p>规范记录日志格式，比如说提供类似于<code>log.Errorf(code,msg,args)</code>这种方法。要考虑将来是否存在日志分析的需求</p>
+<p>使用时，可以使用编程结构体传入错误信息，也可以使用<code>map</code></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731200304546.png" alt="image-20230731200304546"></p>
+<p><code>kratos/middleware/logging/logging.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> se := errors.FromError(err); se != <span class="literal">nil</span> &#123;</span><br><span class="line">	code = se.Code</span><br><span class="line">	reason = se.Reason</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>kratos/errors/errors.pb.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Status <span class="keyword">struct</span> &#123;</span><br><span class="line">	state         protoimpl.MessageState</span><br><span class="line">	sizeCache     protoimpl.SizeCache</span><br><span class="line">	unknownFields protoimpl.UnknownFields</span><br><span class="line"></span><br><span class="line">	Code     <span class="type">int32</span>             <span class="string">`protobuf:&quot;varint,1,opt,name=code,proto3&quot; json:&quot;code,omitempty&quot;`</span></span><br><span class="line">	Reason   <span class="type">string</span>            <span class="string">`protobuf:&quot;bytes,2,opt,name=reason,proto3&quot; json:&quot;reason,omitempty&quot;`</span></span><br><span class="line">	Message  <span class="type">string</span>            <span class="string">`protobuf:&quot;bytes,3,opt,name=message,proto3&quot; json:&quot;message,omitempty&quot;`</span></span><br><span class="line">	Metadata <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span> <span class="string">`protobuf:&quot;bytes,4,rep,name=metadata,proto3&quot; json:&quot;metadata,omitempty&quot; protobuf_key:&quot;bytes,1,opt,name=key,proto3&quot; protobuf_val:&quot;bytes,2,opt,name=value,proto3&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>kratos/errors/errors.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Error is a status error.</span></span><br><span class="line"><span class="keyword">type</span> Error <span class="keyword">struct</span> &#123;</span><br><span class="line">	Status</span><br><span class="line">	cause <span class="type">error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// FromError try to convert an error to *Error.</span></span><br><span class="line"><span class="comment">// It supports wrapped errors.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FromError</span><span class="params">(err <span class="type">error</span>)</span></span> *Error &#123;</span><br><span class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> se := <span class="built_in">new</span>(Error); errors.As(err, &amp;se) &#123;</span><br><span class="line">		<span class="keyword">return</span> se</span><br><span class="line">	&#125;</span><br><span class="line">	gs, ok := status.FromError(err)</span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		<span class="keyword">return</span> New(UnknownCode, UnknownReason, err.Error())</span><br><span class="line">	&#125;</span><br><span class="line">	ret := New(</span><br><span class="line">		httpstatus.FromGRPCCode(gs.Code()),</span><br><span class="line">		UnknownReason,</span><br><span class="line">		gs.Message(),</span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">for</span> _, detail := <span class="keyword">range</span> gs.Details() &#123;</span><br><span class="line">		<span class="keyword">switch</span> d := detail.(<span class="keyword">type</span>) &#123;</span><br><span class="line">		<span class="keyword">case</span> *errdetails.ErrorInfo:</span><br><span class="line">			ret.Reason = d.Reason</span><br><span class="line">			<span class="keyword">return</span> ret.WithMetadata(d.Metadata)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ret</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="tracing"><a href="#tracing" class="headerlink" title="tracing"></a>tracing</h2><p>在 tracing 里面记录下错误码。可能需要定义自己的错误结构体：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731201129010.png" alt="image-20230731201129010"></p>
+<p><code>kratos/middleware/tracing/tracing.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server returns a new server middleware for OpenTelemetry.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Server</span><span class="params">(opts ...Option)</span></span> middleware.Middleware &#123;</span><br><span class="line">	tracer := NewTracer(trace.SpanKindServer, opts...)</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(handler middleware.Handler)</span></span> middleware.Handler &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(ctx context.Context, req <span class="keyword">interface</span>&#123;&#125;)</span></span> (reply <span class="keyword">interface</span>&#123;&#125;, err <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">if</span> tr, ok := transport.FromServerContext(ctx); ok &#123;</span><br><span class="line">				<span class="keyword">var</span> span trace.Span</span><br><span class="line">				ctx, span = tracer.Start(ctx, tr.Operation(), tr.RequestHeader())</span><br><span class="line">				setServerSpan(ctx, span, req)</span><br><span class="line">				<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; tracer.End(ctx, span, reply, err) &#125;()</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> handler(ctx, req)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>kratos/middleware/tracing/tracer.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// End finish tracing span</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(t *Tracer)</span></span> End(_ context.Context, span trace.Span, m <span class="keyword">interface</span>&#123;&#125;, err <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		span.RecordError(err)</span><br><span class="line">		<span class="keyword">if</span> e := errors.FromError(err); e != <span class="literal">nil</span> &#123;</span><br><span class="line">			span.SetAttributes(attribute.Key(<span class="string">&quot;rpc.status_code&quot;</span>).Int64(<span class="type">int64</span>(e.Code)))</span><br><span class="line">		&#125;</span><br><span class="line">		span.SetStatus(codes.Error, err.Error())</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		span.SetStatus(codes.Ok, <span class="string">&quot;OK&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> p, ok := m.(proto.Message); ok &#123;</span><br><span class="line">		<span class="keyword">if</span> t.kind == trace.SpanKindServer &#123;</span><br><span class="line">			span.SetAttributes(attribute.Key(<span class="string">&quot;send_msg.size&quot;</span>).Int(proto.Size(p)))</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			span.SetAttributes(attribute.Key(<span class="string">&quot;recv_msg.size&quot;</span>).Int(proto.Size(p)))</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	span.End()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用tracing时，可以获取到全链路的报错</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731201339765.png" alt="image-20230731201339765"></p>
+<h2 id="metrics"><a href="#metrics" class="headerlink" title="metrics"></a>metrics</h2><p>也可以把错误码记录到 metrics 里面。注意，error code 比较多的时候，不要记录到时序数据库里面</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230731201436856.png" alt="image-20230731201436856"></p>
+<p><code>kratos/middleware/metrics/metrics.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Server is middleware server-side metrics.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Server</span><span class="params">(opts ...Option)</span></span> middleware.Middleware &#123;</span><br><span class="line">	op := options&#123;&#125;</span><br><span class="line">	<span class="keyword">for</span> _, o := <span class="keyword">range</span> opts &#123;</span><br><span class="line">		o(&amp;op)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(handler middleware.Handler)</span></span> middleware.Handler &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(ctx context.Context, req <span class="keyword">interface</span>&#123;&#125;)</span></span> (<span class="keyword">interface</span>&#123;&#125;, <span class="type">error</span>) &#123;</span><br><span class="line">			<span class="keyword">var</span> (</span><br><span class="line">				code      <span class="type">int</span></span><br><span class="line">				reason    <span class="type">string</span></span><br><span class="line">				kind      <span class="type">string</span></span><br><span class="line">				operation <span class="type">string</span></span><br><span class="line">			)</span><br><span class="line">			startTime := time.Now()</span><br><span class="line">			<span class="keyword">if</span> info, ok := transport.FromServerContext(ctx); ok &#123;</span><br><span class="line">				kind = info.Kind().String()</span><br><span class="line">				operation = info.Operation()</span><br><span class="line">			&#125;</span><br><span class="line">			reply, err := handler(ctx, req)</span><br><span class="line">			<span class="keyword">if</span> se := errors.FromError(err); se != <span class="literal">nil</span> &#123;</span><br><span class="line">				code = <span class="type">int</span>(se.Code)</span><br><span class="line">				reason = se.Reason</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> op.requests != <span class="literal">nil</span> &#123;</span><br><span class="line">				op.requests.With(kind, operation, strconv.Itoa(code), reason).Inc()</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> op.seconds != <span class="literal">nil</span> &#123;</span><br><span class="line">				op.seconds.With(kind, operation).Observe(time.Since(startTime).Seconds())</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> reply, err</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>需要有Error的结构体，针对Error的辅助方法，例如从Error中提取原始error或者code</li>
+<li>需要middleware，一般在中间件中都会提供，比如gin、gorm、gRPC中都会有</li>
+<li>用middleware来实现logging、tracing、metrics</li>
+<li>需要引入tracing框架，例如skywalking、zipkin</li>
+<li>需要引入metrics框架，prometheus</li>
+<li>ELK等日志分析平台</li>
+</ul>
+<h1 id="一些注意事项"><a href="#一些注意事项" class="headerlink" title="一些注意事项"></a>一些注意事项</h1><ul>
+<li>OK vs Accepted：异步接口需要注意，返回Accept语义而不是OK（或者Success）</li>
+<li>回调 or 消息也要带上错误码</li>
+<li>要求苛刻的应用，错误码要入库。比如某个下单失败，失败原因作为错误码记录到数据库</li>
+<li>为了统计或者离线分析，错误码本身可以存储到数据库里面</li>
+<li>tracing工具和metrics工具需要考虑错误码。prometheus要注意太多错误码可能会引发问题</li>
+<li>错误码可以设计为数字，也可以设计为字符串–字符串更加灵活，例如可以使用缩写来表示，比如USR-LG-001，表达user应用，login模块的某个错误</li>
+<li>QPS没过百万，就不用担心错误码长度问题。（基本上高并发瓶颈不会在这里）</li>
+<li>理论上，返回的错误码要详细，要细分</li>
+<li>实际上，取决于是否可以按照规范设计延续下去</li>
+<li>错误码只加不减</li>
+<li>尽最大努力保持语义清晰并且正交</li>
+<li>API版本变化可能会引入新的错误码，要注意通知老用户处理新错误码</li>
+<li>处理下游错误码的时候，要有default的分支，防止下游增加错误码自己没有处理</li>
+<li>谨慎引入所谓通用错误码，比如说一个统一的错误码来表达“数据库错误”</li>
+</ul>
+<h1 id="HTTP-code"><a href="#HTTP-code" class="headerlink" title="HTTP code"></a>HTTP code</h1><p>使用HTTP错误码还是使用业务错误码？</p>
+<p>比如HTTP code：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http status : 200 </span><br><span class="line">biz code: 400002</span><br><span class="line">msg: &quot;用户不存在&quot;</span><br><span class="line">data: &quot;xxx&quot;</span><br></pre></td></tr></table></figure>
+
+<p>http code 只表示收到了请求与否，但凡收到请求，返回的响应 http status 永远是成功。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http status : 200 </span><br><span class="line">msg: &quot;用户不存在&quot;</span><br></pre></td></tr></table></figure>
+
+<p>只用http code 来表达错误，无法细分具体业务错误，可能会导致请求错误误以为是业务逻辑错误</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http status: 400</span><br><span class="line">biz code: 400002</span><br><span class="line">msg: “用户不存在”</span><br></pre></td></tr></table></figure>
+
+<p>http status 与 biz code 保持一致</p>
+<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><p>在纠结错误码的时候，到底争执的是什么</p>
+<ul>
+<li>对错问题：比如说使用很明显的业界已经被证明是思路一条的方案，或者说这个方案无法解决掉业务的某个关键点的，这种属于对错问题</li>
+<li>舍取问题：两个方案，在非功能性的偏向不同，比如说长期方案与短期打补丁的冲突；高性能与简单设计的冲突，方案本身都能解决问题，而且准确来说并没有高低优劣之分，只是侧重点不同</li>
+<li>偏好问题：连取舍问题都说不上，完全是个人喜好。比如说代码风格，字段命名等</li>
+</ul>
+<h1 id="落地"><a href="#落地" class="headerlink" title="落地"></a>落地</h1><ul>
+<li><p>先在组内试试，阻力小。如果组内同时都不愿意，那么可以遵循规范。这样出现BUG的时候，更容易理解。特别是如果公司有tracing或者metrics工具，错误码会显著加快定位问题的速度。</p>
+</li>
+<li><p>从新项目开始，老项目阻力一般都很大</p>
+</li>
+<li><p>要准备好各种辅助工具</p>
+<ul>
+<li>错误码段分配要智能化</li>
+<li>错误码辅助库，提供一些便利方法，比如判断状态码是否属于成功这一大类</li>
+</ul>
+</li>
+<li><p>折中、曲线方式</p>
+<ul>
+<li>先建议规范创建项目的过程</li>
+<li>新创建项目的脚本或者流程，完成错误码的创建<ul>
+<li>初始化项目结构</li>
+<li>初始化git 钩子（pre-commit，pre-push）之类的</li>
+<li>如果是用gitlab之类的，可以尝试直接接入代码质量检测工具</li>
+<li>悄悄加上错误码分段，完善Error结构体方法，悄悄推进</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/5700.html" rel="prev" title="Go中Error的处理">
+                  <i class="fa fa-chevron-left"></i> Go中Error的处理
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

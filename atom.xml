@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-07-31T01:49:24.165Z</updated>
+  <updated>2023-08-01T09:14:54.676Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,23 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>错误码实践</title>
+    <link href="https://www.xiaoyeshiyu.com/post/f595.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/f595.html</id>
+    <published>2023-07-30T16:00:00.000Z</published>
+    <updated>2023-08-01T09:14:54.676Z</updated>
+    
+    
+    <summary type="html">在业务开发过程中，有效的使用错误码可以很好的优化交互逻辑，并且可以更加规范的进行错误处理。</summary>
+    
+    
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/developer/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Go中Error的处理</title>
@@ -339,23 +356,6 @@
     
     
     <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>事务和分布式事务</title>
-    <link href="https://www.xiaoyeshiyu.com/post/72b7.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/72b7.html</id>
-    <published>2022-10-11T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.883Z</updated>
-    
-    
-    <summary type="html">在一些使用数据库的系统中，当数据操作掺杂业务逻辑，需要通过业务逻辑结果判断是否需要修改数据时，可以用到数据库的事务。在分布式的场景下，如果是跨节点交互业务逻辑，需要实现回滚，则需要使用到分布式事务。</summary>
-    
-    
-    
-    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
     
     
   </entry>
