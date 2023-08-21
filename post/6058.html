@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
@@ -20,7 +21,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="使用protocol之后，更加符合微服务开发规范，并且定义即文档，开发效率大大提高。但是protobuf无法实现自定义报错内容，所幸这个功能Google已经在考虑，并且在validate的beta版本已经实现。">
 <meta property="og:type" content="article">
@@ -29,8 +30,8 @@
 <meta property="og:site_name" content="小夜时雨">
 <meta property="og:description" content="使用protocol之后，更加符合微服务开发规范，并且定义即文档，开发效率大大提高。但是protobuf无法实现自定义报错内容，所幸这个功能Google已经在考虑，并且在validate的beta版本已经实现。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-08-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:37:48.202Z">
+<meta property="article:published_time" content="2023-08-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T03:39:28.306Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
 <meta name="twitter:card" content="summary">
@@ -145,7 +146,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8validate%E9%99%90%E5%88%B6%E8%BE%93%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text">使用validate限制输入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gin"><span class="nav-number">1.1.</span> <span class="nav-text">gin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protoc-gen-validate-PGV"><span class="nav-number">1.2.</span> <span class="nav-text">protoc-gen-validate (PGV)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.1.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8EGitHub%E5%8F%91%E5%B8%83%E4%B8%8B%E8%BD%BD"><span class="nav-number">1.2.2.0.1.</span> <span class="nav-text">从GitHub发布下载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8E%E6%BA%90%E4%BB%A3%E7%A0%81%E6%9E%84%E5%BB%BA"><span class="nav-number">1.2.2.0.2.</span> <span class="nav-text">从源代码构建</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%92%A1-Yes-our-go-module-path-is-github-com-envoyproxy-protoc-gen-validate-not-bufbuild-this-is-intentional"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">💡 Yes, our go module path is github.com&#x2F;envoyproxy&#x2F;protoc-gen-validate not bufbuild this is intentional.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.3.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.2.4.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Go"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">Go</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-number">1.2.5.</span> <span class="nav-text">拦截器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Next-Generation"><span class="nav-number">2.</span> <span class="nav-text">Next Generation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#protovalidate"><span class="nav-number">3.</span> <span class="nav-text">protovalidate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%B3%95"><span class="nav-number">3.0.1.</span> <span class="nav-text">用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5-protovalidate"><span class="nav-number">3.0.1.1.</span> <span class="nav-text">导入 protovalidate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87-buf-%E6%9E%84%E5%BB%BA"><span class="nav-number">3.0.1.2.</span> <span class="nav-text">通过 buf 构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87protoc%E6%9E%84%E5%BB%BA"><span class="nav-number">3.0.1.3.</span> <span class="nav-text">通过protoc构建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%96%BD%E9%AA%8C%E8%AF%81%E7%BA%A6%E6%9D%9F"><span class="nav-number">3.0.2.</span> <span class="nav-text">实施验证约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E4%BF%A1%E6%81%AF"><span class="nav-number">3.0.3.</span> <span class="nav-text">验证信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%A1%A3"><span class="nav-number">3.0.4.</span> <span class="nav-text">文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#protoc-gen-validate"><span class="nav-number">3.0.5.</span> <span class="nav-text">protoc-gen-validate</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%90%91%E5%AF%BC"><span class="nav-number">3.0.5.1.</span> <span class="nav-text">迁移向导</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8A%A5%E9%94%99"><span class="nav-number">3.1.</span> <span class="nav-text">自定义报错</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">3.1.1.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CEL-%E9%80%9A%E7%94%A8%E8%A1%A8%E7%A4%BA%E8%AF%AD%E8%A8%80"><span class="nav-number">3.1.2.</span> <span class="nav-text">CEL 通用表示语言</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">4.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8validate%E9%99%90%E5%88%B6%E8%BE%93%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text">使用validate限制输入</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gin"><span class="nav-number">1.1.</span> <span class="nav-text">gin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protoc-gen-validate-PGV"><span class="nav-number">1.2.</span> <span class="nav-text">protoc-gen-validate (PGV)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.1.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8EGitHub%E5%8F%91%E5%B8%83%E4%B8%8B%E8%BD%BD"><span class="nav-number">1.2.2.0.1.</span> <span class="nav-text">从GitHub发布下载</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%8E%E6%BA%90%E4%BB%A3%E7%A0%81%E6%9E%84%E5%BB%BA"><span class="nav-number">1.2.2.0.2.</span> <span class="nav-text">从源代码构建</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.3.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.2.4.</span> <span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Go"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">Go</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-number">1.2.5.</span> <span class="nav-text">拦截器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Next-Generation"><span class="nav-number">2.</span> <span class="nav-text">Next Generation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#protovalidate"><span class="nav-number">3.</span> <span class="nav-text">protovalidate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%B3%95"><span class="nav-number">3.0.1.</span> <span class="nav-text">用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5-protovalidate"><span class="nav-number">3.0.1.1.</span> <span class="nav-text">导入 protovalidate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87-buf-%E6%9E%84%E5%BB%BA"><span class="nav-number">3.0.1.2.</span> <span class="nav-text">通过 buf 构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87protoc%E6%9E%84%E5%BB%BA"><span class="nav-number">3.0.1.3.</span> <span class="nav-text">通过protoc构建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%96%BD%E9%AA%8C%E8%AF%81%E7%BA%A6%E6%9D%9F"><span class="nav-number">3.0.2.</span> <span class="nav-text">实施验证约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E4%BF%A1%E6%81%AF"><span class="nav-number">3.0.3.</span> <span class="nav-text">验证信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%A1%A3"><span class="nav-number">3.0.4.</span> <span class="nav-text">文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#protoc-gen-validate"><span class="nav-number">3.0.5.</span> <span class="nav-text">protoc-gen-validate</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%81%E7%A7%BB%E5%90%91%E5%AF%BC"><span class="nav-number">3.0.5.1.</span> <span class="nav-text">迁移向导</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8A%A5%E9%94%99"><span class="nav-number">3.1.</span> <span class="nav-text">自定义报错</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">3.1.1.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CEL-%E9%80%9A%E7%94%A8%E8%A1%A8%E7%A4%BA%E8%AF%AD%E8%A8%80"><span class="nav-number">3.1.2.</span> <span class="nav-text">CEL 通用表示语言</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">4.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -226,15 +227,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2022-08-21 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-21T00:00:00+08:00">2022-08-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-08-21 11:37:48" itemprop="dateModified" datetime="2023-08-21T11:37:48+08:00">2023-08-21</time>
+      <time title="Created: 2023-08-21 00:00:00 / Modified: 11:39:28" itemprop="dateCreated datePublished" datetime="2023-08-21T00:00:00+08:00">2023-08-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -328,7 +323,8 @@
 <h5 id="从源代码构建"><a href="#从源代码构建" class="headerlink" title="从源代码构建"></a>从源代码构建</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">fetches this repo into <span class="variable">$GOPATH</span></span></span><br><span class="line">go get -d github.com/envoyproxy/protoc-gen-validate</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<h4 id="💡-Yes-our-go-module-path-is-github-com-envoyproxy-protoc-gen-validate-not-bufbuild-this-is-intentional"><a href="#💡-Yes-our-go-module-path-is-github-com-envoyproxy-protoc-gen-validate-not-bufbuild-this-is-intentional" class="headerlink" title="💡 Yes, our go module path is github.com/envoyproxy/protoc-gen-validate not bufbuild this is intentional."></a>💡 Yes, our go module path is <code>github.com/envoyproxy/protoc-gen-validate</code> <strong>not</strong> <code>bufbuild</code> this is intentional.</h4><p>Changing the module path is effectively creating a new, independent module. We would prefer not to break our users. The Go team are working on better <code>cmd/go</code> support for modules that change paths, but progress is slow. Until then, we will continue to use the <code>envoyproxy</code> module path.</p>
+<p>💡 Yes, our go module path is <code>github.com/envoyproxy/protoc-gen-validate</code> <strong>not</strong> <code>bufbuild</code> this is intentional.</p>
+<p>Changing the module path is effectively creating a new, independent module. We would prefer not to break our users. The Go team are working on better <code>cmd/go</code> support for modules that change paths, but progress is slow. Until then, we will continue to use the <code>envoyproxy</code> module path.</p>
 </blockquote>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone github.com/bufbuild/protoc-gen-validate</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">installs PGV into <span class="variable">$GOPATH</span>/bin</span></span><br><span class="line">cd protoc-gen-validate &amp;&amp; make build</span><br></pre></td></tr></table></figure>
 
@@ -473,14 +469,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/post/89f2.html" rel="prev" title="Golang中多线程设计模式">
-                  <i class="fa fa-chevron-left"></i> Golang中多线程设计模式
+                <a href="/post/f595.html" rel="prev" title="错误码实践">
+                  <i class="fa fa-chevron-left"></i> 错误码实践
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/post/dd3c.html" rel="next" title="Golang中的一些设计模式">
-                  Golang中的一些设计模式 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -512,19 +505,13 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
 </div>
-  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
   </div>
 
     </div>
   </footer>
 
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
   <div class="back-to-top" role="button" aria-label="Back to top">
     <i class="fa fa-arrow-up fa-lg"></i>
     <span>0%</span>
@@ -540,7 +527,7 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.14.3/algoliasearch-lite.umd.js" integrity="sha256-dyJcbGuYfdzNfifkHxYVd/rzeR6SLLcDFYEidcybldM=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.51.1/instantsearch.production.min.js" integrity="sha256-y6I4MY/blLHk4a7G33zp97DcnBFRY2iMId4FObo8toI=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>

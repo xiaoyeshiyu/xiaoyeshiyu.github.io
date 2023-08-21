@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-08-01T09:15:12.747Z</updated>
+  <updated>2023-08-21T03:39:28.306Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用protobuf validate自定义报错内容</title>
+    <link href="https://www.xiaoyeshiyu.com/post/6058.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/6058.html</id>
+    <published>2023-08-20T16:00:00.000Z</published>
+    <updated>2023-08-21T03:39:28.306Z</updated>
+    
+    
+    <summary type="html">使用protocol之后，更加符合微服务开发规范，并且定义即文档，开发效率大大提高。但是protobuf无法实现自定义报错内容，所幸这个功能Google已经在考虑，并且在validate的beta版本已经实现。</summary>
+    
+    
+    
+    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
+    
+    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/microservice/Golang/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>错误码实践</title>
@@ -339,23 +358,6 @@
     
     
     <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>RocketMQ学习笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/post/db4a.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/db4a.html</id>
-    <published>2022-10-13T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.882Z</updated>
-    
-    
-    <summary type="html">在微服务场景中，解耦能力是非常重要的，常用的解决方案是通过消息队列。具有回查机制和高并发能力的RocketMQ在实现分布式事务功能上有很大的优势。</summary>
-    
-    
-    
-    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
     
     
   </entry>
