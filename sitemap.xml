@@ -92,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/a3e5.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/61db.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -101,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/61db.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/a3e5.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -164,7 +164,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/bcfc.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/6b44.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -173,7 +173,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/6b44.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/bcfc.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -209,6 +209,15 @@
   </url>
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/post/6b2c.html</loc>
+    
+    <lastmod>2023-07-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/post/a1f5.html</loc>
     
     <lastmod>2023-07-24</lastmod>
@@ -218,7 +227,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/6b2c.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/a70a.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -237,15 +246,6 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/post/8e69.html</loc>
-    
-    <lastmod>2023-07-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/post/a70a.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -353,7 +353,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/b0f4.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/6f83.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -362,7 +362,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/6f83.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/b0f4.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -479,15 +479,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/b787.html</loc>
-    
-    <lastmod>2023-07-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/post/b182.html</loc>
     
     <lastmod>2023-07-24</lastmod>
@@ -498,6 +489,15 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/post/2036.html</loc>
+    
+    <lastmod>2023-07-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/post/b787.html</loc>
     
     <lastmod>2023-07-24</lastmod>
     
@@ -814,14 +814,21 @@
 
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
     <lastmod>2023-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/midware/</loc>
+    <lastmod>2023-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
     <lastmod>2023-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -856,13 +863,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/database/Golang/</loc>
-    <lastmod>2023-08-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/k8s/</loc>
     <lastmod>2023-08-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -877,14 +877,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/k8s/database/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/database/Golang/</loc>
     <lastmod>2023-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/midware/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/k8s/database/</loc>
     <lastmod>2023-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -898,14 +898,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/k8s/Golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Linux/</loc>
     <lastmod>2023-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Linux/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/k8s/Golang/</loc>
     <lastmod>2023-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
