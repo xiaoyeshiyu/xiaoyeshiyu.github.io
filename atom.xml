@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-08-21T09:19:26.257Z</updated>
+  <updated>2023-08-25T13:35:53.216Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>内网穿透笔记</title>
+    <link href="https://www.xiaoyeshiyu.com/post/931.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/931.html</id>
+    <published>2023-08-24T16:00:00.000Z</published>
+    <updated>2023-08-25T13:35:53.216Z</updated>
+    
+    
+    <summary type="html">在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。</summary>
+    
+    
+    
+    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/midware/developer/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>s3实现视频分片预览</title>
@@ -341,23 +360,6 @@
     
     
     <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>微服务之链路追踪</title>
-    <link href="https://www.xiaoyeshiyu.com/post/a70a.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/a70a.html</id>
-    <published>2022-10-15T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.902Z</updated>
-    
-    
-    <summary type="html">在微服务架构中，交互方式变成服务和服务之间的交互，当接口链路过多，此时出现问题会非常不好排查，因此需要引入链路追踪技术，可以查看请求链路中所有经过的服务。</summary>
-    
-    
-    
-    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
     
     
   </entry>

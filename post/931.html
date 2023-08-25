@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网穿透笔记">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/931.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/wireguard-configuration.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/Site-to-site-ipsec-example.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230824161159104.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/ZeroTier_ilustracija_2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825103746719.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825103837954.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825205928495.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825210308076.png">
+<meta property="article:published_time" content="2023-08-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-25T13:35:53.216Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/wireguard-configuration.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/931.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/931.html","path":"post/931.html","title":"内网穿透笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>内网穿透笔记 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E7%AC%94%E8%AE%B0"><span class="nav-number">1.</span> <span class="nav-text">内网穿透笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#frp-%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F"><span class="nav-number">1.1.</span> <span class="nav-text">frp 内网穿透</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84"><span class="nav-number">1.1.3.</span> <span class="nav-text">端口映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P"><span class="nav-number">1.1.4.</span> <span class="nav-text">P2P</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.1.5.</span> <span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WireGuard"><span class="nav-number">1.2.</span> <span class="nav-text">WireGuard</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.3.</span> <span class="nav-text">安装过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.2.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZeroTier"><span class="nav-number">1.3.</span> <span class="nav-text">ZeroTier</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">1.3.2.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%AE%89%E8%A3%85zerotier"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">服务端安装zerotier</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAmoon%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">创建moon服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%AE%89%E8%A3%85ztncui"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">服务端安装ztncui</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8A%A0%E5%85%A5%E7%BD%91%E7%BB%9C"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">客户端加入网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8A%A0%E5%85%A5moon"><span class="nav-number">1.3.2.5.</span> <span class="nav-text">客户端加入moon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.3.2.6.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93-1"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/931.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="内网穿透笔记 | 小夜时雨">
+      <meta itemprop="description" content="在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          内网穿透笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-08-25 00:00:00 / Modified: 21:35:53" itemprop="dateCreated datePublished" datetime="2023-08-25T00:00:00+08:00">2023-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/midware/" itemprop="url" rel="index"><span itemprop="name">中间件</span></a>
+        </span>
+          , 
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/midware/developer/" itemprop="url" rel="index"><span itemprop="name">开发技巧</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/931.html" class="post-meta-item leancloud_visitors" data-flag-title="内网穿透笔记" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/931.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/931.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="内网穿透笔记"><a href="#内网穿透笔记" class="headerlink" title="内网穿透笔记"></a>内网穿透笔记</h1><p>前提环境：</p>
+<ol>
+<li>公司网络在接入大量VPN设备后，VPN网络环境差</li>
+<li>外出办公需要访问家中设备</li>
+<li>不想购入VPN、内网穿透等物理设备，出口光猫不好折腾</li>
+</ol>
+<p>这种情况下，可以使用内网穿透技术，实现端口映射或者内部局域网。</p>
+<h2 id="frp-内网穿透"><a href="#frp-内网穿透" class="headerlink" title="frp 内网穿透"></a>frp 内网穿透</h2><p><code>frp</code>是一种用于在内网和外网之间建立安全通信的工具。它可以通过内网穿透技术，将内网服务暴露在外网上，实现远程访问。<code>frp</code>支持<code>TCP</code>、<code>UDP</code>和<code>HTTP</code>协议，并提供了多种认证方式和加密方式来保障通信安全。您可以访问Frp的官方网站了解更多信息。</p>
+<p>github主页：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2ZhdGVkaWVyL2ZycA==">https://github.com/fatedier/frp<i class="fa fa-external-link-alt"></i></span></p>
+<p>官方文档：<span class="exturl" data-url="aHR0cHM6Ly9nb2ZycC5vcmcvZG9jcy8=">https://gofrp.org/docs/<i class="fa fa-external-link-alt"></i></span></p>
+<p>在<code>release</code>里下载最新版，里面包含服务端和客户端</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>frp 主要由 <strong>客户端(frpc)</strong> 和 <strong>服务端(frps)</strong> 组成，服务端通常部署在具有公网 IP 的机器上，客户端通常部署在需要穿透的内网服务所在的机器上。</p>
+<p>内网服务由于没有公网 IP，不能被非局域网内的其他用户访问。</p>
+<p>用户通过访问服务端的 frps，由 frp 负责根据请求的端口或其他信息将请求路由到对应的内网机器，从而实现通信。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>开机自启</p>
+<p>在 Linux 系统下，使用<code>systemd</code> 可以方便地控制 frp 服务端 <code>frps</code> 的启动和停止、配置后台运行和开启自启。</p>
+<p>要使用 <code>systemd</code> 来控制 <code>frps</code>，需要先安装 <code>systemd</code>，然后在 <code>/etc/systemd/system</code> 目录下创建一个 frps.service 文件。</p>
+<ol>
+<li><p>如Linux服务端上没有安装 <code>systemd</code>，可以使用 <code>yum</code> 或 <code>apt</code> 等命令安装 <code>systemd</code>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">yum</span></span><br><span class="line">yum install systemd</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">apt</span></span><br><span class="line">apt install systemd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用文本编辑器，如 <code>vim</code> 创建并编辑 <code>frps.service</code> 文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/systemd/system/frps.service</span><br></pre></td></tr></table></figure>
+
+<p>写入内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line"># 服务名称，可自定义</span><br><span class="line">Description = frp server</span><br><span class="line">After = network.target syslog.target</span><br><span class="line">Wants = network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type = simple</span><br><span class="line"># 启动frps的命令，需修改为您的frps的安装路径</span><br><span class="line">ExecStart = /path/to/frps -c /path/to/frps.ini</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy = multi-user.target</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用 <code>systemd</code> 命令，管理 frps。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启动frp</span></span><br><span class="line">systemctl start frps</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">停止frp</span></span><br><span class="line">systemctl stop frps</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启frp</span></span><br><span class="line">systemctl restart frps</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看frp状态</span></span><br><span class="line">systemctl status frps</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置 frps 开机自启。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable frps</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>日志默认会记录到<code>/var/log/messages</code></p>
+<h3 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h3><p><strong>服务端</strong></p>
+<p>服务端一般选择具有固定公网IP地址的服务器，例如腾讯云、阿里云、华为云、京东云、aws、谷歌云。</p>
+<blockquote>
+<p>一般云厂商会有新人礼包，免费用三个月、一个月、七天等，例如</p>
+<p>腾讯云：<span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9hY3QvcHJvL3NlY2tpbGxfc2Vhc29u">https://cloud.tencent.com/act/pro/seckill_season<i class="fa fa-external-link-alt"></i></span></p>
+<p>京东云：<span class="exturl" data-url="aHR0cHM6Ly93d3cuamRjbG91ZC5jb20v">https://www.jdcloud.com/<i class="fa fa-external-link-alt"></i></span></p>
+<p>阿里云：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYWxpeXVuLmNvbS9taW5pc2l0ZS9nb29kcw==">https://www.aliyun.com/minisite/goods<i class="fa fa-external-link-alt"></i></span></p>
+<p>另外aws可以白嫖一年，谷歌云通过绕过电话申请google账号，使用一张visa卡可以一直白嫖，相比而言香港的网络更好一些。</p>
+</blockquote>
+<p>服务端启动开启端口监听即可</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="comment"># 端口不使用默认，稍安全些</span></span><br><span class="line"><span class="attr">bind_port</span> = <span class="number">7001</span>  </span><br><span class="line"><span class="comment"># 日志等级调整为最小，方便debug</span></span><br><span class="line"><span class="attr">log_level</span> = trace </span><br></pre></td></tr></table></figure>
+
+<p><strong>内网设备</strong></p>
+<p>内网设备将端口映射出去，例如映射ssh端口</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="comment"># 端口，或者域名，推荐使用域名，一年个位数，方便</span></span><br><span class="line"><span class="attr">server_addr</span> = x.x.x.x </span><br><span class="line"><span class="attr">server_port</span> = <span class="number">7001</span></span><br><span class="line"></span><br><span class="line"><span class="section">[ssh]</span></span><br><span class="line"><span class="attr">type</span> = tcp</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="comment"># 将本机22端口映射出去，映射成远端6000端口</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="number">22</span>      </span><br><span class="line"><span class="attr">remote_port</span> = <span class="number">6000</span></span><br></pre></td></tr></table></figure>
+
+<p>其他设备即可通过公网地址的<code>6000</code>端口，<code>ssh</code>到内网服务器上。</p>
+<blockquote>
+<p>一般云服务器厂商都带有默认防火墙，需要将上述<code>7001</code>和<code>6000</code>端口放开。</p>
+</blockquote>
+<h3 id="P2P"><a href="#P2P" class="headerlink" title="P2P"></a>P2P</h3><p><code>STCP</code> 和 <code>SUDP</code> 的 (S) 的含义是 <code>Secret</code>。其作用是为 <code>TCP</code> 和 <code>UDP</code> 类型的服务提供一种安全访问的能力，避免让端口直接暴露在公网上导致任何人都能访问到。</p>
+<p>这两种代理要求在被访问服务的机器上以及要访问的用户的机器上都部署上 frp 的客户端。被访问的服务所在机器叫做服务端，另一端叫做访问端。</p>
+<p><code>frp</code> 会在访问端监听一个端口和服务端的端口做映射。访问端的用户需要提供相同的密钥才能连接成功，从而保证安全性。</p>
+<p>采用 <code>P2P</code> 的方式进行打洞穿透，如果成功，后续的流量将不会经过 <code>frps</code>，而是直接通信，不再受到 <code>frps</code> 所在服务器的带宽限制。</p>
+<p>由于打洞成功率取决于所处网络的 <code>NAT</code> 类型，所以 <code>XTCP</code> 的可用性和稳定性无法保证。在需要可靠连接的情况下，建议使用 <code>STCP</code> 替代。</p>
+<p>可以通过配置 <code>fallback</code> 到 <code>stcp visitor </code>实现在打洞失败时，回退到 <code>stcp</code> 建立连接。</p>
+<p>内网设备配置：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">server_addr</span> = x.x.x.x</span><br><span class="line"><span class="attr">server_port</span> = <span class="number">7001</span></span><br><span class="line"><span class="comment"># set up a new stun server if the default one is not available.</span></span><br><span class="line"><span class="comment"># nat_hole_stun_server = xxx</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务端名称</span></span><br><span class="line"><span class="section">[p2p_ssh]</span>								</span><br><span class="line"><span class="attr">type</span> = xtcp</span><br><span class="line"><span class="attr">sk</span> = abc</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="number">22</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># stcp的服务名称</span></span><br><span class="line"><span class="section">[stcp_ssh]</span></span><br><span class="line"><span class="attr">type</span> = stcp</span><br><span class="line"><span class="attr">sk</span> = abc</span><br><span class="line"><span class="attr">local_ip</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">local_port</span> = <span class="number">22</span></span><br></pre></td></tr></table></figure>
+
+<p>客户端配置：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[common]</span></span><br><span class="line"><span class="attr">server_addr</span> = x.x.x.x</span><br><span class="line"><span class="attr">server_port</span> = <span class="number">7001</span></span><br><span class="line"><span class="comment"># set up a new stun server if the default one is not available.</span></span><br><span class="line"><span class="comment"># nat_hole_stun_server = xxx</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用于fallback</span></span><br><span class="line"><span class="section">[stcp-visitor]</span>     				</span><br><span class="line"><span class="attr">role</span> = visitor</span><br><span class="line"><span class="attr">type</span> = stcp</span><br><span class="line"><span class="comment"># 对应服务端stcp服务的名称</span></span><br><span class="line"><span class="attr">server_name</span> = stcp_ssh</span><br><span class="line"><span class="attr">sk</span> = abc</span><br><span class="line"><span class="attr">bind_port</span> = -<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="section">[xtcp-visitor]</span></span><br><span class="line"><span class="attr">role</span> = visitor</span><br><span class="line"><span class="attr">type</span> = xtcp</span><br><span class="line"><span class="comment"># 与服务端匹配</span></span><br><span class="line"><span class="attr">server_name</span> = p2p_ssh  			</span><br><span class="line"><span class="attr">sk</span> = abc</span><br><span class="line"><span class="attr">bind_addr</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="comment"># 客户端运行成功之后，通过ssh本地9002端口即可ssh到远端服务器上</span></span><br><span class="line"><span class="attr">bind_port</span> = <span class="number">9002</span>      			</span><br><span class="line"><span class="comment"># 与上面的 stcp-visitor 匹配</span></span><br><span class="line"><span class="attr">fallback_to</span> = stcp-visitor  </span><br><span class="line"><span class="attr">fallback_timeout_ms</span> = <span class="number">200</span></span><br></pre></td></tr></table></figure>
+
+<p>当连接 <code>127.0.0.1:9002</code> 超过 <code>200ms</code>， <code>p2p</code> 打洞还未成功的话，会回退到使用 <code>stcp-visitor</code> 建立连接。<code>fallback</code> 后，之前触发的打洞操作仍然会继续，一般来说打洞完成需要的耗时会比较长。</p>
+<p>如果打洞成功，下次建立新的连接时，将不需要再次打洞，会很快完成连接建立，不会触发 <code>fallback</code>。</p>
+<p>需要注意根据访问端和被访问端的延迟情况来合理设置超时时间，以避免超时时间太短，即使打洞成功连接也来不及建立，而一直触发 <code>fallback</code>。</p>
+<p><code>stcp-visitor</code> 的 <code>bind_port</code> 设置为 -1 表示不需要监听物理端口，只接受 <code>fallback</code> 的连接即可。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>总的来说，<code>frp</code>简单易用，高性能，支持多种平台。</p>
+<p>更多使用姿势，可以参考 <code>frp</code> 官网。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nb2ZycC5vcmcvZG9jcy9yZWZlcmVuY2Uv">https://gofrp.org/docs/reference/<i class="fa fa-external-link-alt"></i></span></p>
+<blockquote>
+<p>如果映射ssh，最好关闭密码登录，仅保留密钥登录。</p>
+<p>亲测，映射 mac 屏幕共享端口 5900 ，使用P2P无法成功连接，使用端口映射不安全。</p>
+</blockquote>
+<p>来自 chatGPT</p>
+<p>要屏蔽用户使用密码登录 SSH，并只允许使用密钥登录，你可以按照以下步骤进行设置：</p>
+<ol>
+<li><p>使用超级用户或具有管理员权限的用户登录到 CentOS 服务器。</p>
+</li>
+<li><p>打开 SSH 配置文件 <code>/etc/ssh/sshd_config</code>，可以使用文本编辑器（如 <code>vi</code> 或 <code>nano</code>）进行编辑。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在文件中找到 <code>PasswordAuthentication</code> 选项，并将其值改为 <code>no</code>，即禁用密码登录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PasswordAuthentication no</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>确保 <code>PubkeyAuthentication</code> 选项的值为 <code>yes</code>，以启用密钥登录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PubkeyAuthentication yes</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>保存并关闭文件。</p>
+</li>
+<li><p>重新加载 SSH 服务以应用更改。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl reload sshd</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>现在，只有配置了密钥的用户才能通过 SSH 登录到 CentOS 服务器，而密码登录将被禁用。</p>
+<p>请确保在进行此操作之前，你已经为要允许的用户设置了 SSH 密钥，并且测试过密钥登录的功能。否则，你可能会被锁定在服务器上，无法通过 SSH 登录。</p>
+<p>请注意，对于已经存在的用户，如果你想要禁用密码登录并只允许密钥登录，你可以在完成上述步骤后，确保这些用户的密码登录方式也被禁用。你可以使用以下命令将用户的密码字段设置为空，从而禁用密码登录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo passwd -l &lt;username&gt;</span><br></pre></td></tr></table></figure>
+
+<p>将 <code>&lt;username&gt;</code> 替换为要禁用密码登录的用户的用户名。</p>
+<p>这样，你就成功地屏蔽了用户的密码登录，只允许通过密钥登录到 CentOS 服务器。</p>
+<h2 id="WireGuard"><a href="#WireGuard" class="headerlink" title="WireGuard"></a>WireGuard</h2><p><code>WireGuard</code> 是一种现代的开源VPN协议，旨在提供高性能、低延迟和简单易用的虚拟私人网络（<code>VPN</code>）解决方案。它被设计为轻量级、快速且安全的协议，适用于各种操作系统和设备。</p>
+<p>以下是关于 <code>WireGuard</code> 的一些重要特点：</p>
+<ol>
+<li><p><strong>简单易用</strong>: <code>WireGuard</code>的设计目标之一是简化配置和使用过程。它采用了较少的代码和简洁的配置选项，使得部署和管理VPN变得更加容易。</p>
+</li>
+<li><p><strong>高性能</strong>: <code>WireGuard</code>被设计为高性能的VPN协议。它采用了现代密码学算法和高效的内核实现，以提供快速的加密和解密操作，减少了网络延迟和资源消耗。</p>
+</li>
+<li><p><strong>安全可靠</strong>: <code>WireGuard</code>使用了最新的加密算法，如<code>Curve25519</code>、<code>ChaCha20</code>、<code>Poly1305</code>和<code>HKDF</code>，以提供强大的安全性。它还通过避免复杂的配置和减少攻击面来增加安全性。</p>
+</li>
+<li><p><strong>跨平台支持</strong>: <code>WireGuard</code>可以在多个操作系统和设备上运行，包括<code>Linux</code>、<code>Windows</code>、<code>macOS</code>、<code>Android</code>和iOS等。这使得它非常适合用于构建跨平台的VPN解决方案。</p>
+</li>
+<li><p><strong>动态路由</strong>: <code>WireGuard</code>支持动态路由，可以自动处理网络路由表的更新。这使得网络配置更加灵活，可以方便地添加或删除对等节点。</p>
+</li>
+</ol>
+<p>总的来说，<code>WireGuard</code>是一种简单、高效和安全的<code>VPN</code>协议，适用于构建虚拟私人网络。它已经得到了广泛的采用，并且在网络安全领域受到了积极的评价。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cud2lyZWd1YXJkLmNvbS8=">https://www.wireguard.com/<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/wireguard-configuration.png" alt="WireGuardでVPNサーバーを構築してスマホやPCから接続する手順 | virtualiment"></p>
+<p>原理直白点说，就是通过服务端，将客户端1、客户端2使用channel连接成一个局域网，实现客户端1和客户端2之间P2P。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/Site-to-site-ipsec-example.jpeg" alt="WireGuard - RouterOS - MikroTik Documentation"></p>
+<p>也可以在两台网关设备之间，通过P2P打通通道，实现两个内部局域网通过网关互联。一般家中有软路由担任网关的角色。</p>
+<h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p>对应平台有不同的安装方式，推荐查看官网：<span class="exturl" data-url="aHR0cHM6Ly93d3cud2lyZWd1YXJkLmNvbS9pbnN0YWxsLw==">https://www.wireguard.com/install/<i class="fa fa-external-link-alt"></i></span></p>
+<p>例如Centos 7 ，最简单的使用 RPM 安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release elrepo-release</span><br><span class="line">yum install yum-plugin-elrepo</span><br><span class="line">yum install kmod-wireguard wireguard-tools</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><p>推荐直接按照官网上的安装流程，生成 key，然后添加网口，copy and run</p>
+<blockquote>
+<p>官网还有视频，真的很详细。</p>
+</blockquote>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cud2lyZWd1YXJkLmNvbS9xdWlja3N0YXJ0Lw==">https://www.wireguard.com/quickstart/<i class="fa fa-external-link-alt"></i></span></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230824161159104.png" alt="image-20230824161159104"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><code>WireGuard</code>也是一个非常简单的P2P工具，支持多平台，相比 <code>frp</code> 安装稍微有些复杂。</p>
+<p><code>frp</code>和 <code>WireGuard</code>虽然都可以实现VPN，都有内网穿透的能力，但是实际上，在P2P上都不够好用，毕竟公网服务器增加带宽之后的价格很贵。</p>
+<h2 id="ZeroTier"><a href="#ZeroTier" class="headerlink" title="ZeroTier"></a>ZeroTier</h2><p><code>ZeroTier</code>是一种虚拟网络技术，它提供了一种简单、安全和高效的方式来创建和管理全球范围内的虚拟私有网络（<code>VPN</code>）。<code>ZeroTier</code>的主要优点包括以下几个方面：</p>
+<ol>
+<li><p><strong>简单易用</strong>: <code>ZeroTier</code>的配置和使用非常简单。只需在需要连接的设备上安装<code>ZeroTier</code>客户端，并加入相同的网络，即可实现设备之间的安全通信。与传统的<code>VPN</code>解决方案相比，<code>ZeroTier</code>的配置和管理更加简便。</p>
+</li>
+<li><p><strong>全球覆盖</strong>: <code>ZeroTier</code>的网络可以跨越全球范围，无论设备位于何处，只要连接到互联网，就可以加入相同的<code>ZeroTier</code>网络。这使得<code>ZeroTier</code>非常适合需要跨地域连接的场景，如远程办公、分布式团队和多地点的服务器部署等。</p>
+</li>
+<li><p><strong>安全性</strong>: <code>ZeroTier</code>使用端到端的加密来保护数据传输的安全性。所有的通信都经过加密，防止数据被窃听或篡改。此外，<code>ZeroTier</code>还提供了身份验证和访问控制机制，可以限制只有授权设备可以加入网络，增强网络的安全性。</p>
+</li>
+<li><p><strong>低延迟</strong>: <code>ZeroTier</code>采用了一种优化的路由算法，可以在全球范围内实现低延迟的通信。这对于需要实时通信、对延迟敏感的应用程序（如游戏、视频会议等）非常重要。</p>
+</li>
+<li><p><strong>跨平台支持</strong>: <code>ZeroTier</code>支持多个操作系统和平台，包括<code>Windows</code>、<code>Mac</code>、<code>Linux</code>、<code>iOS</code>和<code>Android</code>等。这使得<code>ZeroTier</code>可以在各种设备上使用，并实现设备之间的互通。</p>
+</li>
+</ol>
+<p>总的来说，<code>ZeroTier</code>提供了一种简单、安全和高效的方式来创建全球范围内的虚拟私有网络。它的简单易用性、全球覆盖、安全性、低延迟和跨平台支持等优点使得<code>ZeroTier</code>成为一个受欢迎的虚拟网络解决方案。</p>
+<p>相比较<code>WireGuard</code>而言，<code>ZeroTier</code>在使用上差别不大，但是<code>ZeroTier</code>有个优势，可以通过<code>Moon</code>节点优化网络，<strong>某些情况下可以让两个节点直接通过P2P通信</strong>。</p>
+<h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/ZeroTier_ilustracija_2.png" alt="ZeroTier - RouterOS - MikroTik Documentation"></p>
+<p>ZeroTier由以下几个组成部分构成，每个部分都扮演着特定的角色：</p>
+<ol>
+<li><p><strong>ZeroTier Central</strong>: ZeroTier Central是ZeroTier的中央服务器，负责协调和管理ZeroTier网络。它维护了网络拓扑信息、设备身份验证和访问控制规则等。当设备加入ZeroTier网络时，它们会向ZeroTier Central注册，并获取网络配置信息。</p>
+</li>
+<li><p><strong>ZeroTier Node</strong>: ZeroTier Node是运行在每个设备上的ZeroTier客户端。它负责与ZeroTier Central进行通信，并处理网络连接和流量转发。ZeroTier Node会在设备上创建虚拟网络接口，将设备与ZeroTier网络连接起来。</p>
+</li>
+<li><p><strong>ZeroTier Network</strong>: ZeroTier Network是由ZeroTier Central管理的虚拟私有网络。它是一个全局唯一的网络标识符，由一个64位的网络ID表示。ZeroTier Network可以跨越全球范围，设备只需加入相同的ZeroTier Network，就可以在网络中进行通信。</p>
+</li>
+<li><p><strong>ZeroTier Address</strong>: ZeroTier Address是分配给设备的唯一标识符，类似于IP地址。ZeroTier Address由网络ID和设备ID组成，用于在ZeroTier网络中唯一标识设备。设备可以使用ZeroTier Address进行直接通信。</p>
+</li>
+</ol>
+<p>ZeroTier的工作原理如下：</p>
+<ol>
+<li><p><strong>设备加入网络</strong>: 设备上运行的ZeroTier Node会向ZeroTier Central注册，并请求加入特定的ZeroTier网络。ZeroTier Central会验证设备的身份，并分配一个唯一的ZeroTier Address给设备。</p>
+</li>
+<li><p><strong>网络拓扑建立</strong>: ZeroTier Central维护了ZeroTier网络的拓扑信息，包括设备之间的连接关系。当设备加入网络后，ZeroTier Central会将设备的连接信息广播给其他设备，建立网络拓扑。</p>
+</li>
+<li><p><strong>路由和转发</strong>: 当设备需要与其他设备通信时，ZeroTier Node会根据网络拓扑信息进行路由选择，并将数据包转发到目标设备。数据包在设备之间通过ZeroTier网络传输，保证了安全和加密。</p>
+</li>
+<li><p><strong>加密和安全</strong>: ZeroTier使用端到端的加密来保护数据传输的安全性。数据包在设备之间进行加密和解密，防止数据被窃听或篡改。ZeroTier还提供了身份验证和访问控制机制，只有授权设备可以加入网络。</p>
+</li>
+</ol>
+<p>总的来说，ZeroTier通过ZeroTier Central协调和管理设备的连接，并通过ZeroTier Node在设备之间建立安全的虚拟网络通信。它的分布式架构和加密保护使得设备可以安全地在全球范围内进行通信。</p>
+<p>节点类型：</p>
+<ol>
+<li><p><strong>PLANET</strong>：PLANET节点是指ZeroTier网络中的中央服务器节点，也就是ZeroTier Central。它负责协调和管理整个ZeroTier网络，包括设备的注册、网络拓扑维护、身份验证和访问控制等。PLANET节点是ZeroTier网络的核心组成部分。</p>
+</li>
+<li><p><strong>MOON</strong>：MOON节点是指ZeroTier网络中的中继节点。MOON节点用于帮助设备在网络中建立连接，特别是在存在NAT(Network Address Translation)的情况下。MOON节点位于公共互联网上，可以充当设备间的中继，帮助数据包在设备之间进行转发。</p>
+</li>
+<li><p><strong>LEAF</strong>：LEAF节点是指ZeroTier网络中的终端设备节点。LEAF节点是最常见的节点类型，它可以是计算机、服务器、移动设备等各种终端设备。LEAF节点通过ZeroTier Node与ZeroTier网络连接，并参与网络通信。LEAF节点可以直接与其他LEAF节点通信，也可以通过MOON节点进行中继通信。</p>
+</li>
+</ol>
+<p>这些术语主要用于描述ZeroTier网络中不同节点的角色和功能。PLANET节点作为中央服务器负责管理整个网络，MOON节点提供中继功能，而LEAF节点则是网络中的终端设备节点。它们共同构成了ZeroTier网络的基础架构。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>为了优化网络，使用云主机作为中央服务器节点，因此需要在云主机上安装服务端。另外，<code>Centos 7</code>缺少库，推荐使用<code>Debian/Ubuntu</code>或者 <code>Centos 8</code>。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vSnVsaWVuMTAyMS9wLzE2MjU1NDAzLmh0bWw=">CentOS 8 更换yum国内源<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="服务端安装zerotier"><a href="#服务端安装zerotier" class="headerlink" title="服务端安装zerotier"></a>服务端安装zerotier</h4><p>服务端一键安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s https://install.zerotier.com | sudo bash</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">&lt;&lt;ENDOFSIGSTART=</span><br><span class="line">-----BEGIN PGP SIGNED MESSAGE-----</span><br><span class="line">Hash: SHA256</span><br><span class="line"></span><br><span class="line">ENDOFSIGSTART=</span><br><span class="line"></span><br><span class="line">export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment"># ZeroTier install script</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment"># All this script does is determine your OS and/or distribution and then add the correct</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">repository or download the correct package and install it. It <span class="keyword">then</span> starts the service</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">and prints your device<span class="string">&#x27;s ZeroTier address.</span></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="string"></span></span></span><br><span class="line"><span class="string"><span class="language-bash"></span></span><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Base URL for download.zerotier.com tree; see https://github.com/zerotier/download.zerotier.com if you want to mirror.</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Some things want http, some https, so we must specify both. Must include trailing /</span></span></span><br><span class="line">ZT_BASE_URL_HTTPS=&#x27;https://download.zerotier.com/&#x27;</span><br><span class="line">ZT_BASE_URL_HTTP=&#x27;http://download.zerotier.com/&#x27;</span><br><span class="line"></span><br><span class="line">echo</span><br><span class="line">echo &#x27;*** ZeroTier Service Quick Install for Unix-like Systems&#x27;</span><br><span class="line">echo</span><br><span class="line">echo &#x27;*** Tested OSes / distributions:&#x27;</span><br><span class="line">echo</span><br><span class="line">echo &#x27;***   MacOS (10.13+) (just installs ZeroTier One.pkg)&#x27;</span><br><span class="line">echo &#x27;***   Debian Linux (7+)&#x27;</span><br><span class="line">echo &#x27;***   RedHat/CentOS Linux (6+)&#x27;</span><br><span class="line">echo &#x27;***   Fedora Linux (16+)&#x27;</span><br><span class="line">echo &#x27;***   SuSE Linux (12+)&#x27;</span><br><span class="line">echo &#x27;***   Mint Linux (18+)&#x27;</span><br><span class="line">echo</span><br><span class="line">echo &#x27;*** Supported architectures vary by OS / distribution. We try to support&#x27;</span><br><span class="line">echo &#x27;*** every system architecture supported by the target.&#x27;</span><br><span class="line">echo</span><br><span class="line">echo &#x27;*** Please report problems to contact@zerotier.com and we will try to fix.&#x27;</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line">SUDO=</span><br><span class="line">if [ &quot;$UID&quot; != &quot;0&quot; ]; then</span><br><span class="line">	if [ -e /usr/bin/sudo -o -e /bin/sudo ]; then</span><br><span class="line">		SUDO=sudo</span><br><span class="line">	else</span><br><span class="line">		echo &#x27;*** This quick installer script requires root privileges.&#x27;</span><br><span class="line">		exit 0</span><br><span class="line">	fi</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Detect MacOS and install .pkg file there</span></span></span><br><span class="line">if [ -e /usr/bin/uname ]; then</span><br><span class="line">	if [ &quot;`/usr/bin/uname -s`&quot; = &quot;Darwin&quot; ]; then</span><br><span class="line">		echo &#x27;*** Detected MacOS / Darwin, downloading and installing Mac .pkg...&#x27;</span><br><span class="line"><span class="meta prompt_">		$</span><span class="language-bash"><span class="string">SUDO rm -f &quot;/tmp/ZeroTier One.pkg&quot;</span></span></span><br><span class="line">		curl -s $&#123;ZT_BASE_URL_HTTPS&#125;dist/ZeroTier%20One.pkg &gt;&quot;/tmp/ZeroTier One.pkg&quot;</span><br><span class="line"><span class="meta prompt_">		$</span><span class="language-bash"><span class="string">SUDO installer -pkg &quot;/tmp/ZeroTier One.pkg&quot; -target /</span></span></span><br><span class="line"></span><br><span class="line">		echo</span><br><span class="line">		echo &#x27;*** Waiting for identity generation...&#x27;</span><br><span class="line"></span><br><span class="line">		while [ ! -f &quot;/Library/Application Support/ZeroTier/One/identity.secret&quot; ]; do</span><br><span class="line">			sleep 1</span><br><span class="line">		done</span><br><span class="line"></span><br><span class="line">		echo</span><br><span class="line">		echo &quot;*** Success! You are connected to port `cat &#x27;/Library/Application Support/ZeroTier/One/identity.public&#x27; | cut -d : -f 1` of Earth&#x27;s planetary smart switch.&quot;</span><br><span class="line">		echo</span><br><span class="line"></span><br><span class="line">		exit 0</span><br><span class="line">	fi</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">Detect already-installed on Linux</span></span></span><br><span class="line">if [ -f /usr/sbin/zerotier-one ]; then</span><br><span class="line">	echo &#x27;*** ZeroTier appears to already be installed.&#x27;</span><br><span class="line">	exit 0</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">rm -f /tmp/zt-gpg-key</span><br><span class="line">echo &#x27;-----BEGIN PGP PUBLIC KEY BLOCK-----&#x27; &gt;/tmp/zt-gpg-key</span><br><span class="line">cat &gt;&gt;/tmp/zt-gpg-key &lt;&lt; END_OF_KEY</span><br><span class="line">Comment: GPGTools - https://gpgtools.org</span><br><span class="line"></span><br><span class="line">mQINBFdQq7oBEADEVhyRiaL8dEjMPlI/idO8tA7adjhfvejxrJ3Axxi9YIuIKhWU</span><br><span class="line">5hNjDjZAiV9iSCMfJN3TjC3EDA+7nFyU6nDKeAMkXPbaPk7ti+Tb1nA4TJsBfBlm</span><br><span class="line">CC14aGWLItpp8sI00FUzorxLWRmU4kOkrRUJCq2kAMzbYWmHs0hHkWmvj8gGu6mJ</span><br><span class="line">WU3sDIjvdsm3hlgtqr9grPEnj+gA7xetGs3oIfp6YDKymGAV49HZmVAvSeoqfL1p</span><br><span class="line">pEKlNQ1aO9uNfHLdx6+4pS1miyo7D1s7ru2IcqhTDhg40cHTL/VldC3d8vXRFLIi</span><br><span class="line">Uo2tFZ6J1jyQP5c1K4rTpw3UNVne3ob7uCME+T1+ePeuM5Y/cpcCvAhJhO0rrlr0</span><br><span class="line">dP3lOKrVdZg4qhtFAspC85ivcuxWNWnfTOBrgnvxCA1fmBX+MLNUEDsuu55LBNQT</span><br><span class="line">5+WyrSchSlsczq+9EdomILhixUflDCShHs+Efvh7li6Pg56fwjEfj9DJYFhRvEvQ</span><br><span class="line">7GZ7xtysFzx4AYD4/g5kCDsMTbc9W4Jv+JrMt3JsXt2zqwI0P4R1cIAu0J6OZ4Xa</span><br><span class="line">dJ7Ci1WisQuJRcCUtBTUxcYAClNGeors5Nhl4zDrNIM7zIJp+GfPYdWKVSuW10mC</span><br><span class="line">r3OS9QctMSeVPX/KE85TexeRtmyd4zUdio49+WKgoBhM8Z9MpTaafn2OPQARAQAB</span><br><span class="line">tFBaZXJvVGllciwgSW5jLiAoWmVyb1RpZXIgU3VwcG9ydCBhbmQgUmVsZWFzZSBT</span><br><span class="line">aWduaW5nIEtleSkgPGNvbnRhY3RAemVyb3RpZXIuY29tPokCNwQTAQoAIQUCV1Cr</span><br><span class="line">ugIbAwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgAAKCRAWVxmII+UqYViGEACnC3+3</span><br><span class="line">lRzfv7f7JLWo23FSHjlF3IiWfYd+47BLDx706SDih1H6Qt8CqRy706bWbtictEJ/</span><br><span class="line">xTaWgTEDzY/lRalYO5NAFTgK9h2zBP1t8zdEA/rmtVPOWOzd6jr0q3l3pKQTeMF0</span><br><span class="line">6g+uaMDG1OkBz6MCwdg9counz6oa8OHK76tXNIBEnGOPBW375z1O+ExyddQOHDcS</span><br><span class="line">IIsUlFmtIL1yBa7Q5NSfLofPLfS0/o2FItn0riSaAh866nXHynQemjTrqkUxf5On</span><br><span class="line">65RLM+AJQaEkX17vDlsSljHrtYLKrhEueqeq50e89c2Ya4ucmSVeC9lrSqfyvGOO</span><br><span class="line">P3aT/hrmeE9XBf7a9vozq7XhtViEC/ZSd1/z/oeypv4QYenfw8CtXP5bW1mKNK/M</span><br><span class="line">8xnrnYwo9BUMclX2ZAvu1rTyiUvGre9fEGfhlS0rjmCgYfMgBZ+R/bFGiNdn6gAd</span><br><span class="line">PSY/8fP8KFZl0xUzh2EnWe/bptoZ67CKkDbVZnfWtuKA0Ui7anitkjZiv+6wanv4</span><br><span class="line">+5A3k/H3D4JofIjRNgx/gdVPhJfWjAoutIgGeIWrkfcAP9EpsR5swyc4KuE6kJ/Y</span><br><span class="line">wXXVDQiju0xE1EdNx/S1UOeq0EHhOFqazuu00ojATekUPWenNjPWIjBYQ0Ag4ycL</span><br><span class="line">KU558PFLzqYaHphdWYgxfGR+XSgzVTN1r7lW87kCDQRXUKu6ARAA2wWOywNMzEiP</span><br><span class="line">ZK6CqLYGZqrpfx+drOxSowwfwjP3odcK8shR/3sxOmYVqZi0XVZtb9aJVz578rNb</span><br><span class="line">e4Vfugql1Yt6w3V84z/mtfj6ZbTOOU5yAGZQixm6fkXAnpG5Eer/C8Aw8dH1EreP</span><br><span class="line">Na1gIVcUzlpg2Ql23qjr5LqvGtUB4BqJSF4X8efNi/y0hj/GaivUMqCF6+Vvh3GG</span><br><span class="line">fhvzhgBPku/5wK2XwBL9BELqaQ/tWOXuztMw0xFH/De75IH3LIvQYCuv1pnM4hJL</span><br><span class="line">XYnpAGAWfmFtmXNnPVon6g542Z6c0G/qi657xA5vr6OSSbazDJXNiHXhgBYEzRrH</span><br><span class="line">napcohTQwFKEA3Q4iftrsTDX/eZVTrO9x6qKxwoBVTGwSE52InWAxkkcnZM6tkfV</span><br><span class="line">n7Ukc0oixZ6E70Svls27zFgaWbUFJQ6JFoC6h+5AYbaga6DwKCYOP3AR+q0ZkcH/</span><br><span class="line">oJIdvKuhF9zDZbQhd76b4gK3YXnMpVsj9sQ9P23gh61RkAQ1HIlGOBrHS/XYcvpk</span><br><span class="line">DcfIlJXKC3V1ggrG+BpKu46kiiYmRR1/yM0EXH2n99XhLNSxxFxxWhjyw8RcR6iG</span><br><span class="line">ovDxWAULW+bJHjaNJdgb8Kab7j2nT2odUjUHMP42uLJgvS5LgRn39IvtzjoScAqg</span><br><span class="line">8I817m8yLU/91D2f5qmJIwFI6ELwImkAEQEAAYkCHwQYAQoACQUCV1CrugIbDAAK</span><br><span class="line">CRAWVxmII+UqYWSSEACxaR/hhr8xUIXkIV52BeD+2BOS8FNOi0aM67L4fEVplrsV</span><br><span class="line">Op9fvAnUNmoiQo+RFdUdaD2Rpq+yUjQHHbj92mlk6Cmaon46wU+5bAWGYpV1Uf+o</span><br><span class="line">wbKw1Xv83Uj9uHo7zv9WDtOUXUiTe/S792icTfRYrKbwkfI8iCltgNhTQNX0lFX/</span><br><span class="line">Sr2y1/dGCTCMEuA/ClqGKCm9lIYdu+4z32V9VXTSX85DsUjLOCO/hl9SHaelJgmi</span><br><span class="line">IJzRY1XLbNDK4IH5eWtbaprkTNIGt00QhsnM5w+rn1tO80giSxXFpKBE+/pAx8PQ</span><br><span class="line">RdVFzxHtTUGMCkZcgOJolk8y+DJWtX8fP+3a4Vq11a3qKJ19VXk3qnuC1aeW7OQF</span><br><span class="line">j6ISyHsNNsnBw5BRaS5tdrpLXw6Z7TKr1eq+FylmoOK0pIw5xOdRmSVoFm4lVcI5</span><br><span class="line">e5EwB7IIRF00IFqrXe8dCT0oDT9RXc6CNh6GIs9D9YKwDPRD/NKQlYoegfa13Jz7</span><br><span class="line">S3RIXtOXudT1+A1kaBpGKnpXOYD3w7jW2l0zAd6a53AAGy4SnL1ac4cml76NIWiF</span><br><span class="line">m2KYzvMJZBk5dAtFa0SgLK4fg8X6Ygoo9E0JsXxSrW9I1JVfo6Ia//YOBMtt4XuN</span><br><span class="line">Awqahjkq87yxOYYTnJmr2OZtQuFboymfMhNqj3G2DYmZ/ZIXXPgwHx0fnd3R0Q==</span><br><span class="line">=JgAv</span><br><span class="line">END_OF_KEY</span><br><span class="line">echo &#x27;-----END PGP PUBLIC KEY BLOCK-----&#x27; &gt;&gt;/tmp/zt-gpg-key</span><br><span class="line"></span><br><span class="line">echo &#x27;*** Detecting Linux Distribution&#x27;</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line">if [ -f /etc/debian_version ]; then</span><br><span class="line">	dvers=`cat /etc/debian_version | cut -d &#x27;.&#x27; -f 1 | cut -d &#x27;/&#x27; -f 1`</span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO rm -f /tmp/zt-sources-list</span></span></span><br><span class="line"></span><br><span class="line">	if [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F -i LinuxMint`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Linux Mint -&gt; Ubuntu &#x27;</span>xenial<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Linux Mint, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/xenial xenial main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F trusty`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>trusty<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/trusty trusty main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F wily`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>wily<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/wily wily main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F xenial`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>xenial<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/xenial xenial main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F zesty`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>zesty<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/zesty zesty main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F precise`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>precise<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/precise precise main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F artful`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>artful<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/artful artful main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F bionic`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>bionic<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/bionic bionic main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F yakkety`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>yakkety<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/yakkety yakkety main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F disco`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>disco<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/disco disco main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F focal`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>focal<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/focal focal main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F hirsute`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>hirsute<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/bionic bionic main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F impish`&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>impish<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/bionic bionic main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ -f /etc/lsb-release -a &#x27;(&#x27; -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F jammy`&quot; -o -n &quot;`cat /etc/lsb-release 2&gt;/dev/null | grep -F kinetic`&quot; &#x27;)&#x27; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Ubuntu &#x27;</span>jammy<span class="string">&#x27; or &#x27;</span>kinetic<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Ubuntu, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/jammy jammy main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ &quot;$dvers&quot; = &quot;6&quot; -o &quot;$dvers&quot; = &quot;squeeze&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Debian &#x27;</span>squeeze<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Debian, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/squeeze squeeze main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ &quot;$dvers&quot; = &quot;7&quot; -o &quot;$dvers&quot; = &quot;wheezy&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Debian &#x27;</span>wheezy<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Debian, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/wheezy wheezy main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ &quot;$dvers&quot; = &quot;8&quot; -o &quot;$dvers&quot; = &quot;jessie&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Debian &#x27;</span>jessie<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Debian, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/jessie jessie main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ &quot;$dvers&quot; = &quot;9&quot; -o &quot;$dvers&quot; = &quot;stretch&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Debian &#x27;</span>stretch<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Debian, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/stretch stretch main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ &quot;$dvers&quot; = &quot;10&quot; -o &quot;$dvers&quot; = &quot;buster&quot; -o &quot;$dvers&quot; = &quot;parrot&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Debian &#x27;</span>buster<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Debian, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/buster buster main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ &quot;$dvers&quot; = &quot;11&quot; -o &quot;$dvers&quot; = &quot;bullseye&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Debian &#x27;</span>bullseye<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Debian, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/bullseye bullseye main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ &quot;$dvers&quot; = &quot;12&quot; -o &quot;$dvers&quot; = &quot;bookworm&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Debian &#x27;</span>bookworm<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Debian, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/bookworm bookworm main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	elif [ &quot;$dvers&quot; = &quot;testing&quot; -o &quot;$dvers&quot; = &quot;sid&quot; ]; then</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Debian &#x27;</span>testing<span class="string">&#x27;, &#x27;</span>sid<span class="string">&#x27;, and &#x27;</span>bookworm<span class="string">&#x27; -&gt; Debian &#x27;</span>bookworm<span class="string">&#x27;</span></span></span><br><span class="line">		echo &#x27;*** Found Debian, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/bookworm bookworm main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	else</span><br><span class="line"><span class="meta prompt_">		# </span><span class="language-bash"><span class="string">Use Debian &quot;buster&quot; for unrecognized Debians</span></span></span><br><span class="line">		echo &#x27;*** Found Debian or Debian derivative, creating /etc/apt/sources.list.d/zerotier.list&#x27;</span><br><span class="line">		echo &quot;deb $&#123;ZT_BASE_URL_HTTP&#125;debian/buster buster main&quot; &gt;/tmp/zt-sources-list</span><br><span class="line">	fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO apt-get update -y</span></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO apt-get install -y gpg</span></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO mv -f /tmp/zt-sources-list /etc/apt/sources.list.d/zerotier.list</span></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO chown 0 /etc/apt/sources.list.d/zerotier.list</span></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO chgrp 0 /etc/apt/sources.list.d/zerotier.list</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO chmod a+r /tmp/zt-gpg-key</span></span></span><br><span class="line">	if [ -d /etc/apt/trusted.gpg.d ]; then</span><br><span class="line"><span class="meta prompt_">		$</span><span class="language-bash"><span class="string">SUDO gpg --dearmor &lt; /tmp/zt-gpg-key &gt; /etc/apt/trusted.gpg.d/zerotier-debian-package-key.gpg</span></span></span><br><span class="line">	else</span><br><span class="line"><span class="meta prompt_">		$</span><span class="language-bash"><span class="string">SUDO apt-key add /tmp/zt-gpg-key</span></span></span><br><span class="line">	fi</span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO rm -f /tmp/zt-gpg-key</span></span></span><br><span class="line"></span><br><span class="line">	echo</span><br><span class="line">	echo &#x27;*** Installing zerotier-one package...&#x27;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash"><span class="string">Pre-1.1.6 Debian package did not properly enumerate its files, causing</span></span></span><br><span class="line"><span class="meta prompt_">	# </span><span class="language-bash"><span class="string">problems when we try to replace it. So just delete them to force.</span></span></span><br><span class="line">	if [ -d /var/lib/zerotier-one ]; then</span><br><span class="line"><span class="meta prompt_">		$</span><span class="language-bash"><span class="string">SUDO rm -f /etc/init.d/zerotier-one /etc/systemd/system/multi-user.target.wants/zerotier-one.service /var/lib/zerotier-one/zerotier-one /usr/local/bin/zerotier-cli /usr/bin/zerotier-cli /usr/local/bin/zero</span></span></span><br><span class="line">	fi</span><br><span class="line"></span><br><span class="line">	cat /dev/null | $SUDO apt-get update</span><br><span class="line">	cat /dev/null | $SUDO apt-get install -y zerotier-one</span><br><span class="line">elif [ -f /etc/SuSE-release -o -f /etc/suse-release -o -f /etc/SUSE-brand -o -f /etc/SuSE-brand -o -f /etc/suse-brand ]; then</span><br><span class="line">	echo &#x27;*** Found SuSE, adding zypper YUM repo...&#x27;</span><br><span class="line">	cat /dev/null | $SUDO zypper addrepo -t YUM -g $&#123;ZT_BASE_URL_HTTP&#125;redhat/el/7 zerotier</span><br><span class="line">	cat /dev/null | $SUDO rpm --import /tmp/zt-gpg-key</span><br><span class="line"></span><br><span class="line">	echo</span><br><span class="line">	echo &#x27;*** Installing zeortier-one package...&#x27;</span><br><span class="line"></span><br><span class="line">	cat /dev/null | $SUDO zypper install -y zerotier-one</span><br><span class="line">elif [ -d /etc/yum.repos.d ]; then</span><br><span class="line">	baseurl=&quot;$&#123;ZT_BASE_URL_HTTP&#125;redhat/el/7&quot;</span><br><span class="line">	if [ -n &quot;`cat /etc/redhat-release 2&gt;/dev/null | grep -i fedora`&quot; ]; then</span><br><span class="line">		echo &quot;*** Found Fedora, creating /etc/yum.repos.d/zerotier.repo&quot;</span><br><span class="line">		fedora_release=&quot;`cat /etc/os-release | grep -F VERSION_ID= | cut -d = -f 2`&quot;</span><br><span class="line">		if [ -n &quot;$fedora_release&quot; ]; then</span><br><span class="line">			baseurl=&quot;$&#123;ZT_BASE_URL_HTTP&#125;redhat/fc/$fedora_release&quot;</span><br><span class="line">		else</span><br><span class="line">			baseurl=&quot;$&#123;ZT_BASE_URL_HTTP&#125;redhat/fc/22&quot;</span><br><span class="line">		fi</span><br><span class="line">	elif [ -n &quot;`cat /etc/redhat-release 2&gt;/dev/null | grep -i centos`&quot; -o -n &quot;`cat /etc/redhat-release 2&gt;/dev/null | grep -i enterprise`&quot; -o -n &quot;`cat /etc/redhat-release 2&gt;/dev/null | grep -i rocky`&quot; -o -n &quot;`cat /etc/redhat-release 2&gt;/dev/null | grep -i alma`&quot; ]; then</span><br><span class="line">		echo &quot;*** Found RHEL/CentOS/Rocky, creating /etc/yum.repos.d/zerotier.repo&quot;</span><br><span class="line">		baseurl=&quot;$&#123;ZT_BASE_URL_HTTP&#125;redhat/el/\$releasever&quot;</span><br><span class="line">	elif [ -n &quot;`cat /etc/system-release 2&gt;/dev/null | grep -i amazon`&quot; ]; then</span><br><span class="line">		echo &quot;*** Found Amazon (CentOS/RHEL based), creating /etc/yum.repos.d/zerotier.repo&quot;</span><br><span class="line">		if [ -n &quot;`cat /etc/system-release 2&gt;/dev/null | grep -F &#x27;Amazon Linux 2&#x27;`&quot; ]; then</span><br><span class="line">			baseurl=&quot;$&#123;ZT_BASE_URL_HTTP&#125;redhat/el/7&quot;</span><br><span class="line">		else</span><br><span class="line">			baseurl=&quot;$&#123;ZT_BASE_URL_HTTP&#125;redhat/amzn1/2016.03&quot;</span><br><span class="line">		fi</span><br><span class="line">	else</span><br><span class="line">		echo &quot;*** Found unknown yum-based repo, using el/7, creating /etc/yum.repos.d/zerotier.repo&quot;</span><br><span class="line">	fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO rpm --import /tmp/zt-gpg-key</span></span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO rm -f /tmp/zerotier.repo</span></span></span><br><span class="line">	echo &#x27;[zerotier]&#x27; &gt;/tmp/zerotier.repo</span><br><span class="line">	echo &#x27;name=ZeroTier, Inc. RPM Release Repository&#x27; &gt;&gt;/tmp/zerotier.repo</span><br><span class="line">	echo &quot;baseurl=$baseurl&quot; &gt;&gt;/tmp/zerotier.repo</span><br><span class="line">	echo &#x27;enabled=1&#x27; &gt;&gt;/tmp/zerotier.repo</span><br><span class="line">	echo &#x27;gpgcheck=1&#x27; &gt;&gt;/tmp/zerotier.repo</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO mv -f /tmp/zerotier.repo /etc/yum.repos.d/zerotier.repo</span></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO chown 0 /etc/yum.repos.d/zerotier.repo</span></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO chgrp 0 /etc/yum.repos.d/zerotier.repo</span></span></span><br><span class="line"></span><br><span class="line">	echo</span><br><span class="line">	echo &#x27;*** Installing ZeroTier service package...&#x27;</span><br><span class="line"></span><br><span class="line">	if [ -e /usr/bin/dnf ]; then</span><br><span class="line">		cat /dev/null | $SUDO dnf install -y zerotier-one</span><br><span class="line">	else</span><br><span class="line">		cat /dev/null | $SUDO yum install -y zerotier-one</span><br><span class="line">	fi</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash"><span class="string">SUDO rm -f /tmp/zt-gpg-key</span></span></span><br><span class="line"></span><br><span class="line">if [ ! -e /usr/sbin/zerotier-one ]; then</span><br><span class="line">	echo</span><br><span class="line">	echo &#x27;*** Package installation failed! Unfortunately there may not be a package&#x27;</span><br><span class="line">	echo &#x27;*** for your architecture or distribution. For the source go to:&#x27;</span><br><span class="line">	echo &#x27;*** https://github.com/zerotier/ZeroTierOne&#x27;</span><br><span class="line">	echo</span><br><span class="line">	exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo</span><br><span class="line">echo &#x27;*** Enabling and starting ZeroTier service...&#x27;</span><br><span class="line"></span><br><span class="line">if [ -e /usr/bin/systemctl -o -e /usr/sbin/systemctl -o -e /sbin/systemctl -o -e /bin/systemctl ]; then</span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO systemctl enable zerotier-one</span></span></span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO systemctl start zerotier-one</span></span></span><br><span class="line">	if [ &quot;$?&quot; != &quot;0&quot; ]; then</span><br><span class="line">		echo</span><br><span class="line">		echo &#x27;*** Package installed but cannot start service! You may be in a Docker&#x27;</span><br><span class="line">		echo &#x27;*** container or using a non-standard init service.&#x27;</span><br><span class="line">		echo</span><br><span class="line">		exit 1</span><br><span class="line">	fi</span><br><span class="line">else</span><br><span class="line">	if [ -e /sbin/update-rc.d -o -e /usr/sbin/update-rc.d -o -e /bin/update-rc.d -o -e /usr/bin/update-rc.d ]; then</span><br><span class="line"><span class="meta prompt_">		$</span><span class="language-bash"><span class="string">SUDO update-rc.d zerotier-one defaults</span></span></span><br><span class="line">	else</span><br><span class="line"><span class="meta prompt_">		$</span><span class="language-bash"><span class="string">SUDO chkconfig zerotier-one on</span></span></span><br><span class="line">	fi</span><br><span class="line"><span class="meta prompt_">	$</span><span class="language-bash"><span class="string">SUDO /etc/init.d/zerotier-one start</span></span></span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo</span><br><span class="line">echo &#x27;*** Waiting for identity generation...&#x27;</span><br><span class="line"></span><br><span class="line">while [ ! -f /var/lib/zerotier-one/identity.secret ]; do</span><br><span class="line">	sleep 1</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">echo</span><br><span class="line">echo &quot;*** Success! You are ZeroTier address [ `cat /var/lib/zerotier-one/identity.public | cut -d : -f 1` ].&quot;</span><br><span class="line">echo</span><br><span class="line"></span><br><span class="line">exit 0</span><br><span class="line">-----BEGIN PGP SIGNATURE-----</span><br><span class="line"></span><br><span class="line">iQJJBAEBCAAzFiEEdKXpxFjhpDHx2lenFlcZiCPlKmEFAmSIt9YVHGNvbnRhY3RA</span><br><span class="line">emVyb3RpZXIuY29tAAoJEBZXGYgj5SphFWIP/3krOq4kW89uYB/USiqbxeM7MRpu</span><br><span class="line">7E6dy1UeM1EdtWs5u0m1XOY7W372/1KB5HF+DNM9PnsMGtwdnI5XQWEAIZU06SIg</span><br><span class="line">p52n15ODeHkmK1tTXuNkKrIOT47UMvmygZei0MafgxtxXduRSPJKbYhuoSGU3gQN</span><br><span class="line">5zOYZqPzuMqQTYun25tHJ40OouXdMzg14vt+c5NudcF3caxM+kqbXTEoufM/7gP0</span><br><span class="line">eP1hM6e3lR+WeCrV89uOfDEUVuMkkaPohlbzwpWzY/46xHnSfkPi8BH4/sEpuNOc</span><br><span class="line">YaV4ChBjNlcMgPlIYliCbJzmP/I0vegIS4AoEqRAlSF5ofrDBNGq6TsDek+qCHXr</span><br><span class="line">dyXxfvdCPOcOL3xMWlNF3fl7yqPRxHdBQiZvIjTwhSI+zFmF4gMU2kuqZMbVycd6</span><br><span class="line">QQfer7SlquABI9AE5lWBggn8pIG/kotge8rCKyfMWmggzAVvVGJA+uqfBtDgk+lv</span><br><span class="line">Xafc+ZlNeE1TwB34b/m+S4oWIaVCG/mqHXGNq/Ngyl1uSUDCSY9fwyHBdzIGgZGC</span><br><span class="line">t9vNvnmxJEsu6dlGRy5vAn9gnbxuradKQBIF2sPgin6GiG9txALVRWNoz/seGqFp</span><br><span class="line">eGN0+AUfNTe1+f3CfzbUooiv6S+tdxNibTYZucWFPn1WJUGBKV36knhCoR64RZF1</span><br><span class="line">Q2lrixzZnvjukh0w</span><br><span class="line">=Uw+D</span><br><span class="line">-----END PGP SIGNATURE-----</span><br></pre></td></tr></table></figure>
+
+<p>Centos 7可以直接安装。不同版本安装可能会有报错，通过脚本可以看到安装过程和步骤，可以根据实际情况手动执行脚本中的代码。</p>
+<p>登录完之后，会显示，其中<code>2aaxxx3</code>就是本节点id</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*** Success! You are ZeroTier address [ 2aaxxx3 ].</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建moon服务器"><a href="#创建moon服务器" class="headerlink" title="创建moon服务器"></a>创建moon服务器</h4><p>安装好了之后，导出moon配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /var/lib/zerotier-one/</span><br><span class="line">zerotier-idtool initmoon identity.public &gt;&gt; moon.json</span><br></pre></td></tr></table></figure>
+
+<p>修改配置文件，增加监听端口</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">vi moon.json</span><br><span class="line"></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"> <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2aaxxx3&quot;</span><span class="punctuation">,</span></span><br><span class="line"> <span class="attr">&quot;objtype&quot;</span><span class="punctuation">:</span> <span class="string">&quot;world&quot;</span><span class="punctuation">,</span></span><br><span class="line"> <span class="attr">&quot;roots&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">&#123;</span></span><br><span class="line">   <span class="attr">&quot;identity&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2aaxxx3:0:3fba63xxxxxxxxxxxxeae818de0c2f0f75d6c6b2f6b9dd033&quot;</span><span class="punctuation">,</span></span><br><span class="line">   <span class="attr">&quot;stableEndpoints&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;117.72.1x.xx/9993&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span> <span class="comment">// 将公网IP写入，给外部访问</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"> <span class="attr">&quot;signingKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;e8264a853201808xxxxxxxxxxxxxxxxxxx3b2be0a75897c60e9&quot;</span><span class="punctuation">,</span></span><br><span class="line"> <span class="attr">&quot;signingKey_SECRET&quot;</span><span class="punctuation">:</span> <span class="string">&quot;13cb03exxxxxxxxxxxxxxxxa74d67c0e2e6&quot;</span><span class="punctuation">,</span></span><br><span class="line"> <span class="attr">&quot;updatesMustBeSignedBy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;e8264axb2bxxxxxxxxxxxxxxxxxxxxxxxxxxxxe0a75897c60e9&quot;</span><span class="punctuation">,</span></span><br><span class="line"> <span class="attr">&quot;worldType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;moon&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>生成moon配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-idtool genmoon moon.json</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wrote 00002aaxxx3.moon (signed world with timestamp 1692869091229)</span><br></pre></td></tr></table></figure>
+
+<p>生成的<code>00002aaxxx3.moon</code>即是配置文件。</p>
+<p>创建moons文件夹，并且将配置文件移动进去。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir moons.d</span><br><span class="line">cp 00002aaxxx3.moon moons.d/</span><br></pre></td></tr></table></figure>
+
+<p>重启服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart zerotier-one</span><br></pre></td></tr></table></figure>
+
+<p>查看当前<code>zerotier</code>状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">zerotier-cli peers</span></span><br><span class="line">200 peers</span><br><span class="line">&lt;ztaddr&gt;   &lt;ver&gt;  &lt;role&gt; &lt;lat&gt; &lt;link&gt;   &lt;lastTX&gt; &lt;lastRX&gt; &lt;path&gt;</span><br><span class="line">62f865ae71 -      PLANET   384 DIRECT   -1       55388    50.7.252.138/9993</span><br><span class="line">778cde7190 -      PLANET   233 DIRECT   -1       55539    103.195.103.66/9993</span><br><span class="line">cafe04eba9 -      PLANET   227 DIRECT   -1       55545    84.17.53.155/9993</span><br><span class="line">cafe9efeb9 -      PLANET   159 DIRECT   764      55613    104.194.8.134/9993</span><br></pre></td></tr></table></figure>
+
+<p><code>role</code>中<code>PLANET</code>代表这个节点是中央服务器节点，分布在公网。</p>
+<p>加入到moons节点中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-cli orbit  2aaxxx3 2aaxxx3</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">200 orbit OK</span><br></pre></td></tr></table></figure>
+
+<p>重启服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart zerotier-one</span><br></pre></td></tr></table></figure>
+
+<p>再次查看，罗列moon</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">zerotier-cli listmoons</span></span><br><span class="line">[</span><br><span class="line"> &#123;</span><br><span class="line">  &quot;id&quot;: &quot;0000002axxx73&quot;,</span><br><span class="line">  &quot;roots&quot;: [</span><br><span class="line">   &#123;</span><br><span class="line">    &quot;identity&quot;: &quot;2axxx73:0:3fba6xxxc6b2f6b9dd033&quot;,</span><br><span class="line">    &quot;stableEndpoints&quot;: [</span><br><span class="line">     &quot;117.xx.xx.xx/9993&quot;</span><br><span class="line">    ]</span><br><span class="line">   &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;signature&quot;: &quot;b8219xxxxx7e0bd2691c5bf&quot;,</span><br><span class="line">  &quot;timestamp&quot;: 1692934814188,</span><br><span class="line">  &quot;updatesMustBeSignedBy&quot;: &quot;7ad27bx4fb973163969ff744e&quot;,</span><br><span class="line">  &quot;waiting&quot;: false</span><br><span class="line"> &#125;</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="服务端安装ztncui"><a href="#服务端安装ztncui" class="headerlink" title="服务端安装ztncui"></a>服务端安装ztncui</h4><p>控制节点往往网络状况不佳，因此需要搭建自己的控制器节点，并且配置moon</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9rZXktbmV0d29ya3MuY29tL3p0bmN1aS8=">https://key-networks.com/ztncui/<i class="fa fa-external-link-alt"></i></span></p>
+<p>按照官网脚本安装即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">curl -O https://s3-us-west-1.amazonaws.com/key-networks/deb/ztncui/1/x86_64/ztncui_0.8.13_amd64.deb</span><br><span class="line">apt install ./ztncui_0.8.13_amd64.deb</span><br><span class="line">sh -c &quot;echo ZT_TOKEN=`sudo cat /var/lib/zerotier-one/authtoken.secret` &gt; /opt/key-networks/ztncui/.env&quot;</span><br><span class="line">sh -c &quot;echo HTTPS_PORT=3443 &gt;&gt; /opt/key-networks/ztncui/.env&quot;   // 开启HTTPS页面，可以忽略</span><br><span class="line">sh -c &quot;echo HTTP_ALL_INTERFACES=yes &gt;&gt; /opt/key-networks/ztncui/.env&quot; // 监听所有网口，不加只能通过127.0.0.1:3000访问管理页面</span><br><span class="line">sh -c &quot;echo NODE_ENV=production &gt;&gt; /opt/key-networks/ztncui/.env&quot;</span><br><span class="line">chmod 400 /opt/key-networks/ztncui/.env</span><br><span class="line">chown ztncui.ztncui /opt/key-networks/ztncui/.env</span><br><span class="line">systemctl restart ztncui</span><br><span class="line">systemctl enable ztncui</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>/var/log/messages</code>里面会显示日志，<code>Centos 7</code>环境中可能会有以下报错，是由于没有<code>GLIBCXX_3.4.20</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">Aug 24 18:02:57 packer-tool1024 systemd: ztncui.service holdoff time over, scheduling restart.</span><br><span class="line">Aug 24 18:02:57 packer-tool1024 systemd: Stopped ztncui - ZeroTier network controller user interface.</span><br><span class="line">Aug 24 18:02:57 packer-tool1024 systemd: Started ztncui - ZeroTier network controller user interface.</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: pkg/prelude/bootstrap.js:1876</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: throw error;</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: ^</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: Error: /lib64/libstdc++.so.6: version `GLIBCXX_3.4.20&#x27; not found (required by /opt/key-networks/ztncui/node_modules/argon2/build/Release/argon2.node)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at process.dlopen (pkg/prelude/bootstrap.js:2255:28)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at Object.Module._extensions..node (node:internal/modules/cjs/loader:1189:18)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at Module.load (node:internal/modules/cjs/loader:981:32)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at Function.Module._load (node:internal/modules/cjs/loader:822:12)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at Module.require (node:internal/modules/cjs/loader:1005:19)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at Module.require (pkg/prelude/bootstrap.js:1855:31)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at require (node:internal/modules/cjs/helpers:102:18)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at bindings (/snapshot/src/node_modules/bindings/bindings.js:112:48)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at Object.&lt;anonymous&gt; (/snapshot/src/node_modules/argon2/argon2.js:3:37)</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: at Module._compile (pkg/prelude/bootstrap.js:1930:22) &#123;</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: code: &#x27;ERR_DLOPEN_FAILED&#x27;</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 ztncui: &#125;</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: ztncui.service: main process exited, code=exited, status=1/FAILURE</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: Unit ztncui.service entered failed state.</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: ztncui.service failed.</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: ztncui.service holdoff time over, scheduling restart.</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: Stopped ztncui - ZeroTier network controller user interface.</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: start request repeated too quickly for ztncui.service</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: Failed to start ztncui - ZeroTier network controller user interface.</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: Unit ztncui.service entered failed state.</span><br><span class="line">Aug 24 18:02:58 packer-tool1024 systemd: ztncui.service failed.</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：</p>
+<ol>
+<li><p>自己编译，<span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vanVlZGluZ3NoZW5nL3AvMTU2NDMzOTQuaHRtbA==">https://www.cnblogs.com/juedingsheng/p/15643394.html<i class="fa fa-external-link-alt"></i></span>  （解决过程需要编译，可能需要几个小时）</p>
+</li>
+<li><p>直接使用别人编译好的，<span class="exturl" data-url="aHR0cHM6Ly9vc3d1LmNjL3Bvc3QvMjAyMi8wOS9odWdvX2xpYnN0ZGMv">https://oswu.cc/post/2022/09/hugo_libstdc/<i class="fa fa-external-link-alt"></i></span></p>
+<p>包地址：<span class="exturl" data-url="aHR0cDovL3d3dy52dWxuLmNuL3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE5LzA4L2xpYnN0ZGMuc29fLjYuMC4yNi56aXAlRUYlQkMlOEMlNjB3Z2V0JTYwJUU1JThEJUIzJUU1JThGJUFG">http://www.vuln.cn/wp-content/uploads/2019/08/libstdc.so_.6.0.26.zip，`wget`即可<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ol>
+<p>查看服务状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">systemctl status ztncui</span></span><br><span class="line">● ztncui.service - ztncui - ZeroTier network controller user interface</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/ztncui.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: active (running) since Fri 2023-08-25 09:59:23 CST; 3s ago</span><br><span class="line">     Docs: https://key-networks.com</span><br><span class="line"> Main PID: 6138 (ztncui)</span><br><span class="line">   CGroup: /system.slice/ztncui.service</span><br><span class="line">           └─6138 /opt/key-networks/ztncui/ztncui</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">Aug 25 09:59:23 lavm-8wb0f24x4j systemd[1]: Started ztncui - ZeroTier network controller user interface.</span><br><span class="line">Aug 25 09:59:24 lavm-8wb0f24x4j ztncui[6138]: Warning: connect.session() MemoryStore is not</span><br><span class="line">Aug 25 09:59:24 lavm-8wb0f24x4j ztncui[6138]: designed for a production environment, as it will leak</span><br><span class="line">Aug 25 09:59:24 lavm-8wb0f24x4j ztncui[6138]: memory, and will not scale past a single process.</span><br><span class="line">Aug 25 09:59:24 lavm-8wb0f24x4j ztncui[6138]: Listening for HTTP requests on port 3000 on localhost</span><br><span class="line">Aug 25 09:59:24 lavm-8wb0f24x4j ztncui[6138]: Listening for HTTPS requests on port 3443 on all interfaces</span><br></pre></td></tr></table></figure>
+
+<p>从日志里面可以看到默认<code>HPPT</code>端口是<code>3000</code>，在云主机页面将<code>3000</code>端口开放防火墙，然后进入管理页面</p>
+<p>默认用户名 <code>admin</code>，默认密码 <code>password</code>，登录之后，会默认 <code>Set password</code></p>
+<p>点击<code>Add network</code></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825103746719.png" alt="image-20230825103746719"></p>
+<p>点击 <code>Easy setup</code>，设置局域网内部IP</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825103837954.png" alt="image-20230825103837954"></p>
+<p>直接随机生成内部网络配置，其实就是一个局域网。</p>
+<blockquote>
+<p>踩坑：zerotier-one-1.12.0 版本有BUG，生成网络地址会出现BUG，会出现”Error resolving detail for network”之类的报错，使用次版本1.10.6即可。包可以在脚本中寻找对应链接，例如Centos 7地址：<span class="exturl" data-url="aHR0cDovL2Rvd25sb2FkLnplcm90aWVyLmNvbS9yZWRoYXQvZWwvNy8lRTMlODAlODIlRTUlQkIlQkElRTglQUUlQUUlRTUlODUlODglRTglQjclOTElRTUlQUUlOEMlRTUlQUUlODklRTglQTMlODUlRTglODQlOUElRTYlOUMlQUMlRUYlQkMlOEMlRTclODQlQjYlRTUlOTAlOEUlRTUlOEQlQjglRTglQkQlQkQlNjB6ZXJvdGllci1vbmUtMS4xMi4wLTEuZWw4Lng4Nl82NC5ycG0lNjAlRUYlQkMlOEMlRTclODQlQjYlRTUlOTAlOEUlRTYlODklOEIlRTUlOEElQTglRTUlQUUlODklRTglQTMlODU=">http://download.zerotier.com/redhat/el/7/。建议先跑完安装脚本，然后卸载`zerotier-one-1.12.0-1.el8.x86_64.rpm`，然后手动安装<i class="fa fa-external-link-alt"></i></span> <code>zerotier-one-1.10.6-1.el7.x86_64.rpm</code>，保持安装脚本的一致性。</p>
+</blockquote>
+<p>网络正常的情况如下</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825205928495.png" alt="image-20230825205928495"></p>
+<h4 id="客户端加入网络"><a href="#客户端加入网络" class="headerlink" title="客户端加入网络"></a>客户端加入网络</h4><p>通过网络id，在客户端上加入到网络中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-cli join ebxxx0ef</span><br></pre></td></tr></table></figure>
+
+<p>查看网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~ zerotier-cli listnetworks</span><br><span class="line">200 listnetworks &lt;nwid&gt; &lt;name&gt; &lt;mac&gt; &lt;status&gt; &lt;type&gt; &lt;dev&gt; &lt;ZT assigned ips&gt;</span><br><span class="line">200 listnetworks ebxxxxfc60ef  ee:03:0d:8e:7d:1e ACCESS_DENIED PRIVATE feth4155 -</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，现在状态是<code>ACCESS_DENIED</code>，网络类型是<code>PRIVATE</code>，网络设备是<code>feth4155</code>，通过命令也可以看到网络状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">~ ifconfig</span><br><span class="line"></span><br><span class="line">feth4155: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&gt; metric 5000 mtu 2800</span><br><span class="line">	ether ee:03:0d:8e:7d:1e</span><br><span class="line">	peer: feth9155</span><br><span class="line">	media: autoselect</span><br><span class="line">	status: active</span><br></pre></td></tr></table></figure>
+
+<p>页面上点击授权</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825210308076.png" alt="image-20230825210308076"></p>
+<p>再查看状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">~ ifconfig</span><br><span class="line">feth4155: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&gt; metric 5000 mtu 2800</span><br><span class="line">	ether ee:03:0d:8e:7d:1e</span><br><span class="line">	inet 10.140.174.83 netmask 0xffffff00 broadcast 10.140.174.255</span><br><span class="line">	peer: feth9155</span><br><span class="line">	media: autoselect</span><br><span class="line">	status: active</span><br><span class="line">~ zerotier-cli listnetworks</span><br><span class="line">200 listnetworks &lt;nwid&gt; &lt;name&gt; &lt;mac&gt; &lt;status&gt; &lt;type&gt; &lt;dev&gt; &lt;ZT assigned ips&gt;</span><br><span class="line">200 listnetworks ebcxxxxcef zero ee:03:0d:8e:7d:1e OK PRIVATE feth4155 10.140.174.83/24</span><br></pre></td></tr></table></figure>
+
+<h4 id="客户端加入moon"><a href="#客户端加入moon" class="headerlink" title="客户端加入moon"></a>客户端加入moon</h4><p>客户上查看moons状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">~ zerotier-cli listmoons</span><br><span class="line">[]</span><br></pre></td></tr></table></figure>
+
+<p>与节点命令一样，通过moon id，加入moon</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-cli orbit ebxxxc93 ebxxxxec93</span><br></pre></td></tr></table></figure>
+
+<p>查看moon状态</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~ zerotier-cli listmoons</span><br></pre></td></tr></table></figure>
+
+<p>与服务端上结果一致。</p>
+<p>客户端上查看网络状态，与服务端一致，有互联上上公用的<code>PLANET</code>，也有搭建的<code>MOON</code>，客户端自身也作为<code>LEAF</code>在网络中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">服务端</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">zerotier-cli peers</span></span><br><span class="line">200 peers</span><br><span class="line">&lt;ztaddr&gt;   &lt;ver&gt;  &lt;role&gt; &lt;lat&gt; &lt;link&gt;   &lt;lastTX&gt; &lt;lastRX&gt; &lt;path&gt;</span><br><span class="line">62f865ae71 -      PLANET   376 DIRECT   11107    10734    50.7.252.138/9993</span><br><span class="line">63xxxxxxd8 1.10.6 LEAF      35 DIRECT   4838     4838     117.143.173.43/12158</span><br><span class="line">778cde7190 -      PLANET   216 DIRECT   11107    10891    103.195.103.66/9993</span><br><span class="line">cafe04eba9 -      PLANET   242 DIRECT   11107    236125   84.17.53.155/9993</span><br><span class="line">cafe9efeb9 -      PLANET   154 DIRECT   1099     10953    104.194.8.134/9993</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">客户端</span></span><br><span class="line">~ zerotier-cli peers</span><br><span class="line">200 peers</span><br><span class="line">&lt;ztaddr&gt;   &lt;ver&gt;  &lt;role&gt; &lt;lat&gt; &lt;link&gt;   &lt;lastTX&gt; &lt;lastRX&gt; &lt;path&gt;</span><br><span class="line">62f865ae71 -      PLANET    -1 RELAY</span><br><span class="line">778cde7190 -      PLANET   286 DIRECT   59080    211054   2605:9880:400:c3:254:f2bc:a1f7:19/9993</span><br><span class="line">a8xxxxxx0a 1.12.0 LEAF     526 DIRECT   142826   142826   35.209.124.127/63767</span><br><span class="line">cafe04eba9 -      PLANET   247 DIRECT   59080    58558    2a02:6ea0:d405::9993/9993</span><br><span class="line">cafe9efeb9 -      PLANET    -1 RELAY</span><br><span class="line">exxxxxxx93 1.10.6 MOON      34 DIRECT   1444     1444     117.72.12.252/9993</span><br></pre></td></tr></table></figure>
+
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>zerotier支持全平台，各个平台安装和配置在官网有详细教程，另外B站也有视频教程展示更多玩法。</p>
+<p>推荐：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL0JWMVZoNDExRjdNci8=">https://www.bilibili.com/video/BV1Vh411F7Mr/<i class="fa fa-external-link-alt"></i></span></p>
+<p>包含上述步骤，以及加入moon不成功时手动放置moon配置文件等方案。</p>
+<p>这里补充一个，避免<code>ztncui</code>被外网访问，可以将<code>ztncui</code>也作为节点加入到网络，关闭云主机防火墙，这样只能内部访问，大大增加安全性。</p>
+<p>在服务端，直接加入本网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">zerotier-cli <span class="built_in">join</span> ebxxxxxx60ef</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>云平台使用内网穿透对比</p>
+<table>
+<thead>
+<tr>
+<th>穿透方案</th>
+<th>阿里云1M杭州</th>
+<th>京东云4M北京</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>frp</td>
+<td>连接失败</td>
+<td>正常，ssh也很快</td>
+</tr>
+<tr>
+<td>WireGuard</td>
+<td>都正常，但不快</td>
+<td>都正常，但不快</td>
+</tr>
+<tr>
+<td>ZeroTier</td>
+<td>都正常，不快</td>
+<td>都正常，有时候正常（怀疑此时建立P2P）</td>
+</tr>
+</tbody></table>
+<p>穿透方案对比</p>
+<table>
+<thead>
+<tr>
+<th>穿透方案</th>
+<th>优势</th>
+<th>劣势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>frp</td>
+<td>搭建部署简单</td>
+<td>不安全，不支持vnc级别P2P</td>
+</tr>
+<tr>
+<td>WireGuard</td>
+<td>UDP，安全</td>
+<td>搭建有点麻烦</td>
+</tr>
+<tr>
+<td>ZeroTier</td>
+<td>UDP，支持网页管理，小概率支持P2P</td>
+<td>搭建麻烦，（有BUG，不稳定）</td>
+</tr>
+</tbody></table>
+<p>相比较而言，现在运营商对<code>UDP</code>约束挺大的，很容易触发<code>QoS</code>，因此最好的方式还是物理机VPN设备，直接连入家庭或者公司。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/4a89.html" rel="prev" title="s3实现视频分片预览">
+                  <i class="fa fa-chevron-left"></i> s3实现视频分片预览
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
