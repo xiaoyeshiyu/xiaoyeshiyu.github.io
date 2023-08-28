@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-08-28T08:19:41.994Z</updated>
+  <updated>2023-08-28T08:20:49.203Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/8507.html"/>
     <id>https://www.xiaoyeshiyu.com/post/8507.html</id>
     <published>2023-08-27T16:00:00.000Z</published>
-    <updated>2023-08-28T08:19:41.994Z</updated>
+    <updated>2023-08-28T08:20:49.203Z</updated>
     
     
     <summary type="html">在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。</summary>

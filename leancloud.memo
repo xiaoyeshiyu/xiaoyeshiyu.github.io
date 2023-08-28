@@ -36,6 +36,7 @@
 {"title":"使用smartctl命令检查磁盘","url":"/post/7b65.html"},
 {"title":"Golang中结构体内存分配","url":"/post/7ec3.html"},
 {"title":"Golang中的Goroutine原理","url":"/post/8477.html"},
+{"title":"缓存","url":"/post/8507.html"},
 {"title":"Golang中多线程设计模式","url":"/post/89f2.html"},
 {"title":"ipmi 管理工具的使用方式","url":"/post/8d43.html"},
 {"title":"使用md5盐值加密存储密码","url":"/post/8e69.html"},
