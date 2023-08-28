@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-08-25T13:35:53.216Z</updated>
+  <updated>2023-08-28T08:19:41.994Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,28 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>缓存</title>
+    <link href="https://www.xiaoyeshiyu.com/post/8507.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/8507.html</id>
+    <published>2023-08-27T16:00:00.000Z</published>
+    <updated>2023-08-28T08:19:41.994Z</updated>
+    
+    
+    <summary type="html">在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。</summary>
+    
+    
+    
+    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>内网穿透笔记</title>
     <link href="https://www.xiaoyeshiyu.com/post/931.html"/>
     <id>https://www.xiaoyeshiyu.com/post/931.html</id>
     <published>2023-08-24T16:00:00.000Z</published>
-    <updated>2023-08-25T13:35:53.216Z</updated>
+    <updated>2023-08-25T13:37:19.396Z</updated>
     
     
     <summary type="html">在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。</summary>
@@ -343,23 +360,6 @@
     
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>微服务之网关</title>
-    <link href="https://www.xiaoyeshiyu.com/post/a6e3.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/a6e3.html</id>
-    <published>2022-10-15T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.896Z</updated>
-    
-    
-    <summary type="html">微服务下，内部网络以gRPC协议相互通信，但是前后端分离下，或者支持多端能力下，会通过http协议的形式暴露给外部。此时多个微服务下，需要对网关进行一致管理，则需要引入API网关。</summary>
-    
-    
-    
-    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
     
     
   </entry>

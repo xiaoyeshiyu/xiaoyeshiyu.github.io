@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="缓存">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/8507.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160527476.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160954138.png">
+<meta property="article:published_time" content="2023-08-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-28T08:19:41.994Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160527476.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/8507.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/8507.html","path":"post/8507.html","title":"缓存"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>缓存 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88%EF%BC%8C%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">1.1.</span> <span class="nav-text">同步更新方案，数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%88%E5%90%8C%E6%AD%A5%E6%8C%81%E4%B9%85%E5%8C%96%EF%BC%8C%E5%86%8D%E6%93%8D%E4%BD%9Ccache"><span class="nav-number">1.1.1.</span> <span class="nav-text">先同步持久化，再操作cache</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9F%AD%E6%9A%82%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">短暂不一致的情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E7%BC%93%E5%AD%98%E8%BF%98%E6%98%AF%E6%9B%B4%E6%96%B0%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.2.</span> <span class="nav-text">删缓存还是更新缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%8F%B7"><span class="nav-number">1.1.3.</span> <span class="nav-text">版本号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="nav-number">1.2.</span> <span class="nav-text">多级缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%83%AD%E7%82%B9%E7%BC%93%E5%AD%98"><span class="nav-number">1.3.</span> <span class="nav-text">热点缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BF%E9%80%8F%E7%BC%93%E5%AD%98"><span class="nav-number">1.4.</span> <span class="nav-text">穿透缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%8A%80%E5%B7%A7"><span class="nav-number">1.5.</span> <span class="nav-text">缓存技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">1.5.1.</span> <span class="nav-text">小技巧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">1.5.2.</span> <span class="nav-text">Redis 小技巧</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98"><span class="nav-number">2.</span> <span class="nav-text">分布式缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E7%89%B9%E7%82%B9"><span class="nav-number">2.1.</span> <span class="nav-text">Redis 特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">2.1.1.</span> <span class="nav-text">缓存一致性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-number">3.</span> <span class="nav-text">分布式事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88"><span class="nav-number">3.0.1.</span> <span class="nav-text">分布式式事务实现方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-number">3.1.</span> <span class="nav-text">通过消息队列实现分布式事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%82%E7%AD%89"><span class="nav-number">3.1.1.</span> <span class="nav-text">幂等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E5%8D%8F%E8%AE%AE"><span class="nav-number">3.1.2.</span> <span class="nav-text">二阶段提交协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCC"><span class="nav-number">3.1.3.</span> <span class="nav-text">TCC</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">89</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/8507.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="缓存 | 小夜时雨">
+      <meta itemprop="description" content="在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          缓存
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-08-28 00:00:00 / Modified: 16:19:41" itemprop="dateCreated datePublished" datetime="2023-08-28T00:00:00+08:00">2023-08-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/midware/" itemprop="url" rel="index"><span itemprop="name">中间件</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/8507.html" class="post-meta-item leancloud_visitors" data-flag-title="缓存" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/8507.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/8507.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><p>缓存相比于存储，应该是高性能的，缺点则是易失效的。</p>
+<p>使用缓存，其实是选择高性能，而放弃一致性。一般缓存的实现方案是使用内存，要么使用本地内存作为缓存，要么使用<code>Redis</code>这种内存数据库作为分布式缓存。</p>
+<h2 id="同步更新方案，数据一致性"><a href="#同步更新方案，数据一致性" class="headerlink" title="同步更新方案，数据一致性"></a>同步更新方案，数据一致性</h2><h3 id="先同步持久化，再操作cache"><a href="#先同步持久化，再操作cache" class="headerlink" title="先同步持久化，再操作cache"></a>先同步持久化，再操作cache</h3><p>往往最好的选择是优先更新持久化，然后再同步操作cache。</p>
+<p>这个方案虽然可能出现更新数据库之后，操作cache失败，导致数据不一致，因此cache中的数据需要设置过期时间，过期之后，获取到的数据就是新的。</p>
+<p>相比先更新cache再更新持久化，如果更新持久化失败，客户看到的数据会是错误的数据。</p>
+<p>先同步持久化的方式，可以保证数据最终一致性。</p>
+<h4 id="短暂不一致的情况"><a href="#短暂不一致的情况" class="headerlink" title="短暂不一致的情况"></a>短暂不一致的情况</h4><p><strong>获取到cache之后马上更新</strong></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160527476.png" alt="image-20230629160527476"></p>
+<p>但是可能出现另外一种情况：</p>
+<ol>
+<li>一个进程获取<code>cache miss</code>，从db中获取数据</li>
+<li>另外一个进程更新数据（可异步，例如<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FsaWJhYmEvY2FuYWw=">cannel<i class="fa fa-external-link-alt"></i></span>），在<code>cache</code>中删除这个空的<code>cache</code></li>
+<li>第一个进程将<code>cache miss</code>的<code>key</code>放到<code>cache</code>中</li>
+</ol>
+<p>这种情况下，就会造成数据不一致的现象。</p>
+<p><strong>同时更新</strong></p>
+<p>还有一种情况，就是多个线程同时<code>set cache</code>，由于无法确定更新之后，往<code>cache</code>中<code>set</code>的线程顺序（一般进程的顺序不会有很大的影响）</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160954138.png" alt="image-20230629160954138"></p>
+<h3 id="删缓存还是更新缓存"><a href="#删缓存还是更新缓存" class="headerlink" title="删缓存还是更新缓存"></a>删缓存还是更新缓存</h3><p>删除缓存：更新DB中的数据之后，将cache中的数据删除；缺点是如果出现热key，影响会很大。解决方案是不删除，而是将这个key的ttl改短，是否使用交由业务层决定。</p>
+<p>更新缓存：更新DB中的数据之后，再更新cache，通过MQ或者Binlog保证最终一致性；缺点是无法保证发生顺序，可能出现<code>ABA</code>的现象，先获取A，然后刷新下变成B，然后刷新下变成C</p>
+<h3 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h3><p>版本号和使用从库做标签类似。</p>
+<p>当cache miss的时候，生成一个版本号，set DB之后回填，通过新的版本号判断是否是旧数据。</p>
+<p>这个就可以解决脏数据被写入的情况。同时还需要通过双删的做法，保证数据正确性。</p>
+<h2 id="多级缓存"><a href="#多级缓存" class="headerlink" title="多级缓存"></a>多级缓存</h2><p>在微服务场景下，可能出现下层支撑服务和上层业务服务之间，都需要使用缓存，为了降低服务之间调用频率，经常会在上下游都使用缓存，实现多级缓存。</p>
+<p>多级缓存需要注意：</p>
+<ol>
+<li>清理优先级：先清理下游，再清理上游；避免出现清理上游之后，马上有上游进程cache miss之后将下游数据set到上游缓存</li>
+<li>下游缓存的expire要大于上游，里面穿透回源；避免出现上游数据过期之后，cache miss时查询下游，出现缓存穿透</li>
+</ol>
+<h2 id="热点缓存"><a href="#热点缓存" class="headerlink" title="热点缓存"></a>热点缓存</h2><p>对于热点缓存<code>key</code>，可以按照如下思路：</p>
+<ul>
+<li>小表广播，从<code>Remote Cache</code>提升为<code>LocalCache</code>，App定时更新，甚至可以支持广播刷新<code>LocalCache</code></li>
+<li>主动监控防御预热，比如一些大表高更新的情况下，直接外挂服务主动防御，将Remote Cache变成Local Cache</li>
+<li>基础库框架支持热点发现，自动短时的short-live cache，实现在滑动窗口内自有统计的cache，将Remote Cache提升为Local Cache</li>
+<li>在大架构层面，使用多集群思路，每个集群使用独立cache，避免热key，增加冗余能力</li>
+<li>多key设计，使用多副本，减小节点热点的问题<ul>
+<li>使用多副本ms_1,ms_2,ms_3每个节点保存一份数据，使得请求分散到多个节点，避免单点热点问题。一般可以通过中间件实现，多节点hash之后平均请求</li>
+</ul>
+</li>
+</ul>
+<h2 id="穿透缓存"><a href="#穿透缓存" class="headerlink" title="穿透缓存"></a>穿透缓存</h2><ul>
+<li><p>singlefly</p>
+<p>对关键字进行一致性hash，使其某一个维度的key一定命中某个节点，然后在节点内使用互斥锁，保证归并回源，但是对于批量查询无解。获取到互斥锁的线程，获取到结果，广播给所有其他线程。</p>
+</li>
+<li><p>分布式锁</p>
+<p>设置一个lock key，有且只有一个进程成功并且发挥，交由这个进程来执行回源操作，其他候选者轮询cache这个lock key，如果不存在就读数据库，hit就返回，miss继续抢锁。</p>
+</li>
+<li><p>队列</p>
+<p>如果cache miss，交由队列聚合一个key，来load数据会写缓存，对于miss当前请求可以使用singlefly保证回源，如评论架构实现，适合回源加载数据重的任务，比如评论miss只返回第一页，但是需要构建完成评论数据索引。相比直接使用singlefly的进程写入缓存要轻量。</p>
+</li>
+<li><p>lease，租约</p>
+<p>通过加入lease机制，可以很好避免这两个问题，lease是64-bit的token，与客户端请求的key绑定，对于过时设置，在写入时验证lease，可以解决这个问题：对于thundering hard，每个key10s分配一次，当client在没有获取到lease时，可以稍微等一下再访问cache，这时往往cache中已有数据。（基础库支持&amp;修改cache源码）</p>
+</li>
+</ul>
+<h2 id="缓存技巧"><a href="#缓存技巧" class="headerlink" title="缓存技巧"></a>缓存技巧</h2><h3 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h3><ul>
+<li>易读性的前提下，key设置尽可能小，减少资源占用，redis value可以用int就不要用string，比如存储指针，对于小于N的value，redis内部有shared object缓存</li>
+<li>拆分key，主要用在redis使用hashes情况下，同一个hashes key会落到同一个redis节点，hashes过大的情况下，会导致内存以及请求分布的不均匀。考虑对hash进行拆分为小的hash，使得节点内存均匀及避免单节点请求热点。</li>
+<li>空缓存设置，对于部分数据，可能数据库使用为空，这时应该设置空缓存，避免每次请求都缓存miss，直接击穿缓存到DB；也可以在业务层判断过滤</li>
+<li>空缓存保护策略</li>
+<li>读失败后的写缓存策略（降级后一般读失败不触发回写缓存）</li>
+<li>序列化使用protobuf而不是json，尽可能减少size</li>
+<li>工具化浇水代码，比如使用go generate 生成代码</li>
+</ul>
+<h3 id="Redis-小技巧"><a href="#Redis-小技巧" class="headerlink" title="Redis 小技巧"></a>Redis 小技巧</h3><ul>
+<li>增量更新一致性：EXPIRE、ZADD&#x2F;HSET 等，保证索引结构体务必存在的情况下去操作新增数据。避免出现先判断没有过期，然后ZADD时又出现过期的情况，可以先增加过期时间，然后ZADD</li>
+<li>BITSET：存储每日登录用户，单个标记位置（boolean），为了避免单个BITSET过大或者热点，需要使用region sharding，比如按照mid求余%和1&#x2F;10000，商为key、余数作为offset</li>
+<li>List：抽奖的奖池、顶弹幕，用于类似Stack PUSH&#x2F;POP操作</li>
+<li>SortedSet：翻页、排序、有序的集合，杜绝zrange或者zrevrange返回的集合过大</li>
+<li>Hashs：过小的时候会使用压缩列表、过大的情况容易导致rehash内存浪费，也杜绝返回hgetall，对于小结构体，建议直接使用memcache KV；</li>
+<li>String：SET的EX&#x2F;NX等KV扩展指令，SETNX可以用于分布式锁、SETNX聚合了SET+EXPIRE</li>
+<li>Sets：类似Hashs，无value，去重等</li>
+<li>尽可能的PIPELINE指令，但是避免集合过大</li>
+<li>避免超大Value</li>
+</ul>
+<h1 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h1><p>分布式缓存是一种常见的技术，用于提高系统的性能和可扩展性。以下是几种常见的分布式缓存实现方案：</p>
+<ol>
+<li><p>Memcached：Memcached 是一种常用的开源分布式内存对象缓存系统。它以键值对的形式存储数据，并使用哈希算法将数据分布到多个节点上。Memcached 提供了简单而高效的缓存机制，适用于许多应用场景。</p>
+</li>
+<li><p>Redis：Redis 是另一种流行的开源内存数据存储系统，它支持键值对、列表、集合等多种数据结构，并提供了丰富的功能和灵活的配置选项。Redis 的分布式特性通过使用主从复制和分片技术来实现，可以将数据分布到多个节点上以提高性能和可用性。</p>
+</li>
+<li><p>Apache Kafka：尽管 Kafka 主要被用作消息队列系统，但它也可以用作分布式缓存。Kafka 提供了高吞吐量、持久化存储和分布式复制等特性，可以用于缓存大量的数据，并支持多个消费者并行读取。</p>
+</li>
+<li><p>Hazelcast：Hazelcast 是一个开源的内存数据网格解决方案，它提供了分布式缓存和分布式计算的功能。Hazelcast 可以将数据存储在内存中，并通过分布式算法将数据分散到多个节点上。它还提供了事务支持和集群管理功能。</p>
+</li>
+</ol>
+<p>这些是常见的分布式缓存实现方案，每个方案都有其特点和适用场景。选择适合你的需求的方案时，需要考虑数据一致性、可用性、性能要求以及系统的复杂性等因素。</p>
+<h2 id="Redis-特点"><a href="#Redis-特点" class="headerlink" title="Redis 特点"></a>Redis 特点</h2><p>单线程处理读写请求。多线程下，也是单线程处理读写，其他的线程处理磁盘读写。</p>
+<p>集群下，Redis 使用一致性哈希算法（Consistent Hashing）来实现分布式缓存的数据分片和负载均衡。一致性哈希算法的主要思想是将缓存键（Key）通过哈希函数映射到一个固定大小的哈希环上，然后将节点（缓存服务器）也映射到同一个哈希环上。</p>
+<p>以下是 Redis 一致性哈希算法的基本原理和步骤：</p>
+<ol>
+<li><p>构建哈希环：将所有的缓存节点（服务器）通过哈希函数映射到一个固定大小的哈希环上，形成一个环状结构。</p>
+</li>
+<li><p>映射缓存键：将要缓存的键（Key）通过同样的哈希函数映射到哈希环上的一个位置。</p>
+</li>
+<li><p>定位节点：从映射到的位置开始，沿着哈希环顺时针查找，找到第一个遇到的节点。这个节点就是负责缓存该键的节点。</p>
+</li>
+<li><p>数据分片：将缓存的数据分散存储在不同的节点上，每个节点负责一部分数据。</p>
+</li>
+<li><p>节点变动处理：当添加或移除节点时，只会影响到环上的少部分键的映射，大部分键的映射仍然保持不变。这样可以避免大规模数据迁移的开销。</p>
+</li>
+</ol>
+<p>通过使用一致性哈希算法，Redis 可以实现动态的节点扩展和收缩，而不需要重新分配大部分数据。这样可以使缓存系统具备高可用性和可扩展性。</p>
+<p>需要注意的是，一致性哈希算法并不能完全解决数据倾斜（数据在节点上分布不均匀）的问题。为了解决数据倾斜，可以使用虚拟节点（Virtual Nodes）来增加节点的数量，使数据更加均匀地分布在各个节点上。</p>
+<h3 id="缓存一致性"><a href="#缓存一致性" class="headerlink" title="缓存一致性"></a>缓存一致性</h3><p>一致性无法满足的情况大部分是在更新数据和获取的数据不一致。</p>
+<ol>
+<li>更新数据更新之后，先逐条更新<code>redis</code>，同时更新<code>sql</code>。</li>
+<li>监听<code>sql</code>的<code>binlog</code>，再次更新<code>redis</code>。</li>
+</ol>
+<p>解决方法：产生数据不一致，可以在数据查询时更新<code>redis</code>，使用<code>nx</code>更新。在更新数据是，使用<code>set</code>覆盖。</p>
+<p>那么，更新<code>sql</code>之后，是使用删除<code>redis</code>里面的<code>key</code>还是更新<code>key</code>？</p>
+<ul>
+<li>更新key可能会出现的问题是两个更新，无法确定前后，导致数据不一致</li>
+<li>删除key可能会出现的问题是热key被删除之后，请求会打到数据库</li>
+</ul>
+<p>有一种方式是，redis过期之后，在数据上加一个tag，在获取到缓存之后，能够知道这个key过期，需要请求数据库。</p>
+<h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p>分布式事务，指的是：跨表，跨集群，跨服务的事务。（直白来说，就是跨进程）</p>
+<p>分布式理论：</p>
+<ul>
+<li>ACID：原子、一致性、持久化、事务隔离。</li>
+<li>CAP：满足分布式的三大要素，但是C（一致性）和A（可用性）不能同时满足。</li>
+<li>BASE：CAP理论的进一步扩充</li>
+</ul>
+<p>分布式事务方案的一种思路：使用插件或者说代理，让代理作为中间件，实现事务。比如 <span class="exturl" data-url="aHR0cHM6Ly9zZWF0YS5pby9lbi11cy9pbmRleC5odG1s">Seata<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="分布式式事务实现方案"><a href="#分布式式事务实现方案" class="headerlink" title="分布式式事务实现方案"></a>分布式式事务实现方案</h3><p>实现方案：</p>
+<ul>
+<li>方案1、服务a生成一张伴随表，记录中间处理状态，服务b任务完成，回调服务a，服务a将半生表中的字段删除，或者更新字段。</li>
+<li>方案2、服务b定期查询服务a的伴随表，处理任务，处理成功之后，更新b服务的表，b服务作为新的服务状态表。这个方案，会定时查询表，可能会对数据库有压力。</li>
+<li>方案3、伴随表的binlog变更订阅推送到kafka，消费者更新本地事务。</li>
+</ul>
+<h2 id="通过消息队列实现分布式事务"><a href="#通过消息队列实现分布式事务" class="headerlink" title="通过消息队列实现分布式事务"></a>通过消息队列实现分布式事务</h2><p>需要解决的问题有幂等。</p>
+<h3 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h3><p>消息重复投递，或者重复消费。通过全局唯一ID+去重表。</p>
+<p>做法1、启一个本地事务，查询伴随表，是否存在这个id，如果不存在，则插入这个任务id（或者叫流水号），创建这个任务，并且在伴随表中插入这个字段。  </p>
+<p>也可以通过状态判断、或者通过版本号来解决。</p>
+<h3 id="二阶段提交协议"><a href="#二阶段提交协议" class="headerlink" title="二阶段提交协议"></a>二阶段提交协议</h3><p>发送方</p>
+<ol>
+<li>先发送消息<code>perpared</code>，再执行本地事务，事务成功，再发送<code>commit_message</code>确认消息；</li>
+<li>可以确保消息一定会成功发送到消息队列中，第二步或者第三步失败，消息队列会反向请求业务消息是否确认，如果本地事务异常，则丢弃消息。</li>
+</ol>
+<p>接收方</p>
+<ol>
+<li>接受消息，处理本地事务，处理成功，ack消息。</li>
+<li>这个过程需要在接收方处理幂等性。</li>
+</ol>
+<h3 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h3><p><code>try confirm cancel</code>：也就是事务的三个分支，预处理try，确认confirm，撤销cancel。</p>
+<p>例如，预处理阶段，可以在表中新增一个冻结字段，描述资源变化。在两个服务中都做一个冻结。</p>
+<p>确认阶段，两个服务均按照逻辑处理，处理成功，则确认。处理失败，则撤销，通过冻结字段进行撤销。</p>
+<p>这个过程需要注意：</p>
+<p>空回滚：try失败，也就是什么都没有执行，需要能支持回滚。</p>
+<p>防悬挂：如果因为一些原因，cancel比try先到达，操作乱序的情况下，应该取消本次事务。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/931.html" rel="prev" title="内网穿透笔记">
+                  <i class="fa fa-chevron-left"></i> 内网穿透笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
