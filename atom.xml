@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-08-28T08:20:49.203Z</updated>
+  <updated>2023-08-29T06:59:28.665Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,30 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Go的concurrency之goroutine</title>
+    <link href="https://www.xiaoyeshiyu.com/post/6927.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/6927.html</id>
+    <published>2023-08-28T16:00:00.000Z</published>
+    <updated>2023-08-29T06:59:28.665Z</updated>
+    
+    
+    <summary type="html">Golang中极有特点之一就是协程goroutine，通过关键字直接开启一个协程是非常简单的，但是在goroutine使用过程中有些关键点需要注意。</summary>
+    
+    
+    
+    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/Golang/Reference/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>缓存</title>
     <link href="https://www.xiaoyeshiyu.com/post/8507.html"/>
     <id>https://www.xiaoyeshiyu.com/post/8507.html</id>
     <published>2023-08-27T16:00:00.000Z</published>
-    <updated>2023-08-28T08:20:49.203Z</updated>
+    <updated>2023-08-29T06:47:40.031Z</updated>
     
     
     <summary type="html">在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。</summary>
@@ -29,6 +48,8 @@
     
     
     <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/midware/Reference/"/>
     
     
   </entry>
@@ -93,7 +114,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/f595.html"/>
     <id>https://www.xiaoyeshiyu.com/post/f595.html</id>
     <published>2023-07-30T16:00:00.000Z</published>
-    <updated>2023-08-01T09:15:12.747Z</updated>
+    <updated>2023-08-29T06:50:32.479Z</updated>
     
     
     <summary type="html">在业务开发过程中，有效的使用错误码可以很好的优化交互逻辑，并且可以更加规范的进行错误处理。</summary>
@@ -101,6 +122,8 @@
     
     
     <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/developer/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/developer/Reference/"/>
     
     
   </entry>
@@ -110,7 +133,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/5700.html"/>
     <id>https://www.xiaoyeshiyu.com/post/5700.html</id>
     <published>2023-07-25T16:00:00.000Z</published>
-    <updated>2023-07-31T01:49:24.165Z</updated>
+    <updated>2023-08-29T06:52:42.737Z</updated>
     
     
     <summary type="html">Golang中error是一个非常常见的返回值，如何高效和简便的处理error是一门重要学问。</summary>
@@ -118,6 +141,8 @@
     
     
     <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/Golang/Reference/"/>
     
     
   </entry>
@@ -127,7 +152,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/ff69.html"/>
     <id>https://www.xiaoyeshiyu.com/post/ff69.html</id>
     <published>2023-07-23T16:00:00.000Z</published>
-    <updated>2023-08-21T05:53:46.588Z</updated>
+    <updated>2023-08-29T06:54:49.846Z</updated>
     
     
     <summary type="html">微服务当前大热，几乎所有的厂商都希望把服务微服务化，减少服务之间耦合，加快开发、迭代速度。学习微服务设计是必不可免的一件事。</summary>
@@ -137,6 +162,8 @@
     <category term="k8s" scheme="https://www.xiaoyeshiyu.com/categories/k8s/"/>
     
     <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/k8s/microservice/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/k8s/microservice/Reference/"/>
     
     
   </entry>
@@ -182,7 +209,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
     <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
     <published>2023-02-20T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.874Z</updated>
+    <updated>2023-08-29T06:51:29.181Z</updated>
     
     
     <summary type="html">Git是日常工作中很常用的工具，除了程序员，一些文字编辑工作者都可以通过Git加速工作效率。</summary>
@@ -190,6 +217,8 @@
     
     
     <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/developer/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/developer/Reference/"/>
     
     
   </entry>
@@ -233,7 +262,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/c187.html"/>
     <id>https://www.xiaoyeshiyu.com/post/c187.html</id>
     <published>2022-12-05T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.885Z</updated>
+    <updated>2023-08-29T06:56:53.778Z</updated>
     
     
     <summary type="html">Redis学习笔记之实用篇包含Redis的底层原理以及一些使用场景和解决方案，是基础篇的补充篇。</summary>
@@ -241,6 +270,8 @@
     
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
     
     
   </entry>
@@ -250,7 +281,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/a820.html"/>
     <id>https://www.xiaoyeshiyu.com/post/a820.html</id>
     <published>2022-11-24T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.875Z</updated>
+    <updated>2023-08-29T06:55:08.433Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记高可用篇，主要包含日志、主从复制、备份和恢复。</summary>
@@ -258,6 +289,8 @@
     
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
     
     
   </entry>
@@ -267,7 +300,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/fa7d.html"/>
     <id>https://www.xiaoyeshiyu.com/post/fa7d.html</id>
     <published>2022-11-23T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.880Z</updated>
+    <updated>2023-08-29T06:56:06.774Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记事务和锁篇，主要包含数据库的事务、锁和MVCC机制。</summary>
@@ -275,6 +308,8 @@
     
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
     
     
   </entry>
@@ -284,7 +319,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/de27.html"/>
     <id>https://www.xiaoyeshiyu.com/post/de27.html</id>
     <published>2022-11-20T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.877Z</updated>
+    <updated>2023-08-29T06:56:03.777Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记设计规范和调优篇，主要是数据库、表的设计规范，以及数据库服务端性能调优。</summary>
@@ -292,6 +327,8 @@
     
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
     
     
   </entry>
@@ -301,7 +338,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/b3f4.html"/>
     <id>https://www.xiaoyeshiyu.com/post/b3f4.html</id>
     <published>2022-11-14T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.879Z</updated>
+    <updated>2023-08-29T06:55:58.596Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记索引篇，主要是索引的设计和使用，查询分析和优化。</summary>
@@ -309,6 +346,8 @@
     
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
     
     
   </entry>
@@ -318,7 +357,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/4dd2.html"/>
     <id>https://www.xiaoyeshiyu.com/post/4dd2.html</id>
     <published>2022-11-11T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.874Z</updated>
+    <updated>2023-08-29T06:55:05.636Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记架构篇，主要是逻辑架构、存储引擎、索引的数据结构</summary>
@@ -326,6 +365,8 @@
     
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
     
     
   </entry>
@@ -335,7 +376,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/dc39.html"/>
     <id>https://www.xiaoyeshiyu.com/post/dc39.html</id>
     <published>2022-11-07T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.872Z</updated>
+    <updated>2023-08-29T06:54:59.818Z</updated>
     
     
     <summary type="html">这是学习MySQL的笔记高级使用篇，主要是视图、存储、函数、变量、流程和触发器等。</summary>
@@ -344,22 +385,7 @@
     
     <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
     
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL学习笔记DQL篇</title>
-    <link href="https://www.xiaoyeshiyu.com/post/4c06.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/4c06.html</id>
-    <published>2022-10-25T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.876Z</updated>
-    
-    
-    <summary type="html">这是学习MySQL的笔记DQL篇，主要是DML、DQL、DDL相关语句和操作。</summary>
-    
-    
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
     
     
   </entry>
