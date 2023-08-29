@@ -26,6 +26,7 @@
 {"title":"实例使用crash分析Kdump转储kernel崩溃内核","url":"/post/58be.html"},
 {"title":"使用protobuf validate自定义报错内容","url":"/post/6058.html"},
 {"title":"Golang单元测试","url":"/post/61db.html"},
+{"title":"Go的concurrency之goroutine","url":"/post/6927.html"},
 {"title":"快速排序、二分法以及一些变形的思考","url":"/post/6b2c.html"},
 {"title":"微服务之服务发现","url":"/post/6b44.html"},
 {"title":"Golang中的接口","url":"/post/6f83.html"},

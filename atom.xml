@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-08-29T06:59:28.665Z</updated>
+  <updated>2023-08-29T07:06:24.508Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/6927.html"/>
     <id>https://www.xiaoyeshiyu.com/post/6927.html</id>
     <published>2023-08-28T16:00:00.000Z</published>
-    <updated>2023-08-29T06:59:28.665Z</updated>
+    <updated>2023-08-29T07:06:24.508Z</updated>
     
     
     <summary type="html">Golang中极有特点之一就是协程goroutine，通过关键字直接开启一个协程是非常简单的，但是在goroutine使用过程中有些关键点需要注意。</summary>
