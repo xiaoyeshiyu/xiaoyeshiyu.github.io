@@ -30,7 +30,7 @@
     
     <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/Golang/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/Golang/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -47,9 +47,9 @@
     
     
     
-    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
+    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/midware/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -59,17 +59,19 @@
     <link href="https://www.xiaoyeshiyu.com/post/931.html"/>
     <id>https://www.xiaoyeshiyu.com/post/931.html</id>
     <published>2023-08-24T16:00:00.000Z</published>
-    <updated>2023-08-25T13:37:19.396Z</updated>
+    <updated>2023-09-07T09:17:33.128Z</updated>
     
     
     <summary type="html">在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。</summary>
     
     
     
-    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
+    <category term="App" scheme="https://www.xiaoyeshiyu.com/categories/Application/"/>
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/midware/developer/"/>
     
+    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/tags/midware/"/>
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
@@ -85,7 +87,7 @@
     
     
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/developer/"/>
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/"/>
     
     
   </entry>
@@ -121,9 +123,9 @@
     
     
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/developer/"/>
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/developer/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -142,7 +144,7 @@
     
     <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/Golang/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/Golang/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -163,7 +165,7 @@
     
     <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/k8s/microservice/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/k8s/microservice/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/k8s/microservice/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -182,7 +184,7 @@
     
     <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
     
-    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/Golang/algorithm/"/>
+    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/Golang/%E7%AE%97%E6%B3%95/"/>
     
     
   </entry>
@@ -199,7 +201,7 @@
     
     
     
-    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/algorithm/"/>
+    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/%E7%AE%97%E6%B3%95/"/>
     
     
   </entry>
@@ -216,9 +218,9 @@
     
     
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/developer/"/>
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/developer/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -269,9 +271,9 @@
     
     
     
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -288,9 +290,9 @@
     
     
     
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -307,9 +309,9 @@
     
     
     
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -326,9 +328,9 @@
     
     
     
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -345,9 +347,9 @@
     
     
     
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -364,9 +366,9 @@
     
     
     
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
@@ -383,9 +385,9 @@
     
     
     
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/database/"/>
+    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/database/Reference/"/>
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
     
   </entry>
