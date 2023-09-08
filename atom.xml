@@ -40,17 +40,17 @@
     <link href="https://www.xiaoyeshiyu.com/post/8507.html"/>
     <id>https://www.xiaoyeshiyu.com/post/8507.html</id>
     <published>2023-08-27T16:00:00.000Z</published>
-    <updated>2023-08-29T06:47:40.031Z</updated>
+    <updated>2023-09-07T09:39:33.813Z</updated>
     
     
     <summary type="html">在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。</summary>
     
     
     
-    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
     
   </entry>
   
@@ -59,17 +59,34 @@
     <link href="https://www.xiaoyeshiyu.com/post/931.html"/>
     <id>https://www.xiaoyeshiyu.com/post/931.html</id>
     <published>2023-08-24T16:00:00.000Z</published>
-    <updated>2023-09-07T09:17:33.128Z</updated>
+    <updated>2023-09-07T09:38:47.215Z</updated>
     
     
     <summary type="html">在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。</summary>
     
     
     
-    <category term="App" scheme="https://www.xiaoyeshiyu.com/categories/Application/"/>
+    <category term="应用软件" scheme="https://www.xiaoyeshiyu.com/categories/Application/"/>
     
     
-    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/tags/midware/"/>
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用protobuf validate自定义报错内容</title>
+    <link href="https://www.xiaoyeshiyu.com/post/6058.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/6058.html</id>
+    <published>2023-08-20T16:00:00.000Z</published>
+    <updated>2023-09-07T09:39:03.015Z</updated>
+    
+    
+    <summary type="html">使用protocol之后，更加符合微服务开发规范，并且定义即文档，开发效率大大提高。但是protobuf无法实现自定义报错内容，所幸这个功能Google已经在考虑，并且在validate的beta版本已经实现。</summary>
+    
+    
+    
+    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
+    
     
     <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
@@ -93,40 +110,23 @@
   </entry>
   
   <entry>
-    <title>使用protobuf validate自定义报错内容</title>
-    <link href="https://www.xiaoyeshiyu.com/post/6058.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/6058.html</id>
-    <published>2023-08-20T16:00:00.000Z</published>
-    <updated>2023-09-04T03:59:10.541Z</updated>
-    
-    
-    <summary type="html">使用protocol之后，更加符合微服务开发规范，并且定义即文档，开发效率大大提高。但是protobuf无法实现自定义报错内容，所幸这个功能Google已经在考虑，并且在validate的beta版本已经实现。</summary>
-    
-    
-    
-    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
-    
-    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/microservice/Golang/"/>
-    
-    
-  </entry>
-  
-  <entry>
     <title>错误码实践</title>
     <link href="https://www.xiaoyeshiyu.com/post/f595.html"/>
     <id>https://www.xiaoyeshiyu.com/post/f595.html</id>
     <published>2023-07-30T16:00:00.000Z</published>
-    <updated>2023-08-29T06:50:32.479Z</updated>
+    <updated>2023-09-07T09:43:45.733Z</updated>
     
     
     <summary type="html">在业务开发过程中，有效的使用错误码可以很好的优化交互逻辑，并且可以更加规范的进行错误处理。</summary>
     
     
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/"/>
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
@@ -184,8 +184,122 @@
     
     <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
     
-    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/Golang/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/Golang/algorithm/"/>
     
+    
+  </entry>
+  
+  <entry>
+    <title>Git学习笔记之Git工具</title>
+    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
+    <published>2023-04-03T16:00:00.000Z</published>
+    <updated>2023-09-07T10:05:43.922Z</updated>
+    
+    
+    <summary type="html">介绍Git在实际工作中的一些常用工具。</summary>
+    
+    
+    
+    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git学习笔记之GitHub</title>
+    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
+    <published>2023-03-25T16:00:00.000Z</published>
+    <updated>2023-09-07T10:05:45.109Z</updated>
+    
+    
+    <summary type="html">介绍Git工具中使用范围最广的GitHub平台使用手册。</summary>
+    
+    
+    
+    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git学习笔记之分布式工作流程</title>
+    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
+    <published>2023-03-18T16:00:00.000Z</published>
+    <updated>2023-09-07T10:01:54.647Z</updated>
+    
+    
+    <summary type="html">介绍Git在实际工作中的使用流程。</summary>
+    
+    
+    
+    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git学习笔记之服务端</title>
+    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
+    <published>2023-03-11T16:00:00.000Z</published>
+    <updated>2023-09-07T10:02:20.287Z</updated>
+    
+    
+    <summary type="html">介绍Git在服务端上的搭建和使用。</summary>
+    
+    
+    
+    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git学习笔记之分支</title>
+    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
+    <published>2023-03-04T16:00:00.000Z</published>
+    <updated>2023-09-07T10:02:14.405Z</updated>
+    
+    
+    <summary type="html">介绍Git中的重要概念：分支。</summary>
+    
+    
+    
+    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git学习笔记之基础</title>
+    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
+    <published>2023-02-26T16:00:00.000Z</published>
+    <updated>2023-09-07T09:57:01.159Z</updated>
+    
+    
+    <summary type="html">介绍Git的一些基本概念和基础操作。</summary>
+    
+    
+    
+    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
     
   </entry>
   
@@ -201,27 +315,27 @@
     
     
     
-    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/%E7%AE%97%E6%B3%95/"/>
+    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/algorithm/"/>
     
     
   </entry>
   
   <entry>
-    <title>Git学习笔记</title>
+    <title>Git学习笔记之起步</title>
     <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
     <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
     <published>2023-02-20T16:00:00.000Z</published>
-    <updated>2023-08-29T06:51:29.181Z</updated>
+    <updated>2023-09-07T09:49:02.056Z</updated>
     
     
-    <summary type="html">Git是日常工作中很常用的工具，除了程序员，一些文字编辑工作者都可以通过Git加速工作效率。</summary>
+    <summary type="html">Git是日常工作中很常用的工具，除了程序员，一些文字编辑工作者都可以通过Git加速工作效率。这里简单介绍一下Git以及安装。</summary>
     
     
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/"/>
+    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
     
   </entry>
   
@@ -230,15 +344,17 @@
     <link href="https://www.xiaoyeshiyu.com/post/48a2.html"/>
     <id>https://www.xiaoyeshiyu.com/post/48a2.html</id>
     <published>2023-01-15T16:00:00.000Z</published>
-    <updated>2023-07-24T07:09:28.888Z</updated>
+    <updated>2023-09-07T09:28:30.735Z</updated>
     
     
     <summary type="html">手动查看代码和人工查找BUG都会存在效率问题，使用自动化代码检测能够跟大程度提高效率，提升代码质量。</summary>
     
     
     
-    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
+    <category term="云原生" scheme="https://www.xiaoyeshiyu.com/categories/CloudNative/"/>
     
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
@@ -268,120 +384,6 @@
     
     
     <summary type="html">Redis学习笔记之实用篇包含Redis的底层原理以及一些使用场景和解决方案，是基础篇的补充篇。</summary>
-    
-    
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL学习笔记高可用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/post/a820.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/a820.html</id>
-    <published>2022-11-24T16:00:00.000Z</published>
-    <updated>2023-08-29T06:55:08.433Z</updated>
-    
-    
-    <summary type="html">这是学习MySQL的笔记高可用篇，主要包含日志、主从复制、备份和恢复。</summary>
-    
-    
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL学习笔记事务和锁篇</title>
-    <link href="https://www.xiaoyeshiyu.com/post/fa7d.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/fa7d.html</id>
-    <published>2022-11-23T16:00:00.000Z</published>
-    <updated>2023-08-29T06:56:06.774Z</updated>
-    
-    
-    <summary type="html">这是学习MySQL的笔记事务和锁篇，主要包含数据库的事务、锁和MVCC机制。</summary>
-    
-    
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL学习笔记设计规范和调优篇</title>
-    <link href="https://www.xiaoyeshiyu.com/post/de27.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/de27.html</id>
-    <published>2022-11-20T16:00:00.000Z</published>
-    <updated>2023-08-29T06:56:03.777Z</updated>
-    
-    
-    <summary type="html">这是学习MySQL的笔记设计规范和调优篇，主要是数据库、表的设计规范，以及数据库服务端性能调优。</summary>
-    
-    
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL学习笔记索引篇</title>
-    <link href="https://www.xiaoyeshiyu.com/post/b3f4.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/b3f4.html</id>
-    <published>2022-11-14T16:00:00.000Z</published>
-    <updated>2023-08-29T06:55:58.596Z</updated>
-    
-    
-    <summary type="html">这是学习MySQL的笔记索引篇，主要是索引的设计和使用，查询分析和优化。</summary>
-    
-    
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL学习笔记架构篇</title>
-    <link href="https://www.xiaoyeshiyu.com/post/4dd2.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/4dd2.html</id>
-    <published>2022-11-11T16:00:00.000Z</published>
-    <updated>2023-08-29T06:55:05.636Z</updated>
-    
-    
-    <summary type="html">这是学习MySQL的笔记架构篇，主要是逻辑架构、存储引擎、索引的数据结构</summary>
-    
-    
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL学习笔记高级使用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/post/dc39.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/dc39.html</id>
-    <published>2022-11-07T16:00:00.000Z</published>
-    <updated>2023-08-29T06:54:59.818Z</updated>
-    
-    
-    <summary type="html">这是学习MySQL的笔记高级使用篇，主要是视图、存储、函数、变量、流程和触发器等。</summary>
     
     
     
