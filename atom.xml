@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-09-08T01:10:51.635Z</updated>
+  <updated>2023-09-08T06:19:38.210Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go的sync包</title>
+    <link href="https://www.xiaoyeshiyu.com/post/2f5e.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2f5e.html</id>
+    <published>2023-09-06T16:00:00.000Z</published>
+    <updated>2023-09-08T06:19:38.210Z</updated>
+    
+    
+    <summary type="html">Go语言的sync包是Go标准库中提供的用于同步和并发编程的包。它提供了一些关键的同步原语，用于协调并发操作，以确保数据的正确性和一致性。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>Go的concurrency之goroutine</title>
@@ -376,27 +395,6 @@
     
     
     <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis学习笔记之实用篇</title>
-    <link href="https://www.xiaoyeshiyu.com/post/c187.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/c187.html</id>
-    <published>2022-12-05T16:00:00.000Z</published>
-    <updated>2023-09-08T01:36:10.301Z</updated>
-    
-    
-    <summary type="html">Redis学习笔记之实用篇包含Redis的底层原理以及一些使用场景和解决方案，是基础篇的补充篇。</summary>
-    
-    
-    
-    <category term="Redis" scheme="https://www.xiaoyeshiyu.com/categories/Redis/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-    <category term="数据库" scheme="https://www.xiaoyeshiyu.com/tags/database/"/>
     
   </entry>
   

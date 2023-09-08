@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/post/2f5e.html</loc>
+    
+    <lastmod>2023-09-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/post/c001.html</loc>
     
     <lastmod>2023-09-08</lastmod>
@@ -918,14 +927,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/tags/developer/</loc>
+    <loc>https://www.xiaoyeshiyu.com/tags/database/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/tags/database/</loc>
+    <loc>https://www.xiaoyeshiyu.com/tags/developer/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -948,14 +957,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/es/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/es/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -969,14 +978,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/GoLearningNote/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/CloudNative/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/CloudNative/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/GoLearningNote/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -997,7 +1006,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Linux/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1005,6 +1014,13 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/MongoDB/</loc>
+    <lastmod>2023-09-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/Linux/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1032,13 +1048,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Redis/</loc>
-    <lastmod>2023-09-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/distributed/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -1053,7 +1062,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Redis/</loc>
     <lastmod>2023-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
