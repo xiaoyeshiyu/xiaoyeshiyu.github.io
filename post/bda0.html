@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="casbin">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/bda0.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/dispatcher-architecture.svg">
+<meta property="article:published_time" content="2023-09-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-09-13T08:11:49.058Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="开发技巧">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/dispatcher-architecture.svg">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/bda0.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/bda0.html","path":"post/bda0.html","title":"casbin"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>casbin | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5"><span class="nav-number">1.1.</span> <span class="nav-text">几个关键概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.2.</span> <span class="nav-text">能做什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.3.</span> <span class="nav-text">不能做什么</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">开始使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8"><span class="nav-number">2.2.</span> <span class="nav-text">存储</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-number">2.2.1.</span> <span class="nav-text">模型的存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E7%9A%84%E5%AD%98%E5%82%A8"><span class="nav-number">2.2.2.</span> <span class="nav-text">策略的存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%96%E7%95%A5%E5%AD%90%E9%9B%86%E5%8A%A0%E8%BD%BD"><span class="nav-number">2.2.3.</span> <span class="nav-text">策略子集加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="nav-number">2.3.</span> <span class="nav-text">执行器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%A0%E7%A7%8D%E6%89%A7%E8%A1%8C%E5%99%A8"><span class="nav-number">2.3.1.</span> <span class="nav-text">几种执行器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%82%E9%85%8D%E5%99%A8"><span class="nav-number">2.4.</span> <span class="nav-text">适配器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E8%A7%86%E5%99%A8"><span class="nav-number">2.5.</span> <span class="nav-text">监视器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">2.6.</span> <span class="nav-text">调度器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%92%E8%89%B2%E7%AE%A1%E7%90%86%E5%99%A8"><span class="nav-number">2.7.</span> <span class="nav-text">角色管理器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.</span> <span class="nav-text">使用场景介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/bda0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="casbin | 小夜时雨">
+      <meta itemprop="description" content="Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          casbin
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-09-12 00:00:00" itemprop="dateCreated datePublished" datetime="2023-09-12T00:00:00+08:00">2023-09-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-09-13 16:11:49" itemprop="dateModified" datetime="2023-09-13T16:11:49+08:00">2023-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Application/" itemprop="url" rel="index"><span itemprop="name">应用软件</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/bda0.html" class="post-meta-item leancloud_visitors" data-flag-title="casbin" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/bda0.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/bda0.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。</p>
+<p>Casbin的核心概念是访问控制模型和策略。访问控制模型定义了一组规则，用于描述谁可以访问哪些资源以及在什么条件下可以访问。策略是基于模型定义的规则，描述了实际的访问控制规则集合。</p>
+<p>Casbin支持多种访问控制模型，包括基于角色的访问控制（RBAC）、访问控制列表（ACL）和属性访问控制（ABAC）等。它还提供了灵活的策略管理机制，可以将策略存储在不同的持久化存储中，如文件、数据库或远程服务。</p>
+<p>使用Casbin，你可以轻松地实现细粒度的权限管理，定义和管理角色、资源和操作之间的访问规则，并在应用程序中进行访问控制的验证。无论是Web应用程序、API服务还是其他类型的系统，Casbin都可以帮助你实现安全的访问控制机制。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvb3ZlcnZpZXc=">https://casbin.org/zh/docs/overview<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="几个关键概念"><a href="#几个关键概念" class="headerlink" title="几个关键概念"></a>几个关键概念</h2><p>Casbin是一个开源的访问控制库，用于实现权限管理和访问控制策略。它基于访问控制模型（Access Control Model）和策略（Policy）来管理用户对资源的访问权限。</p>
+<p>在Casbin中，有几个关键性的概念：</p>
+<ol>
+<li><p>模型（Model）：模型定义了访问控制策略的基本结构和规则。它由多个规则组成，每个规则包含多个字段，如”sub”（Subject，主体，表示用户）、”obj”（Object，对象，表示资源）、”act”（Action，动作，表示操作）等。</p>
+</li>
+<li><p>策略（Policy）：策略是实际的访问控制规则集合，用于定义谁可以对什么资源执行什么操作。Casbin支持多种类型的策略，包括基于角色的访问控制（Role-Based Access Control，RBAC）、基于对象的访问控制（Object-Based Access Control，OBAC）等。</p>
+</li>
+<li><p>主体（Subject）：主体代表用户或者实体，它通常通过唯一标识符（如用户名、角色等）进行识别。主体在访问控制中被授予特定的权限。</p>
+</li>
+<li><p>对象（Object）：对象代表系统中的资源，可以是文件、数据库表、API端点等。对象具有特定的属性和标识符，用于确定访问控制规则。</p>
+</li>
+<li><p>动作（Action）：动作表示主体对对象执行的操作或行为，如读取、写入、删除等。动作定义了主体对资源的权限。</p>
+</li>
+<li><p>策略存储（Policy Store）：策略存储用于存储和管理策略规则。Casbin支持多种策略存储后端，如内存、文件、数据库等。</p>
+</li>
+</ol>
+<p>通过定义模型、策略和访问请求，Casbin可以进行访问控制决策，判断是否允许主体执行特定的操作。它提供了灵活的访问控制模型和丰富的策略管理功能，使开发人员能够轻松实现细粒度的权限管理和访问控制策略。</p>
+<h2 id="能做什么"><a href="#能做什么" class="headerlink" title="能做什么"></a>能做什么</h2><ol>
+<li>以典型的 { 主体、对象、动作 } 形式或您定义的自定义形式形成策略。支持允许和拒绝授权。</li>
+<li>具有访问控制模型 <code>model</code> 和策略 <code>policy</code> 两个核心概念。</li>
+<li>支持RBAC中的多层角色继承，不止主体可以有角色，资源也可以具有角色。</li>
+<li>支持内置超级用户，如 <code>root</code> 或 <code>administrator</code>。 超级用户可以在没有明确权限的情况下做任何事情。</li>
+<li>提供多个内置操作符，支持规则匹配。例如，<code>keyMatch</code> 可将资源键 <code>/foo/bar</code> 映射到模式 <code>/foo*</code>。</li>
+</ol>
+<h2 id="不能做什么"><a href="#不能做什么" class="headerlink" title="不能做什么"></a>不能做什么</h2><ol>
+<li>验证（又称用户登录时验证用户名和密码）</li>
+<li>管理用户列表或角色列表。</li>
+</ol>
+<p>项目管理用户、角色或密码列表更加方便。用户通常有他们的密码，但是 Casbin 的设计思想并不是把它作为一个存储密码的容器。 而是存储RBAC方案中用户和角色之间的映射关系。</p>
+<h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/casbin/casbin/v2</span><br></pre></td></tr></table></figure>
+
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>casbin支持多种模型，适用于多种业务场景</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Access_control_list"><strong>ACL (Access Control List, 访问控制列表)</strong></a></li>
+<li><strong>具有 <span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvU3VwZXJ1c2Vy">超级用户<i class="fa fa-external-link-alt"></i></span> 的 ACL</strong></li>
+<li><strong>ACL without users</strong>: 这对于没有身份验证或用户登录的系统特别有用。</li>
+<li><strong>ACL without resources</strong>: 在某些场景中，目标是一种类型的资源，而不是单个资源。可以使用“写文章”和“读日志”等权限。这不会控制对特定文章或日志的访问。</li>
+<li><strong><span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvUm9sZS1iYXNlZF9hY2Nlc3NfY29udHJvbA==">RBAC (基于角色的访问控制)<i class="fa fa-external-link-alt"></i></span></strong></li>
+<li><strong>RBAC with resource roles</strong>: 用户和资源可以同时拥有角色（或组）。</li>
+<li><strong>RBAC with domains&#x2F;tenants</strong>: 用户可以为不同的域&#x2F;租户拥有不同的角色集。</li>
+<li><strong><span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQXR0cmlidXRlLUJhc2VkX0FjY2Vzc19Db250cm9s">ABAC (Attribute-Based Access Control)<i class="fa fa-external-link-alt"></i></span></strong>: 像“resource.Owner”这样的语法糖可以用来获取资源的属性。</li>
+<li><strong><span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvUmVwcmVzZW50YXRpb25hbF9zdGF0ZV90cmFuc2Zlcg==">RESTful<i class="fa fa-external-link-alt"></i></span></strong>: 支持“&#x2F;res&#x2F;*”、“&#x2F;res&#x2F;：id”等路径，以及“GET”、“POST”、“PUT”、“DELETE”等HTTP方法。</li>
+<li><strong>Deny-override</strong>: 在允许拒绝覆盖的情况下，允许和拒绝授权都受支持。</li>
+<li><strong>Priority</strong>: 策略规则可以按优先级排列，类似于防火墙规则。</li>
+</ol>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvc3VwcG9ydGVkLW1vZGVscw==">https://casbin.org/zh/docs/supported-models<i class="fa fa-external-link-alt"></i></span></p>
+<p>一般会通过使用场景确定模型，然后在官网实例中查询模型，直接使用。</p>
+<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>casbin 支持通过加载存储的模型、策略、策略子集实现动态调整。</p>
+<h3 id="模型的存储"><a href="#模型的存储" class="headerlink" title="模型的存储"></a>模型的存储</h3><p>与策略不同，模型只能加载，不能保存。我们认为，模型不是动态组件，不应在运行时修改，因此我们没有实现将模型保存到存储中的应用程序接口。</p>
+<p>不过，有一个好消息。我们提供了三种等效的方法来静态或动态加载模型：</p>
+<ul>
+<li>从 <code>.conf</code> 文件中加载 model</li>
+<li>从代码加载 model</li>
+<li>从字符串加载 model</li>
+</ul>
+<h3 id="策略的存储"><a href="#策略的存储" class="headerlink" title="策略的存储"></a>策略的存储</h3><p>在 casbin 中，策略存储作为 <strong>适配器</strong> 来实现</p>
+<ul>
+<li>从 <code>.csv</code> 文件加载</li>
+<li>从后端存储加载实现</li>
+</ul>
+<h3 id="策略子集加载"><a href="#策略子集加载" class="headerlink" title="策略子集加载"></a>策略子集加载</h3><p>一些adapter支持过滤策略管理。 这意味着 Casbin 加载的策略是根据给定过滤器存储在数据库中的策略的子集。这样就能在大型多租户环境中高效执行策略，因为在这种环境中，解析整个策略会成为性能瓶颈。</p>
+<p>为了防止意外数据丢失，当策略已经加载， SavePolicy 方法会被禁用。</p>
+<p>要使用支持的adapter处理过滤后的策略，只需调用 <code>LoadFilteredPolicy</code> 方法。 过滤器参数的有效格式取决于所用的适配器。 为了防止意外数据丢失，当策略已经加载， <code>SavePolicy</code> 方法会被禁用。</p>
+<h2 id="执行器"><a href="#执行器" class="headerlink" title="执行器"></a>执行器</h2><p>Casbin 使用配置文件来定义访问控制模型。</p>
+<p>例如使用文件记录模型和策略存储文件，作为两个配置文件：<code>model.conf</code> 和 <code>policy.csv</code>。<code>model.conf</code> 保存访问模型，而 <code>policy.csv</code> 保存具体的用户权限配置。<code>Casbin</code> 的使用非常简单。我们只需创建一个主要结构：<code>enforcer</code>。当构造这个结构的时候，<code>model.conf</code> 和 <code>policy.csv</code> 将会被加载。</p>
+<p>换句话说，要创建一个 Casbin 执行器，您需要提供一个模型和一个适配器。</p>
+<p>Casbin 提供了一个 <code>FileAdapter</code>，您可以使用它。更多信息，请参阅适配器。</p>
+<p>使用模型文件和默认 <code>FileAdapter</code> 的示例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import &quot;github.com/casbin/casbin/v2&quot;</span><br><span class="line"></span><br><span class="line">e, err := casbin.NewEnforcer(&quot;path/to/model.conf&quot;, &quot;path/to/policy.csv&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>在 Casbin 中，执行器（Enforcer）是负责执行访问控制策略的核心组件。它提供了一系列方法，用于判断主体是否被授予对特定资源执行特定操作的权限。</p>
+<p>执行器的主要功能包括：</p>
+<ol>
+<li><p>加载策略：执行器可以从不同的策略存储（如文件、数据库）中加载访问控制策略。它可以读取和解析策略规则，并将其转换为内部模型进行处理。</p>
+</li>
+<li><p>决策判断：执行器可以根据加载的策略和传入的访问请求，进行访问控制决策。它会根据模型中定义的规则和策略，判断主体是否有权限执行特定的操作。</p>
+</li>
+<li><p>策略管理：执行器提供了管理策略的方法，可以动态地添加、修改或删除策略规则。这使得开发人员可以根据需要对访问控制策略进行灵活的调整和管理。</p>
+</li>
+<li><p>角色管理：执行器支持角色（Role）的管理，包括角色的添加、删除和关联。角色可以用于实现基于角色的访问控制（RBAC）模型。</p>
+</li>
+</ol>
+<p>通过执行器，开发人员可以轻松地集成 Casbin 的访问控制功能到他们的应用程序中。执行器提供了简单而强大的 API，使开发人员能够方便地进行访问控制决策和策略管理。</p>
+<h3 id="几种执行器"><a href="#几种执行器" class="headerlink" title="几种执行器"></a>几种执行器</h3><p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvZW5mb3JjZXJz">https://casbin.org/zh/docs/enforcers<i class="fa fa-external-link-alt"></i></span></p>
+<ul>
+<li>通用执行器：最基础的执行器，Enforcer 是用户与 Casbin 策略和模型交互的基本结构。</li>
+<li>带缓存的执行器：<code>CachedEnforcer</code> 基于 <code>Enforcer</code>，支持使用 <code>map</code> 将请求的判断结果（是否具有能力）缓存在内存中。它能在指定的过期时间内清除缓存。此外，它还通过读写锁保证线程安全。您可以使用 <code>EnableCache</code> 启用缓存评估结果（默认为启用）。<code>CachedEnforcer</code> 的其他 API 方法与 <code>Enforcer</code> 相同。</li>
+<li>分布式执行器：<code>DistributedEnforcer</code> 支持分布式集群中的多个实例。它为调度器封装了 <code>SyncedEnforcer</code>。官方的分布式执行器无法指定适配器，使用内置的适配器，而且通过HTTP接口实现一致性。</li>
+<li>同步执行器：<code>SyncedEnforcer</code> 同步执行器提供并发功能，是线程安全的。</li>
+<li>带缓存的同步执行器：<code>SyncedCachedEnforcer</code> ，同步执行器和带缓存的执行器结合</li>
+</ul>
+<p>简单来说:</p>
+<ul>
+<li>如果是简单环境，使用通用执行器：<code>casbin.NewEnforcer()</code></li>
+<li>如果需要提高判断结果的并发，则使用带缓存的执行器：<code>casbin.NewCachedEnforcer()</code>   </li>
+<li>如果是分布式的场景，例如多个服务器集群中，每个集群都需要有 casbin 实例，而且需要有独立的后端存储，则使用分布式执行器：<code>casbin.NewDistributedEnforcer()</code></li>
+<li>如果会频繁变动策略，而且是并发场景，则使用同步执行器：<code>casbin.NewSyncedEnforcer()</code></li>
+<li>如果既要频繁变动策略，也要求判断结果的高并发，则使用带缓存的同步执行器：<code>casbin.NewSyncedCachedEnforcer()</code></li>
+</ul>
+<p>在当下云原生的场景下，部署在 <code>k8s</code> 上，并且后端使用同一个存储，多个实例，推荐使用同步执行器或者带缓存的同步执行器。</p>
+<h2 id="适配器"><a href="#适配器" class="headerlink" title="适配器"></a>适配器</h2><p>在Casbin中，策略存储作为adapter(Casbin的中间件) 实现。 Casbin用户可以使用adapter从存储中加载策略规则 (aka <code>LoadPolicy()</code>) 或者将策略规则保存到其中 (aka <code>SavePolicy()</code>)。 为了保持代码轻量级，我们没有把adapter代码放在主库中。</p>
+<p>Casbin的适配器完整列表如下。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvYWRhcHRlcnM=">https://casbin.org/zh/docs/adapters<i class="fa fa-external-link-alt"></i></span></p>
+<blockquote>
+<p>备注</p>
+<ol>
+<li>如果使用显式或隐式adapter调用<code>casbin.NewEnforcer()</code>，策略将自动加载。</li>
+<li>可以调用<code>e.LoadPolicy()</code> 来从存储中重新加载策略规则。</li>
+<li>如果adapter不支持<code>Auto-Save</code>特性，则在添加或删除策略时不能将策略规则自动保存回存储器。 你必须手动调用 <code>SavePolicy()</code> 来保存所有的策略规则</li>
+</ol>
+</blockquote>
+<h2 id="监视器"><a href="#监视器" class="headerlink" title="监视器"></a>监视器</h2><p>casbin 支持使用分布式消息系统（如 etcd）来保持多个 Casbin 执行器实例之间的一致性。这样，用户就可以同时使用多个 Casbin 执行器来处理大量权限检查请求。</p>
+<p>与策略存储适配器类似，casbin 在主库中不包含监视器代码。任何对新消息系统的支持都应该作为监视程序来实现。 Casbin 监视器的完整列表如下。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvd2F0Y2hlcnM=">https://casbin.org/zh/docs/watchers<i class="fa fa-external-link-alt"></i></span></p>
+<p>推荐使用 Redis ，内部是通过 redis 的 channel 实现多个实例之间通讯。</p>
+<h2 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h2><p>调度程序提供了一种同步策略增量变化的方法。它们应基于 Raft 等一致性算法，以确保所有执行者实例的一致性。通过调度器，用户可以轻松建立分布式集群。</p>
+<p>调度器的方法分为两部分。 第一部分是与 Casbin 结合的方法。这些方法应在 Casbin 内部调用。用户可以使用 Casbin 本身提供的更完整的 API。</p>
+<p>另一部分是调度器自身定义的方法，包括调度器初始化方法和不同算法提供的不同功能，如动态成员资格和配置更改。</p>
+<blockquote>
+<p>我们希望调度器只在运行时确保 Casbin 执行器的一致性。因此，如果策略在初始化时不一致，调度程序将无法正常工作。用户需要在使用调度程序前确保所有实例的状态一致。</p>
+</blockquote>
+<p>下面是 Casbin 调度程序的完整列表。欢迎任何第三方提供新的调度程序。请通知我们，我们将把它添加到此列表中。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvZGlzcGF0Y2hlcnM=">https://casbin.org/zh/docs/dispatchers<i class="fa fa-external-link-alt"></i></span></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/dispatcher-architecture.svg" alt="overall architecture"></p>
+<p>调度器的使用场景更合适分布式的环境下。</p>
+<h2 id="角色管理器"><a href="#角色管理器" class="headerlink" title="角色管理器"></a>角色管理器</h2><p>角色管理器用于管理 Casbin 中的 RBAC 角色层次结构（用户角色映射）。 角色管理器可从 Casbin 策略规则或外部来源（如 LDAP、Okta、Auth0、Azure AD 等）检索角色数据。我们支持不同的角色管理器实现。 为了保持轻量级，我们在主库中不包含角色管理器代码（默认角色管理器除外）。</p>
+<p>下面提供了 Casbin 角色管理器的完整列表。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvcm9sZS1tYW5hZ2Vycw==">https://casbin.org/zh/docs/role-managers<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="使用场景介绍"><a href="#使用场景介绍" class="headerlink" title="使用场景介绍"></a>使用场景介绍</h1><p>casbin 的 API 比较简单，基本上在官网直接搜索就可以找到。例如经常使用的一个场景是 后端 使用 MySQL 或者 PostgreSQL 存储策略，模型使用 RBAC 或者 基于域的 RBAC 。</p>
+<p>注意点：</p>
+<ol>
+<li><p>手动增加权限时，需要注意参数位置：</p>
+<p>例如模型定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[policy_definition]</span><br><span class="line">p = sub, dom, obj, act</span><br></pre></td></tr></table></figure>
+
+<p>添加权限时</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sub, dom, obj, act</span></span><br><span class="line">_, err := r.e.AddPermissionForUser(portalRole.RoleID, portalId, portalId, portalRole.PermissionID)</span><br></pre></td></tr></table></figure>
+
+<p>依次是：主体（角色或者用户id）、域、对象、操作</p>
+</li>
+<li><p>使用 redis 同步的时候，插入新的策略，在其他的实例上消费 redis 的消息时，再次插入会报错唯一键冲突。寻求解决方法过程比较惨：</p>
+<ol>
+<li>去掉自动保存。这种方案不会有主键冲突，但是无法做到接受请求的实例保存而其他消费实例不保存到数据库的需求，除非自己再加一个锁，消费的时候加锁，修改自动保存设置，消费结束释放锁，然后作为服务实例接受请求的时候，加锁处理。这种方式很繁琐。</li>
+<li>去掉自动保存会出现更大的问题，增加的策略都保存在内存中，而不是在数据库中</li>
+<li>监视器不使用增量，获取到变更时加载数据库。这种方案很重量，如果策略很多，这个操作会很耗时，而且对内存和数据库都有不小的开销。casbin 是直接将数据库的所有数据都一次性读取到内存中。</li>
+</ol>
+<p>最终解决方法是使用 PostgreSQL 作为适配器时，如果冲突，则 <code>DoNothing</code> 。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db = db.Clauses(clause.OnConflict&#123;</span><br><span class="line">	DoNothing: <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>提升性能的小技巧：通过调整 <code>matchers</code> ，可以加快匹配速度。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[matchers]</span><br><span class="line">m = g(r.sub, p.sub) &amp;&amp; r.obj == p.obj &amp;&amp; r.act == p.act</span><br></pre></td></tr></table></figure>
+
+<p>将函数等比较耗时的表达式放在后面，执行时间就会很短。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[matchers]</span><br><span class="line">m = r.obj == p.obj &amp;&amp; g(r.sub, p.sub) &amp;&amp; r.act == p.act</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvb3ZlcnZpZXc=">casbin官方文档<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9jYXNiaW4=">casbin<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9jYXNiaW4vYmxvYi9tYXN0ZXIvZW5mb3JjZXJfc3luY2VkLmdv">enforcer_sync<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9nb3JtLWFkYXB0ZXI=">Gorm Adapter<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9yZWRpcy13YXRjaGVy">Redis Watcher<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/developer/" rel="tag"># 开发技巧</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/2f5e.html" rel="prev" title="Go的sync包">
+                  <i class="fa fa-chevron-left"></i> Go的sync包
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

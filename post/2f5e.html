@@ -30,7 +30,6 @@
 <meta property="og:site_name" content="小夜时雨">
 <meta property="og:description" content="Go语言的sync包是Go标准库中提供的用于同步和并发编程的包。它提供了一些关键的同步原语，用于协调并发操作，以确保数据的正确性和一致性。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905212123617.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905213545439.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905213801116.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905213914872.png">
@@ -66,11 +65,11 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907225501216.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907225817922.png">
 <meta property="article:published_time" content="2023-09-06T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-08T06:19:38.210Z">
+<meta property="article:modified_time" content="2023-09-08T08:47:11.642Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905212123617.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905213545439.png">
 
 
 <link rel="canonical" href="https://www.xiaoyeshiyu.com/post/2f5e.html">
@@ -201,7 +200,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -280,7 +279,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-09-08 14:19:38" itemprop="dateModified" datetime="2023-09-08T14:19:38+08:00">2023-09-08</time>
+      <time title="Modified: 2023-09-08 16:47:11" itemprop="dateModified" datetime="2023-09-08T16:47:11+08:00">2023-09-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -340,9 +339,10 @@
 <p>早在2013年6月份的Go 1.1 中，Go 工具引入了一个 race detector。竞态检测器是在构建过程中内置到程序中的代码。然后，一旦程序运行，它就能够检测并报告它发现的任何竞争条件。这个工具非常酷，并且在识别罪魁祸首的代码方面作了令人难以置信的工作。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">go build -race  // 编译时使用-race标志来启用race detector</span><br><span class="line">go test -race   // 单元测试时启用race detector</span><br></pre></td></tr></table></figure>
 
-<h2 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905212123617.png" alt="image-20230905212123617"></p>
-<p>例如上述代码，在 goroutine 中使用 value++ ，同时赋值。</p>
-<p>通过编译可以看到 value++ 不是原子的</p>
+<h2 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Wait sync.WaitGroup</span><br><span class="line"><span class="keyword">var</span> Counter <span class="type">int</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> routine := <span class="number">1</span>; routine &lt;= <span class="number">2</span>; routine++ &#123;</span><br><span class="line">		Wait.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> Routine(routine)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Wait.Wait()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Final Counter: %d\n&quot;</span>, Counter)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Routine</span><span class="params">(id <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> count := <span class="number">0</span>; count &lt; <span class="number">2</span>; count++ &#123;</span><br><span class="line">		value := Counter</span><br><span class="line">		value++</span><br><span class="line">		Counter = value</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Wait.Done()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例如上述代码，在 goroutine 中使用 <code>value++ </code>，同时赋值。</p>
+<p>通过编译可以看到 <code>value++</code> 不是原子的</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go tool compile -N -l -S main.go  // 生成汇编代码 main.o</span><br><span class="line">go build -gcflags -S main.go			// 生成汇编代码 main</span><br><span class="line">go tool objdump main.o 						// 反汇编出代码</span><br></pre></td></tr></table></figure>
 
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905213545439.png" alt="image-20230905213545439"></p>
@@ -507,6 +507,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/post/bda0.html" rel="next" title="casbin">
+                  casbin <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
