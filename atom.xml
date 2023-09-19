@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-09-13T08:11:49.058Z</updated>
+  <updated>2023-09-13T08:12:05.970Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/bda0.html"/>
     <id>https://www.xiaoyeshiyu.com/post/bda0.html</id>
     <published>2023-09-11T16:00:00.000Z</published>
-    <updated>2023-09-13T08:11:49.058Z</updated>
+    <updated>2023-09-13T08:12:05.970Z</updated>
     
     
     <summary type="html">Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。</summary>
@@ -40,7 +40,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/2f5e.html"/>
     <id>https://www.xiaoyeshiyu.com/post/2f5e.html</id>
     <published>2023-09-06T16:00:00.000Z</published>
-    <updated>2023-09-08T08:47:11.642Z</updated>
+    <updated>2023-09-19T09:21:05.396Z</updated>
     
     
     <summary type="html">Go语言的sync包是Go标准库中提供的用于同步和并发编程的包。它提供了一些关键的同步原语，用于协调并发操作，以确保数据的正确性和一致性。</summary>
@@ -112,25 +112,6 @@
   </entry>
   
   <entry>
-    <title>s3实现视频分片预览</title>
-    <link href="https://www.xiaoyeshiyu.com/post/4a89.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/4a89.html</id>
-    <published>2023-08-20T16:00:00.000Z</published>
-    <updated>2023-09-08T01:10:22.186Z</updated>
-    
-    
-    <summary type="html">在一些支持分段获取文件的服务中，通过Range获取指定分片，可以分段获取文件而不用将文件整个下载下来。</summary>
-    
-    
-    
-    <category term="应用软件" scheme="https://www.xiaoyeshiyu.com/categories/Application/"/>
-    
-    
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
-    
-  </entry>
-  
-  <entry>
     <title>使用protobuf validate自定义报错内容</title>
     <link href="https://www.xiaoyeshiyu.com/post/6058.html"/>
     <id>https://www.xiaoyeshiyu.com/post/6058.html</id>
@@ -143,6 +124,25 @@
     
     
     <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
+    
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>s3实现视频分片预览</title>
+    <link href="https://www.xiaoyeshiyu.com/post/4a89.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/4a89.html</id>
+    <published>2023-08-20T16:00:00.000Z</published>
+    <updated>2023-09-08T01:10:22.186Z</updated>
+    
+    
+    <summary type="html">在一些支持分段获取文件的服务中，通过Range获取指定分片，可以分段获取文件而不用将文件整个下载下来。</summary>
+    
+    
+    
+    <category term="应用软件" scheme="https://www.xiaoyeshiyu.com/categories/Application/"/>
     
     
     <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
@@ -164,9 +164,9 @@
     <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
     
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
     <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
     
   </entry>
   
@@ -380,21 +380,21 @@
   </entry>
   
   <entry>
-    <title>Golang中的sync.Pool</title>
-    <link href="https://www.xiaoyeshiyu.com/post/dbf7.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/dbf7.html</id>
+    <title>Golang代码质量持续检测</title>
+    <link href="https://www.xiaoyeshiyu.com/post/48a2.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/48a2.html</id>
     <published>2023-01-15T16:00:00.000Z</published>
-    <updated>2023-09-08T02:12:04.800Z</updated>
+    <updated>2023-09-08T02:03:58.491Z</updated>
     
     
-    <summary type="html">缓冲池在很多时候都会用到，使用缓冲池可以减少创建对象和垃圾回收，可以大大增加处理效率。</summary>
+    <summary type="html">手动查看代码和人工查找BUG都会存在效率问题，使用自动化代码检测能够跟大程度提高效率，提升代码质量。</summary>
     
     
     
-    <category term="Go学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/GoLearningNote/"/>
+    <category term="云原生" scheme="https://www.xiaoyeshiyu.com/categories/CloudNative/"/>
     
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
