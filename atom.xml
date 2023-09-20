@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-09-13T08:12:05.970Z</updated>
+  <updated>2023-09-20T03:28:54.207Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go的concurrency之Memory model</title>
+    <link href="https://www.xiaoyeshiyu.com/post/84a9.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/84a9.html</id>
+    <published>2023-09-19T16:00:00.000Z</published>
+    <updated>2023-09-20T03:28:54.207Z</updated>
+    
+    
+    <summary type="html">内存模型指的是一组规则和保证，用于定义并管理多个 Goroutine 之间的内存访问和同步行为。内存模型确保 Goroutine 之间的内存操作具有一致性和可预测性，以避免出现竞态条件、数据竞争和其他并发相关的问题。</summary>
+    
+    
+    
+    <category term="Golang" scheme="https://www.xiaoyeshiyu.com/categories/Golang/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/Golang/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>casbin</title>
@@ -376,25 +395,6 @@
     
     
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Golang代码质量持续检测</title>
-    <link href="https://www.xiaoyeshiyu.com/post/48a2.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/48a2.html</id>
-    <published>2023-01-15T16:00:00.000Z</published>
-    <updated>2023-09-08T02:03:58.491Z</updated>
-    
-    
-    <summary type="html">手动查看代码和人工查找BUG都会存在效率问题，使用自动化代码检测能够跟大程度提高效率，提升代码质量。</summary>
-    
-    
-    
-    <category term="云原生" scheme="https://www.xiaoyeshiyu.com/categories/CloudNative/"/>
-    
-    
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
