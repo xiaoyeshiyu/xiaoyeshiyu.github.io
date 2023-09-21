@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-09-21T03:21:03.179Z</updated>
+  <updated>2023-09-21T03:21:29.987Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/d34c.html"/>
     <id>https://www.xiaoyeshiyu.com/post/d34c.html</id>
     <published>2023-09-20T16:00:00.000Z</published>
-    <updated>2023-09-21T03:21:03.179Z</updated>
+    <updated>2023-09-21T03:21:29.987Z</updated>
     
     
     <summary type="html">在Go语言中，context包提供了一种在并发操作中传递请求范围数据、取消操作以及处理截止时间的机制。context包可以帮助你优雅地处理并发操作的控制流和资源管理。</summary>
