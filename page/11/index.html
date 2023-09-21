@@ -26,7 +26,7 @@
     <meta name="description" content="Golang开发博客">
 <meta property="og:type" content="website">
 <meta property="og:title" content="小夜时雨">
-<meta property="og:url" content="https://www.xiaoyeshiyu.com/archives/2023/page/2/index.html">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/page/11/index.html">
 <meta property="og:site_name" content="小夜时雨">
 <meta property="og:description" content="Golang开发博客">
 <meta property="og:locale" content="en_US">
@@ -35,14 +35,14 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://www.xiaoyeshiyu.com/archives/2023/page/2/">
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/page/11/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"en","comments":"","permalink":"","path":"archives/2023/page/2/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"en","comments":"","permalink":"","path":"page/11/index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Archive | 小夜时雨</title>
+<title>小夜时雨 - 君子敬其在己者，而不慕其在天者，是以日进也。</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
@@ -194,232 +194,123 @@
 
     </div>
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner index posts-expand">
+
+    
 
 
+<div class="post-block">
   
   
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/58be.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 小夜时雨">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/post/58be.html" class="post-title-link" itemprop="url">实例使用crash分析Kdump转储kernel崩溃内核</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2017-05-11 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-11T00:00:00+08:00">2017-05-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-09-08 10:04:45" itemprop="dateModified" datetime="2023-09-08T10:04:45+08:00">2023-09-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
+    <span id="/post/58be.html" class="post-meta-item leancloud_visitors" data-flag-title="实例使用crash分析Kdump转储kernel崩溃内核" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/58be.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/58be.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>有时候碰到系统运行过程中突然出现宕机、死机，但是又不得不找原因的时候还是非常苦恼的，虽然可以通过暂时的防护机制看门狗解决眼下的问题，但是要找到宕机死机的原因，还是得靠专门针对内核进行分析的工具Kdump来实现。虽然不懂Linux内核，但是通过简单的分析还是可以得到是哪个堆栈出现异常导致宕机。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/58be.html">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        <span class="collection-header">Good! 101 posts in total. Keep on posting.</span>
-      </div>
-
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-07-26T00:00:00+08:00"
-              content="2023-07-26">
-          07-26
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/post/5700.html" itemprop="url">
-            <span itemprop="name">Go中Error的处理</span>
-          </a>
-      </div>
-
+    <footer class="post-footer">
+        <div class="post-eof"></div>
       
-    </header>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-07-24T00:00:00+08:00"
-              content="2023-07-24">
-          07-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/ff69.html" itemprop="url">
-            <span itemprop="name">微服务</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-06-21T00:00:00+08:00"
-              content="2023-06-21">
-          06-21
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/ef35.html" itemprop="url">
-            <span itemprop="name">排序算法</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-04-04T00:00:00+08:00"
-              content="2023-04-04">
-          04-04
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/2148.html" itemprop="url">
-            <span itemprop="name">Git学习笔记之Git工具</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-03-26T00:00:00+08:00"
-              content="2023-03-26">
-          03-26
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/2148.html" itemprop="url">
-            <span itemprop="name">Git学习笔记之GitHub</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-03-19T00:00:00+08:00"
-              content="2023-03-19">
-          03-19
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/2148.html" itemprop="url">
-            <span itemprop="name">Git学习笔记之分布式工作流程</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-03-12T00:00:00+08:00"
-              content="2023-03-12">
-          03-12
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/2148.html" itemprop="url">
-            <span itemprop="name">Git学习笔记之服务端</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-03-05T00:00:00+08:00"
-              content="2023-03-05">
-          03-05
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/2148.html" itemprop="url">
-            <span itemprop="name">Git学习笔记之分支</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-02-27T00:00:00+08:00"
-              content="2023-02-27">
-          02-27
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/2148.html" itemprop="url">
-            <span itemprop="name">Git学习笔记之基础</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-02-24T00:00:00+08:00"
-              content="2023-02-24">
-          02-24
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/post/fe74.html" itemprop="url">
-            <span itemprop="name">LeetCode每日一题</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
+
+
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/archives/2023/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2023/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2023/page/3/">3</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/archives/2023/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="Previous page" aria-label="Previous page" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span>
   </nav>
 
 </div>

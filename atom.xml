@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-09-20T03:29:41.486Z</updated>
+  <updated>2023-09-21T03:21:03.179Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go的concurrency之context</title>
+    <link href="https://www.xiaoyeshiyu.com/post/d34c.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/d34c.html</id>
+    <published>2023-09-20T16:00:00.000Z</published>
+    <updated>2023-09-21T03:21:03.179Z</updated>
+    
+    
+    <summary type="html">在Go语言中，context包提供了一种在并发操作中传递请求范围数据、取消操作以及处理截止时间的机制。context包可以帮助你优雅地处理并发操作的控制流和资源管理。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>Go的concurrency之Memory model</title>
@@ -55,11 +74,11 @@
   </entry>
   
   <entry>
-    <title>Go的sync包</title>
+    <title>Go的concurrency之sync</title>
     <link href="https://www.xiaoyeshiyu.com/post/2f5e.html"/>
     <id>https://www.xiaoyeshiyu.com/post/2f5e.html</id>
     <published>2023-09-06T16:00:00.000Z</published>
-    <updated>2023-09-19T09:21:05.396Z</updated>
+    <updated>2023-09-20T07:46:19.581Z</updated>
     
     
     <summary type="html">Go语言的sync包是Go标准库中提供的用于同步和并发编程的包。它提供了一些关键的同步原语，用于协调并发操作，以确保数据的正确性和一致性。</summary>
@@ -78,14 +97,14 @@
     <link href="https://www.xiaoyeshiyu.com/post/6927.html"/>
     <id>https://www.xiaoyeshiyu.com/post/6927.html</id>
     <published>2023-08-28T16:00:00.000Z</published>
-    <updated>2023-09-08T01:10:51.635Z</updated>
+    <updated>2023-09-20T07:33:32.479Z</updated>
     
     
     <summary type="html">Golang中极有特点之一就是协程goroutine，通过关键字直接开启一个协程是非常简单的，但是在goroutine使用过程中有些关键点需要注意。</summary>
     
     
     
-    <category term="Go学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/GoLearningNote/"/>
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
     
     
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
@@ -154,7 +173,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/4a89.html"/>
     <id>https://www.xiaoyeshiyu.com/post/4a89.html</id>
     <published>2023-08-20T16:00:00.000Z</published>
-    <updated>2023-09-08T01:10:22.186Z</updated>
+    <updated>2023-09-20T07:53:01.268Z</updated>
     
     
     <summary type="html">在一些支持分段获取文件的服务中，通过Range获取指定分片，可以分段获取文件而不用将文件整个下载下来。</summary>
@@ -183,9 +202,9 @@
     <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
     
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
-    
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
@@ -373,25 +392,6 @@
     
     
     <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/algorithm/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git学习笔记之起步</title>
-    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
-    <published>2023-02-20T16:00:00.000Z</published>
-    <updated>2023-09-07T09:49:02.056Z</updated>
-    
-    
-    <summary type="html">Git是日常工作中很常用的工具，除了程序员，一些文字编辑工作者都可以通过Git加速工作效率。这里简单介绍一下Git以及安装。</summary>
-    
-    
-    
-    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
     
     
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
