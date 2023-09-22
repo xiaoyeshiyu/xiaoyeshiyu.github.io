@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921102049931.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921102313677.png">
 <meta property="article:published_time" content="2023-09-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-21T03:21:29.987Z">
+<meta property="article:modified_time" content="2023-09-21T07:54:12.262Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -157,7 +157,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#context"><span class="nav-number">1.</span> <span class="nav-text">context</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E8%8C%83%E5%9B%B4%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">1.1.</span> <span class="nav-text">请求范围的上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E8%A6%81%E5%B0%86context%E5%AD%98%E5%82%A8%E5%9C%A8%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%AD"><span class="nav-number">1.2.</span> <span class="nav-text">不要将context存储在结构体中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A0%81"><span class="nav-number">1.3.</span> <span class="nav-text">源码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#context-WithValue"><span class="nav-number">1.3.1.</span> <span class="nav-text">context.WithValue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-gRPC-%E7%9A%84-MD-%E6%80%9D%E6%83%B3%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E5%88%B0ctx"><span class="nav-number">1.3.2.</span> <span class="nav-text">基于 gRPC 的 MD 思想存储数据到ctx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#context-WithCancel"><span class="nav-number">1.3.3.</span> <span class="nav-text">context.WithCancel</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Final-Notes"><span class="nav-number">2.</span> <span class="nav-text">Final Notes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#context"><span class="nav-number">1.</span> <span class="nav-text">context</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E8%8C%83%E5%9B%B4%E7%9A%84%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">1.1.</span> <span class="nav-text">请求范围的上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E8%A6%81%E5%B0%86context%E5%AD%98%E5%82%A8%E5%9C%A8%E7%BB%93%E6%9E%84%E4%BD%93%E4%B8%AD"><span class="nav-number">1.2.</span> <span class="nav-text">不要将context存储在结构体中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A0%81"><span class="nav-number">1.3.</span> <span class="nav-text">源码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#context-WithValue"><span class="nav-number">1.3.1.</span> <span class="nav-text">context.WithValue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-gRPC-%E7%9A%84-MD-%E6%80%9D%E6%83%B3%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E5%88%B0ctx"><span class="nav-number">1.3.2.</span> <span class="nav-text">基于 gRPC 的 MD 思想存储数据到ctx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#context-WithCancel"><span class="nav-number">1.3.3.</span> <span class="nav-text">context.WithCancel</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Final-Notes"><span class="nav-number">2.</span> <span class="nav-text">Final Notes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B8%A9%E5%9D%91"><span class="nav-number">2.1.</span> <span class="nav-text">踩坑</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -245,7 +245,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2023-09-21 00:00:00 / Modified: 11:21:29" itemprop="dateCreated datePublished" datetime="2023-09-21T00:00:00+08:00">2023-09-21</time>
+      <time title="Created: 2023-09-21 00:00:00 / Modified: 15:54:12" itemprop="dateCreated datePublished" datetime="2023-09-21T00:00:00+08:00">2023-09-21</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -391,6 +391,7 @@
 <p><code>Done()</code> 返回一个 <code>chan</code>，当取消某个 <code>parent context</code>，实际上会递归层层 <code>cancel</code> 掉自己的 <code>child context</code> 的 <code>done chan</code>，从而让整儿调用链中所有监听 <code>cancel</code> 的 goroutine 退出。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// This example demonstrates the use of a cancelable context to prevent a</span></span><br><span class="line"><span class="comment">// goroutine leak. By the end of the example function, the goroutine started</span></span><br><span class="line"><span class="comment">// by gen will return without leaking.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleWithCancel</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// gen generates integers in a separate goroutine and</span></span><br><span class="line">	<span class="comment">// sends them to the returned channel.</span></span><br><span class="line">	<span class="comment">// The callers of gen need to cancel the context once</span></span><br><span class="line">	<span class="comment">// they are done consuming generated integers not to leak</span></span><br><span class="line">	<span class="comment">// the internal goroutine started by gen.</span></span><br><span class="line">	gen := <span class="function"><span class="keyword">func</span><span class="params">(ctx context.Context)</span></span> &lt;-<span class="keyword">chan</span> <span class="type">int</span> &#123;</span><br><span class="line">		dst := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">		n := <span class="number">1</span></span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			<span class="keyword">for</span> &#123;</span><br><span class="line">				<span class="keyword">select</span> &#123;</span><br><span class="line">				<span class="keyword">case</span> &lt;-ctx.Done():</span><br><span class="line">					<span class="keyword">return</span> <span class="comment">// returning not to leak the goroutine</span></span><br><span class="line">				<span class="keyword">case</span> dst &lt;- n:</span><br><span class="line">					n++</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;()</span><br><span class="line">		<span class="keyword">return</span> dst</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ctx, cancel := context.WithCancel(context.Background())</span><br><span class="line">	<span class="keyword">defer</span> cancel() <span class="comment">// cancel when we are finished consuming integers</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> n := <span class="keyword">range</span> gen(ctx) &#123;</span><br><span class="line">		fmt.Println(n)</span><br><span class="line">		<span class="keyword">if</span> n == <span class="number">5</span> &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">// 1</span></span><br><span class="line">	<span class="comment">// 2</span></span><br><span class="line">	<span class="comment">// 3</span></span><br><span class="line">	<span class="comment">// 4</span></span><br><span class="line">	<span class="comment">// 5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p><strong>注意</strong>：<code>	defer cancel() // cancel when we are finished consuming integers</code> 很重要，不 <code>cancel()</code> 可能会出现内存泄漏。</p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921102049931.png" alt="image-20230921102049931"></p>
 <p>所有会阻塞的、长链路调用的操作都应该可以被取消。</p>
 <p>All blocking&#x2F;long operations should be canceled.</p>
@@ -438,8 +439,12 @@
 <li><p>Try not to use context.Value.</p>
 <p>尽量不要使用<code>context.Value</code></p>
 </li>
+<li><p>返回的 <code>cancel</code> 要在 <code>defer</code> 中执行掉，不然会出现内存泄漏。</p>
+</li>
 </ul>
 <p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvdGFsa3MvMjAxNC9nb3RoYW0tY29udGV4dC5zbGlkZSMx">Cancellation, Context, and Plumbing<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p>这篇文章介绍的比较全面：<span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zNDQxNzEwNj9obXNyPXRvdXRpYW8uaW8=">Go Context的踩坑经历<i class="fa fa-external-link-alt"></i></span></p>
+<p>基本上：注意闭包，不要将请求进来的 <code>ctx</code> 带 <code>cancel</code> 作为参数发送到异步的 goroutine 中。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly9tZWRpdW0uY29tL2Etam91cm5leS13aXRoLWdvL2dvLWNvbnRleHQtYW5kLWNhbmNlbGxhdGlvbi1ieS1wcm9wYWdhdGlvbi03YTgwOGJiYzg4OWM=">Go: Context and Cancellation by Propagation<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvY29udGV4dA==">Go Concurrency Patterns: Context<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMDkvY29udGV4dC1wYWNrYWdlLXNlbWFudGljcy1pbi1nby5odG1s">Context Package Semantics In Go<i class="fa fa-external-link-alt"></i></span></p>
@@ -467,6 +472,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/post/cf24.html" rel="next" title="Go的concurrency之channels">
+                  Go的concurrency之channels <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
