@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-09-22T02:01:23.407Z</updated>
+  <updated>2023-09-22T02:06:13.132Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/cf24.html"/>
     <id>https://www.xiaoyeshiyu.com/post/cf24.html</id>
     <published>2023-09-21T16:00:00.000Z</published>
-    <updated>2023-09-22T02:01:23.407Z</updated>
+    <updated>2023-09-22T02:06:13.132Z</updated>
     
     
     <summary type="html">在Go语言中，channel（通道）是一种用于在 goroutine 之间进行通信和同步的特殊类型。它提供了一种安全、简洁的方式来传递数据和进行并发操作。</summary>
@@ -97,7 +97,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/2f5e.html"/>
     <id>https://www.xiaoyeshiyu.com/post/2f5e.html</id>
     <published>2023-09-06T16:00:00.000Z</published>
-    <updated>2023-09-20T07:46:19.581Z</updated>
+    <updated>2023-09-24T14:58:42.038Z</updated>
     
     
     <summary type="html">Go语言的sync包是Go标准库中提供的用于同步和并发编程的包。它提供了一些关键的同步原语，用于协调并发操作，以确保数据的正确性和一致性。</summary>
@@ -221,9 +221,9 @@
     <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
     
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
-    
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
