@@ -106,6 +106,7 @@
 {"title":"Gin的参数校验器validator","url":"/post/cdfa.html"},
 {"title":"Go的concurrency之channels","url":"/post/cf24.html"},
 {"title":"Go的concurrency之context","url":"/post/d34c.html"},
+{"title":"Go工程化实践之工程项目结构","url":"/post/d3e3.html"},
 {"title":"Golang中的反射","url":"/post/d6e6.html"},
 {"title":"Golang中常用的标准库之time","url":"/post/d7f0.html"},
 {"title":"RocketMQ学习笔记","url":"/post/db4a.html"},
