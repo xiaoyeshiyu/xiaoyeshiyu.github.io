@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-09-22T02:06:13.132Z</updated>
+  <updated>2023-09-25T08:35:55.437Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go工程化实践之工程项目结构</title>
+    <link href="https://www.xiaoyeshiyu.com/post/d3e3.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/d3e3.html</id>
+    <published>2023-09-24T16:00:00.000Z</published>
+    <updated>2023-09-25T08:35:55.437Z</updated>
+    
+    
+    <summary type="html">在Go语言中，工程项目结构没有强制的规定，但有一些常见的实践和约定，可以帮助组织和管理Go项目。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>Go的concurrency之channels</title>
@@ -369,25 +388,6 @@
     
     
     <summary type="html">介绍Git中的重要概念：分支。</summary>
-    
-    
-    
-    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git学习笔记之基础</title>
-    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
-    <published>2023-02-26T16:00:00.000Z</published>
-    <updated>2023-09-07T09:57:01.159Z</updated>
-    
-    
-    <summary type="html">介绍Git的一些基本概念和基础操作。</summary>
     
     
     
