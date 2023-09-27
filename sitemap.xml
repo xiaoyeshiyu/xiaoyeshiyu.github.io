@@ -1009,13 +1009,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
-    <lastmod>2023-09-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
     <lastmod>2023-09-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -1024,6 +1017,13 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/CloudNative/</loc>
+    <lastmod>2023-09-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
     <lastmod>2023-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1044,14 +1044,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/MongoDB/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Linux/</loc>
     <lastmod>2023-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Linux/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/MongoDB/</loc>
     <lastmod>2023-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
