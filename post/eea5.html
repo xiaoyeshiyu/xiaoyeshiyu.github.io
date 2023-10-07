@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在Go语言中进行架构设计时，可以采用一些常见的设计模式和原则来帮助组织和管理代码。这里以评论系统作为案例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="架构设计之评论系统">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/eea5.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="在Go语言中进行架构设计时，可以采用一些常见的设计模式和原则来帮助组织和管理代码。这里以评论系统作为案例。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926094930746.png">
+<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20230926103429108.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926110511188.png">
+<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20230926111104916.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927161249867.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927174051328.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007113032203.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007174023897.png">
+<meta property="article:published_time" content="2023-10-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-07T10:03:11.559Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926094930746.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/eea5.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/eea5.html","path":"post/eea5.html","title":"架构设计之评论系统"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>架构设计之评论系统 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97"><span class="nav-number">1.</span> <span class="nav-text">功能模块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#comment-service"><span class="nav-number">2.1.</span> <span class="nav-text">comment-service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comment-admin"><span class="nav-number">2.2.</span> <span class="nav-text">comment-admin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comment"><span class="nav-number">2.3.</span> <span class="nav-text">comment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">存储设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%86%85%E5%AE%B9%E5%88%86%E7%A6%BB"><span class="nav-number">3.1.</span> <span class="nav-text">索引内容分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.2.</span> <span class="nav-text">缓存设计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E6%80%A7%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.</span> <span class="nav-text">可用性设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Singlefilght"><span class="nav-number">4.1.</span> <span class="nav-text">Singlefilght</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%83%AD%E7%82%B9"><span class="nav-number">4.2.</span> <span class="nav-text">热点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">5.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">104</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/eea5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="架构设计之评论系统 | 小夜时雨">
+      <meta itemprop="description" content="在Go语言中进行架构设计时，可以采用一些常见的设计模式和原则来帮助组织和管理代码。这里以评论系统作为案例。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          架构设计之评论系统
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-10-07 00:00:00 / Modified: 18:03:11" itemprop="dateCreated datePublished" datetime="2023-10-07T00:00:00+08:00">2023-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/eea5.html" class="post-meta-item leancloud_visitors" data-flag-title="架构设计之评论系统" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/eea5.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/eea5.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">在Go语言中进行架构设计时，可以采用一些常见的设计模式和原则来帮助组织和管理代码。这里以评论系统作为案例。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="功能模块"><a href="#功能模块" class="headerlink" title="功能模块"></a>功能模块</h1><p>架构设计最重要的就是理解整个产品体系在系统中的定位。搞清楚系统背后的背景，才能做出最佳的设计和抽象。不要做需求的翻译机，先理解业务背后的本质，事情的初衷。</p>
+<p>评论系统，往小里做，就是视频评论系统，往大做就是评论平台，可以接入各种业务形态。</p>
+<p>评论的主要功能：</p>
+<ul>
+<li>发布评论：支持回复楼层、楼中楼。（一般会做两层效果较好，但是设计上可以支持无限嵌套）</li>
+<li>读取评论：按照时间、热度排序</li>
+<li>删除评论：用户删除、作者删除</li>
+<li>管理评论：作者置顶、后台运营管理（搜索、删除、审核等）</li>
+</ul>
+<blockquote>
+<p>在动手设计前，反复思考，真正编码的时间只有5%。</p>
+</blockquote>
+<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1><p>在做架构设计之前，可以先将大的模块设计出来，并且处理好流量方向。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926094930746.png" alt="image-20230926094930746"></p>
+<ul>
+<li><p>BFF：<code>comment</code></p>
+<p>复杂评论业务的服务编排，比如访问账号服务进行等级判定（糅杂一些业务规则，例如 <code>account-service</code>，<code>filter-service</code>），同时需要在 BFF 面向 移动端&#x2F;WEB 场景来设计 API，这一层抽象把评论的本身的内容列表处理（加载、分页、排序等）进行了隔离，关注在业务平台化逻辑上。这一层专注于处理平台业务逻辑。</p>
+</li>
+<li><p>Service：<code>comment-service</code></p>
+<p>服务层，去平台业务的逻辑，专注在评论功能的 API 实现上，比如发布、读取、删除等，关注在稳定性、可用性上，这样让上游可以灵活组织逻辑，把基础能力和业务能力剥离。这一层专注于处理数据本身。</p>
+</li>
+<li><p>Job：<code>comment-job</code></p>
+<p>消息队列的最大用途是削峰处理。当写入请求非常大的时候，通过异步消息队列处理写请求。</p>
+</li>
+<li><p>Admin：<code>comment-admin</code></p>
+<p>管理平台，按照安全等级划分服务，尤其划分运营平台，他们会共享服务层的存储层（MySQL、Redis）。运营体系的数据大量都是检索，我们使用 <code>Canal</code> 进行同步到 <code>ES</code> 中，整个业务的展示都是通过 <code>ES</code>，再通过业务主键更新业务数据层，这样运营端的查询压力就下放给了独立的 <code>fulltext search</code>系统。（运营后台搜索、统计等，这种业务不适合使用 <code>OLTP</code>，使用 ES 更加适合。)</p>
+</li>
+<li><p>Dependency：<code>account-service</code>、<code>filter-service</code></p>
+<p>整个评论服务还会依赖一些外部 gRPC 服务，统一的平台业务逻辑在 <code>comment</code> BFF 层收敛，这里 <code>account-service</code>  主要是账号服务，<code>filter-service</code> 是忙按此过滤服务。</p>
+</li>
+</ul>
+<blockquote>
+<p>架构设计等同于数据设计，梳理清楚数据的走向和逻辑。尽量避免环形依赖、数据双向请求等。</p>
+</blockquote>
+<h2 id="comment-service"><a href="#comment-service" class="headerlink" title="comment-service"></a>comment-service</h2><p>评论服务，专注在评论数据处理。（将 DDD 思想分隔开，作为独立的服务。Separation of Concerns）</p>
+<p>最开始的时候，是将 <code>comment-service</code> 和 <code>comment</code> 是一层，业务耦合和功能耦合在一起，非常不利于迭代。当然，在设计层面可以考虑目录结构进行拆分，但是从架构层次来说，迭代隔离是更好的。将两个服务拆分开，注重不同的核心点，BFF 关注业务逻辑，<code>comment-service</code>关注数据读写处理。</p>
+<p><img src="/../../../../../Library/Application%20Support/typora-user-images/image-20230926103429108.png" alt="image-20230926103429108"></p>
+<ul>
+<li><p>读的核心逻辑</p>
+<p><code>Cache-Aside</code> 模式，先读取缓存，再读取存储。</p>
+<p>早期 <code>cache rebuild</code> 是做到服务里的，对于重建逻辑，一般会使用 <code>read ahead</code> 的思路。即预读，用户访问了第一页，很有可能访问第二页，所以缓存会超前加载，避免频繁 <code>cache miss</code>。</p>
+<p>当缓存抖动，特别容易引起集群 <code>thundering herd</code>现象（线程惊群效应），大量的请求会触发 <code>cache rebuild</code>，大量往 <code>MySQL</code>获取数据，并且回填到 <code>Redis</code>中。因为使用了预加载，容易导致服务 <code>OOM</code>。</p>
+<p>所以再到回源的逻辑里，改为使用消息队列来进行逻辑异步化，对于当前请求只返回 <code>MySQL</code> 中部分数据即止，然后发送异步消息，处理 <code>cache miss</code>的数据和预读的数据到 <code>Redis</code>。</p>
+</li>
+<li><p>写的核心逻辑</p>
+<p>如果发生类似“明星出轨”等热点事件的发生，而且写和读相比较，写可以认为是透穿到存储层的，系统的瓶颈往往就来自于存储层，或者有状态层。</p>
+<p>对于写的设计上，我们认为刚发布的评论有极短的延迟（通常小于几ms），对用户可见是可接受的，把对存储的直接冲击下放到消息队列，按照消息反压的思路，即如果存储 <code>latency</code> 升高，消费能力就下降，自然消息容易堆积，系统始终以最大化方式消费。</p>
+<p><code>Kafka</code> 存在 <code>partition</code> 概念，可以认为是物理上的一个小队列，一个 <code>topic</code> 是由一组 <code>partition</code> 组成的，所以 <code>Kafka</code> 的吞吐模型理解为：全局并行，局部串行的生产消费方式。对于入队的消息，可以按照 <code>hash(comment_subject) % N(partitions)</code>的方式进行分发，那么某个 <code>partition</code> 中的评论主题的数据一定都在一起，这样方便串行消费。</p>
+<p>同样的，处理回源消息也是类似的思路。</p>
+</li>
+</ul>
+<h2 id="comment-admin"><a href="#comment-admin" class="headerlink" title="comment-admin"></a>comment-admin</h2><p>运营后台的读写能力。</p>
+<p><code>MySQL binlog</code> 中的数据被 <code>canal</code> 中间件流式消费，获取到业务的原始 <code>CRUD</code> 操作，需要回放录入到 <code>ES</code> 中，但是 <code>ES</code> 中的数据最终是面向运营体系提供服务能力，需要检索的数据维度比较多，在入 <code>ES</code> 前需要做一个异构的 <code>joiner</code>，把单表变宽预处理好 <code>join</code> 逻辑，然后倒入到 <code>ES</code> 中。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926110511188.png" alt="image-20230926110511188"></p>
+<p>一般来说，运营后台的检索条件都是组合的，使用 <code>ES</code> 的好处是避免依赖 <code>MySQL</code> 来做多条件组合检索，同时 <code>MySQL</code> 毕竟是 <code>OLTP</code> 面向线上联机事务处理的。通过冗余数据的方式，使用其他引擎来实现。</p>
+<p><code>ES</code> 一般会存储检索、展示、<code>primary key</code> 等数据，当操作编辑的时候，找到记录的 <code>primary key</code>，最后交由 <code>comment-admin</code> 进行运营测的 <code>CRUD</code> 操作。</p>
+<p>内部运营体系，基于<code>ES</code>来完成更加有优势。</p>
+<h2 id="comment"><a href="#comment" class="headerlink" title="comment"></a>comment</h2><p><code>comment</code> 作为 <code>BFF</code>，是面向端，面向平台，面向业务组合的服务。所以平台扩展的能力，都在 <code>comment</code> 服务来实现，方便统一和准入平台，以统一的接口形式提供平台化的能力。</p>
+<p><img src="/../../../../../Library/Application%20Support/typora-user-images/image-20230926111104916.png" alt="image-20230926111104916"></p>
+<ul>
+<li>依赖其他 <code>gRPC</code> 服务，整合统一平台测的逻辑（比如发布评论用户等级限定）</li>
+<li>直接向端上提供接口，提供数据的读写接口，甚至可以整合端上，提供统一的端上 SDK</li>
+<li>需要对非核心依赖的 <code>gRPC</code> 服务进行降级，当这些服务不稳定时。</li>
+</ul>
+<h1 id="存储设计"><a href="#存储设计" class="headerlink" title="存储设计"></a>存储设计</h1><p>也就是数据库设计。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927161249867.png" alt="image-20230927161249867"></p>
+<ul>
+<li><p><code>comment_subject</code>：主题表（例如一个资源、视频、文稿等）</p>
+<ul>
+<li>要适配多种资源类型，通过 <code>obj_id</code> 和 <code>obj_type</code> 匹配各种资源类型</li>
+<li><code>member_id</code> 记录作者用户 id，这个id不会变化，有利于查询</li>
+<li><code>count</code>、<code>root_count</code>、<code>all_count</code> 分别代表评论总数，根评论总数，评论+回复总数，可更好的做展示，而不需要每次都 <code>count(*)</code></li>
+<li><code>stat</code> 状态记录这个资源的状态</li>
+<li><code>attrs</code> 属性，记录资源属性，而且通过二进制，代表多个属性</li>
+</ul>
+<p>表都应该带有 <code>create_time</code> 和 <code>update_time</code> ，而且一定要有主键，写入的时候使用顺序写，避免出现页分裂。</p>
+<p>为了避免单表过大，通过 <code>hash</code> 分割表。</p>
+<p>尽量使用软删除，或者手动设置是否隐藏字段。</p>
+</li>
+<li><p><code>comment_index</code>：索引表</p>
+<ul>
+<li>记录评论的索引</li>
+<li>同样记录对应的主题，方便后续查询</li>
+<li>通过 <code>root</code> 和 <code>parent</code> 记录是否是根评论以及子评论的上级</li>
+<li><code>floor</code> 记录评论层级，也需要更新主题表中的楼层数，</li>
+</ul>
+</li>
+<li><p><code>comment_content</code>：评论内容表</p>
+<p>记录核心评论的内容，避免检索的时候内容过多导致效率低。</p>
+</li>
+</ul>
+<p>数据写入：事务更新 <code>comment_subject</code>，<code>comment_index</code>，<code>comment_content</code> 三张表。<code>content</code> 属于非强制需要一致性考虑的。可以先写入 <code>content</code>，之后事务更新其他表。即便 <code>content</code> 先成功，后续失败仅仅存在一条 <code>ghost</code> 数据。</p>
+<p>数据读取：基于 <code>obj_id</code> + <code>obj_type</code> 在 <code>comment_index</code> 表找到评论列表， <code>WHERE root = 0 ORDER BY floor</code>。之后根据 <code>comment_index</code> 的 <code>id</code> 字段获取出 <code>comment_content</code> 的评论内容。对于二级的子楼层， <code>WHERE parent/root IN (id...)</code>。</p>
+<p>因为产品形态上只存在二级列表，因此只需要迭代查询两次即可。对于嵌套层次多的，产品上，可以通过二次点击支持。</p>
+<blockquote>
+<p>可以看到，上面的存储结构比较简单，而且在这种读多写少的场景，有其他的数据库也支持。例如 ES 也可以，不分表。</p>
+<p> Graph 存储也可以， DGraph、HugeGraph 类似的图存储思路，不分表，内部可以实现数据补全。</p>
+</blockquote>
+<h2 id="索引内容分离"><a href="#索引内容分离" class="headerlink" title="索引内容分离"></a>索引内容分离</h2><p>用于检索的索引，和评论的具体内容分离成两张表。</p>
+<p><code>comment_index</code>：评论楼层的索引组织表，实际并不包含内容。<code>comment_content</code>：评论内容表，包含评论的具体内容。其中 <code>comment_index</code> 的 <code>id</code> 字段和 <code>comment_content</code> 是 1对1 的关系，这里面包含几种设计思想：</p>
+<ul>
+<li>表都有主键，即 <code>cluster index</code>，是物理组织形式存放的，<code>comment_content</code> 没有 <code>id</code>，是为了减少一次二级索引查找（回表），直接基于主键检索，同时 <code>comment_id</code> 在写入要尽可能的顺序自增。</li>
+<li>索引、内容分离，方便 <code>mysql datapage</code> 缓存更多的 <code>row</code>，如果和 <code>content</code> 耦合，会导致更大的 <code>IO</code>，长远来看 <code>content</code> 信息可以直接使用 <code>KV storage</code>存储。</li>
+</ul>
+<h2 id="缓存设计"><a href="#缓存设计" class="headerlink" title="缓存设计"></a>缓存设计</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927174051328.png" alt="image-20230927174051328"></p>
+<p><code>comment_subject_cache</code>：对应主题的缓存，<code>value</code> 使用 <code>protobuf</code> 序列化的方式存入。现在使用 <code>memcache</code> 来进行缓存，或者使用 <code>redis</code> 这种<code>KV</code>键值对存储都差不多。</p>
+<p><code>comment_index_cache</code>：使用 <code>redis sortedset</code> 进行索引的缓存，索引即数据的组织顺序，而非数据内容。</p>
+<p>参考百度贴吧，他们使用自己研发的拉链存储来组织索引。</p>
+<p>使用<code>mysql</code> 作为主力存储，利用 <code>redis</code> 来做加速完全足够，因为 <code>cache miss</code> 的构建，使用 <code>kafka</code> 的消费者中处理，预加载少量数据，通过增量加载的方式主键预热填充缓存，而 <code>redis sortedset skiplist</code> 的实现，可以做到 <code>O(logN) + O(M)</code> 的时间复杂度，效率很高。</p>
+<p>过期时间可以通过内存大小调整。</p>
+<p><code>sorted set</code> 是要增量追加的，因此必须判定 <code>key</code> 存在，才能 <code>zadd</code></p>
+<p><code>comment_content_cache</code>：对应评论内存数据，使用 <code>protobuf</code> 序列化的方式存入。类似的早期使用 <code>memcache</code> 进行缓存，或者使用 <code>redis</code> 存储。</p>
+<p>增量加载（将数据库中的数据批量放到 <code>redis</code> 中，而且先续约时间，然后再加缓存。） + lazy 加载。（所以没有分页，都是使用懒加载，使用 <code>mget</code> 批量获取。）</p>
+<p>还可以使用预加载，获取第一页时，将第二页的数据加入到缓存中。</p>
+<h1 id="可用性设计"><a href="#可用性设计" class="headerlink" title="可用性设计"></a>可用性设计</h1><h2 id="Singlefilght"><a href="#Singlefilght" class="headerlink" title="Singlefilght"></a>Singlefilght</h2><p>对于热门的主题，如果存在缓存穿透（缓存中没有数据，请求穿透了缓存，直接打到数据库）的情况，会导致大量的同进程、跨进程的数据回源到存储层，可能会引起存储过载的情况，如何只交给同进程内，一个人去做加载存储。</p>
+<p>使用归并回源的思路：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L2dvbGFuZy5vcmcveC9zeW5jL3NpbmdsZWZsaWdodA==">singleflight<i class="fa fa-external-link-alt"></i></span></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007113032203.png" alt="image-20231007113032203"></p>
+<p>同进程只交给一个人去获取 <code>mysql</code> 数据，然后批量返回。同时这个 <code>lease owner</code> 投递一个 <code>kafka</code> 消息，做 <code>index cache</code> 的 <code>recovery</code> 操作。这样可以大大减少 <code>mysql</code> 的压力，以及大量穿透导致的密集写 <code>kafka</code> 的问题。</p>
+<p>更进一步的，后续连续的请求，仍然可能会短时 <code>cache miss</code> ，我们可以在进程内设置了一个 <code>short-lived flag</code>，标记最近有一个人投递了 <code>cache rebuild</code> 的消息，直接 <code>drop</code>。</p>
+<p>可以看到，这里说明的都是单进程下的解决思路。那么在多进程下，能否使用分布式锁来解决。理论上可以，但是实际操作起来，容易将这个简单问题复杂化，不推荐使用分布式锁。（PS：<code>redis</code> 作者不推荐使用 <code>redis</code> 实现分布式锁。）</p>
+<h2 id="热点"><a href="#热点" class="headerlink" title="热点"></a>热点</h2><p>热点分为写热点和读热点。</p>
+<p>写操作一般会通过MQ削峰，当大量的请求都集中在 <code>MQ</code> 中，不仅仅会影响当前服务，还可能导致下游服务出现异常。这种情况下，可以再进行解耦，增加上游服务的吞吐，将下游服务解耦，不依赖同一个同步逻辑。</p>
+<p>流量热点是因为突然热门的主题，被高频次的访问，因为底层的 <code>cache</code> 设计，一般是按照主题 <code>key</code> 进行一致性 <code>hash</code> 来进行分片，但是热点 <code>key</code> 一定命中某一个节点，这时 <code>remote cache</code> 可能会变成瓶颈。因此做 <code>cache</code> 升级 <code>local cache</code> 是有必要的，一般使用<strong>单进程自适应发现热点</strong>的思路，附加一个短时的 <code>ttl local cache</code>，可以在进程内吞掉大量的读请求。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007174023897.png" alt="image-20231007174023897"></p>
+<p>在内存中使用 <code>hashmap</code> 统计每个 <code>key</code> 的访问频次，这里可以使用滑动窗口（左角标和右角标一起移动，统计区间内部的数据量）统计，即每个窗口中，维护一个 <code>hashmap</code>，之后统计所有未过去的 <code>bucket</code>，汇总所有 <code>key</code> 的数据。</p>
+<p>之后使用小堆计算 <code>TopK</code> 的数据，自动进行热点识别。</p>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cudXNlbml4Lm9yZy9zeXN0ZW0vZmlsZXMvY29uZmVyZW5jZS9uc2RpMTMvbnNkaTEzLWZpbmFsMTcwX3VwZGF0ZS5wZGY=">Scaling Memcache at Facebook<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly90ZWNoLmlwYWxmaXNoLmNvbS9ibG9nLzIwMjAvMDQvMDcvZmItbWVtY2FjaGUv">Scaling Memcache at Facebook (2013) 中文<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/d3e3.html" rel="prev" title="Go工程化实践之工程项目结构">
+                  <i class="fa fa-chevron-left"></i> Go工程化实践之工程项目结构
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
