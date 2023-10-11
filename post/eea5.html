@@ -33,13 +33,13 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926094930746.png">
 <meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20230926103429108.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926110511188.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20230926111104916.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231008175707792.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927161249867.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927174051328.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007113032203.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007174023897.png">
 <meta property="article:published_time" content="2023-10-06T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-10-07T10:03:45.722Z">
+<meta property="article:modified_time" content="2023-10-08T09:57:49.767Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -245,9 +245,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2023-10-07 00:00:00 / Modified: 18:03:45" itemprop="dateCreated datePublished" datetime="2023-10-07T00:00:00+08:00">2023-10-07</time>
+      <time title="Created: 2023-10-07 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-07T00:00:00+08:00">2023-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-10-08 17:57:49" itemprop="dateModified" datetime="2023-10-08T17:57:49+08:00">2023-10-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -344,14 +350,16 @@
 </ul>
 <h2 id="comment-admin"><a href="#comment-admin" class="headerlink" title="comment-admin"></a>comment-admin</h2><p>运营后台的读写能力。</p>
 <p><code>MySQL binlog</code> 中的数据被 <code>canal</code> 中间件流式消费，获取到业务的原始 <code>CRUD</code> 操作，需要回放录入到 <code>ES</code> 中，但是 <code>ES</code> 中的数据最终是面向运营体系提供服务能力，需要检索的数据维度比较多，在入 <code>ES</code> 前需要做一个异构的 <code>joiner</code>，把单表变宽预处理好 <code>join</code> 逻辑，然后倒入到 <code>ES</code> 中。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926110511188.png" alt="image-20230926110511188"></p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926110511188.png" alt="image-20230926110511188" style="zoom:25%;" />
+
 <p>一般来说，运营后台的检索条件都是组合的，使用 <code>ES</code> 的好处是避免依赖 <code>MySQL</code> 来做多条件组合检索，同时 <code>MySQL</code> 毕竟是 <code>OLTP</code> 面向线上联机事务处理的。通过冗余数据的方式，使用其他引擎来实现。</p>
 <p><code>ES</code> 一般会存储检索、展示、<code>primary key</code> 等数据，当操作编辑的时候，找到记录的 <code>primary key</code>，最后交由 <code>comment-admin</code> 进行运营测的 <code>CRUD</code> 操作。</p>
 <p>内部运营体系，基于<code>ES</code>来完成更加有优势。</p>
 <h2 id="comment"><a href="#comment" class="headerlink" title="comment"></a>comment</h2><p><code>comment</code> 作为 <code>BFF</code>，是面向端，面向平台，面向业务组合的服务。所以平台扩展的能力，都在 <code>comment</code> 服务来实现，方便统一和准入平台，以统一的接口形式提供平台化的能力。</p>
-<p><img src="/../../../../../Library/Application%20Support/typora-user-images/image-20230926111104916.png" alt="image-20230926111104916"></p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231008175707792.png" alt="image-20231008175707792" style="zoom:50%;" />
+
 <ul>
-<li>依赖其他 <code>gRPC</code> 服务，整合统一平台测的逻辑（比如发布评论用户等级限定）</li>
+<li>依赖其他 <code>gRPC</code> 服务，整合统一平台测的逻辑（比如发布评论用户等级限定)</li>
 <li>直接向端上提供接口，提供数据的读写接口，甚至可以整合端上，提供统一的端上 SDK</li>
 <li>需要对非核心依赖的 <code>gRPC</code> 服务进行降级，当这些服务不稳定时。</li>
 </ul>
@@ -408,14 +416,17 @@
 <h1 id="可用性设计"><a href="#可用性设计" class="headerlink" title="可用性设计"></a>可用性设计</h1><h2 id="Singlefilght"><a href="#Singlefilght" class="headerlink" title="Singlefilght"></a>Singlefilght</h2><p>对于热门的主题，如果存在缓存穿透（缓存中没有数据，请求穿透了缓存，直接打到数据库）的情况，会导致大量的同进程、跨进程的数据回源到存储层，可能会引起存储过载的情况，如何只交给同进程内，一个人去做加载存储。</p>
 <p>使用归并回源的思路：</p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L2dvbGFuZy5vcmcveC9zeW5jL3NpbmdsZWZsaWdodA==">singleflight<i class="fa fa-external-link-alt"></i></span></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007113032203.png" alt="image-20231007113032203"></p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007113032203.png" alt="image-20231007113032203" style="zoom: 50%;" />
+
 <p>同进程只交给一个人去获取 <code>mysql</code> 数据，然后批量返回。同时这个 <code>lease owner</code> 投递一个 <code>kafka</code> 消息，做 <code>index cache</code> 的 <code>recovery</code> 操作。这样可以大大减少 <code>mysql</code> 的压力，以及大量穿透导致的密集写 <code>kafka</code> 的问题。</p>
 <p>更进一步的，后续连续的请求，仍然可能会短时 <code>cache miss</code> ，我们可以在进程内设置了一个 <code>short-lived flag</code>，标记最近有一个人投递了 <code>cache rebuild</code> 的消息，直接 <code>drop</code>。</p>
 <p>可以看到，这里说明的都是单进程下的解决思路。那么在多进程下，能否使用分布式锁来解决。理论上可以，但是实际操作起来，容易将这个简单问题复杂化，不推荐使用分布式锁。（PS：<code>redis</code> 作者不推荐使用 <code>redis</code> 实现分布式锁。）</p>
+<p>多进程下，也是一样的思想，多个进程会发送多个消息到消息队列中，消费端获取消息的时候，通过单飞的思路，同样处理。</p>
 <h2 id="热点"><a href="#热点" class="headerlink" title="热点"></a>热点</h2><p>热点分为写热点和读热点。</p>
 <p>写操作一般会通过MQ削峰，当大量的请求都集中在 <code>MQ</code> 中，不仅仅会影响当前服务，还可能导致下游服务出现异常。这种情况下，可以再进行解耦，增加上游服务的吞吐，将下游服务解耦，不依赖同一个同步逻辑。</p>
 <p>流量热点是因为突然热门的主题，被高频次的访问，因为底层的 <code>cache</code> 设计，一般是按照主题 <code>key</code> 进行一致性 <code>hash</code> 来进行分片，但是热点 <code>key</code> 一定命中某一个节点，这时 <code>remote cache</code> 可能会变成瓶颈。因此做 <code>cache</code> 升级 <code>local cache</code> 是有必要的，一般使用<strong>单进程自适应发现热点</strong>的思路，附加一个短时的 <code>ttl local cache</code>，可以在进程内吞掉大量的读请求。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007174023897.png" alt="image-20231007174023897"></p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007174023897.png" alt="image-20231007174023897" style="zoom:25%;" />
+
 <p>在内存中使用 <code>hashmap</code> 统计每个 <code>key</code> 的访问频次，这里可以使用滑动窗口（左角标和右角标一起移动，统计区间内部的数据量）统计，即每个窗口中，维护一个 <code>hashmap</code>，之后统计所有未过去的 <code>bucket</code>，汇总所有 <code>key</code> 的数据。</p>
 <p>之后使用小堆计算 <code>TopK</code> 的数据，自动进行热点识别。</p>
 <h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cudXNlbml4Lm9yZy9zeXN0ZW0vZmlsZXMvY29uZmVyZW5jZS9uc2RpMTMvbnNkaTEzLWZpbmFsMTcwX3VwZGF0ZS5wZGY=">Scaling Memcache at Facebook<i class="fa fa-external-link-alt"></i></span></p>
