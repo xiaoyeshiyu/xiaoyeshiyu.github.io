@@ -31,15 +31,17 @@
 <meta property="og:description" content="在Go语言中进行架构设计时，可以采用一些常见的设计模式和原则来帮助组织和管理代码。这里以评论系统作为案例。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926094930746.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20230926103429108.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012102737583.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926110511188.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231008175707792.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927161249867.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927174051328.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007113032203.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007174023897.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012113811261.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012114740809.png">
 <meta property="article:published_time" content="2023-10-06T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-10-08T09:57:49.767Z">
+<meta property="article:modified_time" content="2023-10-12T03:50:01.185Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -159,7 +161,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97"><span class="nav-number">1.</span> <span class="nav-text">功能模块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#comment-service"><span class="nav-number">2.1.</span> <span class="nav-text">comment-service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comment-admin"><span class="nav-number">2.2.</span> <span class="nav-text">comment-admin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comment"><span class="nav-number">2.3.</span> <span class="nav-text">comment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">存储设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%86%85%E5%AE%B9%E5%88%86%E7%A6%BB"><span class="nav-number">3.1.</span> <span class="nav-text">索引内容分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.2.</span> <span class="nav-text">缓存设计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E6%80%A7%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.</span> <span class="nav-text">可用性设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Singlefilght"><span class="nav-number">4.1.</span> <span class="nav-text">Singlefilght</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%83%AD%E7%82%B9"><span class="nav-number">4.2.</span> <span class="nav-text">热点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">5.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97"><span class="nav-number">1.</span> <span class="nav-text">功能模块</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.</span> <span class="nav-text">架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#comment-service"><span class="nav-number">2.1.</span> <span class="nav-text">comment-service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comment-admin"><span class="nav-number">2.2.</span> <span class="nav-text">comment-admin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#comment"><span class="nav-number">2.3.</span> <span class="nav-text">comment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">存储设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%86%85%E5%AE%B9%E5%88%86%E7%A6%BB"><span class="nav-number">3.1.</span> <span class="nav-text">索引内容分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.2.</span> <span class="nav-text">缓存设计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E7%94%A8%E6%80%A7%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.</span> <span class="nav-text">可用性设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Singlefilght"><span class="nav-number">4.1.</span> <span class="nav-text">Singlefilght</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%83%AD%E7%82%B9"><span class="nav-number">4.2.</span> <span class="nav-text">热点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">5.</span> <span class="nav-text">数据库层级结构设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%A8%A1%E5%BC%8F-cache-pattern"><span class="nav-number">6.</span> <span class="nav-text">缓存模式 cache pattern</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">7.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -253,7 +255,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-08 17:57:49" itemprop="dateModified" datetime="2023-10-08T17:57:49+08:00">2023-10-08</time>
+      <time title="Modified: 2023-10-12 11:50:01" itemprop="dateModified" datetime="2023-10-12T11:50:01+08:00">2023-10-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -333,7 +335,7 @@
 </blockquote>
 <h2 id="comment-service"><a href="#comment-service" class="headerlink" title="comment-service"></a>comment-service</h2><p>评论服务，专注在评论数据处理。（将 DDD 思想分隔开，作为独立的服务。Separation of Concerns）</p>
 <p>最开始的时候，是将 <code>comment-service</code> 和 <code>comment</code> 是一层，业务耦合和功能耦合在一起，非常不利于迭代。当然，在设计层面可以考虑目录结构进行拆分，但是从架构层次来说，迭代隔离是更好的。将两个服务拆分开，注重不同的核心点，BFF 关注业务逻辑，<code>comment-service</code>关注数据读写处理。</p>
-<p><img src="/../../../../../Library/Application%20Support/typora-user-images/image-20230926103429108.png" alt="image-20230926103429108"></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012102737583.png" alt="image-20231012102737583"></p>
 <ul>
 <li><p>读的核心逻辑</p>
 <p><code>Cache-Aside</code> 模式，先读取缓存，再读取存储。</p>
@@ -429,8 +431,74 @@
 
 <p>在内存中使用 <code>hashmap</code> 统计每个 <code>key</code> 的访问频次，这里可以使用滑动窗口（左角标和右角标一起移动，统计区间内部的数据量）统计，即每个窗口中，维护一个 <code>hashmap</code>，之后统计所有未过去的 <code>bucket</code>，汇总所有 <code>key</code> 的数据。</p>
 <p>之后使用小堆计算 <code>TopK</code> 的数据，自动进行热点识别。</p>
+<h1 id="数据库层级结构设计"><a href="#数据库层级结构设计" class="headerlink" title="数据库层级结构设计"></a>数据库层级结构设计</h1><p>很多时候会碰到需要设计带有层级结构的数据，例如部门和成员、树级结构、评论、聊天等，一般会有要求检索某个节点下的子节点。</p>
+<p>这种情况下，可以有根节点、叶子节点、中间节点。</p>
+<ul>
+<li><p>邻接表 Adjacency List </p>
+<p>通过 parent_id 记录层级关系</p>
+<p>缺点：</p>
+<ul>
+<li>难以查询全部子节点</li>
+<li>难以查询特定层的节点</li>
+<li>难以查询聚合函数</li>
+</ul>
+</li>
+<li><p>分段式 Path</p>
+<p>通过 <code>/a/b/c</code> 的形式（或者使用 <code>#</code> 分隔符 <code>_</code> ）</p>
+<p>缺点：</p>
+<ul>
+<li>查找主要依赖于 <code>LIKE</code> 查询</li>
+<li>无法保证 PATH 正确</li>
+<li>Path 依赖于应用的字符串处理</li>
+</ul>
+</li>
+<li><p>Nested Set</p>
+<p>记录左节点和右节点。</p>
+<p>nsleft 小于所有子节点的 nsleft</p>
+<p>nlright 大于所有子节点的 nright</p>
+<p>本质上是一个深度优先遍历的顺序</p>
+<p>缺点：</p>
+<ul>
+<li>查找父亲非常困难:c 结点的父亲节 点是祖先节点里面，没有别的祖先节 点作为其子节点的节点</li>
+<li>插入非常困难:需要重新计算节点的 nsleft 和 nsright</li>
+</ul>
+</li>
+<li><p>Closure Table</p>
+<p>用单独的表来存储节点之间的关系</p>
+</li>
+</ul>
+<p>对比</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012113811261.png" alt="image-20231012113811261"></p>
+<p>Resursive Query 直接依赖于数据库特性。</p>
+<h1 id="缓存模式-cache-pattern"><a href="#缓存模式-cache-pattern" class="headerlink" title="缓存模式 cache pattern"></a>缓存模式 cache pattern</h1><ul>
+<li><p>cache aside </p>
+<p>把 cache 当成一个普通的数据源</p>
+<p>更新 cache 和 DB 都是依赖于开发者自己写代码</p>
+<p>cache 读不到，就去读取数据库，需要注意穿透，也需要使用 singlefilght</p>
+<p>先写数据库，然后删除原本的 cache（这是数据不一致间隔最短的一种方式）</p>
+</li>
+<li><p>read through</p>
+<p>从 cache 中读取数据，cache 会在缓存不命中的时候读取数据</p>
+<p>更新数据的时候也直接更新DB，等待 Cache 过期，也可以更新 DB 之后同步更新 Cache</p>
+</li>
+<li><p>write through</p>
+<p>只需要写入 cache ，由 cache 更新数据库</p>
+<p>在读未命中缓存的情况下，需要去数据库捞数据，然后更新 cache</p>
+</li>
+<li><p>refresh-ahead</p>
+<p>依赖于 CDC （changed data capture）接口：</p>
+<ul>
+<li>数据库暴露数据变更接口</li>
+<li>cache 或者第四方在监听到数据变更之后自动更新数据。</li>
+</ul>
+</li>
+</ul>
+<p>总结对比：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012114740809.png" alt="image-20231012114740809"></p>
 <h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cudXNlbml4Lm9yZy9zeXN0ZW0vZmlsZXMvY29uZmVyZW5jZS9uc2RpMTMvbnNkaTEzLWZpbmFsMTcwX3VwZGF0ZS5wZGY=">Scaling Memcache at Facebook<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly90ZWNoLmlwYWxmaXNoLmNvbS9ibG9nLzIwMjAvMDQvMDcvZmItbWVtY2FjaGUv">Scaling Memcache at Facebook (2013) 中文<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cDovL3d3dy5yLTUub3JnL2ZpbGVzL2Jvb2tzL2NvbXB1dGVycy9sYW5ndWFnZXMvc3FsL3N0eWxlL0JpbGxfS2Fyd2luLVNRTF9BbnRpcGF0dGVybnMtRU4ucGRm">SQL Antipatterns<i class="fa fa-external-link-alt"></i></span> :Chapter 3: Naive Trees </p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9oYXplbGNhc3QuY29tL2Jsb2cvYS1oaXRjaGhpa2Vycy1ndWlkZS10by1jYWNoaW5nLXBhdHRlcm5zLw==">A Hitchhiker’s Guide to Caching Patterns<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 
