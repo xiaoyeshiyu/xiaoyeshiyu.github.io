@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-10-12T03:50:01.185Z</updated>
+  <updated>2023-10-16T10:05:15.705Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go工程化实践之API设计</title>
+    <link href="https://www.xiaoyeshiyu.com/post/7988.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/7988.html</id>
+    <published>2023-10-15T16:00:00.000Z</published>
+    <updated>2023-10-16T10:05:15.705Z</updated>
+    
+    
+    <summary type="html">在现代软件开发中，良好的API设计是构建可扩展、可维护和易于使用的应用程序的关键。在Go语言中，API设计的重要性更加凸显，因为Go的简洁性和高效性使其成为构建可靠和高性能应用的理想选择。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>架构设计之评论系统</title>
@@ -40,7 +59,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/d3e3.html"/>
     <id>https://www.xiaoyeshiyu.com/post/d3e3.html</id>
     <published>2023-09-24T16:00:00.000Z</published>
-    <updated>2023-09-26T01:26:35.824Z</updated>
+    <updated>2023-10-16T10:03:05.511Z</updated>
     
     
     <summary type="html">在Go语言中，工程项目结构没有强制的规定，但有一些常见的实践和约定，可以帮助组织和管理Go项目。</summary>
@@ -259,9 +278,9 @@
     <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
     
     
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
-    
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
@@ -369,25 +388,6 @@
     
     
     <summary type="html">介绍Git在实际工作中的使用流程。</summary>
-    
-    
-    
-    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git学习笔记之服务端</title>
-    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
-    <published>2023-03-11T16:00:00.000Z</published>
-    <updated>2023-09-07T10:02:20.287Z</updated>
-    
-    
-    <summary type="html">介绍Git在服务端上的搭建和使用。</summary>
     
     
     

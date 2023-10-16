@@ -39,6 +39,10 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925151531304.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925152920064.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925154629249.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016161954739.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162210509.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162445903.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162509133.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925160248473.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925160629527.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925161932955.png">
@@ -48,7 +52,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925162012361.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925162046300.png">
 <meta property="article:published_time" content="2023-09-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-26T01:26:35.824Z">
+<meta property="article:modified_time" content="2023-10-16T10:03:05.511Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -183,7 +187,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">104</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -262,7 +266,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-09-26 09:26:35" itemprop="dateModified" datetime="2023-09-26T09:26:35+08:00">2023-09-26</time>
+      <time title="Modified: 2023-10-16 18:03:05" itemprop="dateModified" datetime="2023-10-16T18:03:05+08:00">2023-10-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -406,10 +410,6 @@
 </ul>
 <p><code>service</code> 的方法签名因为实现了 API 的接口定义，DTO 在业务逻辑层直接使用了，更有 <code>dao</code> 直接使用，最简化代码。</p>
 <p>DO（Domain Object）：领域对象，就是从现实世界中抽象出来的有形或无形的业务实体（是一个面向业务的结构体，例如需要返回给上层使用的结构体）。缺乏 DTO -&gt; DO 的对象转换。</p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9sdXNodW5qaWFuLmdpdGVlLmlvLzIwMjIvMDIvMjAvc2hpLXhpZS1tby14aW5nLXl1LWNob25nLXhpZS1tby14aW5nLw==">失血模型与充血模型<i class="fa fa-external-link-alt"></i></span></p>
-<p>在这里，可以理解为：</p>
-<p>失血模型：<code>model</code> 中的 <code>struct</code> 只有纯数据结构，所有的业务逻辑由 <code>service</code> 层完成</p>
-<p>贫血模型：<code>struct</code> 带有一部分属性判断逻辑，在 <code>service</code> 层可以直接调用使用</p>
 <h1 id="服务端应用目录层级划分-v2"><a href="#服务端应用目录层级划分-v2" class="headerlink" title="服务端应用目录层级划分-v2"></a>服务端应用目录层级划分-v2</h1><p><code>app</code>目录下有 <code>api</code>、<code>configs</code>、<code>internal</code> 目录，目录里一般还会放置 <code>README</code>、<code>CHANGELOG</code>、<code>OWNERS</code></p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925154629249.png" alt="image-20230925154629249" style="zoom:25%;" />
 
@@ -421,7 +421,23 @@
 </ul>
 </li>
 </ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016161954739.png" alt="image-20231016161954739"></p>
 <p>PO（Persistent Object）：持久化对象，它跟持久层（通常是关系型数据库的数据结构，形成一一对应的映射关系，如果持久层是关系型数据库，那么数据表中的每个字段（或若干个）就对应 PO 的一个（或若干个）属性。</p>
+<p>如果将 DDD 设计中的一些思想和工程结构做一些简化，映射到 api、service、biz、data 各层</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162210509.png" alt="image-20231016162210509"></p>
+<p>松散分层架构（ Relaxed Layout System）</p>
+<p>层间关系不那么严格。每层都可以使用它下面所有层的服务，而不仅仅是下一层的服务。每层都可能是半透明的，这意味着有些服务只对上一层可见，而有些服务对上面的所有层都可见。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162445903.png" alt="image-20231016162445903"></p>
+<p>同时在领域驱动设计（DDD）中也采用了继承分层架构（Layering Through Inheritance），高层继承并实现低层接口。</p>
+<p>调整一下各层的顺序，并且将基础设施层移动到最高层。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162509133.png" alt="image-20231016162509133"></p>
+<p>注意：继承分层架构依然是单相依赖，这也意味着领域层、应用层、表现层能不将依赖基础设施层，相反基础设施层可以依赖它们。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9sdXNodW5qaWFuLmdpdGVlLmlvLzIwMjIvMDIvMjAvc2hpLXhpZS1tby14aW5nLXl1LWNob25nLXhpZS1tby14aW5nLw==">失血模型与充血模型<i class="fa fa-external-link-alt"></i></span></p>
+<p>在这里，可以理解为：</p>
+<p>失血模型：<code>model</code> 中的 <code>struct</code> 只有纯数据结构，所有的业务逻辑（例如 getter&#x2F;setter）由 <code>service</code> 层完成</p>
+<p>贫血模型：<code>struct</code> 带有一部分属性判断逻辑，在 <code>service</code> 层可以直接调用使用，不包含依赖持久层的业务逻辑。这部分依赖于持久层的业务逻辑将会放到服务层中。可以看出。贫血模型中的领域对象是不依赖于持久层的。</p>
+<p>充血模型：充血模型中包含了所有的业务逻辑，闹括依赖于持久层的业务逻辑。所以，使用充血模型的领域层是依赖于持久层，简单表示就是 UI层 -&gt; 服务层 -&gt; 领域层 -&gt; 持久层。</p>
+<p>胀血模型：胀血模型就是把和业务逻辑不相关的其他应用逻辑（如授权、事务等），都放在领域模型中。比较臃肿，服务层小时，领域层干了服务层的事，相对服务层而言，服务层变成失血模型。</p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VudC9lbnQvYmxvYi9tYXN0ZXIvUkVBRE1FX3poLm1kI2VudC0tLSVFNCVCOCU4MCVFNCVCOCVBQSVFNSVCQyVCQSVFNSVBNCVBNyVFNyU5QSU4NGdvJUU4JUFGJUFEJUU4JUE4JTgwJUU1JUFFJTlFJUU0JUJEJTkzJUU2JUExJTg2JUU2JTlFJUI2">ent - 一个强大的Go语言实体框架<i class="fa fa-external-link-alt"></i></span></p>
 <h2 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h2><p>Lifecycle 需要考虑服务应用的对象初始化以及生命周期的管理，所有 HTTP&#x2F;gRPC 依赖的前置资源初始化，包括 <code>data</code>、<code>biz</code>、<code>service</code>，之后再启动监听服务。使用 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJl">wire<i class="fa fa-external-link-alt"></i></span> ，来管理所有资源的 <strong>依赖注入</strong>。控制反转的一种方式就是依赖注入。为何需要依赖注入？</p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925160248473.png" alt="image-20230925160248473"></p>
@@ -460,6 +476,21 @@
 <p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoaWt1YWk5OTk1L2FydGljbGUvZGV0YWlscy8xMDA3MjM1NDA=">阿里技术专家详解 DDD 系列- Domain Primitive<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1Rhb2Jhb2ppc2h1L2FydGljbGUvZGV0YWlscy8xMDE0NDQzMjQ=">阿里技术专家详解DDD系列 第二弹 - 应用架构<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Rhb2Jhb2ppc2h1L2FydGljbGUvZGV0YWlscy8xMDYxNTI2NDE=">阿里技术专家详解DDD系列 第三讲 - Repository模式<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9rYi5jbmJsb2dzLmNvbS9wYWdlLzUyMDc0My8=">贫血，充血模型的解释以及一些经验<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDU0NjY2NTY=">领域驱动设计 实践手册(1.Get Started)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDU2NDg5ODY=">DDD 实践手册(2. 实现分层架构)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDY2MzQzNzM=">DDD 实践手册(3. Entity, Value Object)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDczNDc1OTM=">DDD 实践手册(4. Aggregate — 聚合)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDkwNDg1MzI=">DDD 实践手册(5. Factory 与 Repository)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMTAyNTIzOTQ=">DDD 实践手册(6. Bounded Context - 限界上下文)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC9kZmE0Mjc3NjI5NzU=">01、DDD和微服务的关系<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9nby1kZGQv">Domain Driven Design in Go<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9wYXJ0LTItZG9tYWluLWRyaXZlbi1kZXNpZ24taW4tZ28v">Domain Driven Design in Go: Part 2<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9wYXJ0LTMtZG9tYWluLWRyaXZlbi1kZXNpZ24taW4tZ28v">Domain Driven Design in Go: Part 3<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81NzMyYjY5YmQxYTE=">当中台遇上DDD，我们该如何设计微服务？<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC8xMDc4OTYxMi5odG1s">领域驱动设计系列文章（1）——通过现实例子显示领域驱动设计的威力<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC80MzkwMDg2Lmh0bWw=">领域驱动设计系列文章（2）——浅析VO、DTO、DO、PO的概念、区别和用处<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC8xMDc4OTYyMS5odG1s">领域驱动设计系列文章（3）——有选择性的使用领域驱动设计<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 
