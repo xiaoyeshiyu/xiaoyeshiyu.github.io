@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go工程化实践之测试">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/c73a.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173148561.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173928910.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174245099.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174256653.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174437843.png">
+<meta property="article:published_time" content="2023-10-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-17T10:13:56.023Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173148561.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/c73a.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/c73a.html","path":"post/c73a.html","title":"Go工程化实践之测试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Go工程化实践之测试 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Testing"><span class="nav-number">1.</span> <span class="nav-text">Testing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unittest"><span class="nav-number">1.1.</span> <span class="nav-text">Unittest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-Requirement"><span class="nav-number">1.2.</span> <span class="nav-text">Basic Requirement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Completed-Tests"><span class="nav-number">1.3.</span> <span class="nav-text">Completed Tests</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/c73a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Go工程化实践之测试 | 小夜时雨">
+      <meta itemprop="description" content="在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go工程化实践之测试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-10-17 00:00:00 / Modified: 18:13:56" itemprop="dateCreated datePublished" datetime="2023-10-17T00:00:00+08:00">2023-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/c73a.html" class="post-meta-item leancloud_visitors" data-flag-title="Go工程化实践之测试" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/c73a.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/c73a.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h1><h2 id="Unittest"><a href="#Unittest" class="headerlink" title="Unittest"></a>Unittest</h2><p>单元测试</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173148561.png" alt="image-20231017173148561"></p>
+<ul>
+<li><p>小型测试带来优秀的代码质量、良好的异常处理、优雅的错误报告；</p>
+<p>大中型测试会带来整体产品质量和数据验证。</p>
+</li>
+<li><p>不同类型的项目，对测试的需求不同，总体上有一个经验法则：即70&#x2F;20&#x2F;10原则；</p>
+<p>70%是小型测试，20%是中型测试，10%是大型测试</p>
+</li>
+<li><p>如果一个项目是面向用户的，拥有较高的集成度，或者用户接口比较复杂，他们就应该有更多的中型和大型测试；</p>
+<p>如果是基础平台或者面向数据的项目，例如索引或者爬虫，则最好有大量的小型测试，中型测试和大型测试的数量要求会少很多。</p>
+</li>
+</ul>
+<p>小型测试一般是单元测试，使用 <code>go test</code> 即可；</p>
+<p>中型测试一般需要引入外包，例如 <code>mock</code></p>
+<p>大型测试则会更加整体，可能会使用 <code>docker</code> 构建服务进行自动化测试，一般会使用大型测试框架</p>
+<blockquote>
+<p>“自动化实现的，用于验证一个单独函数或独立功能模块的代码是否按照预期工作，着重于典型功能性问题、数据损坏、错误条件和大小差一错误（译注：大小差一(off-by-one)错误是一类常见的程序设计错误）等方面的验证”</p>
+<p>​                  - 《Google软件测试之道》</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173928910.png" alt="image-20231017173928910"></p>
+<h2 id="Basic-Requirement"><a href="#Basic-Requirement" class="headerlink" title="Basic Requirement"></a>Basic Requirement</h2><p>单元测试的基本要求：</p>
+<ul>
+<li>快速：运行和执行速度</li>
+<li>环境一致：单元测试前后不影响环境，开始之前可能会预处理环境，测试之后还原环境</li>
+<li>任意顺序：单元测试之间的顺序不构成依赖关系</li>
+<li>并行：提高效率</li>
+</ul>
+<p>基于 <code>docker-compose</code> 实现跨平台跨语言环境的容器依赖管理方案，以解决运行 <code>unittest</code> 场景下的（<code>MySQL</code>，<code>Redis</code>，<code>mc</code>）容器依赖问题：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174245099.png" alt="image-20231017174245099"></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174256653.png" alt="image-20231017174256653"></p>
+<ul>
+<li>本地安装 Docker</li>
+<li>无侵入式的环境初始化</li>
+<li>快速重置环境</li>
+<li>随时随地运行（不依赖外部服务）</li>
+<li>语义式 API 声明资源</li>
+<li>真实外部依赖，而非 in-process 模拟</li>
+<li>正确的对容器内服务进行健康检测，避免 <code>unittest</code> 启动时候资源还未 ready</li>
+<li>应该交由 app 自己来初始化数据，比如 db 的 scheme，初始化 SQL 数据等，为了满足测试的一致性，在每次结束后，都会销毁容器。</li>
+<li>在单元测试开始前，导入封装好的 <code>testing</code> 库，方便启动和销毁容器</li>
+<li>对于 <code>service</code> 的单元测试，使用 <code>gomock</code> 等库，把 <code>dao mock</code> 掉，所以在设计包的时候，应该面向抽象编程</li>
+<li>在本地执行依赖 Docker，在 CI 环境里执行 Unittest ，需要考虑在物理机里的 Docker 网络，或者在 Docker 里再次启动一个 Docker。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174437843.png" alt="image-20231017174437843"></p>
+<h2 id="Completed-Tests"><a href="#Completed-Tests" class="headerlink" title="Completed Tests"></a>Completed Tests</h2><p>利用 go 官方提供的：Subtests + Gomock 完成整个单元测试。</p>
+<ul>
+<li><p>&#x2F;api</p>
+<p>比较适合进行集成测试，直接测试 API，使用 API 测试框架（例如：yapi），维护大量业务测试 case</p>
+</li>
+<li><p>&#x2F;data</p>
+<p>docker compose 把底层基础设施真实模拟，因此可以去掉 infra 的抽象层</p>
+</li>
+<li><p>&#x2F;biz</p>
+<p>依赖 repo、rpc client，利用 gomock 模拟 interface 的实现，来进行业务单元测试</p>
+</li>
+<li><p>&#x2F;service</p>
+<p>依赖 biz 的实现，构建 biz 的实现类传入，进行单元测试</p>
+</li>
+</ul>
+<p>基于 <code>git branch </code> 进行 <code>feature</code> 开发，本地进行 <code>unittest</code>，之后提交 <code>gitlab merge request</code> 进行 CI 的单元测试，基于 <code>feature branch</code> 进行构建，完成功能测试，之后合并 <code>master</code>，进行集成测试，上线后，进行回归测试。</p>
+<blockquote>
+<p>Without integration tests, it’s difficult to trust the end-to-end operation of a web service.</p>
+</blockquote>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMDMvaW50ZWdyYXRpb24tdGVzdGluZy1pbi1nby1leGVjdXRpbmctdGVzdHMtd2l0aC1kb2NrZXIuaHRtbA==">Integration Testing in Go: Part I - Executing Tests with Docker<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMTAvaW50ZWdyYXRpb24tdGVzdGluZy1pbi1nby1zZXQtdXAtYW5kLXdyaXRpbmctdGVzdHMuaHRtbA==">Integration Testing in Go: Part II - Set-up and Writing Tests<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvZXhhbXBsZXM=">Testable Examples in Go<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9zdWJ0ZXN0cw==">Using Subtests and Sub-benchmarks<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvY292ZXI=">The cover story<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlLWNvbXBhdGliaWxpdHk=">Keeping Your Modules Compatible<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvdjItZ28tbW9kdWxlcw==">Go Modules: v2 and Beyond<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kZWNlbnRyaWMuZGUvd2lzc2Vucy1odWIvYmxvZy9nb21vY2stdHV0b3JpYWw=">Testing with GoMock: A Tutorial<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L2dpdGh1Yi5jb20vZ29sYW5nL21vY2tAdjEuNi4wL2dvbW9jaw==">gomock<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iZXR0ZXJwcm9ncmFtbWluZy5wdWIvYS1nb21vY2stcXVpY2stc3RhcnQtZ3VpZGUtNzFiZWU0YjNhNmYx">A GoMock Quick Start Guide<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/70.html" rel="prev" title="Go工程化实践之配置管理">
+                  <i class="fa fa-chevron-left"></i> Go工程化实践之配置管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/e924.html" rel="next" title="Go工程化实践之包管理">
+                  Go工程化实践之包管理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go工程化实践之配置管理">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/70.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017151856686.png">
+<meta property="article:published_time" content="2023-10-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-17T07:40:11.739Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017151856686.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/70.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/70.html","path":"post/70.html","title":"Go工程化实践之配置管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Go工程化实践之配置管理 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuration-%E7%A7%8D%E7%B1%BB"><span class="nav-number">1.1.</span> <span class="nav-text">Configuration 种类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E9%80%94"><span class="nav-number">1.2.</span> <span class="nav-text">用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Configuration-Best-Pratice"><span class="nav-number">1.3.</span> <span class="nav-text">Configuration Best Pratice</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/70.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Go工程化实践之配置管理 | 小夜时雨">
+      <meta itemprop="description" content="在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go工程化实践之配置管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-10-17 00:00:00 / Modified: 15:40:11" itemprop="dateCreated datePublished" datetime="2023-10-17T00:00:00+08:00">2023-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/70.html" class="post-meta-item leancloud_visitors" data-flag-title="Go工程化实践之配置管理" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/70.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/70.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+            <div class="post-description">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="配置管理"><a href="#配置管理" class="headerlink" title="配置管理"></a>配置管理</h1><h2 id="Configuration-种类"><a href="#Configuration-种类" class="headerlink" title="Configuration 种类"></a>Configuration 种类</h2><ul>
+<li><p>环境变量（配置）</p>
+<p>Region（区域）、Zone（华南、华北）、Cluster（集群）、Environment（预发布、测试、研发）、Color（染色、组合）、Discovery、AppID、Host等之类的环境信息，都是通过在线运行时平台打入到容器或者物理机，供 kit 库读取使用。</p>
+</li>
+<li><p>静态配置</p>
+<p>资源需要初始化的配置信息，比如 <code>http/gRPC server</code>、<code>Redis</code>、<code>MySQL</code>等，这类资源在线变更配置的风险非常大，通常不鼓励 <code>on-the-fly</code>（运行时） 变更，很可能会导致业务出现不可预期的事故，变更静态配置和发布 <code>bianry app</code> 没有区别，应该走一次迭代发布的流程。（例如 IM 这类长连接的服务，应该将连接层和逻辑层分开，逻辑层更新，但是连接层不断开）</p>
+</li>
+<li><p>动态配置</p>
+<p>应用程序可能需要一些在线的开关，来控制业务的一些简单策略，会频繁的调整和使用，这类是基础类型（<code>int</code>，<code>bool</code>）等配置，用于可以动态变更业务流的收归一起，同时可以考虑结合类似 <code>https://pkg.go.dev/expvar</code> 来结合使用</p>
+</li>
+<li><p>全局配置</p>
+<p>通常，依赖的各类组件、中间件都有大量的默认配置或者指定配置，在各个项目里大量拷贝复制，容易出现意外，所以使用全局配置模板来定制化常用的组件，然后再特化的应用里进行局部替换。</p>
+</li>
+</ul>
+<h2 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h2><p>例如一个 <code>Redis client</code> 例子</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DialTimeout acts like Dial for establishing the</span></span><br><span class="line"><span class="comment">// connection to the server, writing a command and reading a reply.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Dial</span><span class="params">(network, address <span class="type">string</span>)</span></span> (Conn, <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+
+<p>但是在创建中需要增加需求，例如</p>
+<ol>
+<li>要自定义超时时间</li>
+<li>要设定 <code>Database</code></li>
+<li>要控制连接池的策略</li>
+<li>要安全使用 <code>Redis</code>，需要使用 <code>Password</code></li>
+<li>要提供慢查询请求记录，并且可以设置 <code>slowlog</code> 的时间</li>
+</ol>
+<p>如果要满足这些需求，则可以修改代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DialTimeout acts like Dial for establishing the</span></span><br><span class="line"><span class="comment">// connection to the server, writing a command and reading a reply.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Dial</span><span class="params">(network, address <span class="type">string</span>)</span></span> (Conn, <span class="type">error</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// DialTimeout acts like Dial but takes timeouts for establishing the</span></span><br><span class="line"><span class="comment">// connection to the server, writing a command and reading a reply.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DialTimeout</span><span class="params">(network, address <span class="type">string</span>, connectTimeout, readTimeout, writeTimeout time.Duration)</span></span> (Conn, <span class="type">error</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// DialDatabase acts like Dial but takes database for establishing the</span></span><br><span class="line"><span class="comment">// connection to the server, writing a command and reading a reply.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DialDatabase</span><span class="params">(network, address <span class="type">string</span>, database <span class="type">int</span>)</span></span> (Conn, <span class="type">error</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// DialPool</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DialPool</span>...</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，这种实现方式是非常繁杂的，增加一个功能要增加一个函数，不灵活。</p>
+<p>仿照一下标准库里面的</p>
+<p><code>net/http/server.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A Server defines parameters for running an HTTP server.</span></span><br><span class="line"><span class="comment">// The zero value for Server is a valid configuration.</span></span><br><span class="line"><span class="keyword">type</span> Server <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">// Addr optionally specifies the TCP address for the server to listen on,</span></span><br><span class="line">    <span class="comment">// in the form &quot;host:port&quot;. If empty, &quot;:http&quot; (port 80) is used.</span></span><br><span class="line">    <span class="comment">// The service names are defined in RFC 6335 and assigned by IANA.</span></span><br><span class="line">    <span class="comment">// See net.Dial for details of the address format.</span></span><br><span class="line">    Addr <span class="type">string</span></span><br><span class="line"></span><br><span class="line">    Handler Handler <span class="comment">// handler to invoke, http.DefaultServeMux if nil</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// TLSConfig optionally provides a TLS configuration for use</span></span><br><span class="line">    <span class="comment">// by ServeTLS and ListenAndServeTLS. Note that this value is</span></span><br><span class="line">    <span class="comment">// cloned by ServeTLS and ListenAndServeTLS, so it&#x27;s not</span></span><br><span class="line">    <span class="comment">// possible to modify the configuration with methods like</span></span><br><span class="line">    <span class="comment">// tls.Config.SetSessionTicketKeys. To use</span></span><br><span class="line">    <span class="comment">// SetSessionTicketKeys, use Server.Serve with a TLS Listener</span></span><br><span class="line">    <span class="comment">// instead.</span></span><br><span class="line">    TLSConfig *tls.Config</span><br></pre></td></tr></table></figure>
+
+<p>使用时</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;log&quot;</span></span><br><span class="line">  <span class="string">&quot;net/http&quot;</span></span><br><span class="line">  <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  s := &amp;http.Server&#123;</span><br><span class="line">    Addr: <span class="string">&quot;:8080&quot;</span>,</span><br><span class="line">    Handler: <span class="literal">nil</span>,</span><br><span class="line">    ReadTimeout: <span class="number">10</span> * time.Second,</span><br><span class="line">    WriteTimeout: <span class="number">10</span> * time.Second,</span><br><span class="line">    MaxHeaderBytes: <span class="number">1</span> &lt;&lt; <span class="number">20</span>,</span><br><span class="line">  &#125;</span><br><span class="line">  log.Fatal(s.ListenAndServe())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式的弊端：</p>
+<ol>
+<li>大写暴露出来，也就是外部可以拿到，也可以修改，修改之后可能引起的问题无法预料</li>
+<li>没有配置的默认值需要通过文档获取</li>
+</ol>
+<p>如果说，需要从配置文件进行解析，初始化 <code>Redis</code> 对象</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Config redis settings.</span></span><br><span class="line"><span class="keyword">type</span> Config <span class="keyword">struct</span> &#123;</span><br><span class="line">  *pool.Config</span><br><span class="line">  Addr <span class="type">string</span></span><br><span class="line">  Auth <span class="type">string</span></span><br><span class="line">  DialTimeout time.Duration</span><br><span class="line">  ReadTimeout time.Duration</span><br><span class="line">  WriteTimeout time.Duration</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NewConn new a redis conn.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewConn</span><span class="params">(c *Config)</span></span> (cn Conn, err <span class="type">error</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  c := &amp;redis.Config&#123;</span><br><span class="line">    Addr: <span class="string">&quot;tcp://127.0.0.1:3389&quot;</span>,</span><br><span class="line">  &#125;</span><br><span class="line">  r, _ := redis.NewConn(c)</span><br><span class="line">  c.Addr = <span class="string">&quot;tcp://127.0.0.1:3390&quot;</span> <span class="comment">// 副作用是什么？</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式与 <code>HTTP</code> 初始化方式一样，无法预知初始化之后再修改的效果。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NewConn new a redis conn. 使用配置结构体，与上面一样</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewConn</span><span class="params">(c Config)</span></span> (cn Conn, err <span class="type">error</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment">// NewConn new a redis conn. 使用只读配置，无法确定零值</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewConn</span><span class="params">(c *Config)</span></span> (cn Conn, err <span class="type">error</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// NewConn new a redis conn. 使用可变长的配置，一样无法确定零值</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewConn</span><span class="params">(c ...*Config)</span></span> (cn Conn, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+
+<p>当什么都不传（或者传 <code>nil</code> ），就使用默认配置。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;github.com/go-kratos/kratos/pkg/log&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  log.Init(<span class="literal">nil</span>) <span class="comment">// 这样使用默认配置</span></span><br><span class="line">  <span class="comment">// config.fix() // 修正默认配置</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>nil</code> 不能作为一个参数传递到函数中</p>
+<blockquote>
+<p>“I believe that we, as Go programmers, should work hard to ensure that nil is never a parameter that needs to be passed to any public function.” – Dave Cheney</p>
+</blockquote>
+<p>推荐方法：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jb21tYW5kY2VudGVyLmJsb2dzcG90LmNvbS8yMDE0LzAxL3NlbGYtcmVmZXJlbnRpYWwtZnVuY3Rpb25zLWFuZC1kZXNpZ24uaHRtbA==">Self-referential functions and the design of options<i class="fa fa-external-link-alt"></i></span> - <span class="exturl" data-url="aHR0cDovL3JvYnBpa2UuYmxvZ3Nwb3QuY29tLw==">rob pike<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNC8xMC8xNy9mdW5jdGlvbmFsLW9wdGlvbnMtZm9yLWZyaWVuZGx5LWFwaXM=">Functional options for friendly APIs<i class="fa fa-external-link-alt"></i></span> - <span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQv">Dave Cheney<i class="fa fa-external-link-alt"></i></span></p>
+<p>函数级别的可选项</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DialOption specifies an option for dialing a Redis server.</span></span><br><span class="line"><span class="keyword">type</span> DialOption <span class="keyword">struct</span> &#123;</span><br><span class="line">  f <span class="function"><span class="keyword">func</span><span class="params">(*dialOptions)</span></span>    <span class="comment">// 内部使用函数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Dial connects to the Redis server at the given network and</span></span><br><span class="line"><span class="comment">// address using the specified options. </span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Dial</span><span class="params">(network, address <span class="type">string</span>, options ...DialOption)</span></span> (Conn, <span class="type">error</span>) &#123; <span class="comment">// 函数签名中显示必选和可选参数</span></span><br><span class="line">  do := dialOptions&#123;  </span><br><span class="line">    dial: net.Dial,   <span class="comment">// 使用默认值</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> _, option := <span class="keyword">range</span> options &#123;</span><br><span class="line">    option.f(&amp;do)     <span class="comment">// 将设定值替换掉默认值</span></span><br><span class="line">  &#125; <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用时，可以通过函数进行配置</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;time&quot;</span></span><br><span class="line">  <span class="string">&quot;github.com/go-kratos/kratos/pkg/cache/redis&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  c, _ := redis.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:3389&quot;</span>,</span><br><span class="line">  redis.DialDatabase(<span class="number">0</span>),</span><br><span class="line">  redis.DialPassword(<span class="string">&quot;hello&quot;</span>),</span><br><span class="line">  redis.DialReadTimeout(<span class="number">10</span>*time.Second))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的思想简化下来</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DialOption specifies an option for dialing a Redis server.</span></span><br><span class="line"><span class="keyword">type</span> DialOption <span class="function"><span class="keyword">func</span><span class="params">(*dialOptions)</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Dial connects to the Redis server at the given network and</span></span><br><span class="line"><span class="comment">// address using the specified options.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Dial</span><span class="params">(network, address <span class="type">string</span>, options ...DialOption)</span></span> (Conn, <span class="type">error</span>) &#123;</span><br><span class="line">  do := dialOptions&#123;</span><br><span class="line">    dial: net.Dial,</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> _, option := <span class="keyword">range</span> options &#123;</span><br><span class="line">    option(&amp;do)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者使用这样这种方式，暂时使用指定配置，实用完后，恢复成原来的配置</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> option <span class="function"><span class="keyword">func</span><span class="params">(f *Foo)</span></span> option</span><br><span class="line"></span><br><span class="line"><span class="comment">// Verbosity sets Foo&#x27;s verbosity level to v.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Verbosity</span><span class="params">(v <span class="type">int</span>)</span></span> option &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(f *Foo)</span></span> option &#123;</span><br><span class="line">    prev := f.verbosity</span><br><span class="line">    f.verbosity = v</span><br><span class="line">    <span class="keyword">return</span> Verbosity(prev)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DoSomethingVerbosely</span><span class="params">(foo *Foo, verbosity <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">  <span class="comment">// Could combine the next two lines,</span></span><br><span class="line">  <span class="comment">// with some loss of readability.</span></span><br><span class="line">  prev := foo.Option(pkg.Verbosity(verbosity))</span><br><span class="line">  <span class="keyword">defer</span> foo.Option(prev)</span><br><span class="line">  <span class="comment">// ... do some stuff with foo under high verbosity.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>又或者使用这种方式，在 <code>gRPC</code> 中的 <code>CallOption</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> GreeterClient <span class="keyword">interface</span> &#123;</span><br><span class="line">  SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, <span class="type">error</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> CallOption <span class="keyword">interface</span> &#123;</span><br><span class="line">  before(*callInfo) <span class="type">error</span></span><br><span class="line">  after(*callInfo)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 内部实现对象实现上面的 CallOption</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// EmptyCallOption does not alter the Call configuration.</span></span><br><span class="line"><span class="keyword">type</span> EmptyCallOption <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// TimeoutCallOption timeout option. 包含 EmptyCallOption 则直接实现 interface，再增加字段实现扩展</span></span><br><span class="line"><span class="keyword">type</span> TimeoutCallOption <span class="keyword">struct</span> &#123;</span><br><span class="line">  grpc.EmptyCallOption</span><br><span class="line">  Timeout time.Duration</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么，回到最开始的问题，如何使用配置</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Dial connects to the Redis server at the given network and</span></span><br><span class="line"><span class="comment">// address using the specified options.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Dial</span><span class="params">(network, address <span class="type">string</span>, options ...DialOption)</span></span> (Conn, <span class="type">error</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// NewConn new a redis conn.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewConn</span><span class="params">(c *Config)</span></span> (cn Conn, err <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>JSON</code>，<code>YAML</code> 的配置无法映射 <code>DialOption</code>，也只能使用第二种 <code>*Config</code> 的方式。</p>
+<blockquote>
+<p>For example, both your infrastructure and interface might use plain JSON. However, avoid tight coupling between the data format you use as the interface and the data format you use internally. For example, you may use a data structure internally that contains the data structure consumed from configuration. The internal data structure might also contain completely implementation-specific data that never needs to be surfaced outside of the system.</p>
+<p>例如，您的基础架构和接口都可能使用纯JSON。但是，请避免在用作接口的数据格式与内部使用的数据格式之间紧密耦合。例如，您可以在内部使用一个数据结构，其中包含从配置中使用的数据结构。内部数据结构可能还包含完全特定于实现的数据，这些数据永远不需要在系统外部显示。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9yZWRiZWFyZGVyLmdpdGh1Yi5pby9UaGUtU2l0ZS1SZWxpYWJpbGl0eS1Xb3JrYm9vay1DSFMvN18lRTclQUMlQUMlRTQlQkElOEMlRTklODMlQTglRTUlODglODYtJUU1JUFFJTlFJUU4JUI3JUI1LzctN18lRTclQUMlQUMxNCVFNyVBQiVBMC0lRTklODUlOEQlRTclQkQlQUUlRTglQUUlQkUlRTglQUUlQTElRTUlOTIlOEMlRTYlOUMlODAlRTQlQkQlQjMlRTUlQUUlOUUlRTglQjclQjUuaHRtbA==">The Site Reliability Workbook 站点可靠性工作手册 中文版<i class="fa fa-external-link-alt"></i></span></p>
+</blockquote>
+<p>将配置数据，和系统进行解耦</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Dial connects to the Redis server at the given network and</span></span><br><span class="line"><span class="comment">// address using the specified options.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Dial</span><span class="params">(network, address <span class="type">string</span>, options ...DialOption)</span></span> (Conn, <span class="type">error</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>仅保留 <code>options API</code></li>
+<li><code>config file</code> 和 <code>options struct</code> 解耦</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017151856686.png" alt="image-20231017151856686"></p>
+<p>使用 YAML（JSON） + Protobuf 结合，实现配置文件与系统分开</p>
+<ul>
+<li>通过 Protobuf + validation 实现语义验证</li>
+<li>通过 Protobuf 实现高亮</li>
+<li>使用 Protobuf 做 Lint 校验</li>
+<li>使用 YAML 做格式化</li>
+</ul>
+<p>具体解耦方式</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Options apply config to options.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Config)</span></span> Options() []redis.Options &#123;</span><br><span class="line">  <span class="keyword">return</span> []redis.Options&#123; <span class="comment">// 返回数组</span></span><br><span class="line">    redis.DialDatabase(c.Database),</span><br><span class="line">    redis.DialPassword(c.Password),</span><br><span class="line">    redis.DialReadTimeout(c.ReadTimeout),</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="comment">// instead use load yaml file.</span></span><br><span class="line">  <span class="comment">// 使用 protobuf 定义 Config 结构体，而不是 yaml</span></span><br><span class="line">  c := &amp;Config&#123;</span><br><span class="line">    Network: <span class="string">&quot;tcp&quot;</span>,</span><br><span class="line">    Addr: <span class="string">&quot;127.0.0.1:3389&quot;</span>,</span><br><span class="line">    Database: <span class="number">1</span>,</span><br><span class="line">    Password: <span class="string">&quot;Hello&quot;</span>,</span><br><span class="line">    ReadTimeout: <span class="number">1</span> * time.Second,</span><br><span class="line">  &#125;</span><br><span class="line">  r, _ := redis.Dial(c.Network, c.Addr, c.Options()...)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>自定义方法，将 <code>Option</code> 转换成  <code>Redis</code> 可以使用的方法</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> redis</span><br><span class="line"></span><br><span class="line"><span class="comment">// Option configures how we set up the connection.</span></span><br><span class="line"><span class="keyword">type</span> Option <span class="keyword">interface</span> &#123;</span><br><span class="line">  apply(*options)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结合 <code>YAML</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ApplyYAML</span><span class="params">(s *redis.Config, yml <span class="type">string</span>)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">  js, err := yaml.YAMLToJSON([]<span class="type">byte</span>(yml))</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> err</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// YAML 转换成 JSON，JSON 做胶水格式，映射到 Config 中</span></span><br><span class="line">  <span class="keyword">return</span> ApplyJSON(s, <span class="type">string</span>(js))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Options apply config to options.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Options</span><span class="params">(c *redis.Config)</span></span> []redis.Options &#123;</span><br><span class="line">  <span class="keyword">return</span> []redis.Options&#123;</span><br><span class="line">    redis.DialDatabase(c.Database),</span><br><span class="line">    redis.DialPassword(c.Password),</span><br><span class="line">    redis.DialReadTimeout(c.ReadTimeout),</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际上的配置格式</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;google/protobuf/duration.proto&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> config.redis.v1;</span><br><span class="line"></span><br><span class="line"><span class="comment">// redis config.</span></span><br><span class="line">message redis &#123;</span><br><span class="line">  <span class="type">string</span> network = <span class="number">1</span>;</span><br><span class="line">  <span class="type">string</span> address = <span class="number">2</span>;</span><br><span class="line">  <span class="type">int32</span> database = <span class="number">3</span>;</span><br><span class="line">  <span class="type">string</span> password = <span class="number">4</span>;</span><br><span class="line">  google.protobuf.Duration read_timeout = <span class="number">5</span>; <span class="comment">// 表示可选</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最终使用起来</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="comment">// load config file from yaml.</span></span><br><span class="line">  c := <span class="built_in">new</span>(redis.Config)</span><br><span class="line">  _ = ApplyYAML(c, loadConfig())</span><br><span class="line">  r, _ := redis.Dial(c.Network, c.Address, Options(c)...)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Configuration-Best-Pratice"><a href="#Configuration-Best-Pratice" class="headerlink" title="Configuration Best Pratice"></a><strong>Configuration Best</strong> Pratice</h2><p>代码更改系统功能是一个冗长且复杂的过程，往往还涉及 <code>Review</code>、测试等流程，但更改单个配置选项可能会对功能产生重大影响，通常配置还未经测试。</p>
+<p>配置的目标：</p>
+<ul>
+<li>避免复杂：使用通用中间件，全局配置模板</li>
+<li>多样的配置：模板 + 自定义 做多样化</li>
+<li>简单化努力：默认配置使用最佳配置</li>
+<li>以基础设施 -&gt; 面向用户进行转变：基础配置多，用户配置少，可以针对场景进行演化</li>
+<li>配置的必选项和可选项：默认值应该也是一个科学的值</li>
+<li>配置的防御编程：在基础库中如果有不合理的配置，应该直接 <code>panic</code>，避免影响全局</li>
+<li>权限和变更跟踪：例如使用 git 做权限，配置中心做回滚</li>
+<li>配置的版本和应用对齐：应用变更之后，配置也要一并变更</li>
+<li>安全的配置变更：逐步部署、回滚更改、自动回滚；逐步部署，可应用突发状况</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/7988.html" rel="prev" title="Go工程化实践之API设计">
+                  <i class="fa fa-chevron-left"></i> Go工程化实践之API设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/c73a.html" rel="next" title="Go工程化实践之测试">
+                  Go工程化实践之测试 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

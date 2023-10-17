@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-10-16T10:06:03.307Z</updated>
+  <updated>2023-10-17T10:14:20.488Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,68 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Go工程化实践之包管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-17T10:14:20.488Z</updated>
+    
+    
+    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go工程化实践之测试</title>
+    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-17T10:13:56.023Z</updated>
+    
+    
+    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go工程化实践之配置管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-17T07:40:11.739Z</updated>
+    
+    
+    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Go工程化实践之API设计</title>
     <link href="https://www.xiaoyeshiyu.com/post/7988.html"/>
     <id>https://www.xiaoyeshiyu.com/post/7988.html</id>
     <published>2023-10-15T16:00:00.000Z</published>
-    <updated>2023-10-16T10:06:03.307Z</updated>
+    <updated>2023-10-17T10:01:39.602Z</updated>
     
     
     <summary type="html">在现代软件开发中，良好的API设计是构建可扩展、可维护和易于使用的应用程序的关键。在Go语言中，API设计的重要性更加凸显，因为Go的简洁性和高效性使其成为构建可靠和高性能应用的理想选择。</summary>
@@ -59,7 +116,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/d3e3.html"/>
     <id>https://www.xiaoyeshiyu.com/post/d3e3.html</id>
     <published>2023-09-24T16:00:00.000Z</published>
-    <updated>2023-10-16T10:03:05.511Z</updated>
+    <updated>2023-10-17T10:10:26.446Z</updated>
     
     
     <summary type="html">在Go语言中，工程项目结构没有强制的规定，但有一些常见的实践和约定，可以帮助组织和管理Go项目。</summary>
@@ -278,9 +335,9 @@
     <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
     
     
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
     <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
     
   </entry>
   
@@ -335,63 +392,6 @@
     
     
     <category term="Go学习笔记" scheme="https://www.xiaoyeshiyu.com/categories/GoLearningNote/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git学习笔记之Git工具</title>
-    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
-    <published>2023-04-03T16:00:00.000Z</published>
-    <updated>2023-09-07T10:05:43.922Z</updated>
-    
-    
-    <summary type="html">介绍Git在实际工作中的一些常用工具。</summary>
-    
-    
-    
-    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git学习笔记之GitHub</title>
-    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
-    <published>2023-03-25T16:00:00.000Z</published>
-    <updated>2023-09-07T10:05:45.109Z</updated>
-    
-    
-    <summary type="html">介绍Git工具中使用范围最广的GitHub平台使用手册。</summary>
-    
-    
-    
-    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git学习笔记之分布式工作流程</title>
-    <link href="https://www.xiaoyeshiyu.com/post/2148.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/2148.html</id>
-    <published>2023-03-18T16:00:00.000Z</published>
-    <updated>2023-09-07T10:01:54.647Z</updated>
-    
-    
-    <summary type="html">介绍Git在实际工作中的使用流程。</summary>
-    
-    
-    
-    <category term="Git" scheme="https://www.xiaoyeshiyu.com/categories/git/"/>
     
     
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
