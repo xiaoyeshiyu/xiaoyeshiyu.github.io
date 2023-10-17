@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/e924.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/70.html</loc>
     
     <lastmod>2023-10-17</lastmod>
     
@@ -12,6 +12,15 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/post/c73a.html</loc>
+    
+    <lastmod>2023-10-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/post/e924.html</loc>
     
     <lastmod>2023-10-17</lastmod>
     
@@ -30,15 +39,6 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/post/7988.html</loc>
-    
-    <lastmod>2023-10-17</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/post/70.html</loc>
     
     <lastmod>2023-10-17</lastmod>
     
@@ -1010,14 +1010,14 @@
 
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/tags/developer/</loc>
+    <loc>https://www.xiaoyeshiyu.com/tags/Reference/</loc>
     <lastmod>2023-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/tags/Reference/</loc>
+    <loc>https://www.xiaoyeshiyu.com/tags/developer/</loc>
     <lastmod>2023-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1038,6 +1038,13 @@
   </url>
   
 
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/</loc>
+    <lastmod>2023-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
@@ -1076,13 +1083,6 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/GoLearningNote/</loc>
-    <lastmod>2023-10-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/</loc>
     <lastmod>2023-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
