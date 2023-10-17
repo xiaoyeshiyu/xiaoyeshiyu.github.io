@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-10-16T10:05:15.705Z</updated>
+  <updated>2023-10-16T10:06:03.307Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/7988.html"/>
     <id>https://www.xiaoyeshiyu.com/post/7988.html</id>
     <published>2023-10-15T16:00:00.000Z</published>
-    <updated>2023-10-16T10:05:15.705Z</updated>
+    <updated>2023-10-16T10:06:03.307Z</updated>
     
     
     <summary type="html">在现代软件开发中，良好的API设计是构建可扩展、可维护和易于使用的应用程序的关键。在Go语言中，API设计的重要性更加凸显，因为Go的简洁性和高效性使其成为构建可靠和高性能应用的理想选择。</summary>
