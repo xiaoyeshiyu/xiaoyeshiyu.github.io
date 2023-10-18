@@ -79,10 +79,10 @@
       });
     };
     if (CONFIG.page.isPost) {
-      // if (CONFIG.hostname !== location.hostname) return;
+      if (CONFIG.hostname !== location.hostname) return;
       addCount(Counter);
-    } else if (document.querySelectorAll('.post-title-link').length >= 10000) {
-      showTime(Counter);
+    } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+      // showTime(Counter);
     }
   };
 
