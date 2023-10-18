@@ -12,7 +12,7 @@
     const url = decodeURI(visitors.id);
     const title = visitors.dataset.flagTitle;
 
-    Counter('get', `/classes/Counter?where=${encodeURIComponent(JSON.stringify({ url }))}`)
+    Counter('get', `/classes/Counter/${encodeURIComponent(JSON.stringify({ url }))}`)
       .then(response => response.json())
       .then(({ results }) => {
         if (results.length > 0) {
