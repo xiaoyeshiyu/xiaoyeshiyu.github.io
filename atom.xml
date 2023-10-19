@@ -36,6 +36,25 @@
   </entry>
   
   <entry>
+    <title>Go工程化实践之配置管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-19T08:38:15.618Z</updated>
+    
+    
+    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Go工程化实践之测试</title>
     <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
     <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
@@ -55,30 +74,11 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之配置管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
-    <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-17T10:14:29.131Z</updated>
-    
-    
-    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Go工程化实践之API设计</title>
     <link href="https://www.xiaoyeshiyu.com/post/7988.html"/>
     <id>https://www.xiaoyeshiyu.com/post/7988.html</id>
     <published>2023-10-15T16:00:00.000Z</published>
-    <updated>2023-10-17T10:01:39.602Z</updated>
+    <updated>2023-10-19T08:23:24.935Z</updated>
     
     
     <summary type="html">在现代软件开发中，良好的API设计是构建可扩展、可维护和易于使用的应用程序的关键。在Go语言中，API设计的重要性更加凸显，因为Go的简洁性和高效性使其成为构建可靠和高性能应用的理想选择。</summary>
@@ -116,7 +116,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/d3e3.html"/>
     <id>https://www.xiaoyeshiyu.com/post/d3e3.html</id>
     <published>2023-09-24T16:00:00.000Z</published>
-    <updated>2023-10-17T10:10:26.446Z</updated>
+    <updated>2023-10-19T07:43:33.728Z</updated>
     
     
     <summary type="html">在Go语言中，工程项目结构没有强制的规定，但有一些常见的实践和约定，可以帮助组织和管理Go项目。</summary>
