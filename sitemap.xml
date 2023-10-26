@@ -20,15 +20,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/a2b0.html</loc>
-    
-    <lastmod>2023-10-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/post/7397.html</loc>
     
     <lastmod>2023-10-26</lastmod>
@@ -1083,7 +1074,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
     <lastmod>2023-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1097,7 +1088,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
     <lastmod>2023-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-10-26T08:55:16.804Z</updated>
+  <updated>2023-10-26T08:55:16.806Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,25 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>微服务可用性设计之降级、重试和负载均衡</title>
-    <link href="https://www.xiaoyeshiyu.com/post/a2b0.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/a2b0.html</id>
-    <published>2023-10-23T16:00:00.000Z</published>
-    <updated>2023-10-26T08:55:16.804Z</updated>
-    
-    
-    <summary type="html">在微服务架构中，超时控制是确保系统可用性的关键因素之一。当微服务之间存在网络延迟或故障时，合理的超时设置可以防止故障扩散，并提高整体系统的稳定性。本文将深入探讨微服务可用性设计中的超时控制策略。我们将介绍超时的重要性，讨论不同类型的超时模式，如请求级超时和资源级超时，并提供针对不同场景的最佳实践和实施建议。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
   
   <entry>
     <title>微服务可用性设计之过载保护和限流</title>
@@ -112,14 +93,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之配置管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
+    <title>Go工程化实践之测试</title>
+    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-19T08:38:15.618Z</updated>
+    <updated>2023-10-20T08:01:02.637Z</updated>
     
     
-    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
+    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
     
     
     
@@ -131,14 +112,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之测试</title>
-    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
+    <title>Go工程化实践之配置管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-20T08:01:02.637Z</updated>
+    <updated>2023-10-19T08:38:15.618Z</updated>
     
     
-    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
+    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
     
     
     
@@ -393,6 +374,27 @@
     
     
     <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>错误码实践</title>
+    <link href="https://www.xiaoyeshiyu.com/post/f595.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/f595.html</id>
+    <published>2023-07-30T16:00:00.000Z</published>
+    <updated>2023-09-08T02:05:08.632Z</updated>
+    
+    
+    <summary type="html">在业务开发过程中，有效的使用错误码可以很好的优化交互逻辑，并且可以更加规范的进行错误处理。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
     
   </entry>
   
