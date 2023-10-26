@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174256653.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174437843.png">
 <meta property="article:published_time" content="2023-10-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-10-17T10:14:29.129Z">
+<meta property="article:modified_time" content="2023-10-20T08:01:02.637Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -157,7 +157,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Testing"><span class="nav-number">1.</span> <span class="nav-text">Testing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unittest"><span class="nav-number">1.1.</span> <span class="nav-text">Unittest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-Requirement"><span class="nav-number">1.2.</span> <span class="nav-text">Basic Requirement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Completed-Tests"><span class="nav-number">1.3.</span> <span class="nav-text">Completed Tests</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Testing"><span class="nav-number">1.</span> <span class="nav-text">Testing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unittest"><span class="nav-number">1.1.</span> <span class="nav-text">Unittest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-Requirement"><span class="nav-number">1.2.</span> <span class="nav-text">Basic Requirement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Completed-Tests"><span class="nav-number">1.3.</span> <span class="nav-text">Completed Tests</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E6%98%93%E4%BA%8E%E6%B5%8B%E8%AF%95%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">1.4.</span> <span class="nav-text">编写易于测试的代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -172,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -243,9 +243,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
-      
 
-      <time title="Created: 2023-10-17 00:00:00 / Modified: 18:14:29" itemprop="dateCreated datePublished" datetime="2023-10-17T00:00:00+08:00">2023-10-17</time>
+      <time title="Created: 2023-10-17 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-17T00:00:00+08:00">2023-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-10-20 16:01:02" itemprop="dateModified" datetime="2023-10-20T16:01:02+08:00">2023-10-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -322,16 +328,16 @@
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174437843.png" alt="image-20231017174437843"></p>
 <h2 id="Completed-Tests"><a href="#Completed-Tests" class="headerlink" title="Completed Tests"></a>Completed Tests</h2><p>利用 go 官方提供的：Subtests + Gomock 完成整个单元测试。</p>
 <ul>
-<li><p>&#x2F;api</p>
+<li><p><code>/api</code></p>
 <p>比较适合进行集成测试，直接测试 API，使用 API 测试框架（例如：yapi），维护大量业务测试 case</p>
 </li>
-<li><p>&#x2F;data</p>
+<li><p><code>/data</code></p>
 <p>docker compose 把底层基础设施真实模拟，因此可以去掉 infra 的抽象层</p>
 </li>
-<li><p>&#x2F;biz</p>
+<li><p><code>/biz</code></p>
 <p>依赖 repo、rpc client，利用 gomock 模拟 interface 的实现，来进行业务单元测试</p>
 </li>
-<li><p>&#x2F;service</p>
+<li><p><code>/service</code></p>
 <p>依赖 biz 的实现，构建 biz 的实现类传入，进行单元测试</p>
 </li>
 </ul>
@@ -339,6 +345,15 @@
 <blockquote>
 <p>Without integration tests, it’s difficult to trust the end-to-end operation of a web service.</p>
 </blockquote>
+<h2 id="编写易于测试的代码"><a href="#编写易于测试的代码" class="headerlink" title="编写易于测试的代码"></a>编写易于测试的代码</h2><ol>
+<li><p>外部传入实例，而不是内部自己创建；</p>
+<p>如果不行，就使用可以修改的包变量。最好是将 <code>DB</code>，<code>RPC</code> 等访问第三方的做成成员变量，而后在创建的时候传入 <code>mock</code> 的版本</p>
+</li>
+<li><p>面向接口编程：因为不支持重写，所以只能面向接口编程</p>
+</li>
+<li><p>可以尝试将复杂逻辑抽取出来单独测试，所以需要的组件都是作为参数传入进去</p>
+</li>
+</ol>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMDMvaW50ZWdyYXRpb24tdGVzdGluZy1pbi1nby1leGVjdXRpbmctdGVzdHMtd2l0aC1kb2NrZXIuaHRtbA==">Integration Testing in Go: Part I - Executing Tests with Docker<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMTAvaW50ZWdyYXRpb24tdGVzdGluZy1pbi1nby1zZXQtdXAtYW5kLXdyaXRpbmctdGVzdHMuaHRtbA==">Integration Testing in Go: Part II - Set-up and Writing Tests<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvZXhhbXBsZXM=">Testable Examples in Go<i class="fa fa-external-link-alt"></i></span></p>
@@ -370,8 +385,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/post/70.html" rel="next" title="Go工程化实践之配置管理">
-                  Go工程化实践之配置管理 <i class="fa fa-chevron-right"></i>
+                <a href="/post/e924.html" rel="next" title="Go工程化实践之包管理">
+                  Go工程化实践之包管理 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
