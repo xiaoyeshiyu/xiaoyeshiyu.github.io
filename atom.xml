@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-10-26T08:54:33.393Z</updated>
+  <updated>2023-10-26T08:55:16.804Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/a2b0.html"/>
     <id>https://www.xiaoyeshiyu.com/post/a2b0.html</id>
     <published>2023-10-23T16:00:00.000Z</published>
-    <updated>2023-10-26T08:54:33.393Z</updated>
+    <updated>2023-10-26T08:55:16.804Z</updated>
     
     
     <summary type="html">在微服务架构中，超时控制是确保系统可用性的关键因素之一。当微服务之间存在网络延迟或故障时，合理的超时设置可以防止故障扩散，并提高整体系统的稳定性。本文将深入探讨微服务可用性设计中的超时控制策略。我们将介绍超时的重要性，讨论不同类型的超时模式，如请求级超时和资源级超时，并提供针对不同场景的最佳实践和实施建议。</summary>
@@ -40,7 +40,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/7175.html"/>
     <id>https://www.xiaoyeshiyu.com/post/7175.html</id>
     <published>2023-10-22T16:00:00.000Z</published>
-    <updated>2023-10-26T08:54:43.946Z</updated>
+    <updated>2023-10-26T08:55:16.806Z</updated>
     
     
     <summary type="html">微服务架构中的过载保护和限流是确保系统可用性的关键策略之一。当微服务面临突发的高负载或异常情况时，合理的过载保护和限流机制可以防止系统崩溃，并保持对关键服务的稳定响应。本文将深入探讨微服务可用性设计中的过载保护和限流策略。我们将介绍过载保护和限流的概念和原理，讨论不同的实现方法和工具，以及如何根据业务需求和系统特点选择适合的策略。</summary>
@@ -59,7 +59,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/7397.html"/>
     <id>https://www.xiaoyeshiyu.com/post/7397.html</id>
     <published>2023-10-19T16:00:00.000Z</published>
-    <updated>2023-10-20T06:29:47.905Z</updated>
+    <updated>2023-10-26T08:55:16.800Z</updated>
     
     
     <summary type="html">在微服务架构中，超时控制是确保系统可用性的关键因素之一。当微服务之间存在网络延迟或故障时，合理的超时设置可以防止故障扩散，并提高整体系统的稳定性。本文将深入探讨微服务可用性设计中的超时控制策略。我们将介绍超时的重要性，讨论不同类型的超时模式，如请求级超时和资源级超时，并提供针对不同场景的最佳实践和实施建议。</summary>
@@ -78,29 +78,10 @@
     <link href="https://www.xiaoyeshiyu.com/post/40eb.html"/>
     <id>https://www.xiaoyeshiyu.com/post/40eb.html</id>
     <published>2023-10-18T16:00:00.000Z</published>
-    <updated>2023-10-26T08:02:55.381Z</updated>
+    <updated>2023-10-26T08:55:16.805Z</updated>
     
     
     <summary type="html">在当今的软件开发中，微服务架构已经成为一种流行的设计模式。然而，随着系统规模的增长和复杂性的提高，确保微服务的可用性变得越来越重要。本文将探讨微服务可用性设计中的一个关键概念：隔离。通过合理的隔离策略，我们可以有效地降低故障的传播范围，提高整体系统的稳定性和可靠性。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go工程化实践之配置管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
-    <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-19T08:38:15.618Z</updated>
-    
-    
-    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
     
     
     
@@ -120,6 +101,25 @@
     
     
     <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go工程化实践之配置管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-19T08:38:15.618Z</updated>
+    
+    
+    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
     
     
     

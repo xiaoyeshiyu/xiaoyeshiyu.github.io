@@ -11,15 +11,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/a2b0.html</loc>
-    
-    <lastmod>2023-10-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/post/40eb.html</loc>
     
     <lastmod>2023-10-26</lastmod>
@@ -29,9 +20,9 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/c73a.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/a2b0.html</loc>
     
-    <lastmod>2023-10-20</lastmod>
+    <lastmod>2023-10-26</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -39,6 +30,15 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/post/7397.html</loc>
+    
+    <lastmod>2023-10-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/post/c73a.html</loc>
     
     <lastmod>2023-10-20</lastmod>
     
@@ -1076,14 +1076,14 @@
 
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
     <lastmod>2023-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
     <lastmod>2023-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1139,14 +1139,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/distributed/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/k8s/</loc>
     <lastmod>2023-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/k8s/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/distributed/</loc>
     <lastmod>2023-10-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
