@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-10-31T09:42:06.848Z</updated>
+  <updated>2023-10-31T10:07:15.733Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/f986.html"/>
     <id>https://www.xiaoyeshiyu.com/post/f986.html</id>
     <published>2023-10-29T16:00:00.000Z</published>
-    <updated>2023-10-31T09:42:06.848Z</updated>
+    <updated>2023-10-31T10:07:15.733Z</updated>
     
     
     <summary type="html">历史记录是现代应用程序中常见的功能之一，它记录了用户在应用程序中的活动和操作。一个良好设计的历史记录系统可以提供方便的回放、导航和个性化推荐等功能，为用户提供更好的体验。</summary>
@@ -112,6 +112,25 @@
   </entry>
   
   <entry>
+    <title>Go工程化实践之测试</title>
+    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-20T08:01:02.637Z</updated>
+    
+    
+    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Go工程化实践之包管理</title>
     <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
     <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
@@ -139,25 +158,6 @@
     
     
     <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go工程化实践之测试</title>
-    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
-    <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-20T08:01:02.637Z</updated>
-    
-    
-    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
     
     
     
