@@ -93,6 +93,25 @@
   </entry>
   
   <entry>
+    <title>Go工程化实践之配置管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-19T08:38:15.618Z</updated>
+    
+    
+    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Go工程化实践之测试</title>
     <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
     <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
@@ -120,25 +139,6 @@
     
     
     <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go工程化实践之配置管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
-    <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-19T08:38:15.618Z</updated>
-    
-    
-    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
     
     
     
