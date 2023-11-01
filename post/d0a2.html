@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="数据结构和算法是很重要的，无论是在工作过程中还是在面试笔试中。这里记录LeetCode每日一题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode每日一题之2023年2月份">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/d0a2.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="数据结构和算法是很重要的，无论是在工作过程中还是在面试笔试中。这里记录LeetCode每日一题。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-02-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-01T03:48:04.872Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/d0a2.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/d0a2.html","path":"post/d0a2.html","title":"LeetCode每日一题之2023年2月份"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LeetCode每日一题之2023年2月份 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#2023%E5%B9%B402%E6%9C%8822%E6%97%A5"><span class="nav-number">1.</span> <span class="nav-text">2023年02月22日</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2023%E5%B9%B402%E6%9C%8823%E6%97%A5"><span class="nav-number">2.</span> <span class="nav-text">2023年02月23日</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2023%E5%B9%B402%E6%9C%8824%E6%97%A5"><span class="nav-number">3.</span> <span class="nav-text">2023年02月24日</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2023%E5%B9%B402%E6%9C%8825%E6%97%A5"><span class="nav-number">4.</span> <span class="nav-text">2023年02月25日</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2023%E5%B9%B402%E6%9C%8826%E6%97%A5"><span class="nav-number">5.</span> <span class="nav-text">2023年02月26日</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2023%E5%B9%B402%E6%9C%8827%E6%97%A5"><span class="nav-number">6.</span> <span class="nav-text">2023年02月27日</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2023%E5%B9%B402%E6%9C%8828%E6%97%A5"><span class="nav-number">7.</span> <span class="nav-text">2023年02月28日</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/d0a2.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LeetCode每日一题之2023年2月份 | 小夜时雨">
+      <meta itemprop="description" content="数据结构和算法是很重要的，无论是在工作过程中还是在面试笔试中。这里记录LeetCode每日一题。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode每日一题之2023年2月份
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-02-24 00:00:00" itemprop="dateCreated datePublished" datetime="2023-02-24T00:00:00+08:00">2023-02-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-11-01 11:48:04" itemprop="dateModified" datetime="2023-11-01T11:48:04+08:00">2023-11-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/d0a2.html" class="post-meta-item leancloud_visitors" data-flag-title="LeetCode每日一题之2023年2月份" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">数据结构和算法是很重要的，无论是在工作过程中还是在面试笔试中。这里记录LeetCode每日一题。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="2023年02月22日"><a href="#2023年02月22日" class="headerlink" title="2023年02月22日"></a>2023年02月22日</h3><p><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9zdG9uZS1nYW1lLWlpLw==">1140. 石子游戏 II<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：DP，茅塞顿开点：</p>
+<ol>
+<li>从后往前推导</li>
+<li>自己拿的最多，则B拿的最少</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">stoneGameII</span><span class="params">(piles []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	n := <span class="built_in">len</span>(piles)</span><br><span class="line">	<span class="comment">// 二维数组，记录当A拿第一堆时，第i堆被A拿的时候对应的M的最大石头数量</span></span><br><span class="line">	f := <span class="built_in">make</span>([][]<span class="type">int</span>, n)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">range</span> f &#123;</span><br><span class="line">		f[i] = <span class="built_in">make</span>([]<span class="type">int</span>, n+<span class="number">1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 从最后一堆开始往前循环</span></span><br><span class="line">	<span class="keyword">for</span> i, s := n<span class="number">-1</span>, <span class="number">0</span>; i &gt;= <span class="number">0</span>; i-- &#123;</span><br><span class="line">		s += piles[i]</span><br><span class="line">		<span class="comment">// M 从1开始循环，直到 i/2+1，也就是假设可以一次性拿一半，M最大是已经拿了的一倍</span></span><br><span class="line">		<span class="keyword">for</span> m := <span class="number">1</span>; m &lt;= i/<span class="number">2</span>+<span class="number">1</span>; m++ &#123;</span><br><span class="line">			<span class="comment">// 状态转移方程，可以全部都拿，就全部都拿</span></span><br><span class="line">			<span class="keyword">if</span> i+m*<span class="number">2</span> &gt;= n &#123;</span><br><span class="line">				f[i][m] = s</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="comment">// 不能全部都拿</span></span><br><span class="line">				mn := math.MaxInt</span><br><span class="line">				<span class="comment">// 便利M，获取B拿最少的</span></span><br><span class="line">				<span class="keyword">for</span> x := <span class="number">1</span>; x &lt;= m*<span class="number">2</span>; x++ &#123;</span><br><span class="line">					mn = min(mn, f[i+x][max(m, x)])</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">// 剩下的就是自己最多的</span></span><br><span class="line">				f[i][m] = s - mn</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> f[<span class="number">0</span>][<span class="number">1</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">min</span><span class="params">(a, b <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> b &lt; a &#123;</span><br><span class="line">		<span class="keyword">return</span> b</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> a</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">max</span><span class="params">(a, b <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> b &gt; a &#123;</span><br><span class="line">		<span class="keyword">return</span> b</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2023年02月23日"><a href="#2023年02月23日" class="headerlink" title="2023年02月23日"></a>2023年02月23日</h3><p><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9jaXJjdWxhci1wZXJtdXRhdGlvbi1pbi1iaW5hcnktcmVwcmVzZW50YXRpb24v">1238. 循环码排列<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：将所有的值与<code>start</code>取反，<code>res[j]^start</code>，得到格雷码，<code>res[j]^start|1&lt;&lt;i</code>处理格雷码，然后再与<code>start</code>取反，得到结果</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">circularPermutation</span><span class="params">(n <span class="type">int</span>, start <span class="type">int</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">	res := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">1</span>, <span class="number">1</span>&lt;&lt;n)</span><br><span class="line">	res[<span class="number">0</span>] = start</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="built_in">len</span>(res) - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j-- &#123;</span><br><span class="line">			res = <span class="built_in">append</span>(res, res[j]^start|<span class="number">1</span>&lt;&lt;i^start)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>顺便解决格雷编码的问题：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9ncmF5LWNvZGUv">89. 格雷编码<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">grayCode</span><span class="params">(n <span class="type">int</span>)</span></span> []<span class="type">int</span> &#123;</span><br><span class="line">	res := <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">1</span>, <span class="number">1</span>&lt;&lt;n)</span><br><span class="line">	res[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := <span class="built_in">len</span>(res) - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j-- &#123;</span><br><span class="line">			res = <span class="built_in">append</span>(res, res[j]|<span class="number">1</span>&lt;&lt;i)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2023年02月24日"><a href="#2023年02月24日" class="headerlink" title="2023年02月24日"></a>2023年02月24日</h3><p><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9tYWtlLWFycmF5LXplcm8tYnktc3VidHJhY3RpbmctZXF1YWwtYW1vdW50cy8=">2357. 使数组中所有元素都等于零<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：使用HashMap，记录所有非0的数字且数字不重复的个数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">minimumOperations</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	all := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">int</span>]<span class="type">bool</span>, <span class="built_in">len</span>(nums))</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(nums); i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> nums[i] != <span class="number">0</span> &amp;&amp; !all[nums[i]] &#123;</span><br><span class="line">			all[nums[i]] = <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">len</span>(all)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解法2：题目中数字大小不超过100，可以使用有限数组代替，最后计算这个数组中有数字的位的次数。</p>
+<h3 id="2023年02月25日"><a href="#2023年02月25日" class="headerlink" title="2023年02月25日"></a>2023年02月25日</h3><p><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9taW5pbXVtLXN3YXBzLXRvLW1ha2Utc3RyaW5ncy1lcXVhbC8=">1247. 交换字符使得字符串相同<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：字符串计算，理解要点：</p>
+<ul>
+<li>可以通过一次交换，使得<code>xy</code>或<code>yx</code>的值减少 2。</li>
+<li>可以通过两次交换，使得<code>xy</code>和<code>yx</code>的值各减少 1。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">minimumSwap</span><span class="params">(s1 <span class="type">string</span>, s2 <span class="type">string</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> xy, yx <span class="type">int</span></span><br><span class="line">	<span class="comment">// 计算xy和yx的个数</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(s1); i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> s1[i] != s2[i] &#123;</span><br><span class="line">			<span class="keyword">if</span> s1[i] == <span class="string">&#x27;x&#x27;</span> &#123;</span><br><span class="line">				xy++</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				yx++</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 如果两者相加最后是奇数，则代表无法交换得到结果</span></span><br><span class="line">	<span class="keyword">if</span> (xy-yx)&amp;<span class="number">1</span> == <span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 最终结果是将一次交换使得xy-2,yx-2，以及两次交换使得xy和yx各-1</span></span><br><span class="line">	<span class="keyword">return</span> xy&gt;&gt;<span class="number">1</span> + yx&gt;&gt;<span class="number">1</span> + (xy&amp;<span class="number">1</span>)*<span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2023年02月26日"><a href="#2023年02月26日" class="headerlink" title="2023年02月26日"></a>2023年02月26日</h3><p><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9tYXhpbXVtLXNjb3JlLXdvcmRzLWZvcm1lZC1ieS1sZXR0ZXJzLw==">1255. 得分最高的单词集合<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：暴力，dfs，将单词往下面尝试</p>
+<p>核心理解点是，只有两种情况，要么算上自己，letters中减去自己的字母，然后加上之后的最大值，要么回溯，不计算自己，用原来的letters直接计算之后的最大值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">maxScoreWords</span><span class="params">(words []<span class="type">string</span>, letters []<span class="type">byte</span>, score []<span class="type">int</span>)</span></span> (ans <span class="type">int</span>) &#123;</span><br><span class="line">	<span class="comment">// 计算每个英文字母的个数</span></span><br><span class="line">	<span class="keyword">var</span> letter [<span class="number">26</span>]<span class="type">int</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(letters); i++ &#123;</span><br><span class="line">		letter[letters[i]-<span class="string">&#x27;a&#x27;</span>]++</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 使用dfs，进行回溯</span></span><br><span class="line">	<span class="keyword">return</span> dfs(words, letter, score)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(words []<span class="type">string</span>, letter [26]<span class="type">int</span>, score []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="comment">// 没有words的情况下直接返回</span></span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(words) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 例如有a，b，c</span></span><br><span class="line">	<span class="comment">// 只有两种情况，要么是加上a，然后计算dfs(b,c)</span></span><br><span class="line">	<span class="comment">// 要么就是回溯，不加上a，计算dfs(b,c)</span></span><br><span class="line">	<span class="comment">// 返回两者的最大值</span></span><br><span class="line">	<span class="keyword">var</span> res <span class="type">int</span></span><br><span class="line">	<span class="keyword">var</span> flag <span class="type">bool</span></span><br><span class="line">	tmpLetter := letter</span><br><span class="line">	tmp := words[<span class="number">0</span>]</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(tmp); i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> tmpLetter[tmp[i]-<span class="string">&#x27;a&#x27;</span>] &lt;= <span class="number">0</span> &#123;</span><br><span class="line">			flag = <span class="literal">true</span></span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		tmpLetter[tmp[i]-<span class="string">&#x27;a&#x27;</span>]--</span><br><span class="line">		res += score[tmp[i]-<span class="string">&#x27;a&#x27;</span>]</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> flag &#123;</span><br><span class="line">		<span class="comment">// 此时a不满足，则直接下一个</span></span><br><span class="line">		<span class="keyword">return</span> dfs(words[<span class="number">1</span>:], letter, score)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 此时a满足，结果只有两种情况，要么是算自己的最大值，要么是不算自己的最大值，两者选一个最大值返回</span></span><br><span class="line">	<span class="keyword">return</span> max(dfs(words[<span class="number">1</span>:], tmpLetter, score)+res, dfs(words[<span class="number">1</span>:], letter, score))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">max</span><span class="params">(i, i2 <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> i &gt; i2 &#123;</span><br><span class="line">		<span class="keyword">return</span> i</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> i2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2023年02月27日"><a href="#2023年02月27日" class="headerlink" title="2023年02月27日"></a>2023年02月27日</h3><p><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9kZWNyZWFzZS1lbGVtZW50cy10by1tYWtlLWFycmF5LXppZ3phZy8=">1144. 递减元素使数组呈锯齿状<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：暴力，将两种情况需要的次数都计算出来，选小的一个</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">movesToMakeZigzag</span><span class="params">(nums []<span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(nums) == <span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">	&#125;</span><br><span class="line">  </span><br><span class="line">	<span class="keyword">var</span> inc, dec <span class="type">int</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(nums); i++ &#123;</span><br><span class="line">		<span class="keyword">if</span> i%<span class="number">2</span> == <span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">var</span> tmpMin <span class="type">int</span></span><br><span class="line">			<span class="keyword">if</span> i == <span class="number">0</span> &#123;</span><br><span class="line">				tmpMin = nums[<span class="number">1</span>]</span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> i == <span class="built_in">len</span>(nums)<span class="number">-1</span> &#123;</span><br><span class="line">				tmpMin = nums[<span class="built_in">len</span>(nums)<span class="number">-2</span>]</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				tmpMin = min(nums[i<span class="number">-1</span>], nums[i+<span class="number">1</span>])</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> nums[i] &gt;= tmpMin &#123;</span><br><span class="line">				inc += nums[i] - tmpMin + <span class="number">1</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">var</span> tmpMin <span class="type">int</span></span><br><span class="line">			<span class="keyword">if</span> i == <span class="built_in">len</span>(nums)<span class="number">-1</span> &#123;</span><br><span class="line">				tmpMin = nums[<span class="built_in">len</span>(nums)<span class="number">-2</span>]</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				tmpMin = min(nums[i<span class="number">-1</span>], nums[i+<span class="number">1</span>])</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> nums[i] &gt;= tmpMin &#123;</span><br><span class="line">				dec += nums[i] - tmpMin + <span class="number">1</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> min(inc, dec)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">min</span><span class="params">(i <span class="type">int</span>, i2 <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> i &lt; i2 &#123;</span><br><span class="line">		<span class="keyword">return</span> i</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> i2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2023年02月28日"><a href="#2023年02月28日" class="headerlink" title="2023年02月28日"></a>2023年02月28日</h3><p><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9tZXJnZS1zaW1pbGFyLWl0ZW1zLw==">2363. 合并相似的物品<i class="fa fa-external-link-alt"></i></span></p>
+<p>解法1：先排序，然后双指针，直到有一个指针达到尽头，再将另外一个指针中的数据都放进去</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">mergeSimilarItems</span><span class="params">(items1 [][]<span class="type">int</span>, items2 [][]<span class="type">int</span>)</span></span> [][]<span class="type">int</span> &#123;</span><br><span class="line">	sort.Slice(items1, <span class="function"><span class="keyword">func</span><span class="params">(i, j <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123; <span class="keyword">return</span> items1[i][<span class="number">0</span>] &lt; items1[j][<span class="number">0</span>] &#125;)</span><br><span class="line">	sort.Slice(items2, <span class="function"><span class="keyword">func</span><span class="params">(i, j <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123; <span class="keyword">return</span> items2[i][<span class="number">0</span>] &lt; items2[j][<span class="number">0</span>] &#125;)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> res [][]<span class="type">int</span></span><br><span class="line">	i, j := <span class="number">0</span>, <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> i &lt; <span class="built_in">len</span>(items1) &amp;&amp; j &lt; <span class="built_in">len</span>(items2) &#123;</span><br><span class="line">		<span class="keyword">if</span> items1[i][<span class="number">0</span>] &lt; items2[j][<span class="number">0</span>] &#123;</span><br><span class="line">			res = <span class="built_in">append</span>(res, items1[i])</span><br><span class="line">			i++</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> items1[i][<span class="number">0</span>] &gt; items2[j][<span class="number">0</span>] &#123;</span><br><span class="line">			res = <span class="built_in">append</span>(res, items2[j])</span><br><span class="line">			j++</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			items1[i][<span class="number">1</span>] += items2[j][<span class="number">1</span>]</span><br><span class="line">			res = <span class="built_in">append</span>(res, items1[i])</span><br><span class="line">			i++</span><br><span class="line">			j++</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> ; i &lt; <span class="built_in">len</span>(items1); i++ &#123;</span><br><span class="line">		res = <span class="built_in">append</span>(res, items1[i])</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> ; j &lt; <span class="built_in">len</span>(items2); j++ &#123;</span><br><span class="line">		res = <span class="built_in">append</span>(res, items2[j])</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/2148.html" rel="prev" title="Git学习笔记之起步">
+                  <i class="fa fa-chevron-left"></i> Git学习笔记之起步
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/2148.html" rel="next" title="Git学习笔记之基础">
+                  Git学习笔记之基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
