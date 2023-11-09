@@ -2,18 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/fa8f.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/8bda.html</loc>
     
-    <lastmod>2023-11-08</lastmod>
+    <lastmod>2023-11-09</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/8bda.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/fa8f.html</loc>
     
-    <lastmod>2023-11-07</lastmod>
+    <lastmod>2023-11-09</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1128,13 +1128,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
-    <lastmod>2023-11-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
     <lastmod>2023-11-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -1142,7 +1135,21 @@
   </url>
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <lastmod>2023-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/CloudNative/</loc>
+    <lastmod>2023-11-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
     <lastmod>2023-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1163,13 +1170,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
-    <lastmod>2023-11-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/Linux/</loc>
     <lastmod>2023-11-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -1177,14 +1177,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/MongoDB/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/algorithm/</loc>
     <lastmod>2023-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/algorithm/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/MongoDB/</loc>
     <lastmod>2023-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
