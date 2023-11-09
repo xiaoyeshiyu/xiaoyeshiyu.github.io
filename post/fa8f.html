@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式事务">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/fa8f.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160013634.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160148107.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160601768.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161230211.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161546297.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161855224.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162256025.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162535314.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163109776.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163145422.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163801454.png">
+<meta property="article:published_time" content="2023-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-08T07:52:45.645Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160013634.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/fa8f.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/fa8f.html","path":"post/fa8f.html","title":"分布式事务"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>分布式事务 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">分布式事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">事务消息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Best-Effort"><span class="nav-number">1.2.</span> <span class="nav-text">Best Effort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transactional-outbox"><span class="nav-number">1.3.</span> <span class="nav-text">Transactional outbox</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Polling-publisher"><span class="nav-number">1.4.</span> <span class="nav-text">Polling publisher</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transaction-log-tailing"><span class="nav-number">1.5.</span> <span class="nav-text">Transaction log tailing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%82%E7%AD%89"><span class="nav-number">1.6.</span> <span class="nav-text">幂等</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2PC"><span class="nav-number">1.7.</span> <span class="nav-text">2PC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2PC-Message-Queue"><span class="nav-number">1.8.</span> <span class="nav-text">2PC Message Queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Seata-2PC"><span class="nav-number">1.9.</span> <span class="nav-text">Seata 2PC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCC"><span class="nav-number">1.10.</span> <span class="nav-text">TCC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.</span> <span class="nav-text">微服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">3.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">117</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/fa8f.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="分布式事务 | 小夜时雨">
+      <meta itemprop="description" content="在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          分布式事务
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-11-06 00:00:00" itemprop="dateCreated datePublished" datetime="2023-11-06T00:00:00+08:00">2023-11-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-11-08 15:52:45" itemprop="dateModified" datetime="2023-11-08T15:52:45+08:00">2023-11-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/fa8f.html" class="post-meta-item leancloud_visitors" data-flag-title="分布式事务" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p>例如转账问题：</p>
+<p>支付宝账户表：<code>A(id, user_id, amount)</code></p>
+<p>余额宝账户表：<code>B(id, user_id, amount)</code></p>
+<p>用户的 <code>user_id = 1</code>，从支付宝转账1万块到余额宝分为两个步骤：</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160013634.png" alt="image-20231106160013634" style="zoom:25%;" />
+
+<ol>
+<li><p>支付宝表扣除 1万：</p>
+<p><code>UPDATE A SET amount = amount - 10000 WHERE user_id = 1;</code></p>
+</li>
+<li><p>余额宝表增加 1万：</p>
+<p><code>UPDATE B SET amount = amount + 10000 WHERE user_id = 1;</code></p>
+</li>
+</ol>
+<p>如何保证数据一致性呢？</p>
+<p>单个数据库，可以保证 <code>ACID</code> 使用数据库事务。</p>
+<p>随着系统变大，进行了微服务架构的改造，因为每个微服务独占了一个数据库实例，从 <code>user_id = 1</code>，发起的转账动作，跨越了两个微服务：<code>pay</code> 和 <code>balance</code> 服务。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160148107.png" alt="image-20231106160148107" style="zoom:25%;" />
+
+<p>需要保证，跨多个服务的步骤数据一致性：</p>
+<ol>
+<li>微服务 <code>pay</code> 的支付宝表扣除 1万；</li>
+<li>微服务 <code>balance</code> 的余额包表增加 1万；</li>
+</ol>
+<p>每个系统都对应一个独立的数据源，且可能位于不同机房，同时调用多个系统的服务很难保证同时成功，这就是跨服务分布式事务的问题。</p>
+<p>系统应该能保证每个服务自身的 <code>ACID</code>，基于这个假设，事务消息解决分布式事务问题。</p>
+<h2 id="事务消息"><a href="#事务消息" class="headerlink" title="事务消息"></a>事务消息</h2><p>例如北京很有名的姚记炒肝，点了炒肝并付了钱后，他们并不会直接把你的炒肝给你，往往是给你一张小票，然后让你拿小票到出货区排队去取。</p>
+<p>这是将付钱和取货两个动作分开。其中一个很重要的原因是为了使他们接待能力增强（并发量更高）。</p>
+<p>只要这张小票在，用户最终是能拿到炒肝的。同理转账服务也是如此。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160601768.png" alt="image-20231106160601768" style="zoom:25%;" />
+
+<p>当支付宝账户扣除 1万后，我们只要生成一个凭证（消息）即可，这个凭证（消息）上写着<strong>让余额宝账户增加1万</strong>，只要这个凭证（消息）能可靠保存，最终是可以拿着这个凭证（消息）让余额宝账户增加1万的，即我们能依靠这个凭证（消息）完成最终一致性。</p>
+<p>问题的关键就是可靠的保存消息凭证。</p>
+<p>要解决消息可靠粗出你乎，实际上需要解决的问题是：本地的 <code>MySQL</code> 存储和 <code>message</code> 存储的一致性问题。</p>
+<ul>
+<li><code>Transactional outbox</code></li>
+<li><code>Polling publisher</code></li>
+<li><code>Transaction log tailing</code></li>
+<li><code>2PC Message Queue</code></li>
+</ul>
+<p>事务消息一旦被可靠的持久化，整个分布式事务，变为了最终一致性，消息的消费才能保障最终业务数据的完整性，所以要尽最大女里，把消息送达到下游的业务消费方，称为：<code>Best Effort</code>。只有消息被消费，整个交易才能算是完整完结。</p>
+<h2 id="Best-Effort"><a href="#Best-Effort" class="headerlink" title="Best Effort"></a>Best Effort</h2><p>尽最大努力交付，主要用于在这样一种场景：不同的服务平台之间的事务性保证。</p>
+<p>比如在电商购物，使用支付宝支付；又比如玩网游的时候，通过 <code>App Store</code> 充值。</p>
+<p>拿购物为例，电商平台与支付平台是相互独立的，隶属于不同的公司，即使是同一个公司也很可能是独立的部门。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161230211.png" alt="image-20231106161230211" style="zoom:25%;" />
+
+<blockquote>
+<p>做过支付宝交易接口的同学都知道，我们一般会在支付宝的回调页面和接口里，解密参数，然后调用系统中更新交易状态相关的服务，将订单更新为付款成功。</p>
+<p>同时，只有当我们回调页面中输出了 <code>success</code> 字样或者标识业务处理成功相应状态码时，支付宝才会停止回调请求。否则，支付宝会每间隔一段时间后，再向客户方发起回调请求，直到输出成功标识为止。</p>
+</blockquote>
+<p>需要注意，回调接口需要处理幂等，当交付平台重复回调接口，发送请求成功信息时，可以避免出现产生多次交易成功的情况。</p>
+<h2 id="Transactional-outbox"><a href="#Transactional-outbox" class="headerlink" title="Transactional outbox"></a>Transactional outbox</h2><p><code>Transactional outbox</code>（事务型收件箱），支付宝在完成扣款的同时，同时记录消息数据，这个消息数据与业务数据保存在同一数据库实例里（消息记录表表名为 <code>msg</code>）</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161546297.png" alt="image-20231106161546297" style="zoom:25%;" />
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BEGIN</span> TRANSACTION</span><br><span class="line">    <span class="keyword">UPDATE</span> A <span class="keyword">SET</span> amount <span class="operator">=</span> amount <span class="operator">-</span> <span class="number">10000</span> <span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">INSERT</span> <span class="keyword">INTO</span> msg(user_id, amount, status) <span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="number">10000</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">END</span> TRANSACTION</span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br></pre></td></tr></table></figure>
+
+<p>上述事务能保证只要支付宝账户里被扣了钱，消息一定能保存下来。当上述事务提交成功后，我们想办法将此消息通知余额宝，余额宝处理成功后发送回复成功消息，支付宝收到回复后删除该条消息数据。</p>
+<h2 id="Polling-publisher"><a href="#Polling-publisher" class="headerlink" title="Polling publisher"></a>Polling publisher</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161855224.png" alt="image-20231106161855224" style="zoom:25%;" />
+
+<p><code>Polling publisher</code>，我们定时的轮询 <code>msg</code> 表，把 <code>status = 1</code> 的消息统统拿出来消费，可以按照自增 <code>id</code> 排序，保证顺序消费。在这里我们独立了一个 <code>pay_task</code> 服务，把拖出来的消息 <code>publish</code> 给我们消息队列，<code>balance</code> 服务自己来消费队列，或者直接 <code>rpc</code> 发送给 <code>balance</code> 服务。</p>
+<p>实际我们第一个版本的 <code>archive-service</code> 在使用 <code>CQRS</code> 时，就用的这个模型，<code>Pull</code> 的模型，从延迟来说不够好，<code>Pull</code> 太猛对 <code>Database</code> 有一定的压力，<code>Pull</code> 频次低了，延迟比较高。</p>
+<p>缺陷：</p>
+<ol>
+<li>定时操作，也就是会有延迟</li>
+<li>如果要减少延迟，那么频次会很高，数据库查询压力大</li>
+</ol>
+<h2 id="Transaction-log-tailing"><a href="#Transaction-log-tailing" class="headerlink" title="Transaction log tailing"></a>Transaction log tailing</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162256025.png" alt="image-20231106162256025" style="zoom:25%;" />
+
+<p><code>Transaction log tailing</code>，上述保存消息的方式使得消息数据和业务数据紧耦合在一起，从架构上看不够优雅，而且容易诱发其他问题。</p>
+<p>有一些业务场景，可以直接使用主表被 <code>canal</code> 订阅使用，有一些业务场景自带这类 <code>message</code> 表，比如订单或者交易流水，可以直接使用这类流水表作为 <code>message</code> 表使用。</p>
+<p>使用 <code>canal</code> 订阅以后，是实时流式消费数据，在消费者 <code>balance</code> 或者 <code>balance-job</code> 必须努力送达到。</p>
+<p>所有努力送达的模型，必须是先预扣（预占资源）的做法。</p>
+<h2 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h2><p>还有一个很严重的问题就是消息重复投递，如果相同的消息被重复投递两次，那么我们余额宝账户将会增加 2万而不是 1万了。</p>
+<p>为什么相同的消息会被重复投递？比如余额宝处理完消息 <code>msg</code> 后，发送了处理成功的消息给支付宝，正常情况下支付宝应该要删除消息 <code>msg</code>，但如果支付宝这时候悲剧的挂了，重启后一看消息 <code>msg</code> 还在，就会继续发送消息 <code>msg</code>。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162535314.png" alt="image-20231106162535314"></p>
+<ul>
+<li><p>全局唯一 <code>ID</code> + 去重表</p>
+<p>在余额宝这边增加消息应用状态表 <code>msg_apply</code>，通俗来说就是个账本，用于记录消息的消费情况，每次来一个消息，在真正执行之前，先去消息应用状态表中查询一遍，如果找到说明是重复消息，丢弃即可，如果没找到才执行，同时插入到消息应用状态表（同一事务）</p>
+</li>
+<li><p>版本号</p>
+</li>
+</ul>
+<h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><p>两阶段提交协议（<code>Two Phase Commitment Protocol</code>）中，涉及到两种角色。</p>
+<ul>
+<li>一个事务协调者（<code>coordinator</code>）：负责协调多个参与者进行业务投票及提交（回滚）</li>
+<li>多个事务参与者（<code>participants</code>）：即本地事务执行者</li>
+</ul>
+<p>总共处理步骤有两个：</p>
+<ol>
+<li>投票阶段（<code>voting phase</code>）：协调者将通知事务参与者准备提交或取消事务，然后进入表决过程。参与者将告知协调者自己的决策：同意（事务参与者本地事务执行成功，但未提交）或取消（本地事务执行故障）；</li>
+<li>提交阶段（<code>commit phase</code>）：收到参与者的通知后，协调者再向参与者发出通知，根据反馈情况决定各参与者是否要提交还是回滚；</li>
+</ol>
+<h2 id="2PC-Message-Queue"><a href="#2PC-Message-Queue" class="headerlink" title="2PC Message Queue"></a>2PC Message Queue</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163109776.png" alt="image-20231106163109776"  />
+
+<h2 id="Seata-2PC"><a href="#Seata-2PC" class="headerlink" title="Seata 2PC"></a>Seata 2PC</h2><p><code>Seata</code> 实现 <code>2PC</code> 与传统 <code>2PC</code> 的差别</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163145422.png" alt="image-20231106163145422" style="zoom:25%;" />
+
+<ul>
+<li>架构层次方面：传统 <code>2PC</code> 方案的 <code>RM</code> 实际上是在数据库层，<code>RM</code> 本质上就是数据库自身，通过 <code>XA</code> 协议实现，而 <code>Seata</code> 的 <code>RM</code> 是以 <code>jar</code> 包的形式作为中间件层部署在应用程序这一侧的。</li>
+<li>两阶段提交方面：传统 <code>2PC</code> 无论第二阶段的决议是 <code>commit</code> 还是 <code>rollback</code>，事务性资源的锁都要保持到 <code>Phase2</code> 完成才释放。而 <code>Seata</code> 的做法是在 <code>Phase1</code> 就将本地事务提交，这样就可以省去 <code>Phase2</code> 持锁的时间，整体提高效率。</li>
+</ul>
+<h2 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h2><p><code>TCC</code> 是 <code>Try</code>、<code>Confirm</code>、<code>Cancel</code> 三个词语的缩写，<code>TCC</code> 要求每个分支事务实现三个操作：预处理 <code>Try</code>、确认<code>Confirm</code>、撤销 <code>Cancel</code>。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163801454.png" alt="image-20231106163801454" style="zoom:25%;" />
+
+<p><code>Try</code> 操作做业务检查及资源预留，<code>Confirm</code> 做业务确认操作，<code>Cancel</code> 实现一个与 <code>Try</code> 相反的操作即回滚操作。</p>
+<p><code>TM</code> 首先发起所有的分支事务 <code>Try</code> 操作，任何一个分支事务的 <code>Try</code> 操作执行失败，<code>TM</code> 将会发起所有分支事务的 <code>Cancel</code> 操作，若 <code>Try</code> 操作全部成功，<code>TM</code> 将会发起所有分支事务的 <code>Confirm</code> 操作，其中 <code>Confirm/Cancel</code> 操作若执行失败，<code>TM</code> 会进行重试。</p>
+<p>需要注意：</p>
+<ul>
+<li>幂等：避免网络原因产生的多次请求</li>
+<li>空回滚：<code>try</code> 失败的时候，再回滚，需要特殊处理；</li>
+<li>防悬挂：例如先 <code>cancel</code> 比 <code>try</code> 到达，导致乱序，这个时候应该停止交易；</li>
+</ul>
+<h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><p>除了上面的服务内部实现分布式事务，在微服务层面，也有一些分布式事务的解决方案：</p>
+<ul>
+<li><code>Event sourcing</code>：事件驱动</li>
+<li><code>Saga</code>：A服务发送消息给 <code>kafka</code>，B订阅，类似与一种编排服务，可以同步请求。</li>
+</ul>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hvc2Fvcy9hcnRpY2xlL2RldGFpbHMvODkxMzY2NjY=">Seata实战-分布式事务简介及demo上手<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xODM3NTM3NzQ=">面试必问：分布式事务六种解决方案<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZHl6Y3MvcC8xMzc4MDY2OC5odG1s">分布式事务有这一篇就够了<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Jqd2VpbWVuZ3NodS9hcnRpY2xlL2RldGFpbHMvNzk2MDc1MjI=">漫画：什么是分布式事务？<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvZXZlbnQtc291cmNpbmcuaHRtbA==">Pattern: Event sourcing<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvc2FnYS5odG1s">Pattern: Saga<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvcG9sbGluZy1wdWJsaXNoZXIuaHRtbA==">Pattern: Polling publisher<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvdHJhbnNhY3Rpb24tbG9nLXRhaWxpbmcuaHRtbA==">Pattern: Transaction log tailing<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/8bda.html" rel="prev" title="分布式缓存">
+                  <i class="fa fa-chevron-left"></i> 分布式缓存
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-10-31T10:07:15.733Z</updated>
+  <updated>2023-11-08T07:52:45.645Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,49 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>分布式事务</title>
+    <link href="https://www.xiaoyeshiyu.com/post/fa8f.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/fa8f.html</id>
+    <published>2023-11-05T16:00:00.000Z</published>
+    <updated>2023-11-08T07:52:45.645Z</updated>
+    
+    
+    <summary type="html">在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>分布式缓存</title>
+    <link href="https://www.xiaoyeshiyu.com/post/8bda.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/8bda.html</id>
+    <published>2023-11-01T16:00:00.000Z</published>
+    <updated>2023-11-07T09:56:07.706Z</updated>
+    
+    
+    <summary type="html">在当今的分布式系统中，高性能和可扩展性是至关重要的。而分布式缓存作为一种关键的技术手段，能够显著提升系统的性能和可扩展性。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>架构设计之历史记录设计</title>
     <link href="https://www.xiaoyeshiyu.com/post/f986.html"/>
     <id>https://www.xiaoyeshiyu.com/post/f986.html</id>
     <published>2023-10-29T16:00:00.000Z</published>
-    <updated>2023-10-31T10:07:15.733Z</updated>
+    <updated>2023-11-02T07:02:57.744Z</updated>
     
     
     <summary type="html">历史记录是现代应用程序中常见的功能之一，它记录了用户在应用程序中的活动和操作。一个良好设计的历史记录系统可以提供方便的回放、导航和个性化推荐等功能，为用户提供更好的体验。</summary>
@@ -112,14 +150,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之包管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
+    <title>Go工程化实践之测试</title>
+    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-17T10:14:29.126Z</updated>
+    <updated>2023-10-20T08:01:02.637Z</updated>
     
     
-    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
+    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
     
     
     
@@ -131,14 +169,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之测试</title>
-    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
+    <title>Go工程化实践之包管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-20T08:01:02.637Z</updated>
+    <updated>2023-10-17T10:14:29.126Z</updated>
     
     
-    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
+    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
     
     
     
@@ -355,44 +393,6 @@
     
     
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>内网穿透笔记</title>
-    <link href="https://www.xiaoyeshiyu.com/post/931.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/931.html</id>
-    <published>2023-08-24T16:00:00.000Z</published>
-    <updated>2023-09-08T01:10:35.163Z</updated>
-    
-    
-    <summary type="html">在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。</summary>
-    
-    
-    
-    <category term="应用软件" scheme="https://www.xiaoyeshiyu.com/categories/Application/"/>
-    
-    
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用protobuf validate自定义报错内容</title>
-    <link href="https://www.xiaoyeshiyu.com/post/6058.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/6058.html</id>
-    <published>2023-08-20T16:00:00.000Z</published>
-    <updated>2023-09-07T09:39:03.015Z</updated>
-    
-    
-    <summary type="html">使用protocol之后，更加符合微服务开发规范，并且定义即文档，开发效率大大提高。但是protobuf无法实现自定义报错内容，所幸这个功能Google已经在考虑，并且在validate的beta版本已经实现。</summary>
-    
-    
-    
-    <category term="微服务" scheme="https://www.xiaoyeshiyu.com/categories/microservice/"/>
-    
-    
-    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
     
   </entry>
   
