@@ -24,26 +24,64 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Golang开发博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="小夜时雨">
-<meta property="og:url" content="https://www.xiaoyeshiyu.com/index.html">
+    <meta name="description" content="网络通信协议互联网的核心是一些列协议，总称为 互联网协议（Internet Protocol Suite），证实这一些协议规定了电脑如何连接和组网。  主要协议分为：  Socket 接口抽象层   TCP&#x2F;UDP 面向连接（可靠）&#x2F; 无连接（不可靠）   HTTP1.1&#x2F;HTTP2&#x2F;QUIC(HTTP3)（HTTP 1.1 是一个请求一个包，连接被占用；HTTP2 可以一个连接发送多个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go网络编程之网络通信协议">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/4d37.html">
 <meta property="og:site_name" content="小夜时雨">
-<meta property="og:description" content="Golang开发博客">
+<meta property="og:description" content="网络通信协议互联网的核心是一些列协议，总称为 互联网协议（Internet Protocol Suite），证实这一些协议规定了电脑如何连接和组网。  主要协议分为：  Socket 接口抽象层   TCP&#x2F;UDP 面向连接（可靠）&#x2F; 无连接（不可靠）   HTTP1.1&#x2F;HTTP2&#x2F;QUIC(HTTP3)（HTTP 1.1 是一个请求一个包，连接被占用；HTTP2 可以一个连接发送多个">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115337020.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115452531.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115750950.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115924836.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110145230009.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110145235930.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110152629917.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153027893.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153401296.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153408855.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120170052422.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120170947189.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120171913308.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120173607411.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127170213257.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127170446224.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127172321386.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127173029262.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128171144094.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128171311154.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128172101216.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128172236626.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128173555811.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128173907409.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128174042747.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128174241302.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175125629.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175424700.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175604491.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175756264.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128180055532.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129113741132.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129113744856.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129114101404.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129114436189.png">
+<meta property="article:published_time" content="2023-11-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-30T03:47:28.919Z">
 <meta property="article:author" content="Mitaka xu">
-<meta property="article:tag" content="Golang, 微服务，数据库，中间件, 算法">
+<meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115337020.png">
 
 
-<link rel="canonical" href="https://www.xiaoyeshiyu.com/">
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/4d37.html">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"en","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/4d37.html","path":"post/4d37.html","title":"Go网络编程之网络通信协议"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>小夜时雨 - 君子敬其在己者，而不慕其在天者，是以日进也。</title>
+<title>Go网络编程之网络通信协议 | 小夜时雨</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
@@ -82,7 +120,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">小夜时雨</h1>
+      <p class="site-title">小夜时雨</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
@@ -136,7 +174,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           Table of Contents
@@ -149,6 +187,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.</span> <span class="nav-text">网络通信协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Socket-%E6%8A%BD%E8%B1%A1%E5%B1%82"><span class="nav-number">1.1.</span> <span class="nav-text">Socket 抽象层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">1.2.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-number">1.3.</span> <span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">1.4.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BC%94%E8%BF%9B"><span class="nav-number">1.4.1.</span> <span class="nav-text">演进</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Go-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">Go 网络编程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90"><span class="nav-number">2.1.</span> <span class="nav-text">TCP简单例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90"><span class="nav-number">2.2.</span> <span class="nav-text">UDP简单例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-x2F-O-%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">I&#x2F;O 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-number">2.3.1.</span> <span class="nav-text">IO多路复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8%E6%A8%A1%E5%9D%97"><span class="nav-number">2.3.2.</span> <span class="nav-text">多路复用模块</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Goim-%E9%95%BF%E8%BF%9E%E6%8E%A5-TCP-%E7%BC%96%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">Goim 长连接 TCP 编程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%A7%88"><span class="nav-number">3.1.</span> <span class="nav-text">概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.2.</span> <span class="nav-text">协议设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B2%98%E5%8C%85"><span class="nav-number">3.2.1.</span> <span class="nav-text">粘包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E8%8A%82%E7%82%B9"><span class="nav-number">3.3.</span> <span class="nav-text">边缘节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">3.4.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%83%E8%B7%B3%E4%BF%9D%E6%B4%BB%E6%9C%BA%E5%88%B6"><span class="nav-number">3.5.</span> <span class="nav-text">心跳保活机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E9%89%B4%E6%9D%83%E5%92%8C-Session-%E4%BF%A1%E6%81%AF"><span class="nav-number">3.6.</span> <span class="nav-text">用户鉴权和 Session 信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Comet"><span class="nav-number">3.7.</span> <span class="nav-text">Comet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logic"><span class="nav-number">3.8.</span> <span class="nav-text">Logic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Job"><span class="nav-number">3.9.</span> <span class="nav-text">Job</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E6%8B%89%E7%BB%93%E5%90%88"><span class="nav-number">3.10.</span> <span class="nav-text">推拉结合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E6%89%A9%E6%95%A3"><span class="nav-number">3.11.</span> <span class="nav-text">读写扩散</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%94%AF%E4%B8%80-ID-%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.12.</span> <span class="nav-text">唯一 ID 设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95"><span class="nav-number">3.12.1.</span> <span class="nav-text">雪花算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sonyflake"><span class="nav-number">3.12.2.</span> <span class="nav-text">Sonyflake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ID%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-number">3.12.3.</span> <span class="nav-text">ID生成器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IM-%E7%A7%81%E4%BF%A1%E7%B3%BB%E7%BB%9F"><span class="nav-number">3.13.</span> <span class="nav-text">IM 私信系统</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">4.</span> <span class="nav-text">References</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -195,16 +234,17 @@
 
     </div>
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
     <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/4d37.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -218,13 +258,13 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
+      <meta itemprop="name" content="Go网络编程之网络通信协议 | 小夜时雨">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/4d37.html" class="post-title-link" itemprop="url">Go网络编程之网络通信协议</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Go网络编程之网络通信协议
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -270,7 +310,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="网络通信协议"><a href="#网络通信协议" class="headerlink" title="网络通信协议"></a>网络通信协议</h1><p>互联网的核心是一些列协议，总称为 <strong>互联网协议</strong>（<code>Internet Protocol Suite</code>），证实这一些协议规定了电脑如何连接和组网。</p>
+        <h1 id="网络通信协议"><a href="#网络通信协议" class="headerlink" title="网络通信协议"></a>网络通信协议</h1><p>互联网的核心是一些列协议，总称为 <strong>互联网协议</strong>（<code>Internet Protocol Suite</code>），证实这一些协议规定了电脑如何连接和组网。</p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115337020.png" alt="image-20231110115337020"></p>
 <p>主要协议分为：</p>
 <ul>
@@ -753,7 +793,6 @@
 <p><span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5mb3EuY24vYXJ0aWNsZS90aGUtcm9hZC1vZi10aGUtZ3Jvd3RoLXdlaXhpbi1iYWNrZ3JvdW5k">从无到有：微信后台系统的演进之路<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9ieXRlYnl0ZWdvLmNvbS9jb3Vyc2VzL3N5c3RlbS1kZXNpZ24taW50ZXJ2aWV3L2Rlc2lnbi1hLWNoYXQtc3lzdGVt">Design A Chat System<i class="fa fa-external-link-alt"></i></span></p>
 
-      
     </div>
 
     
@@ -761,305 +800,21 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/fa8f.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/fa8f.html" class="post-title-link" itemprop="url">分布式事务</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-11-06 00:00:00" itemprop="dateCreated datePublished" datetime="2023-11-06T00:00:00+08:00">2023-11-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-29 17:43:45" itemprop="dateModified" datetime="2023-11-29T17:43:45+08:00">2023-11-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/fa8f.html" class="post-meta-item leancloud_visitors" data-flag-title="分布式事务" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/fa8f.html">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/8bda.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/8bda.html" class="post-title-link" itemprop="url">分布式缓存</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-11-02 00:00:00" itemprop="dateCreated datePublished" datetime="2023-11-02T00:00:00+08:00">2023-11-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-09 14:21:52" itemprop="dateModified" datetime="2023-11-09T14:21:52+08:00">2023-11-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/8bda.html" class="post-meta-item leancloud_visitors" data-flag-title="分布式缓存" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在当今的分布式系统中，高性能和可扩展性是至关重要的。而分布式缓存作为一种关键的技术手段，能够显著提升系统的性能和可扩展性。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/8bda.html">
-                Read more &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/fa8f.html" rel="prev" title="分布式事务">
+                  <i class="fa fa-chevron-left"></i> 分布式事务
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/f986.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/f986.html" class="post-title-link" itemprop="url">架构设计之历史记录设计</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-10-30 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-30T00:00:00+08:00">2023-10-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-02 15:02:57" itemprop="dateModified" datetime="2023-11-02T15:02:57+08:00">2023-11-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/f986.html" class="post-meta-item leancloud_visitors" data-flag-title="架构设计之历史记录设计" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>历史记录是现代应用程序中常见的功能之一，它记录了用户在应用程序中的活动和操作。一个良好设计的历史记录系统可以提供方便的回放、导航和个性化推荐等功能，为用户提供更好的体验。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/f986.html">
-                Read more &raquo;
-              </a>
+            <div class="post-nav-item">
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          </div>
     </footer>
   </article>
 </div>
@@ -1067,598 +822,13 @@
 
 
 
+
+
     
-
-
-<div class="post-block">
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
   
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/a2b0.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/a2b0.html" class="post-title-link" itemprop="url">微服务可用性设计之降级、重试和负载均衡</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-10-24 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-24T00:00:00+08:00">2023-10-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-26 17:57:04" itemprop="dateModified" datetime="2023-10-26T17:57:04+08:00">2023-10-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/a2b0.html" class="post-meta-item leancloud_visitors" data-flag-title="微服务可用性设计之降级、重试和负载均衡" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>介绍了降级、重试和负载均衡这三个策略，旨在提高微服务系统的可用性和稳定性。本文可以了解如何通过降级技术优雅地处理高负载和故障，确保核心功能的正常运行。通过不同的重试策略，以在网络不稳定或服务故障的情况下增加请求的成功率。介绍负载均衡的概念和不同的负载均衡算法，在微服务架构中合理分配请求，实现高可用性和性能优化。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/a2b0.html">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/7175.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/7175.html" class="post-title-link" itemprop="url">微服务可用性设计之过载保护和限流</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-10-23 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-23T00:00:00+08:00">2023-10-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-26 16:55:16" itemprop="dateModified" datetime="2023-10-26T16:55:16+08:00">2023-10-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/7175.html" class="post-meta-item leancloud_visitors" data-flag-title="微服务可用性设计之过载保护和限流" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>微服务架构中的过载保护和限流是确保系统可用性的关键策略之一。当微服务面临突发的高负载或异常情况时，合理的过载保护和限流机制可以防止系统崩溃，并保持对关键服务的稳定响应。本文将深入探讨微服务可用性设计中的过载保护和限流策略。我们将介绍过载保护和限流的概念和原理，讨论不同的实现方法和工具，以及如何根据业务需求和系统特点选择适合的策略。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/7175.html">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/7397.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/7397.html" class="post-title-link" itemprop="url">微服务可用性设计之超时控制</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-20T00:00:00+08:00">2023-10-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-26 16:55:16" itemprop="dateModified" datetime="2023-10-26T16:55:16+08:00">2023-10-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/7397.html" class="post-meta-item leancloud_visitors" data-flag-title="微服务可用性设计之超时控制" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在微服务架构中，超时控制是确保系统可用性的关键因素之一。当微服务之间存在网络延迟或故障时，合理的超时设置可以防止故障扩散，并提高整体系统的稳定性。本文将深入探讨微服务可用性设计中的超时控制策略。我们将介绍超时的重要性，讨论不同类型的超时模式，如请求级超时和资源级超时，并提供针对不同场景的最佳实践和实施建议。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/7397.html">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/40eb.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/40eb.html" class="post-title-link" itemprop="url">微服务可用性设计之隔离</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-10-19 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-19T00:00:00+08:00">2023-10-19</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-26 16:55:16" itemprop="dateModified" datetime="2023-10-26T16:55:16+08:00">2023-10-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/40eb.html" class="post-meta-item leancloud_visitors" data-flag-title="微服务可用性设计之隔离" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在当今的软件开发中，微服务架构已经成为一种流行的设计模式。然而，随着系统规模的增长和复杂性的提高，确保微服务的可用性变得越来越重要。本文将探讨微服务可用性设计中的一个关键概念：隔离。通过合理的隔离策略，我们可以有效地降低故障的传播范围，提高整体系统的稳定性和可靠性。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/40eb.html">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/e924.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/e924.html" class="post-title-link" itemprop="url">Go工程化实践之包管理</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-      
-
-      <time title="Created: 2023-10-17 00:00:00 / Modified: 18:14:29" itemprop="dateCreated datePublished" datetime="2023-10-17T00:00:00+08:00">2023-10-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/e924.html" class="post-meta-item leancloud_visitors" data-flag-title="Go工程化实践之包管理" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/e924.html">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/c73a.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Mitaka xu">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小夜时雨">
-      <meta itemprop="description" content="Golang开发博客">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 小夜时雨">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/post/c73a.html" class="post-title-link" itemprop="url">Go工程化实践之测试</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2023-10-17 00:00:00" itemprop="dateCreated datePublished" datetime="2023-10-17T00:00:00+08:00">2023-10-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-20 16:01:02" itemprop="dateModified" datetime="2023-10-20T16:01:02+08:00">2023-10-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/post/c73a.html" class="post-meta-item leancloud_visitors" data-flag-title="Go工程化实践之测试" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/c73a.html">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
 </div>
   </main>
 

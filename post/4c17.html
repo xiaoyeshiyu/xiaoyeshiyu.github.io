@@ -31,11 +31,23 @@
 <meta property="og:site_name" content="小夜时雨">
 <meta property="og:description" content="网络编程中绕不过去的IO模型，从同步阻塞、同步非阻塞到IO多路复用，不同的IO模型有不同的特点。Redis、Nginx的高性能就是建立在IO多路复用的基础上。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180207820.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180419103.png">
+<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20231129180528779.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180605253.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180636106.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129181203644.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129181421090.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113026557.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113104801.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113139478.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113206991.png">
 <meta property="article:published_time" content="2022-06-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-08T02:06:53.214Z">
+<meta property="article:modified_time" content="2023-11-30T03:36:07.297Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180207820.png">
 
 
 <link rel="canonical" href="https://www.xiaoyeshiyu.com/post/4c17.html">
@@ -151,7 +163,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9E"><span class="nav-number">1.</span> <span class="nav-text">同步阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9E-NIO"><span class="nav-number">2.</span> <span class="nav-text">同步非阻塞 NIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO%E5%AF%B9%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">IO对路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#select"><span class="nav-number">3.1.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#poll"><span class="nav-number">3.2.</span> <span class="nav-text">poll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#epoll"><span class="nav-number">3.3.</span> <span class="nav-text">epoll</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E9%98%BB%E5%A1%9E"><span class="nav-number">1.</span> <span class="nav-text">同步阻塞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9E-NIO"><span class="nav-number">2.</span> <span class="nav-text">同步非阻塞 NIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">IO多路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#select"><span class="nav-number">3.1.</span> <span class="nav-text">select</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#poll"><span class="nav-number">3.2.</span> <span class="nav-text">poll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#epoll"><span class="nav-number">3.3.</span> <span class="nav-text">epoll</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -166,7 +178,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">117</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -245,7 +257,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-09-08 10:06:53" itemprop="dateModified" datetime="2023-09-08T10:06:53+08:00">2023-09-08</time>
+      <time title="Modified: 2023-11-30 11:36:07" itemprop="dateModified" datetime="2023-11-30T11:36:07+08:00">2023-11-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -296,8 +308,47 @@
 <p>主线程检查<code>fd</code>，当有<code>fd</code>就绪，开启一个新的线程处理这个<code>fd</code>的逻辑</p>
 <p>优点：单个<code>socket</code>阻塞时，不影响其他的<code>socket</code></p>
 <p>缺点：需要不断的便利进行系统调用，有一定的开销。多线程的方式在线程切换的时候，会有上下文切换的开销。</p>
-<h3 id="IO对路复用"><a href="#IO对路复用" class="headerlink" title="IO对路复用"></a>IO对路复用</h3><h4 id="select"><a href="#select" class="headerlink" title="select"></a><code>select</code></h4><p>解决同步非阻塞中频繁系统调用的问题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 获取就绪事件</span><br><span class="line">int select (</span><br><span class="line">	int nfds, // 三个监听集合的文件描述符最大值+1，缩小系统监听的范围</span><br><span class="line">	fd_set *readfds, // 要监听的可读文件描述符集合</span><br><span class="line">	fd_set *writefds, // 要监听的可写文件描述符集合</span><br><span class="line">	fd_set *exceptfds, // 要监听的异常文件描述符集合</span><br><span class="line">	struct timeval *timeout, // 本次调用的超时时间</span><br><span class="line">); return // 大于0：已就绪的文件描述符；等于0：超时：小于：出错</span><br></pre></td></tr></table></figure>
+<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>网络编程中，当 <code>client</code> 和 <code>server</code> 建立连接之后，通过 <code>socket</code> 通信。那么，核心点就在于，如何从一大堆创建好的文件描述符中，挑选出符合条件的文件描述符？例如，<code>client</code>发送消息之后，<code>server</code> 需要从特别多的 <code>client</code>  中获取到这个特定的 <code>client</code> 的数据。</p>
+<p>思考：</p>
+<ul>
+<li>每次都便利所有创建好的文件描述符，挨个检查是否符合条件。将可读的连接返回；</li>
+<li>便利所有的文件描述符比较耗时。可以尝试在文件描述符满足条件时，将它们挪动到一个队列里面，如果接收到通知询问是否有满足条件的文件描述符，则直接返回这个队列里的数据；</li>
+</ul>
+<h4 id="select"><a href="#select" class="headerlink" title="select"></a><code>select</code></h4><p>每次都便利所有创建好的连接，挨个检查是否可读。把可读的连接返回。</p>
+<ul>
+<li><code>select</code> 接收三个文件描述符集合：可读、可写和异常文件描述符集合，作为它监听的对象（遍历的对象）</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180207820.png" alt="image-20231129180207820"></p>
+<ul>
+<li>文件描述符集合是一个 <code>bitset</code>，每一个比特位表达垓文件描述符的状态，默认容量是 1024</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180419103.png" alt="image-20231129180419103"></p>
+<ul>
+<li>发起 <code>select</code> 调用，则需要传入我们希望 <code>select</code> 监听的文件描述符集合，<code>select</code> 遍历这些文件描述符，根据文件描述符去找驱动，驱动会回答这些问题</li>
+</ul>
+<p><img src="/../../../../../../Library/Application%20Support/typora-user-images/image-20231129180528779.png" alt="image-20231129180528779"></p>
+<ul>
+<li>如果没有数据，并且设置了超时，那么会进入等待队列（如果设置了超时机制，超时后，则会进入到等待队列，等待队列也是驱动维护。）</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180605253.png" alt="image-20231129180605253"></p>
+<ul>
+<li>如果超时之前等待了，驱动会唤醒内核线程。（当数据到达，网卡收到数据，硬件会通过中断提醒驱动，驱动检查等待队列之后获取就绪的文件描述符）</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180636106.png" alt="image-20231129180636106"></p>
+<ul>
+<li>定时的时钟中断会通过操作系统通知内核检测，如果发生超时，那么驱动会将文件描述符从等待队列中拿出来；</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129181203644.png" alt="image-20231129181203644"></p>
+<p>用户使用方法：</p>
+<ol>
+<li>准备需要 <code>select</code> 的文件描述符集合 <code>fd_arr</code></li>
+<li>复制文件描述符集合，作为参数传递给 <code>select</code> 系统调用</li>
+<li>检查每一个比特位，确认有没有就绪的文件描述符</li>
+<li>处理就绪的文件描述符</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129181421090.png" alt="image-20231129181421090"></p>
+<p>解决同步非阻塞中频繁系统调用的问题</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取就绪事件</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">select</span> <span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> nfds, <span class="comment">// 三个监听集合的文件描述符最大值+1，缩小系统监听的范围</span></span></span><br><span class="line"><span class="params">	fd_set *readfds, <span class="comment">// 要监听的可读文件描述符集合</span></span></span><br><span class="line"><span class="params">	fd_set *writefds, <span class="comment">// 要监听的可写文件描述符集合</span></span></span><br><span class="line"><span class="params">	fd_set *exceptfds, <span class="comment">// 要监听的异常文件描述符集合</span></span></span><br><span class="line"><span class="params">	<span class="keyword">struct</span> timeval *timeout, <span class="comment">// 本次调用的超时时间</span></span></span><br><span class="line"><span class="params">)</span>; <span class="keyword">return</span> <span class="comment">// 大于0：已就绪的文件描述符；等于0：超时：小于：出错</span></span><br></pre></td></tr></table></figure>
 
 <p>服务端同时监听多个<code>fd</code>，将<code>fd</code>存放在<code>bitmap</code>中，也就是<code>fd_set</code>，监听不同的类型使用不同的<code>fs_set</code>，这个<code>bitmap</code>默认1024位（例如<code>fd</code>序号<code>[1,2,3]</code>，则<code>fd_set</code>记录的就是<code>01110000</code>，表示1、2、3号位的<code>fd</code>需要监听，同时<code>nfds</code>是<code>10</code>）。</p>
 <p>服务端将<code>fd_set</code>从用户态拷贝一份到内核态，内核在检查<code>fd</code>的过程中，如果没有数据，则阻塞住，如果有数据，有<code>fd</code>已经就绪，则将<code>fd</code>置位，将<code>fd_set</code>返回到用户态，用户态便利<code>fd</code>，获取对应就绪的<code>fd</code>，进行处理。</p>
@@ -307,28 +358,44 @@
 <p>缺点：单进程监听的<code>fd</code>有限制，默认<code>1024</code>，但是有上线；不知道具体哪个文件描述符就绪，需要便利全部文件描述符；由于内核置位了<code>fs_set</code>，每次进入<code>select</code>的时候，都需要重新将入参的3个<code>fd_set</code>集合重置；以及每次调用需要将<code>fd_set</code>从用户态拷贝到内核态；</p>
 <h4 id="poll"><a href="#poll" class="headerlink" title="poll"></a><code>poll</code></h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取就绪事件</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">poll</span> <span class="params">(</span></span><br><span class="line"><span class="params">	<span class="keyword">struct</span> pollfd *pollfds <span class="comment">// 要监听的文件描述符的集合</span></span></span><br><span class="line"><span class="params">	<span class="type">unsigned</span> <span class="type">int</span> nfds, <span class="comment">// 文件描述符数量</span></span></span><br><span class="line"><span class="params">	<span class="type">int</span> timeout, <span class="comment">// 本次调用的超时时间</span></span></span><br><span class="line"><span class="params">)</span>; <span class="keyword">return</span> <span class="comment">// 大于0：已就绪的文件描述符；等于0：超时：小于：出错</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> pollfd &#123;</span><br><span class="line">	<span class="type">int</span> fd; <span class="comment">// 监听的文件描述符</span></span><br><span class="line">	<span class="type">short</span> events; <span class="comment">// 监听的事件</span></span><br><span class="line">	<span class="type">short</span> revents; <span class="comment">// 就绪的事件</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>跟select类似，不使用bitmap，使用pollfd。将pollfd从用户态空间拷贝到内核态，poll过程也是阻塞，当事件就绪，内核态将revents置位。poll便利pollfds，当pollfd的revent发生改变，则进行处理以及恢复成默认状态，下次循环将默认的pollfd拷贝到内核态空间。</p>
-<p>pollfd数组解决了bitmap的大小限制。</p>
-<p>通过数组中的revent解决解决了每次复制到内核态的fd无法重用的问题。</p>
+<p>跟<code>select</code>类似，不使用<code>bitmap</code>，使用<code>pollfd</code>。将<code>pollfd</code>从用户态空间拷贝到内核态，<code>poll</code>过程也是阻塞，当事件就绪，内核态将<code>revents</code>置位。<code>poll</code>便利<code>pollfds</code>，当<code>pollfd</code>的<code>revent</code>发生改变，则进行处理以及恢复成默认状态，下次循环将默认的<code>pollfd</code>拷贝到内核态空间。</p>
+<p><code>pollfd</code>数组解决了<code>bitmap</code>的大小限制。</p>
+<p>通过数组中的<code>revent</code>解决解决了每次复制到内核态的fd无法重用的问题。</p>
 <p>优点：不需要每个fd都进行一次系统调用，导致频繁的用户态内核态切换</p>
 <p>缺点：<del>单进程监听的fd有限制，默认1024</del>；每次调用需要将fd从用户态拷贝到内核态；不知道具体哪个文件描述符就绪，需要便利全部文件描述符；<del>入参的3个fd_set集合每次调用都需要重置</del></p>
-<h4 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a><code>epoll</code></h4><p>解决poll中无法知道具体哪个fd就绪的问题</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 创建一个epoll</span><br><span class="line">int epoll_create(</span><br><span class="line">	int size // epoll要监听的文件描述符数量</span><br><span class="line">) </span><br><span class="line">return int epoll的文件描述符	</span><br></pre></td></tr></table></figure>
+<h4 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a><code>epoll</code></h4><p><code>event poll</code>，事件驱动</p>
+<p><code>epoll</code> 不需要遍历所有的文件描述符，因为很耗时。尝试在文件描述符满足条件的时候，将它们挪到一个队列里面，如果用户询问，就可以直接返回这个队列里的数据。</p>
+<p>解决<code>poll</code>中无法知道具体哪个fd就绪的问题</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个epoll</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_create</span><span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> size <span class="comment">// epoll要监听的文件描述符数量</span></span></span><br><span class="line"><span class="params">)</span> </span><br><span class="line"><span class="keyword">return</span> <span class="type">int</span> epoll的文件描述符	</span><br></pre></td></tr></table></figure>
+
+<p>核心在于三个方法 <code>epoll_create</code>，<code>epoll_ctl</code>，<code>epoll_wait</code></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113026557.png" alt="image-20231130113026557"></p>
+<p>一个 <code>epoll</code> 对象主要有两个结构，一个是用红黑树来存储被监控文件描述符，一个就是就绪队列，存储就绪文件描述符。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113104801.png" alt="image-20231130113104801"></p>
+<p><code>epoll</code> 会监听系统<strong>中断</strong>，而后将文件描述符挪动到就绪队列。（这也是 <code>epoll</code> 比 <code>select</code> 高效的主要原因，次要原因是文件描述符的处理。）</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113139478.png" alt="image-20231130113139478"></p>
+<p>用户查询的时候，直接返回就绪队列。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113206991.png" alt="image-20231130113206991"></p>
+<p>用户使用代码：</p>
+<ol>
+<li>创建 <code>epoll</code></li>
+<li>往 <code>epoll</code> 里面添加文件描述符</li>
+<li>不断从 <code>epoll</code> 里面找数据</li>
+</ol>
+<p>golang中的调用如下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">epollcreate</span><span class="params">(size <span class="type">int32</span>)</span></span> <span class="type">int32</span></span><br></pre></td></tr></table></figure>
+
+<p>创建产生<code>epollfd</code>，可以是一个有容量的空白的空间，并且这个epfd是内核态和用户态共享的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 时间注册</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_ctl</span><span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> epfd, <span class="comment">// epoll的文件描述符</span></span></span><br><span class="line"><span class="params">	<span class="type">int</span> op, <span class="comment">// 操作类型：新增1，删除2，更新3</span></span></span><br><span class="line"><span class="params">	<span class="type">int</span> fd, <span class="comment">// 本次操作的文件描述符</span></span></span><br><span class="line"><span class="params">	<span class="keyword">struct</span> epoll_event *event, <span class="comment">// 需要监听的事件：读事件、写事件</span></span></span><br><span class="line"><span class="params">	)</span>;</span><br><span class="line"><span class="keyword">return</span> <span class="comment">// 调用成功返回0，不成功返回-1</span></span><br></pre></td></tr></table></figure>
 
 <p>golang中的调用如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func epollcreate(size int32) int32</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//go:noescape</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">epollctl</span><span class="params">(epfd, op, fd <span class="type">int32</span>, ev *epollevent)</span></span> <span class="type">int32</span></span><br></pre></td></tr></table></figure>
 
-<p>创建产生epollfd，可以是一个有容量的空白的空间，并且这个epfd是内核态和用户态共享的</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 时间注册</span><br><span class="line">int epoll_ctl(</span><br><span class="line">	int epfd, // epoll的文件描述符</span><br><span class="line">	int op, // 操作类型：新增1，删除2，更新3</span><br><span class="line">	int fd, // 本次操作的文件描述符</span><br><span class="line">	struct epoll_event *event, // 需要监听的事件：读事件、写事件</span><br><span class="line">	);</span><br><span class="line">return // 调用成功返回0，不成功返回-1</span><br></pre></td></tr></table></figure>
-
-<p>golang中的调用如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//go:noescape</span><br><span class="line">func epollctl(epfd, op, fd int32, ev *epollevent) int32</span><br></pre></td></tr></table></figure>
-
-<p>epoll_ctl，循环注册，将需要监听的fd注册到epfd中，每次以fd-epoll_event的形式注册到epollfd</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 获取就绪事件</span><br><span class="line">int epoll_wait(</span><br><span class="line">	int epfd, // epoll的文件描述符</span><br><span class="line">	struct epoll_event, // 用于回传就绪的事件</span><br><span class="line">	int maxevents, // 每次能处理的最大事件数</span><br><span class="line">	int timeout, // 等待I/O事件发生的超时时间，-1相当于阻塞，0相当于非阻塞</span><br><span class="line">)</span><br><span class="line">return // 大于0，已就绪的文件描述符数；等于0：超时；小于0：出错</span><br></pre></td></tr></table></figure>
+<p><code>epoll_ctl</code>，循环注册，将需要监听的<code>fd</code>注册到<code>epfd</code>中，每次以<code>fd-epoll_event</code>的形式注册到<code>epollfd</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取就绪事件</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_wait</span><span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> epfd, <span class="comment">// epoll的文件描述符</span></span></span><br><span class="line"><span class="params">	<span class="keyword">struct</span> epoll_event, <span class="comment">// 用于回传就绪的事件</span></span></span><br><span class="line"><span class="params">	<span class="type">int</span> maxevents, <span class="comment">// 每次能处理的最大事件数</span></span></span><br><span class="line"><span class="params">	<span class="type">int</span> timeout, <span class="comment">// 等待I/O事件发生的超时时间，-1相当于阻塞，0相当于非阻塞</span></span></span><br><span class="line"><span class="params">)</span></span><br><span class="line"><span class="keyword">return</span> <span class="comment">// 大于0，已就绪的文件描述符数；等于0：超时；小于0：出错</span></span><br></pre></td></tr></table></figure>
 
 <p>golang中的调用如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//go:noescape</span><br><span class="line">func epollwait(epfd int32, ev *epollevent, nev, timeout int32) int32</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//go:noescape</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">epollwait</span><span class="params">(epfd <span class="type">int32</span>, ev *epollevent, nev, timeout <span class="type">int32</span>)</span></span> <span class="type">int32</span></span><br></pre></td></tr></table></figure>
 
 <p>内核态检测到有数据，通过重排的方式，将就绪状态的fd排列在epfd前面，并且返回就绪个数。</p>
 <p>用户态在处理的时候，便利前面就绪个数的元素。</p>

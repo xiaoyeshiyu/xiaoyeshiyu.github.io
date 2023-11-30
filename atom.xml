@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-11-09T06:21:52.978Z</updated>
+  <updated>2023-11-30T03:47:28.919Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,36 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Go网络编程之网络通信协议</title>
+    <link href="https://www.xiaoyeshiyu.com/post/4d37.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/4d37.html</id>
+    <published>2023-11-08T16:00:00.000Z</published>
+    <updated>2023-11-30T03:47:28.919Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;网络通信协议&quot;&gt;&lt;a href=&quot;#网络通信协议&quot; class=&quot;headerlink&quot; title=&quot;网络通信协议&quot;&gt;&lt;/a&gt;网络通信协议&lt;/h1&gt;&lt;p&gt;互联网的核心是一些列协议，总称为</summary>
+        
+      
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>分布式事务</title>
     <link href="https://www.xiaoyeshiyu.com/post/fa8f.html"/>
     <id>https://www.xiaoyeshiyu.com/post/fa8f.html</id>
     <published>2023-11-05T16:00:00.000Z</published>
-    <updated>2023-11-09T06:21:52.978Z</updated>
+    <updated>2023-11-29T09:43:45.064Z</updated>
     
     
     <summary type="html">在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。</summary>
@@ -371,25 +396,6 @@
     
     
     <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>缓存</title>
-    <link href="https://www.xiaoyeshiyu.com/post/8507.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/8507.html</id>
-    <published>2023-08-27T16:00:00.000Z</published>
-    <updated>2023-09-07T09:39:33.813Z</updated>
-    
-    
-    <summary type="html">在微服务中会经常用到缓存，特别是在高并发的场景中，为了降低数据库压力和提高性能，使用缓存会非常频繁。</summary>
-    
-    
-    
-    <category term="中间件" scheme="https://www.xiaoyeshiyu.com/categories/midware/"/>
     
     
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
