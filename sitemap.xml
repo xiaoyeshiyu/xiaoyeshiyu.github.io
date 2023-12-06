@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/post/a2b0.html</loc>
+    
+    <lastmod>2023-12-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/post/c682.html</loc>
     
     <lastmod>2023-12-06</lastmod>
@@ -86,15 +95,6 @@
     <loc>https://www.xiaoyeshiyu.com/post/d0a2.html</loc>
     
     <lastmod>2023-11-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/post/a2b0.html</loc>
-    
-    <lastmod>2023-10-26</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1155,28 +1155,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
-    <lastmod>2023-12-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
-    <lastmod>2023-12-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Application/</loc>
-    <lastmod>2023-12-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
     <lastmod>2023-12-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1190,7 +1169,28 @@
   </url>
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <lastmod>2023-12-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
+    <lastmod>2023-12-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/GoLearningNote/</loc>
+    <lastmod>2023-12-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/Application/</loc>
     <lastmod>2023-12-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

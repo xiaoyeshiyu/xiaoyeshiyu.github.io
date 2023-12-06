@@ -135,7 +135,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/a2b0.html"/>
     <id>https://www.xiaoyeshiyu.com/post/a2b0.html</id>
     <published>2023-10-23T16:00:00.000Z</published>
-    <updated>2023-10-26T09:57:04.758Z</updated>
+    <updated>2023-12-06T10:10:28.303Z</updated>
     
     
     <summary type="html">介绍了降级、重试和负载均衡这三个策略，旨在提高微服务系统的可用性和稳定性。本文可以了解如何通过降级技术优雅地处理高负载和故障，确保核心功能的正常运行。通过不同的重试策略，以在网络不稳定或服务故障的情况下增加请求的成功率。介绍负载均衡的概念和不同的负载均衡算法，在微服务架构中合理分配请求，实现高可用性和性能优化。</summary>

@@ -38,7 +38,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024115320016.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024145149959.png">
 <meta property="article:published_time" content="2023-10-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-10-26T09:57:04.758Z">
+<meta property="article:modified_time" content="2023-12-06T10:10:28.303Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -158,7 +158,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%8D%E7%BA%A7"><span class="nav-number">1.</span> <span class="nav-text">降级</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%B4%A8"><span class="nav-number">1.1.</span> <span class="nav-text">本质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Case-Study"><span class="nav-number">1.2.</span> <span class="nav-text">Case Study</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E8%AF%95"><span class="nav-number">2.</span> <span class="nav-text">重试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Case-Study-1"><span class="nav-number">2.1.</span> <span class="nav-text">Case Study</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">3.</span> <span class="nav-text">负载均衡</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">4.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%8D%E7%BA%A7"><span class="nav-number">1.</span> <span class="nav-text">降级</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E8%B4%A8"><span class="nav-number">1.1.</span> <span class="nav-text">本质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Case-Study"><span class="nav-number">1.2.</span> <span class="nav-text">Case Study</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E8%AF%95"><span class="nav-number">2.</span> <span class="nav-text">重试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Case-Study-1"><span class="nav-number">2.1.</span> <span class="nav-text">Case Study</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">3.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.2.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%8B%E7%9A%84%E9%A2%9D%E5%A4%96%E7%BA%A6%E6%9D%9F"><span class="nav-number">3.3.</span> <span class="nav-text">微服务下的额外约束</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%84%E4%B8%9A%E5%8A%A1%E7%9B%B8%E5%85%B3%E6%80%A7"><span class="nav-number">3.4.</span> <span class="nav-text">负载均衡的业务相关性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%92%8C%E6%9C%AC%E5%9C%B0%E7%BC%93%E5%AD%98"><span class="nav-number">3.5.</span> <span class="nav-text">负载均衡和本地缓存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E9%98%85%E8%AF%BB"><span class="nav-number">4.</span> <span class="nav-text">推荐阅读</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -252,7 +252,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-10-26 17:57:04" itemprop="dateModified" datetime="2023-10-26T17:57:04+08:00">2023-10-26</time>
+      <time title="Modified: 2023-12-06 18:10:28" itemprop="dateModified" datetime="2023-12-06T18:10:28+08:00">2023-12-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -344,7 +344,7 @@
 </li>
 </ul>
 <h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024114742593.png" alt="image-20231024114742593"></p>
-<p>负载均衡是数据中心内部的负载均衡。</p>
+<p>负载均衡是数据中心内部的负载均衡。（负载均衡的本质是挑选一个最优的节点）</p>
 <p>在理想情况下，某个服务的负载会完全均匀地分发给所有的后端任务。在任何时刻，最忙的和最不忙的节点永远消耗同样数量的 CPU 。</p>
 <p>目标：</p>
 <ul>
@@ -380,6 +380,108 @@
 <p><code>β</code> 为若干次幂的倒数，即：<code>Math.Exp((-span) / 600ms)</code></p>
 <p>最终的状态，所有 <code>backend</code> 节点的负载趋于一样。</p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024145149959.png" alt="image-20231024145149959"></p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><ul>
+<li>轮询<ul>
+<li>有一些前提<ul>
+<li>所有服务器的处理能力是一样的</li>
+<li>所有请求所需的资源也是一样的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>加权轮询<ul>
+<li>权重大的多分，权重少的少分</li>
+<li>用权重来代表服务器的处理能力</li>
+<li>所有请求所需的资源也是一样的</li>
+</ul>
+</li>
+<li>随机<ul>
+<li>瞎选</li>
+<li>所有服务器的处理能力是一样的</li>
+<li>所有请求所需的资源也是一样的</li>
+<li>每台服务器被随机到的概率一样，因而大量请求的情况下，服务器之间的负载会一样</li>
+<li>相比之下，轮询的可控性更强。但是大多数情况下效果差不多</li>
+</ul>
+</li>
+<li>加权随机<ul>
+<li>根据权重来确定选中率</li>
+<li>用权重来代表服务器的处理能力</li>
+<li>所有请求所需的资源也是一样的</li>
+</ul>
+</li>
+<li>哈希<ul>
+<li>所有服务器的处理能力是一样的</li>
+<li>所有请求所需的资源也是一样的</li>
+<li>哈希值是均匀的</li>
+<li>哈希值不均匀会导致请求堆积在一个地方</li>
+</ul>
+</li>
+<li>最小连接数<ul>
+<li>加设<ul>
+<li>用连接数来代表服务器负载</li>
+<li>所有服务器的处理能力是一样的</li>
+<li>请求所需资源都一样</li>
+</ul>
+</li>
+<li>可能会短时间内把所有的请求都发过去同一台服务器</li>
+<li>连接复用的情况下，连接数不能很好代表服务器的负载</li>
+</ul>
+</li>
+<li>最小活跃数（最少请求数）<ul>
+<li>加设：<ul>
+<li>用服务器上的请求数量代表负载</li>
+<li>所有服务器的处理能力是一样的</li>
+<li>请求所需资源都一样</li>
+</ul>
+</li>
+<li>可能会短时间内把所有的请求都发去同一台服务器</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>要不要考虑服务器处理能力<ul>
+<li>轮询、随机、哈希、最小连接数、最少活跃数都没有考虑上限</li>
+</ul>
+</li>
+<li>选择什么指标来表达服务器当前负载<ul>
+<li>（加权）轮询、（加权）随机、哈希什么都没有选，依赖于统计</li>
+<li>选择连接数、请求数、响应时间、错误数</li>
+</ul>
+</li>
+<li>是不是所有的请求所需资源都是一样的？显然不是<ul>
+<li>大商家品类极多，大买家订单极多</li>
+<li>不考虑请求消耗资源的负载均衡容易出现偶发性的大爆某一台实例的情况</li>
+</ul>
+</li>
+</ul>
+<h2 id="微服务下的额外约束"><a href="#微服务下的额外约束" class="headerlink" title="微服务下的额外约束"></a>微服务下的额外约束</h2><ul>
+<li>微服务客户端不同于网关，它不具备全局信息<ul>
+<li>最小连接数负载均衡：客户端只能知道自己和服务器之间有多少连接</li>
+<li>最少活跃负载均衡：客户端只能知道自己发过去多少的请求，还有多少个没有返回</li>
+</ul>
+</li>
+<li>微服务框架很少设计为要获取全局信息，难点在于：<ul>
+<li>这本质上是一个分布式一致性问题</li>
+<li>即便借助于注册中心交换信息，会导致注册中心频繁通知客户端</li>
+</ul>
+</li>
+<li>在缺乏全局信息的情况下，客户端会选择服务端1作为服务提供者</li>
+<li>在微服务中选择负载均衡算法，这种需要全局信息的算法可能抖动会比较厉害</li>
+<li>那么为什么它们运作得还是很好呢？因为请求数量多了，慢慢会收敛到一种比较均匀的状态</li>
+</ul>
+<h2 id="负载均衡的业务相关性"><a href="#负载均衡的业务相关性" class="headerlink" title="负载均衡的业务相关性"></a>负载均衡的业务相关性</h2><ul>
+<li>业务相关负载均衡：根据业务的某些特征来进行负载均衡，典型的如根据用户ID来进行负载均衡</li>
+<li>但是往往一个请求所需多少资源和业务是强相关的，于是容易出现热点问题，或者大请求永远落在一部分机器上两个问题</li>
+<li>业务相关的负载均衡可以结合本地缓存，避免本地缓存同步的问题</li>
+</ul>
+<h2 id="负载均衡和本地缓存"><a href="#负载均衡和本地缓存" class="headerlink" title="负载均衡和本地缓存"></a>负载均衡和本地缓存</h2><ul>
+<li>业务无关的负载均衡和本地缓存搭配，效果很差：<ul>
+<li>缓存命中率低</li>
+<li>缓存占据内存更大</li>
+</ul>
+</li>
+<li>业务相关负载均衡，例如根据用户ID来做负载均衡（分库分表大部分都可以看作是业务相关的），存在热点问题</li>
+</ul>
 <h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5mb3EuY24vYXJ0aWNsZS9iYXNpcy1mcmFtZXdvcmt0by1pbXBsZW1lbnQtbWljcm8tc2VydmljZS8=">实施微服务，我们需要哪些基础框架？<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5mb3EuY24vbmV3cy8yMDE3LzA0L2xpbmtlcmQtY2VsZWJyYXRlcy1vbmUteWVhci8=">开源 Linkerd 项目庆祝一周年纪念日<i class="fa fa-external-link-alt"></i></span></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9uZXRmbGl4dGVjaGJsb2cuY29tL25ldGZsaXgtZWRnZS1sb2FkLWJhbGFuY2luZy02OTUzMDhiNTU0OGM=">Rethinking Netflix’s Edge Load Balancing<i class="fa fa-external-link-alt"></i></span></p>
