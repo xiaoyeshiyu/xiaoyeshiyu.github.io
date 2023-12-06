@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这篇文章将深入探讨微服务架构中的可观察性，着重于日志记录作为关键的监控和调试工具。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务可观察性之日志">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/cfd3.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="这篇文章将深入探讨微服务架构中的可观察性，着重于日志记录作为关键的监控和调试工具。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/03.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152007930.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152012928.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130155603276.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130160401517.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175503236.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175623920.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201173021618.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174102166.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174418357.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174911511.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175010120.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175208534.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175638694.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201180255277.png">
+<meta property="article:published_time" content="2023-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-06T03:39:45.326Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/03.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/cfd3.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/cfd3.html","path":"post/cfd3.html","title":"微服务可观察性之日志"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>微服务可观察性之日志 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7%E4%B8%89%E8%A7%92"><span class="nav-number">1.</span> <span class="nav-text">可观测性三角</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB"><span class="nav-number">2.</span> <span class="nav-text">日志级别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Warning"><span class="nav-number">2.1.</span> <span class="nav-text">Warning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fatal"><span class="nav-number">2.2.</span> <span class="nav-text">Fatal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Error"><span class="nav-number">2.3.</span> <span class="nav-text">Error</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Debug"><span class="nav-number">2.4.</span> <span class="nav-text">Debug</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Logger"><span class="nav-number">3.</span> <span class="nav-text">Logger</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E9%80%89%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">日志选型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ELK-stack"><span class="nav-number">4.1.</span> <span class="nav-text">ELK stack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">4.2.</span> <span class="nav-text">引入消息队列</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F"><span class="nav-number">5.</span> <span class="nav-text">日志系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="nav-number">5.1.</span> <span class="nav-text">设计目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E8%A7%84%E8%8C%83"><span class="nav-number">5.2.</span> <span class="nav-text">日志规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.3.</span> <span class="nav-text">设计与实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%87%E9%9B%86"><span class="nav-number">5.3.1.</span> <span class="nav-text">采集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93"><span class="nav-number">5.3.2.</span> <span class="nav-text">传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E5%88%86"><span class="nav-number">5.3.3.</span> <span class="nav-text">切分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%92%8C%E6%A3%80%E7%B4%A2"><span class="nav-number">5.3.4.</span> <span class="nav-text">存储和检索</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-number">5.4.</span> <span class="nav-text">文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86"><span class="nav-number">5.5.</span> <span class="nav-text">容器日志采集</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">6.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/cfd3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="微服务可观察性之日志 | 小夜时雨">
+      <meta itemprop="description" content="这篇文章将深入探讨微服务架构中的可观察性，着重于日志记录作为关键的监控和调试工具。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          微服务可观察性之日志
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-11-06 00:00:00" itemprop="dateCreated datePublished" datetime="2023-11-06T00:00:00+08:00">2023-11-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-06 11:39:45" itemprop="dateModified" datetime="2023-12-06T11:39:45+08:00">2023-12-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/cfd3.html" class="post-meta-item leancloud_visitors" data-flag-title="微服务可观察性之日志" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">这篇文章将深入探讨微服务架构中的可观察性，着重于日志记录作为关键的监控和调试工具。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="可观测性三角"><a href="#可观测性三角" class="headerlink" title="可观测性三角"></a>可观测性三角</h1><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/03.png" alt="Venn diagram with gradient"></p>
+<ul>
+<li><code>Metrics</code>：度量数据，这些数据应该是可以用来做分析的，例如均值，99线等。对于一个请求来说，可以度量的东西很多：</li>
+<li><code>Tracing</code>：强大的是请求级别，即一个请求发生了什么；</li>
+<li><code>Logging</code>：强调的记录发生了某个事情，一个请求内部会发生很多事情；</li>
+</ul>
+<h1 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h1><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy9nbG9n">https://github.com/golang/glog<i class="fa fa-external-link-alt"></i></span> ，是 google 提供的一个不维护的日志库，<code>glog</code> 有其他语言的一些版本，可以起到很大的借鉴作用。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> glog.V(<span class="number">2</span>) &#123;</span><br><span class="line">	glog.Info(<span class="string">&quot;Starting transaction...&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">glog.V(<span class="number">2</span>).Infoln(<span class="string">&quot;Processed&quot;</span>, nItems, <span class="string">&quot;elements&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>V(2)</code> 打印不同层级的日志，避免出现由于打印日志过多影响性能。</p>
+<p>它包含如下日志级别：</p>
+<ul>
+<li><code>Info</code></li>
+<li><code>Warning</code></li>
+<li><code>Error</code></li>
+<li><code>Fatal</code>（会中断程序执行）</li>
+</ul>
+<p>还有类似 <code>log4go</code>，<code>loggo</code>，<code>zap</code> 等其他第三方日志库，他们还提供了设置日志级别的可见行，一般提供日志级别：</p>
+<ul>
+<li><code>Trace</code></li>
+<li><code>Debug</code></li>
+<li><code>Info</code></li>
+<li><code>Warning</code></li>
+<li><code>Error</code></li>
+<li><code>Critical</code></li>
+</ul>
+<p>各个级别的定义和使用规范：</p>
+<h2 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a><code>Warning</code></h2><p>没人看告警，因为从定义上将，没有什么出错。也许将来会出问题，但这听起来像是别人的问题。我们尽可能的消除警告级别，它要么是一条消息性消息，那么是一个错误。我们参考 <code>Go</code> 语言设计的哲学，所有警告都是错误，其他语言的 <code>warning</code> 都可以忽略，除非 <code>IDE</code> 或者在 <code>CICD</code> 流程中强制他们为 <code>error</code>，然后逼着程序员们尽可能去消除。同样的，如果想要最终消除 <code>warning</code> 可以记录为 <code>error</code>，让代码作者重视起来。</p>
+<h2 id="Fatal"><a href="#Fatal" class="headerlink" title="Fatal"></a><code>Fatal</code></h2><p>记录消息后，直接调用 <code>os.Exit(1)</code>，这意味着：</p>
+<ul>
+<li>在其他 <code>goroutine defer</code> 语句不会被执行；</li>
+<li>各种 <code>buffers</code> 不会被 <code>flush</code>，包括日志的；</li>
+<li>临时文件或者目录不会被移除；</li>
+</ul>
+<p>不要使用 <code>fatal</code> 记录日志，而是面向调用者返回错误。如果错误一直持续到 <code>main.main</code>。<code>main.main</code> 就是在退出之前做处理任何清理操作的正确位置。</p>
+<h2 id="Error"><a href="#Error" class="headerlink" title="Error"></a><code>Error</code></h2><p>也有很多人，在错误发生的地方要立马记录日志，尤其要使用 <code>error</code> 级别记录。</p>
+<ul>
+<li>处理 <code>error</code>；</li>
+<li>把 <code>error</code> 抛给调用者，在顶部打印日志；</li>
+</ul>
+<p>如果选择通过日志记录来处理错误，那么根据定义，<em>它不再是一个错误 - 您已经处理了它</em>。记录错误的行为会处理错误，因此不再适合将其记录为错误。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152007930.png" alt="image-20231130152007930" style="zoom: 50%;" />
+
+<p>要么打印，要么往上抛。</p>
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152012928.png" alt="image-20231130152012928" style="zoom:50%;" />
+
+<p>这里降级了，就属于正常状态。</p>
+<blockquote>
+<p> 这里产生了降级行为，本质属于有损服务，我更倾向于这里使用 <code>Warning</code>。</p>
+</blockquote>
+<h2 id="Debug"><a href="#Debug" class="headerlink" title="Debug"></a><code>Debug</code></h2><p>相信只有两种事件应该记录：</p>
+<ul>
+<li>开发人员在开发或调试软件时关心的事情；</li>
+<li>用户在使用软件时关心的事情；</li>
+</ul>
+<p>显示，它们分别是调试和信息级别。</p>
+<p><code>log.Info</code> 只需要将该行写入日志输出。不应该有关闭它的选项，因为用户只应该被告知对他们有用的事情。如果发生了一个无法处理的错误，它就会抛出到 <code>main.main</code>。<code>main.main</code> 程序终止的地方。在最后的日志消息前面插入 <code>fatal</code> 前缀，或者直接写入 <code>os.Stderr</code>。</p>
+<p><code>log.Debug</code>，是完全不同的事情。它由开发人员或支持工程师控制。在开发过程中，调试语句应该是丰富的，而不必求助于 <code>trace</code> 或 <code>debug2</code>（开发者知道）级别。日志包应该支持细粒度控制，以启用或禁用调试，并且只在包或更精细的范围内启用或禁用调试语句。</p>
+<p>推荐 <code>kratos</code> 的设计和思考：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvLWtyYXRvcy9rcmF0b3MvdHJlZS9tYWluL2xvZw==">https://github.com/go-kratos/kratos/tree/main/log<i class="fa fa-external-link-alt"></i></span></p>
+<ul>
+<li>没有具体的日志实现，只有抽象</li>
+<li><code>log.Init(...)</code> 初始化抽象，然后使用 <code>interface</code></li>
+<li>通过对象，来调用 <code>interface</code> 注入不同的 <code>level</code></li>
+</ul>
+<h1 id="Logger"><a href="#Logger" class="headerlink" title="Logger"></a><code>Logger</code></h1><p>在 <code>package</code> 使用的时候</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;mylogger&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> log = mylogger.GetLogger(<span class="string">&quot;github.com/project/foo&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>foo</code> 耦合了 <code>mylogger</code></li>
+<li>所有使用 <code>foo</code> 的其他库，被透明依赖了 <code>mylogger</code></li>
+</ul>
+<p>当我们使用 <code>kit</code> 时</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/pkg/log&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">	logger log.Logger </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130155603276.png" alt="image-20231130155603276" style="zoom: 50%;" />
+
+<p>解耦需要打日志的类型与日志的实际类型之间的绑定。</p>
+<h1 id="日志选型"><a href="#日志选型" class="headerlink" title="日志选型"></a>日志选型</h1><p>一个完整的集中式日志系统，需要包含以下几个主要特点：</p>
+<ul>
+<li>收集 - 能够采集多种来源的日志数据；</li>
+<li>传输 - 能够稳定的把日志传输到中央系统；</li>
+<li>存储 - 如何存储日志数据；</li>
+<li>分析 - 可以支持 UI 分析；</li>
+<li>警告 - 能够提供错误报告，监控机制；</li>
+</ul>
+<h2 id="ELK-stack"><a href="#ELK-stack" class="headerlink" title="ELK stack"></a>ELK stack</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130160401517.png" alt="image-20231130160401517" style="zoom: 25%;" />
+
+<p>开源界鼎鼎大名 <code>ELK stack</code>，分别表示：<code>ElasticSearch</code>，<code>Logstash</code>，<code>Kibana</code>，它们都是开源软件。新增一个 <code>FileBeat</code>，它是一个轻量级的日志收集处理工具（<code>Agent</code>），<code>FileBeat</code> 占用资源少，适合于在各个服务器上收集日志后传输给 <code>Logstash</code>，官方也推荐此工具。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175503236.png" alt="image-20231130175503236"></p>
+<p>此架构由 <code>Logstash</code> 分布于各个节点上（以 <code>Logstash Agent</code> 的形式）搜集相关日志、数据，并经过分析、过滤后发送给远端服务器上的 <code>Elasticsearch</code> 进行存储。</p>
+<p><code>Elasticsearch</code> 将数据以分片的形式压缩存储并提供多种 API 供用户查询，操作。用户亦可以更直观的通过配置 <code>Kibana Web</code> 方便的对日志查询，并根据数据生成报表。</p>
+<p>因为 <code>logstatsh</code> 属于 <code>server</code> 角色，必然出现流量集中式的热点问题，因此我们不建议使用这种部署方式，同时因为还需要做大量的 <code>match</code> 操作（格式化日志），消耗的 CPU 也很多，不利于 <code>scale out</code>。</p>
+<h2 id="引入消息队列"><a href="#引入消息队列" class="headerlink" title="引入消息队列"></a>引入消息队列</h2><p>为了解决<code>Logstash Agent</code> 的热点和维护性问题，可以将 <code>logstash Agent</code> 退化到本地微服务中</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175623920.png" alt="image-20231130175623920"></p>
+<p>此种架构引入了消息队列机制，位于各个节点上的 <code>Logstath Agent</code> 先将数据、日志传递给<code>Kafka</code>，并将队列中消息或数据间接传递给 <code>Logstash</code>，<code>Logstash</code> 过滤、分析后将数据传递给 <code>Elasticsearch</code> 存储。最后由 <code>Kibana</code> 将日志和数据呈现给用户。因为引入了 <code>Kafka</code>，所以即使远端 <code>Logstash server</code>因故障停止运行，数据将会先被存储下来，从而避免数据丢失。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201173021618.png" alt="image-20231201173021618"></p>
+<p>更进一步的：</p>
+<p>将收集端 <code>logstash</code> 替换为 <code>beats</code>，更灵活，消耗资源更少，扩展性更强。替代 <code>JRuby</code> 语言，使用 <code>beats</code> 外挂服务或者 <code>sidercar</code>。</p>
+<h1 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h1><p>基于上面的日志选型，设计一个符合高并发大容量的日志系统。</p>
+<h2 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h2><ul>
+<li>接入方式收敛；</li>
+<li>日志格式规范；</li>
+<li>日志解析对日志系统透明；</li>
+<li>系统高吞吐、低延迟；</li>
+<li>系统高可用、容量可扩展、高可运维性；</li>
+</ul>
+<h2 id="日志规范"><a href="#日志规范" class="headerlink" title="日志规范"></a>日志规范</h2><p>一般使用 <code>JSON</code> 作为日志的输出格式（相比<code>protocbuf</code>，<code>json</code> 更加广泛，但是前者性能更好）：</p>
+<ul>
+<li><code>time</code>：日志产生时间，<code>ISO8601</code> 格式；</li>
+<li><code>level</code>：日志等级，<code>ERROR</code>、<code>WARN</code>、<code>INFO</code>、<code>DEBUG</code></li>
+<li><code>app_id</code>：应用<code>id</code>，用于标示日志来源；也就是服务发现的 <code>app_id</code></li>
+<li><code>instance_id</code>：实例<code>id</code>，用于区分同一应用不同实例，即 <code>hostname</code>；</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174102166.png" alt="image-20231201174102166"></p>
+<h2 id="设计与实现"><a href="#设计与实现" class="headerlink" title="设计与实现"></a>设计与实现</h2><p>日志从产生到可检索，经历几个阶段：</p>
+<ul>
+<li>生产 &amp; 采集</li>
+<li>传输 &amp; 切分</li>
+<li>存储 &amp; 检索</li>
+</ul>
+<h3 id="采集"><a href="#采集" class="headerlink" title="采集"></a>采集</h3><p><code>logstash</code>：</p>
+<ul>
+<li>监听 <code>tcp/udp</code></li>
+<li>适用于通过网络上报日志的方式</li>
+</ul>
+<p><code>filebeat</code>：</p>
+<ul>
+<li>直接采集本地生成的日志文件（这种比较简单和稳定）</li>
+<li>适用于日志无法定制化输出的应用</li>
+</ul>
+<p><code>logagent</code>：</p>
+<ul>
+<li>物理机部署，监听 <code>unixsocket</code>，进程间通讯</li>
+<li>日志系统提供各种语言 <code>SDK</code></li>
+<li>直接读取本地日志文件</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174418357.png" alt="image-20231201174418357"></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174911511.png" alt="image-20231201174911511"></p>
+<h3 id="传输"><a href="#传输" class="headerlink" title="传输"></a>传输</h3><p>基于 <code>Flume</code> + <code>Kafka</code> 统一传输平台</p>
+<p>基于 <code>LogID</code> 做日志分流：</p>
+<ol>
+<li>一般级别</li>
+<li>低级别</li>
+<li>高级别（<code>ERROR</code>）</li>
+</ol>
+<p>大流量的环境下，可以使用 <code>Flink</code> + <code>Kafka</code> 来实现。</p>
+<p>也可以通过 <code>gateway</code> 来将日志路由到不同的 <code>Kafka</code> 集群中。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175010120.png" alt="image-20231201175010120"></p>
+<h3 id="切分"><a href="#切分" class="headerlink" title="切分"></a>切分</h3><p>从 <code>kafka</code> 消费日志，解析日志，写入 <code>elasticsearch</code></p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175208534.png" alt="image-20231201175208534"></p>
+<p>消费端：</p>
+<p><code>bili-index</code>：B站自研，<code>golang</code> 开发，逻辑简单，性能高，可定制化方便。（后续也会替换成 <code>flink</code>）</p>
+<ul>
+<li>日志规范产生的日志（<code>log agent</code> 收集）</li>
+</ul>
+<p><code>logstash</code>：es 官方组件，基于 <code>jruby</code> 开发，功能强大，资源消耗高，性能低。</p>
+<ul>
+<li>处理未按照日志规范产生的日志（<code>filebeat</code>、<code>logstash</code> 收集），需配置各种日志解析规则。</li>
+</ul>
+<h3 id="存储和检索"><a href="#存储和检索" class="headerlink" title="存储和检索"></a>存储和检索</h3><p>存储和检索都是基于 <code>elasticsearch</code> 实现，<code>es</code> 多集群架构：</p>
+<ul>
+<li>日志分级、高可用</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175638694.png" alt="image-20231201175638694"></p>
+<p>单数据集群内：</p>
+<p><code>master node</code> + <code>data node(hot/stale)</code> + <code>client node</code></p>
+<ul>
+<li>每日固定时间进行热 -&gt; 冷迁移；热数据存储到 <code>ssd</code> 上，冷数据迁移到 <code>hdd</code> 上</li>
+<li><code>index</code> 提前一天创建，基于 <code>template</code> 进行 <code>mapping</code> 管理</li>
+<li>检索基于 <code>kibana</code></li>
+</ul>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p>使用自定义协议，对于 <code>SDK</code> 质量、版本升级都有比较高的要求，因此我们长期会使用<strong>本地文件</strong>的方案实现：</p>
+<ul>
+<li><p>采集本地日志文件：位置不限，容器内 <code>or</code> 物理机</p>
+</li>
+<li><p>配置自描述：不做中心化配置，配置由 <code>app/paas</code> 自身提供，<code>agent</code> 读取配置并生效</p>
+</li>
+<li><p>日志不重不丢：多级队列，能够稳定地处理日志收集过程中各种异常</p>
+</li>
+<li><p>可监控：实施监控运行状态</p>
+</li>
+<li><p>完善的自我保护机制：限制自身对于宿主机资源的消耗，限制发送速度</p>
+</li>
+</ul>
+<h2 id="容器日志采集"><a href="#容器日志采集" class="headerlink" title="容器日志采集"></a>容器日志采集</h2><p>容器内应用日志采集：</p>
+<p>基于 <code>overlay2</code>，直接从物理机上查找对应日志文件（容器日志映射到物理机目录）。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201180255277.png" alt="image-20231201180255277"></p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly9wZXRlci5ib3VyZ29uLm9yZy9ibG9nLzIwMTcvMDIvMjEvbWV0cmljcy10cmFjaW5nLWFuZC1sb2dnaW5nLmh0bWw=">Metrics, tracing, and logging<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNS8xMS8wNS9sZXRzLXRhbGstYWJvdXQtbG9nZ2luZw==">Let’s talk about logging<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTMvMTEvdXNpbmctbG9nLXBhY2thZ2UtaW4tZ28uaHRtbA==">Using The Log Package In Go<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvZGVzaWduLXBoaWxvc29waHktb24tbG9nZ2luZy5odG1s">Design Philosophy On Logging<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNy8wMS8yMy90aGUtcGFja2FnZS1sZXZlbC1sb2dnZXItYW50aS1wYXR0ZXJu">The package level logger anti pattern<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9oZWxwLmFsaXl1bi5jb20vemgvc2xzL3VzZXItZ3VpZGUvdXNlLWxvZ3RhaWwtdG8tY29sbGVjdC1kYXRh">Logtail采集概述<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzcwMzIyOQ==">Logtail提升采集性能<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzIwNDU1NA==">Logtail技术分享(一) : Polling + Inotify 组合下的日志保序采集方案<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzI1MTYyOQ==">Logtail技术分享(二) : 多租户隔离技术+双十一实战效果<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9lbGFzdGljLXN0YWNrLw==">elastic-stack<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vYXJlc3hpbi9wLzgwMzUxMzcuaHRtbA==">ELK原理与介绍<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9iZWF0cy9maWxlYmVhdA==">Filebeat 轻量型日志采集器<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9iZWF0cy9maWxlYmVhdC84LjExL2luZGV4Lmh0bWw=">Filebeat Reference<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9sb2dzdGFzaA==">Logstash 集中、转换和存储数据<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9sb2dzdGFzaC84LjExL2luZGV4Lmh0bWw=">Logstash Reference<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9raWJhbmE=">Kibana 将数据转变为结果、响应和解决方案<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9raWJhbmEvOC4xMS9pbmRleC5odG1s">Kibana Guide<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9lbGFzdGljc2VhcmNoL3JlZmVyZW5jZS84LjExL2luZGV4Lmh0bWw=">Elasticsearch Guide<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9lbGFzdGljc2VhcmNoLmNuLw==">elasticsearch.cn<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmFsaWFzbWVlLmNvbS9wb3N0L2dyYXlsb2ctbG9nLXN5c3RlbS1hcmNoaXRlY3R1cmUv">Graylog 日志系统架构<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/8bda.html" rel="prev" title="分布式缓存">
+                  <i class="fa fa-chevron-left"></i> 分布式缓存
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/fa8f.html" rel="next" title="分布式事务">
+                  分布式事务 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
