@@ -32,6 +32,7 @@
 <meta property="og:description" content="这篇文章将探讨微服务架构中关键的可观察性工具之一——链路追踪。我们将深入研究链路追踪的概念，重点介绍它在微服务环境中的作用和优势。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113116946.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/2q6FmR7hgIzuUGx.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113257114.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205174815073.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113838814.png">
@@ -45,8 +46,14 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172251344.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172423414.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172427832.png">
-<meta property="article:published_time" content="2023-11-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-12-06T03:25:31.498Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/dependency-graph.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/architecture.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/grafana_prometheus.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206172436479.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206173700490.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206173831463.png">
+<meta property="article:published_time" content="2023-12-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-06T09:41:38.360Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -166,7 +173,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="nav-number">1.</span> <span class="nav-text">设计目标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dapper"><span class="nav-number">1.1.</span> <span class="nav-text">Dapper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E9%93%BE"><span class="nav-number">1.2.</span> <span class="nav-text">调用链</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%BD%E8%B8%AA%E4%BF%A1%E6%81%AF"><span class="nav-number">2.</span> <span class="nav-text">追踪信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A4%8D%E5%85%A5%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">植入点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">4.</span> <span class="nav-text">架构图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%9F%E8%B8%AA%E6%B6%88%E8%80%97"><span class="nav-number">5.</span> <span class="nav-text">跟踪消耗</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%9F%E8%B8%AA%E9%87%87%E6%A0%B7"><span class="nav-number">6.</span> <span class="nav-text">跟踪采样</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API"><span class="nav-number">7.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-number">7.1.</span> <span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E6%83%85"><span class="nav-number">7.2.</span> <span class="nav-text">详情</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E4%BE%9D%E8%B5%96%E5%9B%BE"><span class="nav-number">7.3.</span> <span class="nav-text">全局依赖图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E6%90%9C%E7%B4%A2"><span class="nav-number">7.4.</span> <span class="nav-text">依赖搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E6%96%AD%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="nav-number">7.5.</span> <span class="nav-text">推断环依赖</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%8F%E9%AA%8C-amp-%E4%BC%98%E5%8C%96"><span class="nav-number">8.</span> <span class="nav-text">经验&amp;优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">8.1.</span> <span class="nav-text">性能优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E9%87%8F%E9%A2%84%E4%BC%B0"><span class="nav-number">8.2.</span> <span class="nav-text">容量预估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7"><span class="nav-number">8.3.</span> <span class="nav-text">监控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB"><span class="nav-number">9.</span> <span class="nav-text">日志级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7-1"><span class="nav-number">10.</span> <span class="nav-text">监控</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="nav-number">1.</span> <span class="nav-text">设计目标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dapper"><span class="nav-number">1.1.</span> <span class="nav-text">Dapper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E9%93%BE"><span class="nav-number">1.2.</span> <span class="nav-text">调用链</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%BD%E8%B8%AA%E4%BF%A1%E6%81%AF"><span class="nav-number">2.</span> <span class="nav-text">追踪信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A4%8D%E5%85%A5%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">植入点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">4.</span> <span class="nav-text">架构图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%9F%E8%B8%AA%E6%B6%88%E8%80%97"><span class="nav-number">5.</span> <span class="nav-text">跟踪消耗</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%9F%E8%B8%AA%E9%87%87%E6%A0%B7"><span class="nav-number">6.</span> <span class="nav-text">跟踪采样</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#API"><span class="nav-number">7.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-number">7.1.</span> <span class="nav-text">搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%A6%E6%83%85"><span class="nav-number">7.2.</span> <span class="nav-text">详情</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E4%BE%9D%E8%B5%96%E5%9B%BE"><span class="nav-number">7.3.</span> <span class="nav-text">全局依赖图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E6%90%9C%E7%B4%A2"><span class="nav-number">7.4.</span> <span class="nav-text">依赖搜索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A8%E6%96%AD%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="nav-number">7.5.</span> <span class="nav-text">推断环依赖</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%8F%E9%AA%8C-amp-%E4%BC%98%E5%8C%96"><span class="nav-number">8.</span> <span class="nav-text">经验&amp;优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">8.1.</span> <span class="nav-text">性能优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E9%87%8F%E9%A2%84%E4%BC%B0"><span class="nav-number">8.2.</span> <span class="nav-text">容量预估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7"><span class="nav-number">8.3.</span> <span class="nav-text">监控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB"><span class="nav-number">9.</span> <span class="nav-text">日志级别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7-1"><span class="nav-number">10.</span> <span class="nav-text">监控</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#opentracing-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">11.</span> <span class="nav-text">opentracing 基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%A0%E4%B8%AA%E5%85%B3%E9%94%AE-API"><span class="nav-number">11.1.</span> <span class="nav-text">几个关键 API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%A8%E7%AB%AF%E4%BC%A0%E9%80%92"><span class="nav-number">11.2.</span> <span class="nav-text">跨端传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E5%90%88-zipkin-%E6%88%96%E8%80%85-jeager"><span class="nav-number">11.3.</span> <span class="nav-text">配合 zipkin 或者 jeager</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#prometheus"><span class="nav-number">12.</span> <span class="nav-text">prometheus</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E6%A0%87"><span class="nav-number">12.1.</span> <span class="nav-text">指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E5%90%88-Grafana"><span class="nav-number">12.2.</span> <span class="nav-text">配合 Grafana</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">12.3.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E7%94%A8%E6%B3%95"><span class="nav-number">12.4.</span> <span class="nav-text">向量用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Histogram-%E5%92%8C-Summary-%E5%8C%BA%E5%88%AB"><span class="nav-number">12.5.</span> <span class="nav-text">Histogram 和 Summary 区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%92%8C%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%90%AF%E5%8A%A8"><span class="nav-number">12.6.</span> <span class="nav-text">客户端和服务端启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80-PromQL"><span class="nav-number">12.7.</span> <span class="nav-text">查询语言 PromQL</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%82%E6%B5%8B"><span class="nav-number">13.</span> <span class="nav-text">观测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%A7%82%E6%B5%8B"><span class="nav-number">13.1.</span> <span class="nav-text">HTTP 服务端观测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%A7%82%E6%B5%8B"><span class="nav-number">13.2.</span> <span class="nav-text">HTTP 客户端观测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC-%E8%A7%82%E6%B5%8B"><span class="nav-number">13.3.</span> <span class="nav-text">RPC 观测</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">14.</span> <span class="nav-text">References</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -252,15 +259,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">Posted on</span>
+      
 
-      <time title="Created: 2023-11-30 00:00:00" itemprop="dateCreated datePublished" datetime="2023-11-30T00:00:00+08:00">2023-11-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-06 11:25:31" itemprop="dateModified" datetime="2023-12-06T11:25:31+08:00">2023-12-06</time>
+      <time title="Created: 2023-12-06 00:00:00 / Modified: 17:41:38" itemprop="dateCreated datePublished" datetime="2023-12-06T00:00:00+08:00">2023-12-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -302,6 +303,14 @@
 <p>参考 <code>Google Dapper</code> 论文实现，为每个请求都生成一个全局唯一的 <code>traceid</code>（<code>cityhash + uuid</code> 算法生成），端到端（跨进程通过 <code>grpc </code>中的 <code>metadata</code> 传递，同进程使用 <code>ctx</code> 传递）传到上下游所有节点，每一层生成一个 <code>spanid</code>，通过 <code>traceid</code> 将不同系统孤立的调用日志和异常信息串联一起，通过 <code>spanid</code> 和 <code>level</code> 表达节点的父子关系。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113116946.png" alt="image-20231205113116946" style="zoom:50%;" />
 
+<p>进程内传递和进程间传递：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/2q6FmR7hgIzuUGx.png" alt="Image 6 of 7"></p>
+<p>进程内：使用 <code>context</code> 传递</p>
+<p>进程间：例如 <code>gRPC</code>，可以放在 <code>metadata</code>里面；如果是 <code>http</code>，可以放在 <code>header</code> 里面（发起 HTTP</p>
+<p>调用需要手动设置好头部。接下来，如果要将请求染色 A 的服务上，可以用七层负载均衡，也可以自己手动筛选服务器，比如说 <code>a.yourcompany.com</code>，或者用路径来区分。），一些基于 <code>tcp</code> 的 <code>socket</code> 通信，这种自定义实现方式，也需要自己实现。（例如 <code>google</code>的<code>rpc</code>协议约定放在 <code>attachment</code>里面）</p>
+<p>初始染色可以是前端起步，也可以是 <code>BFF</code> 层，也可以是更加靠后的任何一个服务，取决于业务需要。</p>
+<p>跨端传递核心就是在报文里面带上染色信息。普遍来说，要么是在 <code>HTTP Header</code>，要么是自定义协议的某个部分（那么自定义协议的头部，要么自定义协议的扩展部分）。重建 <code>ctx</code> 会在解析完报文之后第一时间建好，而后开始层层往下传。</p>
+<p>这种元数据的使用方式，可以扩展到很多场景，例如 <code>A/B</code> 测试，多租户，压力测试，<code>mock</code> 测试。</p>
 <p>核心概念：</p>
 <ul>
 <li><code>Tree</code>：整个调用过程</li>
@@ -421,6 +430,126 @@
 </ul>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172423414.png" alt="image-20231205172423414"></p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172427832.png" alt="image-20231205172427832"></p>
+<h1 id="opentracing-基本用法"><a href="#opentracing-基本用法" class="headerlink" title="opentracing 基本用法"></a><code>opentracing</code> 基本用法</h1><ul>
+<li><code>opentracing</code> 定义了一套 <code>API</code>，很多 <code>tracing</code> 框架都支持这套 <code>API</code></li>
+<li><code>go get github.com/opentracing/opentracing-go@latest</code> 引入依赖</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    opentracing.SetGlobalTracer(</span><br><span class="line">        <span class="comment">// tracing impl specific:</span></span><br><span class="line">        some_tracing_impl.New(...),</span><br><span class="line">    )</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">http.HandleFunc(<span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, req *http.Request)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> serverSpan opentracing.Span</span><br><span class="line">    appSpecificOperationName := ...</span><br><span class="line">    wireContext, err := opentracing.GlobalTracer().Extract(</span><br><span class="line">        opentracing.HTTPHeaders,</span><br><span class="line">        opentracing.HTTPHeadersCarrier(req.Header))</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="comment">// Optionally record something about err here</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create the span referring to the RPC client if available.</span></span><br><span class="line">    <span class="comment">// If wireContext == nil, a root span will be created.</span></span><br><span class="line">    serverSpan = opentracing.StartSpan(</span><br><span class="line">        appSpecificOperationName,</span><br><span class="line">        ext.RPCServerOption(wireContext))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">defer</span> serverSpan.Finish()</span><br><span class="line"></span><br><span class="line">    ctx := opentracing.ContextWithSpan(context.Background(), serverSpan)</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在程序入口处创建一个根 <code>span</code>。一般来说，是在 <code>HTTP</code> 服务器上接收用户请求的地方创建</li>
+<li><code>span</code> 创建之后要记得 <code>Finish()</code></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">xyz</span><span class="params">(parentSpan opentracing.Span, ...)</span></span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    sp := opentracing.StartSpan(</span><br><span class="line">        <span class="string">&quot;operation_name&quot;</span>,</span><br><span class="line">        opentracing.ChildOf(parentSpan.Context()))</span><br><span class="line">    <span class="keyword">defer</span> sp.Finish()</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在需要的打点创建子 <code>span</code>，进一步记录数据<ul>
+<li><code>Log Field</code>：发生了什么事情，有唯一时间戳</li>
+<li><code>Tag</code>：贯穿整个 <code>span</code> 生命周期</li>
+<li><code>Baggage Item</code>：贯穿 <code>tracing</code> 整个剩下的周期。会不断向下传递。</li>
+</ul>
+</li>
+<li>将 <code>span</code> 和 <code>context.Context</code> 关联起来，向下传递</li>
+</ul>
+<h2 id="几个关键-API"><a href="#几个关键-API" class="headerlink" title="几个关键 API"></a>几个关键 API</h2><ul>
+<li><code>StartSpan</code>：创建根 <code>span</code></li>
+<li><code>ContextWithSpan</code>：将 <code>span</code> 和 <code>context.Context</code> 结合在一起，以在进程内传递 <code>tracing</code> 信息</li>
+<li><code>StartSpanFromContext</code>：视图从参数 <code>ctx</code> 里面拿到一个 <code>span</code> 作为父亲 <code>span</code>。如果拿不到，则创建一个根 <code>span</code></li>
+<li><code>ContextWithSpan</code> 和 <code>StartSpanFromContext</code> 基本上是成对出现</li>
+<li>除非你明确知道自己是入口，否则使用 <code>StartSpanFromContext</code></li>
+</ul>
+<h2 id="跨端传递"><a href="#跨端传递" class="headerlink" title="跨端传递"></a>跨端传递</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">makeSomeRequest</span><span class="params">(ctx context.Context)</span></span> ... &#123;</span><br><span class="line">    <span class="keyword">if</span> span := opentracing.SpanFromContext(ctx); span != <span class="literal">nil</span> &#123;</span><br><span class="line">        httpClient := &amp;http.Client&#123;&#125;</span><br><span class="line">        httpReq, _ := http.NewRequest(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;http://myservice/&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Transmit the span&#x27;s TraceContext as HTTP headers on our</span></span><br><span class="line">        <span class="comment">// outbound request.</span></span><br><span class="line">        opentracing.GlobalTracer().Inject(</span><br><span class="line">            span.Context(),</span><br><span class="line">            opentracing.HTTPHeaders,</span><br><span class="line">            opentracing.HTTPHeadersCarrier(httpReq.Header))</span><br><span class="line"></span><br><span class="line">        resp, err := httpClient.Do(httpReq)</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Span</code> 跨端传递核心是要把 <code>tracing</code> 的信息在端到端之间进行传递。也就是两个过程：在客户端把 <code>tracing</code> 信息写入到请求里面，也就是 <code>Inject</code>（注入）过程：在服务端里面提取出来 <code>tracing</code> 信息，也就是 <code>extract</code> 过程</li>
+<li>对于 <code>HTTP</code> 协议来说，一般是放在 <code>HTTP Header</code> 里面</li>
+<li>对于 <code>RPC</code> 协议来说，如果其本身依赖于 <code>HTTP</code>，那么也是放在 <code>Header</code> 里面。但是如果本身是直接 <code>TCP</code> 通信，那么就会在自己协议的某个位置里面放下</li>
+</ul>
+<h2 id="配合-zipkin-或者-jeager"><a href="#配合-zipkin-或者-jeager" class="headerlink" title="配合 zipkin 或者 jeager"></a>配合 <code>zipkin</code> 或者 <code>jeager</code></h2><p>可以自己搭建一个 <code>zipkin</code> 或者 <code>jeager</code> 本地服务器作为 <code>tracing</code> 的采集服务器，收集采集信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 9411:9411 openzipkin/zipkin</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/dependency-graph.png" alt="Dependency graph screenshot"></p>
+<h1 id="prometheus"><a href="#prometheus" class="headerlink" title="prometheus"></a><code>prometheus</code></h1><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/architecture.png" alt="Prometheus architecture"></p>
+<h2 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h2><ul>
+<li><code>prometheus</code> 自身分为客户端和服务端。服务端也就是采集到的数据存储的地方，客户端就是使用 <code>prometheus</code> 的地方。</li>
+<li><code>prometheus metrics</code> 类型：<ul>
+<li><code>Counter</code>：计数器，统计次数，比如说某件事的发生次数</li>
+<li><code>Gauge</code>：度量，可以增加也可以减少，比如说当前正在处理的请求数</li>
+<li><code>Histogram</code>：柱状图，对观察对象进行采样，然后分到一个个桶里面</li>
+<li><code>Summary</code>：采样点按照百分位进行统计，比如说 99 线，999 线等</li>
+</ul>
+</li>
+</ul>
+<h2 id="配合-Grafana"><a href="#配合-Grafana" class="headerlink" title="配合 Grafana"></a>配合 <code>Grafana</code></h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/grafana_prometheus.png" alt="Grafana screenshot"></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewPrometheusService</span><span class="params">()</span></span> (*Service, <span class="type">error</span>) &#123;</span><br><span class="line">	cli := prometheus.NewHistogramVec(prometheus.HistogramOpts&#123;</span><br><span class="line">		Namespace: <span class="string">&quot;pushgateway&quot;</span>,</span><br><span class="line">    Subsystem: <span class="string">&quot;network&quot;</span>,</span><br><span class="line">		Name:      <span class="string">&quot;cmd_duration_seconds&quot;</span>,</span><br><span class="line">		Help:      <span class="string">&quot;CLI application execution in seconds&quot;</span>,</span><br><span class="line">		Buckets:   prometheus.DefBuckets,</span><br><span class="line">	&#125;, []<span class="type">string</span>&#123;<span class="string">&quot;name&quot;</span>&#125;)</span><br><span class="line">	http := prometheus.NewHistogramVec(prometheus.HistogramOpts&#123;</span><br><span class="line">		Namespace: <span class="string">&quot;http&quot;</span>,</span><br><span class="line">    Subsystem: <span class="string">&quot;network&quot;</span>,</span><br><span class="line">		Name:      <span class="string">&quot;request_duration_seconds&quot;</span>,</span><br><span class="line">		Help:      <span class="string">&quot;The latency of the HTTP requests.&quot;</span>,</span><br><span class="line">		Buckets:   prometheus.DefBuckets,</span><br><span class="line">	&#125;, []<span class="type">string</span>&#123;<span class="string">&quot;handler&quot;</span>, <span class="string">&quot;method&quot;</span>, <span class="string">&quot;code&quot;</span>&#125;)</span><br><span class="line"></span><br><span class="line">	s := &amp;Service&#123;</span><br><span class="line">		pHistogram:           cli,</span><br><span class="line">		httpRequestHistogram: http,</span><br><span class="line">	&#125;</span><br><span class="line">	err := prometheus.Register(s.pHistogram)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &amp;&amp; err.Error() != <span class="string">&quot;duplicate metrics collector registration attempted&quot;</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	err = prometheus.Register(s.httpRequestHistogram)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &amp;&amp; err.Error() != <span class="string">&quot;duplicate metrics collector registration attempted&quot;</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要引入 <code>github.com/prometheus/client_golang/prometheus</code></p>
+<ul>
+<li><code>namespace</code> 可以是应用名</li>
+<li><code>subsystem</code>：可以是一大类的东西，例如 <code>http</code></li>
+<li><code>name</code>：则是给指标的命名，根据需求来</li>
+</ul>
+<h2 id="向量用法"><a href="#向量用法" class="headerlink" title="向量用法"></a>向量用法</h2><ul>
+<li>创建一个向量，可以使用 <code>ConstLabels</code> 和 <code>Labels</code></li>
+<li>使用 <code>WithLabelValues</code> 来获取具体的收集器</li>
+</ul>
+<p>这种用法更加普遍</p>
+<h2 id="Histogram-和-Summary-区别"><a href="#Histogram-和-Summary-区别" class="headerlink" title="Histogram 和 Summary 区别"></a><code>Histogram</code> 和 <code>Summary</code> 区别</h2><ul>
+<li><code>Histogram</code> 和 <code>Summary</code> 两者都会额外统计计数和总和</li>
+<li>区别：<ul>
+<li><code>summary</code> 是在客户端上（也就是我们的应用上）做计算的，所以性能损耗比较大</li>
+<li><code>histogram</code> 是在服务端上做计算的</li>
+<li><code>summary</code> 不支持聚合操作（因为上报的结果都是已经计算好了的）</li>
+<li><code>summary</code> 指标在客户端上硬编码，不灵活</li>
+<li><code>histogram</code> 严重依赖于设置合理的 <code>bucket</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="客户端和服务端启动"><a href="#客户端和服务端启动" class="headerlink" title="客户端和服务端启动"></a>客户端和服务端启动</h2><p>一般是采用客户端开启一个端口，由服务端来拉取数据。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">        <span class="string">&quot;net/http&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="string">&quot;github.com/prometheus/client_golang/prometheus/promhttp&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">        http.Handle(<span class="string">&quot;/metrics&quot;</span>, promhttp.Handler())</span><br><span class="line">        http.ListenAndServe(<span class="string">&quot;:2112&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在客户端暴露采集数据端口：<code>prometheus</code> 会访问这个端口来拉数据</li>
+<li>启动 <code>prometheus</code> 服务器：本地实验可以使用 <code>docker</code> 来启动</li>
+<li>推荐配置 <span class="exturl" data-url="aHR0cHM6Ly9wcm9tZXRoZXVzLmlvL2RvY3MvcHJvbWV0aGV1cy9sYXRlc3QvY29uZmlndXJhdGlvbi9jb25maWd1cmF0aW9uLw==">CONFIGURATION<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -p 9090:9090 \</span><br><span class="line">    -v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml \</span><br><span class="line">    prom/prometheus</span><br></pre></td></tr></table></figure>
+
+<h2 id="查询语言-PromQL"><a href="#查询语言-PromQL" class="headerlink" title="查询语言 PromQL"></a>查询语言 PromQL</h2><p><span class="exturl" data-url="aHR0cHM6Ly9wcm9tZXRoZXVzLmlvL2RvY3MvcHJvbWV0aGV1cy9sYXRlc3QvcXVlcnlpbmcvYmFzaWNzLw==">QUERYING PROMETHEUS<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="观测"><a href="#观测" class="headerlink" title="观测"></a>观测</h1><h2 id="HTTP-服务端观测"><a href="#HTTP-服务端观测" class="headerlink" title="HTTP 服务端观测"></a>HTTP 服务端观测</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206172436479.png" alt="image-20231206172436479"></p>
+<ul>
+<li>HTTP 方法、状态、协议：GET，POST、200 、HTTPS</li>
+<li>HTTP 路由：不是记录路径，路径可能带参数，所以应该记录命中的路由。注意一些非法请求可能完全不能命中任何路由</li>
+<li><code>error</code>：如果能够利用 <code>middleware</code> 之类的东西获得请求执行过程中的 <code>error</code>，则可以记录下来。如果有错误码的设计，那么这一步应该记录下错误码</li>
+<li>请求和响应：在处于开发环境或者 <code>DEBUG</code> 下，请求和响应整体都应该记录下来，用作 <code>DEBUG</code> 信息</li>
+<li>业务ID：如果可以从 <code>HTTP Header</code> 里面解析出来用户ID，或者订单ID，也可以记录下来，后面查找、分析都很有用</li>
+<li>响应时间</li>
+</ul>
+<h2 id="HTTP-客户端观测"><a href="#HTTP-客户端观测" class="headerlink" title="HTTP 客户端观测"></a>HTTP 客户端观测</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206173700490.png" alt="image-20231206173700490"></p>
+<ul>
+<li>HTTP 方法、状态、协议：GET，POST、200 、HTTPS</li>
+<li>HTTP 路由：如果要做聚合分析，那么应该记录可能命中的路由，否则直接记录整个路径（不含参数）</li>
+<li><code>error</code>：如果能够利用 <code>middleware</code> 之类的东西获得请求执行过程中的 <code>error</code>，则可以记录下来。如果有错误码的设计，那么这一步应该记录下错误码</li>
+<li>请求和响应：在处于开发环境或者 <code>DEBUG</code> 下，请求和响应整体都应该记录下来，用作 <code>DEBUG</code> 信息</li>
+<li>业务ID：如果可以从 <code>HTTP Header</code> 里面解析出来用户ID，或者订单ID，也可以记录下来，后面查找、分析都很有用</li>
+<li>响应时间</li>
+</ul>
+<h2 id="RPC-观测"><a href="#RPC-观测" class="headerlink" title="RPC 观测"></a>RPC 观测</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206173831463.png" alt="image-20231206173831463"></p>
+<ul>
+<li>服务标志符：用于标记唯一服务的</li>
+<li>目标主机名、IP 和端口：如果能够拿到目标主机的主机名、IP和端口都可以记录下来</li>
+<li>RPC 响应状态：取决于 RPC 框架设计和公司规范</li>
+<li>RPC 请求和响应：开发环境或者 <code>DEBUG</code> 下可以完整记录</li>
+<li><code>error</code>：如果能够获得 <code>error</code>，则可以记录下来。如果有错误码的设计，那么这一步应该记录下错误码</li>
+<li>响应时间</li>
+<li>RPC 一般来说比较难获得业务ID，除非是约定了在整个链路中传递，例如放在 <code>metadata</code> 里面</li>
+</ul>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly9vcGVudHJhY2luZy5pby9kb2NzL292ZXJ2aWV3Lw==">OpenTracing<i class="fa fa-external-link-alt"></i></span>（已经弃用，合并到 <code>OpenTelemetry</code> 中）</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9lZGR5Y2p5LmdpdGJvb2suaW8vZ29sYW5nL2RpLTQta2UtZ3JwYy96aXBraW4=">分布式链路追踪<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aXBraW4uaW8v">Zipkin<i class="fa fa-external-link-alt"></i></span></p>
+<p><a target="_blank" rel="noopener" href="https://prometheus.io/"></a></p>
 
     </div>
 
@@ -437,8 +566,8 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/post/4d37.html" rel="prev" title="Go网络编程">
-                  <i class="fa fa-chevron-left"></i> Go网络编程
+                <a href="/post/cfd3.html" rel="prev" title="微服务可观察性之日志">
+                  <i class="fa fa-chevron-left"></i> 微服务可观察性之日志
                 </a>
             </div>
             <div class="post-nav-item">

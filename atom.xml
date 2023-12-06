@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-12-06T03:25:31.498Z</updated>
+  <updated>2023-12-06T09:41:38.360Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -20,11 +20,30 @@
     <title>微服务可观察性之链路追踪</title>
     <link href="https://www.xiaoyeshiyu.com/post/c682.html"/>
     <id>https://www.xiaoyeshiyu.com/post/c682.html</id>
-    <published>2023-11-29T16:00:00.000Z</published>
-    <updated>2023-12-06T03:25:31.498Z</updated>
+    <published>2023-12-05T16:00:00.000Z</published>
+    <updated>2023-12-06T09:41:38.360Z</updated>
     
     
     <summary type="html">这篇文章将探讨微服务架构中关键的可观察性工具之一——链路追踪。我们将深入研究链路追踪的概念，重点介绍它在微服务环境中的作用和优势。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>微服务可观察性之日志</title>
+    <link href="https://www.xiaoyeshiyu.com/post/cfd3.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/cfd3.html</id>
+    <published>2023-11-29T16:00:00.000Z</published>
+    <updated>2023-12-06T03:51:43.543Z</updated>
+    
+    
+    <summary type="html">这篇文章将深入探讨微服务架构中的可观察性，着重于日志记录作为关键的监控和调试工具。</summary>
     
     
     
@@ -63,25 +82,6 @@
     
     
     <summary type="html">在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>微服务可观察性之日志</title>
-    <link href="https://www.xiaoyeshiyu.com/post/cfd3.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/cfd3.html</id>
-    <published>2023-11-05T16:00:00.000Z</published>
-    <updated>2023-12-06T03:39:45.326Z</updated>
-    
-    
-    <summary type="html">这篇文章将深入探讨微服务架构中的可观察性，着重于日志记录作为关键的监控和调试工具。</summary>
     
     
     
@@ -226,14 +226,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之配置管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
+    <title>Go工程化实践之测试</title>
+    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-19T08:38:15.618Z</updated>
+    <updated>2023-10-20T08:01:02.637Z</updated>
     
     
-    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
+    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
     
     
     
@@ -245,14 +245,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之测试</title>
-    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
+    <title>Go工程化实践之配置管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-20T08:01:02.637Z</updated>
+    <updated>2023-10-19T08:38:15.618Z</updated>
     
     
-    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
+    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
     
     
     
