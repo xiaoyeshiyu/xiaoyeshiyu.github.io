@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-12-06T09:41:38.360Z</updated>
+  <updated>2023-12-07T02:19:38.552Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/c682.html"/>
     <id>https://www.xiaoyeshiyu.com/post/c682.html</id>
     <published>2023-12-05T16:00:00.000Z</published>
-    <updated>2023-12-06T09:41:38.360Z</updated>
+    <updated>2023-12-07T02:19:38.552Z</updated>
     
     
     <summary type="html">这篇文章将探讨微服务架构中关键的可观察性工具之一——链路追踪。我们将深入研究链路追踪的概念，重点介绍它在微服务环境中的作用和优势。</summary>
@@ -207,14 +207,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之配置管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
+    <title>Go工程化实践之包管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-19T08:38:15.618Z</updated>
+    <updated>2023-10-17T10:14:29.126Z</updated>
     
     
-    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
+    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
     
     
     
@@ -226,14 +226,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之包管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
+    <title>Go工程化实践之配置管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-17T10:14:29.126Z</updated>
+    <updated>2023-10-19T08:38:15.618Z</updated>
     
     
-    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
+    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
     
     
     
