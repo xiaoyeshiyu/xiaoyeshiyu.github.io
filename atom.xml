@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-12-12T08:29:06.911Z</updated>
+  <updated>2023-12-12T08:33:33.122Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,16 +21,10 @@
     <link href="https://www.xiaoyeshiyu.com/post/b09f.html"/>
     <id>https://www.xiaoyeshiyu.com/post/b09f.html</id>
     <published>2023-12-10T16:00:00.000Z</published>
-    <updated>2023-12-12T08:29:06.911Z</updated>
+    <updated>2023-12-12T08:33:33.122Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;多活系统&quot;&gt;&lt;a href=&quot;#多活系统&quot; class=&quot;headerlink&quot;</summary>
-        
-      
+    <summary type="html">本文将探讨多活（Multi-Region）架构在现代云计算和分布式系统中的重要性和应用。多活是一种设计原则和技术，通过在服务范围内部署多个数据中心或区域，实现高可用性、弹性和容错能力。</summary>
     
     
     
@@ -46,16 +40,10 @@
     <link href="https://www.xiaoyeshiyu.com/post/9a24.html"/>
     <id>https://www.xiaoyeshiyu.com/post/9a24.html</id>
     <published>2023-12-06T16:00:00.000Z</published>
-    <updated>2023-12-12T08:29:56.926Z</updated>
+    <updated>2023-12-12T08:31:38.476Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;DNS&quot;&gt;&lt;a href=&quot;#DNS&quot; class=&quot;headerlink&quot; title=&quot;DNS&quot;&gt;&lt;/a&gt;DNS&lt;/h1&gt;&lt;h2 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot;</summary>
-        
-      
+    <summary type="html">这篇文章将探讨DNS（域名系统）和CDN（内容分发网络）的重要性和功能，介绍一些常见的DNS和CDN优化策略，以提高网站的可用性、安全性和性能。</summary>
     
     
     
