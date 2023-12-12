@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="多活系统 业务分级 按照一定的标准将业务进行分级，挑选出核心的业务，只为核心业务核心场景设计异地多活，降低方案整体复杂度和实现成本。例如：1、访问量；2、核心场景；3、收入；避免进入所有业务都要全部多活，分阶段分场景推进。  数据分类 挑选出核心业务后，需要对核心业务相关的数据进一步分析，目的在于识别所有的数据及数据特征，这些数据特征会影响后面的方案设计。常见的数据特征分析维度有：1、数据量；2、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多活">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/b09f.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="多活系统 业务分级 按照一定的标准将业务进行分级，挑选出核心的业务，只为核心业务核心场景设计异地多活，降低方案整体复杂度和实现成本。例如：1、访问量；2、核心场景；3、收入；避免进入所有业务都要全部多活，分阶段分场景推进。  数据分类 挑选出核心业务后，需要对核心业务相关的数据进一步分析，目的在于识别所有的数据及数据特征，这些数据特征会影响后面的方案设计。常见的数据特征分析维度有：1、数据量；2、">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207175416162.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207180349760.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095338203.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095601395.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095958862.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208100702477.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101054457.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101209876.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101919926.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101933360.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101946001.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208102559035.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103036627.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103255417.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103855392.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103932501.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105133911.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105346554.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105404479.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208110338741.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208110812889.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208111047770.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208112422472.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208112726491.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208142552962.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208142600439.png">
+<meta property="article:published_time" content="2023-12-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-12T08:29:06.911Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207175416162.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/b09f.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/b09f.html","path":"post/b09f.html","title":"多活"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>多活 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E6%B4%BB%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.</span> <span class="nav-text">多活系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A5%BF%E4%BA%86%E4%B9%88%E5%A4%9A%E6%B4%BB"><span class="nav-number">1.1.</span> <span class="nav-text">饿了么多活</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">业务模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99"><span class="nav-number">1.1.2.</span> <span class="nav-text">基本原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E7%89%B9%E5%BE%81"><span class="nav-number">1.1.3.</span> <span class="nav-text">业务特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E5%88%92%E5%88%86"><span class="nav-number">1.1.4.</span> <span class="nav-text">位置划分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%BF%E9%87%8C%E5%A4%9A%E6%B4%BB"><span class="nav-number">1.2.</span> <span class="nav-text">阿里多活</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">业务架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.2.</span> <span class="nav-text">技术架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E7%81%BE%E8%83%BD%E5%8A%9B"><span class="nav-number">1.2.3.</span> <span class="nav-text">容灾能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E9%87%8F%E8%B7%AF%E7%94%B1"><span class="nav-number">1.2.4.</span> <span class="nav-text">流量路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%AB%98%E5%8F%AF%E9%9D%A0"><span class="nav-number">1.2.5.</span> <span class="nav-text">数据高可靠</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8B%8F%E5%AE%81%E5%A4%9A%E6%B4%BB"><span class="nav-number">1.3.</span> <span class="nav-text">苏宁多活</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.1.</span> <span class="nav-text">服务架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E7%81%BE%E8%83%BD%E5%8A%9B-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">容灾能力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Facebook-Memcache-%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">1.4.</span> <span class="nav-text">Facebook Memcache 一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E4%BF%A1%E6%9C%8B%E5%8F%8B%E5%9C%88%E5%BC%82%E5%9C%B0%E5%A4%9A%E6%B4%BB"><span class="nav-number">1.5.</span> <span class="nav-text">微信朋友圈异地多活</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E6%9E%9C%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95"><span class="nav-number">1.5.1.</span> <span class="nav-text">因果一致性算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%A6%E5%8F%B7%E5%A4%9A%E6%B4%BB"><span class="nav-number">2.</span> <span class="nav-text">账号多活</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%90%91"><span class="nav-number">2.1.</span> <span class="nav-text">数据流向</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%BF%E4%BB%B6%E5%A4%9A%E6%B4%BB"><span class="nav-number">3.</span> <span class="nav-text">稿件多活</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">4.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/b09f.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="多活 | 小夜时雨">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          多活
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-12-11 00:00:00" itemprop="dateCreated datePublished" datetime="2023-12-11T00:00:00+08:00">2023-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-12 16:29:06" itemprop="dateModified" datetime="2023-12-12T16:29:06+08:00">2023-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GoTrainingCamp/" itemprop="url" rel="index"><span itemprop="name">Go训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/b09f.html" class="post-meta-item leancloud_visitors" data-flag-title="多活" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="多活系统"><a href="#多活系统" class="headerlink" title="多活系统"></a>多活系统</h1><ul>
+<li><p>业务分级</p>
+<p>按照一定的标准将业务进行分级，挑选出<strong>核心的业</strong>务，只为<strong>核心业务核心场景</strong>设计异地多活，降低方案整体复杂度和实现成本。例如：1、访问量；2、核心场景；3、收入；避免进入所有业务都要全部多活，分阶段分场景推进。</p>
+</li>
+<li><p>数据分类</p>
+<p>挑选出核心业务后，需要对核心业务相关的数据进一步分析，目的在于识别所有的数据及数据特征，这些数据特征会影响后面的方案设计。常见的数据特征分析维度有：1、数据量；2、唯一性；3、实时性；4、可丢失性；5、可恢复性；</p>
+</li>
+<li><p>数据同步</p>
+<p>确定数据的特点后，我们可以根据不同的数据设计不同的同步方案。常见的数据同步方案有：1、存储系统同步；2、消息队列同步；3、重复生成；</p>
+</li>
+<li><p>异常处理</p>
+<p>无论数据同步方案如何设计，一旦出现极端异常的情况，总是会有部分数据出现异常的。例如，同步延迟、数据丢失、数据不一致等。异常处理就是假设在出现这些问题时，系统将采取什么措施来应对。常见的异常处理措施：1、多通道同步；2、同步和异步访问；3、日志记录；4、补偿；</p>
+</li>
+</ul>
+<p>多活不是整个体系业务的多活，而是分成不同维度，不同重要性的多活，比如我们业务观看体验为主（淘宝以交易单元，买家为维度），那么第一大前提就是浏览、观看上的多活。我们将资源分为三类：</p>
+<ul>
+<li><code>Global</code> 资源：多个 <code>Zone</code>（机房）共享访问的资源，每个 <code>Zone</code> 访问本 <code>Zone</code> 的资源，但是 <code>Global</code> 层面来说是单写 <code>Core Zone</code>（核心机房），即：单写 + 多读、利用数据复制（写 <code>Zone</code>单向）实现最终一致性方案实现（例如账号数据）；</li>
+<li><code>Multi Zone</code>资源：多个 <code>Zone</code> 分片部署，每个 <code>Zone</code> 拥有部分的 <code>Shard</code> 数据，比如我们按照用户维度拆分，用户 <code>A</code> 可能在 <code>ZoneA</code>，用户 <code>B</code> 可能在 <code>ZoneB</code>，即：多写+多读、利用数据复制（写 <code>Zone</code> 双向复制）方案实现；</li>
+<li><code>Single Zone</code> 资源：单机房部署业务；</li>
+</ul>
+<p>核心主要围绕：<code>PC/APP</code> 首页可观看、视频详情页可打开、账号可登录、鉴权来开展，我们认为最合适我们观看类业务最合适的场景就是采用 <code>Global</code> 资源策略，对于社区类（评论、弹幕）可能会采用 <code>Multi Zone</code> 的策略。</p>
+<p>蚂蚁金服单元化架构设计：</p>
+<p>单元化，指的是业务尽量在一个单元内完成的架构。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207175416162.png" alt="image-20231207175416162"></p>
+<p>整体架构包含<code>RZone</code>、<code>GZone</code>和<code>CZone</code>。</p>
+<p><code>GZone</code>，全局唯一：其中<code>GZone</code>部署的是无法拆分的数据和业务，<code>GZone</code>的数据和业务被<code>RZone</code>依赖，<code>GZone</code>全<code>Paxos</code>局只部署一份，而<code>RZone</code>部署的是可拆分的业务和对应的数据。</p>
+<p><code>RZone</code>，区域：每个<code>RZone</code>内的数据分片如图所示有五副本，实现三地五中心部署，每个分片内只有一个可写入的主副本，其余副本按照协议做数据强一致。每个<code>RZone</code>内实现业务单元封闭，独立完成自己的所有业务。</p>
+<p><code>CZone</code>，城市，只读副本：而<code>CZone</code>的出现是因为<code>GZone</code>全局只有一份，不同城市的<code>RZone</code>可能依赖<code>GZone</code>服务和数据的时候需要远距离调用，延迟比较大，所以在每个城市部署一个<code>CZone</code>作为<code>GZone</code>的只读副本，为本城市的<code>RZone</code>提供服务。</p>
+<p>核心指标：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207180349760.png" alt="image-20231207180349760"></p>
+<ul>
+<li><code>RPO</code>（<code>Recovery Point Object</code>）：表示机房级别故障时，未被同步的数据时长。考虑到 <code>MySQL</code> 在特殊情况下复制延迟较大，<code>RPO</code> 设置为分钟级别，正常情况下 <code>RPO</code> 为秒级</li>
+<li><code>RTO</code>（<code>Recovery Target Object</code>）：表示机房故障情况下，关键流程或系统切换恢复时间，一般为分钟级别</li>
+<li><code>WRT</code>（<code>Work Recovery Time</code>）：表示故障时，由于 <code>RPO</code>导致的未同步异常数据修复完成时长，一般为小时级别。</li>
+</ul>
+<p>行业常见分布式架构分析：</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095338203.png" alt="image-20231208095338203"></p>
+<p>行业常见的分布式架构主要包含，单活架构、双活架构和冷备架构。从容灾能力角度来看，双活架构和冷备架构均能做到应用级跨机房容灾，但是数据库因为使用了异步复制的技术，无法做到机房级<code>RPO=0</code>的容灾（需要启动之后进行预热和备份数据同步）。</p>
+<h2 id="饿了么多活"><a href="#饿了么多活" class="headerlink" title="饿了么多活"></a>饿了么多活</h2><h3 id="业务模型"><a href="#业务模型" class="headerlink" title="业务模型"></a>业务模型</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095601395.png" alt="image-20231208095601395"></p>
+<p>业务过程中包含3个最重要的角色，分别是用户、商家和骑手，一个订单包含3个步骤：</p>
+<ol>
+<li>用户打开饿了么APP，系统会推荐出用户位置附近的各种美食，推荐顺序中结合了用户习惯，推荐排序，商户的推广等。用户找到中意的食物，下单并支付，订单会流转到商家。</li>
+<li>商家接单并开始制作食物，制作完成后，系统调度骑手赶到店面，取走食物。</li>
+<li>骑手按照配送地址，把食物送到客户手中。</li>
+</ol>
+<h3 id="基本原则"><a href="#基本原则" class="headerlink" title="基本原则"></a>基本原则</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095958862.png" alt="image-20231208095958862"></p>
+<ul>
+<li><p>业务内聚</p>
+<p>单个订单的履单过程，要在一个机房中完成，不允许跨机房调用。这个原则是为了保证实时性，履单过程中不依赖另外一个机房的服务，才能保证没有延迟。</p>
+<p>我们称每个机房为一个 <code>ezone</code>，一个 <code>ezone</code>包含了饿了么需要的各种服务。一笔业务能够内聚在一个 <code>ezone</code> 中，那么一个订单涉及的<strong>用户，商家，骑手</strong>都会在相同的机房（或者一个单元），这样订单在各个角色之间流转速度最快，不会因为各种异常情况导致延时。</p>
+<p>恰好饿了么的业务是地域化的，通过合理的地域划分，也能够实现业务内聚。</p>
+</li>
+<li><p>可用性优先</p>
+<p>当发生故障切换机房时，优先保证系统可用，首先让用户可以下单吃饭，容忍有限时间段内的数据不一致，在事后修复。每个 <code>ezone</code> 都会有全量的业务数据，当一个 <code>ezone</code> 失效后，其他的 <code>ezone</code> 可以接管用户。用户在一个 <code>ezone</code> 的下单数据，会实时的复制到其他 <code>ezone</code>。</p>
+</li>
+<li><p>保证数据正确</p>
+<p>在确保可用的情况下，需要对数据做保护以避免错误，在切换和故障是，如果发现某些订单的状态在两个机房不一致，会锁定该笔订单，阻止对它进行更改，保证数据的正确。</p>
+</li>
+<li><p>业务可感</p>
+<p>因为基础设施还没有强大到可以抹去跨机房的差异，需要让业务感知多活逻辑，业务代码要做一些改造，包括：需要业务代码能够识别出业务数据的归属，只处理本 <code>ezone</code> 的数据，过滤掉无关的数据。改善业务状态机，能够在数据出现不一致的时候，通过状态机发现和纠正。</p>
+</li>
+</ul>
+<h3 id="业务特征"><a href="#业务特征" class="headerlink" title="业务特征"></a>业务特征</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208100702477.png" alt="image-20231208100702477"></p>
+<p>为了实现业务内聚，我们首先要选择一个划分方法（<code>Sharding Key</code>），对服务进行分区，让用户，商户，骑手能够正确的内聚到同一个 <code>ezone</code>中。分区方案是整个多活的基础，它决定了之后的所有逻辑。</p>
+<p>根据饿了么的业务特性，可以自然的选择地理位置（地理围栏，地理围栏主体按照省界划分，再加上局部微调）作为划分业务的单元，把地理位置上接近的用户，商户，骑手划分到同一个 <code>ezone</code>，这样一个订单的履单流程就会在一个机房完成，能够保证最小的延时，在某个机房出现问题的时候，也可以按照地理位置把用户，商户，骑手打包迁移到别的机房即可。</p>
+<h3 id="位置划分"><a href="#位置划分" class="headerlink" title="位置划分"></a>位置划分</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101054457.png" alt="image-20231208101054457"></p>
+<p>基于地理位置划分规则，开发了统一的流量路由层（<code>API Router</code>），这一层负责对客户端过来的 <code>API</code> 调用进行路由，把流量导向到正确的 <code>ezone</code>，<code>API Router</code> 部署在多个公有云机房中，用户就近接入到公有云的 <code>API Router</code>，还可以提升接入质量。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101209876.png" alt="image-20231208101209876"></p>
+<p>最基础的分流标签是地理位置，有了地理位置，<code>API Router</code>就能计算出正确的 <code>shard</code> 归属。但业务是很复杂的，并不是所有的调用都能直接关联到某个地理位置上，我们使用了一种分层的路由方案，核心的路由逻辑是地理位置，但是也支持其他的一些 <code>High Level Sharding Key</code>，这些 <code>Sharding Key</code> 由 <code>API Router</code> 转换为核心的 <code>Sharding Key</code>，具体如上图。</p>
+<p>这样即减少了业务的改造工作量，也可以扩展出更多的分区方法。出了入口处的路由，我们还开发了 <code>SOA Proxy</code>，用于路由 <code>SOA</code> 调用的，和 <code>API Router</code> 基于相同的路由规则。</p>
+<h2 id="阿里多活"><a href="#阿里多活" class="headerlink" title="阿里多活"></a>阿里多活</h2><p>基本原则：</p>
+<ul>
+<li>按买家维度来进行数据切分</li>
+<li>只取与买家链路相关的业务（单元）做多活</li>
+<li>单元内最大限度的封闭</li>
+<li>无法接受数据最终一致的跨单元单点写</li>
+</ul>
+<h3 id="业务架构"><a href="#业务架构" class="headerlink" title="业务架构"></a>业务架构</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101919926.png" alt="image-20231208101919926"></p>
+<p>下单需要立即可见，就需要有多分数据存储在不同的单元，同时同步到中心机房。并且需要扩散到其他所有单元。</p>
+<p>又需要其他单元查询到卖家数据，因此卖家数据是通过中心全量复制到其他单元。</p>
+<h3 id="技术架构"><a href="#技术架构" class="headerlink" title="技术架构"></a>技术架构</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101933360.png" alt="image-20231208101933360"></p>
+<p>通过 <code>CDN</code> 实现路由功能，<code>CDN</code> 通过业务逻辑判断用户分流到具体的 <code>IDC</code>。</p>
+<p>除了多个 <code>IDC</code> 之外，还有一个中心机房，好处是复制过程简化，<code>IDC</code>数据先同步到中心机房，再由中心机房将数据同步到其他的 <code>IDC</code>。</p>
+<h3 id="容灾能力"><a href="#容灾能力" class="headerlink" title="容灾能力"></a>容灾能力</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101946001.png" alt="image-20231208101946001"></p>
+<ul>
+<li><p>同城容灾</p>
+<p><code>RZone1</code> 出现故障先看同城容灾能力，我们目标将 <code>RZone1</code> 切换至同城同在 <code>RZone2</code>。先做数据库分片切换，<code>RZone1</code> 对应的分片为分片1，把分片1在 <code>RZone2</code> 的副本提升为主副本，数据库副本提升完毕后，将 <code>RZone1</code> 的流量切换至 <code>RZone2</code>，实现同城容灾 <code>RPO=0</code>、<code>RTO&lt;1min</code></p>
+</li>
+<li><p>异地容灾</p>
+<p>同样以 <code>RZone1</code> 故障为例。目标切换至 <code>RZone3</code>，先做数据库切换，分片1在 <code>RZone3</code> 的副本切换成主副本，完成后将 <code>RZone1</code> 的流量切换至 <code>RZone3</code>，实现异地容灾，该过程 <code>RPO=0</code>、<code>RTO&lt;1min</code></p>
+</li>
+</ul>
+<p>这种情况，使用 <code>Raft</code> 或者 <code>Paxos</code> 这种需要满足写入半数的强一致性，会牺牲写入延迟。</p>
+<h3 id="流量路由"><a href="#流量路由" class="headerlink" title="流量路由"></a>流量路由</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208102559035.png" alt="image-20231208102559035"></p>
+<p>流量路由模块核心是将用户的 <code>uid</code> 信息和对应的 <code>Zone</code>信息植入到 <code>cookie</code> 中，供路由模块做精准路由。</p>
+<p>服务路由分为本机房服务路由和跨机房服务路由调用。</p>
+<ul>
+<li><p>本机房服务路由</p>
+<p>服务调用端向本机房服务注册中心订阅服务，发现服务地址后做本机房服务路由调用。</p>
+</li>
+<li><p>跨机房服务路由调用</p>
+<p>服务调用端向其他 <code>IDC</code> 的注册中心订阅服务地址，发现服务地址后做跨机房服务调用。</p>
+</li>
+</ul>
+<h3 id="数据高可靠"><a href="#数据高可靠" class="headerlink" title="数据高可靠"></a>数据高可靠</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103036627.png" alt="image-20231208103036627"></p>
+<p>蚂蚁使用自研的分布式关系数据库 <code>OceanBase</code>，每个分片的数据库做5副本部署，部署地域实现三地五中心部署，5副本中有3副本实现强一致，如图所示可以实现同城、<code>IDC</code>容灾和异地容灾。（同城两副本，最近地域1副本，保证写入3副本时的延迟。）</p>
+<h2 id="苏宁多活"><a href="#苏宁多活" class="headerlink" title="苏宁多活"></a>苏宁多活</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103255417.png" alt="image-20231208103255417"></p>
+<ul>
+<li><p><code>Cell</code></p>
+<p>业务可封闭收敛最小执行分片：业务对请求空间按一定维度（比如会员、门店等）划分分片</p>
+</li>
+<li><p><code>LDC</code></p>
+<p>逻辑数据中心，是由多个业务可封闭 <code>cell</code> 组成的集合单元，拥有独立的基础中间件系统（包括 <code>RPC</code>，<code>MQ</code>，<code>DNS</code>等），以及出口网络等。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103855392.png" alt="image-20231208103855392"></p>
+</li>
+<li><p><code>PDC</code></p>
+<p>物理数据中心，指物理上独立的一栋建筑，一般每栋有好几层，存放一系列机柜和上千和上万服务器，构成一个 <code>PDC</code></p>
+</li>
+<li><p><code>AZ</code>（<code>Avaliable Zone</code>）</p>
+<p>可用区，具有独立的故障隔离空间，拥有独立网络设施或电力设备，由相邻的单个或多个 <code>PDC</code> 组成。</p>
+</li>
+<li><p><code>Region</code></p>
+<p>地理区域，有多个可用区所组成的集合，区域之间故障域完全隔离</p>
+</li>
+</ul>
+<h3 id="服务架构"><a href="#服务架构" class="headerlink" title="服务架构"></a>服务架构</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103932501.png" alt="image-20231208103932501"></p>
+<ul>
+<li><p>分片服务</p>
+<p>对应数据仅在某个 <code>Cell</code> 存在，其他 <code>Cell</code> 不与交叉或共享，比如会员服务、订单服务等</p>
+</li>
+<li><p>共享服务</p>
+<p>所有 <code>Cell</code> 拥有相同的数据，相互共享，比如价格服务、商品服务等</p>
+</li>
+<li><p>索引服务</p>
+<p>用于索引数据提供服务，类似共享服务</p>
+</li>
+<li><p>竞争（控制）服务</p>
+<p>各个 <code>Cell</code> 相互操作同一个数据，为了保证数据一致性，需要在同一个数据中心进行控制，比如库存的扣减、用户注册等</p>
+</li>
+<li><p>竞争 <code>Proxy</code> 服务</p>
+<p>用于竞争服务前置服务，比如库存前置调拨服务（例如一次性获取100个库存）</p>
+</li>
+</ul>
+<h3 id="容灾能力-1"><a href="#容灾能力-1" class="headerlink" title="容灾能力"></a>容灾能力</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105133911.png" alt="image-20231208105133911"></p>
+<p>为了确保数据高可用以及任何一个机房故障都可被接管，所有数据中心都包含全量数据，当主数据中心的变更将会实时同步到各个从数据中心。</p>
+<p>数据中心之间的延迟相对数据中心内部延迟较大，数据中心之间的同步一般采用异步复制方式。在机房故障等极端情况，将出现少量数据未同步到其他数据中心，针对此类故障场景，在机房恢复后，需要对未同步的数据进行人工修复。</p>
+<h2 id="Facebook-Memcache-一致性"><a href="#Facebook-Memcache-一致性" class="headerlink" title="Facebook Memcache 一致性"></a>Facebook Memcache 一致性</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105346554.png" alt="image-20231208105346554"></p>
+<ol>
+<li>写入缓存时带一个 marker</li>
+<li>将数据写入到主库</li>
+<li>删除缓存</li>
+<li>另外有一个请求过来，如果标记存在，从主库读取；如果标记不存在，则从从库读取</li>
+<li>从主库到从库同步的时候，将 <code>cache</code> 中删除 <code>marker</code></li>
+</ol>
+<h2 id="微信朋友圈异地多活"><a href="#微信朋友圈异地多活" class="headerlink" title="微信朋友圈异地多活"></a>微信朋友圈异地多活</h2><p>因果关系对事件施加了一种顺序：</p>
+<p>因在果之前，消息发送在消息收取之前。而且就像现实生活中一样，一件事会顺序地导致另一件事发生：某个节点读取了一些数据然后写入一些结果，另一个节点读取其他写入的内容，并依次写入一些其他内容等等。这些因果依赖的操作链定义了系统中的因果顺序，即什么在什么之前发生。从而我们也引出了分布式系统的因果一致性，如果一个系统服从因果关系所规定的顺序，我们说它是因果一致性的。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105404479.png" alt="image-20231208105404479"></p>
+<p>微信朋友圈某条状态的评论以及对评论的答复（也是评论）所构成的因果关系。</p>
+<p>微信分布在全球四地的数据中心，可知用户小王有两个朋友：Mary、Kate，分别在不同的区域下（数据中心），所以他们要看到彼此朋友圈的内容时，必须等到相关的数据在不同数据中心间的副本同步到用户所在的IDC完成之后才能看到。</p>
+<p>需要保证不同数据中心的因果一致性来保证一个用户在刷朋友圈的时候不会出现看到评论所对应的答复，却看不到答复对应的评论。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208110338741.png" alt="image-20231208110338741"></p>
+<p>由于网络在不同副本间复制数据时的延迟、中断等分布式系统中常见的场景，导致两条消息在同步到用户 <code>Kate</code>（加拿大）所在数据中心上的副本时已经乱序了。</p>
+<p>即原先顺序是这样的：</p>
+<blockquote>
+<p>“Mary: 这是哪里”  -&gt; </p>
+<p>“小王：Mary，这是梅里雪山”</p>
+</blockquote>
+<p>然而 <code>Kate</code> 去数据库中查到的消息却是这样的顺序：</p>
+<blockquote>
+<p>“小王：Mary，这是梅里雪山”  -&gt;</p>
+<p>“Mary: 这是哪里” </p>
+</blockquote>
+<p>或者中间的某个时刻只能查询到 “小王：Mary，这是梅里雪山” 这一条消息，你说 <code>Kate</code> 会不会懵逼。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208110812889.png" alt="image-20231208110812889"></p>
+<p>我们可以将 <code>Mary</code> 对小王所发布的朋友圈状态的评论 “Mary: 这是哪里” 当成因，而把小王对 <code>Mary</code> 评论的答复 “小王：Mary，这是梅里雪山” 当成果。</p>
+<p>按照这样的约定，当这两条数据同步到 <code>Kate</code> 所在的数据中心副本时，即使发生乱序，<code>Kate</code> 根据在刷朋友圈时，根据因果关系也可以将这个评论、答复的顺序调整到正确的、可阅读的方式。</p>
+<h3 id="因果一致性算法"><a href="#因果一致性算法" class="headerlink" title="因果一致性算法"></a>因果一致性算法</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208111047770.png" alt="image-20231208111047770"></p>
+<ul>
+<li><p>每条评论都有一个唯一的且递增的数字 <code>ID</code></p>
+<p>那么背后肯定是一个 <code>ID</code> 生成器，各个数据中心都有一个这样的入口来获取本<code>ID</code>内唯一、递增的<code>ID</code></p>
+</li>
+<li><p>每条新评论的<code>ID</code>都必须比本地已经见过的全局最大的<code>ID</code>大，确保因果关系</p>
+<p>在香港的数据中心，当发表完2的评论，并且已经同步上海数据中心过来的1，4，7等<code>ID</code>的评论之后，如果再有香港地域下的用户发表新评论时，那么一定要大于当前香港数据中心能看到的全局最大<code>ID</code>，此时是7，所以香港地域此时用户最新发表的评论的<code>ID</code>必须大于7.</p>
+</li>
+<li><p>广播本地看到的所有评论和新评论到其他 <code>IDC</code>；相同 <code>ID</code> 的评论合并排重</p>
+</li>
+</ul>
+<p>本地域下的用户，针对同一条朋友圈状态有评论时，该地域就负责申请一个全局 <code>ID</code>，然后将这个评论的事件广播给其他的数据中心。</p>
+<p>注意这个过程需要合并所有看到的序列，例如香港数据中心就合并1，2，4，7，8等针对同一条朋友圈状态的一系列评论事件<code>IDs</code>，然后再整体广播出去，这样才能保证针对同一条状态的所有当前最新的事件整体被广播出去，否则此时香港<code>IDC</code>只广播8的话，如果前面的事件序列在广播的中途丢失了，那么其他节点比如加拿大<code>IDC</code>就会漏掉部分评论时间，这也是数据多重补位的措施。</p>
+<p>当然这个方法有一个前提就是：因为同一个朋友圈的发布状态，一般的评论不会很多，所以造成的数据冗余交互不会很大，否则是不执行的。之余相同<code>ID</code>的评论合并排重，加拿大<code>IDC</code>会收到来自香港<code>IDC</code>同步过来的1，4，7，8事件系列，这两个广播的事件系列有重复，所以需要去重。</p>
+<h1 id="账号多活"><a href="#账号多活" class="headerlink" title="账号多活"></a>账号多活</h1><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208112422472.png" alt="image-20231208112422472"></p>
+<p>A 中心注册了用户，数据还未同步到B中心，此时A中心宕机，为了支持注册业务多活，那我们可以挑选B中心让用户去重新注册。</p>
+<p>看起来很容易就支持多活了，但仔细思考一下会发现这样会有问题：一个手机号只能注册一个账号，A中心的数据没有同步过来，B中心无法判断这个手机号是否重复，如果B中心让用户注册，后来A中心恢复了，发现数据有冲突，怎么解决？</p>
+<p>实际上是无法解决的，因为注册账号不能说挑选最后一个生效；而如果B中心不支持本来属于A中心的业务进行注册，注册业务的双活又成了空谈。</p>
+<p>但很多朋友在考虑这个<strong>业务</strong>的时候，会不自觉的陷入一个思维误区：我要保证所有业务的<strong>异地多活</strong>。因此账号系统一般不会做多活，一般主写从读，多个备库支持读。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208112726491.png" alt="image-20231208112726491"></p>
+<ul>
+<li><p>减少数据同步</p>
+<p>用户登录所产生的 <code>token</code> 或者 <code>session</code> 信息，数据量很大，但其实并不需要同步到其他业务中心，因为这些数据丢失后重新登录就可以了。</p>
+<ul>
+<li>某些情况下，可能出现消息队列同步也延迟了，用户在 A 中心注册，然后访问 B 中心的业务，此时 B 中心本地拿不到用户的账号数据。为了解决这个问题，B中心在读取本地数据失败的时候，可以根据路由规则，再去 A 中心访问一次（这就是所谓的二次读取，第一次读取本地，本地失败后第二次读取对端）。</li>
+<li>对于登录的 <code>session</code> 数据，由于数据量很大，我们可以不同步数据；但当用户在 A 中心登录后，然后又在 B 中心登录，B 中心拿到用户上传的 <code>session id</code> 后，根据路由判断 <code>session</code> 属于 A 中心，直接去 A 中心请求 <code>session</code> 数据即可，反之亦然，A 中心也可以到 B 中心去拿取 <code>session</code> 数据。</li>
+</ul>
+</li>
+<li><p>最终一致性</p>
+<p>A机房注册了一个用户，业务上不能要求在 <code>50ms</code> 内就同步到所有机房，正常情况下要求 <code>5分钟</code> 同步到所有机房即可，异常情况下甚至可以允许 1小时 或者 1天 后能够一致。</p>
+<p>最终一致性在具体实现的时候，还需要根据不同的数据特征，进行差异化的处理，以满足业务需要。例如对<strong>账号信息</strong>来说，如果在 A机房新注册的用户 5分钟内正好跑到B机房了，此时B机房还没有这个用户的信息，为了保证业务的正确，B 机房就需要根据路由规则到A机房请求数据。</p>
+<p>而对<strong>用户信息</strong>来说，5分钟后同步也没有问题，也不需要采取其他措施来弥补，但还是会影响用户体验，即用户看到了旧的用户信息，这个问题怎么解决呢？</p>
+</li>
+</ul>
+<h2 id="数据流向"><a href="#数据流向" class="headerlink" title="数据流向"></a>数据流向</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208142552962.png" alt="image-20231208142552962"></p>
+<ol>
+<li>将用户账号密码等用户信息同步到所有机房节点，账号登录和认证都在本机房实现</li>
+<li>当本机房数据没有同步过来，则降级到中心机房</li>
+</ol>
+<h1 id="稿件多活"><a href="#稿件多活" class="headerlink" title="稿件多活"></a>稿件多活</h1><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208142600439.png" alt="image-20231208142600439"></p>
+<p>稿件体系就是一个典型的单写，同步到其他机房。通过 <code>MySQL</code> 的同步来同步其他机房，同时订阅从库的 <code>binlog</code> 来做缓存刷新和预热。</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMjAwOTgyMg==">饿了么异地多活技术实现（一）总体介绍<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMjU4Nzk2MA==">饿了么异地多活技术实现（二）API-Router的设计与实现<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMzQzMDg2OQ==">饿了么异地多活技术实现（三）GZS&amp;DAL<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zNDk1ODU5Ng==">饿了么异地多活技术实现（四）- 实时双向复制工具（DRC）<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cDovL2FmZ2hsLmdpdGh1Yi5pby8yMDE4LzAyLzExL2Rpc3RyaWJ1dGVkLXN5c3RlbS1tdWx0aS1kYXRhY2VudGVyLTEuaHRtbA==">分布式系统 - 关于异地多活的一点笔记 - overview<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvUlFpdXJUaV9wTGttSWdfUFNwWnR2QQ==">OPPO互联网业务多活架构演进和实践<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvTENuNzFqM2hnbTVJajV0SFllOHVvQQ==">OPPO异地多活实践——缓存篇<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDczNDAzOA==">Scaling Memcache in Facebook 笔记（一）<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDc2MTA3MQ==">Scaling Memcache in Facebook 笔记（二）<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDgyNzE4Mw==">Scaling Memcache in Facebook 笔记（三）<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZGF2aWR3YW5nNDU2L2FydGljbGVzLzgxOTI4NjAuaHRtbA==">阿里异地多活与同城双活的架构演进<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvdHk1R2x0TzlNNjQ4T1hTV2dMZV9TZw==">多中心容灾实践：如何实现真正的异地多活？<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzU3NzE1">异地多活设计辣么难？其实是你想多了！<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvV0s4TjR4RnhDb1V2U3BYT3dDVklYdw==">历时三年，苏宁如何建设多数据中心多活的实践项目？<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3Mvb29QTFYwMzlCQUdCc2lEWmFnV05Idw==">异地多活数据流基础设施DRC 双11支持571亿交易额背后的武器<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvVlBrUWhKTGxfVUx3a2xQMXNxRjc5Zw==">阿里异地多活与同城双活的架构演进<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvdHk1R2x0TzlNNjQ4T1hTV2dMZV9TZw==">多中心容灾实践：如何实现真正的异地多活？<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3M/X19iaXo9TXpreU5USTVOVFExTlE9PSZtaWQ9MjI0NzUwMDg4NCZpZHg9MSZzbj0xNjZlMTRhZThlNTgzNDU4OTM0Y2NmNTY5OWM0ZjcyMyZzb3VyY2U9NDEjd2VjaGF0X3JlZGlyZWN0">一线大厂都在用的异地多活的 5 种解决方案！<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC80MjE1MDY2Ng==">异地多活技术方案的原则，技巧，步骤<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTI0MjI4MjkvYXJ0aWNsZS9kZXRhaWxzLzgzNzE4Mjk2">全球异地多活架构设计(一): Why and How<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTI0MjI4MjkvYXJ0aWNsZS9kZXRhaWxzLzgzOTMyODI5">全球异地多活架构设计(二): 数据层的支持<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20va2luZzAxMDEvcC8xMTkwODMwNS5odG1s">从微信朋友圈的评论可见性，谈因果一致性在分布式系统中的应用<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvamQ5T3MxT0F5Q1haOHJYdzhaSVFtZw==">异地多活的单元化设计<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xNDQxNDU1">谈谈异地多活架构<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvaF9LV3d6UHpzenJkR3E1a2NDdWRSQQ==">30 | 异地多活设计4步走<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3M/X19iaXo9TXpJM01EQTJPVEUwTnc9PSZtaWQ9MjI0NzQ4MzcyNiZpZHg9MSZzbj1hMDg2MzExZjgyZjI0Y2E3MDQyODZkZmRlOTdkMjNmOSZjaGtzbT1lYWQ3ZmRiYWRkYTA3NGFjOTBkNTYwM2VlMDA1ZmZkNjA2NjBlODRjZjBjZjc5NTk4MWM0Y2UyMmVjNjIyYWFlZWZmMTAxZTFiNjZmJnNjZW5lPTIxI3dlY2hhdF9yZWRpcmVjdA==">互联网异地多活方案发展历史<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xMDQyMDgxP2Zyb209YXJ0aWNsZS5kZXRhaWwuMTQ0MTQ1NQ==">荔枝FM架构师刘耀华：异地多活IDC机房架构<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/9a24.html" rel="prev" title="DNS & CND">
+                  <i class="fa fa-chevron-left"></i> DNS & CND
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
