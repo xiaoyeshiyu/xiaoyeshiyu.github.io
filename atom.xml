@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-12-12T08:33:33.122Z</updated>
+  <updated>2023-12-22T08:58:57.923Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go runtime之内存分配</title>
+    <link href="https://www.xiaoyeshiyu.com/post/ab88.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/ab88.html</id>
+    <published>2023-12-14T16:00:00.000Z</published>
+    <updated>2023-12-22T08:58:57.923Z</updated>
+    
+    
+    <summary type="html">Go runtime 的内存分配是其高效性和并发性的关键组成部分之一。Go 在内存分配方面采用了一些策略和算法，以提供快速的内存分配和高效的垃圾回收。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go runtime之 Goroutine 原理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/c06b.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/c06b.html</id>
+    <published>2023-12-12T16:00:00.000Z</published>
+    <updated>2023-12-22T08:57:39.534Z</updated>
+    
+    
+    <summary type="html">Goroutine 是 Go 编程语言中一种轻量级的并发执行单元，它是 Go runtime 的核心特性之一。Goroutine 允许开发者以一种简单、高效且可扩展的方式编写并发代码。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>多活</title>
@@ -245,25 +283,6 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之包管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
-    <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-17T10:14:29.126Z</updated>
-    
-    
-    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Go工程化实践之测试</title>
     <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
     <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
@@ -291,6 +310,25 @@
     
     
     <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go工程化实践之包管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-17T10:14:29.126Z</updated>
+    
+    
+    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
     
     
     
@@ -348,44 +386,6 @@
     
     
     <summary type="html">在Go语言中，工程项目结构没有强制的规定，但有一些常见的实践和约定，可以帮助组织和管理Go项目。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go的concurrency之channels</title>
-    <link href="https://www.xiaoyeshiyu.com/post/cf24.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/cf24.html</id>
-    <published>2023-09-21T16:00:00.000Z</published>
-    <updated>2023-10-18T03:19:01.621Z</updated>
-    
-    
-    <summary type="html">在Go语言中，channel（通道）是一种用于在 goroutine 之间进行通信和同步的特殊类型。它提供了一种安全、简洁的方式来传递数据和进行并发操作。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go的concurrency之context</title>
-    <link href="https://www.xiaoyeshiyu.com/post/d34c.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/d34c.html</id>
-    <published>2023-09-20T16:00:00.000Z</published>
-    <updated>2023-09-21T07:54:12.262Z</updated>
-    
-    
-    <summary type="html">在Go语言中，context包提供了一种在并发操作中传递请求范围数据、取消操作以及处理截止时间的机制。context包可以帮助你优雅地处理并发操作的控制流和资源管理。</summary>
     
     
     
