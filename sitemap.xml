@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.xiaoyeshiyu.com/post/c06b.html</loc>
+    
+    <lastmod>2023-12-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.xiaoyeshiyu.com/post/ab88.html</loc>
     
     <lastmod>2023-12-22</lastmod>
@@ -11,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/post/c06b.html</loc>
+    <loc>https://www.xiaoyeshiyu.com/post/ede3.html</loc>
     
     <lastmod>2023-12-22</lastmod>
     
@@ -1191,14 +1200,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
     <lastmod>2023-12-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/</loc>
     <lastmod>2023-12-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1226,14 +1235,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Application/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/GoLearningNote/</loc>
     <lastmod>2023-12-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/GoLearningNote/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Application/</loc>
     <lastmod>2023-12-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

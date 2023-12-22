@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-12-22T08:58:57.923Z</updated>
+  <updated>2023-12-22T09:03:12.049Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,30 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Go runtime之 GC</title>
+    <link href="https://www.xiaoyeshiyu.com/post/ede3.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/ede3.html</id>
+    <published>2023-12-20T16:00:00.000Z</published>
+    <updated>2023-12-22T09:03:12.049Z</updated>
+    
+    
+    <summary type="html">Go runtime 的垃圾回收（Garbage Collection）是实现自动内存管理的关键组成部分。Go 的垃圾回收器采用了一系列策略和算法，旨在提供高效的内存回收，并减少开发者对内存管理的负担。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Go runtime之内存分配</title>
     <link href="https://www.xiaoyeshiyu.com/post/ab88.html"/>
     <id>https://www.xiaoyeshiyu.com/post/ab88.html</id>
     <published>2023-12-14T16:00:00.000Z</published>
-    <updated>2023-12-22T08:58:57.923Z</updated>
+    <updated>2023-12-22T09:03:21.292Z</updated>
     
     
     <summary type="html">Go runtime 的内存分配是其高效性和并发性的关键组成部分之一。Go 在内存分配方面采用了一些策略和算法，以提供快速的内存分配和高效的垃圾回收。</summary>
@@ -40,7 +59,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/c06b.html"/>
     <id>https://www.xiaoyeshiyu.com/post/c06b.html</id>
     <published>2023-12-12T16:00:00.000Z</published>
-    <updated>2023-12-22T08:57:39.534Z</updated>
+    <updated>2023-12-22T09:03:26.911Z</updated>
     
     
     <summary type="html">Goroutine 是 Go 编程语言中一种轻量级的并发执行单元，它是 Go runtime 的核心特性之一。Goroutine 允许开发者以一种简单、高效且可扩展的方式编写并发代码。</summary>
@@ -283,6 +302,25 @@
   </entry>
   
   <entry>
+    <title>Go工程化实践之包管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
+    <published>2023-10-16T16:00:00.000Z</published>
+    <updated>2023-10-17T10:14:29.126Z</updated>
+    
+    
+    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Go工程化实践之测试</title>
     <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
     <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
@@ -321,25 +359,6 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之包管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
-    <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-17T10:14:29.126Z</updated>
-    
-    
-    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Go工程化实践之API设计</title>
     <link href="https://www.xiaoyeshiyu.com/post/7988.html"/>
     <id>https://www.xiaoyeshiyu.com/post/7988.html</id>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">在Go语言中进行架构设计时，可以采用一些常见的设计模式和原则来帮助组织和管理代码。这里以评论系统作为案例。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go工程化实践之工程项目结构</title>
-    <link href="https://www.xiaoyeshiyu.com/post/d3e3.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/d3e3.html</id>
-    <published>2023-09-24T16:00:00.000Z</published>
-    <updated>2023-10-19T07:43:33.728Z</updated>
-    
-    
-    <summary type="html">在Go语言中，工程项目结构没有强制的规定，但有一些常见的实践和约定，可以帮助组织和管理Go项目。</summary>
     
     
     
