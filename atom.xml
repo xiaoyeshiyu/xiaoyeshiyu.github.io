@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2023-12-22T09:03:12.049Z</updated>
+  <updated>2023-12-25T08:19:12.305Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>channel原理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/52fe.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/52fe.html</id>
+    <published>2023-12-24T16:00:00.000Z</published>
+    <updated>2023-12-25T08:19:12.305Z</updated>
+    
+    
+    <summary type="html">通道是 Go 语言中用于协程之间通信的重要机制。通过阻塞和同步的方式，通道实现了安全的数据传递和协程之间的同步操作。通道的实现依赖于调度器和锁机制，通过队列和阻塞机制实现数据的传递。通道在并发编程中具有广泛的应用场景，可以提高程序的可靠性和性能。</summary>
+    
+    
+    
+    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>Go runtime之 GC</title>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">在现代软件开发中，良好的API设计是构建可扩展、可维护和易于使用的应用程序的关键。在Go语言中，API设计的重要性更加凸显，因为Go的简洁性和高效性使其成为构建可靠和高性能应用的理想选择。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>架构设计之评论系统</title>
-    <link href="https://www.xiaoyeshiyu.com/post/eea5.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/eea5.html</id>
-    <published>2023-10-06T16:00:00.000Z</published>
-    <updated>2023-10-19T09:21:35.684Z</updated>
-    
-    
-    <summary type="html">在Go语言中进行架构设计时，可以采用一些常见的设计模式和原则来帮助组织和管理代码。这里以评论系统作为案例。</summary>
     
     
     
