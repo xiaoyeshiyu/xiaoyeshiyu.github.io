@@ -54,6 +54,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222103057305.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222103622421.png">
 <meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20231222104551165.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229105910802.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222105747171.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222105854334.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222110545812.png">
@@ -68,7 +69,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222113231890.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222113247773.png">
 <meta property="article:published_time" content="2023-12-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-12-22T09:03:12.049Z">
+<meta property="article:modified_time" content="2023-12-29T08:11:29.875Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -203,13 +204,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-count">127</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -282,7 +283,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-22 17:03:12" itemprop="dateModified" datetime="2023-12-22T17:03:12+08:00">2023-12-22</time>
+      <time title="Modified: 2023-12-29 16:11:29" itemprop="dateModified" datetime="2023-12-29T16:11:29+08:00">2023-12-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -544,7 +545,10 @@
 </li>
 </ul>
 <p>为了移除栈的重扫描过程，出了引入混合写屏障之外，在垃圾收集的标记阶段，我们还需要将创建的所有堆上新对象都标记成黑色，防止新分配的栈内存和堆内存中的对象被错误地回收，因为栈内存在标记阶段最终都会变为黑色，所以不再需要重新扫描栈空间。</p>
-<h2 id="Sweep"><a href="#Sweep" class="headerlink" title="Sweep"></a>Sweep</h2><p>Sweep 让 Go 知道哪些内存可以重新分配使用，然而，Sweep 过程并不会处理释放的对象内存置为 0（zeroing the memory）。而是在分配重新使用的时候，重新 <code>reset bit</code></p>
+<h2 id="Sweep"><a href="#Sweep" class="headerlink" title="Sweep"></a>Sweep</h2><p>Sweep 让 Go 知道哪些内存可以重新分配使用，然而，Sweep 过程并不会处理释放的对象内存置为 0（zeroing the memory）。</p>
+<p>在 内存分配时，<code>mspan</code> 的结构体中维护了两个位图字段（两个字段完全一致，为了后续 GC 之后，直接替换），记录已经分配的和需要gc的。</p>
+<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229105910802.png" alt="image-20231229105910802"></p>
+<p>而是在分配重新使用的时候，重新 <code>reset bit</code></p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222105747171.png" alt="image-20231222105747171"></p>
 <p>每个 <code>span</code> 内有一个 <code>bitmap</code> 叫作 <code>allocBits</code>，它表示上一次 GC 之后每一个 object 的分配情况。1：表示已分配；2:表示未使用或释放。</p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222105854334.png" alt="image-20231222105854334"></p>
@@ -667,7 +671,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
