@@ -120,6 +120,7 @@
 {"title":"微服务开发之gRPC","url":"/post/c867.html"},
 {"title":"Golang并发编程","url":"/post/cd1b.html"},
 {"title":"Golang网络编程","url":"/post/cd80.html"},
+{"title":"Docker 核心技术","url":"/post/cdb9.html"},
 {"title":"Gin的参数校验器validator","url":"/post/cdfa.html"},
 {"title":"Go的concurrency之channels","url":"/post/cf24.html"},
 {"title":"微服务可观察性之日志","url":"/post/cfd3.html"},
