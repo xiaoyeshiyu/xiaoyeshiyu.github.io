@@ -149,5 +149,6 @@
 {"title":"分布式事务","url":"/post/fa8f.html"},
 {"title":"Gitlab的CI","url":"/post/fe1f.html"},
 {"title":"LeetCode每日一题","url":"/post/fe74.html"},
+{"title":"Kubernetes 架构原则和对象设计","url":"/post/ff15.html"},
 {"title":"微服务","url":"/post/ff69.html"},
 ]
