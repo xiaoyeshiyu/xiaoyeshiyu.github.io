@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-01-10T10:23:50.556Z</updated>
+  <updated>2024-01-10T10:37:44.335Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,16 +21,10 @@
     <link href="https://www.xiaoyeshiyu.com/post/ff15.html"/>
     <id>https://www.xiaoyeshiyu.com/post/ff15.html</id>
     <published>2024-01-03T16:00:00.000Z</published>
-    <updated>2024-01-10T10:23:50.556Z</updated>
+    <updated>2024-01-10T10:37:44.335Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;云计算&quot;&gt;&lt;a href=&quot;#云计算&quot; class=&quot;headerlink&quot;</summary>
-        
-      
+    <summary type="html">探讨 Kubernetes 核心设计原理和对象模型，通过详细分析 Kubernetes 的架构设计原则，以及对象如何在 Kubernetes 中发挥作用，了解这个开源容器编排平台的内部运作机制理解 Kubernetes 的设计哲学和对象模型，并探索如何有效地利用这些概念来构建可靠、可扩展的容器化应用程序。</summary>
     
     
     
@@ -46,16 +40,10 @@
     <link href="https://www.xiaoyeshiyu.com/post/cdb9.html"/>
     <id>https://www.xiaoyeshiyu.com/post/cdb9.html</id>
     <published>2023-12-28T16:00:00.000Z</published>
-    <updated>2024-01-04T09:25:27.103Z</updated>
+    <updated>2024-01-10T10:39:34.772Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;系统架构&quot;&gt;&lt;a href=&quot;#系统架构&quot; class=&quot;headerlink&quot; title=&quot;系统架构&quot;&gt;&lt;/a&gt;系统架构&lt;/h1&gt;&lt;h2 id=&quot;传统分层架构-VS-微服务&quot;&gt;&lt;a href=&quot;#传统分层架构-VS-微服务&quot;</summary>
-        
-      
+    <summary type="html">Docker 是如何实现轻量级、可移植和隔离化的容器化解决方案，从容器镜像到容器运行时，再到容器编排，介绍 Docker 技术栈的各个组成部分，并探讨它们是如何相互配合以提供高效、可靠的应用程序部署和管理环境的。</summary>
     
     
     
@@ -390,14 +378,14 @@
   </entry>
   
   <entry>
-    <title>Go工程化实践之测试</title>
-    <link href="https://www.xiaoyeshiyu.com/post/c73a.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/c73a.html</id>
+    <title>Go工程化实践之配置管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/70.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/70.html</id>
     <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-20T08:01:02.637Z</updated>
+    <updated>2023-10-19T08:38:15.618Z</updated>
     
     
-    <summary type="html">在Go语言的开发过程中，测试是确保代码质量和可靠性的重要环节。良好的测试实践可以帮助我们捕捉潜在的错误、验证代码逻辑，并确保代码在不同场景下的正确行为。</summary>
+    <summary type="html">在现代的软件开发中，配置管理是构建可配置和可扩展应用程序的关键要素之一。在Go语言中，配置管理的良好实践可以使您的应用程序更加灵活和易于管理。</summary>
     
     
     

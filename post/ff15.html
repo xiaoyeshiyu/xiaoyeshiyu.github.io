@@ -24,12 +24,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="云计算云原生是云计算时代的产物。 云计算是将计算资源、网络资源、存储资源整合为一个集群的抽象，面向抽象的计算资源运行应用。云平台将应用按照资源需求，自动调度合适的资源运行。  云计算平台的分类以 Openstack 为典型的虚拟化平台  虚拟机构建和业务代码部署分离 可变的基础架构使后续持续风险变大  以谷歌 borg 为典型的基于进程的作业调度平台  技术的迭代引发 borg 的换代需求 早期的">
+    <meta name="description" content="探讨 Kubernetes 核心设计原理和对象模型，通过详细分析 Kubernetes 的架构设计原则，以及对象如何在 Kubernetes 中发挥作用，了解这个开源容器编排平台的内部运作机制理解 Kubernetes 的设计哲学和对象模型，并探索如何有效地利用这些概念来构建可靠、可扩展的容器化应用程序。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kubernetes 架构原则和对象设计">
 <meta property="og:url" content="https://www.xiaoyeshiyu.com/post/ff15.html">
 <meta property="og:site_name" content="小夜时雨">
-<meta property="og:description" content="云计算云原生是云计算时代的产物。 云计算是将计算资源、网络资源、存储资源整合为一个集群的抽象，面向抽象的计算资源运行应用。云平台将应用按照资源需求，自动调度合适的资源运行。  云计算平台的分类以 Openstack 为典型的虚拟化平台  虚拟机构建和业务代码部署分离 可变的基础架构使后续持续风险变大  以谷歌 borg 为典型的基于进程的作业调度平台  技术的迭代引发 borg 的换代需求 早期的">
+<meta property="og:description" content="探讨 Kubernetes 核心设计原理和对象模型，通过详细分析 Kubernetes 的架构设计原则，以及对象如何在 Kubernetes 中发挥作用，了解这个开源容器编排平台的内部运作机制理解 Kubernetes 的设计哲学和对象模型，并探索如何有效地利用这些概念来构建可靠、可扩展的容器化应用程序。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240104172734510.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240104173736050.png">
@@ -67,7 +67,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/2019-03-05-Job-Topology.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/2019-03-01-DaemonSet-Topology.png">
 <meta property="article:published_time" content="2024-01-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-01-10T10:23:50.556Z">
+<meta property="article:modified_time" content="2024-01-10T10:37:44.335Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -259,7 +259,7 @@
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="Kubernetes 架构原则和对象设计 | 小夜时雨">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="探讨 Kubernetes 核心设计原理和对象模型，通过详细分析 Kubernetes 的架构设计原则，以及对象如何在 Kubernetes 中发挥作用，了解这个开源容器编排平台的内部运作机制理解 Kubernetes 的设计哲学和对象模型，并探索如何有效地利用这些概念来构建可靠、可扩展的容器化应用程序。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -281,7 +281,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-10 18:23:50" itemprop="dateModified" datetime="2024-01-10T18:23:50+08:00">2024-01-10</time>
+      <time title="Modified: 2024-01-10 18:37:44" itemprop="dateModified" datetime="2024-01-10T18:37:44+08:00">2024-01-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -303,6 +303,7 @@
     </span>
 </div>
 
+            <div class="post-description">探讨 Kubernetes 核心设计原理和对象模型，通过详细分析 Kubernetes 的架构设计原则，以及对象如何在 Kubernetes 中发挥作用，了解这个开源容器编排平台的内部运作机制理解 Kubernetes 的设计哲学和对象模型，并探索如何有效地利用这些概念来构建可靠、可扩展的容器化应用程序。</div>
         </div>
       </header>
 
