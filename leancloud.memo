@@ -41,6 +41,7 @@
 {"title":"Go的sync包","url":"/post/2f5e.html"},
 {"title":"Go的concurrency之sync","url":"/post/2f5e.html"},
 {"title":"Golang中的错误处理","url":"/post/37ee.html"},
+{"title":"Kubernetes 控制平面组件：etcd","url":"/post/387e.html"},
 {"title":"Golnag标准包之os包","url":"/post/3d51.html"},
 {"title":"通过k8s安装pgsql","url":"/post/3f07.html"},
 {"title":"Gin框架学习笔记","url":"/post/405c.html"},

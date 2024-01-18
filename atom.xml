@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-01-16T10:04:34.096Z</updated>
+  <updated>2024-01-18T09:03:28.513Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,30 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Kubernetes 控制平面组件：API Server</title>
+    <link href="https://www.xiaoyeshiyu.com/post/bad7.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/bad7.html</id>
+    <published>2024-01-14T16:00:00.000Z</published>
+    <updated>2024-01-18T09:03:28.513Z</updated>
+    
+    
+    <summary type="html">Kubernetes 控制平面的核心引擎之一，API Server 扮演着整个系统的关键角色。作为 Kubernetes 集群的掌控中心，API Server 负责接收、处理和管理集群中的所有资源对象，从而实现集群的协同工作和资源编排。</summary>
+    
+    
+    
+    <category term="云原生训练营" scheme="https://www.xiaoyeshiyu.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Kubernetes 控制平面组件：etcd</title>
     <link href="https://www.xiaoyeshiyu.com/post/387e.html"/>
     <id>https://www.xiaoyeshiyu.com/post/387e.html</id>
     <published>2024-01-09T16:00:00.000Z</published>
-    <updated>2024-01-16T10:04:34.096Z</updated>
+    <updated>2024-01-18T09:03:20.345Z</updated>
     
     
     <summary type="html">分布式键值存储系统 etcd 在 Kubernetes 架构中的关键作用。</summary>
@@ -59,7 +78,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/cdb9.html"/>
     <id>https://www.xiaoyeshiyu.com/post/cdb9.html</id>
     <published>2023-12-28T16:00:00.000Z</published>
-    <updated>2024-01-10T10:39:34.772Z</updated>
+    <updated>2024-01-18T09:03:11.621Z</updated>
     
     
     <summary type="html">Docker 是如何实现轻量级、可移植和隔离化的容器化解决方案，从容器镜像到容器运行时，再到容器编排，介绍 Docker 技术栈的各个组成部分，并探讨它们是如何相互配合以提供高效、可靠的应用程序部署和管理环境的。</summary>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">在当今的软件开发中，微服务架构已经成为一种流行的设计模式。然而，随着系统规模的增长和复杂性的提高，确保微服务的可用性变得越来越重要。本文将探讨微服务可用性设计中的一个关键概念：隔离。通过合理的隔离策略，我们可以有效地降低故障的传播范围，提高整体系统的稳定性和可靠性。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go工程化实践之包管理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/e924.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/e924.html</id>
-    <published>2023-10-16T16:00:00.000Z</published>
-    <updated>2023-10-17T10:14:29.126Z</updated>
-    
-    
-    <summary type="html">在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。</summary>
     
     
     
