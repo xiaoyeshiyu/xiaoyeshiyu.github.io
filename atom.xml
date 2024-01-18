@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-01-18T09:03:28.513Z</updated>
+  <updated>2024-01-18T09:03:38.183Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/bad7.html"/>
     <id>https://www.xiaoyeshiyu.com/post/bad7.html</id>
     <published>2024-01-14T16:00:00.000Z</published>
-    <updated>2024-01-18T09:03:28.513Z</updated>
+    <updated>2024-01-18T09:03:38.183Z</updated>
     
     
     <summary type="html">Kubernetes 控制平面的核心引擎之一，API Server 扮演着整个系统的关键角色。作为 Kubernetes 集群的掌控中心，API Server 负责接收、处理和管理集群中的所有资源对象，从而实现集群的协同工作和资源编排。</summary>
