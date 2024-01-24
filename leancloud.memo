@@ -139,6 +139,7 @@
 {"title":"MySQL学习笔记设计规范和调优篇","url":"/post/de27.html"},
 {"title":"Golang中的channel","url":"/post/e135.html"},
 {"title":"Go工程化实践之包管理","url":"/post/e924.html"},
+{"title":"Kubernetes 控制平面组件：调度器和控制器","url":"/post/ea1d.html"},
 {"title":"Golang结构体、“对象”的用法","url":"/post/eba7.html"},
 {"title":"Go runtime之 GC","url":"/post/ede3.html"},
 {"title":"架构设计之评论系统","url":"/post/eea5.html"},
