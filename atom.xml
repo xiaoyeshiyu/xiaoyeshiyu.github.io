@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-01-24T10:25:04.918Z</updated>
+  <updated>2024-01-31T07:56:27.799Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Kubernetes 控制平面组件：生命周期管理和服务发现</title>
+    <link href="https://www.xiaoyeshiyu.com/post/f2e1.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/f2e1.html</id>
+    <published>2024-01-23T16:00:00.000Z</published>
+    <updated>2024-01-31T07:56:27.799Z</updated>
+    
+    
+    <summary type="html">Kubernetes 控制平面组件的两个关键方面：生命周期管理和服务发现。在 Kubernetes 中，控制平面是整个集群的核心组件，负责管理和控制集群的运行。</summary>
+    
+    
+    
+    <category term="云原生训练营" scheme="https://www.xiaoyeshiyu.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>Kubernetes 控制平面组件：调度器和控制器</title>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">微服务架构中的过载保护和限流是确保系统可用性的关键策略之一。当微服务面临突发的高负载或异常情况时，合理的过载保护和限流机制可以防止系统崩溃，并保持对关键服务的稳定响应。本文将深入探讨微服务可用性设计中的过载保护和限流策略。我们将介绍过载保护和限流的概念和原理，讨论不同的实现方法和工具，以及如何根据业务需求和系统特点选择适合的策略。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>微服务可用性设计之超时控制</title>
-    <link href="https://www.xiaoyeshiyu.com/post/7397.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/7397.html</id>
-    <published>2023-10-19T16:00:00.000Z</published>
-    <updated>2023-10-26T08:55:16.800Z</updated>
-    
-    
-    <summary type="html">在微服务架构中，超时控制是确保系统可用性的关键因素之一。当微服务之间存在网络延迟或故障时，合理的超时设置可以防止故障扩散，并提高整体系统的稳定性。本文将深入探讨微服务可用性设计中的超时控制策略。我们将介绍超时的重要性，讨论不同类型的超时模式，如请求级超时和资源级超时，并提供针对不同场景的最佳实践和实施建议。</summary>
     
     
     
