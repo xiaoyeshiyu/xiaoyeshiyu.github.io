@@ -19,10 +19,10 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。">
 <meta property="og:type" content="article">
@@ -50,7 +50,7 @@
 <title>casbin | 小夜时雨</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -276,8 +276,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。</p>
 <p>Casbin的核心概念是访问控制模型和策略。访问控制模型定义了一组规则，用于描述谁可以访问哪些资源以及在什么条件下可以访问。策略是基于模型定义的规则，描述了实际的访问控制规则集合。</p>
 <p>Casbin支持多种访问控制模型，包括基于角色的访问控制（RBAC）、访问控制列表（ACL）和属性访问控制（ABAC）等。它还提供了灵活的策略管理机制，可以将策略存储在不同的持久化存储中，如文件、数据库或远程服务。</p>
 <p>使用Casbin，你可以轻松地实现细粒度的权限管理，定义和管理角色、资源和操作之间的访问规则，并在应用程序中进行访问控制的验证。无论是Web应用程序、API服务还是其他类型的系统，Casbin都可以帮助你实现安全的访问控制机制。</p>
@@ -460,12 +459,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/post/2f5e.html" rel="prev" title="Go的concurrency之sync">
-                  <i class="fa fa-chevron-left"></i> Go的concurrency之sync
+                  <i class="fa fa-angle-left"></i> Go的concurrency之sync
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/post/84a9.html" rel="next" title="Go的concurrency之Memory model">
-                  Go的concurrency之Memory model <i class="fa fa-chevron-right"></i>
+                  Go的concurrency之Memory model <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -489,15 +488,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+  </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
   </div>
 
@@ -524,6 +522,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
+
 
 
 

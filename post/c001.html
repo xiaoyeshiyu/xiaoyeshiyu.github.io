@@ -19,10 +19,10 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="工作中时常会碰到网络问题导致业务出现故障，排查问题的办法万变不离其宗，当报错太过特殊的时候，差异排除法是比较简单快捷就可以定位到问题的方法。这次就碰到由于客户IP地址更换而防火墙没有及时更新策略出现服务访问异常的问题，顺手就记录了处理过程。">
 <meta property="og:type" content="article">
@@ -51,7 +51,7 @@
 <title>使用Wireshark分析TCP ACK回复问题 | 小夜时雨</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -277,8 +277,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="Wireshark分析TCP-ACK错误实例"><a href="#Wireshark分析TCP-ACK错误实例" class="headerlink" title="Wireshark分析TCP ACK错误实例"></a>Wireshark分析TCP ACK错误实例</h1><h2 id="情况复现"><a href="#情况复现" class="headerlink" title="情况复现"></a>情况复现</h2><p>上传文件出现报错，报错如下</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="Wireshark分析TCP-ACK错误实例"><a href="#Wireshark分析TCP-ACK错误实例" class="headerlink" title="Wireshark分析TCP ACK错误实例"></a>Wireshark分析TCP ACK错误实例</h1><h2 id="情况复现"><a href="#情况复现" class="headerlink" title="情况复现"></a>情况复现</h2><p>上传文件出现报错，报错如下</p>
 <p><img src="https://cl.ly/2u161P463K11/Image%202017-10-16%20at%2010.59.21%20AM.png" alt="上传文件出现报错"></p>
 <p><code>testv.mp4上传失败unexpected error -- SyntaxError: Unexpected end of JSON input</code></p>
 <p>然而，用VPN连接到校园网进行上传没有出现报错，同时检查服务器各项服务配置文件，均为发现有异常，判断问题出现在网络。</p>
@@ -313,12 +312,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/post/58be.html" rel="prev" title="实例使用crash分析Kdump转储kernel崩溃内核">
-                  <i class="fa fa-chevron-left"></i> 实例使用crash分析Kdump转储kernel崩溃内核
+                  <i class="fa fa-angle-left"></i> 实例使用crash分析Kdump转储kernel崩溃内核
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/post/a1f5.html" rel="next" title="rbd中通过hack卷ID实现快速克隆虚拟机">
-                  rbd中通过hack卷ID实现快速克隆虚拟机 <i class="fa fa-chevron-right"></i>
+                  rbd中通过hack卷ID实现快速克隆虚拟机 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -342,15 +341,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+  </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
   </div>
 
@@ -377,6 +375,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
+
 
 
 

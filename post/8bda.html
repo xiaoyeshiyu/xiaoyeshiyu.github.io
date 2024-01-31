@@ -19,10 +19,10 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在当今的分布式系统中，高性能和可扩展性是至关重要的。而分布式缓存作为一种关键的技术手段，能够显著提升系统的性能和可扩展性。">
 <meta property="og:type" content="article">
@@ -68,7 +68,7 @@
 <title>分布式缓存 | 小夜时雨</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -294,8 +294,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="缓存选型"><a href="#缓存选型" class="headerlink" title="缓存选型"></a>缓存选型</h1><h2 id="Memcache"><a href="#Memcache" class="headerlink" title="Memcache"></a>Memcache</h2><p><code>Memcache</code> 提供简单的 <code>kv</code> <code>cache</code> 存储，<code>value</code> 大小不超过 <code>1MB</code>。一般将 <code>Memcache</code> 作为大文本或者简单的 <code>kv</code> 结构使用。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="缓存选型"><a href="#缓存选型" class="headerlink" title="缓存选型"></a>缓存选型</h1><h2 id="Memcache"><a href="#Memcache" class="headerlink" title="Memcache"></a>Memcache</h2><p><code>Memcache</code> 提供简单的 <code>kv</code> <code>cache</code> 存储，<code>value</code> 大小不超过 <code>1MB</code>。一般将 <code>Memcache</code> 作为大文本或者简单的 <code>kv</code> 结构使用。</p>
 <p><code>Memcache</code> 使用了 <code>slab</code> 的方式做内存管理（可以理解为分块，一开始申请一个非常大的联系内存块，然后逐步分为比较小的块），存在一定的浪费，如果大量接近的 <code>item</code>，建议调整 <code>Memcache</code> 参数来优化每一个 <code>slab</code> 增长的 <code>ratio</code>（增长因子），可以通过设置 <code>slab_automove</code> &amp; <code>slab_reassign</code> 开启 <code>Memcache</code> 的动态&#x2F;手动 <code>move slab</code>，防止某些 <code>slab</code> 热点导致内存足够的情况下引发 <code>LRU</code>。（例如大量的小数据占用大量的小 <code>slab</code> ，放入大数据的时候虽然显示有内存，但是实际上没有连续的内存空间，此时会导致内存回收）</p>
 <p>大部分情况下，简单 <code>KV</code> 推荐使用 <code>Memcache</code>，吞吐和响应都足够好。</p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102164553767.png" alt="image-20231102164553767"></p>
@@ -529,12 +528,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/post/f986.html" rel="prev" title="架构设计之历史记录设计">
-                  <i class="fa fa-chevron-left"></i> 架构设计之历史记录设计
+                  <i class="fa fa-angle-left"></i> 架构设计之历史记录设计
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/post/fa8f.html" rel="next" title="分布式事务">
-                  分布式事务 <i class="fa fa-chevron-right"></i>
+                  分布式事务 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -558,15 +557,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+  </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
   </div>
 
@@ -593,6 +591,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
+
 
 
 

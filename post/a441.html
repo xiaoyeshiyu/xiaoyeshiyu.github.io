@@ -19,10 +19,10 @@
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.15.0","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在排查网络问题过程中，除了Windows平台上使用的wireshark工具之外，linux上也有网络抓包工具，Tcpdump。作为技术支持，更多时候是和Linux操作系统打交道，所以了解Tcpdump的使用方式也是必不可少的。另外，通过Tcpdump延伸出的网络问题优化小知识也是比较实用的。">
 <meta property="og:type" content="article">
@@ -50,7 +50,7 @@
 <title>通过TCPdump等工具排查网络问题以及优化 | 小夜时雨</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
-  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false}</script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false,"measure_protocol_api_secret":null}</script>
   <script src="/js/third-party/analytics/google-analytics.js"></script>
 
   <script src="/js/third-party/analytics/baidu-analytics.js"></script>
@@ -276,8 +276,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <h1 id="Tcpdump"><a href="#Tcpdump" class="headerlink" title="Tcpdump"></a>Tcpdump</h1><p>​	作为技术支持，有时候会遇到与 LAN 或 WAN 中的问题相关或由其直接导致的问题，这是不可避免的。在这些情况下，在求助于二级支持或者现场网络管理员之前，最好对问题进行初步诊断，这有助于识别问题的根源，至少可以给出进一步研究的大方向。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="Tcpdump"><a href="#Tcpdump" class="headerlink" title="Tcpdump"></a>Tcpdump</h1><p>​	作为技术支持，有时候会遇到与 LAN 或 WAN 中的问题相关或由其直接导致的问题，这是不可避免的。在这些情况下，在求助于二级支持或者现场网络管理员之前，最好对问题进行初步诊断，这有助于识别问题的根源，至少可以给出进一步研究的大方向。</p>
 <p>​	在需要对网络问题进行简单的分析的时候，掌握一个重要的诊断工具是必须的，这里推荐的基于UNIX平台的上的Tcpdump，它可以帮助解决与TCP&#x2F;IP网络相关的问题。</p>
 <h2 id="步骤分析"><a href="#步骤分析" class="headerlink" title="步骤分析"></a>步骤分析</h2><p>网络中相关问题大多数可以通过其他方法进行检测，例如二层链路中的arp，三层中的路由，四层中的端口等，而Tcpdump在能解决以上层面的问题的同时，也能针对上三层进行判断。首先介绍下四层问题诊断的几种工具。</p>
 <h3 id="分析网络连通性"><a href="#分析网络连通性" class="headerlink" title="分析网络连通性"></a>分析网络连通性</h3><p>​	诊断任何网络相关问题的第一步都是检查目标主机是否正在运行。可以使用 <code>ping</code>检查是否可以通过网络访问某一主机。这个命令向主机发送一个<code>Internet Control Message Protocol (ICMP)</code>回显请求数据包，然后等待回显回复。</p>
@@ -580,12 +579,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/post/ae9a.html" rel="prev" title="Neutron结合OpenvSwitch网络部分浅析">
-                  <i class="fa fa-chevron-left"></i> Neutron结合OpenvSwitch网络部分浅析
+                  <i class="fa fa-angle-left"></i> Neutron结合OpenvSwitch网络部分浅析
                 </a>
             </div>
             <div class="post-nav-item">
                 <a href="/post/79b0.html" rel="next" title="数据结构和算法初识">
-                  数据结构和算法初识 <i class="fa fa-chevron-right"></i>
+                  数据结构和算法初识 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -609,15 +608,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+  </div>
   <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
   </div>
 
@@ -644,6 +642,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
+
 
 
 
