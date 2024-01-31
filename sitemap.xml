@@ -1277,7 +1277,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
     <lastmod>2024-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1291,14 +1291,14 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/CloudNative/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
     <lastmod>2024-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/CloudNative/</loc>
     <lastmod>2024-01-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
