@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-02-22T09:46:58.896Z</updated>
+  <updated>2024-02-22T09:47:37.667Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/3045b31e.html"/>
     <id>https://www.xiaoyeshiyu.com/post/3045b31e.html</id>
     <published>2024-02-18T16:00:00.000Z</published>
-    <updated>2024-02-22T09:46:58.896Z</updated>
+    <updated>2024-02-22T09:47:37.667Z</updated>
     
     
     <summary type="html">生产化环境涉及到 镜像管理、CI/CD、DevOps、日志收集、监控，目的是高效开发，以及确保在生产环境中稳定运行，高效运维。</summary>
