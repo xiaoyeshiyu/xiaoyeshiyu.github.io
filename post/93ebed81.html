@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="生产化集群的核心是监控和自动化扩展，从集群的高可用性、安全性和保障资源使用率上高效管理集群环境。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes 生产化集群的管理">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/93ebed81.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="生产化集群的核心是监控和自动化扩展，从集群的高可用性、安全性和保障资源使用率上高效管理集群环境。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-09-01-image-20240131170900968.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-40-07-image-20240131174007070.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-47-41-image-20240131174741687.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F11-31-04-image-20240202113103913.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F11-37-28-image-20240202113728218.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F04%2F15-59-30-image-20240202161353373.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-37-49-image-20240202163749074.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-42-33-image-20240202164233706.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-46-09-image-20240202164609254.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-55-29-image-20240202165529854.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-55-52-image-20240202165552807.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-56-09-image-20240202165609461.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-56-30-image-20240202165630401.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-01-10-image-20240202170110444.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-02-19-image-20240202170219230.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-04-09-image-20240202170409037.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-10-31-image-20240202171031379.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-10-46-image-20240202171046625.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-11-09-image-20240202171108988.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-11-31-image-20240202171131474.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F07%2F19-06-02-image-20240207190602635.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-20-22-image-20240202172022775.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-24-24-image-20240202172424091.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-26-56-image-20240202172656160.png">
+<meta property="article:published_time" content="2024-01-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-02-18T02:35:33.640Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-09-01-image-20240131170900968.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/93ebed81.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/93ebed81.html","path":"post/93ebed81.html","title":"Kubernetes 生产化集群的管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Kubernetes 生产化集群的管理 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E8%8A%82%E7%82%B9%E7%9B%B8%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text">计算节点相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E5%8C%96%E9%9B%86%E7%BE%A4%E7%9A%84%E8%80%83%E9%87%8F"><span class="nav-number">1.1.</span> <span class="nav-text">生产化集群的考量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%80%89%E6%8B%A9"><span class="nav-number">2.</span> <span class="nav-text">操作系统选择</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="nav-number">2.1.</span> <span class="nav-text">操作系统的评估与选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9-1"><span class="nav-number">2.2.</span> <span class="nav-text">操作系统的评估与选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E4%B8%8E%E6%88%90%E7%86%9F%E5%BA%A6"><span class="nav-number">2.3.</span> <span class="nav-text">生态系统与成熟度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%91%E5%8E%9F%E7%94%9F%E7%9A%84%E5%8E%9F%E5%88%99"><span class="nav-number">2.4.</span> <span class="nav-text">云原生的原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Atomic"><span class="nav-number">2.5.</span> <span class="nav-text">Atomic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E5%8C%96%E4%B8%BB%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.6.</span> <span class="nav-text">最小化主机操作系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="nav-number">2.7.</span> <span class="nav-text">操作系统构建流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ostree"><span class="nav-number">2.8.</span> <span class="nav-text">ostree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA-ostree"><span class="nav-number">2.8.1.</span> <span class="nav-text">构建 ostree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD-ostree"><span class="nav-number">2.8.2.</span> <span class="nav-text">加载 ostree</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8A%A0%E8%BD%BD"><span class="nav-number">2.9.</span> <span class="nav-text">操作系统加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E9%81%AD%E9%81%87%E8%BF%87%E7%9A%84%E9%99%B7%E9%98%B1"><span class="nav-number">2.10.</span> <span class="nav-text">生产环境遭遇过的陷阱</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">节点资源管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NUMA-Node"><span class="nav-number">3.1.</span> <span class="nav-text">NUMA Node</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86-1"><span class="nav-number">3.2.</span> <span class="nav-text">节点资源管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E4%B8%8A%E6%8A%A5"><span class="nav-number">3.2.1.</span> <span class="nav-text">状态上报</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lease"><span class="nav-number">3.3.</span> <span class="nav-text">Lease</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E9%A2%84%E7%95%99"><span class="nav-number">3.4.</span> <span class="nav-text">资源预留</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Capacity-%E5%92%8C-Allocatable"><span class="nav-number">3.5.</span> <span class="nav-text">Capacity 和 Allocatable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86"><span class="nav-number">3.6.</span> <span class="nav-text">节点磁盘管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A9%B1%E9%80%90%E7%AE%A1%E7%90%86"><span class="nav-number">3.7.</span> <span class="nav-text">驱逐管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E5%8F%AF%E7%94%A8%E9%A2%9D%E7%9B%91%E6%8E%A7"><span class="nav-number">3.7.1.</span> <span class="nav-text">资源可用额监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A9%B1%E9%80%90%E7%AD%96%E7%95%A5"><span class="nav-number">3.7.2.</span> <span class="nav-text">驱逐策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AD%98%E5%8E%8B%E5%8A%9B%E7%9A%84%E9%A9%B1%E9%80%90"><span class="nav-number">3.7.3.</span> <span class="nav-text">基于内存压力的驱逐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E7%A3%81%E7%9B%98%E5%8E%8B%E5%8A%9B%E7%9A%84%E9%A9%B1%E9%80%90"><span class="nav-number">3.7.4.</span> <span class="nav-text">基于磁盘压力的驱逐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%92%8C%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE"><span class="nav-number">3.8.</span> <span class="nav-text">容器和资源配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU-CGroup-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.9.</span> <span class="nav-text">CPU CGroup 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%92%8C%E8%B5%84%E6%BA%90%E9%85%8D%E7%BD%AE-1"><span class="nav-number">3.10.</span> <span class="nav-text">容器和资源配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98-CGroup-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.11.</span> <span class="nav-text">内存 CGroup 配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OOM-Killer-%E8%A1%8C%E4%B8%BA"><span class="nav-number">3.12.</span> <span class="nav-text">OOM Killer 行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%AF%B9-CPU-%E7%9A%84%E6%A0%A1%E9%AA%8C%E5%92%8C%E5%87%86%E5%85%A5%E8%A1%8C%E4%B8%BA"><span class="nav-number">3.13.</span> <span class="nav-text">测试对 CPU 的校验和准入行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86"><span class="nav-number">3.14.</span> <span class="nav-text">日志管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-%E5%8D%B7%E7%AE%A1%E7%90%86"><span class="nav-number">3.15.</span> <span class="nav-text">Docker 卷管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%B5%84%E6%BA%90"><span class="nav-number">3.16.</span> <span class="nav-text">网络资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%95%B0"><span class="nav-number">3.17.</span> <span class="nav-text">进程数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="nav-number">4.</span> <span class="nav-text">节点异常检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes-%E9%9B%86%E7%BE%A4%E5%8F%AF%E8%83%BD%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.1.</span> <span class="nav-text">Kubernetes 集群可能存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-problem-detector-%EF%BC%88NPD%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">node-problem-detector （NPD）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%85%E9%9A%9C%E5%88%86%E7%B1%BB"><span class="nav-number">4.2.1.</span> <span class="nav-text">故障分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%B1%87%E6%8A%A5%E6%89%8B%E6%AE%B5"><span class="nav-number">4.2.2.</span> <span class="nav-text">问题汇报手段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">4.2.3.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%8F%92%E4%BB%B6-Pod-%E5%90%AF%E5%8A%A8-NPD"><span class="nav-number">4.2.4.</span> <span class="nav-text">使用插件 Pod 启动 NPD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NPD-%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E8%A1%8C%E4%B8%BA"><span class="nav-number">4.2.5.</span> <span class="nav-text">NPD 的异常处理行为</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E8%8A%82%E7%82%B9%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%89%8B%E6%AE%B5"><span class="nav-number">5.</span> <span class="nav-text">常用节点问题排查手段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ssh-%E5%88%B0%E5%86%85%E7%BD%91%E8%8A%82%E7%82%B9"><span class="nav-number">5.1.</span> <span class="nav-text">ssh 到内网节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97"><span class="nav-number">5.2.</span> <span class="nav-text">查看日志</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-extended-resource-%E6%89%A9%E5%B1%95%E8%8A%82%E7%82%B9%E8%B5%84%E6%BA%90"><span class="nav-number">6.</span> <span class="nav-text">基于 extended resource 扩展节点资源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E8%B5%84%E6%BA%90"><span class="nav-number">6.1.</span> <span class="nav-text">扩展资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E6%89%A9%E5%B1%95%E8%B5%84%E6%BA%90"><span class="nav-number">6.2.</span> <span class="nav-text">管理扩展资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E8%8A%82%E7%82%B9%E9%85%8D%E7%BD%AE%E8%B5%84%E6%BA%90"><span class="nav-number">6.3.</span> <span class="nav-text">为节点配置资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%89%A9%E5%B1%95%E8%B5%84%E6%BA%90"><span class="nav-number">6.4.</span> <span class="nav-text">使用扩展资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%B1%82%E9%9D%A2%E7%9A%84%E6%89%A9%E5%B1%95%E8%B5%84%E6%BA%90"><span class="nav-number">6.5.</span> <span class="nav-text">集群层面的扩展资源</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E5%92%8C%E7%AE%A1%E7%90%86%E9%AB%98%E5%8F%AF%E7%94%A8%E8%B5%84%E6%BA%90"><span class="nav-number">7.</span> <span class="nav-text">构建和管理高可用资源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes-%E9%AB%98%E5%8F%AF%E7%94%A8%E5%B1%82%E7%BA%A7"><span class="nav-number">7.1.</span> <span class="nav-text">Kubernetes 高可用层级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83"><span class="nav-number">7.1.1.</span> <span class="nav-text">高可用的数据中心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86"><span class="nav-number">7.1.2.</span> <span class="nav-text">Node 的生命周期管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E6%9C%BA%E7%AE%A1%E7%90%86"><span class="nav-number">7.1.3.</span> <span class="nav-text">主机管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E5%8C%96%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86"><span class="nav-number">7.1.4.</span> <span class="nav-text">生产化集群管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%81%E4%B8%9A%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1"><span class="nav-number">7.1.5.</span> <span class="nav-text">企业公共服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%B9%B3%E9%9D%A2%E7%9A%84%E9%AB%98%E5%8F%AF%E7%94%A8%E4%BF%9D%E8%AF%81"><span class="nav-number">7.1.6.</span> <span class="nav-text">控制平面的高可用保证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4"><span class="nav-number">7.1.7.</span> <span class="nav-text">高可用集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%96%B9%E6%B3%95%E6%AF%94%E8%BE%83"><span class="nav-number">7.2.</span> <span class="nav-text">集群安装方法比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8-Kubespray-%E6%90%AD%E5%BB%BA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4"><span class="nav-number">7.2.1.</span> <span class="nav-text">用 Kubespray 搭建高可用集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%A3%B0%E6%98%8E%E5%BC%8F-API-%E7%AE%A1%E7%90%86%E9%9B%86%E7%BE%A4"><span class="nav-number">7.3.</span> <span class="nav-text">基于声明式 API 管理集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kubernetes-Cluster-API"><span class="nav-number">7.3.1.</span> <span class="nav-text">Kubernetes Cluster API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E4%B8%8E%E8%A7%92%E8%89%B2"><span class="nav-number">7.3.2.</span> <span class="nav-text">参与角色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%89%E5%8F%8A%E6%A8%A1%E5%9E%8B"><span class="nav-number">7.3.3.</span> <span class="nav-text">涉及模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8-cluster-API-%E7%AE%A1%E7%90%86%E9%9B%86%E7%BE%A4"><span class="nav-number">7.3.4.</span> <span class="nav-text">用 cluster API 管理集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KubeadmControlPlane"><span class="nav-number">7.3.5.</span> <span class="nav-text">KubeadmControlPlane</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MachineDeployment"><span class="nav-number">7.3.6.</span> <span class="nav-text">MachineDeployment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MachineHealthCheck"><span class="nav-number">7.3.7.</span> <span class="nav-text">MachineHealthCheck</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E5%B8%B8%E8%BF%90%E8%90%A5%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9%E9%97%AE%E9%A2%98%E5%BD%92%E7%B1%BB"><span class="nav-number">7.3.8.</span> <span class="nav-text">日常运营中的节点问题归类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E8%87%AA%E5%8A%A8%E6%81%A2%E5%A4%8D"><span class="nav-number">7.3.9.</span> <span class="nav-text">故障检测和自动恢复</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cluster-Autoscaler"><span class="nav-number">8.</span> <span class="nav-text">Cluster Autoscaler</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="nav-number">8.1.</span> <span class="nav-text">工作机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cluster-Autoscaler-%E6%9E%B6%E6%9E%84"><span class="nav-number">8.2.</span> <span class="nav-text">Cluster Autoscaler 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cluster-Autoscaler-%E7%9A%84%E6%89%A9%E5%B1%95%E6%9C%BA%E5%88%B6"><span class="nav-number">8.3.</span> <span class="nav-text">Cluster  Autoscaler 的扩展机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%E8%B5%84%E6%96%99"><span class="nav-number">8.4.</span> <span class="nav-text">附加资料</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86%E5%AE%9E%E8%B7%B5%E6%A1%88%E4%BE%8B%E5%88%86%E4%BA%AB"><span class="nav-number">9.</span> <span class="nav-text">集群管理实践案例分享</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8F%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="nav-number">9.1.</span> <span class="nav-text">声明式集群配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8F%E6%89%A9%E5%AE%B9"><span class="nav-number">9.2.</span> <span class="nav-text">声明式扩容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%BC%8F%E6%8C%81%E7%BB%AD%E5%8F%91%E5%B8%83"><span class="nav-number">9.3.</span> <span class="nav-text">声明式持续发布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8F%92%E4%BB%B6-%E5%A3%B0%E6%98%8E%E5%BC%8F%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86%E5%AF%B9%E8%B1%A1"><span class="nav-number">9.4.</span> <span class="nav-text">自定义插件 - 声明式集群管理对象</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E7%A7%9F%E6%88%B7%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86"><span class="nav-number">10.</span> <span class="nav-text">多租户集群管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%9F%E6%88%B7"><span class="nav-number">10.1.</span> <span class="nav-text">租户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81-%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%A7%9F%E6%88%B7%E7%9A%84%E5%9F%BA%E7%A1%80"><span class="nav-number">10.2.</span> <span class="nav-text">认证 - 实现多租户的基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB"><span class="nav-number">10.3.</span> <span class="nav-text">隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%9F%E6%88%B7%E9%9A%94%E7%A6%BB%E6%89%8B%E6%AE%B5"><span class="nav-number">10.4.</span> <span class="nav-text">租户隔离手段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E9%9A%94%E7%A6%BB"><span class="nav-number">10.5.</span> <span class="nav-text">权限隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Quota-%E7%AE%A1%E7%90%86"><span class="nav-number">10.6.</span> <span class="nav-text">Quota 管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E7%82%B9%E8%B5%84%E6%BA%90%E9%9A%94%E7%A6%BB"><span class="nav-number">10.7.</span> <span class="nav-text">节点资源隔离</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#references"><span class="nav-number">11.</span> <span class="nav-text">references</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/93ebed81.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Kubernetes 生产化集群的管理 | 小夜时雨">
+      <meta itemprop="description" content="生产化集群的核心是监控和自动化扩展，从集群的高可用性、安全性和保障资源使用率上高效管理集群环境。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kubernetes 生产化集群的管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-01-31 00:00:00" itemprop="dateCreated datePublished" datetime="2024-01-31T00:00:00+08:00">2024-01-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-02-18 10:35:33" itemprop="dateModified" datetime="2024-02-18T10:35:33+08:00">2024-02-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/" itemprop="url" rel="index"><span itemprop="name">云原生训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/93ebed81.html" class="post-meta-item leancloud_visitors" data-flag-title="Kubernetes 生产化集群的管理" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">生产化集群的核心是监控和自动化扩展，从集群的高可用性、安全性和保障资源使用率上高效管理集群环境。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="计算节点相关"><a href="#计算节点相关" class="headerlink" title="计算节点相关"></a>计算节点相关</h1><p>生产环境需要稳定性、安全性和可维护性，在硬件、<code>kernel</code> 上需要做一些考量。</p>
+<h2 id="生产化集群的考量"><a href="#生产化集群的考量" class="headerlink" title="生产化集群的考量"></a>生产化集群的考量</h2><p>计算节点：</p>
+<ul>
+<li>如何批量安装和升级计算节点的操作系统</li>
+<li>如何管理配置计算节点的网络信息</li>
+<li>如何管理不同 <code>SKU</code>（<code>Stock Keeping Unit</code>）的计算节点，例如有的节点带有GPU，有的节点不带</li>
+<li>如何快速下架故障的计算节点</li>
+<li>如何快速扩缩容集群的规模</li>
+</ul>
+<p>控制平面：</p>
+<ul>
+<li>如何在主节点上下载、安装和升级控制平面组件及其所需的配置文件</li>
+<li>如何确保集群所需的其他插件，例如 <code>CoreDNS</code>、监控系统等部署完成</li>
+<li>如何准备控制平面组件的各种安全证书</li>
+<li>如何快速升级或者回滚控制平面组件的版本</li>
+</ul>
+<h1 id="操作系统选择"><a href="#操作系统选择" class="headerlink" title="操作系统选择"></a>操作系统选择</h1><h2 id="操作系统的评估与选择"><a href="#操作系统的评估与选择" class="headerlink" title="操作系统的评估与选择"></a>操作系统的评估与选择</h2><ul>
+<li>通用操作系统<ul>
+<li><code>Ubuntu</code></li>
+<li><code>CentOS</code></li>
+<li><code>Fedora</code></li>
+</ul>
+</li>
+<li>专为容器优化的操作系统<ul>
+<li>最小化操作系统<ul>
+<li><code>CoreOS</code></li>
+<li><code>RedHat Atomic</code></li>
+<li><code>Snappy Ubuntu Core</code></li>
+<li><code>RancherOS</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>面对市面上可选的多种操作系统，需要针对性做技术选型。</p>
+<h2 id="操作系统的评估与选择-1"><a href="#操作系统的评估与选择-1" class="headerlink" title="操作系统的评估与选择"></a>操作系统的评估与选择</h2><ul>
+<li>操作系统评估和选型的标准<ul>
+<li>是否有生态系统</li>
+<li>成熟度</li>
+<li>内核版本</li>
+<li>对运行时的支持</li>
+<li><code>Init System</code></li>
+<li>包管理和系统升级</li>
+<li>安全</li>
+</ul>
+</li>
+</ul>
+<h2 id="生态系统与成熟度"><a href="#生态系统与成熟度" class="headerlink" title="生态系统与成熟度"></a>生态系统与成熟度</h2><ul>
+<li>容器优化操作系统的游戏<ul>
+<li>小<ul>
+<li>原子级升级和回退</li>
+<li>更高的安全性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Centos</th>
+<th>Ubuntu</th>
+<th>CoreOS</th>
+<th>Atomic*</th>
+<th>Snappy</th>
+<th>RancherOS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>通用操作系统</td>
+<td>容器优化</td>
+<td>容器优化</td>
+<td>容器优化</td>
+<td>容器优化</td>
+<td>容器优化</td>
+</tr>
+<tr>
+<td>生态系统和成熟度</td>
+<td>成熟</td>
+<td>成熟</td>
+<td>最早的容器优化操作系统，不过公司体量小，目前已被收购</td>
+<td>Red Hat 出品，品质保证</td>
+<td>Canonical 出品，最初为移动设备设计</td>
+<td>相对较新，RancherOS 中运行的所有服务都是 docker 容器</td>
+</tr>
+</tbody></table>
+<p>最终推荐 <code>Atomic</code>，主要原因是不可变原则，并且可以将 <code>rpm</code> 包以 <code>ostree</code> 的方式提供，在启动的时候注入，通过 <code>ostree </code> 生成不同的操作系统，逻辑与 <code>dockerfile</code> 非常类似。</p>
+<h2 id="云原生的原则"><a href="#云原生的原则" class="headerlink" title="云原生的原则"></a>云原生的原则</h2><ul>
+<li><p>可变基础设施的风险</p>
+<ul>
+<li>在灾难发生的时候，难以重新构建服务。持续过多的手工操作，缺乏记录，会导致很难由标准初始化后的服务器来重新构建起等效的服务</li>
+<li>在服务运行过程中，持续的修改服务器，就犹如程序中的可变变量的值发生变化而引入的状态不一致的并发风险。这些对于服务器的修改，同样会引入中间状态，从而导致不可预知的问题</li>
+</ul>
+</li>
+<li><p>不可变基础设施（<code>immutable infrastructure</code>）</p>
+<p>避免一些额外动作影响线上业务逻辑，以及一些手动操作没有覆盖生产环境导致异常问题。</p>
+<ul>
+<li>不可变的容器镜像</li>
+<li>不可变的主机操作系统</li>
+</ul>
+</li>
+</ul>
+<h2 id="Atomic"><a href="#Atomic" class="headerlink" title="Atomic"></a>Atomic</h2><ul>
+<li>由 <code>Red Hat</code> 支持的软件包安装系统</li>
+<li>多种 <code>Distro</code><ul>
+<li><code>Fedora</code></li>
+<li><code>CentOS</code></li>
+<li><code>RHEL</code></li>
+</ul>
+</li>
+<li>优势<ul>
+<li>不可变操作系统，面向容器优化的基础设施<ul>
+<li>灵活和安全性较好</li>
+<li>只有 <code>/etc</code> 和 <code>/var</code> 可以修改，其他目录均为只读</li>
+</ul>
+</li>
+<li>基于 <code>rpm-ostree</code> 管理系统包<ul>
+<li><code>rpm-ostree</code> 是一个开源项目，使得生产系统中构建镜像非常简单</li>
+<li>支持操作系统升级和回滚的原子操作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="最小化主机操作系统"><a href="#最小化主机操作系统" class="headerlink" title="最小化主机操作系统"></a>最小化主机操作系统</h2><p>原则：</p>
+<ul>
+<li>最小化主机操作系统</li>
+<li>只安装必要的工具<ul>
+<li>必要：支持系统运行的最小工具集</li>
+<li>任何调试工具，比如性能排查，网络排查工具，均可以后期以容器形式运行</li>
+</ul>
+</li>
+<li>意义<ul>
+<li>性能</li>
+<li>稳定性</li>
+<li>安全保障</li>
+</ul>
+</li>
+</ul>
+<h2 id="操作系统构建流程"><a href="#操作系统构建流程" class="headerlink" title="操作系统构建流程"></a>操作系统构建流程</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-09-01-image-20240131170900968.png" alt="image-20240131170900968"></p>
+<ul>
+<li>将 <code>rpm</code> 源拉取快照</li>
+<li>通过 <code>rpm-ostree</code> 将 <code>rpm</code> 源构建出 <code>ostree</code> 包，提供 <code>ostree</code> 服务</li>
+<li>物理机在启动时候，通过 <code>kickstart</code> 调用 <code>ostree</code> 命令</li>
+<li>虚拟机（例如 <code>OpenStack</code>），通过 <code>Packer Builder</code> 将 <code>ostree</code> 构建成 <code>OpenStack</code> 支持的方式</li>
+<li>需要做调试时，在节点上通过拉起容器进行调试，避免最小化操作系统被一些工具污染</li>
+</ul>
+<h2 id="ostree"><a href="#ostree" class="headerlink" title="ostree"></a>ostree</h2><p>提供一个共享库（<code>libostree</code>）和一些列命令行（非常类似 <code>git</code>）</p>
+<p>提供与 <code>git</code> 命令行一致的体验，可以提交或者下载一个完整的可启动的文件系统数</p>
+<p>提供将 <code>ostree</code> 部署进 <code>bootloader</code> 的机制</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29zdHJlZWRldi9vc3RyZWUvYmxvYi9tYWluL3NyYy9ib290L2RyYWN1dC9tb2R1bGUtc2V0dXAuc2g=">https://github.com/ostreedev/ostree/blob/main/src/boot/dracut/module-setup.sh<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">install</span></span>() &#123;</span><br><span class="line">    dracut_install /usr/lib/ostree/ostree-prepare-root</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> /usr/lib /etc; <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">test</span> -f <span class="string">&quot;<span class="variable">$r</span>/ostree/prepare-root.conf&quot;</span>; <span class="keyword">then</span></span><br><span class="line">            inst_simple <span class="string">&quot;<span class="variable">$r</span>/ostree/prepare-root.conf&quot;</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">test</span> -f <span class="string">&quot;/etc/ostree/initramfs-root-binding.key&quot;</span>; <span class="keyword">then</span></span><br><span class="line">        inst_simple <span class="string">&quot;/etc/ostree/initramfs-root-binding.key&quot;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    inst_simple <span class="string">&quot;<span class="variable">$&#123;systemdsystemunitdir&#125;</span>/ostree-prepare-root.service&quot;</span></span><br><span class="line">    <span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$&#123;initdir&#125;</span><span class="variable">$&#123;systemdsystemconfdir&#125;</span>/initrd-root-fs.target.wants&quot;</span></span><br><span class="line">    ln_r <span class="string">&quot;<span class="variable">$&#123;systemdsystemunitdir&#125;</span>/ostree-prepare-root.service&quot;</span> \</span><br><span class="line">        <span class="string">&quot;<span class="variable">$&#123;systemdsystemconfdir&#125;</span>/initrd-root-fs.target.wants/ostree-prepare-root.service&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="构建-ostree"><a href="#构建-ostree" class="headerlink" title="构建 ostree"></a>构建 ostree</h3><ul>
+<li><p><code>rpm-ostree</code></p>
+<p>基于 <code>treefile</code> 将 <code>rpm</code> 包构建成为 <code>ostree</code> 管理 <code>ostree</code> 以及 <code>bootloader</code> 配置</p>
+</li>
+<li><p><code>treefile</code></p>
+<p><code>refer</code>：分支名（版本，CPU 架构）</p>
+<p><code>repo</code>：<code>rpm package repositories</code></p>
+<p><code>packages</code>：待安装组件</p>
+</li>
+<li><p>将 <code>rpm</code> 构建成 <code>ostree</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># rpm-ostree compose tree --unified-core --cachedir=cache --repo=./build-repo /path/to/treefile.json</span></span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>treefile</code> 构建最小化镜像。</p>
+</li>
+</ul>
+<p><code>treefile</code> 示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;ref&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fedora-atomic/rawhide/x86_64/base/core&quot;</span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">&quot;gpg-key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;SET KEY ID FOR GPG&gt;&quot;</span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">&quot;repos&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;fedora-rawhide&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">&quot;selinux&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">&quot;packages&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;kernel&quot;</span><span class="punctuation">,</span> <span class="string">&quot;ostree&quot;</span><span class="punctuation">,</span> <span class="string">&quot;lvm2&quot;</span><span class="punctuation">,</span></span><br><span class="line">                 <span class="string">&quot;btrfs-progs&quot;</span><span class="punctuation">,</span> <span class="string">&quot;e2fsprogs&quot;</span><span class="punctuation">,</span> <span class="string">&quot;xfsprogs&quot;</span><span class="punctuation">,</span></span><br><span class="line">                 <span class="string">&quot;gnupg2&quot;</span><span class="punctuation">,</span> <span class="string">&quot;selinux-policy-targeted&quot;</span><span class="punctuation">,</span></span><br><span class="line">                 <span class="string">&quot;openssh-server&quot;</span><span class="punctuation">,</span> <span class="string">&quot;openssh-clients&quot;</span><span class="punctuation">,</span></span><br><span class="line">                 <span class="string">&quot;NetworkManager&quot;</span><span class="punctuation">,</span> <span class="string">&quot;vim-minimal&quot;</span><span class="punctuation">,</span> <span class="string">&quot;nano&quot;</span><span class="punctuation">,</span> <span class="string">&quot;sudo&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="加载-ostree"><a href="#加载-ostree" class="headerlink" title="加载 ostree"></a>加载 ostree</h3><ul>
+<li><p>初始化项目</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ostree admin os-init centos-atomic-host</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>导入 <code>ostree repo</code>，指定 <code>ostree</code> 源</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ostree remote add atomic http://ostree.svr/ostree</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-40-07-image-20240131174007070.png" alt="image-20240131174007070"></p>
+</li>
+<li><p>拉取 <code>ostree</code>，将构建好的 <code>ostree</code> 拉到本地</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ostree pull atomic centos-atomic-host/8/x86_64/standard</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>部署 <code>os</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ostree admin deploy --os=centos-atomic-host centos-atomic-host/8/x86_64/standard --karg=<span class="string">&#x27;root=/dev/atomicos/root&#x27;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="操作系统加载"><a href="#操作系统加载" class="headerlink" title="操作系统加载"></a>操作系统加载</h2><ul>
+<li>物理机<ul>
+<li>物理机通常需要通过 <code>foreman</code> 启动，<code>foreman</code> 通过 <code>pxe boot</code>，并加载 <code>kickstart</code></li>
+<li><code>kickstart</code> 通过 <code>ostree deploy</code> 即可完成操作系统的部署</li>
+</ul>
+</li>
+<li>虚拟机<ul>
+<li>需要通过镜像工具将 <code>ostree</code> 构建成 <code>qcow2</code> 格式，<code>vhd</code>、<code>raw</code> 等模式</li>
+</ul>
+</li>
+</ul>
+<h2 id="生产环境遭遇过的陷阱"><a href="#生产环境遭遇过的陷阱" class="headerlink" title="生产环境遭遇过的陷阱"></a>生产环境遭遇过的陷阱</h2><p>一些早期碰到的问题。</p>
+<ul>
+<li><p><code>cluoud-init 0.7.7</code> <code>bug</code></p>
+<p>阻止 node 在初始化过程中的静态网络配置</p>
+</li>
+<li><p><code>Docker 1.9.1</code> <code>bug</code></p>
+<p>当 <code>docker</code> 实例日志快速输出时，会发生内存泄漏</p>
+</li>
+<li><p><code>Kernel panic</code> in <code>4.4.6</code></p>
+<p><code>Cgroup</code> 创建和销毁过程中，会产生 <code>kernel panic</code></p>
+</li>
+<li><p><code>rootfs</code> 分区大小</p>
+<p><code>rootfs</code> 无空间会导致 <code>docker</code> 无法启动</p>
+<ul>
+<li>导致 <code>rootfs</code> 占满的情况<ul>
+<li><code>CICD</code> 中的 <code>Maven build</code> 会把下载的 <code>lib</code> 放在 <code>/tmp</code></li>
+<li>用户 <code>Docker</code> <code>logs</code> 日志过快，导致一个 <code>log rotation</code> 周期内日志文件撑爆硬盘</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>需要定制化的操作系统参数</p>
+<ul>
+<li>比如 <code>Elasticsearch</code> 需要 <code>max_map_count &gt;= 262144</code>，但操作系统默认值为 <code>65535</code>，我们需要在创建 <code>Node</code> 的时候就 <code>apply</code> 这个配置</li>
+</ul>
+</li>
+</ul>
+<h1 id="节点资源管理"><a href="#节点资源管理" class="headerlink" title="节点资源管理"></a>节点资源管理</h1><h2 id="NUMA-Node"><a href="#NUMA-Node" class="headerlink" title="NUMA Node"></a>NUMA Node</h2><p><code>Non-Uniform Memory Access</code> （不对等内存访问）是一种内存访问方式，是为多处理器计算机设计的内存架构</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-47-41-image-20240131174741687.png" alt="image-20240131174741687"></p>
+<p>CPU 通过 FSB 总线与内存交互，但是 <code>Core2</code> 访问内存是通过 <code>QPI</code> + <code>FSB</code> ，相对而言性能是较低的。一些性能调优会通过判断进程正在运行的 <code>Core</code> 做就近迁移，避免内存远程访问。</p>
+<h2 id="节点资源管理-1"><a href="#节点资源管理-1" class="headerlink" title="节点资源管理"></a>节点资源管理</h2><ul>
+<li>状态汇报</li>
+<li>资源预留：例如预留给 <code>systemd</code>、<code>kebelet</code> 运行</li>
+<li>防止节点资源耗尽的防御机制驱逐：例如 Pod 将磁盘耗尽、inode 耗尽、端口耗尽、文件句柄耗尽，节点通过防御机制驱逐这种 Pod 以自保</li>
+<li>容器和系统资源的配置</li>
+</ul>
+<h3 id="状态上报"><a href="#状态上报" class="headerlink" title="状态上报"></a>状态上报</h3><p><code>kubelet</code> 周期性地向 <code>API Server</code> 进行汇报，并更新节点的相关健康和资源使用信息。</p>
+<ul>
+<li><p>节点基础信息，包括 <code>IP</code> 地址、操作系统、内核、运行时、<code>kubelet</code>、<code>kube-proxy</code> 版本信息</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl get nodes  master  -o yaml</span></span><br><span class="line">  <span class="attr">nodeInfo:</span></span><br><span class="line">    <span class="attr">architecture:</span> <span class="string">amd64</span></span><br><span class="line">    <span class="attr">bootID:</span> <span class="string">29d745d8-b0c0-4eb7-ac29-b8734d40ef3f</span></span><br><span class="line">    <span class="attr">containerRuntimeVersion:</span> <span class="string">docker://19.3.5</span></span><br><span class="line">    <span class="attr">kernelVersion:</span> <span class="number">5.15</span><span class="number">.15</span><span class="number">-1.</span><span class="string">el7.x86_64</span></span><br><span class="line">    <span class="attr">kubeProxyVersion:</span> <span class="string">v1.16.15</span></span><br><span class="line">    <span class="attr">kubeletVersion:</span> <span class="string">v1.16.15</span></span><br><span class="line">    <span class="attr">machineID:</span> <span class="string">844b4cb679ee439dab4948ec571eef48</span></span><br><span class="line">    <span class="attr">operatingSystem:</span> <span class="string">linux</span></span><br><span class="line">    <span class="attr">osImage:</span> <span class="string">CentOS</span> <span class="string">Linux</span> <span class="number">7</span> <span class="string">(Core)</span></span><br><span class="line">    <span class="attr">systemUUID:</span> <span class="number">00000000</span><span class="number">-0000</span><span class="number">-0000</span><span class="number">-0000</span><span class="string">-ac1f6b145e7c</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>节点资源信息包括 <code>CPU</code>、内存、<code>HugePage</code>、临时存储、<code>GPU</code> 等注册设备，以及这些资源中可以分配给容器使用的部分</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">allocatable:</span>		<span class="comment"># 可分配资源</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="string">&quot;56&quot;</span></span><br><span class="line">  <span class="attr">ephemeral-storage:</span> <span class="string">456005072Ki</span></span><br><span class="line">  <span class="attr">hugepages-1Gi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">hugepages-2Mi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">memory:</span> <span class="string">131726028Ki</span></span><br><span class="line">  <span class="attr">pods:</span> <span class="string">&quot;110&quot;</span></span><br><span class="line"><span class="attr">capacity:</span>		<span class="comment"># 资源总和</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="string">&quot;56&quot;</span></span><br><span class="line">  <span class="attr">ephemeral-storage:</span> <span class="string">466490832Ki</span></span><br><span class="line">  <span class="attr">hugepages-1Gi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">hugepages-2Mi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">memory:</span> <span class="string">131726028Ki</span></span><br><span class="line">  <span class="attr">pods:</span> <span class="string">&quot;110&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调度器在为 <code>Pod</code> 选择节点时会将机器的状态信息作为依据</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">conditions:</span>		<span class="comment"># 节点状态信息汇总</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">lastHeartbeatTime:</span> <span class="string">&quot;2024-02-01T03:31:37Z&quot;</span></span><br><span class="line">  <span class="attr">lastTransitionTime:</span> <span class="string">&quot;2023-05-30T03:06:38Z&quot;</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">kubelet</span> <span class="string">has</span> <span class="string">sufficient</span> <span class="string">memory</span> <span class="string">available</span></span><br><span class="line">  <span class="attr">reason:</span> <span class="string">KubeletHasSufficientMemory</span></span><br><span class="line">  <span class="attr">status:</span> <span class="string">&quot;False&quot;</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">MemoryPressure</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>状态的意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ready</td>
+<td>节点是否健康</td>
+</tr>
+<tr>
+<td>MemoryPressure</td>
+<td>节点是否存在内存压力</td>
+</tr>
+<tr>
+<td>PIDPressure</td>
+<td>节点是否存在比较多的进程</td>
+</tr>
+<tr>
+<td>DiskPressure</td>
+<td>节点是否存在磁盘压力</td>
+</tr>
+<tr>
+<td>NetworkUnavailable</td>
+<td>节点网络配置是否正确</td>
+</tr>
+</tbody></table>
+<h2 id="Lease"><a href="#Lease" class="headerlink" title="Lease"></a>Lease</h2><p>在早期版本 <code>kubelet</code> 的状态上报直接更新 <code>node</code> 对象，而上报的信息包含状态信息和资源信息，因此需要传输的数据包较大，给 <code>APIServer</code> 和 <code>etcd</code> 造成的压力较大。</p>
+<p>后引入 <code>Lease</code> 对象（租约）用来保存健康信息（状态信息和资源信息通常变化不会很频繁，只有健康信息需要重点关注），在默认 <code>40s</code> 的 <code>nodeLeaseDurationSeconds</code> 周期内，若 <code>Lease</code> 对象没有被更新，则对应节点可以被判定为不健康</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl get leases.coordination.k8s.io -A</span></span><br><span class="line"><span class="string">NAMESPACE</span>         <span class="string">NAME</span>                                   <span class="string">HOLDER</span>                                                                      <span class="string">AGE</span></span><br><span class="line"><span class="string">ingress-nginx</span>     <span class="string">ingress-nginx-leader</span>                   <span class="string">ingress-nginx-controller-88b784f6-s86db</span>                                     <span class="string">43h</span></span><br><span class="line"><span class="string">kube-node-lease</span>   <span class="string">master</span>                                 <span class="string">master</span>                                                                      <span class="string">8d</span></span><br><span class="line"><span class="string">kube-node-lease</span>   <span class="string">slave01</span>                                <span class="string">slave01</span>                                                                     <span class="string">8d</span></span><br><span class="line"><span class="string">kube-node-lease</span>   <span class="string">slave02</span>                                <span class="string">slave02</span>                                                                     <span class="string">8d</span></span><br><span class="line"><span class="string">kube-system</span>       <span class="string">apiserver-oodnacusc5bcuykzhczyk7a7zq</span>   <span class="string">apiserver-oodnacusc5bcuykzhczyk7a7zq_f0896458-9db4-470b-80ff-26da7d4822ba</span>   <span class="string">2d2h</span></span><br><span class="line"><span class="string">kube-system</span>       <span class="string">kube-controller-manager</span>                <span class="string">master_d31b90f1-a20b-4a3a-86d8-33d6550a1a26</span>                                 <span class="string">8d</span></span><br><span class="line"><span class="string">kube-system</span>       <span class="string">kube-scheduler</span>                         <span class="string">master_cec8814f-23e8-474e-879a-ad93494bba9d</span>                                 <span class="string">8d</span></span><br><span class="line"><span class="string">tigera-operator</span>   <span class="string">operator-lock</span>                          <span class="string">slave01_d10c5ec9-0be4-422b-a521-a162c017a4c3</span>                                <span class="string">2d</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># kubectl get leases.coordination.k8s.io master -n kube-node-lease -o yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">coordination.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Lease</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">creationTimestamp:</span> <span class="string">&quot;2024-01-23T14:19:03Z&quot;</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">master</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-node-lease</span></span><br><span class="line">  <span class="attr">ownerReferences:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Node</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">master</span></span><br><span class="line">    <span class="attr">uid:</span> <span class="string">dcf73b81-f5f1-4efc-b1df-63838d48266e</span></span><br><span class="line">  <span class="attr">resourceVersion:</span> <span class="string">&quot;650009&quot;</span></span><br><span class="line">  <span class="attr">uid:</span> <span class="string">0ff39bf2-2a71-420b-acd1-7c565d56e621</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">holderIdentity:</span> <span class="string">master</span></span><br><span class="line">  <span class="attr">leaseDurationSeconds:</span> <span class="number">40</span></span><br><span class="line">  <span class="attr">renewTime:</span> <span class="string">&quot;2024-01-31T09:53:24.759121Z&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="资源预留"><a href="#资源预留" class="headerlink" title="资源预留"></a>资源预留</h2><p>计算节点除用户容器外，还存在很多支撑系统运行的基础服务，譬如 <code>systemd</code>、<code>journald</code>、<code>sshd</code>、<code>dockerd</code>、<code>Containerd</code>、<code>kubelet</code> 等。</p>
+<p>为了使服务进程能够正常运行，要确保他们在任何时候都可以获取足够的系统资源，所以我们要为这些系统进程预留资源。</p>
+<p><code>kubelet</code> 可以通过众多启动参数为系统预留 <code>CPU</code>、内存、<code>PID</code> 等资源，比如 <code>systemReserved</code>、<code>KubeReserved</code> 等。</p>
+<h2 id="Capacity-和-Allocatable"><a href="#Capacity-和-Allocatable" class="headerlink" title="Capacity 和 Allocatable"></a>Capacity 和 Allocatable</h2><p>容量资源（<code>Capacity</code>）是指 <code>kubelet</code> 获取的计算节点当前的资源信息。</p>
+<ul>
+<li>CPU 是从 <code>/proc/cpuinfo</code> 文件中获取的节点 CPU 核数</li>
+<li><code>memory</code> 是从 <code>/proc/memoryinfo</code> 中获取的节点内存大小</li>
+<li><code>ephemeral-storage</code> 是指节点根分区的大小</li>
+</ul>
+<p>资源可分配额（<code>Allocatable</code>）是用户 <code>Pod</code> 可用的资源，是资源容量减去分配给系统的资源的剩余部分。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">allocatable:</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="string">&quot;4&quot;</span></span><br><span class="line">  <span class="attr">ephemeral-storage:</span> <span class="string">&quot;18858870344&quot;</span></span><br><span class="line">  <span class="attr">hugepages-1Gi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">hugepages-2Mi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">memory:</span> <span class="string">3879272Ki</span></span><br><span class="line">  <span class="attr">pods:</span> <span class="string">&quot;110&quot;</span></span><br><span class="line"><span class="attr">capacity:</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="string">&quot;4&quot;</span></span><br><span class="line">  <span class="attr">ephemeral-storage:</span> <span class="string">20463184Ki</span></span><br><span class="line">  <span class="attr">hugepages-1Gi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">hugepages-2Mi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">memory:</span> <span class="string">3981672Ki</span></span><br><span class="line">  <span class="attr">pods:</span> <span class="string">&quot;110&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>节点可分配资源（<code>allocatable</code>） &#x3D; 节点的资源容量（<code>capacity</code>）- <code>kube-reserved</code> - <code>system-reserved</code> - &#96;eviction</p>
+<table>
+<thead>
+<tr>
+<th>节点的资源容量（capacity）</th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>kube-reserved</td>
+<td>system-reserved</td>
+<td>eviction-threshold</td>
+<td>可用资源（allocatable）</td>
+</tr>
+</tbody></table>
+<h2 id="节点磁盘管理"><a href="#节点磁盘管理" class="headerlink" title="节点磁盘管理"></a>节点磁盘管理</h2><ul>
+<li><p>系统分区 <code>nodefs</code></p>
+<p>默认：<code>/var/lib/kubelet/pods/</code></p>
+<ul>
+<li>工作目录和容器日志</li>
+</ul>
+</li>
+<li><p>容器运行时分区 <code>imagefs</code></p>
+<p><code>docker</code>：<code>/var/lib/docker/overlay2/</code></p>
+<p><code>containerd</code>：<code>/var/lib/containerd/io.containerd.snapshotter.v1.overlayfs/</code></p>
+<ul>
+<li>用户镜像和容器可写层</li>
+<li>容器运行时分区是可选的，可以合并到系统分区中</li>
+</ul>
+</li>
+</ul>
+<h2 id="驱逐管理"><a href="#驱逐管理" class="headerlink" title="驱逐管理"></a>驱逐管理</h2><ul>
+<li><code>kubelet</code> 会在系统资源不够时中止一些容器进程，以空出系统资源，保证节点的稳定性</li>
+<li>但由 <code>kubelet</code> 发起的驱逐只停止 <code>Pod</code> 的所有容器进程，并不会直接删除 <code>Pod</code> （作为审计用，后续需要手动清理）<ul>
+<li><code>Pod</code> 的 <code>status.phase</code> 会被标记为 <code>Failed</code></li>
+<li><code>status.reason</code> 会被设置为 <code>Evicted</code></li>
+<li><code>status.message</code> 则会记录被驱逐的原因</li>
+</ul>
+</li>
+</ul>
+<h3 id="资源可用额监控"><a href="#资源可用额监控" class="headerlink" title="资源可用额监控"></a>资源可用额监控</h3><ul>
+<li><code>kubelet</code> 依赖内嵌的开源软件 <code>cAdvisor</code>，周期性检查节点资源使用情况（新版本会替换掉，由 <code>kubelet</code> 自身获取，主要是通过 <code>Cgroup</code>）</li>
+<li><code>CPU</code> 是可压缩资源，根据不同进程分配时间配额和权重，<code>CPU</code> 可被多个进程竞相使用（针对一些无法压缩的进程，则需要针对性调优）</li>
+<li>驱逐策略是基于磁盘和内存资源用量进行的，因为两者属于不可压缩的资源，当此类资源使用耗尽时将无法再申请</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>检查类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>memory.avaliable</td>
+<td>节点当前的可用内存</td>
+</tr>
+<tr>
+<td>nodefs.avaliable</td>
+<td>节点根分区的可使用磁盘大小</td>
+</tr>
+<tr>
+<td>nodefs.inodesFree</td>
+<td>节点根分区的可使用 inode</td>
+</tr>
+<tr>
+<td>imagefs.inodesFree</td>
+<td>节点运行时分区的可使用 inode</td>
+</tr>
+<tr>
+<td>imagefs.avaliable</td>
+<td>节点运行时分区的可使用磁盘大小<br />节点如果没有运行时分区，就不会有相应的资源监控</td>
+</tr>
+</tbody></table>
+<h3 id="驱逐策略"><a href="#驱逐策略" class="headerlink" title="驱逐策略"></a>驱逐策略</h3><p><code>kubelet</code> 获得节点的可用额信息后，会结合节点的容量信息来判断当前节点运行的 <code>Pod</code> 是否满足驱逐条件。</p>
+<p>驱逐条件可以是绝对值或百分比，当监控资源的可使用额少于设定的数值或百分比时，<code>kubelet</code> 就会发起驱逐操作。</p>
+<p><code>kubelet</code> 参数 <code>evictionMinimumReclaim</code> 可以设置每次回收的资源的最小值，以防止小资源的多次回收。</p>
+<table>
+<thead>
+<tr>
+<th>kubelet 参数</th>
+<th>分类</th>
+<th>驱逐方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>evictionSoft</td>
+<td>软驱逐</td>
+<td>当检测到当前资源达到软驱逐的阈值时，并不会立即启动驱逐操作，而是要等待一个宽限期。<br />这个宽限期选取 EvictionSoftGracePeriod 和 Pod 指定的 TerminationGracePeriodSeconds 中较小的值。</td>
+</tr>
+<tr>
+<td>evictionHard</td>
+<td>硬驱逐</td>
+<td>没有宽限期，一旦检测到满足硬驱逐的条件，就直接中止容器来释放紧张资源</td>
+</tr>
+</tbody></table>
+<p><code>kubectl explain pod.spec.terminationGracePeriodSeconds</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /usr/bin/kubelet --help</span></span><br><span class="line">      --eviction-hard mapStringString                            A <span class="built_in">set</span> of eviction thresholds (e.g. memory.available&lt;1Gi) that <span class="keyword">if</span> met would trigger a pod eviction. (DEPRECATED: This parameter should be <span class="built_in">set</span> via the config file specified by the Kubelet<span class="string">&#x27;s --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)</span></span><br><span class="line"><span class="string">      --eviction-max-pod-grace-period int32                      Maximum allowed grace period (in seconds) to use when terminating pods in response to a soft eviction threshold being met.  If negative, defer to pod specified value. (DEPRECATED: This parameter should be set via the config file specified by the Kubelet&#x27;</span>s --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ <span class="keyword">for</span> more information.)</span><br><span class="line">      --eviction-minimum-reclaim mapStringString                 A <span class="built_in">set</span> of minimum reclaims (e.g. imagefs.available=2Gi) that describes the minimum amount of resource the kubelet will reclaim when performing a pod eviction <span class="keyword">if</span> that resource is under pressure. (DEPRECATED: This parameter should be <span class="built_in">set</span> via the config file specified by the Kubelet<span class="string">&#x27;s --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)</span></span><br><span class="line"><span class="string">      --eviction-pressure-transition-period duration             Duration for which the kubelet has to wait before transitioning out of an eviction pressure condition. (default 5m0s) (DEPRECATED: This parameter should be set via the config file specified by the Kubelet&#x27;</span>s --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ <span class="keyword">for</span> more information.)</span><br><span class="line">      --eviction-soft mapStringString                            A <span class="built_in">set</span> of eviction thresholds (e.g. memory.available&lt;1.5Gi) that <span class="keyword">if</span> met over a corresponding grace period would trigger a pod eviction. (DEPRECATED: This parameter should be <span class="built_in">set</span> via the config file specified by the Kubelet<span class="string">&#x27;s --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ for more information.)</span></span><br><span class="line"><span class="string">      --eviction-soft-grace-period mapStringString               A set of eviction grace periods (e.g. memory.available=1m30s) that correspond to how long a soft eviction threshold must hold before triggering a pod eviction. (DEPRECATED: This parameter should be set via the config file specified by the Kubelet&#x27;</span>s --config flag. See https://kubernetes.io/docs/tasks/administer-cluster/kubelet-config-file/ <span class="keyword">for</span> more information.)</span><br></pre></td></tr></table></figure>
+
+<h3 id="基于内存压力的驱逐"><a href="#基于内存压力的驱逐" class="headerlink" title="基于内存压力的驱逐"></a>基于内存压力的驱逐</h3><p><code>memory.avaiable</code> 表示当前系统的可用内存情况。</p>
+<p><code>kubelet</code> 默认设置了 <code>memory.available &lt; 100Mi</code> 的硬驱逐条件。</p>
+<p>当 <code>kubelet</code> 检测到当前节点可用内存资源紧张并满足驱逐条件时，会将节点的 <code>MemoryPressurce</code> 状态设置为 True，调度器会阻止 <code>BestEffort Pod</code> 调度到内存承压的节点。（也就是禁止调度）</p>
+<p><code>kubelet</code> 启动对内存不足的驱逐操作时，会依照如下的顺序选取目标 Pod：</p>
+<ol>
+<li>判断 <code>Pod</code> 所有容器的内存使用量总和是否超出了请求的内存量，超出请求资源的 <code>Pod</code> 会成为被选目标（QoS）<code>kubectl explain pod.status.qosClass</code></li>
+<li>查询 <code>Pod</code> 的调度优先级，低优先级的 <code>Pod</code> 被优先驱逐（优先级）<code>kubectl explain pod.spec.priorityClassName</code></li>
+<li>计算 <code>Pod</code> 所有容器的内存使用量和 <code>Pod</code> 请求的内存量的差值，差值越小，越不容易被驱逐。（同等优先级情况下，再按照内存使用量进行排序）</li>
+</ol>
+<h3 id="基于磁盘压力的驱逐"><a href="#基于磁盘压力的驱逐" class="headerlink" title="基于磁盘压力的驱逐"></a>基于磁盘压力的驱逐</h3><p>以下任何一项满足驱逐条件时，它会将节点的 <code>DiskPressure</code> 状态设置为 <code>True</code>，调度器不会再调度任何 <code>Pod</code> 到该节点上</p>
+<ul>
+<li><code>nodefs.avaliable</code>：可用空间</li>
+<li><code>nodefs.inodesFree</code>：判断<code>inode</code> 够不够</li>
+<li><code>imagefs.available</code></li>
+<li><code>iamgefs.inodesFree</code></li>
+</ul>
+<p>驱逐行为：（按照 <code>nodefs</code> 和 <code>imagefs</code> 是否放在一起做区分）</p>
+<ul>
+<li>有容器运行时分区<ul>
+<li><code>nodefs</code> 达到驱逐阈值，那么 <code>kubelet</code> 删除已经退出的容器</li>
+<li><code>imagefs</code> 达到驱逐阈值，那么 <code>kubelet</code> 删除所有未使用的镜像</li>
+</ul>
+</li>
+<li>无容器运行时分区<ul>
+<li><code>kubelet</code> 同时删除未运行的容器和未使用的镜像</li>
+</ul>
+</li>
+</ul>
+<p>回收已经退出的容器和未使用的镜像后，如果节点依然满足驱逐条件，<code>kubelet</code> 就会开始驱逐正在运行的 <code>Pod</code> ，进一步释放磁盘空间。</p>
+<ul>
+<li>判断 Pod 的磁盘使用量是否超过请求的大小，超出请求资源的 Pod 会成为备选目标</li>
+<li>查询 Pod 的调度优先级，低优先级的 Pod 优先驱逐</li>
+<li>根据磁盘使用超过请求的数量进行排序，差值越小，越不容易被驱逐</li>
+</ul>
+<h2 id="容器和资源配置"><a href="#容器和资源配置" class="headerlink" title="容器和资源配置"></a>容器和资源配置</h2><blockquote>
+<p>Pod 的 QoS 级别是根据其容器的资源请求和限制来确定的。如果容器的资源请求和限制相等，则 Pod 被标记为 Guaranteed 级别。如果容器的资源请求小于限制，则 Pod 被标记为 Burstable 级别。如果容器没有设置资源请求和限制，则 Pod 被标记为 BestEffort 级别。</p>
+</blockquote>
+<p>针对不同 QoS Class 的 Pod，Kubernetes 按如下 Hierarchy 组织 cgroup 中的 CPU 子系统（内存同理）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cd /sys/fs/cgroup/cpu/kubepods.slice/</span></span><br><span class="line">root@master:/sys/fs/cgroup/cpu/kubepods.slice<span class="comment"># ls -ltrah</span></span><br><span class="line">total 0</span><br><span class="line">dr-xr-xr-x 5 root root 0 Feb  2 02:06 ..</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 cpu.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cpu.shares</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cpu.cfs_quota_us</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cpu.cfs_period_us</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 cpuacct.usage_percpu</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 cpuacct.usage_all</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cpuacct.usage</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 cpuacct.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cgroup.clone_children</span><br><span class="line">drwxr-xr-x 4 root root 0 Feb  2 02:07 .</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cgroup.procs</span><br><span class="line">drwxr-xr-x 6 root root 0 Feb  2 02:07 kubepods-burstable.slice  		<span class="comment"># 不同的 class 放入不同的目录</span></span><br><span class="line">drwxr-xr-x 6 root root 0 Feb  2 02:07 kubepods-besteffort.slice</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:30 tasks</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:30 notify_on_release</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:30 cpu.uclamp.min</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:30 cpu.uclamp.max</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:30 cpuacct.usage_user</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:30 cpuacct.usage_sys</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:30 cpuacct.usage_percpu_user</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:30 cpuacct.usage_percpu_sys</span><br></pre></td></tr></table></figure>
+
+<p><code>Guaranteed</code> 则是一个单独的目录。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F11-31-04-image-20240202113103913.png" alt="image-20240202113103913"></p>
+<h2 id="CPU-CGroup-配置"><a href="#CPU-CGroup-配置" class="headerlink" title="CPU CGroup 配置"></a>CPU CGroup 配置</h2><table>
+<thead>
+<tr>
+<th>CGroup 类型</th>
+<th>参数</th>
+<th>QoS 类型</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>容器的 CGroup</td>
+<td>cpu.shares</td>
+<td>BestEffort</td>
+<td>2（最小值）</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Burstable</td>
+<td>requests.cpu X 1024</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Guaranteed</td>
+<td>requests.cpu X 1024</td>
+</tr>
+<tr>
+<td></td>
+<td>cpu.cfs_quota_us</td>
+<td>BestEffort</td>
+<td>-1（不限制）</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Burstable</td>
+<td>limits.cpu X 100</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Guaranteed</td>
+<td>limits.cpu X 100</td>
+</tr>
+<tr>
+<td>Pod 的 CGroup</td>
+<td>cpu.shares</td>
+<td>BestEffort</td>
+<td>2</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Burstable</td>
+<td>Pod 所有容器（requests.cpu X 1024）之和</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Guaranteed</td>
+<td>Pod 所有容器（requests.cpu X 1024）之和</td>
+</tr>
+<tr>
+<td></td>
+<td>cpu.cfs_quota_us</td>
+<td>BestEffort</td>
+<td>-1</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Burstable</td>
+<td>Pod 所有容器（limits.cpu X 100）之和</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Guaranteed</td>
+<td>Pod 所有容器（limits.cpu X 100）之和</td>
+</tr>
+</tbody></table>
+<h2 id="容器和资源配置-1"><a href="#容器和资源配置-1" class="headerlink" title="容器和资源配置"></a>容器和资源配置</h2><p>针对不同 QoS Class 的 Pod，Kubernetes 按如下 Hierarchy 组织 cgroup 中的 Memory 子系统</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls -ltra /sys/fs/cgroup/memory/kubepods.slice/</span></span><br><span class="line">total 0</span><br><span class="line">dr-xr-xr-x 5 root root 0 Feb  2 02:06 ..</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.use_hierarchy</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.usage_in_bytes</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.soft_limit_in_bytes</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.numa_stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.max_usage_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.limit_in_bytes</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.usage_in_bytes</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.tcp.usage_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.tcp.max_usage_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.tcp.limit_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.tcp.failcnt</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.max_usage_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.limit_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.failcnt</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.failcnt</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cgroup.clone_children</span><br><span class="line">drwxr-xr-x 4 root root 0 Feb  2 02:07 .</span><br><span class="line">drwxr-xr-x 6 root root 0 Feb  2 02:07 kubepods-burstable.slice</span><br><span class="line">drwxr-xr-x 6 root root 0 Feb  2 02:07 kubepods-besteffort.slice</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 tasks</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 notify_on_release</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 memory.swappiness</span><br><span class="line">---------- 1 root root 0 Feb  2 03:31 memory.pressure_level</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 memory.oom_control</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 memory.move_charge_at_immigrate</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:31 memory.kmem.slabinfo</span><br><span class="line">--w------- 1 root root 0 Feb  2 03:31 memory.force_empty</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 cgroup.procs</span><br><span class="line">--w--w--w- 1 root root 0 Feb  2 03:31 cgroup.event_control</span><br></pre></td></tr></table></figure>
+
+<p><code>Guaranteed</code> 则是一个单独的目录。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F11-37-28-image-20240202113728218.png" alt="image-20240202113728218"></p>
+<h2 id="内存-CGroup-配置"><a href="#内存-CGroup-配置" class="headerlink" title="内存 CGroup 配置"></a>内存 CGroup 配置</h2><table>
+<thead>
+<tr>
+<th>CGroup 类型</th>
+<th>参数</th>
+<th>QoS 类型</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>容器的 CGroup</td>
+<td>memory.limit_in_bytes</td>
+<td>BestEffort</td>
+<td>9223372036854771712（最大值）</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Burstable</td>
+<td>limits.memory</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Guaranteed</td>
+<td>limits.memory</td>
+</tr>
+<tr>
+<td>Pod 的 CGroup</td>
+<td>memory.limit_in_bytes</td>
+<td>BestEffort</td>
+<td>9223372036854771712</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Burstable</td>
+<td>Pod 所有容器（limits.memory）之和</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Guaranteed</td>
+<td>Pod 所有容器（limits.memory）之和</td>
+</tr>
+</tbody></table>
+<h2 id="OOM-Killer-行为"><a href="#OOM-Killer-行为" class="headerlink" title="OOM Killer 行为"></a>OOM Killer 行为</h2><ul>
+<li>系统的 OOM <code>Killer</code> 可能会采取 OOM 的方式来中止某些容器的进程，进行必要的内存回收操作</li>
+<li>而系统根据进程的 <code>oom_score</code> 来进行优先级排序，选择待终止的进程，且进程的 <code>oom_score</code> 越高，越容易被终止</li>
+<li>进程的 <code>oom_score</code> 是根据当前进程使用的内存占节点总内存的比例值乘以 10，再加上 <code>oom_score_adj</code> 综合得到的</li>
+<li>而容器进程的 <code>oom_score_adj</code> 正是 <code>kubelet</code> 根据 <code>memory.request</code> 进行设置的</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Pod QoS 类型</th>
+<th>oom_score_adj</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Guaranteed</td>
+<td>-997</td>
+</tr>
+<tr>
+<td>BestEffort</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Burstable</td>
+<td>min(max(2, 1000-(1000 x memoryRequestBytes) &#x2F; machineMemoryCapacityBytes), 999)</td>
+</tr>
+</tbody></table>
+<p>也就是优先杀死 <code>BestEffort</code> 中对内存占用较高的进程。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># crictl ps | grep nginx</span><br><span class="line">c394818a94a1f       b690f5f0a2d53       4 hours ago         Running             nginx                       4                   2fd8e7acb1da3       nginx-deployment-7854ff8877-qs72v</span><br><span class="line"># crictl inspect c394818a94a1f | grep pid</span><br><span class="line">    &quot;pid&quot;: 3414,</span><br><span class="line">            &quot;pid&quot;: 1</span><br><span class="line">            &quot;type&quot;: &quot;pid&quot;</span><br><span class="line"># cat /proc/3414/oom_score</span><br><span class="line">1334</span><br><span class="line"># cat /proc/3414/oom_score_adj</span><br><span class="line">1000</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试对-CPU-的校验和准入行为"><a href="#测试对-CPU-的校验和准入行为" class="headerlink" title="测试对 CPU 的校验和准入行为"></a>测试对 CPU 的校验和准入行为</h2><p>定义一个 <code>Pod</code>，并将该 <code>Pod</code> 中的 <code>nodeName</code> 属性直接写成集群中的节点名</p>
+<p>将 <code>Pod</code> 的 <code>CPU</code> 的资源设置为超出计算节点的 <code>CPU</code> 的值</p>
+<p>创建该 <code>Pod</code> </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">test-pod</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">practice</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">imagePullPolicy:</span> <span class="string">Always</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">test-pod</span></span><br><span class="line">    <span class="attr">resources:</span></span><br><span class="line">      <span class="attr">requests:</span></span><br><span class="line">        <span class="attr">cpu:</span> <span class="number">10</span></span><br><span class="line">  <span class="attr">dnsPolicy:</span> <span class="string">ClusterFirst</span></span><br><span class="line">  <span class="attr">nodeName:</span> <span class="string">slave02</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Events:</span></span><br><span class="line">  <span class="string">Type</span>     <span class="string">Reason</span>    <span class="string">Age</span>   <span class="string">From</span>     <span class="string">Message</span></span><br><span class="line">  <span class="string">----</span>     <span class="string">------</span>    <span class="string">----</span>  <span class="string">----</span>     <span class="string">-------</span></span><br><span class="line">  <span class="string">Warning</span>  <span class="string">OutOfcpu</span>  <span class="string">37s</span>   <span class="string">kubelet</span>  <span class="string">Node</span> <span class="string">didn&#x27;t</span> <span class="attr">have enough resource:</span> <span class="string">cpu,</span> <span class="attr">requested:</span> <span class="number">10000</span><span class="string">,</span> <span class="attr">used:</span> <span class="number">200</span><span class="string">,</span> <span class="attr">capacity:</span> <span class="number">4000</span></span><br><span class="line"></span><br><span class="line"><span class="attr">status:</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">&#x27;Pod was rejected: Node didn&#x27;</span><span class="string">&#x27;t have enough resource: cpu, requested: 10000,</span></span><br><span class="line"><span class="string">    used: 200, capacity: 4000&#x27;</span></span><br><span class="line">  <span class="attr">phase:</span> <span class="string">Failed</span></span><br><span class="line">  <span class="attr">reason:</span> <span class="string">OutOfcpu</span></span><br><span class="line">  <span class="attr">startTime:</span> <span class="string">&quot;2024-02-17T08:51:16Z&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，<code>pod</code> 被拒绝创建。</p>
+<h2 id="日志管理"><a href="#日志管理" class="headerlink" title="日志管理"></a>日志管理</h2><p>节点上需要通过运行 <code>logrotate</code> 的定时任务对系统服务日志进行 <code>rotate</code> 清理，以防止系统服务日志占用大量的磁盘空间。</p>
+<ul>
+<li><code>logrotate</code> 的执行周期不能过长，以防日志短时间内大量增长</li>
+<li>同时配置日志的 <code>rotate</code> 条件，在日志不占用太多空间的情况下，保证有足够的日志可供查看</li>
+<li><code>Docker</code><ul>
+<li>出了基于系统 <code>logrotate</code> 管理日志，还可以依赖 <code>Docker</code> 自带的日志管理功能来设置容器日志的数量和每个日志文件的大小</li>
+<li><code>Docker</code> 写入数据之前会对日志大小进行检查和 <code>rotate</code> 操作，确保日志文件不会超过配置的数量和大小</li>
+</ul>
+</li>
+<li><code>Containerd</code><ul>
+<li>日志的管理是通过 <code>kubelet</code>  定期（默认为 10s）执行 <code>du</code> 命令，来检查容器日志的数量和文件的大小的。</li>
+<li>每个容器日志的大小和可以保留的文件个数，可以通过 <code>kubelet</code> 的配置参数 <code>container-log-max-size</code> 和 <code>container-log-max-files</code> 进行调整</li>
+</ul>
+</li>
+</ul>
+<h2 id="Docker-卷管理"><a href="#Docker-卷管理" class="headerlink" title="Docker 卷管理"></a>Docker 卷管理</h2><ul>
+<li>在构建容器镜像时，可以在 <code>Dockerfile</code> 中通过 <code>VOLUME</code> 指令声明一个存储卷，目前 Kubernetes 尚未将其纳入管控范围，不建议使用。</li>
+<li>如果容器进程在可写层或 <code>emptyDir</code> 卷进行大量读写操作，就会导致磁盘 <code>I/O</code> 过高，从而影响其他容器进程甚至系统进程。（所有的容器都使用同一个运行时目录）</li>
+<li><code>Docker</code> 和 <code>Containerd</code> 运行时都基于 <code>CGroup v1</code>。对于块设备，只支持对 <code>Direct I/O</code> 限速，而对于 <code>Buffer I/O</code> 还不具备有效的支持。因此，针对设备限速的问题，目前还没有完美的解决方案，对于特殊 <code>I/O</code> 需求的容器，建议使用独立的磁盘空间。（期待 <code>CGroup v2</code> 来解决）</li>
+</ul>
+<h2 id="网络资源"><a href="#网络资源" class="headerlink" title="网络资源"></a>网络资源</h2><p>由网络插件通过 <code>Linux Traffic Control</code> 为 <code>Pod</code> 限制带宽</p>
+<p>可利用 CNI 社区提供的 <code>bandwidth</code> 插件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">kubernetes.io/ingress-bandwidth:</span> <span class="string">1M</span></span><br><span class="line">    <span class="attr">kubernetes.io/egress-bandwidth:</span> <span class="string">1M</span></span><br><span class="line"><span class="string">...</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="进程数"><a href="#进程数" class="headerlink" title="进程数"></a>进程数</h2><p><code>kubelet</code>  默认不限制 Pod 可以创建的子进程数量，但可以通过启动参数 <code>podPidsLimit</code> 开启限制，还可以由 <code>reserved</code> 参数为系统进程预留进程数。</p>
+<ul>
+<li><code>kubelet</code> 通过系统调用周期性地获取当前系统的 PID 的使用量，并读取 <code>/proc/sys/kernel/pid_max</code>，获取系统支持的 PID 上限</li>
+<li>如果当前的可用进程数少于设定阈值，那么 <code>kubelet</code> 会将节点对象的 <code>PIDPressure</code> 标记为 True</li>
+<li><code>kube-schedule</code> 在进行调度时，会从备选节点中对处于 <code>NodeUnderPIDPressure</code> 状态的节点进行过滤</li>
+</ul>
+<h1 id="节点异常检测"><a href="#节点异常检测" class="headerlink" title="节点异常检测"></a>节点异常检测</h1><h2 id="Kubernetes-集群可能存在的问题"><a href="#Kubernetes-集群可能存在的问题" class="headerlink" title="Kubernetes 集群可能存在的问题"></a>Kubernetes 集群可能存在的问题</h2><ul>
+<li>基础架构守护程序问题：NTP 服务关闭</li>
+<li>硬件问题：CPU，内存或磁盘损坏</li>
+<li>内核问题：内核死锁，文件系统损坏</li>
+<li>容器运行时问题：运行时守护程序无响应</li>
+<li>…</li>
+</ul>
+<p>当 Kubernetes 中节点发生上述问题，在整个集群中，Kubernetes 服务组件并不会感知以上问题，就会导致 Pod 仍会调度至问题节点。</p>
+<h2 id="node-problem-detector-（NPD）"><a href="#node-problem-detector-（NPD）" class="headerlink" title="node-problem-detector （NPD）"></a>node-problem-detector （NPD）</h2><p>为了解决上面的问题，社区引入了守护进程 <code>node-problem-detector</code>，从各个守护进程收集节点问题，并使它们对上游层可见。</p>
+<p>Kubernetes 节点诊断的工具，可以将节点的异常上报，例如：</p>
+<ul>
+<li>Runtime 无响应</li>
+<li>Linux Kernel 无响应</li>
+<li>网络插件</li>
+<li>文件描述符异常</li>
+<li>硬件问题如 CPU，内存或者磁盘故障</li>
+</ul>
+<h3 id="故障分类"><a href="#故障分类" class="headerlink" title="故障分类"></a>故障分类</h3><table>
+<thead>
+<tr>
+<th>Problem Daemon Types</th>
+<th>NodeCondition</th>
+<th>Description</th>
+<th>Configs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>系统日志监控</td>
+<td>KernelDeadlock ReadonlyFilesystem FrequentKubeletRestart FrequentDockerRestart FrequentContainerdRestart</td>
+<td>通过监控系统日志来汇报问题并输出系统指标数据</td>
+<td>filelog, kmsg, kernel abrt system</td>
+</tr>
+<tr>
+<td>CustomPluginMonitor</td>
+<td>按需定义</td>
+<td>自定义插件监控允许用户自定义监控脚本，并运行这些脚本来进行监控</td>
+<td>比如 npt 服务监控</td>
+</tr>
+<tr>
+<td>HealthChecker</td>
+<td>KubeletUnhealthy ContainerRuntimeUnhealthy</td>
+<td>针对 kubelet 和运行时的健康检查</td>
+<td>kubelet<br />docker<br />containerd</td>
+</tr>
+</tbody></table>
+<h3 id="问题汇报手段"><a href="#问题汇报手段" class="headerlink" title="问题汇报手段"></a>问题汇报手段</h3><p><code>node-problem-detector</code> 通过设置 <code>NodeCondition</code> 或者创建 <code>Event</code> 对象来汇报问题</p>
+<ul>
+<li><code>NodeCondition</code>：针对永久性故障，会通过设置 <code>NodeCondition</code> 来改变节点状态</li>
+<li><code>Event</code>：临时故障通过 <code>Event</code> 来提醒相关对象，比如通知当前节点运行的所有 Pod</li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>按照教程：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9oZWxtLnNoL2RvY3MvaW50cm8vaW5zdGFsbC8=">https://helm.sh/docs/intro/install/<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVybmV0ZXMvbm9kZS1wcm9ibGVtLWRldGVjdG9y">https://github.com/kubernetes/node-problem-detector<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helm repo add deliveryhero https://charts.deliveryhero.io/</span><br><span class="line">helm install --generate-name deliveryhero/node-problem-detector</span><br></pre></td></tr></table></figure>
+
+<p>或者手动安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">helm repo add deliveryhero https://charts.deliveryhero.io/</span><br><span class="line">helm pull deliveryhero/node-problem-detector</span><br><span class="line">tar -zxvf node-problem-detector-2.3.12.tgz</span><br></pre></td></tr></table></figure>
+
+<p>改镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">vi node-problem-detector/values.yaml</span></span><br><span class="line"></span><br><span class="line">image:</span><br><span class="line">  repository: k8s.mirror.nju.edu.cn/node-problem-detector/node-problem-detector</span><br><span class="line">  tag: v0.8.15</span><br></pre></td></tr></table></figure>
+
+<p>镜像源从 <code>regisry.k8s.io</code> 改为 <code>k8s.mirror.nju.edu.cn</code></p>
+<p>安装</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm install npd ./node-problem-detector</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl get daemonsets.apps</span></span><br><span class="line">NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE</span><br><span class="line">npd-node-problem-detector   3         3         3       3            3           &lt;none&gt;          7m24s</span><br></pre></td></tr></table></figure>
+
+<p>测试，在节点的 <code>kmsg</code> 中刷入日志</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c <span class="string">&quot;echo &#x27;kernel: BUG: unable to handle kernel NULL pointer dereference at TESTING&#x27; &gt;&gt; /dev/kmsg&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">kubectl logs -f npd-node-problem-detector-sv7hx --<span class="built_in">tail</span> 10</span></span><br><span class="line">I0202 07:00:52.076757       1 log_monitor.go:159] New status generated: &amp;&#123;Source:kernel-monitor Events:[&#123;Severity:warn Timestamp:2024-02-02 07:00:50.754358117 +0000 UTC m=+138.323074338 Reason:KernelOops Message:kernel: BUG: unable to handle kernel NULL pointer dereference at TESTING&#125;] Conditions:[&#123;Type:KernelDeadlock Status:False Transition:2024-02-02 06:58:32.590661209 +0000 UTC m=+0.159377435 Reason:KernelHasNoDeadlock Message:kernel has no deadlock&#125; &#123;Type:ReadonlyFilesystem Status:False Transition:2024-02-02 06:58:32.590661356 +0000 UTC m=+0.159377577 Reason:FilesystemIsNotReadOnly Message:Filesystem is not read-only&#125;]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在节点的 <code>event</code> 中</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl describe nodes master</span></span><br><span class="line">Events:</span><br><span class="line">  Type     Reason      Age   From            Message</span><br><span class="line">  ----     ------      ----  ----            -------</span><br><span class="line">  Warning  KernelOops  36m   kernel-monitor  kernel: BUG: unable to handle kernel NULL pointer dereference at TESTING</span><br></pre></td></tr></table></figure>
+
+<p>测试，刷入 <code>blocked</code> 类型日志</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c <span class="string">&quot;echo &#x27;kernel: INFO: task docker:20744 blocked for more than 120 seconds.&#x27; &gt;&gt; /dev/kmsg&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>在节点的 <code>condition</code> 中</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl get node master -o yaml</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">lastHeartbeatTime:</span> <span class="string">&quot;2024-02-17T09:04:43Z&quot;</span></span><br><span class="line">    <span class="attr">lastTransitionTime:</span> <span class="string">&quot;2024-02-17T09:04:43Z&quot;</span></span><br><span class="line">    <span class="attr">message:</span> <span class="string">&#x27;kernel: INFO: task docker:20744 blocked for more than 120 seconds.&#x27;</span></span><br><span class="line">    <span class="attr">reason:</span> <span class="string">DockerHung</span></span><br><span class="line">    <span class="attr">status:</span> <span class="string">&quot;True&quot;</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">KernelDeadlock</span></span><br><span class="line">    </span><br><span class="line"><span class="comment"># kubectl describe nodes master</span></span><br><span class="line">  <span class="attr">Warning  DockerHung               77s                 kernel-monitor   Node condition KernelDeadlock is now:</span> <span class="literal">True</span><span class="string">,</span> <span class="attr">reason:</span> <span class="string">DockerHung,</span> <span class="attr">message:</span> <span class="string">&quot;kernel: INFO: task docker:20744 blocked for more than 120 seconds.&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>NPD 只负责捕获异常状态，因此，还需要有监控系统做对应运维操作。</p>
+<h3 id="使用插件-Pod-启动-NPD"><a href="#使用插件-Pod-启动-NPD" class="headerlink" title="使用插件 Pod 启动 NPD"></a>使用插件 Pod 启动 NPD</h3><p>如果你使用的是自定义集群引导解决方案，不需要覆盖默认配置，可以利用插件 Pod 进一步自动化部署。</p>
+<p>创建 <code>node-stick-detector.yaml</code>，并在控制平面节点上保存配置到插件 Pod 的目录 <code>/etc/kubernetes/addons/node-problem-detector</code>。Kubernetes 会自动去扫描这个 <code>addons</code> 目录安装插件。</p>
+<h3 id="NPD-的异常处理行为"><a href="#NPD-的异常处理行为" class="headerlink" title="NPD 的异常处理行为"></a>NPD 的异常处理行为</h3><ul>
+<li><p>NPD 只负责获取异常事件，并修改 <code>node conditino</code>，不会对节点状态和调度产生影响</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">lastHeartbeatTime:</span> <span class="string">&quot;2024-02-17T09:04:43Z&quot;</span></span><br><span class="line">  <span class="attr">lastTransitionTime:</span> <span class="string">&quot;2024-02-17T09:04:43Z&quot;</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">&#x27;kernel: INFO: task docker:20744 blocked for more than 120 seconds.&#x27;</span></span><br><span class="line">  <span class="attr">reason:</span> <span class="string">DockerHung</span></span><br><span class="line">  <span class="attr">status:</span> <span class="string">&quot;True&quot;</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">KernelDeadlock</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>需要自定义控制器，监听 NPD 汇报的 <code>condition</code>，<code>taint node</code>，阻止 <code>pod</code> 调度到故障节点</p>
+</li>
+<li><p>问题修复后，重启 NPD Pod 来清理错误事件</p>
+</li>
+</ul>
+<p>需要人为操作，修复好节点之后，删除 NPD Pod 。</p>
+<h1 id="常用节点问题排查手段"><a href="#常用节点问题排查手段" class="headerlink" title="常用节点问题排查手段"></a>常用节点问题排查手段</h1><p>通常建议使用运维 <code>pod</code> 来做排查手段，并且给足够的权限</p>
+<h2 id="ssh-到内网节点"><a href="#ssh-到内网节点" class="headerlink" title="ssh 到内网节点"></a>ssh 到内网节点</h2><ul>
+<li>创建一个支持 <code>ssh</code> 的 <code>pod</code></li>
+<li>并通过负载均衡器转发 <code>ssh</code> 请求</li>
+</ul>
+<h2 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h2><p>针对 <code>systemd</code> 拉起的服务：</p>
+<ul>
+<li><code>journalctl -afu kubelet -S &quot;2024-02-02 00:00:00&quot;</code><ul>
+<li><code>-u unit</code>：对应的 <code>systemd</code> 拉起的组件，如 <code>kubelet</code></li>
+<li><code>-f follow</code>：跟踪最新日志</li>
+<li><code>-a show all</code>：实现所有日志列</li>
+<li><code>-S since</code>：从某一时间开始</li>
+</ul>
+</li>
+</ul>
+<p>对于标准的容器日志：</p>
+<ul>
+<li><p><code>kubectl logs -f nginx-deployment-5759c4887d-gv98m -c nginx</code></p>
+<p>指定容器名 和 Pod 名称</p>
+</li>
+<li><p><code>kubectl logs -f --all-containers nginx-deployment-5759c4887d-gv98m</code></p>
+<p>打印 Pod 内所有容器的日志</p>
+</li>
+<li><p><code>kubectl logs -f nginx-deployment-5759c4887d-gv98m --previous</code></p>
+<p>查看 Pod <code>crash</code> 时上一个 Pod 的日志</p>
+</li>
+</ul>
+<p>如果容器日志被 <code>shell</code> 转储到文件，则需通过 <code>exec</code></p>
+<ul>
+<li><code>kubectl exec -it nginx-deployment-5759c4887d-gv98m -- tail -f /var/log/nginx/error.log</code></li>
+</ul>
+<h1 id="基于-extended-resource-扩展节点资源"><a href="#基于-extended-resource-扩展节点资源" class="headerlink" title="基于 extended resource 扩展节点资源"></a>基于 extended resource 扩展节点资源</h1><h2 id="扩展资源"><a href="#扩展资源" class="headerlink" title="扩展资源"></a>扩展资源</h2><p>扩展资源是 <code>kubernetes.io</code> 域名之外的标准资源名称。它们使得集群管理员能够颁布非 Kubernetes 内置资源，而用户可以使用它们。</p>
+<p>自定义扩展资源无法使用 <code>kubernetes.io</code> 作为资源域名。</p>
+<h2 id="管理扩展资源"><a href="#管理扩展资源" class="headerlink" title="管理扩展资源"></a>管理扩展资源</h2><ul>
+<li>节点级扩展资源<ul>
+<li>节点级扩展资源绑定到节点</li>
+</ul>
+</li>
+<li>设备插件管理的资源<ul>
+<li>发布在各节点上由设备插件所管理的资源，如 GPU，智能网卡等</li>
+</ul>
+</li>
+</ul>
+<h2 id="为节点配置资源"><a href="#为节点配置资源" class="headerlink" title="为节点配置资源"></a>为节点配置资源</h2><ul>
+<li>集群操作员可以向 API 服务器提交 PATCH HTTP 请求，以在集群中节点的 <code>status.capacity</code> 中为其配置可用数量</li>
+<li>完成此操作后，节点的 <code>status.capacity</code> 字段中将包含新资源</li>
+<li><code>kubelet</code> 会异步地对 <code>status.allocatable</code> 字段执行自动更新操作，使之包含新资源</li>
+<li>调度器在评估 Pod 是否适在某节点上执行时会使用节点的 <code>status.allocatable</code> 值，在更新节点容量使之包含新资源之后和请求该资源的第一个 Pod 被调度到该节点之间，可能会有短暂的延迟。</li>
+<li>例如注册扩展自定义的扩展资源</li>
+</ul>
+<p>将 <code>~/.kube/config</code> 中的 <code>client-key-data</code> 和 <code>client-certificate-data</code> 作为 <code>key</code> 和 <code>crt</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> xxx | <span class="built_in">base64</span> -d &gt; admin.key</span><br><span class="line"><span class="built_in">echo</span> xxx | <span class="built_in">base64</span> -d &gt; admin.crt</span><br><span class="line"></span><br><span class="line">curl --key admin.key --cert admin.crt --header <span class="string">&quot;Content-Type: application/json-patch+json&quot;</span> \</span><br><span class="line">--request PATCH -k \</span><br><span class="line">--data <span class="string">&#x27;[&#123;&quot;op&quot;: &quot;add&quot;, &quot;path&quot;: &quot;/status/capacity/xiaoyeshiyu.com~1reclaimed-cpu&quot;, &quot;value&quot;: &quot;2&quot;&#125;]&#x27;</span> \</span><br><span class="line">https://192.168.239.128:6443/api/v1/nodes/master/status</span><br></pre></td></tr></table></figure>
+
+<p>可以看到额外资源</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">allocatable:</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="string">&quot;4&quot;</span></span><br><span class="line">  <span class="attr">ephemeral-storage:</span> <span class="string">&quot;18858870344&quot;</span></span><br><span class="line">  <span class="attr">hugepages-1Gi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">hugepages-2Mi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">memory:</span> <span class="string">3879252Ki</span></span><br><span class="line">  <span class="attr">pods:</span> <span class="string">&quot;110&quot;</span></span><br><span class="line">  <span class="attr">xiaoyeshiyu.com/reclaimed-cpu:</span> <span class="string">&quot;2&quot;</span></span><br><span class="line"><span class="attr">capacity:</span></span><br><span class="line">  <span class="attr">cpu:</span> <span class="string">&quot;4&quot;</span></span><br><span class="line">  <span class="attr">ephemeral-storage:</span> <span class="string">20463184Ki</span></span><br><span class="line">  <span class="attr">hugepages-1Gi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">hugepages-2Mi:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">  <span class="attr">memory:</span> <span class="string">3981652Ki</span></span><br><span class="line">  <span class="attr">pods:</span> <span class="string">&quot;110&quot;</span></span><br><span class="line">  <span class="attr">xiaoyeshiyu.com/reclaimed-cpu:</span> <span class="string">&quot;2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用扩展资源"><a href="#使用扩展资源" class="headerlink" title="使用扩展资源"></a>使用扩展资源</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-deployment</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">nginx</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">nginx</span></span><br><span class="line">          <span class="attr">resources:</span></span><br><span class="line">            <span class="attr">limits:</span></span><br><span class="line">              <span class="attr">xiaoyeshiyu.com/reclaimed-cpu:</span> <span class="number">3</span></span><br><span class="line">            <span class="attr">requests:</span></span><br><span class="line">              <span class="attr">xiaoyeshiyu.com/reclaimed-cpu:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>yaml</code> 文件创建资源，可以看到由于节点资源不足的报错</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Events:</span></span><br><span class="line">  <span class="string">Type</span>     <span class="string">Reason</span>            <span class="string">Age</span>   <span class="string">From</span>               <span class="string">Message</span></span><br><span class="line">  <span class="string">----</span>     <span class="string">------</span>            <span class="string">----</span>  <span class="string">----</span>               <span class="string">-------</span></span><br><span class="line">  <span class="attr">Warning  FailedScheduling  26s   default-scheduler  0/3 nodes are available: 3 Insufficient xiaoyeshiyu.com/reclaimed-cpu. preemption: 0/3 nodes are available:</span> <span class="number">3</span> <span class="literal">No</span> <span class="string">preemption</span> <span class="string">victims</span> <span class="string">found</span> <span class="string">for</span> <span class="string">incoming</span> <span class="string">pod.</span></span><br></pre></td></tr></table></figure>
+
+<p>将 <code>reclaimed-cpu</code> 的数量改为 2 即可。</p>
+<h2 id="集群层面的扩展资源"><a href="#集群层面的扩展资源" class="headerlink" title="集群层面的扩展资源"></a>集群层面的扩展资源</h2><ul>
+<li>可选择由默认调度器管理资源，默认调度器像管理其他资源一样管理扩展资源<ul>
+<li><code>Request</code> 与 <code>Limit</code> 必须一致，因为 Kubernetes 无法确保扩展资源的超售</li>
+<li>而且给会给客户带来变动压力</li>
+</ul>
+</li>
+<li>更常见的场景是，由调度器扩展程序（Scheduler Extenders）管理，这些程序处理资源消耗和资源配额</li>
+<li>修改调度器策略配置 <code>ignoredByScheduler</code> 字段可配置调度器不要检查自定义资源</li>
+<li>在波谷时，监控机器的负载，将资源通过扩展资源进行管理，将一些 <code>Job</code> 使用扩展资源进行调度</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;kind&quot;</span> <span class="string">:</span> <span class="string">&quot;Policy&quot;</span>,</span><br><span class="line">  <span class="string">&quot;apiVersion&quot;</span> <span class="string">:</span> <span class="string">&quot;v1&quot;</span>,</span><br><span class="line">  <span class="string">&quot;predicates&quot;</span> <span class="string">:</span> [</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;PodFitsHostPorts&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;PodFitsResources&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;NoDiskConflict&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;MatchNodeSelector&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;HostName&quot;</span>&#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;priorities&quot;</span> <span class="string">:</span> [</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;LeastRequestedPriority&quot;</span>, <span class="string">&quot;weight&quot;</span> <span class="string">:</span> <span class="number">1</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;BalancedResourceAllocation&quot;</span>, <span class="string">&quot;weight&quot;</span> <span class="string">:</span> <span class="number">1</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;ServiceSpreadingPriority&quot;</span>, <span class="string">&quot;weight&quot;</span> <span class="string">:</span> <span class="number">1</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;EqualPriority&quot;</span>, <span class="string">&quot;weight&quot;</span> <span class="string">:</span> <span class="number">1</span>&#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;extenders&quot;</span> <span class="string">:</span> [&#123;</span><br><span class="line">    <span class="attr">&quot;urlPrefix&quot;:</span> <span class="string">&quot;http://localhost:8880&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;filterVerb&quot;:</span> <span class="string">&quot;predicates&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;prioritizeVerb&quot;:</span> <span class="string">&quot;priorities&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;preemptVerb&quot;:</span> <span class="string">&quot;preemption&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;bindVerb&quot;:</span> <span class="string">&quot;bind&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;weight&quot;:</span> <span class="number">1</span>,</span><br><span class="line">    <span class="attr">&quot;enableHttps&quot;:</span> <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;nodeCacheCapable&quot;:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">&quot;managedResources&quot;:</span> [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;name&quot;:</span> <span class="string">&quot;expample.com/foo&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;ignoredByScheduler&quot;:</span> <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">   &#125;],</span><br><span class="line">  <span class="string">&quot;hardPodAffinitySymmetricWeight&quot;</span> <span class="string">:</span> <span class="number">10</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="构建和管理高可用资源"><a href="#构建和管理高可用资源" class="headerlink" title="构建和管理高可用资源"></a>构建和管理高可用资源</h1><p>在多节点、集群环境下管理 Kubernetes 生产系统。</p>
+<h2 id="Kubernetes-高可用层级"><a href="#Kubernetes-高可用层级" class="headerlink" title="Kubernetes 高可用层级"></a>Kubernetes 高可用层级</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F04%2F15-59-30-image-20240202161353373.png" alt="image-20240202161353373"></p>
+<ul>
+<li>基础架构管理：提供计算资源的管理平台，在数据中心中安装部署服务器，作为计算节点、网络节点、存储节点，对应的，还需要管理操作系统，以及一些安全相关的策略，例如 <code>iptables</code>、<code>firewalld</code>、<code>selinux</code> ，以及容器运行时，一般选择 <code>containerd</code></li>
+<li>Kubernetes 本身管理：包括集群管理，每一个物理节点管理等</li>
+<li>在数据平面和控制平面有不同的插件和组件，控制平面服务于应用程序，控制平面服务与应用管理，控制平面除了 Kubernetes 自带的一些核心组件，还有有社区提供的插件例如 <code>cni</code>，针对一些特殊场景有自定义的用户空间控制器，以及基于告警系统的平台管理</li>
+<li>对接企业公共服务，面向企业，搭配企业 DNS 实现外部域名访问等</li>
+</ul>
+<h3 id="高可用的数据中心"><a href="#高可用的数据中心" class="headerlink" title="高可用的数据中心"></a>高可用的数据中心</h3><ul>
+<li>多地部署</li>
+<li>每个数据中心需要划分成具有独立供电、制冷、网络设备的高可用区</li>
+<li>每个高可用区管理独立的硬件资产，包括机架、计算节点、存储、负载均衡器、防火墙等硬件设备</li>
+</ul>
+<h3 id="Node-的生命周期管理"><a href="#Node-的生命周期管理" class="headerlink" title="Node 的生命周期管理"></a>Node 的生命周期管理</h3><p>运营 Kubernetes 集群，不仅仅是集群搭建那么简单，运营需要对集群中所有节点的完整生命周期负责。</p>
+<ul>
+<li>集群搭建</li>
+<li>集群扩容、缩容</li>
+<li>集群销毁（很少）</li>
+<li>无论是集群搭建还是扩容，核心是 Node 的生命周期管理<ul>
+<li>Onboard<ul>
+<li>物理资产上架</li>
+<li>操作系统安装</li>
+<li>网络配置</li>
+<li>Kubernetes 组件安装</li>
+<li>创建 Node 对象</li>
+</ul>
+</li>
+<li>故障处理<ul>
+<li>临时故障：重启大法</li>
+<li>永久故障：机器下架</li>
+</ul>
+</li>
+<li>Offboard<ul>
+<li>删除 Node 对象</li>
+<li>物理资产下载，送修、报废</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="主机管理"><a href="#主机管理" class="headerlink" title="主机管理"></a>主机管理</h3><ul>
+<li>选定哪个版本的系统内核、哪个发行版、安装哪些工具集、主机网络如何规划等</li>
+<li>日常的主机镜像升级更新也可能是造成服务不可用的因素之一<ul>
+<li>主机镜像更新可以通过 <code>A/B</code> 系统 OTA（Over The Air） 升级方式进行<ul>
+<li><p>分别使用 A、B 两个存储空间，共享一份用户数据。在升级过程中，OTA 更新即往其中一个存储空间写入升级包，同时保证了另一个系统可以正常运行，而不会打断用户。如果 OTA 失败，那么设备会启动到 OTA 之前的磁盘分区，并且仍然可以使用。</p>
+<p>更加推荐这种方式，不仅有安全保证，还可以批量进行。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="生产化集群管理"><a href="#生产化集群管理" class="headerlink" title="生产化集群管理"></a>生产化集群管理</h3><ul>
+<li>如何设定单个集群规模<ul>
+<li><p>社区声明单一集群可支持 5000 节点，在如此规模的集群中，大规模部署应用是有诸多挑战的。应该更多还是更少？如何权衡？</p>
+<p>可以采用在 Pod 内搭建 git，然后使用 Pod 拉取代码构建。避免频繁创建 Pod</p>
+</li>
+</ul>
+</li>
+<li>如何根据地域划分集群：（<code>etcd</code> 集群部署，选主、心跳）<ul>
+<li>不同地域的计算节点划分到同一集群</li>
+<li>将同一地域的节点划分到同一集群</li>
+</ul>
+</li>
+<li>如何规划集群的网络<ul>
+<li>企业办公环境、测试环境、预生产环境和生产环境应如何进行网络分离</li>
+<li>不同租户之间应如何进行网络隔离</li>
+</ul>
+</li>
+<li>如何自动化搭建集群<ul>
+<li>如何自动化搭建和升级集群，包括自动化部署控制平面和数据平面的核心组件</li>
+<li>如何与企业的公共服务集成</li>
+</ul>
+</li>
+</ul>
+<h3 id="企业公共服务"><a href="#企业公共服务" class="headerlink" title="企业公共服务"></a>企业公共服务</h3><ul>
+<li>需要与企业认证平台集成，这样企业用户就能通过统一认证平台接入 Kubernetes 集群，而无须重新设计和管理一套用户系统</li>
+<li>集成企业的域名服务、负载均衡服务，提供集群服务对企业外发布的访问入口</li>
+<li>在与企业的公共服务集成时，需要考虑它们的服务是否可靠</li>
+<li>对于不能异步调用的请求，采用同步调用需要设置合理的超时时间</li>
+<li>过长的超时时间，会延迟结果等待时间，导致整体的链路调用时间延长，从而降低整体的 TPS</li>
+<li>有些失败是短暂的、偶然的（比如网络抖动），进行重试即可。而有些失败是必然的，重试反而会造成调用请求量放大，加重对调用系统的负担</li>
+</ul>
+<h3 id="控制平面的高可用保证"><a href="#控制平面的高可用保证" class="headerlink" title="控制平面的高可用保证"></a>控制平面的高可用保证</h3><ul>
+<li>针对大规模的集群，应该为控制平面组件划分单独节点，减少业务容器对控制平面容器或守护进程的干扰和资源抢占</li>
+<li>控制平面所在的节点，应确保在不同机架上，以防止因为某些机架的交换机或电源出问题，造成所有的控制面节点都无法工作</li>
+<li>保证控制平面的每个组件有足够的 CPU、内存和磁盘资源，过于严苛的资源限制会导致系统效率低下，降低集群可用性</li>
+<li>应尽可能地减少或消除外部依赖。在 Kubernetes 初期版本中存在较多 Cloud Provider API 的调用，导致在运营过程中，当 Cloud Provider API 出现故障时，会使得 Kubernetes 集群也无法正常工作</li>
+<li>应尽可能地将控制平面和数据平面解耦，确保控制平面组件出现故障时，将业务影响降到最低</li>
+<li>Kubernetes 还有一些核心插件，是以普通的 Pod 形式加载运行的，可能会被调度到任意工作节点，与普通应用竞争资源。这些插件是否正常运行也决定了集群的可用性</li>
+</ul>
+<h3 id="高可用集群"><a href="#高可用集群" class="headerlink" title="高可用集群"></a>高可用集群</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-37-49-image-20240202163749074.png" alt="image-20240202163749074"></p>
+<p>多节点选择专门的 <code>master</code> ，避免控制面流量被数据流量影响。</p>
+<h2 id="集群安装方法比较"><a href="#集群安装方法比较" class="headerlink" title="集群安装方法比较"></a>集群安装方法比较</h2><table>
+<thead>
+<tr>
+<th>安装工具</th>
+<th>方法</th>
+<th>优势</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二进制</td>
+<td>下载二进制文件，并通过设置 systemd 来管理</td>
+<td>灵活度强</td>
+<td>复杂，需要关心每一个组件的配置<br />对系统服务的依赖性过多</td>
+</tr>
+<tr>
+<td>kubeadm</td>
+<td>kubeadm 是一个搭建集群的命令行工具<br />管理节点通过 kubeadm init 初始化<br />计算节点通过 kubeadm join 加入</td>
+<td>相比二进制，控制面板组件的安装和配置被封装起来了<br />管理集群的生命周期，比如升级，证书管理等</td>
+<td>操作系统层面的配置无自动化<br />运行时安装配置等复杂步骤依然是必须的<br />CNI 插件等需要手工安装</td>
+</tr>
+<tr>
+<td>kubespray</td>
+<td>通过 Ansible-playbook 完成集群搭建</td>
+<td>自动完成操作系统层面的配置<br />利用了 kubeadm 作为集群管理工具</td>
+<td>缺少基于声明式 API 的支持</td>
+</tr>
+<tr>
+<td>KOPS</td>
+<td>基于声明式 API 的集群管理工具</td>
+<td>基于社区标准的 Cluster API 进行集群管理<br />节点的操作系统安装等全自动化</td>
+<td>与云环境深度集成<br />灵活性差</td>
+</tr>
+</tbody></table>
+<p>综合来看，在商业化能力不够的情况下，安装大型集群推荐使用 <code>kubespray</code> 的方式。</p>
+<p>目前社区推广的事 <code>KOPS</code> 的方式，但是需要与云环境定制开发。</p>
+<h3 id="用-Kubespray-搭建高可用集群"><a href="#用-Kubespray-搭建高可用集群" class="headerlink" title="用 Kubespray 搭建高可用集群"></a>用 Kubespray 搭建高可用集群</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-42-33-image-20240202164233706.png" alt="image-20240202164233706"></p>
+<p>通过 <code>ansible</code> 和 <code>kubadm</code> 实现自动化安装。</p>
+<h2 id="基于声明式-API-管理集群"><a href="#基于声明式-API-管理集群" class="headerlink" title="基于声明式 API 管理集群"></a>基于声明式 API 管理集群</h2><p>集群管理不仅仅包括集群搭建，还有更多功能需要支持</p>
+<ul>
+<li>集群扩缩容</li>
+<li>节点健康检查和自动修复</li>
+<li>Kubernetes 升级</li>
+<li>操作系统升级</li>
+</ul>
+<p>云原生场景中集群应该按照我们的期望的状态运行，这意味着我们应该将集群管理建立在声明式 API 的基础之上。</p>
+<h3 id="Kubernetes-Cluster-API"><a href="#Kubernetes-Cluster-API" class="headerlink" title="Kubernetes Cluster API"></a>Kubernetes Cluster API</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-46-09-image-20240202164609254.png" alt="image-20240202164609254"></p>
+<h3 id="参与角色"><a href="#参与角色" class="headerlink" title="参与角色"></a>参与角色</h3><ul>
+<li><p>管理集群</p>
+<ul>
+<li><p>管理 workload 集群的集群，用来存放 Cluster API 对象的地方</p>
+<p>可同时管理多个集群</p>
+</li>
+</ul>
+</li>
+<li><p><code>Workload</code> 集群</p>
+<ul>
+<li>真正开放给用户用来运行应用的集群，由管理集群管理</li>
+</ul>
+</li>
+<li><p><code>Infrastructure provider</code></p>
+<ul>
+<li>提供不同云的基础架构管理，包括计算节点、网络等。目前流行的公有云多与 Cluster API 集成了</li>
+</ul>
+</li>
+<li><p><code>Bootstrap provider</code></p>
+<ul>
+<li>证书生成</li>
+<li>控制面组件安装和初始化，监控节点的创建</li>
+<li>将主节点和计算节点加入集群</li>
+</ul>
+</li>
+<li><p><code>Control plane</code></p>
+<ul>
+<li>Kubernetes 控制平面组件</li>
+</ul>
+</li>
+</ul>
+<h3 id="涉及模型"><a href="#涉及模型" class="headerlink" title="涉及模型"></a>涉及模型</h3><ul>
+<li><code>Machine</code><ul>
+<li>计算节点，用来描述可以运行 Kubernetes 组件的机器对象（注意与 Kubernetes Node）的差异</li>
+<li>一个新 <code>Machine</code> 被创建以后，对应的控制器会创建一个计算节点，安装好操作系统并更新 <code>Machine</code> 的状态</li>
+<li>当一个 <code>Machine</code> 被删除后，对应的控制器会删除掉该节点并回收计算资源</li>
+<li>当 <code>Machine</code> 属性被更新以后（比如 Kubernetes 版本更新），对应的控制器会删除旧节点并创建新节点</li>
+</ul>
+</li>
+<li><code>Machine Immutability</code>（<code>In-place Upgrade</code> vs. <code>Replace</code>）<ul>
+<li>不可变基础架构</li>
+</ul>
+</li>
+<li><code>MachineDeployment</code><ul>
+<li>提供针对 <code>Machine</code> 和 <code>MachineSet</code> 的声明式更新，类似于 Kubernetes Deployment（声明式思想统一）</li>
+</ul>
+</li>
+<li><code>MachineSet</code><ul>
+<li>维护一个稳定的机器集合，类似 Kubernetes <code>ReplicaSet</code></li>
+</ul>
+</li>
+<li><code>MachineHealthCheck</code><ul>
+<li>定义节点应该被标记为不可用的条件</li>
+</ul>
+</li>
+</ul>
+<h3 id="用-cluster-API-管理集群"><a href="#用-cluster-API-管理集群" class="headerlink" title="用 cluster API 管理集群"></a>用 cluster API 管理集群</h3><p>使用 <code>kind</code> 部署 Kubernetes on Docker</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-55-29-image-20240202165529854.png" alt="image-20240202165529854"></p>
+<h3 id="KubeadmControlPlane"><a href="#KubeadmControlPlane" class="headerlink" title="KubeadmControlPlane"></a>KubeadmControlPlane</h3><p>一些配置</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-55-52-image-20240202165552807.png" alt="image-20240202165552807"></p>
+<h3 id="MachineDeployment"><a href="#MachineDeployment" class="headerlink" title="MachineDeployment"></a>MachineDeployment</h3><p>一些配置</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-56-09-image-20240202165609461.png" alt="image-20240202165609461"></p>
+<h3 id="MachineHealthCheck"><a href="#MachineHealthCheck" class="headerlink" title="MachineHealthCheck"></a>MachineHealthCheck</h3><p>一些配置</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-56-30-image-20240202165630401.png" alt="image-20240202165630401"></p>
+<h3 id="日常运营中的节点问题归类"><a href="#日常运营中的节点问题归类" class="headerlink" title="日常运营中的节点问题归类"></a>日常运营中的节点问题归类</h3><p>可自动修复的问题</p>
+<ul>
+<li>计算节点 <code>down</code><ul>
+<li><code>Ping</code> 不通</li>
+<li><code>TCP probe</code> 失败</li>
+<li>节点上的所有应用都不可达</li>
+</ul>
+</li>
+</ul>
+<p>不可自动修复的问题</p>
+<ul>
+<li>文件系统损坏</li>
+<li>磁盘阵列故障</li>
+<li>网盘挂载问题</li>
+<li>其他硬件故障</li>
+<li><code>kernel</code> 出错，<code>core dumps</code></li>
+</ul>
+<p>其他问题</p>
+<ul>
+<li>软件 Bug</li>
+<li>进程锁死，或者 <code>memory/CPU</code> 竞争问题</li>
+<li>Kubernetes 组件出问题<ul>
+<li><code>kubelet</code>&#x2F;<code>kube-proxy</code>&#x2F;<code>Docker</code>&#x2F;<code>Salt</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="故障检测和自动恢复"><a href="#故障检测和自动恢复" class="headerlink" title="故障检测和自动恢复"></a>故障检测和自动恢复</h3><p>当创建 <code>Compute</code> 节点时，允许定义 <code>Liveness Probe</code></p>
+<ul>
+<li>当 <code>livenessProbe</code> 失败时，<code>ComputeNode</code> 的 <code>ProbePassed</code> 设置为 <code>false</code></li>
+</ul>
+<p>在 <code>Prometheus</code> 中，已经有 <code>Node Level</code> 的 <code>alert</code>，抓取 <code>Prometheus</code> 中的 <code>alert</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="attr">livenessProbe:</span></span><br><span class="line">      <span class="attr">tcpSocket:</span></span><br><span class="line">        <span class="attr">port:</span> <span class="number">22</span></span><br><span class="line">      <span class="attr">initialDelaySeconds:</span> <span class="number">15</span></span><br><span class="line">      <span class="attr">periodSeconds:</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
+
+<p>设定自动恢复规则</p>
+<ul>
+<li>大多数情况下，重启大法（<code>Restart operator</code>）</li>
+<li>如果重启不行就重装（<code>reprovision</code>）</li>
+<li>重装不行就重修（<code>breakfix</code>）</li>
+</ul>
+<p>探活失败示例：</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-01-10-image-20240202170110444.png" alt="image-20240202170110444"></p>
+<h1 id="Cluster-Autoscaler"><a href="#Cluster-Autoscaler" class="headerlink" title="Cluster Autoscaler"></a>Cluster Autoscaler</h1><p>每一个厂商都有自己的一套 <code>cluster aotoscaler</code> 方法，但是原理都差不多。</p>
+<h2 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h2><ul>
+<li>扩容：<ul>
+<li>由于资源不足，<code>pod</code> 调度失败，即有 <code>pod</code> 一直处于 <code>Pending</code> 状态</li>
+</ul>
+</li>
+<li>缩容<ul>
+<li><code>node</code> 的资源利用率较低时，持续 <code>10</code> 分钟低于 <code>50%</code></li>
+<li>此 <code>node</code> 上存在的 <code>pod</code> 都能被重新调度到其他 <code>node</code> 上运行</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-02-19-image-20240202170219230.png" alt="image-20240202170219230"></p>
+<h2 id="Cluster-Autoscaler-架构"><a href="#Cluster-Autoscaler-架构" class="headerlink" title="Cluster Autoscaler 架构"></a>Cluster Autoscaler 架构</h2><p><code>Autoscaler</code>：核心模块，负责整体扩缩容功能</p>
+<p><code>Estimator</code>：负责评估计算扩容节点，数量以及是否支持扩容</p>
+<p><code>Simulator</code>：负责模拟调度，计算缩容节点，资源以及调度之后是否可以运行</p>
+<p><code>Cloud-Provider</code>：与云交互进行节点的增删操作，每个支持 <code>CA</code> 的主流厂商都实现自己的 <code>plugin</code> 实现动态缩放</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-04-09-image-20240202170409037.png" alt="image-20240202170409037"></p>
+<h2 id="Cluster-Autoscaler-的扩展机制"><a href="#Cluster-Autoscaler-的扩展机制" class="headerlink" title="Cluster  Autoscaler 的扩展机制"></a>Cluster  Autoscaler 的扩展机制</h2><p>为了自动创建和初始化 <code>Node</code>，<code>Cluster Autoscaler</code> 要求 <code>Node</code> 必须属于某个 <code>Node Group</code>，比如：</p>
+<ul>
+<li><code>GCE/GKE</code> 中的 <code>Managed instance groups</code>（MIG）</li>
+<li><code>AWS</code> 中的 <code>Autoscaling Groups</code></li>
+<li><code>Cluster API Node</code></li>
+</ul>
+<p>当集群中有多个 <code>Node Group</code> 时，可以通过 <code>--expander=&lt;option&gt;</code> 选项配置选择 <code>Node Group</code> 的策略，支持如下四种方式：</p>
+<ul>
+<li><code>random</code>：随机选择</li>
+<li><code>most-pods</code>：选择容量最大（可以创建最多 <code>Pod</code>）的 <code>Node Group</code></li>
+<li><code>least-waste</code>：以最小浪费原则选择，即选择有最少可用资源的 <code>Node Group</code></li>
+<li><code>price</code>：选择最便宜的 <code>Node Group</code></li>
+</ul>
+<h2 id="附加资料"><a href="#附加资料" class="headerlink" title="附加资料"></a>附加资料</h2><p>代码：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVybmV0ZXMvYXV0b3NjYWxlcg==">https://github.com/kubernetes/autoscaler<i class="fa fa-external-link-alt"></i></span></p>
+<p><code>Cluster API</code> 与  <code>Cluster Autoscaler</code> 的整合</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jbHVzdGVyLWFwaS5zaWdzLms4cy5pby90YXNrcy9hdXRvbWF0ZWQtbWFjaGluZS1tYW5hZ2VtZW50L2F1dG9zY2FsaW5n">https://cluster-api.sigs.k8s.io/tasks/automated-machine-management/autoscaling<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="集群管理实践案例分享"><a href="#集群管理实践案例分享" class="headerlink" title="集群管理实践案例分享"></a>集群管理实践案例分享</h1><p><code>cluster API</code> 出现之前，一些厂商都有自己的管理方式。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-10-31-image-20240202171031379.png" alt="image-20240202171031379"></p>
+<p>设备模型通过不同的区域、数据中心、机架。机器上架之后，注册到集群中。</p>
+<p>设备通过集群模型进行抽象资源化，通过划分到不同的节点池，用于后续扩容缩容使用。</p>
+<p>如果是虚拟化 <code>Openstack</code> 则通过 <code>api</code> 启动 <code>node</code>，是物理机则使用 <code>kickstart</code> ，使用 <code>OSImage</code> 定义操作系统</p>
+<h2 id="声明式集群配置"><a href="#声明式集群配置" class="headerlink" title="声明式集群配置"></a>声明式集群配置</h2><p>通过 <code>yaml</code> 文件声明节点信息，<code>salt</code> 安装</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-10-46-image-20240202171046625.png" alt="image-20240202171046625"></p>
+<h2 id="声明式扩容"><a href="#声明式扩容" class="headerlink" title="声明式扩容"></a>声明式扩容</h2><p>定义 <code>NodePool</code> 定义资源副本数，通过 <code>NodePool Controller</code> 创建 <code>ComputeNode</code> 描述节点信息，<code>Provision Controller</code> 与 <code>provider</code> 交互创建虚拟机，安装 Kubernetes 。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-11-09-image-20240202171108988.png" alt="image-20240202171108988"></p>
+<h2 id="声明式持续发布"><a href="#声明式持续发布" class="headerlink" title="声明式持续发布"></a>声明式持续发布</h2><p>操作系统或者 Kubernetes 组件更新时，通过 <code>ClusterDeployment</code> 的方式一个一个节点更新节点（直接更换，而不是升级）。好处是方便，坏处是缓慢。</p>
+<p>可以优化成只有操作系统更新时才更换节点，Kubernetes 更新时只更新部署。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-11-31-image-20240202171131474.png" alt="image-20240202171131474"></p>
+<h2 id="自定义插件-声明式集群管理对象"><a href="#自定义插件-声明式集群管理对象" class="headerlink" title="自定义插件 - 声明式集群管理对象"></a>自定义插件 - 声明式集群管理对象</h2><p>也就是 <code>Kubernetes on Kubernetes</code></p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F07%2F19-06-02-image-20240207190602635.png" alt="image-20240207190602635"></p>
+<h1 id="多租户集群管理"><a href="#多租户集群管理" class="headerlink" title="多租户集群管理"></a>多租户集群管理</h1><p>多租户集群，核心还是基于 <code>Cluster API</code></p>
+<h2 id="租户"><a href="#租户" class="headerlink" title="租户"></a>租户</h2><ul>
+<li>租户是指一组拥有访问特定软件资源权限的用户集合，在多租户环境中，它还包括共享的应用、服务、数据和各项配置等</li>
+<li>多租户集群必须将租户彼此隔离，以最大限度地减少租户与租户、租户与集群之间的影响</li>
+<li>集群须在租户之间公平地分配集群资源。通过多租户共享集群资源，可以有效地降低集群管理成本，提高整体集群的资源利用率。</li>
+</ul>
+<h2 id="认证-实现多租户的基础"><a href="#认证-实现多租户的基础" class="headerlink" title="认证 - 实现多租户的基础"></a>认证 - 实现多租户的基础</h2><ul>
+<li>租户管理首选需要识别访问的用户是谁，因此用户身份认证是多租户的基础</li>
+<li>权限控制，如允许合法登录的用户访问、拒绝非法登录的用户访问或提供有限的匿名访问</li>
+<li>Kubernetes 可管理两类用户<ul>
+<li>用来标识和管理系统组件的 ServiceAccount</li>
+<li>外部用户的认证，需要通过 Kubernetes 的认证扩展来对接企业、提供商的认证服务，为用户验证、操作授权、资源隔离等提供基础</li>
+</ul>
+</li>
+</ul>
+<h2 id="隔离"><a href="#隔离" class="headerlink" title="隔离"></a>隔离</h2><p>除认证、授权这些基础条件外，还要能够保证用户的工作负载彼此之间有尽可能安全的隔离，减少用户工作负载之间的影响。通常从权限、网络、数据三个方面对不同用户进行隔离。</p>
+<ul>
+<li>权限隔离<ul>
+<li>普通用户的容器默认不具有 <code>priviledged</code>、<code>sys_admin</code>、<code>net_admin</code> 等高级管理权限，以阻止对宿主机及其其他用户的容器进行读取、写入等操作</li>
+</ul>
+</li>
+<li>网络隔离<ul>
+<li>不同的 <code>Pod</code>，运行在不同的 <code>Network Namespace</code> 中，拥有独立的网络协议栈。<code>Pod</code> 之间只能通过容器开放的端口进行通信，不能通过其他方式进行访问。例如使用 <code>iptables</code></li>
+</ul>
+</li>
+<li>数据隔离<ul>
+<li>容器之间利用 <code>Namespace</code> 进行隔离。不同 <code>Pod</code> 的容器，运行在不同的 <code>MNT</code>、<code>UTS</code>、<code>PID</code>、<code>IPC Namespace</code> 上，相互之间无法访问对方的文件系统、进程、<code>IPC</code> 等信息；同一个 <code>Pod</code> 的容器，其 <code>mnt</code>、<code>PID Namespace</code> 也不共享</li>
+</ul>
+</li>
+</ul>
+<h2 id="租户隔离手段"><a href="#租户隔离手段" class="headerlink" title="租户隔离手段"></a>租户隔离手段</h2><p>基于 Namespace 实现隔离</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-20-22-image-20240202172022775.png" alt="image-20240202172022775"></p>
+<ul>
+<li><code>Namespace</code>：<code>Namespace</code> 属于且仅属于一个租户</li>
+<li>权限定义：定义内容包括命名空间中的 <code>Role</code> 与 <code>RoleBinding</code>。这些资源表示目前租户在归属于自己的命名空间中定义了什么权限、授权给了哪些租户的成员</li>
+<li><code>Pod</code> 安全策略：特殊权限指集群级的特定资源定义 - <code>PodSecurityPolicy</code>。它定义了一系列工作负载与基础设施之间、工作负载与工作负载之间的关联关系，并通过命名空间的 RoleBinding 完成授权</li>
+<li>网络策略：基础设施层面为保障租户网络的隔离机制提供了一系列默认策略，以及租户自己定制的用户租户应用彼此访问的策略</li>
+<li><code>Pod</code>、<code>Service</code>、<code>PersistentVolumeClaim</code> 等命名空间资源：这些定义表示租户的应用落地到 Kubernetes 中的实体</li>
+</ul>
+<h2 id="权限隔离"><a href="#权限隔离" class="headerlink" title="权限隔离"></a>权限隔离</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-24-24-image-20240202172424091.png" alt="image-20240202172424091"></p>
+<ul>
+<li>基于 <code>Namespace</code> 的权限隔离<ul>
+<li>创建一个 <code>namespace-admin ClusterRole</code>，拥有所有对象的所有权限</li>
+<li>为用户开辟新 <code>namespace</code>，并在该 <code>namespace</code> 创建 <code>rolebinding</code> 绑定 <code>namespace-admin ClusterRole</code>，用户即可拥有当前 <code>namespace</code> 所有对象操作权限</li>
+</ul>
+</li>
+<li>自动化解决方案<ul>
+<li>当 <code>Namespace</code> 创建时，通过 <code>mutatingwebhook</code> 将 <code>namespace</code> 变形，将用户信息记录至 <code>namespace annotation</code></li>
+<li>创建一个控制器，监控 <code>namespace</code>，创建 <code>rolebinding</code> 为该用户绑定 <code>namespace-admin</code> 的权限</li>
+</ul>
+</li>
+</ul>
+<h2 id="Quota-管理"><a href="#Quota-管理" class="headerlink" title="Quota 管理"></a>Quota 管理</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-26-56-image-20240202172656160.png" alt="image-20240202172656160"></p>
+<ul>
+<li><p>开启 <code>ResourceQuota</code> 准入插件</p>
+</li>
+<li><p>在用户 <code>namespace</code> 创建 <code>ResourceQuota</code> 对象进行限额配置</p>
+</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">List</span></span><br><span class="line"><span class="attr">items:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ResourceQuota</span></span><br><span class="line">  <span class="attr">metadata:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">pods-high</span></span><br><span class="line">  <span class="attr">spec:</span></span><br><span class="line">    <span class="attr">hard:</span></span><br><span class="line">      <span class="attr">cpu:</span> <span class="string">&quot;1000&quot;</span></span><br><span class="line">      <span class="attr">memory:</span> <span class="string">200Gi</span></span><br><span class="line">      <span class="attr">pods:</span> <span class="string">&quot;10&quot;</span></span><br><span class="line">    <span class="attr">scopeSelector:</span></span><br><span class="line">      <span class="attr">matchExpressions:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">operator :</span> <span class="string">In</span></span><br><span class="line">        <span class="attr">scopeName:</span> <span class="string">PriorityClass</span></span><br><span class="line">        <span class="attr">values:</span> [<span class="string">&quot;high&quot;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ResourceQuota</span></span><br><span class="line">  <span class="attr">metadata:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">pods-medium</span></span><br><span class="line">  <span class="attr">spec:</span></span><br><span class="line">    <span class="attr">hard:</span></span><br><span class="line">      <span class="attr">cpu:</span> <span class="string">&quot;10&quot;</span></span><br><span class="line">      <span class="attr">memory:</span> <span class="string">20Gi</span></span><br><span class="line">      <span class="attr">pods:</span> <span class="string">&quot;10&quot;</span></span><br><span class="line">    <span class="attr">scopeSelector:</span></span><br><span class="line">      <span class="attr">matchExpressions:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">operator :</span> <span class="string">In</span></span><br><span class="line">        <span class="attr">scopeName:</span> <span class="string">PriorityClass</span></span><br><span class="line">        <span class="attr">values:</span> [<span class="string">&quot;medium&quot;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ResourceQuota</span></span><br><span class="line">  <span class="attr">metadata:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">pods-low</span></span><br><span class="line">  <span class="attr">spec:</span></span><br><span class="line">    <span class="attr">hard:</span></span><br><span class="line">      <span class="attr">cpu:</span> <span class="string">&quot;5&quot;</span></span><br><span class="line">      <span class="attr">memory:</span> <span class="string">10Gi</span></span><br><span class="line">      <span class="attr">pods:</span> <span class="string">&quot;10&quot;</span></span><br><span class="line">    <span class="attr">scopeSelector:</span></span><br><span class="line">      <span class="attr">matchExpressions:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">operator :</span> <span class="string">In</span></span><br><span class="line">        <span class="attr">scopeName:</span> <span class="string">PriorityClass</span></span><br><span class="line">        <span class="attr">values:</span> [<span class="string">&quot;low&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl describe quota</span></span><br><span class="line"></span><br><span class="line"><span class="attr">Name:</span>       <span class="string">pods-high</span></span><br><span class="line"><span class="attr">Namespace:</span>  <span class="string">default</span></span><br><span class="line"><span class="string">Resource</span>    <span class="string">Used</span>  <span class="string">Hard</span></span><br><span class="line"><span class="string">--------</span>    <span class="string">----</span>  <span class="string">----</span></span><br><span class="line"><span class="string">cpu</span>         <span class="string">500m</span>  <span class="string">1k</span></span><br><span class="line"><span class="string">memory</span>      <span class="string">10Gi</span>  <span class="string">200Gi</span></span><br><span class="line"><span class="string">pods</span>        <span class="number">1</span>     <span class="number">10</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="attr">Name:</span>       <span class="string">pods-low</span></span><br><span class="line"><span class="attr">Namespace:</span>  <span class="string">default</span></span><br><span class="line"><span class="string">Resource</span>    <span class="string">Used</span>  <span class="string">Hard</span></span><br><span class="line"><span class="string">--------</span>    <span class="string">----</span>  <span class="string">----</span></span><br><span class="line"><span class="string">cpu</span>         <span class="number">0</span>     <span class="number">5</span></span><br><span class="line"><span class="string">memory</span>      <span class="number">0</span>     <span class="string">10Gi</span></span><br><span class="line"><span class="string">pods</span>        <span class="number">0</span>     <span class="number">10</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="attr">Name:</span>       <span class="string">pods-medium</span></span><br><span class="line"><span class="attr">Namespace:</span>  <span class="string">default</span></span><br><span class="line"><span class="string">Resource</span>    <span class="string">Used</span>  <span class="string">Hard</span></span><br><span class="line"><span class="string">--------</span>    <span class="string">----</span>  <span class="string">----</span></span><br><span class="line"><span class="string">cpu</span>         <span class="number">0</span>     <span class="number">10</span></span><br><span class="line"><span class="string">memory</span>      <span class="number">0</span>     <span class="string">20Gi</span></span><br><span class="line"><span class="string">pods</span>        <span class="number">0</span>     <span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="节点资源隔离"><a href="#节点资源隔离" class="headerlink" title="节点资源隔离"></a>节点资源隔离</h2><p>通过为节点设置不同 <code>taint</code> 来识别不同租户的计算资源</p>
+<p>不同租户在创建 <code>Pod</code> 时，增加 <code>Toleration</code> 关键字，确保其能调度至某个 <code>taint</code> 的节点。</p>
+<h1 id="references"><a href="#references" class="headerlink" title="references"></a>references</h1><p><span class="exturl" data-url="aHR0cHM6Ly9jb3Jlb3MuZ2l0aHViLmlvL3JwbS1vc3RyZWUvY29tcG9zZS1zZXJ2ZXIv">Compose server<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVybmV0ZXMvbm9kZS1wcm9ibGVtLWRldGVjdG9y">node-problem-detector<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/f2e1.html" rel="prev" title="Kubernetes 控制平面组件：生命周期管理和服务发现">
+                  <i class="fa fa-angle-left"></i> Kubernetes 控制平面组件：生命周期管理和服务发现
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/post/3045b31e.html" rel="next" title="Kubernetes 生产化运维">
+                  Kubernetes 生产化运维 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+  </div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

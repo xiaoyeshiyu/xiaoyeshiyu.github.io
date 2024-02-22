@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="生产化环境涉及到 镜像管理、CI&#x2F;CD、DevOps、日志收集、监控，目的是高效开发，以及确保在生产环境中稳定运行，高效运维。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes 生产化运维">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/3045b31e.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="生产化环境涉及到 镜像管理、CI&#x2F;CD、DevOps、日志收集、监控，目的是高效开发，以及确保在生产环境中稳定运行，高效运维。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-31-50-image-20240202173150547.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-40-42-image-20240202174042738.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-45-34-image-20240202174534010.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-48-27-image-20240202174827059.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F11-58-29-image-20240221115829629.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-51-24-image-20240202175124215.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-51-48-image-20240202175148114.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F14-14-59-image-20240221141459901.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-33-26-image-20240220173326353.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-33-57-image-20240220173357254.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-38-14-image-20240220173814357.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-42-06-image-20240220174206307.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-55-16-image-20240220175516885.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F18-01-16-image-20240220180116912.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-13-11-image-20240220201311800.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-17-55-image-20240220201754964.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-18-14-image-20240220201814765.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-18-33-image-20240220201833329.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-25-25-image-20240220202525160.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-33-38-image-20240220203338459.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-33-58-image-20240220203358142.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-36-05-image-20240220203605179.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-36-37-image-20240220203637466.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-37-07-image-20240220203707426.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-37-25-image-20240220203725395.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-37-46-image-20240220203746264.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-42-03-image-20240220204203153.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F17-17-23-continuous-delivery-pipeline.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-44-10-image-20240220204410232.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-47-18-image-20240220204718387.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-48-12-image-20240220204812544.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F17-32-45-image-20240221173245802.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F17-34-18-image-20240221173418681.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-27-35-image-20240221202735345.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F21-28-05-image-20240221212805080.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-29-34-image-20240221202934729.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-29-49-image-20240221202949790.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-31-05-image-20240221203105548.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-35-00-image-20240221203500129.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-36-14-image-20240221203613978.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-37-02-image-20240221203702064.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-37-56-image-20240221203755950.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-23-00-image-20240220212300714.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-24-21-image-20240220212420968.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-24-47-image-20240220212447107.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-29-01-image-20240220212901391.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-31-08-image-20240220213108130.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F22-19-14-image-20240220221914659.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F22-23-37-image-20240220222337263.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F21-13-23-image-20240221211323617.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F22%2F17-06-46-architecture.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F21-24-54-image-20240221212454188.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F21-46-03-image-20240221214603028.png">
+<meta property="article:published_time" content="2024-02-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-02-22T09:46:58.896Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-31-50-image-20240202173150547.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/3045b31e.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/3045b31e.html","path":"post/3045b31e.html","title":"Kubernetes 生产化运维"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Kubernetes 生产化运维 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">镜像仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93-1"><span class="nav-number">1.1.</span> <span class="nav-text">镜像仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E4%BB%93%E9%81%B5%E5%BE%AA-OCI-%E7%9A%84-Distribution-Spec"><span class="nav-number">1.2.</span> <span class="nav-text">镜像仓遵循 OCI 的 Distribution Spec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%92%8C%E5%9D%97%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">数据和块文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93-2"><span class="nav-number">1.4.</span> <span class="nav-text">镜像仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Harbor"><span class="nav-number">1.5.</span> <span class="nav-text">Harbor</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Harbor-%E6%8F%90%E4%BE%9B%E7%9A%84%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.5.1.</span> <span class="nav-text">Harbor 提供的服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Harbor-%E6%9E%B6%E6%9E%84"><span class="nav-number">1.5.2.</span> <span class="nav-text">Harbor 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Harbor-%E5%AE%89%E8%A3%85"><span class="nav-number">1.5.3.</span> <span class="nav-text">Harbor 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Harbor-Demo-Server"><span class="nav-number">1.5.4.</span> <span class="nav-text">Harbor Demo Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Harbor-%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84"><span class="nav-number">1.5.5.</span> <span class="nav-text">Harbor 高可用架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Harbor-%E7%9A%84%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="nav-number">1.5.6.</span> <span class="nav-text">Harbor 的用户管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="nav-number">1.5.7.</span> <span class="nav-text">垃圾回收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F-Dragonfly"><span class="nav-number">1.6.</span> <span class="nav-text">本地镜像加速 Dragonfly</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">1.6.1.</span> <span class="nav-text">优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E4%B8%8B%E8%BD%BD%E6%B5%81%E7%A8%8B"><span class="nav-number">1.7.</span> <span class="nav-text">镜像下载流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E5%AE%89%E5%85%A8"><span class="nav-number">2.</span> <span class="nav-text">镜像安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E5%AE%89%E5%85%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.1.</span> <span class="nav-text">镜像安全的最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E6%89%AB%E6%8F%8F-Vulnerability-Scanning"><span class="nav-number">2.2.</span> <span class="nav-text">镜像扫描 Vulnerability Scanning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E7%AD%96%E7%95%A5%E5%87%86%E5%85%A5%E6%8E%A7%E5%88%B6"><span class="nav-number">2.3.</span> <span class="nav-text">镜像策略准入控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%AB%E6%8F%8F%E9%95%9C%E5%83%8F"><span class="nav-number">2.4.</span> <span class="nav-text">扫描镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E6%89%AB%E6%8F%8F%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.5.</span> <span class="nav-text">镜像扫描服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clair-%E6%9E%B6%E6%9E%84"><span class="nav-number">2.6.</span> <span class="nav-text">Clair 架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-Kubernetes-%E7%9A%84-DevOps"><span class="nav-number">3.</span> <span class="nav-text">基于 Kubernetes 的 DevOps</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E8%BF%90%E7%BB%B4%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">传统运维模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E6%8C%81%E7%BB%AD%E4%BA%A4%E4%BB%98%E7%9A%84%E6%9C%8D%E5%8A%A1%E4%BD%93%E7%B3%BB"><span class="nav-number">3.2.</span> <span class="nav-text">建立持续交付的服务体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-Docker-%E7%9A%84%E5%BC%80%E5%8F%91%E6%A8%A1%E5%BC%8F%E9%A9%B1%E5%8A%A8%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90"><span class="nav-number">3.3.</span> <span class="nav-text">基于 Docker 的开发模式驱动持续集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DevOps-%E6%B5%81%E7%A8%8B%E5%AE%9A%E4%B9%89"><span class="nav-number">3.4.</span> <span class="nav-text">DevOps 流程定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dev-%E5%92%8C-Ops-%E7%9A%84%E8%BE%B9%E7%95%8C%E5%AE%9A%E4%B9%89"><span class="nav-number">3.5.</span> <span class="nav-text">Dev 和 Ops 的边界定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-production-readiness"><span class="nav-number">3.6.</span> <span class="nav-text">定义 production readiness</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84%E4%B8%8B%E7%9A%84%E4%BA%BA%E5%91%98%E9%85%8D%E7%BD%AE"><span class="nav-number">3.7.</span> <span class="nav-text">单体架构下的人员配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E4%B8%8B%E7%9A%84%E4%BA%BA%E5%91%98%E9%85%8D%E7%BD%AE"><span class="nav-number">3.8.</span> <span class="nav-text">微服务架构下的人员配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DevOps-%E4%B8%8B%E7%9A%84%E4%BA%BA%E5%91%98%E5%88%92%E5%88%86"><span class="nav-number">3.9.</span> <span class="nav-text">DevOps 下的人员划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A4%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">3.10.</span> <span class="nav-text">此组织结构的优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E6%83%B3%E4%B8%AD%E7%9A%84-DevOps"><span class="nav-number">3.11.</span> <span class="nav-text">理想中的 DevOps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">3.12.</span> <span class="nav-text">案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A7%E5%93%81%E6%84%BF%E6%99%AF"><span class="nav-number">3.12.1.</span> <span class="nav-text">产品愿景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A7%E5%93%81%E8%B7%AF%E7%BA%BF%E5%9B%BE%E5%AE%9A%E4%B9%89"><span class="nav-number">3.12.2.</span> <span class="nav-text">产品路线图定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%8F%E6%8D%B7%E5%BC%80%E5%8F%91"><span class="nav-number">3.12.3.</span> <span class="nav-text">敏捷开发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DevOps-%E6%B5%81%E7%A8%8B%E6%A6%82%E8%A7%88"><span class="nav-number">3.12.4.</span> <span class="nav-text">DevOps 流程概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86"><span class="nav-number">3.12.5.</span> <span class="nav-text">代码分支管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90"><span class="nav-number">3.12.6.</span> <span class="nav-text">持续集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E9%83%A8%E7%BD%B2"><span class="nav-number">3.12.7.</span> <span class="nav-text">持续部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitOps"><span class="nav-number">3.12.8.</span> <span class="nav-text">GitOps</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-GitHub-Action-%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">4.</span> <span class="nav-text">基于 GitHub Action 的自动化流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%85%AC%E5%85%B1-GitHub-%E7%9A%84-action-%E6%9E%84%E5%BB%BA%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">4.1.</span> <span class="nav-text">基于公共 GitHub 的 action 构建流水线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Action-%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">4.2.</span> <span class="nav-text">Action 的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Action-%E7%BB%86%E8%8A%82"><span class="nav-number">4.3.</span> <span class="nav-text">Action 细节</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-Jenkins-%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">5.</span> <span class="nav-text">基于 Jenkins 的自动化流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes-CI-amp-CD-%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B"><span class="nav-number">5.1.</span> <span class="nav-text">Kubernetes CI&amp;CD 完整流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90%E5%AE%B9%E5%99%A8%E5%8C%96"><span class="nav-number">5.2.</span> <span class="nav-text">持续集成容器化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-Kubernetes-%E7%9A%84%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90"><span class="nav-number">5.3.</span> <span class="nav-text">基于 Kubernetes 的持续集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-in-Docker-%E9%97%AE%E9%A2%98%E5%B1%95%E5%BC%80"><span class="nav-number">5.4.</span> <span class="nav-text">Docker in Docker 问题展开</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%951"><span class="nav-number">5.4.1.</span> <span class="nav-text">方法1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%952"><span class="nav-number">5.4.2.</span> <span class="nav-text">方法2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%953"><span class="nav-number">5.4.3.</span> <span class="nav-text">方法3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E5%9F%BA%E4%BA%8E-Kubernetes-%E7%9A%84-Jenkins-Pipeline"><span class="nav-number">5.5.</span> <span class="nav-text">构建基于 Kubernetes 的 Jenkins Pipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Jenkins-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-number">5.5.1.</span> <span class="nav-text">Jenkins 的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-Jenkins-Job"><span class="nav-number">5.5.2.</span> <span class="nav-text">创建 Jenkins Job</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Kubernetes-%E6%8F%92%E4%BB%B6"><span class="nav-number">5.5.3.</span> <span class="nav-text">安装 Kubernetes 插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-Cloud-Provider"><span class="nav-number">5.5.4.</span> <span class="nav-text">配置 Cloud Provider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-Job-and-test"><span class="nav-number">5.5.5.</span> <span class="nav-text">Create a Job and test</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tokton"><span class="nav-number">6.</span> <span class="nav-text">Tokton</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jenkins-%E7%9A%84%E4%B8%8D%E8%B6%B3"><span class="nav-number">6.1.</span> <span class="nav-text">Jenkins 的不足</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%A3%B0%E6%98%8E%E5%BC%8F-API-%E7%9A%84%E6%B5%81%E6%B0%B4%E7%BA%BF-Tekton"><span class="nav-number">6.2.</span> <span class="nav-text">基于声明式 API 的流水线 - Tekton</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tekton-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-number">6.3.</span> <span class="nav-text">Tekton 核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">6.4.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-number">6.5.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E8%B5%84%E6%BA%90"><span class="nav-number">6.6.</span> <span class="nav-text">输入输出资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">6.7.</span> <span class="nav-text">事件触发的自动化流水线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EventListener"><span class="nav-number">6.8.</span> <span class="nav-text">EventListener</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EventListener-1"><span class="nav-number">6.9.</span> <span class="nav-text">EventListener</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TriggerTemplate"><span class="nav-number">6.10.</span> <span class="nav-text">TriggerTemplate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitLab-Webhook"><span class="nav-number">6.11.</span> <span class="nav-text">GitLab Webhook</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Argo-CD"><span class="nav-number">7.</span> <span class="nav-text">Argo CD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#argo-cd-%E6%9E%B6%E6%9E%84"><span class="nav-number">7.1.</span> <span class="nav-text">argo cd 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-argocd"><span class="nav-number">7.2.</span> <span class="nav-text">安装 argocd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Argued-%E7%9A%84%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">7.3.</span> <span class="nav-text">Argued 的适用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7%E5%92%8C%E6%97%A5%E5%BF%97"><span class="nav-number">8.</span> <span class="nav-text">监控和日志</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E6%9E%84%E5%BB%BA"><span class="nav-number">8.1.</span> <span class="nav-text">数据系统构建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%BB%B7%E5%80%BC"><span class="nav-number">8.2.</span> <span class="nav-text">日志系统的价值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%E6%9E%84%E5%BB%BA%E6%A8%A1%E5%BC%8F"><span class="nav-number">8.3.</span> <span class="nav-text">常用数据系统构建模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E7%B3%BB%E7%BB%9F-Loki"><span class="nav-number">8.4.</span> <span class="nav-text">日志收集系统 Loki</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-Loki-%E7%9A%84%E6%97%A5%E5%BF%97%E6%94%B6%E9%9B%86%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.4.1.</span> <span class="nav-text">基于 Loki 的日志收集系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loki-stack-%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.4.2.</span> <span class="nav-text">Loki-stack 子系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loki-%E6%9E%B6%E6%9E%84"><span class="nav-number">8.4.3.</span> <span class="nav-text">Loki 架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loki-%E7%BB%84%E4%BB%B6"><span class="nav-number">8.4.4.</span> <span class="nav-text">Loki 组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Loki-stack"><span class="nav-number">8.4.5.</span> <span class="nav-text">安装 Loki stack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Kubernetes-%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.4.6.</span> <span class="nav-text">在 Kubernetes 集群中的日志系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%94%9F%E4%BA%A7%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">8.4.7.</span> <span class="nav-text">在生产中的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.5.</span> <span class="nav-text">监控系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Kubernetes-%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.5.1.</span> <span class="nav-text">在 Kubernetes 集群中的监控系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Kubernetes-%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F-1"><span class="nav-number">8.5.2.</span> <span class="nav-text">在 Kubernetes 集群中的监控系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Kubernetes-%E4%B8%AD%E6%B1%87%E6%8A%A5%E6%8C%87%E6%A0%87"><span class="nav-number">8.5.3.</span> <span class="nav-text">在 Kubernetes 中汇报指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Kubernetes-%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F-2"><span class="nav-number">8.5.4.</span> <span class="nav-text">在 Kubernetes 集群中的监控系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prometheus-Query-Language"><span class="nav-number">8.5.5.</span> <span class="nav-text">Prometheus Query Language</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Kubernetes-%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F-3"><span class="nav-number">8.5.6.</span> <span class="nav-text">在 Kubernetes 集群中的监控系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%90%AF%E5%91%8A%E8%AD%A6"><span class="nav-number">8.5.7.</span> <span class="nav-text">开启告警</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E6%94%AF%E6%92%91%E7%94%9F%E4%BA%A7%E7%9A%84%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.5.8.</span> <span class="nav-text">构建支撑生产的监控系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A5%E8%87%AA%E7%94%9F%E4%BA%A7%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB"><span class="nav-number">8.5.9.</span> <span class="nav-text">来自生产系统的经验分享</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">9.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">134</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/3045b31e.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Kubernetes 生产化运维 | 小夜时雨">
+      <meta itemprop="description" content="生产化环境涉及到 镜像管理、CI/CD、DevOps、日志收集、监控，目的是高效开发，以及确保在生产环境中稳定运行，高效运维。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kubernetes 生产化运维
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-02-19 00:00:00" itemprop="dateCreated datePublished" datetime="2024-02-19T00:00:00+08:00">2024-02-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-02-22 17:46:58" itemprop="dateModified" datetime="2024-02-22T17:46:58+08:00">2024-02-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/" itemprop="url" rel="index"><span itemprop="name">云原生训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/3045b31e.html" class="post-meta-item leancloud_visitors" data-flag-title="Kubernetes 生产化运维" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">生产化环境涉及到 镜像管理、CI/CD、DevOps、日志收集、监控，目的是高效开发，以及确保在生产环境中稳定运行，高效运维。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="镜像仓库"><a href="#镜像仓库" class="headerlink" title="镜像仓库"></a>镜像仓库</h1><p>生产化的过程核心是 <code>CI/CD</code>，这两者都非常依赖镜像。</p>
+<h2 id="镜像仓库-1"><a href="#镜像仓库-1" class="headerlink" title="镜像仓库"></a>镜像仓库</h2><p>镜像仓库（<code>Docker Registry</code>）负责存储、管理和分发镜像。</p>
+<p>镜像仓库管理多个 <code>Repository</code>，<code>Repository</code> 通过命名来区分。每个 <code>Repository</code> 包含一个或多个镜像，镜像通过镜像名称和标签（<code>Tag</code>）来区分。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-31-50-image-20240202173150547.png" alt="image-20240202173150547"></p>
+<p>容器镜像最终是一个 <code>tar</code> 包，在镜像仓库中存储两个内容，一个是元数据，记录镜像的 <code>manifest</code>，一个是镜像包。</p>
+<p>客户端拉取镜像时，要指定三要素：</p>
+<ul>
+<li>镜像仓库：要从哪一个镜像仓库拉取镜像，通常通过 DNS 或 IP 地址来确定一个镜像仓库，如 <code>hub.docker.com</code></li>
+<li><code>Repository</code>：组织面，如 <code>xxx.com</code></li>
+<li>镜像名称 + 标签：如 <code>nginx:latest</code></li>
+</ul>
+<h2 id="镜像仓遵循-OCI-的-Distribution-Spec"><a href="#镜像仓遵循-OCI-的-Distribution-Spec" class="headerlink" title="镜像仓遵循 OCI 的 Distribution Spec"></a>镜像仓遵循 OCI 的 Distribution Spec</h2><p>适配规范：</p>
+<table>
+<thead>
+<tr>
+<th>HTTP Verb</th>
+<th>URL</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td>&#x2F;v2&#x2F;</td>
+<td>检查镜像仓库实现的规范、版本</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;v2&#x2F;_catalog</td>
+<td>获取仓库列表</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;v2&#x2F;<name>&#x2F;tags&#x2F;list</td>
+<td>获取一个仓库下所有的标签</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>&#x2F;v2&#x2F;<name>&#x2F;manifests&#x2F;<reference></td>
+<td>上传镜像 manifest 信息</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>&#x2F;v2&#x2F;<name>&#x2F;manifests&#x2F;<reference></td>
+<td>删除镜像</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;v2&#x2F;<name>&#x2F;manifests&#x2F;<reference></td>
+<td>获取一个镜像的 manifest 信息</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>&#x2F;v2&#x2F;<name>&#x2F;blobs&#x2F;<digest></td>
+<td>获取一个镜像的文件层</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>&#x2F;v2&#x2F;<name>&#x2F;blobs&#x2F;uploads&#x2F;</td>
+<td>启动一个镜像的上传</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>&#x2F;v2&#x2F;<name>&#x2F;blobs&#x2F;uploads&#x2F;<session_id></td>
+<td>结束文件层上传</td>
+</tr>
+</tbody></table>
+<h2 id="数据和块文件"><a href="#数据和块文件" class="headerlink" title="数据和块文件"></a>数据和块文件</h2><p>镜像由元数据和块文件两部分组成，镜像仓库的核心职能就是管理这两项数据。</p>
+<ul>
+<li><p>元数据：</p>
+<ul>
+<li>元数据用于描述一个镜像的核心信息，包含镜像的镜像仓库、仓库、标签、校验码、文件层、镜像构建描述等信息</li>
+<li>通过这些信息，可以从抽象层面完整地描述一个镜像：它是如何构建出来的、运行过什么构建命令、构建的每一个文件层的校验码、打的标签、镜像的校验码等</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker inspect busybox</span><br><span class="line"><span class="comment"># 以及 crictl 更加详细</span></span><br><span class="line">cricrl inpecti busybox</span><br></pre></td></tr></table></figure></li>
+<li><p>块文件（<code>blob</code>）</p>
+<ul>
+<li>块文件是组成镜像的联合文件层的实体，每一个块文件是一个文件层，内部包含对应文件层的变更</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-40-42-image-20240202174042738.png" alt="image-20240202174042738"></p>
+<p>镜像仓库就是管理这一堆元数据和一堆 <code>blob</code>，一个镜像有一份元数据，有多份 <code>blob</code>，每一份 <code>blob</code> 就是一层。</p>
+<h2 id="镜像仓库-2"><a href="#镜像仓库-2" class="headerlink" title="镜像仓库"></a>镜像仓库</h2><ul>
+<li><p>共有镜像仓库</p>
+<ul>
+<li><p>优势</p>
+<ul>
+<li>开放：任何开发都可以上传、分享镜像到共有镜像仓库中</li>
+<li>便捷：开发者可以非常方便地搜索、拉取其他开发者的镜像，避免重复造轮子</li>
+<li>免运维：开发者只需要关注应用开发，不必关心镜像仓库的更新、升级、维护等</li>
+<li>成本低：企业或开发者不需要购买硬件、解决方案来搭建镜像仓库，也不需要团队来维护</li>
+</ul>
+</li>
+<li><p>劣势：</p>
+<ul>
+<li>可能会限流</li>
+<li>无法满足一些无外网的环境</li>
+<li>有些时候可能需要翻墙</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>私有镜像仓库</p>
+<ul>
+<li>优势<ul>
+<li>隐私性：企业的代码和数据是企业的私有资产，不允许随意共享到公共平台</li>
+<li>敏感性：企业的镜像会包含一些敏感信息，如密钥信息、令牌信息等。这些敏感信息严禁暴露到企业外部</li>
+<li>网络连通性：企业的网络结构多种多样，并非所有环境都可以访问互联网</li>
+<li>安全性：而在企业环境中，若使用一些含有漏洞的依赖包，则会引入安全隐患</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Harbor"><a href="#Harbor" class="headerlink" title="Harbor"></a>Harbor</h2><p>主流的镜像仓有：<code>docker</code>、<code>coreos</code>、<code>harbor</code>。</p>
+<p><code>Harbor</code> 是 <code>VMware</code> 开源的企业级镜像仓库，目前已是 <code>CNCF</code> 的毕业项目。它拥有完整的仓库管理、镜像管理、基于角色的权限控制、镜像安全扫描集成、镜像签名等。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-45-34-image-20240202174534010.png" alt="image-20240202174534010"></p>
+<h3 id="Harbor-提供的服务"><a href="#Harbor-提供的服务" class="headerlink" title="Harbor 提供的服务"></a>Harbor 提供的服务</h3><ul>
+<li><code>Harbor</code> 核心服务：提供 <code>Harbor</code> 的核心管理服务 <code>API</code>，包括仓库管理、认证管理、授权管理、配置管理、项目管理、配额管理、签名管理、副本管理等</li>
+<li><code>Harbor Portal</code>：<code>Harbor</code> 的 <code>Web</code> 界面</li>
+<li><code>Registry</code>：<code>Registry</code> 负责接收客户端的 <code>pull/push</code> 请求，其核心为 <code>docker/Distribution</code></li>
+<li>副本控制器：<code>Harbor</code> 可以以主从模式来部署镜像仓库，副本控制器将镜像从主镜像服务分发到从镜像服务</li>
+<li>日志收集器：收集各模块的日志</li>
+<li>垃圾回收控制器：回收日常操作中删除镜像记录后遗留在块存储中的孤立块文件</li>
+</ul>
+<h3 id="Harbor-架构"><a href="#Harbor-架构" class="headerlink" title="Harbor 架构"></a>Harbor 架构</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-48-27-image-20240202174827059.png" alt="image-20240202174827059"></p>
+<h3 id="Harbor-安装"><a href="#Harbor-安装" class="headerlink" title="Harbor 安装"></a>Harbor 安装</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">helm repo add harbor https://helm.goharbor.io</span><br><span class="line">helm fetch harbor/harbor --untar</span><br><span class="line">kubelet create ns harbor </span><br><span class="line"><span class="comment"># 修改配置</span></span><br><span class="line">vi ./harbor/values.yaml</span><br><span class="line"></span><br><span class="line">expose:</span><br><span class="line">  <span class="built_in">type</span>: nodePort</span><br><span class="line">tls:</span><br><span class="line">  commonName: <span class="string">&#x27;core.harbor.domain&#x27;</span></span><br><span class="line"></span><br><span class="line">persistence: <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装</span></span><br><span class="line">helm install -n harbor harbor .</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl get pod</span></span><br><span class="line">NAME                               READY   STATUS    RESTARTS      AGE</span><br><span class="line">harbor-core-858676f749-wn8qt       1/1     Running   0             29m</span><br><span class="line">harbor-database-0                  1/1     Running   0             29m</span><br><span class="line">harbor-jobservice-cb88485c-b9sxs   1/1     Running   8 (18m ago)   29m</span><br><span class="line">harbor-nginx-7f4dc65db4-ls6bz      1/1     Running   0             29m</span><br><span class="line">harbor-portal-6b8c795cf-ccrvb      1/1     Running   0             29m</span><br><span class="line">harbor-redis-0                     1/1     Running   0             29m</span><br><span class="line">harbor-registry-5dc97c74d6-gzfwp   2/2     Running   0             29m</span><br><span class="line">harbor-trivy-0                     1/1     Running   0             29m</span><br><span class="line"><span class="comment"># kubectl get svc</span></span><br><span class="line">NAME                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE</span><br><span class="line">harbor              NodePort    10.1.182.235   &lt;none&gt;        80:30002/TCP,443:30003/TCP   29m</span><br><span class="line">harbor-core         ClusterIP   10.1.47.40     &lt;none&gt;        80/TCP                       29m</span><br><span class="line">harbor-database     ClusterIP   10.1.213.211   &lt;none&gt;        5432/TCP                     29m</span><br><span class="line">harbor-jobservice   ClusterIP   10.1.52.90     &lt;none&gt;        80/TCP                       29m</span><br><span class="line">harbor-portal       ClusterIP   10.1.186.166   &lt;none&gt;        80/TCP                       29m</span><br><span class="line">harbor-redis        ClusterIP   10.1.59.94     &lt;none&gt;        6379/TCP                     29m</span><br><span class="line">harbor-registry     ClusterIP   10.1.131.78    &lt;none&gt;        5000/TCP,8080/TCP            29m</span><br><span class="line">harbor-trivy        ClusterIP   10.1.218.186   &lt;none&gt;        8080/TCP                     29m</span><br></pre></td></tr></table></figure>
+
+<p>配置 <code>/etc/hosts</code> 增加域名</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br><span class="line">10.1.182.235 core.harbor.domain</span><br></pre></td></tr></table></figure>
+
+<p>配置证书</p>
+<p>打开管理页面：<code>https://192.168.239.128:30003/</code></p>
+<p>账号&#x2F;密码：<code>admin/Harbor12345</code></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly8xOTIuMTY4LjIzOS4xMjg6MzAwMDMvaGFyYm9yL3Byb2plY3RzLzEvcmVwb3NpdG9yaWVz">https://192.168.239.128:30003/harbor/projects/1/repositories<i class="fa fa-external-link-alt"></i></span></p>
+<p>点击下载证书</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F11-58-29-image-20240221115829629.png" alt="image-20240221115829629"></p>
+<p>创建目录，并将证书放在对应目录中。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir /etc/docker/certs.d/core.harbor.domain</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启 docker</span></span><br><span class="line">systemctl restart docker </span><br></pre></td></tr></table></figure>
+
+<p>Docker 登录</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login -u admin -p Harbor12345 core.harbor.domain</span><br></pre></td></tr></table></figure>
+
+<p>或者使用另外一种不安全的方式，忽略证书</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/docker/daemon.json</span><br><span class="line"><span class="comment"># 增加一行</span></span><br><span class="line"> <span class="string">&quot;insecure-registries&quot;</span>: [<span class="string">&quot;https://core.harbor.domain&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>修改一个镜像的 <code>tag</code>，推送到 <code>harbor</code> 上</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker tag 350b164e7ae1 core.harbor.domain/library/pause</span></span><br><span class="line"><span class="comment"># docker push core.harbor.domain/library/pause</span></span><br><span class="line">Using default tag: latest</span><br><span class="line">The push refers to repository [core.harbor.domain/library/pause]</span><br><span class="line">5f70bf18a086: Pushed</span><br><span class="line">e16a89738269: Pushed</span><br><span class="line">latest: digest: sha256:569cfa0ff435f3a076a1b06a1f45d772ee3f5d4fbf6b39242a573c0cff632d69 size: 938</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>pod</code> 中，镜像存储的地方位于 <code>harbor-registry-5dc97c74d6-gzfwp</code> 中</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 元数据存放于</span></span><br><span class="line">/storage/docker/registry/v2/repositories/</span><br><span class="line"><span class="comment"># blob 存放于</span></span><br><span class="line">/storage/docker/registry/v2/blobs</span><br></pre></td></tr></table></figure>
+
+<p><code>harbor</code> 的信息存储于数据库中</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入pod</span></span><br><span class="line"><span class="comment"># kubectl exec -it harbor-database-0 bash</span></span><br><span class="line"><span class="comment"># 登录到数据库</span></span><br><span class="line">$ psql -U postgres -d postgres -h 127.0.0.1 -p 5432</span><br><span class="line"><span class="comment"># 切换库</span></span><br><span class="line">\c registry</span><br><span class="line"><span class="comment"># 列出所有表</span></span><br><span class="line">\d</span><br></pre></td></tr></table></figure>
+
+<p>一些数据库表以及它们的作用：</p>
+<ol>
+<li><p><code>projects</code> 表：存储Harbor中的项目信息，包括项目名称、描述等。</p>
+</li>
+<li><p><code>repositories</code> 表：存储Harbor中的镜像仓库信息，包括仓库名称、所属项目、创建时间等。</p>
+</li>
+<li><p><code>tags</code> 表：存储Harbor中镜像标签的信息，包括标签名称、关联的镜像ID、大小等。</p>
+</li>
+<li><p><code>manifests</code> 表：存储Harbor中镜像的清单信息，包括镜像ID、标签、创建时间等。</p>
+</li>
+<li><p><code>labels</code> 表：存储Harbor中标签的信息，用于对镜像进行分类和标记。</p>
+</li>
+<li><p><code>users</code> 表：存储Harbor用户的信息，包括用户名、密码哈希、邮箱等。</p>
+</li>
+<li><p><code>roles</code> 表：存储Harbor中角色的信息，用于权限管理。</p>
+</li>
+<li><p><code>permissions</code> 表：存储Harbor中权限的信息，用于定义用户或角色对资源的访问权限。</p>
+</li>
+</ol>
+<h3 id="Harbor-Demo-Server"><a href="#Harbor-Demo-Server" class="headerlink" title="Harbor Demo Server"></a>Harbor Demo Server</h3><p>可以注册和使用共有 <code>harbor</code> 仓库。<span class="exturl" data-url="aHR0cHM6Ly9kZW1vLmdvaGFyYm9yLmlvLw==">https://demo.goharbor.io/<i class="fa fa-external-link-alt"></i></span></p>
+<p>一些特性：</p>
+<ul>
+<li><p><code>Demo Server</code></p>
+<p>2 天清理一次数据（镜像只保留2天）</p>
+<p>不能 <code>push</code> 超过 <code>100Mb</code> 的镜像</p>
+<p>不能使用管理功能</p>
+</li>
+<li><p><code>Portal</code></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZW1vLmdvaGFyYm9yLmlvL2hhcmJvci9wcm9qZWN0cw==">Https://demo.goharbor.io/harbor/projects<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p>镜像使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker login demo.goharbor.io </span><br><span class="line">docker build -t demo.goharbor.io/your-project/test-image .</span><br><span class="line">docker push demo.goharbor.io/your-project/test-image</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Harbor-高可用架构"><a href="#Harbor-高可用架构" class="headerlink" title="Harbor 高可用架构"></a>Harbor 高可用架构</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-51-24-image-20240202175124215.png" alt="image-20240202175124215"></p>
+<p>通过修改 <code>chart</code> 里面的配置，可以搭建 <code>harbor</code> 高可用集群。</p>
+<h3 id="Harbor-的用户管理"><a href="#Harbor-的用户管理" class="headerlink" title="Harbor 的用户管理"></a>Harbor 的用户管理</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-51-48-image-20240202175148114.png" alt="image-20240202175148114"></p>
+<p><code>harbor</code> 的用户管理可以通过不同的用户赋予不同权限实现管理机制。</p>
+<h3 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h3><p>镜像删除时，<code>blob</code> 文件不会被删除，只有 <code>manifest</code> 会被删掉。因为 <code>docker</code> 特性，<code>blob</code> 可能会作为多个镜像的基础镜像，不删除是为了避免影响其他镜像。</p>
+<p>需要通过垃圾回收机制来删除不用的 <code>blob</code>，进而回收存储空间</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F14-14-59-image-20240221141459901.png" alt="image-20240221141459901"></p>
+<h2 id="本地镜像加速-Dragonfly"><a href="#本地镜像加速-Dragonfly" class="headerlink" title="本地镜像加速 Dragonfly"></a>本地镜像加速 Dragonfly</h2><p><code>Dragonfly</code> 是一款基于 <code>P2P</code> 的智能镜像和文件分发工具，阿里主导。</p>
+<p>它旨在提高文件传输的效率和速率，最大限度地利用网络带宽，尤其是在分发大量数据时。当需要拉取镜像时，先从 <code>df</code> 本地缓存中拉取。</p>
+<ul>
+<li>应用分发</li>
+<li>缓存分发</li>
+<li>日志分发</li>
+<li>镜像分发</li>
+</ul>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ul>
+<li>基于 <code>P2P</code> 的文件分发</li>
+<li>非侵入式支持所有类型的容器技术</li>
+<li>机器级别的限速</li>
+<li>被动式 <code>CDN</code></li>
+<li>高度一致性</li>
+<li>磁盘保护和高效 <code>IO</code></li>
+<li>高性能</li>
+<li>自动隔离异常</li>
+<li>对文件源无压力</li>
+<li>支持标准 <code>HTTP</code> 头文件</li>
+<li>有效的 <code>Registry</code> 鉴权并发控制</li>
+<li>简单易用</li>
+</ul>
+<h2 id="镜像下载流程"><a href="#镜像下载流程" class="headerlink" title="镜像下载流程"></a>镜像下载流程</h2><p><code>dfget proxy</code> 也称为 <code>dfdaemon</code>，会拦截来自 <code>docker pull</code> 或 <code>docker push</code> 的 <code>HTTP</code> 请求，然后使用 <code>dfget</code> 来处理那些跟镜像分层相关的请求。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-33-26-image-20240220173326353.png" alt="image-20240220173326353"></p>
+<ol>
+<li>主机 <code>docker</code> 从某一个 <code>dfget proxy</code> 节点中拉取镜像，<code>proxy</code> 节点可能有成千上万台</li>
+<li><code>cluster manager</code> 用于维护整个分发集群，<code>daemon</code> 用于在拉取镜像时，会先将请求发送到 <code>proxy</code> </li>
+<li>当代理中没有对应镜像，<code>dfget proxy</code> 请求 <code>cluster manager</code> </li>
+<li><code>cluster manager</code> 将请求转发到主镜像仓库，主仓库将镜像的 <code>manifest</code> 下发到 <code>cluster manager</code></li>
+<li><code>cluster manager</code> 将 <code>blob</code> 下发到 <code>proxy</code>，而且可能不同 <code>proxy</code> 会下发不同层</li>
+<li><code>proxy</code> 在拉取其他层时，则会 P2P 其他 <code>proxy</code>，请求不会到 <code>cluster manager</code>，通过这种方式减少主镜像仓库的压力</li>
+</ol>
+<p>每个文件会被分成多个分块，并在对等节点之间传输。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-33-57-image-20240220173357254.png" alt="image-20240220173357254"></p>
+<h1 id="镜像安全"><a href="#镜像安全" class="headerlink" title="镜像安全"></a>镜像安全</h1><h2 id="镜像安全的最佳实践"><a href="#镜像安全的最佳实践" class="headerlink" title="镜像安全的最佳实践"></a>镜像安全的最佳实践</h2><ul>
+<li>构建指令问题<ul>
+<li>避免在构建镜像时，添加密钥，<code>Token</code> 等敏感信息（配置与代码应分离）</li>
+</ul>
+</li>
+<li>应用依赖问题<ul>
+<li>应尽量避免安装不必要的依赖</li>
+<li>确保依赖无安全风险，一些长时间不更新的基础镜像的可能面临安全风险，比如基于 <code>openssl1.0</code>，只支持 <code>tls1.0</code> 等</li>
+</ul>
+</li>
+<li>文件问题<ul>
+<li>在构建镜像时，除应用本身外，还会添加应用需要的配置文件、模板等，在添加这些文件时，会无意间添加一些包含敏感信息或不符合安全策略的文件到镜像中</li>
+<li>当镜像中存在文件问题时，需要通过引入该文件的构建指令行进行修复，而不是通过追加一条删除指令来恢复（基于 <code>overlay</code> 删除操作并不能完全清理文件）</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-38-14-image-20240220173814357.png" alt="image-20240220173814357"></p>
+<h2 id="镜像扫描-Vulnerability-Scanning"><a href="#镜像扫描-Vulnerability-Scanning" class="headerlink" title="镜像扫描 Vulnerability Scanning"></a>镜像扫描 Vulnerability Scanning</h2><p>镜像扫描通过扫描工具或扫描服务对镜像进行扫描，来确定镜像是否安全</p>
+<ul>
+<li>分析构建指令、应用、文件、依赖包</li>
+<li>查询 CVE 库、安全策略</li>
+<li>检测镜像是否安全，是否符合企业的安全标准</li>
+</ul>
+<h2 id="镜像策略准入控制"><a href="#镜像策略准入控制" class="headerlink" title="镜像策略准入控制"></a>镜像策略准入控制</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-42-06-image-20240220174206307.png" alt="image-20240220174206307"></p>
+<p>镜像准入控制是在部署 <code>Pod</code>、更新 <code>Pod</code> 时，对 <code>Pod</code> 中的所有镜像进行安全验证以放行或拦截对 <code>Pod</code> 的操作（也就是 <code>ImagePolicyWebhook</code>）：</p>
+<ul>
+<li>放行：<code>Pod</code> 中所有的镜像都安全，允许此次的操作，<code>Pod</code> 成功被创建或更新</li>
+<li>拦截：<code>Pod</code> 中的镜像未扫描，或已经扫描但存在安全漏洞，或不符合安全策略，<code>Pod</code> 无法被创建或更新</li>
+</ul>
+<h2 id="扫描镜像"><a href="#扫描镜像" class="headerlink" title="扫描镜像"></a>扫描镜像</h2><ol>
+<li>镜像扫描服务从镜像仓库拉取镜像</li>
+<li>解析镜像的元数据</li>
+<li>解压镜像的每一个文件层</li>
+<li>提取每一层所包含的依赖包、可运行程序、文件列表、文件内容扫描</li>
+<li>将扫描结果与 CVE 字典、安全策略字典进行匹配，以确认最终镜像是否安全</li>
+</ol>
+<h2 id="镜像扫描服务"><a href="#镜像扫描服务" class="headerlink" title="镜像扫描服务"></a>镜像扫描服务</h2><table>
+<thead>
+<tr>
+<th>供应商</th>
+<th>Anchore</th>
+<th>Aqua</th>
+<th>Twistlock</th>
+<th>Clair</th>
+<th>Qualys</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>镜像文件扫描</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多 CVE 库支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>是否开源</td>
+<td>是</td>
+<td>部分</td>
+<td></td>
+<td>是</td>
+<td></td>
+</tr>
+<tr>
+<td>商业支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td></td>
+<td>支持</td>
+</tr>
+<tr>
+<td>可定制安全策略</td>
+<td>支持</td>
+<td></td>
+<td>支持</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>镜像仓库支持</td>
+<td>Harbor</td>
+<td></td>
+<td></td>
+<td>Quay、Harbor</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>一般 <code>harbor</code> 搭配 <code>Clair</code> 使用。</p>
+<h2 id="Clair-架构"><a href="#Clair-架构" class="headerlink" title="Clair 架构"></a>Clair 架构</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F17-55-16-image-20240220175516885.png" alt="image-20240220175516885"></p>
+<p>前端有 API，有通知机制，有后端存储，以及一些做比较的引擎。</p>
+<h1 id="基于-Kubernetes-的-DevOps"><a href="#基于-Kubernetes-的-DevOps" class="headerlink" title="基于 Kubernetes 的 DevOps"></a>基于 Kubernetes 的 DevOps</h1><h2 id="传统运维模式"><a href="#传统运维模式" class="headerlink" title="传统运维模式"></a>传统运维模式</h2><ul>
+<li>缺乏一致性环境（用户环境和实验室环境可能有差别）</li>
+<li>平台与应用部署相互割裂（基于虚拟化平台，应用层相对于基础平台不可见）</li>
+<li>缺乏工具链支持（特别是 CD，没有统一的发布平台）</li>
+<li>缺乏统一的灰度发布管理</li>
+<li>缺乏统一监控能力和持续运维能力（没有 <code>cgroup</code> 的管理能力）</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F20%2F18-01-16-image-20240220180116912.png" alt="image-20240220180116912"></p>
+<h2 id="建立持续交付的服务体系"><a href="#建立持续交付的服务体系" class="headerlink" title="建立持续交付的服务体系"></a>建立持续交付的服务体系</h2><p>传统的开发运维模式下，存在的问题：</p>
+<ul>
+<li>从需求到版本上线中间是个黑箱子，风险不可控；</li>
+<li>开发设计时未过多考虑运维，导致后续部署及维护的困难；</li>
+<li>开发各自为政，烟囱式开发，未考虑共享重用、联调，开发的资产积累不能快速交移到运维手中；</li>
+</ul>
+<p>应对以上问题，通常倡导的解决之道是：运维前移，统一运维，建立持续交付服务体系。</p>
+<h2 id="基于-Docker-的开发模式驱动持续集成"><a href="#基于-Docker-的开发模式驱动持续集成" class="headerlink" title="基于 Docker 的开发模式驱动持续集成"></a>基于 Docker 的开发模式驱动持续集成</h2><ol>
+<li>开发测试环境容器化</li>
+<li>持续集成容器化</li>
+<li>应用交付容器化</li>
+</ol>
+<p>本地代码写好之后，（<code>CI/CD</code>）持续构建、持续部署到线上环境再进一步测试。</p>
+<h2 id="DevOps-流程定义"><a href="#DevOps-流程定义" class="headerlink" title="DevOps 流程定义"></a>DevOps 流程定义</h2><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-13-11-image-20240220201311800.png" alt="image-20240220201311800" style="zoom:50%;" />
+
+<p>从传统的 产品 -&gt; 研发 -&gt; 测试 -&gt; 产品 的开发流程，到目前的 <code>DevOps</code>，开发和运维一体化。</p>
+<h2 id="Dev-和-Ops-的边界定义"><a href="#Dev-和-Ops-的边界定义" class="headerlink" title="Dev 和 Ops 的边界定义"></a>Dev 和 Ops 的边界定义</h2><p><code>Programming</code> vs. <code>Engineering</code></p>
+<ul>
+<li><code>Programming</code>：编程，更多的是系统设计和编码实现，也就是写逻辑和业务代码</li>
+<li><code>Engineering</code>：工程，包含更大范围概念，除了功能层面的实现，还需为运维服务，产品功能落地（压测、部署脚本、异常排查、监控等）</li>
+</ul>
+<h2 id="定义-production-readiness"><a href="#定义-production-readiness" class="headerlink" title="定义 production readiness"></a>定义 production readiness</h2><p><code>Function ready</code> vs. <code>Production ready</code> </p>
+<ul>
+<li><code>Function Ready</code> 只是交付的软件产品从功能层面满足需求定义</li>
+<li><code>Production Ready</code> 除了功能就绪还包含<ul>
+<li><code>LnP</code> 测试通过，压力测试，满足性能需求</li>
+<li>用户手册完成，用户可按照用户手册使用既定功能</li>
+<li>管理手册完成，运维人员可以依照管理手册部署，升级产品并解决现网问题</li>
+<li>监控，包括：<ul>
+<li>组件健康状态检查（<code>UP</code>）</li>
+<li>性能指标（<code>Metrics</code>）</li>
+<li>基于性能指标，定义 <code>alert rule</code>，在系统故障或缓慢时，发送告警信息给运维人员</li>
+<li><code>Assertion</code>，定期测试某功能并检查结果，比如每小时创建 <code>service</code>，测试 <code>vip</code> 连通性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="单体架构下的人员配置"><a href="#单体架构下的人员配置" class="headerlink" title="单体架构下的人员配置"></a>单体架构下的人员配置</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-17-55-image-20240220201754964.png" alt="image-20240220201754964"></p>
+<p>三层架构：UI -&gt; 业务逻辑 -&gt; 数据库。前后端分离架构。</p>
+<p>在开发过程中，需要前端开发人员和后端开发人员做任务拆分和排期。当需要排查问题时，他们需要有全局的视图，而这往往是理想化的。</p>
+<h2 id="微服务架构下的人员配置"><a href="#微服务架构下的人员配置" class="headerlink" title="微服务架构下的人员配置"></a>微服务架构下的人员配置</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-18-14-image-20240220201814765.png" alt="image-20240220201814765"></p>
+<p>基于不同的微服务有不同的开发运维组，专门负责一个微服务。他们不需要全局化，专注于当前的微服务，定义好服务边界，以及上下游关系。</p>
+<h2 id="DevOps-下的人员划分"><a href="#DevOps-下的人员划分" class="headerlink" title="DevOps 下的人员划分"></a>DevOps 下的人员划分</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-18-33-image-20240220201833329.png" alt="image-20240220201833329"></p>
+<p><code>DevOps</code> 持续迭代的环形结构。</p>
+<h2 id="此组织结构的优缺点"><a href="#此组织结构的优缺点" class="headerlink" title="此组织结构的优缺点"></a>此组织结构的优缺点</h2><p>优势：</p>
+<ul>
+<li>一个架构师负责整个产品的规划，使得产品更规范，产品进化不同的 <code>Program</code> 由不同 <code>PO</code> 负责端到端，从需求到生产系统部署，保证 <code>solution</code> 质量</li>
+<li>研发和运营统一，一个最大的作用是研发可以深刻理解现网痛苦，对功能需求的设计和优先级定义有极大帮助</li>
+<li><code>Function ready</code> Vs. <code>Production ready</code></li>
+<li><code>Programming</code> Vs. <code>Engineering</code></li>
+<li>更具连续性</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>传统运营和开发的冲突并非消失，而是转变为了运营经理和架构以及 <code>PO</code> 之间的冲突</li>
+<li>运营轮值导致生产系统权责不明确</li>
+<li>轮值期间期待不出故障</li>
+<li>对于出现的故障缺少端对端的跟踪，可能问题还没处理结束，已经要交接给下一个人了</li>
+<li>对于生产系统的积累问题，如故障节点，无人专职处理，导致比较多的故障节点堆积</li>
+<li>对于生产系统的配置，无统一规划，每个人可能用不同的配置打到相同的目的</li>
+<li><code>Dev</code> 自主权过高导致 <code>Dev</code> 可以偷偷加功能并部署到生产</li>
+</ul>
+<h2 id="理想中的-DevOps"><a href="#理想中的-DevOps" class="headerlink" title="理想中的 DevOps"></a>理想中的 DevOps</h2><p><code>Dev</code> 和 <code>Ops</code> 需要权责划分，可以有 <code>overlap</code>，同时做部署，同时做计划，但 <code>Dev</code> 应侧重功能开发，<code>Ops</code> 偏重生产系统运维。</p>
+<p><code>Ops</code> 参与到版本规划流程中，并为一个功能能不能 <code>release</code> 和 <code>deploy</code> 把关</p>
+<ul>
+<li><code>Dev</code><ul>
+<li><code>Plan</code></li>
+<li><code>Code</code></li>
+<li><code>Build</code></li>
+<li><code>Test</code></li>
+<li><code>Release</code></li>
+<li><code>Deploy</code></li>
+</ul>
+</li>
+<li><code>Ops</code><ul>
+<li><code>Deploy</code></li>
+<li><code>Operate</code></li>
+<li><code>Monitor</code></li>
+<li><code>Plan</code></li>
+</ul>
+</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-25-25-image-20240220202525160.png" alt="image-20240220202525160"></p>
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><h3 id="产品愿景"><a href="#产品愿景" class="headerlink" title="产品愿景"></a>产品愿景</h3><p>产品愿景的定义有多个目的：</p>
+<ul>
+<li>统一团队思想，让团队成员知道我们要往哪里去，这有助于让团队专注于交付产品价值</li>
+<li>长期愿景往往是有野心的，能对团队成员起到激励作用，比如 <strong>业界尖端技术</strong> 往往能刺激团队成员努力自我提升</li>
+<li>该愿景应该是团队成员的共识，是所有人的共同理想</li>
+<li>愿景要产生真正的价值，是真正建立在对当前业务痛点的充分理解基础之上的</li>
+</ul>
+<p>长期愿景：</p>
+<ul>
+<li>基于业界尖端技术打造下一代流量管理平台</li>
+</ul>
+<p>产品价值：</p>
+<ul>
+<li>节省时间成本，负载均衡上架时间从数月降低到分钟级</li>
+<li>移除供应商依赖问题，出现生产系统故障不再依赖供应商上门调试</li>
+<li>构建一套统一模型管理所有业务场景，降低系统集成成本</li>
+<li>全自动化，减少手工操作，降低维护人力成本</li>
+<li>故障检测和根因分析能力，快速定位故障，提升可用性</li>
+</ul>
+<h3 id="产品路线图定义"><a href="#产品路线图定义" class="headerlink" title="产品路线图定义"></a>产品路线图定义</h3><p>而项目执行需要有明确时间线的近期目标，因此需要将产品价值转化成可控的产品需求。产品需求的输入包括新功能和当前产品的功能缺陷等，产品经理需要与核心团队一道定义近期（比如 <code>2-3</code> 个季度）的产品核心功能，并定义近期产品版本需要包含的功能。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-33-38-image-20240220203338459.png" alt="image-20240220203338459"></p>
+<ol>
+<li>团队成员可以聚焦每个极度的功能</li>
+<li>外部团队可以明确季度交付产出，可以更好的配合</li>
+<li>产品团队可以明确能对外提供能力的时间节点</li>
+</ol>
+<h3 id="敏捷开发"><a href="#敏捷开发" class="headerlink" title="敏捷开发"></a>敏捷开发</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-33-58-image-20240220203358142.png" alt="image-20240220203358142"></p>
+<p>大概 2周 一个<code>Spring</code>，部署原型之后，开启下一个 <code>Spring</code>，可以在开发和迭代过程中规划，逐步靠近产品交付状态。</p>
+<h3 id="DevOps-流程概览"><a href="#DevOps-流程概览" class="headerlink" title="DevOps 流程概览"></a>DevOps 流程概览</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-36-05-image-20240220203605179.png" alt="image-20240220203605179"></p>
+<p>在代码仓库里面设置 <code>WebHook</code>，通过一些 CI 平台，在提交代码后，持续构建。</p>
+<p>通过部署代码仓库，定义 <code>yaml</code> 格式的 <code>spec</code>，将应用部署到平台，持续部署。</p>
+<h3 id="代码分支管理"><a href="#代码分支管理" class="headerlink" title="代码分支管理"></a>代码分支管理</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-36-37-image-20240220203637466.png" alt="image-20240220203637466"></p>
+<ul>
+<li><code>master</code>：主要开发分支</li>
+<li><code>feature</code>：开发分支，某个功能的分支。当功能完成，合并到 <code>master</code>，开始进行流水线，编译、测试等，通过之后，审核代码，通过之后，合并到 <code>master</code></li>
+<li><code>hotfix</code>：一些 <code>bug</code> 修复分支</li>
+<li><code>release-1.0</code>：发布正式版本时，避免版本变更，会从 <code>master</code> 上拉取一个分支，例如 <code>release-1.0</code>，<code>release-1.1</code> 的分支，拉取发布后，打 <code>tag</code>。版本不会一成不变，可能需要加一些功能，此时 <code>release</code> 分支和 <code>master</code> 分支并行开发，此时的开发过程是在 <code>feature</code> 分支开发完后，合并到 <code>master</code>，然后 <code>cherry-pick</code> 到 <code>release</code> 分支。</li>
+</ul>
+<h3 id="持续集成"><a href="#持续集成" class="headerlink" title="持续集成"></a>持续集成</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-37-07-image-20240220203707426.png" alt="image-20240220203707426"></p>
+<p>持续集成是在测试、合并、构建、镜像推送。</p>
+<h3 id="持续部署"><a href="#持续部署" class="headerlink" title="持续部署"></a>持续部署</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-37-25-image-20240220203725395.png" alt="image-20240220203725395"></p>
+<p>持续部署是在部署、线上测试、预生产、生产。</p>
+<h3 id="GitOps"><a href="#GitOps" class="headerlink" title="GitOps"></a>GitOps</h3><p>替代线上环境调试，通过 <code>Git</code> 修改源代码配置，触发持续部署，确保部署过程的健壮性。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-37-46-image-20240220203746264.png" alt="image-20240220203746264"></p>
+<h1 id="基于-GitHub-Action-的自动化流水线"><a href="#基于-GitHub-Action-的自动化流水线" class="headerlink" title="基于 GitHub Action 的自动化流水线"></a>基于 GitHub Action 的自动化流水线</h1><h2 id="基于公共-GitHub-的-action-构建流水线"><a href="#基于公共-GitHub-的-action-构建流水线" class="headerlink" title="基于公共 GitHub 的 action 构建流水线"></a>基于公共 GitHub 的 action 构建流水线</h2><ul>
+<li>低成本<ul>
+<li><code>GitHub</code> 目前为项目提供免费构建流水线，可满足日常构建需求</li>
+</ul>
+</li>
+<li>免运维<ul>
+<li>无需自己构建流水线（有现成的很多流水线），<code>GitHub</code> 提供小量构建请求（每天次数有限）</li>
+</ul>
+</li>
+<li>易构建<ul>
+<li><code>GitHub action</code> 非常容易构建，只需点击几次按钮，即可完成</li>
+<li><code>GitHub</code> 提供了一系列内建 <code>action</code>，社区有大量可复用的 <code>action</code></li>
+</ul>
+</li>
+<li>易集成<ul>
+<li>无需配置 <code>GitHub Webhook</code> 即可完成与 <code>PR</code> 的联动</li>
+</ul>
+</li>
+</ul>
+<h2 id="Action-的创建"><a href="#Action-的创建" class="headerlink" title="Action 的创建"></a>Action 的创建</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-42-03-image-20240220204203153.png" alt="image-20240220204203153"></p>
+<h2 id="Action-细节"><a href="#Action-细节" class="headerlink" title="Action 细节"></a>Action 细节</h2><p><code>xxx/.github/workflows/go.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Go</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span>	<span class="comment"># 触发条件</span></span><br><span class="line">  <span class="attr">pull_request:</span>  <span class="comment"># 动作</span></span><br><span class="line">    <span class="attr">branches:</span> [ <span class="string">master</span> ]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span> <span class="comment"># 构建环境</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v2</span> <span class="comment"># 动作，checkout 代码下来</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">up</span> <span class="string">Go</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">actions/setup-go@v2</span> <span class="comment"># 动作，安装 go</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">go-version:</span> <span class="number">1.17</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Build</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">go</span> <span class="string">build</span> <span class="string">-v</span> <span class="string">./...</span>		<span class="comment"># 动作，构建</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Test</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">go</span> <span class="string">test</span> <span class="string">-v</span> <span class="string">./...</span>  		<span class="comment"># 测试</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="基于-Jenkins-的自动化流水线"><a href="#基于-Jenkins-的自动化流水线" class="headerlink" title="基于 Jenkins 的自动化流水线"></a>基于 Jenkins 的自动化流水线</h1><p>私有环境，使用 <code>Jenkins</code>，没有 <code>action</code> 支持。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F17-17-23-continuous-delivery-pipeline.png" alt="continuous-delivery-pipeline"></p>
+<h2 id="Kubernetes-CI-amp-CD-完整流程"><a href="#Kubernetes-CI-amp-CD-完整流程" class="headerlink" title="Kubernetes CI&amp;CD 完整流程"></a>Kubernetes CI&amp;CD 完整流程</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-44-10-image-20240220204410232.png" alt="image-20240220204410232"></p>
+<h2 id="持续集成容器化"><a href="#持续集成容器化" class="headerlink" title="持续集成容器化"></a>持续集成容器化</h2><p>最主要解决的问题是保证 <code>CI</code> 构建环境和开发构建环境的统一。</p>
+<p>使用容器作为标准的构建环境，将代码库作为 <code>Volume</code> 挂载进构建容器。</p>
+<p>由于构建结果是 <code>Docker</code> 镜像，所以要在构建容器中执行 <code>docker build</code> 命令，需要注意 <code>DIND</code> 的问题。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-47-18-image-20240220204718387.png" alt="image-20240220204718387"></p>
+<h2 id="基于-Kubernetes-的持续集成"><a href="#基于-Kubernetes-的持续集成" class="headerlink" title="基于 Kubernetes 的持续集成"></a>基于 Kubernetes 的持续集成</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F20-48-12-image-20240220204812544.png" alt="image-20240220204812544"></p>
+<p>Jenkins 上可以通过插件的形式支持 Kubernetes。</p>
+<h2 id="Docker-in-Docker-问题展开"><a href="#Docker-in-Docker-问题展开" class="headerlink" title="Docker in Docker 问题展开"></a>Docker in Docker 问题展开</h2><p>当 Jenkins 在 Docker 中时，需要操作 Docker 实现构建和测试。</p>
+<h3 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h3><p><code>docker in docker </code>：在 Docker 做一层 Docker</p>
+<p>早期尝试：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2pwZXRhenpvL2RpbmQ=">https://github.com/jpetazzo/dind<i class="fa fa-external-link-alt"></i></span> (archived)</p>
+<p>官方支持：<span class="exturl" data-url="aHR0cHM6Ly9odWIuZG9ja2VyLmNvbS9fL2RvY2tlci8=">https://hub.docker.com/_/docker/<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker run --privileged --name some-docker -d \</span></span><br><span class="line"><span class="language-bash">	--network some-network --network-alias docker \</span></span><br><span class="line"><span class="language-bash">	-e DOCKER_TLS_CERTDIR=/certs \</span></span><br><span class="line"><span class="language-bash">	-v some-docker-certs-ca:/certs/ca \</span></span><br><span class="line"><span class="language-bash">	-v some-docker-certs-client:/certs/client \</span></span><br><span class="line"><span class="language-bash">	docker:dind</span></span><br></pre></td></tr></table></figure>
+
+<p>可能引入的问题：<span class="exturl" data-url="aHR0cHM6Ly9qcGV0YXp6by5naXRodWIuaW8vMjAxNS8wOS8wMy9kby1ub3QtdXNlLWRvY2tlci1pbi1kb2NrZXItZm9yLWNpLw==">https://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/<i class="fa fa-external-link-alt"></i></span></p>
+<blockquote>
+<p>Long story short: if your use case <em>really absolutely</em> mandates Docker-in-Docker, have a look at <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25lc3R5Ym94L3N5c2JveA==">sysbox<i class="fa fa-external-link-alt"></i></span>, it might be what you need.</p>
+</blockquote>
+<h3 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h3><p><code>mount host docker.socket</code>：将主机的 Docker <code>socket</code> <code>mount</code> 到容器中。</p>
+<p><code>docker run -v /var/run/docker.socket:/var/run/docker.sock</code></p>
+<p>但是这样会有风险，相当于一些不利的操作会影响主机的 Docker。</p>
+<h3 id="方法3"><a href="#方法3" class="headerlink" title="方法3"></a>方法3</h3><p><code>Kaniko</code>：谷歌主导的，在 Tokton 里面使用的非常广泛</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0dvb2dsZUNvbnRhaW5lclRvb2xzL2thbmlrbw==">https://github.com/GoogleContainerTools/kaniko<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> -e <span class="string">&#x27;FROM alpine \nRUN echo &quot;created from standard input&quot;&#x27;</span> &gt; Dockerfile | tar -cf - Dockerfile | gzip -9 | docker run \</span><br><span class="line">  --interactive -v $(<span class="built_in">pwd</span>):/workspace gcr.io/kaniko-project/executor:latest \</span><br><span class="line">  --context tar://stdin \</span><br><span class="line">  --destination=&lt;gcr.io/<span class="variable">$project</span>/<span class="variable">$image</span>:<span class="variable">$tag</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建基于-Kubernetes-的-Jenkins-Pipeline"><a href="#构建基于-Kubernetes-的-Jenkins-Pipeline" class="headerlink" title="构建基于 Kubernetes 的 Jenkins Pipeline"></a>构建基于 Kubernetes 的 Jenkins Pipeline</h2><p><code>sa.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Role</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">&quot;pods&quot;</span>]</span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">&quot;create&quot;</span>,<span class="string">&quot;delete&quot;</span>,<span class="string">&quot;get&quot;</span>,<span class="string">&quot;list&quot;</span>,<span class="string">&quot;patch&quot;</span>,<span class="string">&quot;update&quot;</span>,<span class="string">&quot;watch&quot;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">&quot;pods/exec&quot;</span>]</span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">&quot;create&quot;</span>,<span class="string">&quot;delete&quot;</span>,<span class="string">&quot;get&quot;</span>,<span class="string">&quot;list&quot;</span>,<span class="string">&quot;patch&quot;</span>,<span class="string">&quot;update&quot;</span>,<span class="string">&quot;watch&quot;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">&quot;pods/log&quot;</span>]</span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>,<span class="string">&quot;list&quot;</span>,<span class="string">&quot;watch&quot;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">&quot;events&quot;</span>]</span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">&quot;watch&quot;</span>]</span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">  <span class="attr">resources:</span> [<span class="string">&quot;secrets&quot;</span>]</span><br><span class="line">  <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>]</span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">RoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">Role</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br></pre></td></tr></table></figure>
+
+<p><code>jenkins.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StatefulSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">serviceName:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">terminationGracePeriodSeconds:</span> <span class="number">10</span></span><br><span class="line">      <span class="attr">serviceAccountName:</span> <span class="string">jenkins</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">jenkins/jenkins:lts-alpine</span></span><br><span class="line">          <span class="attr">ports:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">8080</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">50000</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">jenkins</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">targetPort:</span> <span class="number">8080</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">agent</span></span><br><span class="line">      <span class="attr">port:</span> <span class="number">50000</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br></pre></td></tr></table></figure>
+
+<p>安装，在 <code>default</code>  的 <code>ns</code> 中安装</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f sa.yaml</span><br><span class="line">kubectl create -f jenkins.yaml</span><br></pre></td></tr></table></figure>
+
+<p>查看管理员密码</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl logs -f jenkins-0</span><br></pre></td></tr></table></figure>
+
+<p>登录，并初始化</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F17-32-45-image-20240221173245802.png" alt="image-20240221173245802"></p>
+<p>安装 <code>plugin</code></p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F21%2F17-34-18-image-20240221173418681.png" alt="image-20240221173418681"></p>
+<p>等待安装完成。</p>
+<p>生产环境安装步骤：</p>
+<ol>
+<li>Image 准备：基于 Jenkins 官方 Image 安装自定义插件<ol>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2plbmtpbnNjaS9rdWJlcm5ldGVzLXBsdWdpbg==">https://github.com/jenkinsci/kubernetes-plugin<i class="fa fa-external-link-alt"></i></span><ol>
+<li>默认安装 Kubernetes <code>plugin</code></li>
+</ol>
+</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2plbmtpbnNjaS9kb2NrZXItaW5ib3VuZC1hZ2VudA==">https://github.com/jenkinsci/docker-inbound-agent<i class="fa fa-external-link-alt"></i></span> （archived）<ol>
+<li>如果需要做 <code>docker build</code>，则需要自定义 <code>Dockerfile</code>，安装 <code>docker binary</code>，并且把 <code>host</code> 的 <code>docker.socket</code> <code>mount</code> 进 <code>container</code></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Jenkins 配置的保存<ol>
+<li>需要创建 <code>PVC</code>，以便保证在 Jenkins <code>master pod</code> 出错时，新的 Kubernetes <code>pod</code> 可以 <code>mount</code> 同样的工作目录，保证配置不丢失</li>
+<li>可以通过 <code>Jenkins scm plugin</code> 把 <code>Jenkins</code> 配置保存至 <code>GitHub</code></li>
+</ol>
+</li>
+<li>创建 Kubernetes <code>spec</code></li>
+</ol>
+<h3 id="Jenkins-的配置"><a href="#Jenkins-的配置" class="headerlink" title="Jenkins 的配置"></a>Jenkins 的配置</h3><p><code>Cloud provider</code> 配置</p>
+<ul>
+<li><p>在 Jenkins System Config 选择点击 Cloud，并选择 Kubernetes </p>
+</li>
+<li><p>创建 Kubernetes ServiceAccount，并在 Kubernetes 对应的 namespace 授予 namespace admin 权限</p>
+</li>
+<li><p>指定 Jenkins slave 的 image</p>
+</li>
+<li><p>按需指定 volume mount，如需在 slave container 内部执行 docker 命令，则需要 mount &#x2F;var&#x2F;run&#x2F;docker.socket</p>
+</li>
+</ul>
+<h3 id="创建-Jenkins-Job"><a href="#创建-Jenkins-Job" class="headerlink" title="创建 Jenkins Job"></a>创建 Jenkins Job</h3><ul>
+<li>Git Integration <ul>
+<li>Jenkins webhook on GitHub</li>
+<li>Git review &#x2F;merge Bot</li>
+</ul>
+</li>
+<li>Build Job <ul>
+<li>Git clone code </li>
+<li>Build binary </li>
+<li>Build Docker image </li>
+<li>Push Docker image to hub</li>
+</ul>
+</li>
+<li>Testing<ul>
+<li>UT &#x2F;UT Coverage</li>
+<li>E2E<ul>
+<li>Conformance</li>
+<li>Conformance Slow</li>
+</ul>
+</li>
+<li>LnP</li>
+</ul>
+</li>
+</ul>
+<h3 id="安装-Kubernetes-插件"><a href="#安装-Kubernetes-插件" class="headerlink" title="安装 Kubernetes 插件"></a>安装 Kubernetes 插件</h3><p>如上图</p>
+<ul>
+<li>菜单 Mange Jenkins -&gt; Manage Plugins -&gt; Available</li>
+<li>查找并安装 Kubernetes <ul>
+<li>选择 Kubernetes，点击 install without restart</li>
+</ul>
+</li>
+<li>等待安装完成</li>
+</ul>
+<h3 id="配置-Cloud-Provider"><a href="#配置-Cloud-Provider" class="headerlink" title="配置 Cloud Provider"></a>配置 Cloud Provider</h3><p>这个过程相当于配置一个 <code>pod</code></p>
+<ul>
+<li><p>菜单 Manage Jenkins -&gt; Manage Node and Cloud -&gt; Configure Cloud</p>
+</li>
+<li><p>Add a new cloud：<code>Kubernetes</code></p>
+<ul>
+<li><p>Kubernetes URL: <code>https://kubernetes.default</code></p>
+</li>
+<li><p>Kubernetes Namespace: <code>default</code></p>
+<img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-27-35-image-20240221202735345.png" alt="image-20240221202735345" style="zoom:50%;" />
+
+<p>新版本镜像不用指定凭证。</p>
+</li>
+<li><p>Test connection</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F21-28-05-image-20240221212805080.png" alt="image-20240221212805080"></p>
+</li>
+<li><p>Jenkins URL: <code>http://jenkins</code></p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-29-34-image-20240221202934729.png" alt="image-20240221202934729"></p>
+</li>
+</ul>
+</li>
+<li><p>PodTemplate</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-29-49-image-20240221202949790.png" alt="image-20240221202949790"></p>
+<ul>
+<li><p>Add Container &#x2F;&#x2F; 新版本 Jenkins 会默认用社区镜像启动 <code>jnlp slave</code>（官方提供），可以通过定义同名容器覆盖</p>
+<ul>
+<li><p>Name: <code>jnlp</code></p>
+</li>
+<li><p>Namespace: <code>default</code></p>
+</li>
+<li><p>Labels: <code>jnlp-slave</code></p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-31-05-image-20240221203105548.png" alt="image-20240221203105548"></p>
+</li>
+<li><p>Name: <code>jnlp</code></p>
+</li>
+<li><p>Image: <code>jenkins/inbound-agent</code></p>
+</li>
+<li><p>Command: “”</p>
+</li>
+<li><p>Arguments to pass to the command: ${computer.jnlpmac} ${computer.name}</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-35-00-image-20240221203500129.png" alt="image-20240221203500129"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>save</p>
+</li>
+</ul>
+<h3 id="Create-a-Job-and-test"><a href="#Create-a-Job-and-test" class="headerlink" title="Create a Job and test"></a>Create a Job and test</h3><ul>
+<li><p>Dashboard -&gt; Create Item -&gt; Freestyle project</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-36-14-image-20240221203613978.png" alt="image-20240221203613978"></p>
+</li>
+<li><p>Restrict where this project can be run </p>
+<ul>
+<li><p>Label Expression: <code>jnlp-slave</code></p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-37-02-image-20240221203702064.png" alt="image-20240221203702064"></p>
+</li>
+</ul>
+</li>
+<li><p>Build Steps-&gt; Add build step -&gt; Execute shell</p>
+<ul>
+<li><p><code>echo hello world.</code></p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F20-37-56-image-20240221203755950.png" alt="image-20240221203755950"></p>
+</li>
+</ul>
+</li>
+<li><p>Build Now</p>
+</li>
+<li><p>查看 jenkins slave pod:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment"># kubectl get pod -n default -w</span></span><br><span class="line">  NAME        READY   STATUS    RESTARTS   AGE</span><br><span class="line">  jenkins-0   1/1     Running   0          15m</span><br><span class="line">  </span><br><span class="line">  jnlp-1lfzc   0/1     Pending   0          0s</span><br><span class="line">  jnlp-1lfzc   0/1     Pending   0          0s</span><br><span class="line">  jnlp-1lfzc   0/1     ContainerCreating   0          0s</span><br><span class="line">  jnlp-1lfzc   0/1     ContainerCreating   0          1s</span><br><span class="line">  jnlp-1lfzc   1/1     Running             0          2s</span><br><span class="line">  jnlp-1lfzc   1/1     Terminating         0          8s</span><br><span class="line">  jnlp-1lfzc   1/1     Terminating         0          9s</span><br><span class="line">  jnlp-1lfzc   0/1     Terminating         0          9s</span><br><span class="line">  jnlp-1lfzc   0/1     Terminating         0          10s</span><br><span class="line">  </span><br><span class="line">* 查看 job <span class="built_in">log</span></span><br><span class="line"></span><br><span class="line">  ```sh</span><br><span class="line">  Building remotely on jnlp-c7xtm (jnlp-slave) <span class="keyword">in</span> workspace /home/jenkins/agent/workspace/test</span><br><span class="line">  [<span class="built_in">test</span>] $ /bin/sh -xe /tmp/jenkins2725200252626615934.sh</span><br><span class="line">  + <span class="built_in">echo</span> hello world.</span><br><span class="line">  hello world.</span><br><span class="line">  Finished: SUCCESS</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="Tokton"><a href="#Tokton" class="headerlink" title="Tokton"></a>Tokton</h1><p><span class="exturl" data-url="aHR0cHM6Ly90ZWt0b24uZGV2Lw==">https://tekton.dev/<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="Jenkins-的不足"><a href="#Jenkins-的不足" class="headerlink" title="Jenkins 的不足"></a>Jenkins 的不足</h2><ul>
+<li>基于脚本的 <code>Job</code> 配置复用率不足，而且 <code>slave</code> 个数有限制<ul>
+<li>Jenkins 等工具的流水线作用通常基于大量不可复用的脚本语言，如何提高代码复用率</li>
+</ul>
+</li>
+<li>代码调用困难，几千条代码调试也麻烦<ul>
+<li>如何让流水线作业的配置更好地适应云原生场景的需求越来越急迫</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于声明式-API-的流水线-Tekton"><a href="#基于声明式-API-的流水线-Tekton" class="headerlink" title="基于声明式 API 的流水线 - Tekton"></a>基于声明式 API 的流水线 - Tekton</h2><p>面向云原生对象</p>
+<ul>
+<li><p>自定义</p>
+<p>Tekton 对象是高度自定义的，可扩展性极强。平台工程师可预定义可重用模块以详细的模块目录提供，开发人员可在其他项目中直接引用。</p>
+</li>
+<li><p>可重用</p>
+<p>Tekton 对象的可重用性强，组件只需一次定义，即可被组织内的任何人在任何流水线都可重用。使得开发人员无需重复造轮子即可构建复杂流水线。例如 <code>task</code> 和 <code>cluster task</code>，相互引用。</p>
+</li>
+<li><p>可扩展性</p>
+<p>Tekton 组件目录（<code>Tekton Catalog</code>）是一个社区驱动的 Tekton 组件的存储仓库。任何用户可以直接从社区获取成熟的组件并在此之上构建复杂流水线，也就是当你要构建一个流水线时，很可能你需要的所有代码和配置都可以从 <code>Tekton Catalog</code> 直接拿下来复用，而无需重复开发。</p>
+</li>
+<li><p>标准化</p>
+<p>Tekton 作为 Kubernetes 集群的扩展安装和运行，并使用业界公认的 Kubernetes 资源模型；Tekton 作业以 Kubernetes 容器形态执行</p>
+</li>
+<li><p><strong>规模化支持</strong></p>
+<p>只需增加 Kubernetes 节点，即可增加作业处理能力。Tokton 的能力可依照集群规模随意扩充，无需重新定义资源分配需求或者重新定义流水线。</p>
+</li>
+</ul>
+<h2 id="Tekton-核心组件"><a href="#Tekton-核心组件" class="headerlink" title="Tekton 核心组件"></a>Tekton 核心组件</h2><p><code>Pipeline</code>：对象定义了一个流水线作业，一个 <code>Pipeline</code> 对象由一个或数个 <code>Task</code> 对象组成。</p>
+<p><code>Task</code>：一个可独立运行的任务，如获取代码，编译，或者推送镜像等等，当流水线被运行时，Kubernetes 会为每个 <code>Task</code> 创建一个 <code>Pod</code>。一个 <code>Task</code> 由多个 <code>Step</code> 组成，每个 <code>Step</code> 体现为这个 <code>Pod</code> 中的一个容器。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-23-00-image-20240220212300714.png" alt="image-20240220212300714"></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// tekton 核心组件 </span><br><span class="line">kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml</span><br><span class="line">// 拦截器，处理任务相关</span><br><span class="line">kubectl apply --filename https://storage.googleapis.com/tekton-releases/triggers/latest/interceptors.yaml</span><br><span class="line">// 图形化界面</span><br><span class="line">kubectl apply --filename https://github.com/tektoncd/dashboard/releases/latest/download/tekton-dashboard-release.yaml</span><br></pre></td></tr></table></figure>
+
+<p>镜像如果下载不下来，则将镜像源地址从 <code>gcr.io</code> 改成 <code>gcr.lank8s.cn</code>，亲测可用</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl get pod</span></span><br><span class="line">NAME                                                 READY   STATUS    RESTARTS   AGE</span><br><span class="line">tekton-dashboard-86c6648645-r5g2f                    1/1     Running   0          31m</span><br><span class="line">tekton-pipelines-controller-64ff7988b9-67z7p         1/1     Running   0          8m38s</span><br><span class="line">tekton-pipelines-webhook-649f984b56-9pggv            1/1     Running   0          35s</span><br><span class="line">tekton-triggers-controller-55b798d9d5-jzrzz          1/1     Running   0          31m</span><br><span class="line">tekton-triggers-core-interceptors-686fb786c4-ddbbh   1/1     Running   0          31m</span><br><span class="line">tekton-triggers-webhook-5598c9d777-sj692             1/1     Running   0          31m</span><br><span class="line"><span class="comment"># kubectl get svc</span></span><br><span class="line">NAME                                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                              AGE</span><br><span class="line">tekton-dashboard                    ClusterIP   10.1.144.143   &lt;none&gt;        9097/TCP                             68m</span><br><span class="line">tekton-pipelines-controller         ClusterIP   10.1.73.121    &lt;none&gt;        9090/TCP,8080/TCP                    68m</span><br><span class="line">tekton-pipelines-webhook            ClusterIP   10.1.203.234   &lt;none&gt;        9090/TCP,8008/TCP,443/TCP,8080/TCP   68m</span><br><span class="line">tekton-triggers-controller          ClusterIP   10.1.26.3      &lt;none&gt;        9000/TCP                             68m</span><br><span class="line">tekton-triggers-core-interceptors   ClusterIP   10.1.245.52    &lt;none&gt;        80/TCP                               68m</span><br><span class="line">tekton-triggers-webhook             ClusterIP   10.1.201.219   &lt;none&gt;        443/TCP                              68m</span><br></pre></td></tr></table></figure>
+
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>一些 <code>crd</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl get crd | grep tekton</span></span><br><span class="line">clusterinterceptors.triggers.tekton.dev               2024-02-22T03:22:19Z</span><br><span class="line">clustertasks.tekton.dev                               2024-02-22T03:22:18Z</span><br><span class="line">clustertriggerbindings.triggers.tekton.dev            2024-02-22T03:22:19Z</span><br><span class="line">conditions.tekton.dev                                 2024-02-22T03:22:18Z</span><br><span class="line">eventlisteners.triggers.tekton.dev                    2024-02-22T03:22:19Z</span><br><span class="line">extensions.dashboard.tekton.dev                       2024-02-22T03:22:17Z</span><br><span class="line">pipelineresources.tekton.dev                          2024-02-22T03:22:18Z</span><br><span class="line">pipelineruns.tekton.dev                               2024-02-22T03:22:18Z</span><br><span class="line">pipelines.tekton.dev                                  2024-02-22T03:22:18Z</span><br><span class="line">runs.tekton.dev                                       2024-02-22T03:22:18Z</span><br><span class="line">taskruns.tekton.dev                                   2024-02-22T03:22:18Z</span><br><span class="line">tasks.tekton.dev                                      2024-02-22T03:22:18Z</span><br><span class="line">triggerbindings.triggers.tekton.dev                   2024-02-22T03:22:19Z</span><br><span class="line">triggers.triggers.tekton.dev                          2024-02-22T03:22:19Z</span><br><span class="line">triggertemplates.triggers.tekton.dev                  2024-02-22T03:22:19Z</span><br></pre></td></tr></table></figure>
+
+<p><code>taskrun-hello.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">tekton.dev/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">TaskRun</span>  <span class="comment"># Task 的输入</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">generateName:</span> <span class="string">hello-run-</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">taskRef:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">hello</span>  <span class="comment"># 指定 task</span></span><br><span class="line">  <span class="attr">params:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&quot;username&quot;</span>  <span class="comment"># 入参</span></span><br><span class="line">    <span class="attr">value:</span> <span class="string">&quot;jesse&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>task-hello.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">tekton.dev/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Task</span>		<span class="comment"># Task 拉取镜像，执行命令</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">hello</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">hello</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ubuntu</span></span><br><span class="line">      <span class="attr">command:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">echo</span></span><br><span class="line">      <span class="attr">args:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">&quot;Hello $(params.username)!&quot;</span></span><br><span class="line">  <span class="attr">params:</span> <span class="comment"># 参数</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">username</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">string</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 创建 task</span><br><span class="line"># kubectl create -f task-hello.yaml</span><br><span class="line"># kubectl get task</span><br><span class="line">NAME    AGE</span><br><span class="line">hello   10s</span><br><span class="line"></span><br><span class="line"># 执行task，创建 taskrun</span><br><span class="line"># kubectl create -f taskrun-hello.yaml</span><br><span class="line"># kubectl get pod</span><br><span class="line">NAME                                                 READY   STATUS     RESTARTS   AGE</span><br><span class="line">hello-run-r69nz-pod-86btx                            0/1     Init:0/1   0          6s</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl describe pod hello-run-r69nz-pod-86btx</span></span><br><span class="line"><span class="attr">Controlled By:</span>    <span class="string">TaskRun/hello-run-r69nz</span></span><br><span class="line"><span class="attr">Init Containers:</span> <span class="comment"># 用户解析命令，将命令传递给 Containers</span></span><br><span class="line">  <span class="attr">place-tools:</span></span><br><span class="line">    <span class="attr">Container ID:</span></span><br><span class="line">    <span class="attr">Image:</span>         <span class="string">gcr.lank8s.cn/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.27.2@sha256:22880cbc450a6d4aab4fd67e94d25d89b2c719a5a9780bb612b7a72b7f180086</span></span><br><span class="line">    <span class="attr">Image ID:</span></span><br><span class="line">    <span class="attr">Port:</span>          <span class="string">&lt;none&gt;</span></span><br><span class="line">    <span class="attr">Host Port:</span>     <span class="string">&lt;none&gt;</span></span><br><span class="line">    <span class="attr">Command:</span></span><br><span class="line">      <span class="string">/ko-app/entrypoint</span></span><br><span class="line">      <span class="string">cp</span></span><br><span class="line">      <span class="string">/ko-app/entrypoint</span></span><br><span class="line">      <span class="string">/tekton/tools/entrypoint</span></span><br><span class="line">    <span class="attr">State:</span>          <span class="string">Waiting</span></span><br><span class="line">      <span class="attr">Reason:</span>       <span class="string">PodInitializing</span></span><br><span class="line">    <span class="attr">Ready:</span>          <span class="literal">False</span></span><br><span class="line">    <span class="attr">Restart Count:</span>  <span class="number">0</span></span><br><span class="line">    <span class="attr">Environment:</span>    <span class="string">&lt;none&gt;</span></span><br><span class="line">    <span class="attr">Mounts:</span></span><br><span class="line">      <span class="string">/tekton/tools</span> <span class="string">from</span> <span class="string">tekton-internal-tools</span> <span class="string">(rw)</span></span><br><span class="line">      <span class="string">/var/run/secrets/kubernetes.io/serviceaccount</span> <span class="string">from</span> <span class="string">kube-api-access-87p88</span> <span class="string">(ro)</span></span><br><span class="line"><span class="attr">Containers:</span> <span class="comment"># 用于执行命令</span></span><br><span class="line">  <span class="attr">step-hello:</span></span><br><span class="line">    <span class="attr">Container ID:</span></span><br><span class="line">    <span class="attr">Image:</span>         <span class="string">ubuntu</span></span><br><span class="line">    <span class="attr">Image ID:</span></span><br><span class="line">    <span class="attr">Port:</span>          <span class="string">&lt;none&gt;</span></span><br><span class="line">    <span class="attr">Host Port:</span>     <span class="string">&lt;none&gt;</span></span><br><span class="line">    <span class="attr">Command:</span></span><br><span class="line">      <span class="string">/tekton/tools/entrypoint</span></span><br><span class="line">    <span class="attr">Args:</span></span><br><span class="line">      <span class="string">-wait_file</span></span><br><span class="line">      <span class="string">/tekton/downward/ready</span></span><br><span class="line">      <span class="string">-wait_file_content</span></span><br><span class="line">      <span class="string">-post_file</span></span><br><span class="line">      <span class="string">/tekton/tools/0</span></span><br><span class="line">      <span class="string">-termination_path</span></span><br><span class="line">      <span class="string">/tekton/termination</span></span><br><span class="line">      <span class="string">-step_metadata_dir</span></span><br><span class="line">      <span class="string">/tekton/steps/step-hello</span></span><br><span class="line">      <span class="string">-step_metadata_dir_link</span></span><br><span class="line">      <span class="string">/tekton/steps/0</span></span><br><span class="line">      <span class="string">-entrypoint</span></span><br><span class="line">      <span class="string">echo</span></span><br><span class="line">      <span class="string">--</span></span><br><span class="line">      <span class="string">Hello</span> <span class="string">jesse!</span></span><br><span class="line">    <span class="attr">State:</span>          <span class="string">Waiting</span></span><br><span class="line">      <span class="attr">Reason:</span>       <span class="string">PodInitializing</span></span><br><span class="line">    <span class="attr">Ready:</span>          <span class="literal">False</span></span><br><span class="line">    <span class="attr">Restart Count:</span>  <span class="number">0</span></span><br><span class="line">    <span class="attr">Requests:</span></span><br><span class="line">      <span class="attr">cpu:</span>                <span class="number">0</span></span><br><span class="line">      <span class="attr">ephemeral-storage:</span>  <span class="number">0</span></span><br><span class="line">      <span class="attr">memory:</span>             <span class="number">0</span></span><br><span class="line">    <span class="attr">Environment:</span>          <span class="string">&lt;none&gt;</span></span><br><span class="line">    <span class="attr">Mounts:</span></span><br><span class="line">      <span class="string">/tekton/creds</span> <span class="string">from</span> <span class="string">tekton-creds-init-home-0</span> <span class="string">(rw)</span></span><br><span class="line">      <span class="string">/tekton/downward</span> <span class="string">from</span> <span class="string">tekton-internal-downward</span> <span class="string">(rw)</span></span><br><span class="line">      <span class="string">/tekton/home</span> <span class="string">from</span> <span class="string">tekton-internal-home</span> <span class="string">(rw)</span></span><br><span class="line">      <span class="string">/tekton/results</span> <span class="string">from</span> <span class="string">tekton-internal-results</span> <span class="string">(rw)</span></span><br><span class="line">      <span class="string">/tekton/steps</span> <span class="string">from</span> <span class="string">tekton-internal-steps</span> <span class="string">(rw)</span></span><br><span class="line">      <span class="string">/tekton/tools</span> <span class="string">from</span> <span class="string">tekton-internal-tools</span> <span class="string">(rw)</span></span><br><span class="line">      <span class="string">/var/run/secrets/kubernetes.io/serviceaccount</span> <span class="string">from</span> <span class="string">kube-api-access-87p88</span> <span class="string">(ro)</span></span><br><span class="line">      <span class="string">/workspace</span> <span class="string">from</span> <span class="string">tekton-internal-workspace</span> <span class="string">(rw)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="输入输出资源"><a href="#输入输出资源" class="headerlink" title="输入输出资源"></a>输入输出资源</h2><p><code>Pipeline</code> 和 <code>Task</code> 对象可以接收 <code>git reposity</code>，<code>pull request</code> 等资源作为输入，可以将 <code>Image</code>，Kubernetes <code>Cluster</code>，<code>Storage</code>，<code>CloudEvent</code> 等对象作为输出。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-24-21-image-20240220212420968.png" alt="image-20240220212420968"></p>
+<h2 id="事件触发的自动化流水线"><a href="#事件触发的自动化流水线" class="headerlink" title="事件触发的自动化流水线"></a>事件触发的自动化流水线</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-24-47-image-20240220212447107.png" alt="image-20240220212447107"></p>
+<h2 id="EventListener"><a href="#EventListener" class="headerlink" title="EventListener"></a>EventListener</h2><p>EventListener：</p>
+<p>事件监听器，该对象核心属性是 <code>interceptors</code> 拦截器，该拦截器可监听多种类型的事件，比如监听来自 GitLab 的 <code>Push</code> 事件。</p>
+<p>当该 <code>EventListener</code> 对象被创建以后，Tekton 控制器会为该 <code>EventListener</code> 创建 Kubernetes <code>Pod</code> 和 <code>Service</code>，并启动一个 <code>HTTP</code> 服务以监听 <code>Push</code> 事件。</p>
+<p>当用户在 <code>GitHub</code> 项目中设置 <code>webhook</code> 并填写该 <code>EventListener</code> 的服务地址以后，任何人针对被管理项目发起的 <code>Push</code> 操作，都会被 <code>EventListener</code> 捕获。</p>
+<h2 id="EventListener-1"><a href="#EventListener-1" class="headerlink" title="EventListener"></a>EventListener</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">triggers.tekton.dev/v1alpha1</span> </span><br><span class="line"><span class="attr">kind:</span> <span class="string">EventListener</span> </span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">gitlab-listener</span></span><br><span class="line"><span class="attr">spec:</span> </span><br><span class="line">  <span class="attr">serviceAccountName:</span> <span class="string">xxx-gitlab-sa</span></span><br><span class="line">  <span class="attr">triggers:</span> </span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gitlab-push-events-trigger</span> </span><br><span class="line">    <span class="attr">interceptors:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">ref:</span> </span><br><span class="line">        <span class="attr">name:</span> <span class="string">gitlab</span> </span><br><span class="line">      <span class="attr">params:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">secretRef</span></span><br><span class="line">        <span class="attr">value:</span> </span><br><span class="line">          <span class="attr">secretName:</span> <span class="string">xxx-gitlab-secret</span> </span><br><span class="line">          <span class="attr">secretKey:</span> <span class="string">secretToken</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">eventTypes</span> </span><br><span class="line">        <span class="attr">value:</span> </span><br><span class="line">          <span class="bullet">-</span> <span class="string">Push</span> <span class="string">Hook</span></span><br><span class="line">    <span class="attr">bindings:</span> </span><br><span class="line">    <span class="bullet">-</span> <span class="attr">ref:</span> <span class="string">gitlab-binding</span> </span><br><span class="line">    <span class="attr">template:</span> </span><br><span class="line">      <span class="attr">ref:</span> <span class="string">gitlab-triggertemplate</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="TriggerTemplate"><a href="#TriggerTemplate" class="headerlink" title="TriggerTemplate"></a>TriggerTemplate</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">triggers.tekton.dev/v1alpha1</span> </span><br><span class="line"><span class="attr">kind:</span> <span class="string">TriggerTemplate</span> </span><br><span class="line"><span class="attr">metadata:</span> </span><br><span class="line">  <span class="attr">name:</span> <span class="string">gitlab-triggertemplate</span> </span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">params:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gitrevision</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">gitrepositoryurl</span></span><br><span class="line">  <span class="attr">resourcetemplates:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">PipelineRun</span></span><br><span class="line">      <span class="attr">apiVersion:</span> <span class="string">tekton.dev/v1beta1</span></span><br><span class="line">      <span class="attr">metadata:</span></span><br><span class="line">        <span class="attr">generateName:</span> <span class="string">gitlab-pipeline-run-</span></span><br><span class="line">      <span class="attr">spec:</span> </span><br><span class="line">        <span class="attr">serviceAccountName:</span> <span class="string">xxx-gitlab-sa</span></span><br><span class="line">        <span class="attr">pipelineSpec:</span></span><br><span class="line">          <span class="attr">tasks:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">checkout</span></span><br><span class="line">            <span class="attr">taskRef:</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">gitlab-checkout</span></span><br><span class="line">            <span class="attr">resources:</span></span><br><span class="line">              <span class="attr">inputs:</span></span><br><span class="line">              <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">source</span></span><br><span class="line">                <span class="attr">resource:</span> <span class="string">source</span></span><br><span class="line">          <span class="attr">resources:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">source</span></span><br><span class="line">            <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">        <span class="attr">resources:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">source</span></span><br><span class="line">          <span class="attr">resourceSpec:</span></span><br><span class="line">            <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">            <span class="attr">params:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">revision</span></span><br><span class="line">              <span class="attr">value:</span> <span class="string">$(tt.params.gitrevision)</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">url</span></span><br><span class="line">              <span class="attr">value:</span> <span class="string">$(tt.params.gitrepositoryurl)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="GitLab-Webhook"><a href="#GitLab-Webhook" class="headerlink" title="GitLab Webhook"></a>GitLab Webhook</h2><p>只需在 GitLab 中的被管理项目中设置一个 Webhook，以确保该项目中的事件通知会发送至 EventListener 的服务地址即可。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-29-01-image-20240220212901391.png" alt="image-20240220212901391"></p>
+<h1 id="Argo-CD"><a href="#Argo-CD" class="headerlink" title="Argo CD"></a>Argo CD</h1><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FyZ29wcm9qL2FyZ28tY2Q=">https://github.com/argoproj/argo-cd<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9hcmdvLWNkLnJlYWR0aGVkb2NzLmlvL2VuL3N0YWJsZS8=">https://argo-cd.readthedocs.io/en/stable/<i class="fa fa-external-link-alt"></i></span></p>
+<p>Argo CD 是用于 Kubernetes 的声明性 GitOps 连续交付工具。</p>
+<p>选择 Argo CD 的理由：</p>
+<ul>
+<li>应用程序定义，配置和环境应为声明性的，并受版本控制</li>
+<li>应用程序部署和生命周期管理应该是自动化的，可审核的且易于理解的</li>
+</ul>
+<h2 id="argo-cd-架构"><a href="#argo-cd-架构" class="headerlink" title="argo cd 架构"></a>argo cd 架构</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F21-31-08-image-20240220213108130.png" alt="image-20240220213108130"></p>
+<ul>
+<li>Argo CD 被实现为 Kubernetes 控制器，该控制器连续监视正在运行的应用程序，并将当前的活动状态与所需的目标状态（在 Git 存储库中指定）进行比较</li>
+<li>其活动状态偏离目标状态的已部署应用程序被标记为 <code>OutOfSync</code></li>
+<li>Argo CD 报告并可视化差异，同时提供了自动或手动将实时状态同步回所需目标状态的功能</li>
+<li>在 Git 存储库中对所需目标状态所做的任何修改都可以自动应用并反映在指定的目标环境中。</li>
+</ul>
+<h2 id="安装-argocd"><a href="#安装-argocd" class="headerlink" title="安装 argocd"></a>安装 argocd</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create namespace argocd</span><br><span class="line">kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml</span><br></pre></td></tr></table></figure>
+
+<p>确保 <code>argocd-service service</code> 类型为 <code>NodePort</code></p>
+<p>访问 <code>argocd</code> 控制台</p>
+<p>用户名：<code>admin</code></p>
+<p>密码 <code>kubectl get secret -n argocd argocd-initial-admin-secret -o yaml</code></p>
+<h2 id="Argued-的适用场景"><a href="#Argued-的适用场景" class="headerlink" title="Argued 的适用场景"></a>Argued 的适用场景</h2><ol>
+<li>低成本的 <code>Gitops</code> 利器</li>
+<li>多集群管理<ol>
+<li>不同目的集群：测试，集成，预生产，生产</li>
+<li>多生产集群管理</li>
+</ol>
+</li>
+</ol>
+<h1 id="监控和日志"><a href="#监控和日志" class="headerlink" title="监控和日志"></a>监控和日志</h1><h2 id="数据系统构建"><a href="#数据系统构建" class="headerlink" title="数据系统构建"></a>数据系统构建</h2><ul>
+<li>日志收集与分析</li>
+<li>监控系统构建</li>
+</ul>
+<h2 id="日志系统的价值"><a href="#日志系统的价值" class="headerlink" title="日志系统的价值"></a>日志系统的价值</h2><ul>
+<li>分布式系统的日志查看比较复杂，因为多对节点的系统，要先找到正确的节点，才能看到想看的日志。日志系统把整个集群的日志汇总在一起，方便查看</li>
+<li>因为节点上的日志滚动机制，如果由应用打印太多日志，如果没有日志系统，会导致关键日志丢失</li>
+<li>日志系统的重要意义在于解决，节点出错导致不可访问，进而丢失日志的情况</li>
+</ul>
+<h2 id="常用数据系统构建模式"><a href="#常用数据系统构建模式" class="headerlink" title="常用数据系统构建模式"></a>常用数据系统构建模式</h2><ol>
+<li>数据收集<ol>
+<li>Push：客户端往服务端推送</li>
+<li>Pull：服务端在客户端上拉取</li>
+</ol>
+</li>
+<li>预处理<ol>
+<li>去重：日志重复出现的时候去重</li>
+<li>塑形：日志格式标准化，方便后续做过滤查询和内容补充</li>
+<li>Enrich-ment</li>
+</ol>
+</li>
+<li>存储<ol>
+<li>TSDB</li>
+<li>Hadoop</li>
+</ol>
+</li>
+<li>按需查询<ol>
+<li>查询特定需求的日志</li>
+</ol>
+</li>
+<li>告警</li>
+<li>分析<ol>
+<li>奇异点分析</li>
+<li>统计分析</li>
+<li>预测分析</li>
+</ol>
+</li>
+</ol>
+<h2 id="日志收集系统-Loki"><a href="#日志收集系统-Loki" class="headerlink" title="日志收集系统 Loki"></a>日志收集系统 Loki</h2><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dyYWZhbmEvbG9raQ==">https://github.com/grafana/loki<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ncmFmYW5hLmNvbS9vc3MvbG9raS8=">https://grafana.com/oss/loki/<i class="fa fa-external-link-alt"></i></span></p>
+<p><code>Grafana Loki</code> 是可以组成功能齐全的日志记录堆栈的一组组件。</p>
+<ul>
+<li>与其他日志记录系统不同，Loki 是基于仅索引有关日志的元数据的想法而构建的：标签</li>
+<li>日志数据本身被压缩并存储在对象存储（例如 S3 或 GCS）中的块中，甚至存储在文件系统本地</li>
+<li>小索引和高度压缩的块简化了操作，并大大降低了 Loki 的成本</li>
+</ul>
+<h3 id="基于-Loki-的日志收集系统"><a href="#基于-Loki-的日志收集系统" class="headerlink" title="基于 Loki 的日志收集系统"></a>基于 Loki 的日志收集系统</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F22-19-14-image-20240220221914659.png" alt="image-20240220221914659"></p>
+<h3 id="Loki-stack-子系统"><a href="#Loki-stack-子系统" class="headerlink" title="Loki-stack 子系统"></a>Loki-stack 子系统</h3><ul>
+<li>Promtail<ul>
+<li>将容器日志发送到 Loki 或者 Grafana 服务上的日志收集工具</li>
+<li>发现采集目标以及给日志流添加上 <code>Label</code>，然后发送给 Loki</li>
+<li>Promtail 的服务发现是基于 Prometheus 的服务发现机制实现的，可以查看 <code>configmap loki-promtail</code> 了解细节</li>
+</ul>
+</li>
+<li>Loki<ul>
+<li>Loki 是可以水平扩展、高可用以及支持多租户的日志聚合系统</li>
+<li>使用和 Prometheus 相同的服务发现机制，将标签添加到日志流中而不是构建全文索引</li>
+<li>Promtail 接收到的日志和应用的 metrics 指标就具有相同的标签集</li>
+</ul>
+</li>
+<li>Grafana<ul>
+<li>Grafana 是一个用于监控和可视化观测的开源平台，支持非常丰富的数据源</li>
+<li>在 Loki 技术栈中它专门用来展示来自 Prometheus 和 Loki 等数据源的时间序列数据</li>
+<li>允许进行查询、可视化、报警等操作，可以用于创建、探索和共享数据 Dashboard</li>
+</ul>
+</li>
+</ul>
+<h3 id="Loki-架构"><a href="#Loki-架构" class="headerlink" title="Loki 架构"></a>Loki 架构</h3><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F20%2F22-23-37-image-20240220222337263.png" alt="image-20240220222337263"></p>
+<h3 id="Loki-组件"><a href="#Loki-组件" class="headerlink" title="Loki 组件"></a>Loki 组件</h3><ul>
+<li><code>Distributor</code>（分配器）<ul>
+<li>分配器服务负责处理客户端写入的日志</li>
+<li>一旦分配接收到日志数据，它就会把它们分成若干批次，并将它们并行地发送到多个采集器去</li>
+<li>分配器通过 <code>gRPC</code> 和采集器进行通信</li>
+<li>它们是无状态的，基于一致性哈希，我们可以根据实际需要对他们进行扩缩容</li>
+</ul>
+</li>
+<li><code>Ingester</code>（采集器）<ul>
+<li>采集器服务负责将日志数据写入长期存储的后端（<code>DynamoDB</code>、<code>S3</code>、<code>Cassandra</code> 等等）</li>
+<li>采集器会校验采集的日志是否乱序</li>
+<li>采集器验证接收到的日志行是按照时间戳递增的顺序接收的，否则日志行将被拒绝并返回错误</li>
+</ul>
+</li>
+<li><code>Querier</code>（查询器）<ul>
+<li>查询器服务负责处理 <code>LogQL</code> 查询语句来评估存储在长期存储中的日志数据</li>
+</ul>
+</li>
+</ul>
+<h3 id="安装-Loki-stack"><a href="#安装-Loki-stack" class="headerlink" title="安装 Loki stack"></a>安装 Loki stack</h3><p><span class="exturl" data-url="aHR0cHM6Ly9ncmFmYW5hLmNvbS9kb2NzL2xva2kvbGF0ZXN0L3NldHVwL2luc3RhbGwvaGVsbS9pbnN0YWxsLW1vbm9saXRoaWMv">https://grafana.com/docs/loki/latest/setup/install/helm/install-monolithic/<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">helm repo add grafana https://grafana.github.io/helm-charts</span><br><span class="line">helm repo update</span><br><span class="line">helm upgrade --install loki grafana/loki-stack --set grafana.enabled=true,prometheus.enabled=true,prometheus.alertmanager.persistentVolume.enabled=false,prometheus.server.persistentVolume.enabled=false</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-Kubernetes-集群中的日志系统"><a href="#在-Kubernetes-集群中的日志系统" class="headerlink" title="在 Kubernetes 集群中的日志系统"></a>在 Kubernetes 集群中的日志系统</h3><p>日志收集上之后，可以通过简易日志（非详细日志，一般云厂商都免费提供），做一些图表。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F21-13-23-image-20240221211323617.png" alt="image-20240221211323617"></p>
+<h3 id="在生产中的问题"><a href="#在生产中的问题" class="headerlink" title="在生产中的问题"></a>在生产中的问题</h3><p>存在的问题</p>
+<ul>
+<li>利用率低<ul>
+<li>日志大多数目的是给管理员做问题分析用的，但管理员更多的是登陆点到节点或者 <code>pod</code> 里做分析，因为日志分析知识整个分析过程中的一部分，所以很多时候顺手就把日志看了</li>
+</ul>
+</li>
+<li><code>Beats</code> 出现过锁住文件系统，<code>docker container</code> 无法删除的情况</li>
+<li>与监控系统相比，日志系统的重要度稍低</li>
+<li>出现过多次因为日志滚动太快而使得日志收集占用太大网络带宽的情况</li>
+</ul>
+<h2 id="监控系统"><a href="#监控系统" class="headerlink" title="监控系统"></a>监控系统</h2><p>为什么监控，监控什么内容？</p>
+<ul>
+<li>对自己系统的运行状态了如指掌，有问题及时发现，而不让用户先发现我们系统不能使用</li>
+<li>我们也需要知道我们的服务运行情况。例如，<code>slowsql</code> 处于什么水平，平均响应时间超过 <code>200ms</code> 的占比由百分之多少</li>
+</ul>
+<p>我们为什么需要监控我们的服务？</p>
+<ul>
+<li><p>需要监控工具来提醒我服务出现了故障，比如通过监控服务的负载来决定扩容或缩容。</p>
+<p>如果机器普遍负载不高，则可以考虑是否缩减一下机器规模，如果数据库连接经常维持在一个高位水平，则可以考虑一下是否可以进行拆库处理，优化一下架构</p>
+</li>
+<li><p>监控还可以帮助进行内部通知，尤其是对安全比较敏感的行业，比如证券银行等。比如服务器受到攻击时，我们需要分析事件，找到根本原因，识别类似攻击，发现没有发现的被攻击的系统，甚至完成取证等工作</p>
+</li>
+</ul>
+<p>监控目的</p>
+<ul>
+<li>减少宕机时间</li>
+<li>扩展和性能管理</li>
+<li>资源计划</li>
+<li>识别异常事件</li>
+<li>故障排除、分析</li>
+</ul>
+<h3 id="在-Kubernetes-集群中的监控系统"><a href="#在-Kubernetes-集群中的监控系统" class="headerlink" title="在 Kubernetes 集群中的监控系统"></a>在 Kubernetes 集群中的监控系统</h3><p>目前基本上是 Prometheus 一家独大。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9wcm9tZXRoZXVzLmlvL2RvY3MvaW50cm9kdWN0aW9uL292ZXJ2aWV3Lw==">https://prometheus.io/docs/introduction/overview/<i class="fa fa-external-link-alt"></i></span></p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F22%2F17-06-46-architecture.png" alt="Prometheus architecture"></p>
+<h3 id="在-Kubernetes-集群中的监控系统-1"><a href="#在-Kubernetes-集群中的监控系统-1" class="headerlink" title="在 Kubernetes 集群中的监控系统"></a>在 Kubernetes 集群中的监控系统</h3><p>每个节点的 <code>kubelet</code>（集成了 <code>cAdvisor</code>）会收集当前节点 <code>host</code> 上所有信息，包括 <code>cpu</code>、内存、磁盘等。</p>
+<p>Prometheus 会 <code>pull</code> 这些信息，给每个节点打上标签来区分不同的节点。（大部分是 <code>pull</code> 的模式，但是也有 <code>push</code> 模式）</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F21-24-54-image-20240221212454188.png" alt="image-20240221212454188"></p>
+<h3 id="在-Kubernetes-中汇报指标"><a href="#在-Kubernetes-中汇报指标" class="headerlink" title="在 Kubernetes 中汇报指标"></a>在 Kubernetes 中汇报指标</h3><p>应用 <code>pod</code>  需要声明上报指标端口和地址，声明之后，Prometheus 会自动采集。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">prometheus.io/port:</span> <span class="string">http-metrics</span></span><br><span class="line">    <span class="attr">prometheus.io/scrape:</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">loki-0</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">affinity:</span> &#123;&#125;</span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">args:</span></span><br><span class="line">  	<span class="bullet">-</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">loki</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">3100</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">http-metrics</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">TCP</span></span><br></pre></td></tr></table></figure>
+
+<p>应用启动时，需要注册 <code>metrics</code></p>
+<p><code>https://github.com/prometheus/client_golang/tree/main/prometheus/promhttp</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http.Handle(<span class="string">&quot;/metrics&quot;</span>, promhttp.Handler())</span><br><span class="line">http.ListenAndServe(server.MerticsBindAddress, <span class="literal">nil</span>)</span><br></pre></td></tr></table></figure>
+
+<p>注册指标</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">prometheus.MustRegister(version.NewCollector(constants.Loki))</span><br><span class="line"><span class="comment">// unregister default go collector</span></span><br><span class="line">prometheus.Unregister(collectors.NewGoCollector())</span><br><span class="line"><span class="comment">// register collector with additional metrics</span></span><br><span class="line">prometheus.MustRegister(collectors.NewGoCollector(</span><br><span class="line">	collectors.WithGoCollectorRuntimeMetrics(collectors.MetricsAll),</span><br><span class="line">))</span><br></pre></td></tr></table></figure>
+
+<p>代码中输出指标</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">managerMetrics := NewManagerMetrics(<span class="literal">false</span>, <span class="literal">nil</span>, constants.Cortex)</span><br><span class="line">mainReg.MustRegister(managerMetrics)</span><br><span class="line">managerMetrics.AddUserRegistry(<span class="string">&quot;user1&quot;</span>, populateManager(<span class="number">1</span>))</span><br><span class="line">managerMetrics.AddUserRegistry(<span class="string">&quot;user2&quot;</span>, populateManager(<span class="number">10</span>))</span><br><span class="line">managerMetrics.AddUserRegistry(<span class="string">&quot;user3&quot;</span>, populateManager(<span class="number">100</span>))</span><br><span class="line"></span><br><span class="line">managerMetrics.AddUserRegistry(<span class="string">&quot;user4&quot;</span>, populateManager(<span class="number">1000</span>))</span><br><span class="line">managerMetrics.RemoveUserRegistry(<span class="string">&quot;user4&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="在-Kubernetes-集群中的监控系统-2"><a href="#在-Kubernetes-集群中的监控系统-2" class="headerlink" title="在 Kubernetes 集群中的监控系统"></a>在 Kubernetes 集群中的监控系统</h3><p>Kubernetes 的 <code>control panel</code>，包括各种 <code>controller</code> 都原生的暴露 Prometheus 格式的 <code>metrics</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">func</span> <span class="string">newMetrics(registerer</span> <span class="string">prometheus.Registerer)</span> <span class="string">*metrics</span> &#123;</span><br><span class="line">	<span class="string">reqDurationSecs</span> <span class="string">:=</span> <span class="string">prometheus.NewHistogramVec(prometheus.HistogramOpts</span>&#123;</span><br><span class="line">		<span class="attr">Namespace:</span> <span class="string">constants.Loki</span>,</span><br><span class="line">		<span class="attr">Subsystem:</span> <span class="string">&quot;ruler_remote_eval&quot;</span>,</span><br><span class="line">		<span class="attr">Name:</span>      <span class="string">&quot;request_duration_seconds&quot;</span>,</span><br><span class="line">		<span class="string">//</span> <span class="number">0.005000</span>, <span class="number">0.015000</span>, <span class="number">0.045000</span>, <span class="number">0.135000</span>, <span class="number">0.405000</span>, <span class="number">1.215000</span>, <span class="number">3.645000</span>, <span class="number">10.935000</span>, <span class="number">32.805000</span></span><br><span class="line">		<span class="attr">Buckets:</span> <span class="string">prometheus.ExponentialBuckets(0.005</span>, <span class="number">3</span>, <span class="number">9</span><span class="string">)</span>,</span><br><span class="line">	&#125;, []<span class="string">string</span>&#123;<span class="string">&quot;user&quot;</span>&#125;<span class="string">)</span></span><br><span class="line">	<span class="string">responseSizeBytes</span> <span class="string">:=</span> <span class="string">prometheus.NewHistogramVec(prometheus.HistogramOpts</span>&#123;</span><br><span class="line">		<span class="attr">Namespace:</span> <span class="string">constants.Loki</span>,</span><br><span class="line">		<span class="attr">Subsystem:</span> <span class="string">&quot;ruler_remote_eval&quot;</span>,</span><br><span class="line">		<span class="attr">Name:</span>      <span class="string">&quot;response_bytes&quot;</span>,</span><br><span class="line">		<span class="string">//</span> <span class="number">32</span>, <span class="number">128</span>, <span class="number">512</span>, <span class="string">2K</span>, <span class="string">8K</span>, <span class="string">32K</span>, <span class="string">128K</span>, <span class="string">512K</span>, <span class="string">2M</span>, <span class="string">8M</span></span><br><span class="line">		<span class="attr">Buckets:</span> <span class="string">prometheus.ExponentialBuckets(32</span>, <span class="number">4</span>, <span class="number">10</span><span class="string">)</span>,</span><br><span class="line">	&#125;, []<span class="string">string</span>&#123;<span class="string">&quot;user&quot;</span>&#125;<span class="string">)</span></span><br><span class="line">	<span class="string">responseSizeSamples</span> <span class="string">:=</span> <span class="string">prometheus.NewHistogramVec(prometheus.HistogramOpts</span>&#123;</span><br><span class="line">		<span class="attr">Namespace:</span> <span class="string">constants.Loki</span>,</span><br><span class="line">		<span class="attr">Subsystem:</span> <span class="string">&quot;ruler_remote_eval&quot;</span>,</span><br><span class="line">		<span class="attr">Name:</span>      <span class="string">&quot;response_samples&quot;</span>,</span><br><span class="line">		<span class="string">//</span> <span class="number">1</span>, <span class="number">4</span>, <span class="number">16</span>, <span class="number">64</span>, <span class="number">256</span>, <span class="number">1024</span>, <span class="number">4096</span>, <span class="number">16384</span>, <span class="number">65536</span>, <span class="number">262144</span></span><br><span class="line">		<span class="attr">Buckets:</span> <span class="string">prometheus.ExponentialBuckets(1</span>, <span class="number">4</span>, <span class="number">10</span><span class="string">)</span>,</span><br><span class="line">	&#125;, []<span class="string">string</span>&#123;<span class="string">&quot;user&quot;</span>&#125;<span class="string">)</span></span><br><span class="line"></span><br><span class="line">	<span class="string">successfulEvals</span> <span class="string">:=</span> <span class="string">prometheus.NewCounterVec(prometheus.CounterOpts</span>&#123;</span><br><span class="line">		<span class="attr">Namespace:</span> <span class="string">constants.Loki</span>,</span><br><span class="line">		<span class="attr">Subsystem:</span> <span class="string">&quot;ruler_remote_eval&quot;</span>,</span><br><span class="line">		<span class="attr">Name:</span>      <span class="string">&quot;success_total&quot;</span>,</span><br><span class="line">	&#125;, []<span class="string">string</span>&#123;<span class="string">&quot;user&quot;</span>&#125;<span class="string">)</span></span><br><span class="line">	<span class="string">failedEvals</span> <span class="string">:=</span> <span class="string">prometheus.NewCounterVec(prometheus.CounterOpts</span>&#123;</span><br><span class="line">		<span class="attr">Namespace:</span> <span class="string">constants.Loki</span>,</span><br><span class="line">		<span class="attr">Subsystem:</span> <span class="string">&quot;ruler_remote_eval&quot;</span>,</span><br><span class="line">		<span class="attr">Name:</span>      <span class="string">&quot;failure_total&quot;</span>,</span><br><span class="line">	&#125;, []<span class="string">string</span>&#123;<span class="string">&quot;reason&quot;</span>, <span class="string">&quot;user&quot;</span>&#125;<span class="string">)</span></span><br><span class="line"></span><br><span class="line">	<span class="string">registerer.MustRegister(</span></span><br><span class="line">		<span class="string">reqDurationSecs</span>,</span><br><span class="line">		<span class="string">responseSizeBytes</span>,</span><br><span class="line">		<span class="string">responseSizeSamples</span>,</span><br><span class="line">		<span class="string">successfulEvals</span>,</span><br><span class="line">		<span class="string">failedEvals</span>,</span><br><span class="line">	<span class="string">)</span></span><br><span class="line"></span><br><span class="line">	<span class="string">return</span> <span class="string">&amp;metrics</span>&#123;</span><br><span class="line">		<span class="attr">reqDurationSecs:</span>     <span class="string">reqDurationSecs</span>,</span><br><span class="line">		<span class="attr">responseSizeBytes:</span>   <span class="string">responseSizeBytes</span>,</span><br><span class="line">		<span class="attr">responseSizeSamples:</span> <span class="string">responseSizeSamples</span>,</span><br><span class="line"></span><br><span class="line">		<span class="attr">successfulEvals:</span> <span class="string">successfulEvals</span>,</span><br><span class="line">		<span class="attr">failedEvals:</span>     <span class="string">failedEvals</span>,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Prometheus 中的指标类型</p>
+<ul>
+<li><code>Counter</code>（计数器）<ul>
+<li><code>Counter</code> 类型代表一种样本数据单调递增的指标，即只增不减，除非监控系统发生了重置</li>
+</ul>
+</li>
+<li><code>Gauge</code>（仪表盘）<ul>
+<li><code>Gauge</code> 类型代表一种样本数据可以任意变化的指标，即可增可减</li>
+</ul>
+</li>
+<li><code>Histogram</code>（直方图）<ul>
+<li><code>Histogram</code> 在一段时间范围内对数据进行采样（通常是请求持续时间或响应大小等），并将其计入可配置的存储桶（<code>bucket</code>）中，后续可通过指定区间筛选样本，也可以统计样本总数，最后一般将数据展示为直方图</li>
+<li>样本的值分布在 <code>bucket</code> 中的数量，命名为 <code>&lt;basename&gt;_bucket&#123; le = &quot;&lt;上边界&gt;&quot;&#125;</code></li>
+<li>所有样本值的大小总和，命名为 <code>&lt;basename&gt;_sum</code></li>
+<li>样本总数，命名为 <code>&lt;basename&gt;_count</code>。值和 <code>&lt;basename&gt;_bucket&#123; le = &quot;+ Inf&quot;&#125;</code> 相同</li>
+</ul>
+</li>
+<li><code>Summary</code> （摘要）<ul>
+<li>与 <code>Histogram</code> 类型类似，用于表示一段时间内的数据采样结果（通常是请求持续时间或响应大小等），但它直接存储了分位数（通过客户端计算，然后展示出来），而不是通过区间来计算</li>
+<li>它们都包含了 <code>&lt;basename&gt;_sum</code> 和 <code>&lt;basename&gt;_count</code> 指标</li>
+<li>Histogram 需要通过 <code>&lt;basename&gt;_bucket</code> 来计算分位数，而 Summary 则直接存储了分位数的值</li>
+</ul>
+</li>
+</ul>
+<h3 id="Prometheus-Query-Language"><a href="#Prometheus-Query-Language" class="headerlink" title="Prometheus Query Language"></a>Prometheus Query Language</h3><ul>
+<li><code>histogram_quantile(0.95,sum(rate(httpserver_execution_latency_seconds_bucket[5m])) by (le))</code></li>
+<li><code>hsitogram</code> 是直方图，<code>httpserver_execution_latency_seconds_bucket</code> 是直方图指标，是将 <code>httpserver</code> 处理请求的时间放入不同的桶内，其表达的是落在不同时长区间的响应次数</li>
+<li><code>by(le)</code>，是将采集的数据按桶的上边界分组</li>
+<li><code>rate(httpserver_execution_latency_seconds_bucket[5m])</code>，计算的是五分钟内的变化率</li>
+<li><code>sum()</code>，是将所有指标的变化率总计</li>
+<li><code>0.95</code>，是取 <code>95</code> 分位</li>
+</ul>
+<p>综上：</p>
+<p>上述表达式计算的是 <code>httpserver</code> 处理请求时，<code>95%</code> 的请求在 5 分钟内，在不同响应时间区间的处理的数量的变化情况。</p>
+<h3 id="在-Kubernetes-集群中的监控系统-3"><a href="#在-Kubernetes-集群中的监控系统-3" class="headerlink" title="在 Kubernetes 集群中的监控系统"></a>在 Kubernetes 集群中的监控系统</h3><p>Grafana Dashboard</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F21%2F21-46-03-image-20240221214603028.png" alt="image-20240221214603028"></p>
+<h3 id="开启告警"><a href="#开启告警" class="headerlink" title="开启告警"></a>开启告警</h3><p>修改 <code>Prometheus</code> 配置文件 <code>prometheus.yml</code>，添加以下配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">rule_files:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">/etc/prometheus/rules/*.rules</span></span><br></pre></td></tr></table></figure>
+
+<p>在目录 <code>/etc/prometheus/rules/</code> 下创建告警文件 <code>hoststats-alert.rules</code> 内容如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">groups:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">example</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">alert:</span> <span class="string">HighRequestLatency</span></span><br><span class="line">    <span class="attr">expr:</span> <span class="string">job:request_latency_seconds:mean5m&#123;job=&quot;myjob&quot;&#125;</span> <span class="string">&gt;</span> <span class="number">0.5</span></span><br><span class="line">    <span class="attr">for:</span> <span class="string">10m</span></span><br><span class="line">    <span class="attr">labels:</span></span><br><span class="line">      <span class="attr">severity:</span> <span class="string">page</span></span><br><span class="line">    <span class="attr">annotations:</span></span><br><span class="line">      <span class="attr">summary:</span> <span class="string">High</span> <span class="string">request</span> <span class="string">latency</span></span><br></pre></td></tr></table></figure>
+
+<p>或者：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">groups:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Instances</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">alert:</span> <span class="string">InstanceDown</span></span><br><span class="line">    <span class="attr">expr:</span> <span class="string">up</span> <span class="string">==</span> <span class="number">0</span></span><br><span class="line">    <span class="attr">for:</span> <span class="string">5m</span></span><br><span class="line">    <span class="attr">labels:</span></span><br><span class="line">      <span class="attr">severity:</span> <span class="string">page</span></span><br><span class="line">    <span class="comment"># Prometheus templates apply here in the annotation and label fields of the alert.</span></span><br><span class="line">    <span class="attr">annotations:</span></span><br><span class="line">      <span class="attr">description:</span> <span class="string">&#x27;<span class="template-variable">&#123;&#123; $labels.instance &#125;&#125;</span> of job <span class="template-variable">&#123;&#123; $labels.job &#125;&#125;</span> has been down for more than 5 minutes.&#x27;</span></span><br><span class="line">      <span class="attr">summary:</span> <span class="string">&#x27;Instance <span class="template-variable">&#123;&#123; $labels.instance &#125;&#125;</span> down&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="构建支撑生产的监控系统"><a href="#构建支撑生产的监控系统" class="headerlink" title="构建支撑生产的监控系统"></a>构建支撑生产的监控系统</h3><ul>
+<li><code>Metrics</code><ul>
+<li>收集数据</li>
+</ul>
+</li>
+<li><code>Alert</code><ul>
+<li>创建告警规则，如果告警规则被触发，则按不同严重程度告警</li>
+</ul>
+</li>
+<li><code>Assertion</code><ul>
+<li>以一定时间间隔，模拟客户行为，操作 Kubernetes 对象，并断言成功，如果不成功则按严重程度告警</li>
+</ul>
+</li>
+</ul>
+<h3 id="来自生产系统的经验分享"><a href="#来自生产系统的经验分享" class="headerlink" title="来自生产系统的经验分享"></a>来自生产系统的经验分享</h3><p>Prometheus 需要大内存和存储</p>
+<ul>
+<li>最初 <code>prometheus</code> 经常发生 <code>OOM kill</code></li>
+<li>在提高指定的资源以后，如果发生 <code>crash</code> 或者重启，<code>prometheus</code> 需要 <code>30</code> 分钟以上的时间来读取数据进行初始化</li>
+</ul>
+<p>Prometheus 是运营生产系统过程中最重要的模块</p>
+<ul>
+<li>如果 <code>prometheus</code> 宕机，则没有任何数据和告警，管理员无法感知系统状况</li>
+</ul>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYm9nb3RvYm9nby5jb20vRGV2T3BzL0Rldk9wc19DSV9DRF9QaXBlbGluZV9TYW1wbGUucGhw">CONTINUOUS INTEGRATION(CI) &#x2F; CONTINUOUS DELIVERY(CD) PIPELINE : USE CASES<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/93ebed81.html" rel="prev" title="Kubernetes 生产化集群的管理">
+                  <i class="fa fa-angle-left"></i> Kubernetes 生产化集群的管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+  </div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
