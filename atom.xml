@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-03-01T03:37:30.075Z</updated>
+  <updated>2024-03-01T03:58:16.415Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/16548b32.html"/>
     <id>https://www.xiaoyeshiyu.com/post/16548b32.html</id>
     <published>2024-02-22T16:00:00.000Z</published>
-    <updated>2024-03-01T03:37:30.075Z</updated>
+    <updated>2024-03-01T03:58:16.415Z</updated>
     
     
     <summary type="html">云原生具有很多优势，但是在应用上云过程中也有一些挑战，例如如何利用 Kubernetes 的弹性、可扩展性和容错性，提高应用程序的部署效率和稳定性。</summary>
