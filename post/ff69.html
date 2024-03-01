@@ -87,14 +87,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -305,30 +298,30 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h1><p class="fireman-p-indent" >虽然单体架构也是模块化逻辑，但是最终还是会打包并且部署为单体式应用。其中最主要的问题是应用太复杂，以至于任何单个开发者都不可能搞懂全貌。</p>
-<p class="fireman-p-indent" >应用无法扩展，可靠性低，最终敏捷性开发和部署变的无法完成。</p>
-<p class="fireman-p-indent" >应对思路：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h1><p>虽然单体架构也是模块化逻辑，但是最终还是会打包并且部署为单体式应用。其中最主要的问题是应用太复杂，以至于任何单个开发者都不可能搞懂全貌。</p>
+<p>应用无法扩展，可靠性低，最终敏捷性开发和部署变的无法完成。</p>
+<p>应对思路：</p>
 <ul>
 <li><p>化繁为简，分而治之</p>
 <p>将后端服务拆分成多个单体服务，服务之间形成依赖关系。</p>
 </li>
 </ul>
-<h2 id="延伸到微服务"><a href="#延伸到微服务" class="headerlink" title="延伸到微服务"></a>延伸到微服务</h2><p class="fireman-p-indent" >SOA，面向服务的架构模式，可以把微服务想成是SOA的一种实践。</p>
+<h2 id="延伸到微服务"><a href="#延伸到微服务" class="headerlink" title="延伸到微服务"></a>延伸到微服务</h2><p>SOA，面向服务的架构模式，可以把微服务想成是SOA的一种实践。</p>
 <ul>
 <li>小即是美：小的服务代码少，BUG也少，易测试，易维护，也更容易不断迭代完善的精致进而美妙</li>
 <li>单一职责：一个服务也只需要做好一件事，专注才能做好；Go中一个package只做一件事情</li>
 <li>尽可能早地创建原型：尽可能早提供服务API，简历服务契约，达成服务间沟通的一致性约定，至于实现和完善可以慢慢再做；例如先定义接口参数，先开发，最后再联调</li>
 <li>可移植性比效率更重要：服务间的轻量级交互协议在效率和可移植性二者间，首要依然考虑兼容性和移植性；易于通过轻量级RPC框架，将服务拆开多个微服务</li>
 </ul>
-<h1 id="微服务概览"><a href="#微服务概览" class="headerlink" title="微服务概览"></a>微服务概览</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p class="fireman-p-indent" >围绕业务功能构建的，服务<strong>关注单一业务</strong>，服务间采用轻量级的通信机制，可以<strong>全自动独立部署</strong>，可以使用不同的编程语言和数据存储技术。</p>
-<p class="fireman-p-indent" >微服务架构通过业务拆分实现服务组件化，通过组件组合快速开发系统，业务单一的服务组件又可以独立不熟，使得整个系统变得清晰灵活。</p>
+<h1 id="微服务概览"><a href="#微服务概览" class="headerlink" title="微服务概览"></a>微服务概览</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>围绕业务功能构建的，服务<strong>关注单一业务</strong>，服务间采用轻量级的通信机制，可以<strong>全自动独立部署</strong>，可以使用不同的编程语言和数据存储技术。</p>
+<p>微服务架构通过业务拆分实现服务组件化，通过组件组合快速开发系统，业务单一的服务组件又可以独立不熟，使得整个系统变得清晰灵活。</p>
 <ul>
 <li>原子服务：单一业务</li>
 <li>独立进程：可独立部署、测试</li>
 <li>隔离部署：部署过程不依赖其他服务，容器编排</li>
 <li>去中心化服务治理</li>
 </ul>
-<p class="fireman-p-indent" >缺点：</p>
+<p>缺点：</p>
 <ul>
 <li>基础建设的实施，复杂度高，特别是韵味基础设施的挑战比较大</li>
 <li>开发者不得不使用RPC或者消息传递，来实现进程间通信；此外，必须要写代码来处理消息传递中速度过慢或者服务不可用等局部失效问题。特别在如今服务异常多，服务间通信多的情况下，gRPC通信比HTTP减少TCP连接更少。而且使用gRPC对接无须文档，开发更加方便。</li>
@@ -336,9 +329,9 @@
 <li>测试一个基于微服务架构的应用也是很复杂的任务。测试环境多，异常情况多，做到零信任困难</li>
 <li>服务模块间的依赖，应用的升级有可能会波及多个服务模块的修改</li>
 </ul>
-<p class="fireman-p-indent" >微服务是指<strong>关注单一业务</strong>，服务间采用轻量级的通信机制，可以全自动<strong>独立部署</strong>，可以使用不同的编程语言和数据存储技术。通过组件和组件之间组合，实现业务需求，<strong>去中心化</strong>。</p>
-<p class="fireman-p-indent" >模块化：模块化相比微服务化更加重量，按照产品模块划分。</p>
-<p class="fireman-p-indent" >微服务化：模块化是微服务化的前提，隔离性更强，更加独立，也易于横向扩展。</p>
+<p>微服务是指<strong>关注单一业务</strong>，服务间采用轻量级的通信机制，可以全自动<strong>独立部署</strong>，可以使用不同的编程语言和数据存储技术。通过组件和组件之间组合，实现业务需求，<strong>去中心化</strong>。</p>
+<p>模块化：模块化相比微服务化更加重量，按照产品模块划分。</p>
+<p>微服务化：模块化是微服务化的前提，隔离性更强，更加独立，也易于横向扩展。</p>
 <h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
 <li>快速开发、迭代：相比较统一服务，需要整合所有的服务，微服务的设计模式下，只需要单体服务开发完成，则可以进行测试和迭代</li>
 <li>自动化部署：git提交之后通过jenkins可以自动化构建部署上线</li>
@@ -351,31 +344,31 @@
 <li>动态扩容：某些微服务压力增大时自动扩容</li>
 <li>熔断，降级：微服务向外部发送大量请求时，可以将这个服务熔断或者降级，减少流量</li>
 </ul>
-<p class="fireman-p-indent" >将一个大型服务拆分成很多微服务，增加了复杂性，因此需要自动化部署、负载均衡、链路跟踪、服务发现、服务治理。但是可以实现动态扩容和熔断、降级。</p>
-<h3 id="微服务划分"><a href="#微服务划分" class="headerlink" title="微服务划分"></a>微服务划分</h3><p class="fireman-p-indent" >​	微服务架构通过业务拆分实现服务组件化，通过组件组合快速开发系统，业务单一的服务组件又可以独立部署，使得整个系统变得清晰灵活。基于领域驱动的思想，服务原子性，可独立部署，独立测试。</p>
+<p>将一个大型服务拆分成很多微服务，增加了复杂性，因此需要自动化部署、负载均衡、链路跟踪、服务发现、服务治理。但是可以实现动态扩容和熔断、降级。</p>
+<h3 id="微服务划分"><a href="#微服务划分" class="headerlink" title="微服务划分"></a>微服务划分</h3><p>​	微服务架构通过业务拆分实现服务组件化，通过组件组合快速开发系统，业务单一的服务组件又可以独立部署，使得整个系统变得清晰灵活。基于领域驱动的思想，服务原子性，可独立部署，独立测试。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220824113204908.png" alt="image-20220824113204908" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >​	同时，采用去中心化的方式，避免出现局部负载过高，出现瓶颈的情况。</p>
-<p class="fireman-p-indent" >​	划分界限：</p>
+<p>​	同时，采用去中心化的方式，避免出现局部负载过高，出现瓶颈的情况。</p>
+<p>​	划分界限：</p>
 <ul>
 <li>服务职责，例如文件上传，和文件AI审核</li>
 <li>DDD界限上下文，例如提供用户操作文件的服务，提供认证登录的服务，就可以拆开</li>
 </ul>
-<h2 id="架构演变"><a href="#架构演变" class="headerlink" title="架构演变"></a>架构演变</h2><h3 id="服务组件化"><a href="#服务组件化" class="headerlink" title="服务组件化"></a>服务组件化</h3><p class="fireman-p-indent" >传统实现组件的运行方式是通过库，库是和应用一起运行在进程中，库的局部变化意味着整个应用的重新部署。通过服务来实现组件，意味着将应用拆散为一系列的服务运行在不同的进程中，那么单一服务的局部变化只需要重新部署对应的服务进程。</p>
+<h2 id="架构演变"><a href="#架构演变" class="headerlink" title="架构演变"></a>架构演变</h2><h3 id="服务组件化"><a href="#服务组件化" class="headerlink" title="服务组件化"></a>服务组件化</h3><p>传统实现组件的运行方式是通过库，库是和应用一起运行在进程中，库的局部变化意味着整个应用的重新部署。通过服务来实现组件，意味着将应用拆散为一系列的服务运行在不同的进程中，那么单一服务的局部变化只需要重新部署对应的服务进程。</p>
 <ul>
 <li>kit：一个微服务的基础库（框架），例如go-micro，快速确定代码框架</li>
 <li>service：业务代码+kit依赖+第三方依赖组成的业务微服务，组合成一个git库，那么就组成一个独立的服务</li>
 <li>rpc+message queue：轻量级通讯，同步请求和异步请求</li>
 </ul>
-<p class="fireman-p-indent" >本质上等同于多个微服务，组成（compose）完成一耳光完整的用户场景（usecase）。例如一个网站服务，需要提供用户服务、文件服务、内容服务等，可能加上一个组装服务，提供给上层业务。</p>
-<h3 id="按业务组织服务"><a href="#按业务组织服务" class="headerlink" title="按业务组织服务"></a>按业务组织服务</h3><p class="fireman-p-indent" >按照业务能力组织服务的意思是服务提供的能力和业务功能对应。比如：订单服务和数据访问服务，前者反应了真实的订单相关业务，后者是一种技术抽象服务，不反应真实的业务。</p>
+<p>本质上等同于多个微服务，组成（compose）完成一耳光完整的用户场景（usecase）。例如一个网站服务，需要提供用户服务、文件服务、内容服务等，可能加上一个组装服务，提供给上层业务。</p>
+<h3 id="按业务组织服务"><a href="#按业务组织服务" class="headerlink" title="按业务组织服务"></a>按业务组织服务</h3><p>按照业务能力组织服务的意思是服务提供的能力和业务功能对应。比如：订单服务和数据访问服务，前者反应了真实的订单相关业务，后者是一种技术抽象服务，不反应真实的业务。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163210074.png" alt="image-20230716163210074" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >按微服务架构理念来划分服务时，是不应该存在数据访问服务这样一个服务的。通过业务场景划分微服务职责。</p>
+<p>按微服务架构理念来划分服务时，是不应该存在数据访问服务这样一个服务的。通过业务场景划分微服务职责。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163221784.png" alt="image-20230716163221784" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >传统应用设计架构的分层结构反映了不同角色的沟通结构，所以按照微服务的方式构建应用，也需要对应调整团队的服务架构。每个服务背后的小团队的组织是夸功能的，包含实现业务所需的全面的技能。</p>
-<h3 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h3><p class="fireman-p-indent" >每个服务面临的业务场景不同，针对性的选择合适的技术解决方案。但是也需要避开多样化，结合团队实际情况来取舍，比如维护成本。</p>
+<p>传统应用设计架构的分层结构反映了不同角色的沟通结构，所以按照微服务的方式构建应用，也需要对应调整团队的服务架构。每个服务背后的小团队的组织是夸功能的，包含实现业务所需的全面的技能。</p>
+<h3 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h3><p>每个服务面临的业务场景不同，针对性的选择合适的技术解决方案。但是也需要避开多样化，结合团队实际情况来取舍，比如维护成本。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163838451.png" alt="image-20230716163838451" style="zoom:50%;" />
 
 <ul>
@@ -383,7 +376,7 @@
 <li>治理去中心化：流量变大之后，服务和服务之间，会出现流量热点，比如账号服务，对应服务需要针对不同的情况，选择适合的服务治理方案</li>
 <li>技术去中心化：收敛语言</li>
 </ul>
-<h3 id="基础设施自动化，自动化测试"><a href="#基础设施自动化，自动化测试" class="headerlink" title="基础设施自动化，自动化测试"></a>基础设施自动化，自动化测试</h3><p class="fireman-p-indent" >服务划分之后，单一进程的传统应用被拆分为一系列的多进程服务，意味着开发、调试、测试、监控和部署的复杂度都会相应增大，而且服务独立后，可以单独部署和测试，就需要引入自动化测试，自动化部署，可以通过<code>gitlab</code>自带<code>ci</code>和<code>web hook</code>实现，或者通过<code>jenkins</code>实现。</p>
+<h3 id="基础设施自动化，自动化测试"><a href="#基础设施自动化，自动化测试" class="headerlink" title="基础设施自动化，自动化测试"></a>基础设施自动化，自动化测试</h3><p>服务划分之后，单一进程的传统应用被拆分为一系列的多进程服务，意味着开发、调试、测试、监控和部署的复杂度都会相应增大，而且服务独立后，可以单独部署和测试，就需要引入自动化测试，自动化部署，可以通过<code>gitlab</code>自带<code>ci</code>和<code>web hook</code>实现，或者通过<code>jenkins</code>实现。</p>
 <img data-src="https://img2018.cnblogs.com/common/874963/202002/874963-20200203190921731-1402877301.png" alt="img" style="zoom: 25%;" />
 
 <ul>
@@ -391,7 +384,7 @@
 <li>Testing：测试环境、单元测试、API自动化测试</li>
 <li>在线运行时：k8s，以及一系列Prometheus、ELK、Control Panle</li>
 </ul>
-<h3 id="可用性-兼容性设计"><a href="#可用性-兼容性设计" class="headerlink" title="可用性 &amp; 兼容性设计"></a>可用性 &amp; 兼容性设计</h3><p class="fireman-p-indent" >微服务架构采用粗粒度的进程间通信，引入了额外的复杂性和需要处理的新问题，入网络延迟、消息格式、负载均衡和容错，忽略其中任何一点都属于对分布式计算的误解。</p>
+<h3 id="可用性-兼容性设计"><a href="#可用性-兼容性设计" class="headerlink" title="可用性 &amp; 兼容性设计"></a>可用性 &amp; 兼容性设计</h3><p>微服务架构采用粗粒度的进程间通信，引入了额外的复杂性和需要处理的新问题，入网络延迟、消息格式、负载均衡和容错，忽略其中任何一点都属于对分布式计算的误解。</p>
 <ul>
 <li>隔离</li>
 <li>超时控制</li>
@@ -401,11 +394,11 @@
 <li>重试</li>
 <li>负载均衡</li>
 </ul>
-<p class="fireman-p-indent" >在微服务架构模式下，在服务需要变更时需要特别小心，服务提供者的变更可能引发服务消费者的兼容性破坏，时刻谨记保持服务契约的兼容性。</p>
-<p class="fireman-p-indent" >发送时要保守，接受时要开放。</p>
-<p class="fireman-p-indent" >发送数据的时候，最小化传输必要的信息；</p>
-<p class="fireman-p-indent" >接受数据时，最大限度的容忍冗余数据，保证兼容性。</p>
-<h1 id="微服务设计"><a href="#微服务设计" class="headerlink" title="微服务设计"></a>微服务设计</h1><h2 id="API-Gateway"><a href="#API-Gateway" class="headerlink" title="API Gateway"></a>API Gateway</h2><h3 id="平铺模式"><a href="#平铺模式" class="headerlink" title="平铺模式"></a>平铺模式</h3><p class="fireman-p-indent" >在按照垂直功能进行拆分，对外时，肯定是不能一次性暴露批量微服务的，没有统一出口会面临很多问题：</p>
+<p>在微服务架构模式下，在服务需要变更时需要特别小心，服务提供者的变更可能引发服务消费者的兼容性破坏，时刻谨记保持服务契约的兼容性。</p>
+<p>发送时要保守，接受时要开放。</p>
+<p>发送数据的时候，最小化传输必要的信息；</p>
+<p>接受数据时，最大限度的容忍冗余数据，保证兼容性。</p>
+<h1 id="微服务设计"><a href="#微服务设计" class="headerlink" title="微服务设计"></a>微服务设计</h1><h2 id="API-Gateway"><a href="#API-Gateway" class="headerlink" title="API Gateway"></a>API Gateway</h2><h3 id="平铺模式"><a href="#平铺模式" class="headerlink" title="平铺模式"></a>平铺模式</h3><p>在按照垂直功能进行拆分，对外时，肯定是不能一次性暴露批量微服务的，没有统一出口会面临很多问题：</p>
 <ul>
 <li>客户端受到微服务直接通信，强耦合</li>
 <li>需要多次请求，客户端聚合数据，工作量巨大，延迟高</li>
@@ -414,29 +407,29 @@
 <li>多终端兼容逻辑复杂，每个服务都需要处理</li>
 <li>统一逻辑无法收敛，比如安全认证、限流</li>
 </ul>
-<h3 id="接口层"><a href="#接口层" class="headerlink" title="接口层"></a>接口层</h3><p class="fireman-p-indent" >在微服务最外一层的网关服务，主要负责转发。相比nginx，需要能够处理集群环境下节点切换的问题，同时，可以在流量入口增加链路追踪、熔断、鉴权、负载均衡等功能。</p>
+<h3 id="接口层"><a href="#接口层" class="headerlink" title="接口层"></a>接口层</h3><p>在微服务最外一层的网关服务，主要负责转发。相比nginx，需要能够处理集群环境下节点切换的问题，同时，可以在流量入口增加链路追踪、熔断、鉴权、负载均衡等功能。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716170606057.png" alt="image-20230716170606057" style="zoom: 50%;" />
 
-<p class="fireman-p-indent" >通过增加一个app-interface用于统一的协议出口，在服务内部进行大量的dataset join（BFF层），按照业务场景来设计粗粒度的API，给后续服务的演进带来很多优势：</p>
+<p>通过增加一个app-interface用于统一的协议出口，在服务内部进行大量的dataset join（BFF层），按照业务场景来设计粗粒度的API，给后续服务的演进带来很多优势：</p>
 <ul>
 <li>轻量交互：协议精简、聚合</li>
 <li>差异服务：数据裁剪以及聚合、针对终端定制化API</li>
 <li>动态升级：原有系统兼容升级，更新服务而非协议</li>
 <li>沟通效率提升：协作模式前端开发只需要与接口层对接即可</li>
 </ul>
-<p class="fireman-p-indent" >BFF(Backend for Frontend)：是一种适配服务，将后端的微服务进行适配（主要包括聚合裁剪和格式适配等逻辑），向无线端设备暴露友好和统一的API，方便无线设备接入访问后端服务。直白一些，专注服务前端。</p>
-<p class="fireman-p-indent" >通过BFF层，可以将微服务层和展示层隔离，BFF层专注服务给前端数据，微服务层专注于微服务本身。</p>
-<h3 id="网关层"><a href="#网关层" class="headerlink" title="网关层"></a>网关层</h3><p class="fireman-p-indent" >接口层最致命的一个问题是整个app-interface属于单点故障（single point of failure），严重代码缺陷或者流量洪峰可能引发集群宕机。</p>
+<p>BFF(Backend for Frontend)：是一种适配服务，将后端的微服务进行适配（主要包括聚合裁剪和格式适配等逻辑），向无线端设备暴露友好和统一的API，方便无线设备接入访问后端服务。直白一些，专注服务前端。</p>
+<p>通过BFF层，可以将微服务层和展示层隔离，BFF层专注服务给前端数据，微服务层专注于微服务本身。</p>
+<h3 id="网关层"><a href="#网关层" class="headerlink" title="网关层"></a>网关层</h3><p>接口层最致命的一个问题是整个app-interface属于单点故障（single point of failure），严重代码缺陷或者流量洪峰可能引发集群宕机。</p>
 <ul>
 <li>单个模块也会导致后续业务集成复杂度高，会导致后续更迭困难；BFF层也会有多个类别，比如负责账号、负责内容</li>
 <li>很多跨横切面逻辑，比如安全认证，日志兼容，限流熔断等。随着时间推移，代码变的越来越复杂</li>
 </ul>
-<p class="fireman-p-indent" >通过引入API Gateway，把业务集成度高的BFF层和通用功能服务层API Gateway进行了分层处理。</p>
+<p>通过引入API Gateway，把业务集成度高的BFF层和通用功能服务层API Gateway进行了分层处理。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716170623829.png" alt="image-20230716170623829" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >新架构中，网管承担了重要的角色，解耦拆分和后续升级迁移的利器。在网关的配合下，单块BFF实现了解耦拆分，各业务线团队可以独立开发和交付各自的微服务，研发效率大大提升。另外，把跨横切面逻辑从BFF剥离到网关上去以后，BFF的开发人员可以更加关注业务逻辑交付，实现架构上的关注分离。</p>
-<p class="fireman-p-indent" >在BFF层在粗粒度获取微服务的信息，进行数据组装之余，还可以使用Node.js来做服务端渲染。</p>
-<h2 id="微服务划分-1"><a href="#微服务划分-1" class="headerlink" title="微服务划分"></a>微服务划分</h2><p class="fireman-p-indent" >实际项目中通常会采用两种不同的方式划分服务边界：通过特务职能或者DDD的限界上下文</p>
+<p>新架构中，网管承担了重要的角色，解耦拆分和后续升级迁移的利器。在网关的配合下，单块BFF实现了解耦拆分，各业务线团队可以独立开发和交付各自的微服务，研发效率大大提升。另外，把跨横切面逻辑从BFF剥离到网关上去以后，BFF的开发人员可以更加关注业务逻辑交付，实现架构上的关注分离。</p>
+<p>在BFF层在粗粒度获取微服务的信息，进行数据组装之余，还可以使用Node.js来做服务端渲染。</p>
+<h2 id="微服务划分-1"><a href="#微服务划分-1" class="headerlink" title="微服务划分"></a>微服务划分</h2><p>实际项目中通常会采用两种不同的方式划分服务边界：通过特务职能或者DDD的限界上下文</p>
 <ul>
 <li>业务职能 Business Capability：例如客户服务部门提供客户服务的职能，财务部门提供财务相关的职能</li>
 <li>DDD的限界上下文Bounded Context：通过DDD中用来划分不同业务边界的元素，业务边界的含义是“解决不同业务问题”的问题域和对应的解决方案域，为了解决某种类型的业务问题，贴近领域知识，也就是业务。例如账户服务包含VIP服务<ul>
@@ -445,35 +438,35 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" >一种简单方便的划分方法：依据数据库表设计来划分。例如user、role、account、permission这几张表有时会是单独使用，也有时会是多表联查。</p>
-<p class="fireman-p-indent" >灰色模块：那种感觉既可以给A模块也可以给B模块的东西。例如用户对某个资源是否有权限，可以丢给资源服务，也可以丢给用户模块，也可以单独出来作为一个服务。原则上是看模块化阶段，给A模块简单还是给B模块简单。如果预期这种灰色模块将来会有很大的变更，那么可以尝试单独出来。</p>
-<h2 id="微服务团队粒度"><a href="#微服务团队粒度" class="headerlink" title="微服务团队粒度"></a>微服务团队粒度</h2><p class="fireman-p-indent" >通用标准：一个能够完全理解模块的所有细节</p>
-<p class="fireman-p-indent" >事实标准：基本上没有人知道所有的细节，多数情况下，是三两个核心成员合并在一起相互补充，能够说清楚各种细节。</p>
-<p class="fireman-p-indent" >过小粒度更难以开发维护。</p>
-<h3 id="CQRS"><a href="#CQRS" class="headerlink" title="CQRS"></a>CQRS</h3><p class="fireman-p-indent" >将应用程序分为两部分：命令端和查询端，也就是读写分离。</p>
+<p>一种简单方便的划分方法：依据数据库表设计来划分。例如user、role、account、permission这几张表有时会是单独使用，也有时会是多表联查。</p>
+<p>灰色模块：那种感觉既可以给A模块也可以给B模块的东西。例如用户对某个资源是否有权限，可以丢给资源服务，也可以丢给用户模块，也可以单独出来作为一个服务。原则上是看模块化阶段，给A模块简单还是给B模块简单。如果预期这种灰色模块将来会有很大的变更，那么可以尝试单独出来。</p>
+<h2 id="微服务团队粒度"><a href="#微服务团队粒度" class="headerlink" title="微服务团队粒度"></a>微服务团队粒度</h2><p>通用标准：一个能够完全理解模块的所有细节</p>
+<p>事实标准：基本上没有人知道所有的细节，多数情况下，是三两个核心成员合并在一起相互补充，能够说清楚各种细节。</p>
+<p>过小粒度更难以开发维护。</p>
+<h3 id="CQRS"><a href="#CQRS" class="headerlink" title="CQRS"></a>CQRS</h3><p>将应用程序分为两部分：命令端和查询端，也就是读写分离。</p>
 <ul>
 <li>命令端：处理程序构建、更新和删除请求，并在数据更改时发出事件</li>
 <li>查询端：通过针对一个或者多个物化视图执行查询来处理查询，这些物化视图通过订阅数据更改时发出的事件流而保持最新</li>
 </ul>
-<p class="fireman-p-indent" >例如稿件服务，围绕创作稿件、审核稿件、最终发布稿件，有大量的逻辑糅杂在一起，其中稿件本身的状态也有非常多种，但最终前台只关注稿件是否能查看。</p>
-<p class="fireman-p-indent" >通过读写分离，依赖稿件数据binlog以及订阅binlog的中间件canal，将稿件结果发布到消息队列kafka中，最终消费数据独立组件一个稿件查阅结果数据库，并对外提供一个独立查询服务，来拆分复杂架构和业务。</p>
-<p class="fireman-p-indent" >架构也从Pulling publisher -&gt; Transaction log tailing 进行演进。</p>
-<p class="fireman-p-indent" >前者：延迟高，对数据库也有压力，需要从数据库中获取实时数据</p>
-<p class="fireman-p-indent" >后者：通过读写分离，写入数据到某个服务中，自身实现数据请求</p>
-<h2 id="微服务安全"><a href="#微服务安全" class="headerlink" title="微服务安全"></a>微服务安全</h2><p class="fireman-p-indent" >在API Gateway 进行统一认证拦截，一旦认证成功，使用JWT方式通过RPC元数据传递的方式带到BFF层，BFF验证Token完整性后把身份信息注入到应用的Context中，BFF到其他下层的微服务，建议是直接在RPC Request中代入用户身份信息（UserID）请求服务。</p>
+<p>例如稿件服务，围绕创作稿件、审核稿件、最终发布稿件，有大量的逻辑糅杂在一起，其中稿件本身的状态也有非常多种，但最终前台只关注稿件是否能查看。</p>
+<p>通过读写分离，依赖稿件数据binlog以及订阅binlog的中间件canal，将稿件结果发布到消息队列kafka中，最终消费数据独立组件一个稿件查阅结果数据库，并对外提供一个独立查询服务，来拆分复杂架构和业务。</p>
+<p>架构也从Pulling publisher -&gt; Transaction log tailing 进行演进。</p>
+<p>前者：延迟高，对数据库也有压力，需要从数据库中获取实时数据</p>
+<p>后者：通过读写分离，写入数据到某个服务中，自身实现数据请求</p>
+<h2 id="微服务安全"><a href="#微服务安全" class="headerlink" title="微服务安全"></a>微服务安全</h2><p>在API Gateway 进行统一认证拦截，一旦认证成功，使用JWT方式通过RPC元数据传递的方式带到BFF层，BFF验证Token完整性后把身份信息注入到应用的Context中，BFF到其他下层的微服务，建议是直接在RPC Request中代入用户身份信息（UserID）请求服务。</p>
 <ul>
 <li>API Gateway -&gt; BFF -&gt; Service    （服务层级调用关系）</li>
 <li>Biz Auth -&gt; JWT -&gt; Request Args  （请求数据转换）</li>
 </ul>
-<p class="fireman-p-indent" >对于服务内部，一般要区分身份<strong>认证</strong>和<strong>授权</strong></p>
-<p class="fireman-p-indent" >在gRPC中，认证最简单可以通过证书。然后通过RBAC实现授权。</p>
-<p class="fireman-p-indent" >安全等级：</p>
+<p>对于服务内部，一般要区分身份<strong>认证</strong>和<strong>授权</strong></p>
+<p>在gRPC中，认证最简单可以通过证书。然后通过RBAC实现授权。</p>
+<p>安全等级：</p>
 <ul>
 <li>Full Trust ：全信任，即使认证完成，通信也必须加密，避免嗅探和监听</li>
 <li>Half Trust ：半信任，不加密</li>
 <li>Zero Trust：零信任</li>
 </ul>
-<h1 id="gPRC"><a href="#gPRC" class="headerlink" title="gPRC"></a>gPRC</h1><p class="fireman-p-indent" >微服务之间相互通信，大多基于<code>RPC</code>，而<code>gPRC</code>框架可以支持多种语言，而且轻量级、高性能、统一。</p>
+<h1 id="gPRC"><a href="#gPRC" class="headerlink" title="gPRC"></a>gPRC</h1><p>微服务之间相互通信，大多基于<code>RPC</code>，而<code>gPRC</code>框架可以支持多种语言，而且轻量级、高性能、统一。</p>
 <ul>
 <li>序列化支持<code>Protocol Buffer</code>和<code>json</code>，PB结构紧凑，性能好</li>
 <li>多语言：支持多种预览</li>
@@ -489,52 +482,52 @@
 <li>负载无关：不同的服务需要使用不同的消息类型和编码，例如protocol buffer、JSON、XML等</li>
 <li>标准化状态码：客户端通常以有限的方式响应API调用返回的错误</li>
 </ul>
-<p class="fireman-p-indent" >RPC和HTTP区别在哪？</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230726112845540.png" alt="image-20230726112845540"></p>
-<p class="fireman-p-indent" >微服务的区别不在于RPC还是HTTP，而是在于服务拆分，是一种架构，可以通过RPC也可以通过HTTP实现。</p>
-<p class="fireman-p-indent" >RPC可以基于TCP实现，也可以基于HTTP实现。</p>
-<h2 id="Health-Check"><a href="#Health-Check" class="headerlink" title="Health Check"></a>Health Check</h2><p class="fireman-p-indent" >gRPC有一个标准的健康检测协议，在gRPC的所有语言实现中都提供了生成代码和用于设置运行状态的功能。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724202032845.png" alt="image-20230724202032845"></p>
-<p class="fireman-p-indent" >主动健康检查Health Check，可以在服务提供者服务不稳定时，被消费者感知，临时从负载均衡中摘除，减少错误请求。</p>
-<p class="fireman-p-indent" >当服务提供者重新稳定后，health check成功，重新加入到消费者的负载均衡，恢复请求。</p>
-<p class="fireman-p-indent" >health check，同样也被用于外挂方式的容器健康检测，或者流量检测（k8s liveness &amp; readiness）</p>
-<h3 id="平滑发布"><a href="#平滑发布" class="headerlink" title="平滑发布"></a>平滑发布</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724202230795.png" alt="image-20230724202230795"></p>
-<p class="fireman-p-indent" >对比以前暂停服务需要几个小时，平滑发布在应用上线之后，服务提供者在心跳接口正常之后，k8s将服务注册到注册中心，也就是通过服务外挂实现注册。</p>
-<p class="fireman-p-indent" >对于平滑发布，也有相同的平滑下线。（graceful shutdown）</p>
+<p>RPC和HTTP区别在哪？</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230726112845540.png" alt="image-20230726112845540"></p>
+<p>微服务的区别不在于RPC还是HTTP，而是在于服务拆分，是一种架构，可以通过RPC也可以通过HTTP实现。</p>
+<p>RPC可以基于TCP实现，也可以基于HTTP实现。</p>
+<h2 id="Health-Check"><a href="#Health-Check" class="headerlink" title="Health Check"></a>Health Check</h2><p>gRPC有一个标准的健康检测协议，在gRPC的所有语言实现中都提供了生成代码和用于设置运行状态的功能。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724202032845.png" alt="image-20230724202032845"></p>
+<p>主动健康检查Health Check，可以在服务提供者服务不稳定时，被消费者感知，临时从负载均衡中摘除，减少错误请求。</p>
+<p>当服务提供者重新稳定后，health check成功，重新加入到消费者的负载均衡，恢复请求。</p>
+<p>health check，同样也被用于外挂方式的容器健康检测，或者流量检测（k8s liveness &amp; readiness）</p>
+<h3 id="平滑发布"><a href="#平滑发布" class="headerlink" title="平滑发布"></a>平滑发布</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724202230795.png" alt="image-20230724202230795"></p>
+<p>对比以前暂停服务需要几个小时，平滑发布在应用上线之后，服务提供者在心跳接口正常之后，k8s将服务注册到注册中心，也就是通过服务外挂实现注册。</p>
+<p>对于平滑发布，也有相同的平滑下线。（graceful shutdown）</p>
 <ol>
 <li>开始下线某个服务，该服务从注册中心下线</li>
 <li>流量不会被转发到服务提供者，而是转发到正常的服务提供者</li>
 </ol>
-<h2 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h2><p class="fireman-p-indent" >服务注册与发现是基于DNS的思想延伸出来，目的是为了解决服务之间通信的问题，</p>
-<p class="fireman-p-indent" >第一阶段：IP+端口</p>
-<p class="fireman-p-indent" >第二阶段：域名解析DNS</p>
-<p class="fireman-p-indent" >第三阶段：分布式协调-注册中心阶段（必须：定位信息；其他非必须：分组、集群、权重、版本）</p>
-<p class="fireman-p-indent" >第四阶段：元数据服务</p>
-<h3 id="客户端发现模式"><a href="#客户端发现模式" class="headerlink" title="客户端发现模式"></a>客户端发现模式</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203137168.png" alt="image-20230724203137168"></p>
-<p class="fireman-p-indent" >一个服务实例被启动时，它的网络地址会被写到注册表上；当服务实例终止时，再从注册表中删除；这个服务实例的注册表通过心跳机制动态刷新；客户端使用一个负载均衡算法，去选择一个可用的服务实例，来响应这个请求。</p>
-<h3 id="服务端发现模式"><a href="#服务端发现模式" class="headerlink" title="服务端发现模式"></a>服务端发现模式</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203344875.png" alt="image-20230724203344875"></p>
-<p class="fireman-p-indent" >客户端通过负载均衡器向一个服务发送请求，这个负载均衡器会查询服务注册表，并将请求路由到可用的服务实例上。</p>
-<p class="fireman-p-indent" >服务实例在服务注册表上被注册和注销（Consul Template + Nginx ，Kubernetes + etcd）</p>
-<h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><p class="fireman-p-indent" >客户端发现：</p>
-<p class="fireman-p-indent" >直连，比服务端发现少一次网络跳转，Consumer需要内置特定的服务发现客户端和发现逻辑。</p>
-<p class="fireman-p-indent" >服务端发现：</p>
-<p class="fireman-p-indent" >Consumer 无需关注服务发现具体细节，只需要知道服务的DNS域名即可，支持异构语言开发，需要基础设施支撑，多了一次网络跳转，可能有性能损失。</p>
-<p class="fireman-p-indent" >微服务的核心是去中心化，使用客户端发现模式。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203723122.png" alt="image-20230724203723122"></p>
-<h3 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724210724963.png" alt="image-20230724210724963"></p>
-<p class="fireman-p-indent" >当使用CP系统时，微服务非常多，当一个服务上线、下线，会出现大量的广播，导致服务无法访问。</p>
+<h2 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h2><p>服务注册与发现是基于DNS的思想延伸出来，目的是为了解决服务之间通信的问题，</p>
+<p>第一阶段：IP+端口</p>
+<p>第二阶段：域名解析DNS</p>
+<p>第三阶段：分布式协调-注册中心阶段（必须：定位信息；其他非必须：分组、集群、权重、版本）</p>
+<p>第四阶段：元数据服务</p>
+<h3 id="客户端发现模式"><a href="#客户端发现模式" class="headerlink" title="客户端发现模式"></a>客户端发现模式</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203137168.png" alt="image-20230724203137168"></p>
+<p>一个服务实例被启动时，它的网络地址会被写到注册表上；当服务实例终止时，再从注册表中删除；这个服务实例的注册表通过心跳机制动态刷新；客户端使用一个负载均衡算法，去选择一个可用的服务实例，来响应这个请求。</p>
+<h3 id="服务端发现模式"><a href="#服务端发现模式" class="headerlink" title="服务端发现模式"></a>服务端发现模式</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203344875.png" alt="image-20230724203344875"></p>
+<p>客户端通过负载均衡器向一个服务发送请求，这个负载均衡器会查询服务注册表，并将请求路由到可用的服务实例上。</p>
+<p>服务实例在服务注册表上被注册和注销（Consul Template + Nginx ，Kubernetes + etcd）</p>
+<h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><p>客户端发现：</p>
+<p>直连，比服务端发现少一次网络跳转，Consumer需要内置特定的服务发现客户端和发现逻辑。</p>
+<p>服务端发现：</p>
+<p>Consumer 无需关注服务发现具体细节，只需要知道服务的DNS域名即可，支持异构语言开发，需要基础设施支撑，多了一次网络跳转，可能有性能损失。</p>
+<p>微服务的核心是去中心化，使用客户端发现模式。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203723122.png" alt="image-20230724203723122"></p>
+<h3 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724210724963.png" alt="image-20230724210724963"></p>
+<p>当使用CP系统时，微服务非常多，当一个服务上线、下线，会出现大量的广播，导致服务无法访问。</p>
 <ul>
 <li>分布式协调服务（要求任何时刻对ZooKeeper的访问请求能得到一致的数据，从而牺牲可用性）</li>
 <li>网络都懂或网络分区会导致master节点因为其他节点失去联系而重新选举或超过半数不可用导致服务注册发现瘫痪</li>
 <li>大量服务长连接导致性能瓶颈</li>
 </ul>
-<p class="fireman-p-indent" >服务发现的状态，可以弱一致，需要的是AP系统。</p>
+<p>服务发现的状态，可以弱一致，需要的是AP系统。</p>
 <ul>
 <li>注册的事件延迟</li>
 <li>注销的事件延迟</li>
 </ul>
-<p class="fireman-p-indent" >目前最推荐的使用Nacos。</p>
-<h3 id="服务发现概念"><a href="#服务发现概念" class="headerlink" title="服务发现概念"></a>服务发现概念</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724211144480.png" alt="image-20230724211144480"></p>
+<p>目前最推荐的使用Nacos。</p>
+<h3 id="服务发现概念"><a href="#服务发现概念" class="headerlink" title="服务发现概念"></a>服务发现概念</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724211144480.png" alt="image-20230724211144480"></p>
 <ul>
 <li><p>通过Family（appid）和Addr（IP:Port）定位实例，除此之外还可以附加更多的元数据：权重、染色标签、集群等</p>
 <p>appid：使用三段式命名，business.service.xxx（业务、服务、子服务名称）</p>
@@ -549,88 +542,88 @@
 <li><p>Server 定期（60s）检测失效（90s）的实例，失效则剔除。短时间内丢失大量的心跳连接（15分钟内心跳低于期望值*85%），开启自我保护，保留过期服务不删除。（防止由于内部网络问题导致服务抖动异常，启用缓存保护。）</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >服务和服务之间通信，需要知道对端服务IP和端口</p>
-<p class="fireman-p-indent" >如果服务是集群模式，那么需要负载均衡，以及服务异常之后，自动切换</p>
-<p class="fireman-p-indent" >同时，在管理这些服务时，需要维护服务状态，服务上线、下线都可以实时检测到，从而实现负载均衡和流量转发到正常服务节点。</p>
-<p class="fireman-p-indent" ><code>golang</code>协议栈上，推荐使用<code>consul</code></p>
-<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p class="fireman-p-indent" >ps：<code>k8s</code>自带的<code>svc</code>（<code>coredns</code>）不可取的理由有如下：</p>
-<p class="fireman-p-indent" ><code>gRPC</code>默认是长连接，客户端连接到服务端之后，后续不再变更，当服务端扩容，无法实现负载均衡。（虽然有解决方法，例如请求一次之后断开，但是这种方式会产生<code>TCP</code>连接过程资源的浪费；或者通过<code>gRPC</code>客户端自带的<code>Name Resolver</code>功能，但是这种方式当服务端下线之后重新上线，需要连接到上线的服务端，这里就可以让服务端每个一段时间强制断开所有客户端的连接）</p>
-<p class="fireman-p-indent" >解决方法总得来说，都不是很好，比较好的方案是使用专门使用服务发现、负载均衡的技术栈。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cubGl4dWVkdWFuLmNvbS9wb3N0cy9ncnBjLzEzLWxvYWRiYWxhbmNlLW9uLWs4cy8=">gRPC(Go)教程(十三)— Kubernetes 环境下的 gRPC 负载均衡<i class="fa fa-external-link-alt"></i></span></p>
-<h1 id="多集群"><a href="#多集群" class="headerlink" title="多集群"></a>多集群</h1><p class="fireman-p-indent" >在一些需要高可用的服务上，一旦故障影响范围巨大，所以需要从几个角度考虑多集群的必要性：</p>
+<p>服务和服务之间通信，需要知道对端服务IP和端口</p>
+<p>如果服务是集群模式，那么需要负载均衡，以及服务异常之后，自动切换</p>
+<p>同时，在管理这些服务时，需要维护服务状态，服务上线、下线都可以实时检测到，从而实现负载均衡和流量转发到正常服务节点。</p>
+<p><code>golang</code>协议栈上，推荐使用<code>consul</code></p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>ps：<code>k8s</code>自带的<code>svc</code>（<code>coredns</code>）不可取的理由有如下：</p>
+<p><code>gRPC</code>默认是长连接，客户端连接到服务端之后，后续不再变更，当服务端扩容，无法实现负载均衡。（虽然有解决方法，例如请求一次之后断开，但是这种方式会产生<code>TCP</code>连接过程资源的浪费；或者通过<code>gRPC</code>客户端自带的<code>Name Resolver</code>功能，但是这种方式当服务端下线之后重新上线，需要连接到上线的服务端，这里就可以让服务端每个一段时间强制断开所有客户端的连接）</p>
+<p>解决方法总得来说，都不是很好，比较好的方案是使用专门使用服务发现、负载均衡的技术栈。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cubGl4dWVkdWFuLmNvbS9wb3N0cy9ncnBjLzEzLWxvYWRiYWxhbmNlLW9uLWs4cy8=">gRPC(Go)教程(十三)— Kubernetes 环境下的 gRPC 负载均衡<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="多集群"><a href="#多集群" class="headerlink" title="多集群"></a>多集群</h1><p>在一些需要高可用的服务上，一旦故障影响范围巨大，所以需要从几个角度考虑多集群的必要性：</p>
 <ul>
 <li>从单一集群考虑，多个节点保证可用性，通常使用N+2的方式来冗余节点</li>
 <li>从单一集群故障带来的影响面角度考虑冗余多套集群</li>
 <li>单个机房内的机房故障导致的问题</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724213509856.png" alt="image-20230724213509856"></p>
-<p class="fireman-p-indent" >利用PASS平台，给某个appid服务建立多套集群（物理上相当于两套资源，逻辑上维护cluster的概念），对于不同集群服务启动后，从环境变量里可以获取当下服务的cluster，在服务发现注册的时候，带入这些元信息。不同集群可以隔离使用不同的缓存资源等。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724213509856.png" alt="image-20230724213509856"></p>
+<p>利用PASS平台，给某个appid服务建立多套集群（物理上相当于两套资源，逻辑上维护cluster的概念），对于不同集群服务启动后，从环境变量里可以获取当下服务的cluster，在服务发现注册的时候，带入这些元信息。不同集群可以隔离使用不同的缓存资源等。</p>
 <ul>
 <li>多套冗余集群对应多套独占的缓存，带来更好的性能和冗余能力</li>
 <li>尽量避免业务隔离使用或者sharding带来cache hit影响，按照业务划分集群资源。</li>
 </ul>
-<p class="fireman-p-indent" >业务隔离集群带来的问题是cache hit ratio下降，不同业务形态数据正交，可以选择退而求其次，整个集群全部连接。</p>
+<p>业务隔离集群带来的问题是cache hit ratio下降，不同业务形态数据正交，可以选择退而求其次，整个集群全部连接。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724213931250.png" alt="image-20230724213931250" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >这种方式也会带来问题，所有的服务都依赖这个服务，会导致这个服务由于响应ping从而有过高的CPU消耗。</p>
-<p class="fireman-p-indent" >统一为一套逻辑集群（虽然物理上是多套资源），gRPC客户端默认忽略服务发现中cluster信息，按照全部节点，全部连接。</p>
-<p class="fireman-p-indent" >可以使用一种算法，从全集群中选取一批节点（子集），利用划分子集限制连接池大小，</p>
+<p>这种方式也会带来问题，所有的服务都依赖这个服务，会导致这个服务由于响应ping从而有过高的CPU消耗。</p>
+<p>统一为一套逻辑集群（虽然物理上是多套资源），gRPC客户端默认忽略服务发现中cluster信息，按照全部节点，全部连接。</p>
+<p>可以使用一种算法，从全集群中选取一批节点（子集），利用划分子集限制连接池大小，</p>
 <ul>
 <li>长连接导致的内存和CPU开销，Health Check可以高达30%</li>
 <li>短连接极大的资源成本和延迟</li>
 </ul>
-<p class="fireman-p-indent" >合适的子集大小和选择算法</p>
+<p>合适的子集大小和选择算法</p>
 <ul>
 <li>通常20-100个后端，部分场景需要大子集，比如大批量读写操作</li>
 <li>后端平均分给客户端</li>
 <li>客户端重启，保持重新均衡，同时对后端重启保持透明，同时连接的变动最小</li>
 </ul>
-<h1 id="多租户"><a href="#多租户" class="headerlink" title="多租户"></a>多租户</h1><p class="fireman-p-indent" >在一个服务架构里面，允许多系统共存是利用微服务稳定性以及模块化最有效的方式之一，这种方式一般被称为多租户（multi-tenancy）。租户可以是测试、金丝雀发布、影子系统（shadow systems），甚至是服务层或者产品线，使用租户能够保证代码的隔离型并且能够基于流量租户做路由决策。</p>
-<p class="fireman-p-indent" >对于传输中的数据（data-in-flight），例如，消息队列中的请求或者消息，以及静态数据（data-at-rest），例如存储或者持久化缓存。租户都能够保证隔离性和公平性，以及基于租户的路由机会。</p>
+<h1 id="多租户"><a href="#多租户" class="headerlink" title="多租户"></a>多租户</h1><p>在一个服务架构里面，允许多系统共存是利用微服务稳定性以及模块化最有效的方式之一，这种方式一般被称为多租户（multi-tenancy）。租户可以是测试、金丝雀发布、影子系统（shadow systems），甚至是服务层或者产品线，使用租户能够保证代码的隔离型并且能够基于流量租户做路由决策。</p>
+<p>对于传输中的数据（data-in-flight），例如，消息队列中的请求或者消息，以及静态数据（data-at-rest），例如存储或者持久化缓存。租户都能够保证隔离性和公平性，以及基于租户的路由机会。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724215445427.png" alt="image-20230724215445427" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >例如，对服务B做出改变，需要确保它仍能和服务A、C、D正常交互。在微服务架构中，需要做这些集成测试场景，也就是测试和该系统中其他服务的交互。通常来说，微服务架构有两种基本的集成测试方式：并行测试和生产环境测试。而实际情况中，这种测试方式会有诸多限制。</p>
+<p>例如，对服务B做出改变，需要确保它仍能和服务A、C、D正常交互。在微服务架构中，需要做这些集成测试场景，也就是测试和该系统中其他服务的交互。通常来说，微服务架构有两种基本的集成测试方式：并行测试和生产环境测试。而实际情况中，这种测试方式会有诸多限制。</p>
 <ul>
 <li>混用环境导致的不可靠测试</li>
 <li>多套环境带来的硬件成本</li>
 <li>难以做负载测试，仿真线上真实流量情况</li>
 </ul>
-<p class="fireman-p-indent" >使用染色发布的测试方法，把待测试的服务B在一个隔离的沙盒环境中启动，并且在沙盒环境下可以访问集成环境（UAT）C和D。</p>
+<p>使用染色发布的测试方法，把待测试的服务B在一个隔离的沙盒环境中启动，并且在沙盒环境下可以访问集成环境（UAT）C和D。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220227998.png" alt="image-20230724220227998" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >将测试流量路由到B，同时保持生产流量而不处理生产流量。另外要确保集成流量不要被测试流量影响。生产中的测试提出了两个基本要求，他们也构成了多租户体系结构的基础。</p>
+<p>将测试流量路由到B，同时保持生产流量而不处理生产流量。另外要确保集成流量不要被测试流量影响。生产中的测试提出了两个基本要求，他们也构成了多租户体系结构的基础。</p>
 <ul>
 <li>流量路由：能够基于流入栈中的流量类型做路由</li>
 <li>隔离性：能够可靠的隔离测试和生产中的资源，这样可以保证对于关键业务微服务没有副作用</li>
 </ul>
-<p class="fireman-p-indent" >灰度测试成本代价很大，影响1&#x2F;N的用户。其中N为节点数量。</p>
-<p class="fireman-p-indent" >给入站请求绑定上下文（如http header），in-process使用context传递，跨服务使用metadata传递（如：opentracing baggage item），在这个架构中每一个基础组件都能够理解租户信息，并且能够基于租户路由隔离流量，同时在平台中允许对运行不同的微服务有更多的控制，比如指标和日志。在微服务架构中典型的基础组件是乳汁、指标、存储、消息队列、缓存以及配置。基于消息隔离数据需要分别处理基础组件。</p>
-<p class="fireman-p-indent" >多租户是在架构层级的概念，而不是代码逻辑层级，更多的是使用中间件处理，比如将租户信息或者测试信息等，作为metadata存储到context中。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220753448.png" alt="image-20230724220753448"></p>
-<p class="fireman-p-indent" >多租户架构本质上描述为：</p>
-<p class="fireman-p-indent" >跨服务传递请求携带上下文（context），数据隔离的流量路由方案。</p>
-<p class="fireman-p-indent" >利用服务发现注册租户信息，注册成特定的租户。</p>
-<p class="fireman-p-indent" >多租户需要全链路覆盖。不然到某个节点请求就会被丢掉，也无法做好链路追踪和全链路压测。</p>
-<h1 id="微服务的特性"><a href="#微服务的特性" class="headerlink" title="微服务的特性"></a>微服务的特性</h1><h2 id="隔离"><a href="#隔离" class="headerlink" title="隔离"></a>隔离</h2><p class="fireman-p-indent" >隔离本质上是对系统或资源的分割</p>
-<h2 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h2><p class="fireman-p-indent" >通过超时机制，可以有效的回收无法访问的到的请求使用的资源。</p>
-<p class="fireman-p-indent" >超时的机制是通过<code>context</code>在<code>gRPC</code>中传递，或者在<code>HTTP</code>请求中的<code>header</code>中加入<code>xxx-timeout</code>字段实现，在服务内部通过<code>context</code>传递维护超时机制，进程之间通过设定最大超时时间和剩余时间取最小值，实现超时控制。</p>
-<h2 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h2><p class="fireman-p-indent" >过载保护是对令牌桶和漏桶的一种优化机制。</p>
-<p class="fireman-p-indent" >令牌桶： 每秒钟往固定大小的桶中放入特定数量令牌，一个请求消耗一个令牌，当桶中没有令牌，则丢去请求。用于限制请求速度。</p>
-<p class="fireman-p-indent" >漏桶：桶中的水滴每隔一个固定时间漏出来，用于流量整形。</p>
-<p class="fireman-p-indent" >这两种方式需要提前设置好最大的处理速度，例如令牌放入的速度，水滴流出的速度，是一个人为设定的静态值，无法在环境发生变化之后动态变化。</p>
-<p class="fireman-p-indent" >优化方式是通过过载保护机制，通过计算时间节点内，CPU的利用率，计算出一个阈值，当达到阈值时，丢弃流量。并且达到阈值后，需要有一个冷却时间，判断流量是否依然大于阈值。（没有冷却时间，在流量丢弃之后，请求又会马上恢复，导致阈值频繁触发。）</p>
-<p class="fireman-p-indent" >过载保护能解决<code>90%</code>的大流量问题。</p>
-<h2 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h2><p class="fireman-p-indent" >限流则可以解决另外<code>10%</code>的流量问题。限流指的是一段时间内，定义某个用户或应用能够处理请求数量的技术。通过限流，可以过滤产生流量峰值的客户和微服务，或者可以确保引用程序在自动扩展生效前都不会出现过载的情况。</p>
-<p class="fireman-p-indent" >令牌桶和漏桶，都是针对单个节点，无法分布式限流。</p>
-<h2 id="分布式限流"><a href="#分布式限流" class="headerlink" title="分布式限流"></a>分布式限流</h2><p class="fireman-p-indent" >很多分布式限流技术，通过<code>redis</code>实现，例如一个流量发送过来，都会在<code>redis</code>上<code>incr</code>，超过阈值，就丢弃。这种模式，很强依赖<code>redis</code>。另外，请求<code>redis</code>很高频，会影响接口本身性能。</p>
-<p class="fireman-p-indent" >优化：一次取一批，例如取100个，而且异步定时获取，可以减少redis次数，本地用令牌桶做限流。这个方案，需要手动配置个数，这个数值比较难以设置合理。</p>
-<p class="fireman-p-indent" >优化：初始化一个默认值，后续通过一个时间段的QPS，预测当下的请求数。但是这个方案，会导致每个节点获取到的令牌不平等。</p>
-<p class="fireman-p-indent" >优化：最大最小公平分享算法。将总资源，优先满足需求最少的节点。</p>
-<p class="fireman-p-indent" >分布式限流有点很多，但是缺点也明显，实现复杂，而且适配给所有的请求，需要进行请求分级，按照不同的重要性进行限制。</p>
-<h2 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h2><p class="fireman-p-indent" >当服务依赖的下游出现大量的报错，或者服务超过了限额，还发送超大流量，导致服务过载，通过熔断器（断路器），实现本地将请求快速失败，达到保护下游的一种方式。</p>
-<h2 id="降级"><a href="#降级" class="headerlink" title="降级"></a>降级</h2><p class="fireman-p-indent" >为了确保某些核心功能不受影响，通过降级回复来减少工作量，丢弃不重要的请求。</p>
-<h2 id="负载均衡-1"><a href="#负载均衡-1" class="headerlink" title="负载均衡"></a>负载均衡</h2><p class="fireman-p-indent" >请求会分散打到所有的后端节点中，并且可靠识别异常节点，负载均衡过程中不会影响实际问题，也可以实现减少错误，节点冗余，在节点故障后，正常节点依然可以正常处理。</p>
-<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cucWluZ2xpdGUuY24vZG9jLzc0Nzc2NDQ4MzIzMzNiMzVk">注册中心选型篇-四款注册中心特点超全总结<i class="fa fa-external-link-alt"></i></span></p>
+<p>灰度测试成本代价很大，影响1&#x2F;N的用户。其中N为节点数量。</p>
+<p>给入站请求绑定上下文（如http header），in-process使用context传递，跨服务使用metadata传递（如：opentracing baggage item），在这个架构中每一个基础组件都能够理解租户信息，并且能够基于租户路由隔离流量，同时在平台中允许对运行不同的微服务有更多的控制，比如指标和日志。在微服务架构中典型的基础组件是乳汁、指标、存储、消息队列、缓存以及配置。基于消息隔离数据需要分别处理基础组件。</p>
+<p>多租户是在架构层级的概念，而不是代码逻辑层级，更多的是使用中间件处理，比如将租户信息或者测试信息等，作为metadata存储到context中。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220753448.png" alt="image-20230724220753448"></p>
+<p>多租户架构本质上描述为：</p>
+<p>跨服务传递请求携带上下文（context），数据隔离的流量路由方案。</p>
+<p>利用服务发现注册租户信息，注册成特定的租户。</p>
+<p>多租户需要全链路覆盖。不然到某个节点请求就会被丢掉，也无法做好链路追踪和全链路压测。</p>
+<h1 id="微服务的特性"><a href="#微服务的特性" class="headerlink" title="微服务的特性"></a>微服务的特性</h1><h2 id="隔离"><a href="#隔离" class="headerlink" title="隔离"></a>隔离</h2><p>隔离本质上是对系统或资源的分割</p>
+<h2 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h2><p>通过超时机制，可以有效的回收无法访问的到的请求使用的资源。</p>
+<p>超时的机制是通过<code>context</code>在<code>gRPC</code>中传递，或者在<code>HTTP</code>请求中的<code>header</code>中加入<code>xxx-timeout</code>字段实现，在服务内部通过<code>context</code>传递维护超时机制，进程之间通过设定最大超时时间和剩余时间取最小值，实现超时控制。</p>
+<h2 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h2><p>过载保护是对令牌桶和漏桶的一种优化机制。</p>
+<p>令牌桶： 每秒钟往固定大小的桶中放入特定数量令牌，一个请求消耗一个令牌，当桶中没有令牌，则丢去请求。用于限制请求速度。</p>
+<p>漏桶：桶中的水滴每隔一个固定时间漏出来，用于流量整形。</p>
+<p>这两种方式需要提前设置好最大的处理速度，例如令牌放入的速度，水滴流出的速度，是一个人为设定的静态值，无法在环境发生变化之后动态变化。</p>
+<p>优化方式是通过过载保护机制，通过计算时间节点内，CPU的利用率，计算出一个阈值，当达到阈值时，丢弃流量。并且达到阈值后，需要有一个冷却时间，判断流量是否依然大于阈值。（没有冷却时间，在流量丢弃之后，请求又会马上恢复，导致阈值频繁触发。）</p>
+<p>过载保护能解决<code>90%</code>的大流量问题。</p>
+<h2 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h2><p>限流则可以解决另外<code>10%</code>的流量问题。限流指的是一段时间内，定义某个用户或应用能够处理请求数量的技术。通过限流，可以过滤产生流量峰值的客户和微服务，或者可以确保引用程序在自动扩展生效前都不会出现过载的情况。</p>
+<p>令牌桶和漏桶，都是针对单个节点，无法分布式限流。</p>
+<h2 id="分布式限流"><a href="#分布式限流" class="headerlink" title="分布式限流"></a>分布式限流</h2><p>很多分布式限流技术，通过<code>redis</code>实现，例如一个流量发送过来，都会在<code>redis</code>上<code>incr</code>，超过阈值，就丢弃。这种模式，很强依赖<code>redis</code>。另外，请求<code>redis</code>很高频，会影响接口本身性能。</p>
+<p>优化：一次取一批，例如取100个，而且异步定时获取，可以减少redis次数，本地用令牌桶做限流。这个方案，需要手动配置个数，这个数值比较难以设置合理。</p>
+<p>优化：初始化一个默认值，后续通过一个时间段的QPS，预测当下的请求数。但是这个方案，会导致每个节点获取到的令牌不平等。</p>
+<p>优化：最大最小公平分享算法。将总资源，优先满足需求最少的节点。</p>
+<p>分布式限流有点很多，但是缺点也明显，实现复杂，而且适配给所有的请求，需要进行请求分级，按照不同的重要性进行限制。</p>
+<h2 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h2><p>当服务依赖的下游出现大量的报错，或者服务超过了限额，还发送超大流量，导致服务过载，通过熔断器（断路器），实现本地将请求快速失败，达到保护下游的一种方式。</p>
+<h2 id="降级"><a href="#降级" class="headerlink" title="降级"></a>降级</h2><p>为了确保某些核心功能不受影响，通过降级回复来减少工作量，丢弃不重要的请求。</p>
+<h2 id="负载均衡-1"><a href="#负载均衡-1" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>请求会分散打到所有的后端节点中，并且可靠识别异常节点，负载均衡过程中不会影响实际问题，也可以实现减少错误，节点冗余，在节点故障后，正常节点依然可以正常处理。</p>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cucWluZ2xpdGUuY24vZG9jLzc0Nzc2NDQ4MzIzMzNiMzVk">注册中心选型篇-四款注册中心特点超全总结<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

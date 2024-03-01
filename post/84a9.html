@@ -75,14 +75,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -293,79 +286,79 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p class="fireman-p-indent" >如何保证在一个 <code>goroutine</code> 中看到在另一个 <code>goroutine</code> 修改的变量的值，如果程序中修改数据时，有其他 <code>goroutine</code> 同时读取，那么必须将读取串行化。为了串行化访问，请使用 <code>channel</code> 或其他同步原语，例如 <code>sync</code> 和 <code>sync/atomic</code> 来保护数据。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>如何保证在一个 <code>goroutine</code> 中看到在另一个 <code>goroutine</code> 修改的变量的值，如果程序中修改数据时，有其他 <code>goroutine</code> 同时读取，那么必须将读取串行化。为了串行化访问，请使用 <code>channel</code> 或其他同步原语，例如 <code>sync</code> 和 <code>sync/atomic</code> 来保护数据。</p>
 <blockquote>
-<p class="fireman-p-indent" > Programs that modify data being simultaneously accessed by multiple goroutines must serialize such access.</p>
-<p class="fireman-p-indent" >To serialize access, protect the data with channel operations or other synchronization primitives such as those in the <a target="_blank" rel="noopener" href="https://go.dev/pkg/sync/"><code>sync</code></a> and <a target="_blank" rel="noopener" href="https://go.dev/pkg/sync/atomic/"><code>sync/atomic</code></a> packages.</p>
-<p class="fireman-p-indent" >If you must read the rest of this document to understand the behavior of your program, you are being too clever.</p>
+<p> Programs that modify data being simultaneously accessed by multiple goroutines must serialize such access.</p>
+<p>To serialize access, protect the data with channel operations or other synchronization primitives such as those in the <a target="_blank" rel="noopener" href="https://go.dev/pkg/sync/"><code>sync</code></a> and <a target="_blank" rel="noopener" href="https://go.dev/pkg/sync/atomic/"><code>sync/atomic</code></a> packages.</p>
+<p>If you must read the rest of this document to understand the behavior of your program, you are being too clever.</p>
 </blockquote>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvcmVmL21lbQ==">https://go.dev/ref/mem<i class="fa fa-external-link-alt"></i></span></p>
-<h2 id="先行发生"><a href="#先行发生" class="headerlink" title="先行发生"></a>先行发生</h2><p class="fireman-p-indent" >Happens-Before</p>
-<p class="fireman-p-indent" >在 Go 语言中，如果一个操作 A happens-before 另一个操作 B，那么 A 对 B 的执行具有一定的顺序保证。这种顺序保证可以用于推断 Goroutine 之间的同步关系。</p>
-<p class="fireman-p-indent" >在一个 <code>goroutine</code> 中，读和写一定是按照程序中的顺序执行的。即编译器和处理器只有在不会改变这个 <code>goroutine</code> 的行为时才可能修改读和写的执行顺序。由于<strong>重排</strong>，不同的 <code>goroutine</code> 可能会看到不同的执行顺序。</p>
-<p class="fireman-p-indent" >比如 </p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvcmVmL21lbQ==">https://go.dev/ref/mem<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="先行发生"><a href="#先行发生" class="headerlink" title="先行发生"></a>先行发生</h2><p>Happens-Before</p>
+<p>在 Go 语言中，如果一个操作 A happens-before 另一个操作 B，那么 A 对 B 的执行具有一定的顺序保证。这种顺序保证可以用于推断 Goroutine 之间的同步关系。</p>
+<p>在一个 <code>goroutine</code> 中，读和写一定是按照程序中的顺序执行的。即编译器和处理器只有在不会改变这个 <code>goroutine</code> 的行为时才可能修改读和写的执行顺序。由于<strong>重排</strong>，不同的 <code>goroutine</code> 可能会看到不同的执行顺序。</p>
+<p>比如 </p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="number">1</span> </span><br><span class="line">b := <span class="number">2</span> </span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >在编译器重排之后，可能会变成</p>
+<p>在编译器重排之后，可能会变成</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b := 2 </span><br><span class="line">a := 1 </span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >ps: 这个可能是为了执行效率和性能优化考虑。</p>
-<p class="fireman-p-indent" >例如，一个 <code>goroutine</code> 执行 <code>a = 1; b = 2;</code>，另一个 <code>goroutine</code> 可能看到 b 在 a 之前更新。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829152552074.png" alt="image-20230829152552074"></p>
-<p class="fireman-p-indent" >这个结果，可能会看到 （0，1） 或者 （1，1），也可能会打印（0，0），也就是产生内存重排。</p>
-<p class="fireman-p-indent" >用户写下的代码，先要编译成汇编代码，也就是各种指令，包括读写内存的指令。CPU的设计者们，为了榨干CPU的性能，无所不用其极，各种手段都用上，例如<strong>流水线</strong>、<strong>分支预测</strong>等等。</p>
-<p class="fireman-p-indent" >其中，为了提高读写内存的效率，会对读写指令进行重新排列，这就是所谓的内存重排，英文为 <code>MemoryReordering</code> 。</p>
-<p class="fireman-p-indent" >除了上面的 CPU 重排，其实还有编译器重排。比如</p>
+<p>ps: 这个可能是为了执行效率和性能优化考虑。</p>
+<p>例如，一个 <code>goroutine</code> 执行 <code>a = 1; b = 2;</code>，另一个 <code>goroutine</code> 可能看到 b 在 a 之前更新。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829152552074.png" alt="image-20230829152552074"></p>
+<p>这个结果，可能会看到 （0，1） 或者 （1，1），也可能会打印（0，0），也就是产生内存重排。</p>
+<p>用户写下的代码，先要编译成汇编代码，也就是各种指令，包括读写内存的指令。CPU的设计者们，为了榨干CPU的性能，无所不用其极，各种手段都用上，例如<strong>流水线</strong>、<strong>分支预测</strong>等等。</p>
+<p>其中，为了提高读写内存的效率，会对读写指令进行重新排列，这就是所谓的内存重排，英文为 <code>MemoryReordering</code> 。</p>
+<p>除了上面的 CPU 重排，其实还有编译器重排。比如</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104619131.png" alt="image-20230920104619131" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >同一个变量相同赋值、并且打印多次，编译器会通过分支预测，将代码重排成下面这样：</p>
+<p>同一个变量相同赋值、并且打印多次，编译器会通过分支预测，将代码重排成下面这样：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104633559.png" alt="image-20230920104633559" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >但是，如果这时有另外一个线程同时执行</p>
+<p>但是，如果这时有另外一个线程同时执行</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104705888.png" alt="image-20230920104705888" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >在多核场景下，没有办法轻易地判断两段程序是否是“等价”的。</p>
-<h2 id="内存重排"><a href="#内存重排" class="headerlink" title="内存重排"></a>内存重排</h2><p class="fireman-p-indent" >Memory Reordering</p>
-<p class="fireman-p-indent" >现代CPU为了“抚平”内核、内存、硬盘之间的速度差异，通过各种策略，例如多级缓存（CPU的三级缓存）。</p>
-<p class="fireman-p-indent" >例如下图，为了让 （2） 不必等待 （1） 的执行“效果”可见之后才能执行，我们可以把 （1） 的效果保存到 store buffer：</p>
+<p>在多核场景下，没有办法轻易地判断两段程序是否是“等价”的。</p>
+<h2 id="内存重排"><a href="#内存重排" class="headerlink" title="内存重排"></a>内存重排</h2><p>Memory Reordering</p>
+<p>现代CPU为了“抚平”内核、内存、硬盘之间的速度差异，通过各种策略，例如多级缓存（CPU的三级缓存）。</p>
+<p>例如下图，为了让 （2） 不必等待 （1） 的执行“效果”可见之后才能执行，我们可以把 （1） 的效果保存到 store buffer：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920105809868.png" alt="image-20230920105809868" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >为了让 （2） 不必等待 （1） 的执行“效果”可见之后才能执行，我们可以把 （1） 的效果保存到 store buffer：</p>
+<p>为了让 （2） 不必等待 （1） 的执行“效果”可见之后才能执行，我们可以把 （1） 的效果保存到 store buffer：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920105930277.png" alt="image-20230920105930277" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >store buffer 对单线程是完美的。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920110044900.png" alt="image-20230920110044900"></p>
-<p class="fireman-p-indent" >但是在多线程上，先执行（1）和（3），将他们直接写入 store buffer，接着执行（2）和（4）。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920110150587.png" alt="image-20230920110150587"></p>
-<p class="fireman-p-indent" >这个时候，（2）看了 store buffer 中的内容，没有发现B的值，于是从Memory读出了0，（4）同样从Memory读出了0，最后，打印出（0，0）</p>
-<p class="fireman-p-indent" >因此，对于多线程的程序，所有的CPU都会提供“锁”支持，称之为 barrier（内存屏障），或者fence。它要求：barrier 指令要求所有对内存的操作都必须要<strong>扩散</strong>到memory之后才能继续执行其他对 memory 的操作（也就是修改A的值之后，需要往内存中刷新）。因此，我们可以用高级点的 atomic compare-and-swap，或者直接用更高级的锁，通常是标准库提供。（锁、原子操作，基本上都是利用这套机制）</p>
-<h2 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h2><p class="fireman-p-indent" >Memory model</p>
-<p class="fireman-p-indent" >为了说明读和写的必要条件，我们定义了先行发生（Happens Before）：如果事件 e1 发生在 e2 前，我们可以说 e2 发生在 e1 后。如果 e1 不发生在 e2 前也不发生在 e2 后，我们就说 e1 和 e2 是并发的。</p>
-<p class="fireman-p-indent" ><strong>在单一的独立的 goroutine 中，先行发生的顺序即是程序中表达的顺序。</strong></p>
-<p class="fireman-p-indent" >当下面条件满足时，对变量 v 的读操作 r 是被允许看到对 v 的写操作 w 的：</p>
+<p>store buffer 对单线程是完美的。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920110044900.png" alt="image-20230920110044900"></p>
+<p>但是在多线程上，先执行（1）和（3），将他们直接写入 store buffer，接着执行（2）和（4）。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920110150587.png" alt="image-20230920110150587"></p>
+<p>这个时候，（2）看了 store buffer 中的内容，没有发现B的值，于是从Memory读出了0，（4）同样从Memory读出了0，最后，打印出（0，0）</p>
+<p>因此，对于多线程的程序，所有的CPU都会提供“锁”支持，称之为 barrier（内存屏障），或者fence。它要求：barrier 指令要求所有对内存的操作都必须要<strong>扩散</strong>到memory之后才能继续执行其他对 memory 的操作（也就是修改A的值之后，需要往内存中刷新）。因此，我们可以用高级点的 atomic compare-and-swap，或者直接用更高级的锁，通常是标准库提供。（锁、原子操作，基本上都是利用这套机制）</p>
+<h2 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h2><p>Memory model</p>
+<p>为了说明读和写的必要条件，我们定义了先行发生（Happens Before）：如果事件 e1 发生在 e2 前，我们可以说 e2 发生在 e1 后。如果 e1 不发生在 e2 前也不发生在 e2 后，我们就说 e1 和 e2 是并发的。</p>
+<p><strong>在单一的独立的 goroutine 中，先行发生的顺序即是程序中表达的顺序。</strong></p>
+<p>当下面条件满足时，对变量 v 的读操作 r 是被允许看到对 v 的写操作 w 的：</p>
 <ol>
 <li>r 不先行发生于 w</li>
 <li>在 w 后 r 前，没有对 v 的其他写操作</li>
 </ol>
-<p class="fireman-p-indent" >为了保证对变量 v 的读操作 r 看到对 v 的写操作 w，要确保 w 是 r 允许看到的唯一写操作。即当下面条件满足时，r 被保证看到 w ：</p>
+<p>为了保证对变量 v 的读操作 r 看到对 v 的写操作 w，要确保 w 是 r 允许看到的唯一写操作。即当下面条件满足时，r 被保证看到 w ：</p>
 <ol>
 <li>w 先行发生于 r</li>
 <li>其他对共享变量 v 的写操作要么在 w 前，要么在 r 后</li>
 </ol>
-<p class="fireman-p-indent" ><strong>这一对条件，比前面的条件更严格，需要没有其他写操作与 w 或 r 并发发生。</strong></p>
-<p class="fireman-p-indent" >单个 goroutine 中没有并发，所以上面两个定义是相同的：</p>
-<p class="fireman-p-indent" >读操作 r 看到最近一次的写操作 w 写入 v 的值。</p>
-<p class="fireman-p-indent" >当多个 goroutine 访问共享变量 v 时，它们必须使用同步事件来建立先行发生这一条件来保证读操作能看到需要的写操作。</p>
+<p><strong>这一对条件，比前面的条件更严格，需要没有其他写操作与 w 或 r 并发发生。</strong></p>
+<p>单个 goroutine 中没有并发，所以上面两个定义是相同的：</p>
+<p>读操作 r 看到最近一次的写操作 w 写入 v 的值。</p>
+<p>当多个 goroutine 访问共享变量 v 时，它们必须使用同步事件来建立先行发生这一条件来保证读操作能看到需要的写操作。</p>
 <ul>
 <li>对变量 v 的零值初始化在内存模型中变现的与写操作相同</li>
 <li>对大量 single machine word 的变量的读写操作表现的像以不确定顺序对多个 single machine word 的变量的操作。（比如在 32 位的机器上，机器字是 4byte， 在赋值一个指针时，是需要两步操作，不是一个原子操作的。）</li>
 </ul>
-<p class="fireman-p-indent" >内存模型文章推荐：<span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81ZTQ0MTY4ZjQ3YTM=">Go的内存模型<i class="fa fa-external-link-alt"></i></span></p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvcmVmL21lbQ==">The Go Memory Model<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81ZTQ0MTY4ZjQ3YTM=">Go的内存模型<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Nhb3NoYW5ncGEvYXJ0aWNsZS9kZXRhaWxzLzc4ODUzOTE5">理解Memory Barrier（内存屏障）<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FjcmFvL2FydGljbGUvZGV0YWlscy85Mjc1OTkwNw==">曹大谈内存重排<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jY2gxMjMuZ2l0aHViLmlvL29vby8=">从 Memory Reordering 说起<i class="fa fa-external-link-alt"></i></span></p>
+<p>内存模型文章推荐：<span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81ZTQ0MTY4ZjQ3YTM=">Go的内存模型<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvcmVmL21lbQ==">The Go Memory Model<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81ZTQ0MTY4ZjQ3YTM=">Go的内存模型<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Nhb3NoYW5ncGEvYXJ0aWNsZS9kZXRhaWxzLzc4ODUzOTE5">理解Memory Barrier（内存屏障）<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FjcmFvL2FydGljbGUvZGV0YWlscy85Mjc1OTkwNw==">曹大谈内存重排<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jY2gxMjMuZ2l0aHViLmlvL29vby8=">从 Memory Reordering 说起<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

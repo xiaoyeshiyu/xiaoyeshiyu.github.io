@@ -66,14 +66,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -284,7 +277,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p class="fireman-p-indent" >指针类型</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>指针类型</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">type Pointer *ArbitraryType</span><br><span class="line">type ArbitraryType int    // 64位操作系统上，占8个字节</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -293,15 +286,15 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s := &quot;abcd&quot;</span><br><span class="line">fmt.Printf(&quot;%p\n&quot;, &amp;s)		// 0x14000110210</span><br><span class="line">sp := unsafe.Pointer(&amp;s)</span><br><span class="line">fmt.Printf(&quot;%p\n&quot;, sp)		// 0x14000110210</span><br><span class="line">i := (*int)(sp)</span><br><span class="line">fmt.Printf(&quot;%v %v %p\n&quot;, s, *i, i)	// abcd 4362945962 0x14000110210</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >指针的本质是一个地址和类型，类型代表解析指针的方式。通过转换成unsafe.Pointer，绕过了GO的类型安全机制，所以是不安全的操作。</p>
+<p>指针的本质是一个地址和类型，类型代表解析指针的方式。通过转换成unsafe.Pointer，绕过了GO的类型安全机制，所以是不安全的操作。</p>
 <ul>
 <li>unsafe.Pointer可以转换成uintptr</li>
 <li>uintptr可以转换成unsafe.Pointer</li>
 </ul>
-<p class="fireman-p-indent" >转换成uintptr之后，就可以进行计算。</p>
+<p>转换成uintptr之后，就可以进行计算。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sli := [3]int&#123;1, 2, 3&#125;</span><br><span class="line">sp := &amp;sli</span><br><span class="line">u := (*int)(unsafe.Pointer(uintptr(unsafe.Pointer(sp)) + unsafe.Sizeof(sli[0])))</span><br><span class="line">*u += 10</span><br><span class="line">fmt.Println(sli)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >解析：</p>
+<p>解析：</p>
 <ul>
 <li>unsafe.Pointer(sp)：获取数组的指针</li>
 <li>uintptr(unsafe.Pointer(sp))：数组指针的具体数字，可以进行计算操作</li>
@@ -310,10 +303,10 @@
 <li>(*int)(unsafe.Pointer(uintptr(unsafe.Pointer(sp)) + unsafe.Sizeof(sli[0])))：转换成int类型指针</li>
 <li>*u +&#x3D; 10：操作这个指针指向的变量</li>
 </ul>
-<p class="fireman-p-indent" >输出</p>
+<p>输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1 12 3]</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >例如操作slice</p>
+<p>例如操作slice</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type slice struct &#123;</span><br><span class="line">	array unsafe.Pointer // 8个字节</span><br><span class="line">	len   int</span><br><span class="line">	cap   int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s := make([]int, 8, 9) // slice的len和cap是8 9 </span><br><span class="line">l := (*int)(unsafe.Pointer(uintptr(unsafe.Pointer(&amp;s)) + uintptr(8)))</span><br><span class="line">*l += 10</span><br><span class="line">fmt.Printf(&quot;l: %d,len: %d,cap: %d\n&quot;, *l, len(s), cap(s))</span><br><span class="line">c := (*int)(unsafe.Pointer(uintptr(unsafe.Pointer(&amp;s)) + uintptr(16)))</span><br><span class="line">*c += 20</span><br><span class="line">fmt.Printf(&quot;c: %d,len: %d,cap: %d\n&quot;, *c, len(s), cap(s))</span><br></pre></td></tr></table></figure>
@@ -324,43 +317,43 @@
 <li>(*int)(unsafe.Pointer(uintptr(unsafe.Pointer(&amp;s)) + uintptr(8)))：len字段地址</li>
 <li>unsafe.Pointer(uintptr(unsafe.Pointer(&amp;s)) + uintptr(16))：加8个字节长度，是len，再加8个字节长度，是cap</li>
 </ul>
-<p class="fireman-p-indent" >输出</p>
+<p>输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">l: 18,len: 18,cap: 9</span><br><span class="line">c: 29,len: 18,cap: 29</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >操作结构体的私有成员</p>
+<p>操作结构体的私有成员</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">u := User&#123;</span><br><span class="line">	Name: &quot;mitaka&quot;,</span><br><span class="line">	age:  18,</span><br><span class="line">&#125;</span><br><span class="line">a := (*int)(unsafe.Pointer(uintptr(unsafe.Pointer(&amp;u)) + unsafe.Offsetof(u.age)))</span><br><span class="line">*a += 10</span><br><span class="line">fmt.Printf(&quot;u: %+v\n&quot;, u)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >输出</p>
+<p>输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">type User struct &#123;</span><br><span class="line">	Name string</span><br><span class="line">	age  int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">	u := User&#123;</span><br><span class="line">		Name: &quot;mitaka&quot;,</span><br><span class="line">		age:  18,</span><br><span class="line">	&#125;</span><br><span class="line">	a := (*int)(unsafe.Pointer(uintptr(unsafe.Pointer(&amp;u)) + unsafe.Offsetof(u.age)))</span><br><span class="line">	*a += 10</span><br><span class="line">	fmt.Printf(&quot;u: %+v\n&quot;, u)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>unsafe.Offsetof(u.age))：字段偏移量的字节长度</li>
 </ul>
-<p class="fireman-p-indent" >输出</p>
+<p>输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">u: &#123;Name:mitaka age:28&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >或者</p>
+<p>或者</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">type User struct &#123;</span><br><span class="line">	Name     string</span><br><span class="line">	age      int</span><br><span class="line">	language string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">	u := User&#123;</span><br><span class="line">		Name:     &quot;mitaka&quot;,</span><br><span class="line">		age:      18,</span><br><span class="line">		language: &quot;php&quot;,</span><br><span class="line">	&#125;</span><br><span class="line">	a := (*string)(unsafe.Pointer(uintptr(unsafe.Pointer(&amp;u)) + unsafe.Sizeof(string(0)) + unsafe.Sizeof(int(0))))</span><br><span class="line">	*a = &quot;golang&quot;</span><br><span class="line">	fmt.Printf(&quot;u: %+v\n&quot;, u)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>unsafe.Sizeof(string(0))：字符串的偏移量字节长度</li>
 <li>unsafe.Sizeof(int(0))：int类型的偏移量字节长度</li>
 </ul>
-<h3 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h3><p class="fireman-p-indent" >通过操作底层数据，可以实现类型转换而不依赖内存拷贝</p>
-<p class="fireman-p-indent" >切片和字符串底层数据结构，在src&#x2F;reflect&#x2F;value.go中</p>
+<h3 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h3><p>通过操作底层数据，可以实现类型转换而不依赖内存拷贝</p>
+<p>切片和字符串底层数据结构，在src&#x2F;reflect&#x2F;value.go中</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">type SliceHeader struct &#123;</span><br><span class="line">	Data uintptr</span><br><span class="line">	Len  int</span><br><span class="line">	Cap  int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type StringHeader struct &#123;</span><br><span class="line">	Data uintptr</span><br><span class="line">	Len  int</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >实现方式：</p>
-<p class="fireman-p-indent" >使用强制转换，将<code>*string</code>类型，强制转换成<code>*[]byte</code>类型</p>
+<p>实现方式：</p>
+<p>使用强制转换，将<code>*string</code>类型，强制转换成<code>*[]byte</code>类型</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">s := &quot;abcdefghijk&quot;</span><br><span class="line">sli := []byte(s)</span><br><span class="line">fmt.Printf(&quot;s:   %p\n&quot;, &amp;s)</span><br><span class="line">fmt.Printf(&quot;sli: %p\n&quot;, sli)</span><br><span class="line">sli1 := (*[]byte)((unsafe.Pointer)((*reflect.StringHeader)(unsafe.Pointer(&amp;s))))</span><br><span class="line">sli2 := (*[]byte)(unsafe.Pointer(&amp;s))</span><br><span class="line">fmt.Printf(&quot;sli1:%s %p\n&quot;, *sli1, sli1)</span><br><span class="line">fmt.Printf(&quot;sli2:%s %p\n&quot;, *sli2, sli2)</span><br><span class="line">s = &quot;ABCDEF&quot;</span><br><span class="line">fmt.Printf(&quot;s:   %p\n&quot;, &amp;s)</span><br><span class="line">fmt.Printf(&quot;s: %s,sli1: %s\n&quot;, s, *sli1)</span><br><span class="line">fmt.Printf(&quot;s: %s,sli2: %s\n&quot;, s, *sli2)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >输出：</p>
+<p>输出：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">s:   0x14000110210</span><br><span class="line">sli: 0x1400012c010</span><br><span class="line">sli1:abcdefghijk 0x14000110210</span><br><span class="line">sli2:abcdefghijk 0x14000110210</span><br><span class="line">s:   0x14000110210</span><br><span class="line">s: ABCDEF,sli1: ABCDEF</span><br><span class="line">s: ABCDEF,sli2: ABCDEF</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >或者使用下面这种方式：</p>
+<p>或者使用下面这种方式：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">s := &quot;abcdefghijk&quot;</span><br><span class="line">fmt.Printf(&quot;s:   %p\n&quot;, &amp;s)</span><br><span class="line"></span><br><span class="line">sliptr := (*reflect.StringHeader)(unsafe.Pointer(&amp;s))</span><br><span class="line">sli := (*[]byte)(unsafe.Pointer(sliptr))</span><br><span class="line">fmt.Printf(&quot;sli: %p %s\n&quot;, sli, *sli)</span><br><span class="line">fmt.Printf(&quot;s: %d,sli: %d\n&quot;, uintptr(unsafe.Pointer(&amp;s)), uintptr(unsafe.Pointer(sli)))</span><br><span class="line">s = &quot;ABCDEF&quot;</span><br><span class="line">fmt.Printf(&quot;s: %p,sli1: %p\n&quot;, &amp;s, sli)</span><br><span class="line">fmt.Printf(&quot;s: %s,sli1: %s\n&quot;, s, *sli)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >输出</p>
+<p>输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">s:   0x14000110210</span><br><span class="line">sli: 0x14000110210 abcdefghijk</span><br><span class="line">s: 1374390649360,sli: 1374390649360</span><br><span class="line">s: 0x14000110210,sli1: 0x14000110210</span><br><span class="line">s: ABCDEF,sli1: ABCDEF</span><br></pre></td></tr></table></figure>
 
 

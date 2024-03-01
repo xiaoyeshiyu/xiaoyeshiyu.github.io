@@ -68,14 +68,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -287,24 +280,24 @@
     
     
     <div class="post-body" itemprop="articleBody"><blockquote>
-<p class="fireman-p-indent" >「配置中心」的思路就是把项目中各种配置、各种参数、各种开关，全部都放到一个集中的地方进行统一管理，并提供一套标准的接口。 当各个服务需要获取配置的时候，就来「配置中心」的接口拉取。 当「配置中心」中的各种参数有更新的时候，也能通知到各个服务实时的过来同步最新的信息，使之动态更新。</p>
+<p>「配置中心」的思路就是把项目中各种配置、各种参数、各种开关，全部都放到一个集中的地方进行统一管理，并提供一套标准的接口。 当各个服务需要获取配置的时候，就来「配置中心」的接口拉取。 当「配置中心」中的各种参数有更新的时候，也能通知到各个服务实时的过来同步最新的信息，使之动态更新。</p>
 </blockquote>
-<p class="fireman-p-indent" >除了管理配置的有点之外，引入配置中心的有点还有：</p>
+<p>除了管理配置的有点之外，引入配置中心的有点还有：</p>
 <ul>
 <li>当配置发生变化，需要重启配置，通过配置中心配合viper，配置中心可以实现配置动态修改。</li>
 <li>对于一些需要定时更新的配置，例如密钥，统一更新会非常方便</li>
 <li>避免多语言环境下导致的问题</li>
 </ul>
-<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p class="fireman-p-indent" >从<code>Golang</code>技术栈的角度出发，推荐使用配置中心有两个选型，<code>Nacos</code>和<code>Apollo</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/71fb72a5d416ac50d9ab77f8dcc0e4fb.png" alt="img"></p>
-<p class="fireman-p-indent" >作为学习目的，这里推荐使用<code>Nacos</code>，目前已经是官方支持。</p>
-<h2 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h2><p class="fireman-p-indent" >官方文档：</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9uYWNvcy5pby96aC1jbi9kb2NzL3doYXQtaXMtbmFjb3MuaHRtbA==">Nacos<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25hY29zLWdyb3VwL25hY29zLWRvY2tlcg==">Nacos Docker<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >通过<code>docker</code>安装</p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p>从<code>Golang</code>技术栈的角度出发，推荐使用配置中心有两个选型，<code>Nacos</code>和<code>Apollo</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/71fb72a5d416ac50d9ab77f8dcc0e4fb.png" alt="img"></p>
+<p>作为学习目的，这里推荐使用<code>Nacos</code>，目前已经是官方支持。</p>
+<h2 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h2><p>官方文档：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uYWNvcy5pby96aC1jbi9kb2NzL3doYXQtaXMtbmFjb3MuaHRtbA==">Nacos<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25hY29zLWdyb3VwL25hY29zLWRvY2tlcg==">Nacos Docker<i class="fa fa-external-link-alt"></i></span></p>
+<p>通过<code>docker</code>安装</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name nacos-quick -e MODE=standalone -p 8848:8848 -p 9848:9848 -d nacos/nacos-server:2.0.2</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >管理页面是 <code>http://127.0.0.1:8848/nacos</code>，用户名密码都是<code>nacos</code></p>
+<p>管理页面是 <code>http://127.0.0.1:8848/nacos</code>，用户名密码都是<code>nacos</code></p>
 <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ol>
 <li><p>命名空间</p>
 <p>隔离配置群，将某些配置集中放在某一个ns之下，例如数据库的配置，都可以放在一个db的ns中。</p>
@@ -317,29 +310,29 @@
 <p>一个配置集就是一个配置文件，可以很灵活</p>
 </li>
 </ol>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25hY29zLWdyb3VwL25hY29zLXNkay1nbw==">Nacos-sdk-go<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25hY29zLWdyb3VwL25hY29zLXNkay1nbw==">Nacos-sdk-go<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get -u github.com/nacos-group/nacos-sdk-go/v2</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >获取配置和监听配置</p>
+<p>获取配置和监听配置</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/nacos-group/nacos-sdk-go/v2/clients&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/nacos-group/nacos-sdk-go/v2/common/constant&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/nacos-group/nacos-sdk-go/v2/vo&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// nacos服务端的配置</span></span><br><span class="line">	sc := []constant.ServerConfig&#123;</span><br><span class="line">		&#123;</span><br><span class="line">			IpAddr: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">			Port:   <span class="number">8848</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// nacos获取配置的信息</span></span><br><span class="line">	cc := constant.ClientConfig&#123;</span><br><span class="line">		NamespaceId:         <span class="string">&quot;b5688933-77cc-4079-8550-2e1a9c4b555b&quot;</span>, <span class="comment">// 如果需要支持多namespace，我们可以场景多个client,它们有不同的NamespaceId。当namespace是public时，此处填空字符串。</span></span><br><span class="line">		TimeoutMs:           <span class="number">5000</span>,</span><br><span class="line">		NotLoadCacheAtStart: <span class="literal">true</span>,</span><br><span class="line">		LogDir:              <span class="string">&quot;./nacos/log&quot;</span>,</span><br><span class="line">		CacheDir:            <span class="string">&quot;./nacos/cache&quot;</span>, <span class="comment">// 缓存，每次请求时，都会获取配置到本地缓存，如果配置中心无法访问，则使用本地缓存</span></span><br><span class="line">		LogLevel:            <span class="string">&quot;debug&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	configClient, err := clients.NewConfigClient(</span><br><span class="line">		vo.NacosClientParam&#123;</span><br><span class="line">			ClientConfig:  &amp;cc,</span><br><span class="line">			ServerConfigs: sc,</span><br><span class="line">		&#125;,</span><br><span class="line">	)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	config, err := configClient.GetConfig(vo.ConfigParam&#123;</span><br><span class="line">		DataId: <span class="string">&quot;db&quot;</span>,</span><br><span class="line">		Group:  <span class="string">&quot;dev&quot;</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(config)</span><br><span class="line"></span><br><span class="line">	err = configClient.ListenConfig(vo.ConfigParam&#123;</span><br><span class="line">		DataId: <span class="string">&quot;db&quot;</span>,</span><br><span class="line">		Group:  <span class="string">&quot;dev&quot;</span>,</span><br><span class="line">		OnChange: <span class="function"><span class="keyword">func</span><span class="params">(namespace, group, dataId, data <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">&quot;group:&quot;</span> + group + <span class="string">&quot;, dataId:&quot;</span> + dataId + <span class="string">&quot;, data:&quot;</span> + data)</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">select</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >运行</p>
+<p>运行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2022/09/29 20:17:57 [INFO] logDir:&lt;./nacos/log&gt;   cacheDir:&lt;./nacos/cache&gt;</span><br><span class="line">    driver: postgres</span><br><span class="line">    source: host=base-stolon-proxy.base user=datatom dbname=processcenter sslmode=disable password=db_password port=5432 TimeZone=Asia/Shanghai</span><br><span class="line"></span><br><span class="line">group:dev, dataId:db, data:    driver: postgres</span><br><span class="line">    source: host=base-stolon-proxy.base user=datatom dbname=processcenter sslmode=disable password=db_password port=5432 TimeZone=Asia/Shanghai</span><br><span class="line">    abc: def</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >缓存配置</p>
+<p>缓存配置</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">nacos</span><br><span class="line">├── cache</span><br><span class="line">│   └── config</span><br><span class="line">│       └── db@@dev@@b5688933<span class="number">-77</span>cc<span class="number">-4079</span><span class="number">-8550</span><span class="number">-2e1</span>a9c4b555b</span><br><span class="line">├── log</span><br><span class="line">│   └── nacos-sdk.log</span><br><span class="line">└── main.<span class="keyword">go</span></span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" > 集成到服务中</p>
-<p class="fireman-p-indent" ><code>go</code>支持将<code>json</code>反序列化成<code>struct</code></p>
+<p> 集成到服务中</p>
+<p><code>go</code>支持将<code>json</code>反序列化成<code>struct</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Config Foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Foo <span class="keyword">struct</span> &#123;</span><br><span class="line">	DB  <span class="string">`json:&quot;db,omitempty&quot;`</span></span><br><span class="line">	Bar <span class="string">`json:&quot;bar,omitempty&quot;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> DB <span class="keyword">struct</span> &#123;</span><br><span class="line">	Driver <span class="type">string</span> <span class="string">`json:&quot;driver,omitempty&quot;`</span></span><br><span class="line">	Source <span class="type">string</span> <span class="string">`json:&quot;source,omitempty&quot;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Bar <span class="keyword">struct</span> &#123;</span><br><span class="line">	Num    <span class="type">int</span>  <span class="string">`json:&quot;num,omitempty&quot;`</span></span><br><span class="line">	Switch <span class="type">bool</span> <span class="string">`json:&quot;switch,omitempty&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过反序列化成json即可</p>
+<p>通过反序列化成json即可</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">config, err := configClient.GetConfig(vo.ConfigParam&#123;</span><br><span class="line">		DataId: <span class="string">&quot;db&quot;</span>,</span><br><span class="line">		Group:  <span class="string">&quot;dev&quot;</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	err = json.Unmarshal([]<span class="type">byte</span>(config), &amp;Config)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >推荐阅读：</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC82NjA5NzU4Ng==">微服务架构之「 配置中心 」<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuNTFjdG8uY29tL2FydGljbGUvNjQ1NDcxLmh0bWw=">分布式配置中心（Nacos、Apollo）选型比较<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvOUF1WFVHY2dEUzF3dWNwVEh1Y1pRdw==">Nacos、Apollo、Config 配置中心选型<i class="fa fa-external-link-alt"></i></span></p>
+<p>推荐阅读：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC82NjA5NzU4Ng==">微服务架构之「 配置中心 」<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuNTFjdG8uY29tL2FydGljbGUvNjQ1NDcxLmh0bWw=">分布式配置中心（Nacos、Apollo）选型比较<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvOUF1WFVHY2dEUzF3dWNwVEh1Y1pRdw==">Nacos、Apollo、Config 配置中心选型<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 
@@ -356,13 +349,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/post/405c.html" rel="prev" title="Gin框架学习笔记">
-                  <i class="fa fa-angle-left"></i> Gin框架学习笔记
+                <a href="/post/6b44.html" rel="prev" title="微服务之服务发现">
+                  <i class="fa fa-angle-left"></i> 微服务之服务发现
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/post/6b44.html" rel="next" title="微服务之服务发现">
-                  微服务之服务发现 <i class="fa fa-angle-right"></i>
+                <a href="/post/9e4b.html" rel="next" title="Golang中的本地锁和分布式锁">
+                  Golang中的本地锁和分布式锁 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

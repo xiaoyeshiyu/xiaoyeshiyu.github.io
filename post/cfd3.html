@@ -82,14 +82,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -300,24 +293,24 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="可观测性三角"><a href="#可观测性三角" class="headerlink" title="可观测性三角"></a>可观测性三角</h1><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/03.png" alt="Venn diagram with gradient"></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="可观测性三角"><a href="#可观测性三角" class="headerlink" title="可观测性三角"></a>可观测性三角</h1><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/03.png" alt="Venn diagram with gradient"></p>
 <ul>
 <li><code>Metrics</code>：度量数据，这些数据应该是可以用来做分析的，例如均值，99线等。对于一个请求来说，可以度量的东西很多：</li>
 <li><code>Tracing</code>：强大的是请求级别，即一个请求发生了什么；</li>
 <li><code>Logging</code>：强调的记录发生了某个事情，一个请求内部会发生很多事情；</li>
 </ul>
-<h1 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy9nbG9n">https://github.com/golang/glog<i class="fa fa-external-link-alt"></i></span> ，是 google 提供的一个不维护的日志库，<code>glog</code> 有其他语言的一些版本，可以起到很大的借鉴作用。</p>
+<h1 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h1><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy9nbG9n">https://github.com/golang/glog<i class="fa fa-external-link-alt"></i></span> ，是 google 提供的一个不维护的日志库，<code>glog</code> 有其他语言的一些版本，可以起到很大的借鉴作用。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> glog.V(<span class="number">2</span>) &#123;</span><br><span class="line">	glog.Info(<span class="string">&quot;Starting transaction...&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line">glog.V(<span class="number">2</span>).Infoln(<span class="string">&quot;Processed&quot;</span>, nItems, <span class="string">&quot;elements&quot;</span>)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过 <code>V(2)</code> 打印不同层级的日志，避免出现由于打印日志过多影响性能。</p>
-<p class="fireman-p-indent" >它包含如下日志级别：</p>
+<p>通过 <code>V(2)</code> 打印不同层级的日志，避免出现由于打印日志过多影响性能。</p>
+<p>它包含如下日志级别：</p>
 <ul>
 <li><code>Info</code></li>
 <li><code>Warning</code></li>
 <li><code>Error</code></li>
 <li><code>Fatal</code>（会中断程序执行）</li>
 </ul>
-<p class="fireman-p-indent" >还有类似 <code>log4go</code>，<code>loggo</code>，<code>zap</code> 等其他第三方日志库，他们还提供了设置日志级别的可见行，一般提供日志级别：</p>
+<p>还有类似 <code>log4go</code>，<code>loggo</code>，<code>zap</code> 等其他第三方日志库，他们还提供了设置日志级别的可见行，一般提供日志级别：</p>
 <ul>
 <li><code>Trace</code></li>
 <li><code>Debug</code></li>
@@ -326,58 +319,58 @@
 <li><code>Error</code></li>
 <li><code>Critical</code></li>
 </ul>
-<p class="fireman-p-indent" >各个级别的定义和使用规范：</p>
-<h2 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a><code>Warning</code></h2><p class="fireman-p-indent" >没人看告警，因为从定义上将，没有什么出错。也许将来会出问题，但这听起来像是别人的问题。我们尽可能的消除警告级别，它要么是一条消息性消息，那么是一个错误。我们参考 <code>Go</code> 语言设计的哲学，所有警告都是错误，其他语言的 <code>warning</code> 都可以忽略，除非 <code>IDE</code> 或者在 <code>CICD</code> 流程中强制他们为 <code>error</code>，然后逼着程序员们尽可能去消除。同样的，如果想要最终消除 <code>warning</code> 可以记录为 <code>error</code>，让代码作者重视起来。</p>
-<h2 id="Fatal"><a href="#Fatal" class="headerlink" title="Fatal"></a><code>Fatal</code></h2><p class="fireman-p-indent" >记录消息后，直接调用 <code>os.Exit(1)</code>，这意味着：</p>
+<p>各个级别的定义和使用规范：</p>
+<h2 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a><code>Warning</code></h2><p>没人看告警，因为从定义上将，没有什么出错。也许将来会出问题，但这听起来像是别人的问题。我们尽可能的消除警告级别，它要么是一条消息性消息，那么是一个错误。我们参考 <code>Go</code> 语言设计的哲学，所有警告都是错误，其他语言的 <code>warning</code> 都可以忽略，除非 <code>IDE</code> 或者在 <code>CICD</code> 流程中强制他们为 <code>error</code>，然后逼着程序员们尽可能去消除。同样的，如果想要最终消除 <code>warning</code> 可以记录为 <code>error</code>，让代码作者重视起来。</p>
+<h2 id="Fatal"><a href="#Fatal" class="headerlink" title="Fatal"></a><code>Fatal</code></h2><p>记录消息后，直接调用 <code>os.Exit(1)</code>，这意味着：</p>
 <ul>
 <li>在其他 <code>goroutine defer</code> 语句不会被执行；</li>
 <li>各种 <code>buffers</code> 不会被 <code>flush</code>，包括日志的；</li>
 <li>临时文件或者目录不会被移除；</li>
 </ul>
-<p class="fireman-p-indent" >不要使用 <code>fatal</code> 记录日志，而是面向调用者返回错误。如果错误一直持续到 <code>main.main</code>。<code>main.main</code> 就是在退出之前做处理任何清理操作的正确位置。</p>
-<h2 id="Error"><a href="#Error" class="headerlink" title="Error"></a><code>Error</code></h2><p class="fireman-p-indent" >也有很多人，在错误发生的地方要立马记录日志，尤其要使用 <code>error</code> 级别记录。</p>
+<p>不要使用 <code>fatal</code> 记录日志，而是面向调用者返回错误。如果错误一直持续到 <code>main.main</code>。<code>main.main</code> 就是在退出之前做处理任何清理操作的正确位置。</p>
+<h2 id="Error"><a href="#Error" class="headerlink" title="Error"></a><code>Error</code></h2><p>也有很多人，在错误发生的地方要立马记录日志，尤其要使用 <code>error</code> 级别记录。</p>
 <ul>
 <li>处理 <code>error</code>；</li>
 <li>把 <code>error</code> 抛给调用者，在顶部打印日志；</li>
 </ul>
-<p class="fireman-p-indent" >如果选择通过日志记录来处理错误，那么根据定义，<em>它不再是一个错误 - 您已经处理了它</em>。记录错误的行为会处理错误，因此不再适合将其记录为错误。</p>
+<p>如果选择通过日志记录来处理错误，那么根据定义，<em>它不再是一个错误 - 您已经处理了它</em>。记录错误的行为会处理错误，因此不再适合将其记录为错误。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152007930.png" alt="image-20231130152007930" style="zoom: 50%;" />
 
-<p class="fireman-p-indent" >要么打印，要么往上抛。</p>
+<p>要么打印，要么往上抛。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152012928.png" alt="image-20231130152012928" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >这里降级了，就属于正常状态。</p>
+<p>这里降级了，就属于正常状态。</p>
 <blockquote>
-<p class="fireman-p-indent" > 这里产生了降级行为，本质属于有损服务，我更倾向于这里使用 <code>Warning</code>。</p>
+<p> 这里产生了降级行为，本质属于有损服务，我更倾向于这里使用 <code>Warning</code>。</p>
 </blockquote>
-<h2 id="Debug"><a href="#Debug" class="headerlink" title="Debug"></a><code>Debug</code></h2><p class="fireman-p-indent" >相信只有两种事件应该记录：</p>
+<h2 id="Debug"><a href="#Debug" class="headerlink" title="Debug"></a><code>Debug</code></h2><p>相信只有两种事件应该记录：</p>
 <ul>
 <li>开发人员在开发或调试软件时关心的事情；</li>
 <li>用户在使用软件时关心的事情；</li>
 </ul>
-<p class="fireman-p-indent" >显示，它们分别是调试和信息级别。</p>
-<p class="fireman-p-indent" ><code>log.Info</code> 只需要将该行写入日志输出。不应该有关闭它的选项，因为用户只应该被告知对他们有用的事情。如果发生了一个无法处理的错误，它就会抛出到 <code>main.main</code>。<code>main.main</code> 程序终止的地方。在最后的日志消息前面插入 <code>fatal</code> 前缀，或者直接写入 <code>os.Stderr</code>。</p>
-<p class="fireman-p-indent" ><code>log.Debug</code>，是完全不同的事情。它由开发人员或支持工程师控制。在开发过程中，调试语句应该是丰富的，而不必求助于 <code>trace</code> 或 <code>debug2</code>（开发者知道）级别。日志包应该支持细粒度控制，以启用或禁用调试，并且只在包或更精细的范围内启用或禁用调试语句。</p>
-<p class="fireman-p-indent" >推荐 <code>kratos</code> 的设计和思考：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvLWtyYXRvcy9rcmF0b3MvdHJlZS9tYWluL2xvZw==">https://github.com/go-kratos/kratos/tree/main/log<i class="fa fa-external-link-alt"></i></span></p>
+<p>显示，它们分别是调试和信息级别。</p>
+<p><code>log.Info</code> 只需要将该行写入日志输出。不应该有关闭它的选项，因为用户只应该被告知对他们有用的事情。如果发生了一个无法处理的错误，它就会抛出到 <code>main.main</code>。<code>main.main</code> 程序终止的地方。在最后的日志消息前面插入 <code>fatal</code> 前缀，或者直接写入 <code>os.Stderr</code>。</p>
+<p><code>log.Debug</code>，是完全不同的事情。它由开发人员或支持工程师控制。在开发过程中，调试语句应该是丰富的，而不必求助于 <code>trace</code> 或 <code>debug2</code>（开发者知道）级别。日志包应该支持细粒度控制，以启用或禁用调试，并且只在包或更精细的范围内启用或禁用调试语句。</p>
+<p>推荐 <code>kratos</code> 的设计和思考：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvLWtyYXRvcy9rcmF0b3MvdHJlZS9tYWluL2xvZw==">https://github.com/go-kratos/kratos/tree/main/log<i class="fa fa-external-link-alt"></i></span></p>
 <ul>
 <li>没有具体的日志实现，只有抽象</li>
 <li><code>log.Init(...)</code> 初始化抽象，然后使用 <code>interface</code></li>
 <li>通过对象，来调用 <code>interface</code> 注入不同的 <code>level</code></li>
 </ul>
-<h1 id="Logger"><a href="#Logger" class="headerlink" title="Logger"></a><code>Logger</code></h1><p class="fireman-p-indent" >在 <code>package</code> 使用的时候</p>
+<h1 id="Logger"><a href="#Logger" class="headerlink" title="Logger"></a><code>Logger</code></h1><p>在 <code>package</code> 使用的时候</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;mylogger&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> log = mylogger.GetLogger(<span class="string">&quot;github.com/project/foo&quot;</span>)</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><code>foo</code> 耦合了 <code>mylogger</code></li>
 <li>所有使用 <code>foo</code> 的其他库，被透明依赖了 <code>mylogger</code></li>
 </ul>
-<p class="fireman-p-indent" >当我们使用 <code>kit</code> 时</p>
+<p>当我们使用 <code>kit</code> 时</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/pkg/log&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">	logger log.Logger </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130155603276.png" alt="image-20231130155603276" style="zoom: 50%;" />
 
-<p class="fireman-p-indent" >解耦需要打日志的类型与日志的实际类型之间的绑定。</p>
-<h1 id="日志选型"><a href="#日志选型" class="headerlink" title="日志选型"></a>日志选型</h1><p class="fireman-p-indent" >一个完整的集中式日志系统，需要包含以下几个主要特点：</p>
+<p>解耦需要打日志的类型与日志的实际类型之间的绑定。</p>
+<h1 id="日志选型"><a href="#日志选型" class="headerlink" title="日志选型"></a>日志选型</h1><p>一个完整的集中式日志系统，需要包含以下几个主要特点：</p>
 <ul>
 <li>收集 - 能够采集多种来源的日志数据；</li>
 <li>传输 - 能够稳定的把日志传输到中央系统；</li>
@@ -387,18 +380,18 @@
 </ul>
 <h2 id="ELK-stack"><a href="#ELK-stack" class="headerlink" title="ELK stack"></a>ELK stack</h2><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130160401517.png" alt="image-20231130160401517" style="zoom: 25%;" />
 
-<p class="fireman-p-indent" >开源界鼎鼎大名 <code>ELK stack</code>，分别表示：<code>ElasticSearch</code>，<code>Logstash</code>，<code>Kibana</code>，它们都是开源软件。新增一个 <code>FileBeat</code>，它是一个轻量级的日志收集处理工具（<code>Agent</code>），<code>FileBeat</code> 占用资源少，适合于在各个服务器上收集日志后传输给 <code>Logstash</code>，官方也推荐此工具。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175503236.png" alt="image-20231130175503236"></p>
-<p class="fireman-p-indent" >此架构由 <code>Logstash</code> 分布于各个节点上（以 <code>Logstash Agent</code> 的形式）搜集相关日志、数据，并经过分析、过滤后发送给远端服务器上的 <code>Elasticsearch</code> 进行存储。</p>
-<p class="fireman-p-indent" ><code>Elasticsearch</code> 将数据以分片的形式压缩存储并提供多种 API 供用户查询，操作。用户亦可以更直观的通过配置 <code>Kibana Web</code> 方便的对日志查询，并根据数据生成报表。</p>
-<p class="fireman-p-indent" >因为 <code>logstatsh</code> 属于 <code>server</code> 角色，必然出现流量集中式的热点问题，因此我们不建议使用这种部署方式，同时因为还需要做大量的 <code>match</code> 操作（格式化日志），消耗的 CPU 也很多，不利于 <code>scale out</code>。</p>
-<h2 id="引入消息队列"><a href="#引入消息队列" class="headerlink" title="引入消息队列"></a>引入消息队列</h2><p class="fireman-p-indent" >为了解决<code>Logstash Agent</code> 的热点和维护性问题，可以将 <code>logstash Agent</code> 退化到本地微服务中</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175623920.png" alt="image-20231130175623920"></p>
-<p class="fireman-p-indent" >此种架构引入了消息队列机制，位于各个节点上的 <code>Logstath Agent</code> 先将数据、日志传递给<code>Kafka</code>，并将队列中消息或数据间接传递给 <code>Logstash</code>，<code>Logstash</code> 过滤、分析后将数据传递给 <code>Elasticsearch</code> 存储。最后由 <code>Kibana</code> 将日志和数据呈现给用户。因为引入了 <code>Kafka</code>，所以即使远端 <code>Logstash server</code>因故障停止运行，数据将会先被存储下来，从而避免数据丢失。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201173021618.png" alt="image-20231201173021618"></p>
-<p class="fireman-p-indent" >更进一步的：</p>
-<p class="fireman-p-indent" >将收集端 <code>logstash</code> 替换为 <code>beats</code>，更灵活，消耗资源更少，扩展性更强。替代 <code>JRuby</code> 语言，使用 <code>beats</code> 外挂服务或者 <code>sidercar</code>。</p>
-<h1 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h1><p class="fireman-p-indent" >基于上面的日志选型，设计一个符合高并发大容量的日志系统。</p>
+<p>开源界鼎鼎大名 <code>ELK stack</code>，分别表示：<code>ElasticSearch</code>，<code>Logstash</code>，<code>Kibana</code>，它们都是开源软件。新增一个 <code>FileBeat</code>，它是一个轻量级的日志收集处理工具（<code>Agent</code>），<code>FileBeat</code> 占用资源少，适合于在各个服务器上收集日志后传输给 <code>Logstash</code>，官方也推荐此工具。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175503236.png" alt="image-20231130175503236"></p>
+<p>此架构由 <code>Logstash</code> 分布于各个节点上（以 <code>Logstash Agent</code> 的形式）搜集相关日志、数据，并经过分析、过滤后发送给远端服务器上的 <code>Elasticsearch</code> 进行存储。</p>
+<p><code>Elasticsearch</code> 将数据以分片的形式压缩存储并提供多种 API 供用户查询，操作。用户亦可以更直观的通过配置 <code>Kibana Web</code> 方便的对日志查询，并根据数据生成报表。</p>
+<p>因为 <code>logstatsh</code> 属于 <code>server</code> 角色，必然出现流量集中式的热点问题，因此我们不建议使用这种部署方式，同时因为还需要做大量的 <code>match</code> 操作（格式化日志），消耗的 CPU 也很多，不利于 <code>scale out</code>。</p>
+<h2 id="引入消息队列"><a href="#引入消息队列" class="headerlink" title="引入消息队列"></a>引入消息队列</h2><p>为了解决<code>Logstash Agent</code> 的热点和维护性问题，可以将 <code>logstash Agent</code> 退化到本地微服务中</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175623920.png" alt="image-20231130175623920"></p>
+<p>此种架构引入了消息队列机制，位于各个节点上的 <code>Logstath Agent</code> 先将数据、日志传递给<code>Kafka</code>，并将队列中消息或数据间接传递给 <code>Logstash</code>，<code>Logstash</code> 过滤、分析后将数据传递给 <code>Elasticsearch</code> 存储。最后由 <code>Kibana</code> 将日志和数据呈现给用户。因为引入了 <code>Kafka</code>，所以即使远端 <code>Logstash server</code>因故障停止运行，数据将会先被存储下来，从而避免数据丢失。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201173021618.png" alt="image-20231201173021618"></p>
+<p>更进一步的：</p>
+<p>将收集端 <code>logstash</code> 替换为 <code>beats</code>，更灵活，消耗资源更少，扩展性更强。替代 <code>JRuby</code> 语言，使用 <code>beats</code> 外挂服务或者 <code>sidercar</code>。</p>
+<h1 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h1><p>基于上面的日志选型，设计一个符合高并发大容量的日志系统。</p>
 <h2 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h2><ul>
 <li>接入方式收敛；</li>
 <li>日志格式规范；</li>
@@ -406,72 +399,72 @@
 <li>系统高吞吐、低延迟；</li>
 <li>系统高可用、容量可扩展、高可运维性；</li>
 </ul>
-<h2 id="日志规范"><a href="#日志规范" class="headerlink" title="日志规范"></a>日志规范</h2><p class="fireman-p-indent" >一般使用 <code>JSON</code> 作为日志的输出格式（相比<code>protocbuf</code>，<code>json</code> 更加广泛，但是前者性能更好）：</p>
+<h2 id="日志规范"><a href="#日志规范" class="headerlink" title="日志规范"></a>日志规范</h2><p>一般使用 <code>JSON</code> 作为日志的输出格式（相比<code>protocbuf</code>，<code>json</code> 更加广泛，但是前者性能更好）：</p>
 <ul>
 <li><code>time</code>：日志产生时间，<code>ISO8601</code> 格式；</li>
 <li><code>level</code>：日志等级，<code>ERROR</code>、<code>WARN</code>、<code>INFO</code>、<code>DEBUG</code></li>
 <li><code>app_id</code>：应用<code>id</code>，用于标示日志来源；也就是服务发现的 <code>app_id</code></li>
 <li><code>instance_id</code>：实例<code>id</code>，用于区分同一应用不同实例，即 <code>hostname</code>；</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174102166.png" alt="image-20231201174102166"></p>
-<h2 id="设计与实现"><a href="#设计与实现" class="headerlink" title="设计与实现"></a>设计与实现</h2><p class="fireman-p-indent" >日志从产生到可检索，经历几个阶段：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174102166.png" alt="image-20231201174102166"></p>
+<h2 id="设计与实现"><a href="#设计与实现" class="headerlink" title="设计与实现"></a>设计与实现</h2><p>日志从产生到可检索，经历几个阶段：</p>
 <ul>
 <li>生产 &amp; 采集</li>
 <li>传输 &amp; 切分</li>
 <li>存储 &amp; 检索</li>
 </ul>
-<h3 id="采集"><a href="#采集" class="headerlink" title="采集"></a>采集</h3><p class="fireman-p-indent" ><code>logstash</code>：</p>
+<h3 id="采集"><a href="#采集" class="headerlink" title="采集"></a>采集</h3><p><code>logstash</code>：</p>
 <ul>
 <li>监听 <code>tcp/udp</code></li>
 <li>适用于通过网络上报日志的方式</li>
 </ul>
-<p class="fireman-p-indent" ><code>filebeat</code>：</p>
+<p><code>filebeat</code>：</p>
 <ul>
 <li>直接采集本地生成的日志文件（这种比较简单和稳定）</li>
 <li>适用于日志无法定制化输出的应用</li>
 </ul>
-<p class="fireman-p-indent" ><code>logagent</code>：</p>
+<p><code>logagent</code>：</p>
 <ul>
 <li>物理机部署，监听 <code>unixsocket</code>，进程间通讯</li>
 <li>日志系统提供各种语言 <code>SDK</code></li>
 <li>直接读取本地日志文件</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174418357.png" alt="image-20231201174418357"></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174911511.png" alt="image-20231201174911511"></p>
-<h3 id="传输"><a href="#传输" class="headerlink" title="传输"></a>传输</h3><p class="fireman-p-indent" >基于 <code>Flume</code> + <code>Kafka</code> 统一传输平台</p>
-<p class="fireman-p-indent" >基于 <code>LogID</code> 做日志分流：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174418357.png" alt="image-20231201174418357"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174911511.png" alt="image-20231201174911511"></p>
+<h3 id="传输"><a href="#传输" class="headerlink" title="传输"></a>传输</h3><p>基于 <code>Flume</code> + <code>Kafka</code> 统一传输平台</p>
+<p>基于 <code>LogID</code> 做日志分流：</p>
 <ol>
 <li>一般级别</li>
 <li>低级别</li>
 <li>高级别（<code>ERROR</code>）</li>
 </ol>
-<p class="fireman-p-indent" >大流量的环境下，可以使用 <code>Flink</code> + <code>Kafka</code> 来实现。</p>
-<p class="fireman-p-indent" >也可以通过 <code>gateway</code> 来将日志路由到不同的 <code>Kafka</code> 集群中。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175010120.png" alt="image-20231201175010120"></p>
-<h3 id="切分"><a href="#切分" class="headerlink" title="切分"></a>切分</h3><p class="fireman-p-indent" >从 <code>kafka</code> 消费日志，解析日志，写入 <code>elasticsearch</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175208534.png" alt="image-20231201175208534"></p>
-<p class="fireman-p-indent" >消费端：</p>
-<p class="fireman-p-indent" ><code>bili-index</code>：B站自研，<code>golang</code> 开发，逻辑简单，性能高，可定制化方便。（后续也会替换成 <code>flink</code>）</p>
+<p>大流量的环境下，可以使用 <code>Flink</code> + <code>Kafka</code> 来实现。</p>
+<p>也可以通过 <code>gateway</code> 来将日志路由到不同的 <code>Kafka</code> 集群中。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175010120.png" alt="image-20231201175010120"></p>
+<h3 id="切分"><a href="#切分" class="headerlink" title="切分"></a>切分</h3><p>从 <code>kafka</code> 消费日志，解析日志，写入 <code>elasticsearch</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175208534.png" alt="image-20231201175208534"></p>
+<p>消费端：</p>
+<p><code>bili-index</code>：B站自研，<code>golang</code> 开发，逻辑简单，性能高，可定制化方便。（后续也会替换成 <code>flink</code>）</p>
 <ul>
 <li>日志规范产生的日志（<code>log agent</code> 收集）</li>
 </ul>
-<p class="fireman-p-indent" ><code>logstash</code>：es 官方组件，基于 <code>jruby</code> 开发，功能强大，资源消耗高，性能低。</p>
+<p><code>logstash</code>：es 官方组件，基于 <code>jruby</code> 开发，功能强大，资源消耗高，性能低。</p>
 <ul>
 <li>处理未按照日志规范产生的日志（<code>filebeat</code>、<code>logstash</code> 收集），需配置各种日志解析规则。</li>
 </ul>
-<h3 id="存储和检索"><a href="#存储和检索" class="headerlink" title="存储和检索"></a>存储和检索</h3><p class="fireman-p-indent" >存储和检索都是基于 <code>elasticsearch</code> 实现，<code>es</code> 多集群架构：</p>
+<h3 id="存储和检索"><a href="#存储和检索" class="headerlink" title="存储和检索"></a>存储和检索</h3><p>存储和检索都是基于 <code>elasticsearch</code> 实现，<code>es</code> 多集群架构：</p>
 <ul>
 <li>日志分级、高可用</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175638694.png" alt="image-20231201175638694"></p>
-<p class="fireman-p-indent" >单数据集群内：</p>
-<p class="fireman-p-indent" ><code>master node</code> + <code>data node(hot/stale)</code> + <code>client node</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175638694.png" alt="image-20231201175638694"></p>
+<p>单数据集群内：</p>
+<p><code>master node</code> + <code>data node(hot/stale)</code> + <code>client node</code></p>
 <ul>
 <li>每日固定时间进行热 -&gt; 冷迁移；热数据存储到 <code>ssd</code> 上，冷数据迁移到 <code>hdd</code> 上</li>
 <li><code>index</code> 提前一天创建，基于 <code>template</code> 进行 <code>mapping</code> 管理</li>
 <li>检索基于 <code>kibana</code></li>
 </ul>
-<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p class="fireman-p-indent" >使用自定义协议，对于 <code>SDK</code> 质量、版本升级都有比较高的要求，因此我们长期会使用<strong>本地文件</strong>的方案实现：</p>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p>使用自定义协议，对于 <code>SDK</code> 质量、版本升级都有比较高的要求，因此我们长期会使用<strong>本地文件</strong>的方案实现：</p>
 <ul>
 <li><p>采集本地日志文件：位置不限，容器内 <code>or</code> 物理机</p>
 </li>
@@ -484,44 +477,44 @@
 <li><p>完善的自我保护机制：限制自身对于宿主机资源的消耗，限制发送速度</p>
 </li>
 </ul>
-<h2 id="容器日志采集"><a href="#容器日志采集" class="headerlink" title="容器日志采集"></a>容器日志采集</h2><p class="fireman-p-indent" >容器内应用日志采集：</p>
-<p class="fireman-p-indent" >基于 <code>overlay2</code>，直接从物理机上查找对应日志文件（容器日志映射到物理机目录）。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201180255277.png" alt="image-20231201180255277"></p>
-<h1 id="观测内容"><a href="#观测内容" class="headerlink" title="观测内容"></a>观测内容</h1><p class="fireman-p-indent" >在服务上线后，应该观测的内容：</p>
+<h2 id="容器日志采集"><a href="#容器日志采集" class="headerlink" title="容器日志采集"></a>容器日志采集</h2><p>容器内应用日志采集：</p>
+<p>基于 <code>overlay2</code>，直接从物理机上查找对应日志文件（容器日志映射到物理机目录）。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201180255277.png" alt="image-20231201180255277"></p>
+<h1 id="观测内容"><a href="#观测内容" class="headerlink" title="观测内容"></a>观测内容</h1><p>在服务上线后，应该观测的内容：</p>
 <ul>
 <li>错误率：特别是系统级别，还有业务层面的报错，下游服务返回的一些校验之类的错误</li>
 <li>平均响应时间</li>
 <li>99线或者999线</li>
 <li>平均响应时间和99线的差值：这个可以判断服务是否稳定</li>
 </ul>
-<p class="fireman-p-indent" >上线前后：</p>
+<p>上线前后：</p>
 <ul>
 <li>要注意响应时间有没有大幅增加</li>
 <li>错误率有没有大幅增加</li>
 <li>有没有出现新的错误（是否有业务代码异常导致新的错误，也可能由于是下游服务返回）</li>
 <li>日志里面如果有 <code>WARN</code>、<code>WARN</code> 有没有大幅增加（还有<code>ERROR</code>之类的，也需要观察正常的日志是否有产生，<code>INFO</code>级别）</li>
 </ul>
-<p class="fireman-p-indent" >便于观察时，就非常依赖错误码的设计和使用。</p>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9wZXRlci5ib3VyZ29uLm9yZy9ibG9nLzIwMTcvMDIvMjEvbWV0cmljcy10cmFjaW5nLWFuZC1sb2dnaW5nLmh0bWw=">Metrics, tracing, and logging<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNS8xMS8wNS9sZXRzLXRhbGstYWJvdXQtbG9nZ2luZw==">Let’s talk about logging<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTMvMTEvdXNpbmctbG9nLXBhY2thZ2UtaW4tZ28uaHRtbA==">Using The Log Package In Go<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvZGVzaWduLXBoaWxvc29waHktb24tbG9nZ2luZy5odG1s">Design Philosophy On Logging<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNy8wMS8yMy90aGUtcGFja2FnZS1sZXZlbC1sb2dnZXItYW50aS1wYXR0ZXJu">The package level logger anti pattern<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9oZWxwLmFsaXl1bi5jb20vemgvc2xzL3VzZXItZ3VpZGUvdXNlLWxvZ3RhaWwtdG8tY29sbGVjdC1kYXRh">Logtail采集概述<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzcwMzIyOQ==">Logtail提升采集性能<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzIwNDU1NA==">Logtail技术分享(一) : Polling + Inotify 组合下的日志保序采集方案<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzI1MTYyOQ==">Logtail技术分享(二) : 多租户隔离技术+双十一实战效果<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9lbGFzdGljLXN0YWNrLw==">elastic-stack<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vYXJlc3hpbi9wLzgwMzUxMzcuaHRtbA==">ELK原理与介绍<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9iZWF0cy9maWxlYmVhdA==">Filebeat 轻量型日志采集器<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9iZWF0cy9maWxlYmVhdC84LjExL2luZGV4Lmh0bWw=">Filebeat Reference<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9sb2dzdGFzaA==">Logstash 集中、转换和存储数据<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9sb2dzdGFzaC84LjExL2luZGV4Lmh0bWw=">Logstash Reference<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9raWJhbmE=">Kibana 将数据转变为结果、响应和解决方案<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9raWJhbmEvOC4xMS9pbmRleC5odG1s">Kibana Guide<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9lbGFzdGljc2VhcmNoL3JlZmVyZW5jZS84LjExL2luZGV4Lmh0bWw=">Elasticsearch Guide<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9lbGFzdGljc2VhcmNoLmNuLw==">elasticsearch.cn<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmFsaWFzbWVlLmNvbS9wb3N0L2dyYXlsb2ctbG9nLXN5c3RlbS1hcmNoaXRlY3R1cmUv">Graylog 日志系统架构<i class="fa fa-external-link-alt"></i></span></p>
+<p>便于观察时，就非常依赖错误码的设计和使用。</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly9wZXRlci5ib3VyZ29uLm9yZy9ibG9nLzIwMTcvMDIvMjEvbWV0cmljcy10cmFjaW5nLWFuZC1sb2dnaW5nLmh0bWw=">Metrics, tracing, and logging<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNS8xMS8wNS9sZXRzLXRhbGstYWJvdXQtbG9nZ2luZw==">Let’s talk about logging<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTMvMTEvdXNpbmctbG9nLXBhY2thZ2UtaW4tZ28uaHRtbA==">Using The Log Package In Go<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvZGVzaWduLXBoaWxvc29waHktb24tbG9nZ2luZy5odG1s">Design Philosophy On Logging<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNy8wMS8yMy90aGUtcGFja2FnZS1sZXZlbC1sb2dnZXItYW50aS1wYXR0ZXJu">The package level logger anti pattern<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9oZWxwLmFsaXl1bi5jb20vemgvc2xzL3VzZXItZ3VpZGUvdXNlLWxvZ3RhaWwtdG8tY29sbGVjdC1kYXRh">Logtail采集概述<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzcwMzIyOQ==">Logtail提升采集性能<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzIwNDU1NA==">Logtail技术分享(一) : Polling + Inotify 组合下的日志保序采集方案<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzI1MTYyOQ==">Logtail技术分享(二) : 多租户隔离技术+双十一实战效果<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9lbGFzdGljLXN0YWNrLw==">elastic-stack<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vYXJlc3hpbi9wLzgwMzUxMzcuaHRtbA==">ELK原理与介绍<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9iZWF0cy9maWxlYmVhdA==">Filebeat 轻量型日志采集器<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9iZWF0cy9maWxlYmVhdC84LjExL2luZGV4Lmh0bWw=">Filebeat Reference<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9sb2dzdGFzaA==">Logstash 集中、转换和存储数据<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9sb2dzdGFzaC84LjExL2luZGV4Lmh0bWw=">Logstash Reference<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9jbi9raWJhbmE=">Kibana 将数据转变为结果、响应和解决方案<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9raWJhbmEvOC4xMS9pbmRleC5odG1s">Kibana Guide<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9lbGFzdGljc2VhcmNoL3JlZmVyZW5jZS84LjExL2luZGV4Lmh0bWw=">Elasticsearch Guide<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9lbGFzdGljc2VhcmNoLmNuLw==">elasticsearch.cn<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmFsaWFzbWVlLmNvbS9wb3N0L2dyYXlsb2ctbG9nLXN5c3RlbS1hcmNoaXRlY3R1cmUv">Graylog 日志系统架构<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

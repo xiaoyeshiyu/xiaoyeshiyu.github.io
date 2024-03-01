@@ -72,14 +72,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -291,61 +284,61 @@
     
     
     <div class="post-body" itemprop="articleBody"><h1 id="Channels"><a href="#Channels" class="headerlink" title="Channels"></a>Channels</h1><blockquote>
-<p class="fireman-p-indent" >Do not communicate by sharing memory; instead, share memory by communicating.</p>
+<p>Do not communicate by sharing memory; instead, share memory by communicating.</p>
 </blockquote>
-<p class="fireman-p-indent" ><code>channels</code> 是一种类型安全的消息队列，充当两个 goroutine 之间的通道，将通过它同步的进行任意资源的交换。<code>chan</code> 控制 goroutine 交互的能力从而创建了 Go 同步机制。</p>
-<p class="fireman-p-indent" >当创建的 <code>chan</code> 没有容量时，称为无缓冲通道。反过来，使用容量创建的 <code>chan</code> 称为缓冲通道。</p>
-<p class="fireman-p-indent" >要了解通过 <code>chan</code> 交互的 goroutine 的同步行为是什么，就需要知道通道的类型和状态。根据使用的是无缓冲通道还是缓冲通道，场景会有所不同。</p>
-<h2 id="无缓冲通道"><a href="#无缓冲通道" class="headerlink" title="无缓冲通道"></a>无缓冲通道</h2><p class="fireman-p-indent" ><code>ch := make(chan struct&#123;&#125;)</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921155701536.png" alt="image-20230921155701536"></p>
+<p><code>channels</code> 是一种类型安全的消息队列，充当两个 goroutine 之间的通道，将通过它同步的进行任意资源的交换。<code>chan</code> 控制 goroutine 交互的能力从而创建了 Go 同步机制。</p>
+<p>当创建的 <code>chan</code> 没有容量时，称为无缓冲通道。反过来，使用容量创建的 <code>chan</code> 称为缓冲通道。</p>
+<p>要了解通过 <code>chan</code> 交互的 goroutine 的同步行为是什么，就需要知道通道的类型和状态。根据使用的是无缓冲通道还是缓冲通道，场景会有所不同。</p>
+<h2 id="无缓冲通道"><a href="#无缓冲通道" class="headerlink" title="无缓冲通道"></a>无缓冲通道</h2><p><code>ch := make(chan struct&#123;&#125;)</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921155701536.png" alt="image-20230921155701536"></p>
 <ul>
 <li>无缓冲 <code>chan</code> 没有容量，因此进行任何交换前，需要两个 goroutine 同时准备好</li>
 <li>当 goroutine 试图将一个资源发送到一个无缓冲通道，并且没有 goroutine 等待接受该资源时，该通道将锁住发送 goroutine 并使其等待。</li>
 <li>当 goroutine 尝试从无缓冲通道接收，并且没有 goroutine 等待发送资源时，该通道将锁住接受 goroutine 并使其等待。</li>
 </ul>
-<p class="fireman-p-indent" ><strong>无缓冲信道的本质是保证同步</strong></p>
+<p><strong>无缓冲信道的本质是保证同步</strong></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">string</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    wg.Add(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">       <span class="keyword">defer</span> wg.Done()</span><br><span class="line">       c &lt;- <span class="string">&quot;foo&quot;</span></span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">       <span class="keyword">defer</span> wg.Done()</span><br><span class="line"></span><br><span class="line">       time.Sleep(time.Second * <span class="number">1</span>)</span><br><span class="line">       <span class="built_in">print</span>(<span class="string">&quot;Message: &quot;</span> + &lt;-c)</span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >第一个 goroutine 在发送消息 foo 之后被阻塞，因为还没有接受者准备好。规范中对这种行为进行了很好的解释：</p>
+<p>第一个 goroutine 在发送消息 foo 之后被阻塞，因为还没有接受者准备好。规范中对这种行为进行了很好的解释：</p>
 <blockquote>
-<p class="fireman-p-indent" >If the capacity is zero or absent, the channel is unbuffered and communication succeeds only when both a sender and receiver are ready. </p>
-<p class="fireman-p-indent" >如果容量为零或不存在，则信道没有缓冲，只有当发送器和接收器都准备好时，通信才能成功。</p>
-<p class="fireman-p-indent" >– <span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvcmVmL3NwZWMjQ2hhbm5lbF90eXBlcw==">https://go.dev/ref/spec#Channel_types<i class="fa fa-external-link-alt"></i></span></p>
+<p>If the capacity is zero or absent, the channel is unbuffered and communication succeeds only when both a sender and receiver are ready. </p>
+<p>如果容量为零或不存在，则信道没有缓冲，只有当发送器和接收器都准备好时，通信才能成功。</p>
+<p>– <span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvcmVmL3NwZWMjQ2hhbm5lbF90eXBlcw==">https://go.dev/ref/spec#Channel_types<i class="fa fa-external-link-alt"></i></span></p>
 </blockquote>
 <blockquote>
-<p class="fireman-p-indent" >If the channel is unbuffered, the sender blocks until the receiver has received the value.</p>
-<p class="fireman-p-indent" >如果信道未缓冲，则发送器阻塞，直到接收器接收到该值。</p>
-<p class="fireman-p-indent" >– <span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvZG9jL2VmZmVjdGl2ZV9nbyNjaGFubmVscw==">https://go.dev/doc/effective_go#channels<i class="fa fa-external-link-alt"></i></span></p>
+<p>If the channel is unbuffered, the sender blocks until the receiver has received the value.</p>
+<p>如果信道未缓冲，则发送器阻塞，直到接收器接收到该值。</p>
+<p>– <span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvZG9jL2VmZmVjdGl2ZV9nbyNjaGFubmVscw==">https://go.dev/doc/effective_go#channels<i class="fa fa-external-link-alt"></i></span></p>
 </blockquote>
-<p class="fireman-p-indent" >总结一下：</p>
+<p>总结一下：</p>
 <ul>
 <li>Receive 先于 Send 发生</li>
 <li>好处：100% 保证能收到</li>
 <li>代价：延迟时间未知。</li>
 </ul>
-<h2 id="缓冲通道"><a href="#缓冲通道" class="headerlink" title="缓冲通道"></a>缓冲通道</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921162908914.png" alt="image-20230921162908914"></p>
-<p class="fireman-p-indent" ><code>buffered channel</code> 具有容量，因此其行为可能有点不同。</p>
-<p class="fireman-p-indent" >当 goroutine 试图将资源发送到缓冲通道，而该通道已满时，该通道将锁住 goroutine 并使其等待缓冲区可用。</p>
-<p class="fireman-p-indent" >如果通道中有空间，发送可以立即进行， goroutine 可以继续。</p>
-<p class="fireman-p-indent" >当 goroutine 试图从缓冲通道接受数据，而缓冲通道为空时，该通道将锁住 goroutine 并使其等待资源被发送。</p>
+<h2 id="缓冲通道"><a href="#缓冲通道" class="headerlink" title="缓冲通道"></a>缓冲通道</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921162908914.png" alt="image-20230921162908914"></p>
+<p><code>buffered channel</code> 具有容量，因此其行为可能有点不同。</p>
+<p>当 goroutine 试图将资源发送到缓冲通道，而该通道已满时，该通道将锁住 goroutine 并使其等待缓冲区可用。</p>
+<p>如果通道中有空间，发送可以立即进行， goroutine 可以继续。</p>
+<p>当 goroutine 试图从缓冲通道接受数据，而缓冲通道为空时，该通道将锁住 goroutine 并使其等待资源被发送。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;sync&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">string</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    wg.Add(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">       <span class="keyword">defer</span> wg.Done()</span><br><span class="line">       c &lt;- <span class="string">&quot;foo&quot;</span></span><br><span class="line">       c &lt;- <span class="string">&quot;bar&quot;</span></span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">       <span class="keyword">defer</span> wg.Done()</span><br><span class="line"></span><br><span class="line">       time.Sleep(time.Second * <span class="number">1</span>)</span><br><span class="line">       <span class="built_in">println</span>(<span class="string">&quot;Message: &quot;</span> + &lt;-c)</span><br><span class="line">       <span class="built_in">println</span>(<span class="string">&quot;Message: &quot;</span> + &lt;-c)</span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="缓冲区大小不足导致的延迟"><a href="#缓冲区大小不足导致的延迟" class="headerlink" title="缓冲区大小不足导致的延迟"></a>缓冲区大小不足导致的延迟</h3><p class="fireman-p-indent" >Latencies due to under-sized buffer</p>
-<p class="fireman-p-indent" >在 <code>chan</code> 创建过程中定义的缓冲区大小可能会极大地影响性能。</p>
-<p class="fireman-p-indent" >这里密集地使用 <code>chan</code> 的扇出模式来查看不同缓冲区大小的影响。</p>
-<p class="fireman-p-indent" >在基准测试中，一个 <code>producer</code> 将在通道中注入百万个整数元素，而 5 个 <code>worker</code> 读取并将它们追加到一个名为 <code>total</code> 的结果变量中。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921163455423.png" alt="image-20230921163455423"></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921163510983.png" alt="image-20230921163510983"></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921163643628.png" alt="image-20230921163643628"></p>
-<p class="fireman-p-indent" >总结：</p>
+<h3 id="缓冲区大小不足导致的延迟"><a href="#缓冲区大小不足导致的延迟" class="headerlink" title="缓冲区大小不足导致的延迟"></a>缓冲区大小不足导致的延迟</h3><p>Latencies due to under-sized buffer</p>
+<p>在 <code>chan</code> 创建过程中定义的缓冲区大小可能会极大地影响性能。</p>
+<p>这里密集地使用 <code>chan</code> 的扇出模式来查看不同缓冲区大小的影响。</p>
+<p>在基准测试中，一个 <code>producer</code> 将在通道中注入百万个整数元素，而 5 个 <code>worker</code> 读取并将它们追加到一个名为 <code>total</code> 的结果变量中。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921163455423.png" alt="image-20230921163455423"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921163510983.png" alt="image-20230921163510983"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230921163643628.png" alt="image-20230921163643628"></p>
+<p>总结：</p>
 <ul>
 <li>Send 先于 Receive 发生</li>
 <li>好处：延迟更小（有空间时，不需要获取锁，减少上下文）</li>
 <li>代价：不保证数据到达，越大的 <code>buffer</code>，越小的保障到达。<code>buffer = 1</code>时，给你延迟一个消息的保障。</li>
 </ul>
-<h2 id="Go并发模式"><a href="#Go并发模式" class="headerlink" title="Go并发模式"></a>Go并发模式</h2><p class="fireman-p-indent" >Go Concurrency Patterns</p>
-<p class="fireman-p-indent" >Go 使用 <code>chan</code> 的几种方式：</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9jb25jdXJyZW5jeS10aW1lb3V0cw==">Go Concurrency Patterns: Timing out, moving on<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="Go并发模式"><a href="#Go并发模式" class="headerlink" title="Go并发模式"></a>Go并发模式</h2><p>Go Concurrency Patterns</p>
+<p>Go 使用 <code>chan</code> 的几种方式：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9jb25jdXJyZW5jeS10aW1lb3V0cw==">Go Concurrency Patterns: Timing out, moving on<i class="fa fa-external-link-alt"></i></span></p>
 <ul>
 <li><p>TIming out：超时</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">timeout := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">bool</span>, <span class="number">1</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">    timeout &lt;- <span class="literal">true</span></span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
@@ -358,7 +351,7 @@
 <li><p>Moving on：继续流程</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Query</span><span class="params">(conns []Conn, query <span class="type">string</span>)</span></span> Result &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> Result)</span><br><span class="line">    <span class="keyword">for</span> _, conn := <span class="keyword">range</span> conns &#123;</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(c Conn)</span></span> &#123;</span><br><span class="line">            <span class="keyword">select</span> &#123;</span><br><span class="line">            <span class="keyword">case</span> ch &lt;- c.DoQuery(query):</span><br><span class="line">            		<span class="comment">// close(ch)  // 这里也不能close，panic: send on closed channel</span></span><br><span class="line">            <span class="keyword">default</span>:  <span class="comment">// 这个不能遗漏，不然会出现泄漏</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;(conn)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &lt;-ch</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvcGlwZWxpbmVz">Go Concurrency Patterns: Pipelines and cancellation<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvcGlwZWxpbmVz">Go Concurrency Patterns: Pipelines and cancellation<i class="fa fa-external-link-alt"></i></span></p>
 <ul>
 <li><p>Pipeline：管道</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">gen</span><span class="params">(nums ...<span class="type">int</span>)</span></span> &lt;-<span class="keyword">chan</span> <span class="type">int</span> &#123;</span><br><span class="line">    out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">for</span> _, n := <span class="keyword">range</span> nums &#123;</span><br><span class="line">            out &lt;- n</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">close</span>(out)</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -372,7 +365,7 @@
 <p>对该数据执行某些功能，通常会产生新值</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// Set up the pipeline and consume the output.</span></span><br><span class="line">    <span class="keyword">for</span> n := <span class="keyword">range</span> sq(sq(gen(<span class="number">2</span>, <span class="number">3</span>))) &#123;</span><br><span class="line">        fmt.Println(n) <span class="comment">// 16 then 81</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p class="fireman-p-indent" >​	通过<em>出</em>站通道向<em>下游</em>发送值</p>
+<p>​	通过<em>出</em>站通道向<em>下游</em>发送值</p>
 <ul>
 <li><p>Fan-out, Fan-in</p>
 <p>多个函数从同一个 <code>channel</code> 读取数据，直到该<code>chan</code>关闭；这称为<em>扇出</em>。这提供了一种在一组<code>worker</code>之间分配工作以并行化 CPU 使用和 I&#x2F;O 的方法。简单理解为多个 goroutine 同时处理多个任务。master-workers</p>
@@ -402,11 +395,11 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sq</span><span class="params">(done &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, in &lt;-<span class="keyword">chan</span> <span class="type">int</span>)</span></span> &lt;-<span class="keyword">chan</span> <span class="type">int</span> &#123;</span><br><span class="line">    out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">defer</span> <span class="built_in">close</span>(out)				<span class="comment">// 增加内部 close 机制，确保其输出通道在所有返回路径上关闭</span></span><br><span class="line">        <span class="keyword">for</span> n := <span class="keyword">range</span> in &#123;</span><br><span class="line">            <span class="keyword">select</span> &#123;</span><br><span class="line">            <span class="keyword">case</span> out &lt;- n * n:</span><br><span class="line">            <span class="keyword">case</span> &lt;-done:</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;()</span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >Context</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvY29uY3VycmVuY3ktdGltZW91dHM=">Go Concurrency Patterns: Timing out, moving on<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9waXBlbGluZXM=">Go Concurrency Patterns: Pipelines and cancellation<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly90YWxrcy5nb2xhbmcub3JnLzIwMTMvYWR2Y29uYy5zbGlkZSMx">Advanced Go Concurrency Patterns<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvLWtyYXRvcy9rcmF0b3MvdHJlZS92MS4wLngvcGtnL3N5bmM=">go-kratos&#x2F;kratos<i class="fa fa-external-link-alt"></i></span> – errgroup,pipeline</p>
+<li><p>Context</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvY29uY3VycmVuY3ktdGltZW91dHM=">Go Concurrency Patterns: Timing out, moving on<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9waXBlbGluZXM=">Go Concurrency Patterns: Pipelines and cancellation<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly90YWxrcy5nb2xhbmcub3JnLzIwMTMvYWR2Y29uYy5zbGlkZSMx">Advanced Go Concurrency Patterns<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvLWtyYXRvcy9rcmF0b3MvdHJlZS92MS4wLngvcGtnL3N5bmM=">go-kratos&#x2F;kratos<i class="fa fa-external-link-alt"></i></span> – errgroup,pipeline</p>
 </li>
 </ul>
 <h1 id="设计理念"><a href="#设计理念" class="headerlink" title="设计理念"></a>设计理念</h1><ul>
@@ -421,13 +414,13 @@
 </li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >Must know what happens when the sending goroutine blocks </p>
-<p class="fireman-p-indent" >必须知道发送程序阻塞时会发生什么情况</p>
+<li><p>Must know what happens when the sending goroutine blocks </p>
+<p>必须知道发送程序阻塞时会发生什么情况</p>
 </li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >If any given Send on a channel WON’T cause the sending goroutine to block:</p>
-<p class="fireman-p-indent" >如果说通道发消息的任何给一个送，都不会导致发送程序阻塞，那么：</p>
+<li><p>If any given Send on a channel WON’T cause the sending goroutine to block:</p>
+<p>如果说通道发消息的任何给一个送，都不会导致发送程序阻塞，那么：</p>
 <ul>
 <li><p>You have the exact number of buffers for each send.</p>
 <p>每一个发送方都有准确的容量的缓冲。</p>
@@ -437,8 +430,8 @@
 </li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >You have the buffer measured for max capacity.</p>
-<p class="fireman-p-indent" >已经确定了了缓冲区的最大容量。</p>
+<li><p>You have the buffer measured for max capacity.</p>
+<p>已经确定了了缓冲区的最大容量。</p>
 <ul>
 <li><p>Drop pattern </p>
 <p>水滴模式</p>
@@ -447,8 +440,8 @@
 </li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >Less is more with buffers.</p>
-<p class="fireman-p-indent" ><code>chan</code>的缓冲区少即是多。</p>
+<li><p>Less is more with buffers.</p>
+<p><code>chan</code>的缓冲区少即是多。</p>
 <ul>
 <li><p>Don’t think about performance when thinking about buffers </p>
 <p>考虑缓冲区时不要考虑性能问题。性能是消费者决定的。</p>
@@ -473,16 +466,16 @@
 </ul>
 </li>
 </ul>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMTAvdGhlLWJlaGF2aW9yLW9mLWNoYW5uZWxzLmh0bWw=">The Behavior Of Channels<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cDovL3dlYmNhY2hlLmdvb2dsZXVzZXJjb250ZW50LmNvbS9zZWFyY2g/cT1jYWNoZTpodHRwczovL21lZGl1bS5jb20vYS1qb3VybmV5LXdpdGgtZ28vZ28tYnVmZmVyZWQtYW5kLXVuYnVmZmVyZWQtY2hhbm5lbHMtMjlhMTA3YzAwMjY4JnNjYV9lc3Y9NTY3MjAxMDg1JnN0cmlwPTEmdndzcmM9MA==">Go: Buffered and Unbuffered Channels<i class="fa fa-external-link-alt"></i></span>:<span class="exturl" data-url="aHR0cHM6Ly9tZWRpdW0uY29tL2Etam91cm5leS13aXRoLWdvL2dvLWJ1ZmZlcmVkLWFuZC11bmJ1ZmZlcmVkLWNoYW5uZWxzLTI5YTEwN2MwMDI2OA==">https://medium.com/a-journey-with-go/go-buffered-and-unbuffered-channels-29a107c00268<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cDovL3dlYmNhY2hlLmdvb2dsZXVzZXJjb250ZW50LmNvbS9zZWFyY2g/cT1jYWNoZTpodHRwczovL21lZGl1bS5jb20vYS1qb3VybmV5LXdpdGgtZ28vZ28tb3JkZXJpbmctaW4tc2VsZWN0LXN0YXRlbWVudHMtZmQwZmY4MGZkOGQ2JnNjYV9lc3Y9NTY3MjAxMDg1JnN0cmlwPTEmdndzcmM9MA==">Go: Ordering in Select Statements<i class="fa fa-external-link-alt"></i></span>:<span class="exturl" data-url="aHR0cHM6Ly9tZWRpdW0uY29tL2Etam91cm5leS13aXRoLWdvL2dvLW9yZGVyaW5nLWluLXNlbGVjdC1zdGF0ZW1lbnRzLWZkMGZmODBmZDhkNg==">https://medium.com/a-journey-with-go/go-ordering-in-select-statements-fd0ff80fd8d6<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTQvMDIvdGhlLW5hdHVyZS1vZi1jaGFubmVscy1pbi1nby5odG1s">The Nature Of Channels In Go<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTMvMTAvbXktY2hhbm5lbC1zZWxlY3QtYnVnLmh0bWw=">My Channel Select Bug<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9pbzIwMTMtdGFsay1jb25jdXJyZW5jeQ==">Advanced Go Concurrency Patterns<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy93YXphLXRhbGs=">Concurrency is not parallelism<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9pbzIwMTItdmlkZW9z">Go videos from Google I&#x2F;O 2012<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9jb25jdXJyZW5jeS10aW1lb3V0cw==">Go Concurrency Patterns: Timing out, moving on<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1L2ltYWdlLWhvc3Rpbmctc2VydmljZS9ibG9iL21haW4vdVBpYy8yMDIzLzA5L1JldGhpbmtpbmclMjBDbGFzc2ljYWwlMjBDb25jdXJyZW5jeSUyMFBhdHRlcm5zLnBkZg==">Rethinking Classical Concurrency Patterns.pdf<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMTAvdGhlLWJlaGF2aW9yLW9mLWNoYW5uZWxzLmh0bWw=">The Behavior Of Channels<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cDovL3dlYmNhY2hlLmdvb2dsZXVzZXJjb250ZW50LmNvbS9zZWFyY2g/cT1jYWNoZTpodHRwczovL21lZGl1bS5jb20vYS1qb3VybmV5LXdpdGgtZ28vZ28tYnVmZmVyZWQtYW5kLXVuYnVmZmVyZWQtY2hhbm5lbHMtMjlhMTA3YzAwMjY4JnNjYV9lc3Y9NTY3MjAxMDg1JnN0cmlwPTEmdndzcmM9MA==">Go: Buffered and Unbuffered Channels<i class="fa fa-external-link-alt"></i></span>:<span class="exturl" data-url="aHR0cHM6Ly9tZWRpdW0uY29tL2Etam91cm5leS13aXRoLWdvL2dvLWJ1ZmZlcmVkLWFuZC11bmJ1ZmZlcmVkLWNoYW5uZWxzLTI5YTEwN2MwMDI2OA==">https://medium.com/a-journey-with-go/go-buffered-and-unbuffered-channels-29a107c00268<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cDovL3dlYmNhY2hlLmdvb2dsZXVzZXJjb250ZW50LmNvbS9zZWFyY2g/cT1jYWNoZTpodHRwczovL21lZGl1bS5jb20vYS1qb3VybmV5LXdpdGgtZ28vZ28tb3JkZXJpbmctaW4tc2VsZWN0LXN0YXRlbWVudHMtZmQwZmY4MGZkOGQ2JnNjYV9lc3Y9NTY3MjAxMDg1JnN0cmlwPTEmdndzcmM9MA==">Go: Ordering in Select Statements<i class="fa fa-external-link-alt"></i></span>:<span class="exturl" data-url="aHR0cHM6Ly9tZWRpdW0uY29tL2Etam91cm5leS13aXRoLWdvL2dvLW9yZGVyaW5nLWluLXNlbGVjdC1zdGF0ZW1lbnRzLWZkMGZmODBmZDhkNg==">https://medium.com/a-journey-with-go/go-ordering-in-select-statements-fd0ff80fd8d6<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTQvMDIvdGhlLW5hdHVyZS1vZi1jaGFubmVscy1pbi1nby5odG1s">The Nature Of Channels In Go<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTMvMTAvbXktY2hhbm5lbC1zZWxlY3QtYnVnLmh0bWw=">My Channel Select Bug<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9pbzIwMTMtdGFsay1jb25jdXJyZW5jeQ==">Advanced Go Concurrency Patterns<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy93YXphLXRhbGs=">Concurrency is not parallelism<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9pbzIwMTItdmlkZW9z">Go videos from Google I&#x2F;O 2012<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9jb25jdXJyZW5jeS10aW1lb3V0cw==">Go Concurrency Patterns: Timing out, moving on<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1L2ltYWdlLWhvc3Rpbmctc2VydmljZS9ibG9iL21haW4vdVBpYy8yMDIzLzA5L1JldGhpbmtpbmclMjBDbGFzc2ljYWwlMjBDb25jdXJyZW5jeSUyMFBhdHRlcm5zLnBkZg==">Rethinking Classical Concurrency Patterns.pdf<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

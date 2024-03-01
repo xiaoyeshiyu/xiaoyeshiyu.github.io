@@ -91,14 +91,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -309,10 +302,10 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="堆栈-逃逸分析"><a href="#堆栈-逃逸分析" class="headerlink" title="堆栈 &amp; 逃逸分析"></a>堆栈 &amp; 逃逸分析</h1><h2 id="堆和栈的定义"><a href="#堆和栈的定义" class="headerlink" title="堆和栈的定义"></a>堆和栈的定义</h2><p class="fireman-p-indent" >堆和栈都是编程语言里的虚拟概念，并不是说在物理内存上有堆和栈之分，两者的主要区别是栈是每个线程或者协程独立拥有的，从栈上分配内存时不需要加锁。</p>
-<p class="fireman-p-indent" >而整个程序在运行时只有一个堆，从堆中分配内存时需要加锁防止多个线程造成冲突，同时回收堆上的内存块时还需要运行可达性分析、引用计数等算法来决定内存块是否能被回收，所以从分配和回收内存的方面来看栈内存效率更高。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215102404113.png" alt="image-20231215102404113"></p>
-<p class="fireman-p-indent" >Go 有两个地方可以分配内存：一个全局堆空间用来动态分配内存，一个是每个 <code>goroutine</code> 都有的自身栈空间（例如<code>goroutine</code>占用<code>2k</code>）。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="堆栈-逃逸分析"><a href="#堆栈-逃逸分析" class="headerlink" title="堆栈 &amp; 逃逸分析"></a>堆栈 &amp; 逃逸分析</h1><h2 id="堆和栈的定义"><a href="#堆和栈的定义" class="headerlink" title="堆和栈的定义"></a>堆和栈的定义</h2><p>堆和栈都是编程语言里的虚拟概念，并不是说在物理内存上有堆和栈之分，两者的主要区别是栈是每个线程或者协程独立拥有的，从栈上分配内存时不需要加锁。</p>
+<p>而整个程序在运行时只有一个堆，从堆中分配内存时需要加锁防止多个线程造成冲突，同时回收堆上的内存块时还需要运行可达性分析、引用计数等算法来决定内存块是否能被回收，所以从分配和回收内存的方面来看栈内存效率更高。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215102404113.png" alt="image-20231215102404113"></p>
+<p>Go 有两个地方可以分配内存：一个全局堆空间用来动态分配内存，一个是每个 <code>goroutine</code> 都有的自身栈空间（例如<code>goroutine</code>占用<code>2k</code>）。</p>
 <ul>
 <li><p>栈</p>
 <p>栈区的内存一般由编译器自动进行分配和释放（例如在函数内使用局部变量 <code>var a = 1</code>），其中存储的入参以及局部变量，这些参数会随着函数的创建而创建，函数的返回而销毁。（通过 <code>CPU push &amp; release</code>两个指令）。</p>
@@ -323,8 +316,8 @@
 </blockquote>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215105429947.png" alt="image-20231215105429947"></p>
-<p class="fireman-p-indent" >在 <code>main frame</code> 中声明的一个变量 <code>u2</code>，需要被外部访问，<code>u2</code> 会被分配到堆上，外面的 <code>createUserV2 Frame</code> 通过指针访问堆上的 <code>u2</code>，</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215105429947.png" alt="image-20231215105429947"></p>
+<p>在 <code>main frame</code> 中声明的一个变量 <code>u2</code>，需要被外部访问，<code>u2</code> 会被分配到堆上，外面的 <code>createUserV2 Frame</code> 通过指针访问堆上的 <code>u2</code>，</p>
 <ul>
 <li><p>堆</p>
 <p>堆区的内存一般由编译器和工程师自己共同进行管理分配，交给 <code>runtime GC</code> 来释放。</p>
@@ -336,48 +329,48 @@
 </li>
 </ul>
 <blockquote>
-<p class="fireman-p-indent" >stack allocation is cheap and heap allocation is expensive.</p>
-<p class="fireman-p-indent" >栈分配廉价，堆分配昂贵。（堆的内存分配比栈慢；成本更高；）</p>
+<p>stack allocation is cheap and heap allocation is expensive.</p>
+<p>栈分配廉价，堆分配昂贵。（堆的内存分配比栈慢；成本更高；）</p>
 </blockquote>
-<h2 id="变量是在堆还是栈上？"><a href="#变量是在堆还是栈上？" class="headerlink" title="变量是在堆还是栈上？"></a>变量是在堆还是栈上？</h2><p class="fireman-p-indent" >写过其他语言，比如 C ，有明确的栈和堆的相关概念。而 Go 声明语法并没有提到栈和堆，而是交给 Go 编译器决定在哪分配内存，保证程序的正确性，在 <span class="exturl" data-url="aHR0cHM6Ly9nb2xhbmcub3JnL2RvYy9mYXEjc3RhY2tfb3JfaGVhcA==">Go FAQ<i class="fa fa-external-link-alt"></i></span> 里面提到这么一段解释：</p>
+<h2 id="变量是在堆还是栈上？"><a href="#变量是在堆还是栈上？" class="headerlink" title="变量是在堆还是栈上？"></a>变量是在堆还是栈上？</h2><p>写过其他语言，比如 C ，有明确的栈和堆的相关概念。而 Go 声明语法并没有提到栈和堆，而是交给 Go 编译器决定在哪分配内存，保证程序的正确性，在 <span class="exturl" data-url="aHR0cHM6Ly9nb2xhbmcub3JnL2RvYy9mYXEjc3RhY2tfb3JfaGVhcA==">Go FAQ<i class="fa fa-external-link-alt"></i></span> 里面提到这么一段解释：</p>
 <blockquote>
-<p class="fireman-p-indent" >From a correctness standpoint, you don’t need to know. Each variable in Go exists as long as there are references to it. The storage location chosen by the implementation is irrelevant to the semantics of the language.</p>
-<p class="fireman-p-indent" >The storage location does have an effect on writing efficient programs. When possible, the Go compilers will allocate variables that are local to a function in that function’s stack frame. However, if the compiler cannot prove that the variable is not referenced after the function returns, then the compiler must allocate the variable on the garbage-collected heap to avoid dangling pointer errors. Also, if a local variable is very large, it might make more sense to store it on the heap rather than the stack.</p>
-<p class="fireman-p-indent" >In the current compilers, if a variable has its address taken, that variable is a candidate for allocation on the heap. However, a basic <em>escape analysis</em> recognizes some cases when such variables will not live past the return from the function and can reside on the stack.</p>
-<p class="fireman-p-indent" >  从正确的角度来看，你不需要知道。Go 中的每个变量只要有引用就会一直存在。变量的存储位置(堆还是栈)和语言的语义无关。</p>
-<p class="fireman-p-indent" >  存储位置对于写出高性能的程序确实有影响。如果可能，Go 编译器将为该函数的堆栈侦(&#96;&#96;stack frame&#96;)中的函数分配本地变量。但是如果编译器在函数返回后无法证明变量未被引用，则编译器必须在会被垃圾回收的堆上分配变量以避免悬空指针错误。此外，如果局部变量非常大，将它存储在堆而不是栈上可能更有意义。</p>
-<p class="fireman-p-indent" >  在当前编译器中，如果变量存在取址，则该变量是堆上分配的候选变量。但是基础的<strong>逃逸分析</strong>可以将那些生存不超过函数返回值的变量识别出来，并且因此可以分配在栈上。</p>
+<p>From a correctness standpoint, you don’t need to know. Each variable in Go exists as long as there are references to it. The storage location chosen by the implementation is irrelevant to the semantics of the language.</p>
+<p>The storage location does have an effect on writing efficient programs. When possible, the Go compilers will allocate variables that are local to a function in that function’s stack frame. However, if the compiler cannot prove that the variable is not referenced after the function returns, then the compiler must allocate the variable on the garbage-collected heap to avoid dangling pointer errors. Also, if a local variable is very large, it might make more sense to store it on the heap rather than the stack.</p>
+<p>In the current compilers, if a variable has its address taken, that variable is a candidate for allocation on the heap. However, a basic <em>escape analysis</em> recognizes some cases when such variables will not live past the return from the function and can reside on the stack.</p>
+<p>  从正确的角度来看，你不需要知道。Go 中的每个变量只要有引用就会一直存在。变量的存储位置(堆还是栈)和语言的语义无关。</p>
+<p>  存储位置对于写出高性能的程序确实有影响。如果可能，Go 编译器将为该函数的堆栈侦(&#96;&#96;stack frame&#96;)中的函数分配本地变量。但是如果编译器在函数返回后无法证明变量未被引用，则编译器必须在会被垃圾回收的堆上分配变量以避免悬空指针错误。此外，如果局部变量非常大，将它存储在堆而不是栈上可能更有意义。</p>
+<p>  在当前编译器中，如果变量存在取址，则该变量是堆上分配的候选变量。但是基础的<strong>逃逸分析</strong>可以将那些生存不超过函数返回值的变量识别出来，并且因此可以分配在栈上。</p>
 </blockquote>
-<h2 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215113744443.png" alt="image-20231215113744443"></p>
-<p class="fireman-p-indent" ><code>go build -gcflags &#39;-m&#39;</code> 可以看到是否有栈逃逸。例如 <code>tmp</code> 分配在栈上，但是返回了地址，因此会逃逸到堆上。</p>
-<p class="fireman-p-indent" ><strong>通过检查变量的作用域是否超出了它所在的栈来决定是否将它分配在堆上</strong> 的技术，其中 <strong>变量的作用域超出了它所在的栈</strong> 这种行为即被称为逃逸。</p>
-<p class="fireman-p-indent" >逃逸分析在大多数语言里属于静态分析：</p>
-<p class="fireman-p-indent" >在编译器由静态代码分析来决定一个值是否能被分配在栈帧上，还是需要 <strong>逃逸</strong> 到堆上。</p>
+<h2 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215113744443.png" alt="image-20231215113744443"></p>
+<p><code>go build -gcflags &#39;-m&#39;</code> 可以看到是否有栈逃逸。例如 <code>tmp</code> 分配在栈上，但是返回了地址，因此会逃逸到堆上。</p>
+<p><strong>通过检查变量的作用域是否超出了它所在的栈来决定是否将它分配在堆上</strong> 的技术，其中 <strong>变量的作用域超出了它所在的栈</strong> 这种行为即被称为逃逸。</p>
+<p>逃逸分析在大多数语言里属于静态分析：</p>
+<p>在编译器由静态代码分析来决定一个值是否能被分配在栈帧上，还是需要 <strong>逃逸</strong> 到堆上。</p>
 <ul>
 <li>减少 GC 压力，栈上的变量，随着函数退出后系统直接回收，不需要标记后再清除</li>
 <li>减少内存碎片的产生</li>
 <li>减轻分配堆内存的开销，提高程序的运行速度</li>
 </ul>
-<h2 id="超过栈帧（stack-frame）"><a href="#超过栈帧（stack-frame）" class="headerlink" title="超过栈帧（stack frame）"></a>超过栈帧（<code>stack frame</code>）</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215114324916.png" alt="image-20231215114324916"></p>
+<h2 id="超过栈帧（stack-frame）"><a href="#超过栈帧（stack-frame）" class="headerlink" title="超过栈帧（stack frame）"></a>超过栈帧（<code>stack frame</code>）</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215114324916.png" alt="image-20231215114324916"></p>
 <ol>
 <li>声明一个 <code>main</code> 函数，在栈上分配内存</li>
 <li>声明一个 <code>getRandom</code> 函数，栈上新开一块内存进行分配；<code>getRandom</code> 函数中声明一个局部变量 <code>tmp</code>，并且初始化对应内存地址</li>
 </ol>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215114329898.png" alt="image-20231215114329898"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231215114329898.png" alt="image-20231215114329898"></p>
 <ol start="3">
 <li>在 <code>main</code> 函数中访问 <code>getRandom</code> 中的局部变量，赋值给自己的 <code>num</code> 变量，指向 <code>tmp</code> 的地址</li>
 <li>跨栈访问内存中的变量会出现报错</li>
 </ol>
-<p class="fireman-p-indent" >因此 <code>tmp</code> 会被分配到 堆 上，在调用 <code>getRandom</code> 函数返回地址的时候，返回的是堆上的地址。</p>
-<p class="fireman-p-indent" >当一个函数被调用时，会在两个相关的帧边界间进行上下文切换。</p>
-<p class="fireman-p-indent" >从调用函数缺换到被调用函数，如果函数调用时需要传递参数，那么这些参数值也要传递到被调用函数的帧边界中。</p>
-<p class="fireman-p-indent" >Go 语言中帧边界间的数据传递是<strong>按值传递</strong>的。任何在函数 <code>getRandom</code> 中的变量在函数返回时，都将不能访问。</p>
-<p class="fireman-p-indent" >Go 查找所有变量超过当前函数栈帧的，把它们分配到堆上，避免 <code>outlive</code> 变量。</p>
-<p class="fireman-p-indent" >上述情况中 <code>num</code> 变量不能指向之前的栈。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218164231123.png" alt="image-20231218164231123"></p>
-<p class="fireman-p-indent" >Go 查找所有变量超过当前函数栈帧的，把它们分配到堆上，避免 <code>outlive</code> 变量。</p>
-<p class="fireman-p-indent" >变量 <code>tmp</code> 在栈上分配，但是它包含了指向堆内存的地址，所以可以安全的从一个函数的栈帧复制到另外一个函数的栈帧。</p>
-<h2 id="逃逸案例"><a href="#逃逸案例" class="headerlink" title="逃逸案例"></a>逃逸案例</h2><p class="fireman-p-indent" >还存在大量其他的 <code>case</code> 会出现逃逸，比较典型的就是 <strong>多级间接赋值容易导致逃逸</strong>，这里的多级简介指的是，对某个应用类对象中的引用类成员进行赋值。Go 语言中的引用类数据类型有 <code>func</code>，<code>interface</code>，<code>slice</code>，<code>map</code>，<code>chan</code>，<code>*Type</code>：</p>
+<p>因此 <code>tmp</code> 会被分配到 堆 上，在调用 <code>getRandom</code> 函数返回地址的时候，返回的是堆上的地址。</p>
+<p>当一个函数被调用时，会在两个相关的帧边界间进行上下文切换。</p>
+<p>从调用函数缺换到被调用函数，如果函数调用时需要传递参数，那么这些参数值也要传递到被调用函数的帧边界中。</p>
+<p>Go 语言中帧边界间的数据传递是<strong>按值传递</strong>的。任何在函数 <code>getRandom</code> 中的变量在函数返回时，都将不能访问。</p>
+<p>Go 查找所有变量超过当前函数栈帧的，把它们分配到堆上，避免 <code>outlive</code> 变量。</p>
+<p>上述情况中 <code>num</code> 变量不能指向之前的栈。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218164231123.png" alt="image-20231218164231123"></p>
+<p>Go 查找所有变量超过当前函数栈帧的，把它们分配到堆上，避免 <code>outlive</code> 变量。</p>
+<p>变量 <code>tmp</code> 在栈上分配，但是它包含了指向堆内存的地址，所以可以安全的从一个函数的栈帧复制到另外一个函数的栈帧。</p>
+<h2 id="逃逸案例"><a href="#逃逸案例" class="headerlink" title="逃逸案例"></a>逃逸案例</h2><p>还存在大量其他的 <code>case</code> 会出现逃逸，比较典型的就是 <strong>多级间接赋值容易导致逃逸</strong>，这里的多级简介指的是，对某个应用类对象中的引用类成员进行赋值。Go 语言中的引用类数据类型有 <code>func</code>，<code>interface</code>，<code>slice</code>，<code>map</code>，<code>chan</code>，<code>*Type</code>：</p>
 <ul>
 <li>一个值被分享到函数栈帧范围之外</li>
 <li>在 <code>for</code> 循环外声明，在 <code>for</code> 循环内分配，同理闭包</li>
@@ -387,35 +380,35 @@
 <li>在 <code>interface</code> 类型上调用方法</li>
 <li>… <code>go bulid -gcflags &#39;-m&#39;</code></li>
 </ul>
-<h1 id="连续栈"><a href="#连续栈" class="headerlink" title="连续栈"></a>连续栈</h1><h2 id="分段栈"><a href="#分段栈" class="headerlink" title="分段栈"></a>分段栈</h2><p class="fireman-p-indent" >Go 应用程序运行时，每个 <code>goroutine</code> 都维护着一个自己的栈区，这个栈区只能自己使用不能被其他 <code>goroutine</code> 使用。</p>
-<p class="fireman-p-indent" >栈区的初始大小是 2KB（比 <code>x86_64</code> 架构下线程的默认栈 2M 要小很多），在 <code>goroutine</code> 运行的时候栈区会按照需要增长和收缩，占用的内存最大限制的默认值在 64 位系统上是 1GB。</p>
-<p class="fireman-p-indent" >老栈会通过指针，指向新增长的栈，这就是分段栈。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218165805918.png" alt="image-20231218165805918"></p>
+<h1 id="连续栈"><a href="#连续栈" class="headerlink" title="连续栈"></a>连续栈</h1><h2 id="分段栈"><a href="#分段栈" class="headerlink" title="分段栈"></a>分段栈</h2><p>Go 应用程序运行时，每个 <code>goroutine</code> 都维护着一个自己的栈区，这个栈区只能自己使用不能被其他 <code>goroutine</code> 使用。</p>
+<p>栈区的初始大小是 2KB（比 <code>x86_64</code> 架构下线程的默认栈 2M 要小很多），在 <code>goroutine</code> 运行的时候栈区会按照需要增长和收缩，占用的内存最大限制的默认值在 64 位系统上是 1GB。</p>
+<p>老栈会通过指针，指向新增长的栈，这就是分段栈。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218165805918.png" alt="image-20231218165805918"></p>
 <ul>
 <li>v1.0 ~ v1.1 ：最小栈内存空间为 4KB</li>
 <li>v1.2 ：将最小栈内存提升到了 8KB</li>
 <li>v1.3 ：使用连续栈替换之前版本的分段栈</li>
 <li>v1.4 ：将最小栈内存降低到了 2KB</li>
 </ul>
-<h2 id="Hot-split-问题"><a href="#Hot-split-问题" class="headerlink" title="Hot split 问题"></a>Hot split 问题</h2><p class="fireman-p-indent" >分段栈的实现方式存在 <code>hot split</code> 问题，如果栈快满了，那么下一次的函数调用会强制触发栈扩容。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218170923760.png" alt="image-20231218170923760"></p>
-<p class="fireman-p-indent" >当函数返回时，新分配的 <code>stack chunk</code> 会被清理掉。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218171110327.png" alt="image-20231218171110327"></p>
-<p class="fireman-p-indent" >如果这个函数调用产生的范围是在一个循环中，会导致严重的性能问题，频繁的 <code>alloc/free</code>。</p>
-<p class="fireman-p-indent" >Go 不得不在 1.2 版本把栈默认大小改为 8KB，降低出发热分裂的问题，但是每个 <code>goroutine</code> 内存开销就比较大了。直到实现了连续栈（<code>contiguous stack</code>），栈大小才改为 2KB。</p>
-<h2 id="连续栈-1"><a href="#连续栈-1" class="headerlink" title="连续栈"></a>连续栈</h2><p class="fireman-p-indent" >采用复制栈的实现方式，在热分裂场景中不会频繁释放内存，即不像分配一个新的内存块并链接到老的栈内存块，而是会分配一个两倍大的内存块并把老的内存块内容复制到新的内存块里，当栈缩减回之前大小时，我们不需要做任何事情。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218171352743.png" alt="image-20231218171352743"></p>
+<h2 id="Hot-split-问题"><a href="#Hot-split-问题" class="headerlink" title="Hot split 问题"></a>Hot split 问题</h2><p>分段栈的实现方式存在 <code>hot split</code> 问题，如果栈快满了，那么下一次的函数调用会强制触发栈扩容。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218170923760.png" alt="image-20231218170923760"></p>
+<p>当函数返回时，新分配的 <code>stack chunk</code> 会被清理掉。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218171110327.png" alt="image-20231218171110327"></p>
+<p>如果这个函数调用产生的范围是在一个循环中，会导致严重的性能问题，频繁的 <code>alloc/free</code>。</p>
+<p>Go 不得不在 1.2 版本把栈默认大小改为 8KB，降低出发热分裂的问题，但是每个 <code>goroutine</code> 内存开销就比较大了。直到实现了连续栈（<code>contiguous stack</code>），栈大小才改为 2KB。</p>
+<h2 id="连续栈-1"><a href="#连续栈-1" class="headerlink" title="连续栈"></a>连续栈</h2><p>采用复制栈的实现方式，在热分裂场景中不会频繁释放内存，即不像分配一个新的内存块并链接到老的栈内存块，而是会分配一个两倍大的内存块并把老的内存块内容复制到新的内存块里，当栈缩减回之前大小时，我们不需要做任何事情。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218171352743.png" alt="image-20231218171352743"></p>
 <ul>
 <li><code>runtime.newstack</code>：分配更大的栈内存空间</li>
 <li><code>runtime.copystack</code>：将旧栈中的内容复制到新栈中</li>
 <li>将指向旧栈对应变量的指针重新指向新栈（这块代码比较复杂。）</li>
 <li><code>runtime.stackfree</code> ：销毁并回收旧栈的内存空间</li>
 </ul>
-<p class="fireman-p-indent" >如果栈区的空间使用率不超过 1&#x2F;4，那么在垃圾回收的时候使用 <code>runtime.shrinkstack</code> 进行栈锁容，同样使用 <code>copystack</code>。</p>
-<h2 id="栈扩容"><a href="#栈扩容" class="headerlink" title="栈扩容"></a>栈扩容</h2><p class="fireman-p-indent" >Go <strong>运行时</strong>判断栈空间是否足够，所以在 <code>call function</code> 中会插入 <code>runtime.morestack</code>，但每个函数调用都判定的话，成本比较高。</p>
-<p class="fireman-p-indent" >在编译期间通过计算 <code>sp</code>、<code>func stack framesize</code> 确定需要哪个函数调用中插入 <code>runtime.morestack</code>。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218172007910.png" alt="image-20231218172007910"></p>
-<p class="fireman-p-indent" >针函数 <code>framesize</code> 的判定：</p>
+<p>如果栈区的空间使用率不超过 1&#x2F;4，那么在垃圾回收的时候使用 <code>runtime.shrinkstack</code> 进行栈锁容，同样使用 <code>copystack</code>。</p>
+<h2 id="栈扩容"><a href="#栈扩容" class="headerlink" title="栈扩容"></a>栈扩容</h2><p>Go <strong>运行时</strong>判断栈空间是否足够，所以在 <code>call function</code> 中会插入 <code>runtime.morestack</code>，但每个函数调用都判定的话，成本比较高。</p>
+<p>在编译期间通过计算 <code>sp</code>、<code>func stack framesize</code> 确定需要哪个函数调用中插入 <code>runtime.morestack</code>。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218172007910.png" alt="image-20231218172007910"></p>
+<p>针函数 <code>framesize</code> 的判定：</p>
 <ul>
 <li><p>当函数是叶子节点，且栈帧小于等于 112 字节（<code>StackSmall</code>为120字节），不插入指令（因为不会超过 <code>stack.lo</code> 极限值）</p>
 </li>
@@ -429,7 +422,7 @@
 <p><code>SP - stackguard + StackGuard &lt;= framesize + (StackGuard - StackSmall)</code></p>
 </li>
 </ul>
-<h1 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h1><h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p class="fireman-p-indent" ><code>TCMalloc</code> 是 <code>Thread Cache Malloc</code> 的简称，是 Go 内存管理的起源，Go 的内存管理是借鉴了 <code>TCMalloc</code>，解决了下面两个问题：</p>
+<h1 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h1><h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p><code>TCMalloc</code> 是 <code>Thread Cache Malloc</code> 的简称，是 Go 内存管理的起源，Go 的内存管理是借鉴了 <code>TCMalloc</code>，解决了下面两个问题：</p>
 <ul>
 <li><p>内存碎片</p>
 <p>随着内存不断的申请和释放，内存上会存在大量的碎片，降低了内存的使用率。为了解决内存碎片，可以将2个连续的未使用的内存块合并，减少碎片。</p>
@@ -438,11 +431,11 @@
 <p>同一进程下的所有线程共享相同的内存空间，他们申请内存时需要加锁，如果不加锁就存在同一块内存被2个线程同时访问的问题。（因此可以在线程上申请内存，线程内部使用，就无须全局大锁）</p>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218174525785.png" alt="image-20231218174525785"></p>
-<p class="fireman-p-indent" >例如上图，在一块连续内存中，<code>p1、p2、p3</code> 申请内存之后，释放 <code>p2</code>，<code>p4</code> 再去申请内存，虽然内存容量够，但是没有足够的连续内存，出现内存碎片，导致实际使用内存不够。</p>
-<p class="fireman-p-indent" >因此，在分配内存的时候有多种内存分配方式</p>
-<h2 id="内存概念"><a href="#内存概念" class="headerlink" title="内存概念"></a>内存概念</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219105829518.png" alt="image-20231219105829518"></p>
-<p class="fireman-p-indent" >首先需要先知道几个重要的概念：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231218174525785.png" alt="image-20231218174525785"></p>
+<p>例如上图，在一块连续内存中，<code>p1、p2、p3</code> 申请内存之后，释放 <code>p2</code>，<code>p4</code> 再去申请内存，虽然内存容量够，但是没有足够的连续内存，出现内存碎片，导致实际使用内存不够。</p>
+<p>因此，在分配内存的时候有多种内存分配方式</p>
+<h2 id="内存概念"><a href="#内存概念" class="headerlink" title="内存概念"></a>内存概念</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219105829518.png" alt="image-20231219105829518"></p>
+<p>首先需要先知道几个重要的概念：</p>
 <ul>
 <li><code>page</code>：内存页，一块 8K 大小的内存空间。Go 与操作系统之间的内存申请和释放，都是以 <code>page</code> 为单位的。</li>
 <li><code>span</code>：内存块，一个或多个连续的 <code>page</code> 组成一个 <code>span</code></li>
@@ -450,29 +443,29 @@
 <li><code>object</code>：对象，用来存储一个变量数据内存空间，一个 <code>span</code> 在初始化时，会被切割成一堆等大的 <code>object</code>。假设 <code>object</code> 的大小是 16B，<code>span</code> 大小是 8K，那么就会把 <code>span</code> 中的 <code>page</code> 就会被初始化 <code>8K/16B = 512</code> 个 <code>object</code></li>
 </ul>
 <blockquote>
-<p class="fireman-p-indent" >scan &amp; noscan: Each span exists twice: one list for objects that do not contain pointer and another one that contains pointer. This distinction will make the life of the garbage collector easier since it will not have to scan the spans that do not contain any pointer.</p>
-<p class="fireman-p-indent" >扫描和不扫描： 每个跨度存在两次：一个是不包含指针的对象列表，另一个是包含指针的对象列表。这种区别将使垃圾回收器的工作变得更轻松，因为它不必扫描不包含任何指针的跨度。</p>
+<p>scan &amp; noscan: Each span exists twice: one list for objects that do not contain pointer and another one that contains pointer. This distinction will make the life of the garbage collector easier since it will not have to scan the spans that do not contain any pointer.</p>
+<p>扫描和不扫描： 每个跨度存在两次：一个是不包含指针的对象列表，另一个是包含指针的对象列表。这种区别将使垃圾回收器的工作变得更轻松，因为它不必扫描不包含任何指针的跨度。</p>
 </blockquote>
-<h2 id="小于-32KB-内存分配"><a href="#小于-32KB-内存分配" class="headerlink" title="小于 32KB 内存分配"></a>小于 32KB 内存分配</h2><p class="fireman-p-indent" >当程序里发生了 32KB 以下的小块内存申请时，Go 会从一个叫作 <code>mcache</code> 的本地缓存给程序分配内存。</p>
-<p class="fireman-p-indent" >这样的一个内存块里叫作 <code>mspan</code>，它是要给程序分配内存时的分配单元。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219105120291.png" alt="image-20231219105120291"></p>
-<p class="fireman-p-indent" >在 Go 的调度器模型里，每个线程 M 会绑定给一个处理器 P，在单一粒度的时间里只能最多处理运行一个 <code>goroutine</code>，<strong>每个 P 都会绑定一个</strong>上面说的本地缓存 <code>mcache</code>。</p>
-<p class="fireman-p-indent" >当需要进行内存分配时，当前运行的 <code>goroutine</code> 会从 <code>mcache</code> 中查找可用的 <code>mspan</code>。</p>
-<p class="fireman-p-indent" >从本地 <code>mcache</code> 里分配内存时不需要加锁，这种分配策略效率更高。</p>
-<h3 id="mspan的使用"><a href="#mspan的使用" class="headerlink" title="mspan的使用"></a>mspan的使用</h3><p class="fireman-p-indent" >申请内存时，都会给他们一个 <code>mspan</code> 这样的单元会不会产生浪费？</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219110945142.png" alt="image-20231219110945142"></p>
-<p class="fireman-p-indent" >并不会。其实 <code>mcache</code> 持有的这一系列的 <code>mspan</code> 并不都是统一大小的，而是按照大小，从 <code>8kb</code> 到 <code>32kb</code> 分了大概 <code>67 * 2</code> 类的 <code>mspan</code>。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219111043019.png" alt="image-20231219111043019"></p>
-<p class="fireman-p-indent" >每个的思路在 <code>Linux Kernel</code>、<code>Memcache</code> 都可以见到 <code>Slab</code> 内存页分为多级固定大小的 <strong>空闲列表</strong>，着有助于减少碎片。类似 <code>Allactor</code>。</p>
-<h3 id="mcentral"><a href="#mcentral" class="headerlink" title="mcentral"></a>mcentral</h3><p class="fireman-p-indent" >如果分配内存时，<code>mcache</code> 里没有空闲的对口 <code>sizeclass</code> 的 <code>mspan</code> 了，Go 里还为每种类别的 <code>mspan</code> 维护着一个 <code>mcentral</code>。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219112143876.png" alt="image-20231219112143876"></p>
-<p class="fireman-p-indent" ><code>mcentral</code> 的作用是为所有的 <code>mcache</code> 提供切分好的 <code>mspan</code> 资源。</p>
-<p class="fireman-p-indent" >每个 <code>central</code> 会持有一种特定大小的全局 <code>mspan</code> 列表，包括已分配出去的和未分配出去的。每个 <code>mcentral</code> 对应一种 <code>mspan</code>，当工作线程的 <code>mcache</code> 中没有合适（也就是特定大小的）的 <code>mspan</code> 时就会从 <code>mcentral</code> 去获取。</p>
-<p class="fireman-p-indent" ><code>mcentral</code> 被所有的工作线程共同享有，存在多个 <code>goroutine</code> 竞争的情况，因此从 <code>mcentral</code> 获取资源时需要加锁。</p>
-<p class="fireman-p-indent" ><code>mcentral</code> 里维护着两个双向链表，<code>nonempty</code> 表示链表里还有空闲的 <code>mspan</code> 待分配。<code>empty</code> 表示这条链表里的 <code>mspan</code> 都被分配了 <code>object</code> 或缓存 <code>mcache</code> 中。</p>
-<h3 id="mcentral-的使用"><a href="#mcentral-的使用" class="headerlink" title="mcentral 的使用"></a>mcentral 的使用</h3><p class="fireman-p-indent" >程序申请内存的时候，<code>mcache</code> 里已经没有合适的空闲 <code>mspan</code> 了，那么工作线程就会像下图这样去 <code>mcentral</code> 里去申请。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219112442378.png" alt="image-20231219112442378"></p>
-<p class="fireman-p-indent" ><code>mcache</code> 从 <code>mcentral</code> 获取和归还 <code>mspan</code> 的流程：</p>
+<h2 id="小于-32KB-内存分配"><a href="#小于-32KB-内存分配" class="headerlink" title="小于 32KB 内存分配"></a>小于 32KB 内存分配</h2><p>当程序里发生了 32KB 以下的小块内存申请时，Go 会从一个叫作 <code>mcache</code> 的本地缓存给程序分配内存。</p>
+<p>这样的一个内存块里叫作 <code>mspan</code>，它是要给程序分配内存时的分配单元。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219105120291.png" alt="image-20231219105120291"></p>
+<p>在 Go 的调度器模型里，每个线程 M 会绑定给一个处理器 P，在单一粒度的时间里只能最多处理运行一个 <code>goroutine</code>，<strong>每个 P 都会绑定一个</strong>上面说的本地缓存 <code>mcache</code>。</p>
+<p>当需要进行内存分配时，当前运行的 <code>goroutine</code> 会从 <code>mcache</code> 中查找可用的 <code>mspan</code>。</p>
+<p>从本地 <code>mcache</code> 里分配内存时不需要加锁，这种分配策略效率更高。</p>
+<h3 id="mspan的使用"><a href="#mspan的使用" class="headerlink" title="mspan的使用"></a>mspan的使用</h3><p>申请内存时，都会给他们一个 <code>mspan</code> 这样的单元会不会产生浪费？</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219110945142.png" alt="image-20231219110945142"></p>
+<p>并不会。其实 <code>mcache</code> 持有的这一系列的 <code>mspan</code> 并不都是统一大小的，而是按照大小，从 <code>8kb</code> 到 <code>32kb</code> 分了大概 <code>67 * 2</code> 类的 <code>mspan</code>。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219111043019.png" alt="image-20231219111043019"></p>
+<p>每个的思路在 <code>Linux Kernel</code>、<code>Memcache</code> 都可以见到 <code>Slab</code> 内存页分为多级固定大小的 <strong>空闲列表</strong>，着有助于减少碎片。类似 <code>Allactor</code>。</p>
+<h3 id="mcentral"><a href="#mcentral" class="headerlink" title="mcentral"></a>mcentral</h3><p>如果分配内存时，<code>mcache</code> 里没有空闲的对口 <code>sizeclass</code> 的 <code>mspan</code> 了，Go 里还为每种类别的 <code>mspan</code> 维护着一个 <code>mcentral</code>。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219112143876.png" alt="image-20231219112143876"></p>
+<p><code>mcentral</code> 的作用是为所有的 <code>mcache</code> 提供切分好的 <code>mspan</code> 资源。</p>
+<p>每个 <code>central</code> 会持有一种特定大小的全局 <code>mspan</code> 列表，包括已分配出去的和未分配出去的。每个 <code>mcentral</code> 对应一种 <code>mspan</code>，当工作线程的 <code>mcache</code> 中没有合适（也就是特定大小的）的 <code>mspan</code> 时就会从 <code>mcentral</code> 去获取。</p>
+<p><code>mcentral</code> 被所有的工作线程共同享有，存在多个 <code>goroutine</code> 竞争的情况，因此从 <code>mcentral</code> 获取资源时需要加锁。</p>
+<p><code>mcentral</code> 里维护着两个双向链表，<code>nonempty</code> 表示链表里还有空闲的 <code>mspan</code> 待分配。<code>empty</code> 表示这条链表里的 <code>mspan</code> 都被分配了 <code>object</code> 或缓存 <code>mcache</code> 中。</p>
+<h3 id="mcentral-的使用"><a href="#mcentral-的使用" class="headerlink" title="mcentral 的使用"></a>mcentral 的使用</h3><p>程序申请内存的时候，<code>mcache</code> 里已经没有合适的空闲 <code>mspan</code> 了，那么工作线程就会像下图这样去 <code>mcentral</code> 里去申请。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219112442378.png" alt="image-20231219112442378"></p>
+<p><code>mcache</code> 从 <code>mcentral</code> 获取和归还 <code>mspan</code> 的流程：</p>
 <ul>
 <li>获取<ul>
 <li>加锁；</li>
@@ -491,41 +484,41 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" ><code>mcentral</code> 是 <code>sizeclass</code> 相同的 <code>span</code> 会以链表的形式组织在一起，就是指该 <code>span</code> 用来存储哪种大小的对象。</p>
-<h3 id="mcentral-内存扩容"><a href="#mcentral-内存扩容" class="headerlink" title="mcentral 内存扩容"></a>mcentral 内存扩容</h3><p class="fireman-p-indent" >当 <code>mcentral</code> 没有空闲的 <code>mspan</code> 时，会向 <code>mheap</code> 申请。而 <code>mheap</code> 没有资源时，会向操作系统申请新内存。<code>mheap</code> 主要用于大对象的内存分配，以及管理未切割的 <code>mspan</code>，用于给 <code>mcentral</code> 切割成小对象。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219113036829.png" alt="image-20231219113036829"></p>
-<p class="fireman-p-indent" ><code>mheap</code> 中含有所有规格的 <code>mcentral</code>，所以当一个 <code>mcache</code> 从 <code>mcentral</code> 申请 <code>mspan</code> 时，只需要在独立的 <code>mcentral</code> 中使用锁，并不会影响申请其他规格的 <code>mspan</code>。</p>
+<p><code>mcentral</code> 是 <code>sizeclass</code> 相同的 <code>span</code> 会以链表的形式组织在一起，就是指该 <code>span</code> 用来存储哪种大小的对象。</p>
+<h3 id="mcentral-内存扩容"><a href="#mcentral-内存扩容" class="headerlink" title="mcentral 内存扩容"></a>mcentral 内存扩容</h3><p>当 <code>mcentral</code> 没有空闲的 <code>mspan</code> 时，会向 <code>mheap</code> 申请。而 <code>mheap</code> 没有资源时，会向操作系统申请新内存。<code>mheap</code> 主要用于大对象的内存分配，以及管理未切割的 <code>mspan</code>，用于给 <code>mcentral</code> 切割成小对象。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219113036829.png" alt="image-20231219113036829"></p>
+<p><code>mheap</code> 中含有所有规格的 <code>mcentral</code>，所以当一个 <code>mcache</code> 从 <code>mcentral</code> 申请 <code>mspan</code> 时，只需要在独立的 <code>mcentral</code> 中使用锁，并不会影响申请其他规格的 <code>mspan</code>。</p>
 <blockquote>
 <ol>
 <li>mcentral in mheap；</li>
 <li>cacheline padsize(false sharing)</li>
 </ol>
 </blockquote>
-<h3 id="mheap"><a href="#mheap" class="headerlink" title="mheap"></a>mheap</h3><p class="fireman-p-indent" >所有 <code>mcentral</code> 的集合则是存放于 <code>mheap</code> 中的。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219113400365.png" alt="image-20231219113400365"></p>
-<p class="fireman-p-indent" ><code>mheap</code> 里的 <code>arena</code> 区域是真正的堆区，运行时会将 8KB 看作一页，这些内存页中存储了所有在堆上初始化的对象。</p>
-<p class="fireman-p-indent" >运行时使用二维的 <code>runtime.heapArena</code> 数组管理所有的内存，每个 <code>runtime.heapArena</code> 都会管理 <code>64MB</code> 的内存。</p>
-<p class="fireman-p-indent" >如果 <code>arena</code> 区域没有足够的内存，会调用 <code>runtime.mheap.sysAlloc</code> 从操作系统中申请更多的内存。（如下图： Go 1.11 前的内存布局）</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219113600353.png" alt="image-20231219113600353"></p>
-<h2 id="小于-16B-内存分配"><a href="#小于-16B-内存分配" class="headerlink" title="小于 16B 内存分配"></a>小于 16B 内存分配</h2><p class="fireman-p-indent" >主要是 Go 做的一个优化。</p>
-<p class="fireman-p-indent" >对于小于 16字节的对象（且无指针），Go 语言将其划分为了 <code>tiny</code> 对象。划分 <code>tiny</code> 对象的目的是为了处理极小的字符串和独立的转义变量。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219114258532.png" alt="image-20231219114258532"></p>
-<p class="fireman-p-indent" >对 <code>json</code> 的基准测试表明，使用 <code>tiny</code> 对象减少了 12% 的分配次数和 20% 的堆大小。</p>
-<p class="fireman-p-indent" ><code>tiny</code> 对象会被放入 <code>class</code> 为 2 的 <code>span</code> 中。</p>
+<h3 id="mheap"><a href="#mheap" class="headerlink" title="mheap"></a>mheap</h3><p>所有 <code>mcentral</code> 的集合则是存放于 <code>mheap</code> 中的。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219113400365.png" alt="image-20231219113400365"></p>
+<p><code>mheap</code> 里的 <code>arena</code> 区域是真正的堆区，运行时会将 8KB 看作一页，这些内存页中存储了所有在堆上初始化的对象。</p>
+<p>运行时使用二维的 <code>runtime.heapArena</code> 数组管理所有的内存，每个 <code>runtime.heapArena</code> 都会管理 <code>64MB</code> 的内存。</p>
+<p>如果 <code>arena</code> 区域没有足够的内存，会调用 <code>runtime.mheap.sysAlloc</code> 从操作系统中申请更多的内存。（如下图： Go 1.11 前的内存布局）</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219113600353.png" alt="image-20231219113600353"></p>
+<h2 id="小于-16B-内存分配"><a href="#小于-16B-内存分配" class="headerlink" title="小于 16B 内存分配"></a>小于 16B 内存分配</h2><p>主要是 Go 做的一个优化。</p>
+<p>对于小于 16字节的对象（且无指针），Go 语言将其划分为了 <code>tiny</code> 对象。划分 <code>tiny</code> 对象的目的是为了处理极小的字符串和独立的转义变量。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219114258532.png" alt="image-20231219114258532"></p>
+<p>对 <code>json</code> 的基准测试表明，使用 <code>tiny</code> 对象减少了 12% 的分配次数和 20% 的堆大小。</p>
+<p><code>tiny</code> 对象会被放入 <code>class</code> 为 2 的 <code>span</code> 中。</p>
 <ul>
 <li>首先查看之前分配的元素中是否有空余的空间</li>
 <li>如果当前要分配的大小不够，例如要分配 16字节 的大小，这时就需要找到下一个空闲的元素</li>
 </ul>
-<p class="fireman-p-indent" ><code>tiny</code> 分配的第一步是尝试利用分配过的前一个元素的空间，达到节约内存的目的。</p>
-<h2 id="大于-32KB-内存分配"><a href="#大于-32KB-内存分配" class="headerlink" title="大于 32KB 内存分配"></a>大于 32KB 内存分配</h2><p class="fireman-p-indent" >Go 没法使用工作线程的本地缓存 <code>mcache</code> 和全局中心缓存 <code>mcentral</code> 上管理超过 32KB 的内存分配，所以对于那些超过 32KB 的内存申请，会直接从堆（<code>mheap</code>）上分配对应的数量的内存页（每页大小是 8KB）给程序。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219114815169.png" alt="image-20231219114815169"></p>
+<p><code>tiny</code> 分配的第一步是尝试利用分配过的前一个元素的空间，达到节约内存的目的。</p>
+<h2 id="大于-32KB-内存分配"><a href="#大于-32KB-内存分配" class="headerlink" title="大于 32KB 内存分配"></a>大于 32KB 内存分配</h2><p>Go 没法使用工作线程的本地缓存 <code>mcache</code> 和全局中心缓存 <code>mcentral</code> 上管理超过 32KB 的内存分配，所以对于那些超过 32KB 的内存申请，会直接从堆（<code>mheap</code>）上分配对应的数量的内存页（每页大小是 8KB）给程序。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219114815169.png" alt="image-20231219114815169"></p>
 <ul>
 <li><code>freelist</code>：Go 早期版本，在分配和归还内存时，存储到链表中</li>
 <li><code>treap</code>：后来改成二叉树维护，找到具体可以分配的内存，满足空间要求</li>
 <li><code>radix tree</code>：1.14 之后，使用基数树，更迅速找到可以分配的内存</li>
 </ul>
-<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219115655407.png" alt="image-20231219115655407"></p>
-<p class="fireman-p-indent" >一般小对象通过 <code>mspan</code> 分配内存；大对象则直接由 <code>mheap</code> 分配内存。</p>
+<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231219115655407.png" alt="image-20231219115655407"></p>
+<p>一般小对象通过 <code>mspan</code> 分配内存；大对象则直接由 <code>mheap</code> 分配内存。</p>
 <ul>
 <li>Go 在程序启动时，会向操作系统申请一大块内存，由 <code>mheap</code> 结构全局管理（现在 Go 版本不需要连续地址了，所以不会申请一大堆地址）</li>
 <li>Go 内存管理的基本单元是 <code>mspan</code>，每种 <code>mspan</code> 可以分配特定大小的 <code>object</code></li>
@@ -535,35 +528,35 @@
 </ul>
 </li>
 </ul>
-<h1 id="优化实践"><a href="#优化实践" class="headerlink" title="优化实践"></a>优化实践</h1><p class="fireman-p-indent" >1、使用缓存提高效率。在存储的整个体系中到处可见缓存的思想，Go 利用缓存一是减少了系统调用的次数，二是降低了锁的粒度、减少加锁的次数。</p>
-<p class="fireman-p-indent" >2、以空间换时间，提高内存管理效率。空间换时间是一种常用的性能优化思想，这种思想其实非常普遍，比如Hash、Map、二叉排序树等数据结构的本质就是空间换时间。</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC84NDU5MTcxNQ==">栈溢出的检测<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC8xZmZkZTJkZTE1M2Y=">Go 语言内存管理（一）：系统内存管理<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC82MzQwNDQ2MWU1MjA=">高性能 Go 服务的内存优化(译)<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC83NDA1YjRlMTFlZTI=">Go 语言内存管理（二）：Go 内存管理<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81MTg0NjZiNGVlOTY=">Go 语言内存管理（三）：逃逸分析<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC81OTEyNTQ0Mw==">图解Go语言内存分配<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9raXJrOTEuZ2l0aHViLmlvL3Bvc3RzLzJkNTcxZDA5Lw==">聊一聊goroutine stack<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly95YW5neGlrdW4uY29tL2dvbGFuZy8yMDE5LzExLzEyL2dvLWdvcm91dGluZS1zdGFjay5odG1s">golang goroutine 堆栈<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvbGFuZ3VhZ2UtbWVjaGFuaWNzLW9uLXN0YWNrcy1hbmQtcG9pbnRlcnMuaHRtbA==">Language Mechanics On Stacks And Pointers<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvbGFuZ3VhZ2UtbWVjaGFuaWNzLW9uLWVzY2FwZS1hbmFseXNpcy5odG1s">Language Mechanics On Escape Analysis<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMzc4NzA5ODE=">白话Go语言内存管理三部曲（二）解密栈内存管理<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvbGFuZ3VhZ2UtbWVjaGFuaWNzLW9uLXN0YWNrcy1hbmQtcG9pbnRlcnMuaHRtbA==">Language Mechanics On Stacks And Pointers<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NTg3NDYzL2FydGljbGUvZGV0YWlscy8xMDQyMjEyODA=">浅窥关于golang reflect获取interface值的性能问题以及用interface传递参的变量逃逸问题<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuZG8xNjE4LmNvbS9hcmNoaXZlcy8xMzI4L2dvLSVFNSU4NiU4NSVFNSVBRCU5OCVFOSU4MCU4MyVFOSU4MCVCOCVFOCVBRiVBNiVFNyVCQiU4NiVFNSU4OCU4NiVFNiU5RSU5MC8=">Go 内存逃逸详细分析<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yODQ4NDEzMw==">Go语言的栈空间管理<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9hZ2lzLmlvL3Bvc3QvY29udGlndW91cy1zdGFja3MtZ29sYW5nLw==">Contiguous stacks in Go<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZG9jdW1lbnQvZC8xM3ZfdTNVck4ycGdVdFBuSDR5LXFmbWxYd0VFcnlpa0Z1MFNRaXdrMzVTQS9wdWI=">Precise Stack Roots<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZG9jdW1lbnQvZC8xbHlQSWJtc1liWG5wTmo1N2EyNjFoZ09ZVnBOUmNneWR1clZRSXlaT3pfby9wdWI=">Go 1.2 Runtime Symbol Information<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yNjY0OTY3MzU=">Go内存管理三部曲[1]- 内存分配<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cDovL2RtaXRyeXNvc2huaWtvdi5jb20vY29tcGlsZXJzL3dyaXRpbmctYS1tZW1vcnktYWxsb2NhdG9yLw==">Writing a Memory Allocator<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9zdHVkeWdvbGFuZy5jb20vYXJ0aWNsZXMvMjI2NTI/ZnI9c2lkZWJhcg==">从源码讲解 golang 内存分配<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9zdHVkeWdvbGFuZy5jb20vYXJ0aWNsZXMvMjI1MDA/ZnI9c2lkZWJhcg==">详解Go语言的内存模型及堆的分配管理<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vdW5xaWFuZy9wLzEyMDUyMzA4Lmh0bWw=">图解golang内存分配机制 （转）<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC81MzU4MTI5OA==">内存分配<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA4NTMyNjEvYXJ0aWNsZS9kZXRhaWxzLzEwMjk0NTA0Ng==">golang 内存分配深度分析<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hlbGxvX2JyYXZvXy9hcnRpY2xlL2RldGFpbHMvMTAzODQwMDU0">golang源码解析–内存mspan,mcache结构体<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kZ3JhcGguaW8vYmxvZy9wb3N0L21hbnVhbC1tZW1vcnktbWFuYWdlbWVudC1nb2xhbmctamVtYWxsb2Mv">Manual Memory Management in Go using jemalloc<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="优化实践"><a href="#优化实践" class="headerlink" title="优化实践"></a>优化实践</h1><p>1、使用缓存提高效率。在存储的整个体系中到处可见缓存的思想，Go 利用缓存一是减少了系统调用的次数，二是降低了锁的粒度、减少加锁的次数。</p>
+<p>2、以空间换时间，提高内存管理效率。空间换时间是一种常用的性能优化思想，这种思想其实非常普遍，比如Hash、Map、二叉排序树等数据结构的本质就是空间换时间。</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC84NDU5MTcxNQ==">栈溢出的检测<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC8xZmZkZTJkZTE1M2Y=">Go 语言内存管理（一）：系统内存管理<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC82MzQwNDQ2MWU1MjA=">高性能 Go 服务的内存优化(译)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC83NDA1YjRlMTFlZTI=">Go 语言内存管理（二）：Go 内存管理<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81MTg0NjZiNGVlOTY=">Go 语言内存管理（三）：逃逸分析<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC81OTEyNTQ0Mw==">图解Go语言内存分配<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9raXJrOTEuZ2l0aHViLmlvL3Bvc3RzLzJkNTcxZDA5Lw==">聊一聊goroutine stack<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly95YW5neGlrdW4uY29tL2dvbGFuZy8yMDE5LzExLzEyL2dvLWdvcm91dGluZS1zdGFjay5odG1s">golang goroutine 堆栈<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvbGFuZ3VhZ2UtbWVjaGFuaWNzLW9uLXN0YWNrcy1hbmQtcG9pbnRlcnMuaHRtbA==">Language Mechanics On Stacks And Pointers<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvbGFuZ3VhZ2UtbWVjaGFuaWNzLW9uLWVzY2FwZS1hbmFseXNpcy5odG1s">Language Mechanics On Escape Analysis<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMzc4NzA5ODE=">白话Go语言内存管理三部曲（二）解密栈内存管理<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDUvbGFuZ3VhZ2UtbWVjaGFuaWNzLW9uLXN0YWNrcy1hbmQtcG9pbnRlcnMuaHRtbA==">Language Mechanics On Stacks And Pointers<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NTg3NDYzL2FydGljbGUvZGV0YWlscy8xMDQyMjEyODA=">浅窥关于golang reflect获取interface值的性能问题以及用interface传递参的变量逃逸问题<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZG8xNjE4LmNvbS9hcmNoaXZlcy8xMzI4L2dvLSVFNSU4NiU4NSVFNSVBRCU5OCVFOSU4MCU4MyVFOSU4MCVCOCVFOCVBRiVBNiVFNyVCQiU4NiVFNSU4OCU4NiVFNiU5RSU5MC8=">Go 内存逃逸详细分析<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yODQ4NDEzMw==">Go语言的栈空间管理<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9hZ2lzLmlvL3Bvc3QvY29udGlndW91cy1zdGFja3MtZ29sYW5nLw==">Contiguous stacks in Go<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZG9jdW1lbnQvZC8xM3ZfdTNVck4ycGdVdFBuSDR5LXFmbWxYd0VFcnlpa0Z1MFNRaXdrMzVTQS9wdWI=">Precise Stack Roots<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZG9jdW1lbnQvZC8xbHlQSWJtc1liWG5wTmo1N2EyNjFoZ09ZVnBOUmNneWR1clZRSXlaT3pfby9wdWI=">Go 1.2 Runtime Symbol Information<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yNjY0OTY3MzU=">Go内存管理三部曲[1]- 内存分配<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cDovL2RtaXRyeXNvc2huaWtvdi5jb20vY29tcGlsZXJzL3dyaXRpbmctYS1tZW1vcnktYWxsb2NhdG9yLw==">Writing a Memory Allocator<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9zdHVkeWdvbGFuZy5jb20vYXJ0aWNsZXMvMjI2NTI/ZnI9c2lkZWJhcg==">从源码讲解 golang 内存分配<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9zdHVkeWdvbGFuZy5jb20vYXJ0aWNsZXMvMjI1MDA/ZnI9c2lkZWJhcg==">详解Go语言的内存模型及堆的分配管理<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vdW5xaWFuZy9wLzEyMDUyMzA4Lmh0bWw=">图解golang内存分配机制 （转）<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC81MzU4MTI5OA==">内存分配<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA4NTMyNjEvYXJ0aWNsZS9kZXRhaWxzLzEwMjk0NTA0Ng==">golang 内存分配深度分析<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hlbGxvX2JyYXZvXy9hcnRpY2xlL2RldGFpbHMvMTAzODQwMDU0">golang源码解析–内存mspan,mcache结构体<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kZ3JhcGguaW8vYmxvZy9wb3N0L21hbnVhbC1tZW1vcnktbWFuYWdlbWVudC1nb2xhbmctamVtYWxsb2Mv">Manual Memory Management in Go using jemalloc<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

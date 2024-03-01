@@ -102,14 +102,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -320,9 +313,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="网络通信协议"><a href="#网络通信协议" class="headerlink" title="网络通信协议"></a>网络通信协议</h1><p class="fireman-p-indent" >互联网的核心是一些列协议，总称为 <strong>互联网协议</strong>（<code>Internet Protocol Suite</code>），证实这一些协议规定了电脑如何连接和组网。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115337020.png" alt="image-20231110115337020"></p>
-<p class="fireman-p-indent" >主要协议分为：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="网络通信协议"><a href="#网络通信协议" class="headerlink" title="网络通信协议"></a>网络通信协议</h1><p>互联网的核心是一些列协议，总称为 <strong>互联网协议</strong>（<code>Internet Protocol Suite</code>），证实这一些协议规定了电脑如何连接和组网。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115337020.png" alt="image-20231110115337020"></p>
+<p>主要协议分为：</p>
 <ul>
 <li><code>Socket</code><ul>
 <li>接口抽象层</li>
@@ -337,34 +330,34 @@
 </ul>
 </li>
 </ul>
-<h2 id="Socket-抽象层"><a href="#Socket-抽象层" class="headerlink" title="Socket 抽象层"></a>Socket 抽象层</h2><p class="fireman-p-indent" >应用程序通常通过 <strong>套接字</strong> 向网络发出请求或者应答网络请求。</p>
-<p class="fireman-p-indent" >一种通用的面向流的网络接口。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115452531.png" alt="image-20231110115452531"></p>
-<p class="fireman-p-indent" >主要操作：</p>
+<h2 id="Socket-抽象层"><a href="#Socket-抽象层" class="headerlink" title="Socket 抽象层"></a>Socket 抽象层</h2><p>应用程序通常通过 <strong>套接字</strong> 向网络发出请求或者应答网络请求。</p>
+<p>一种通用的面向流的网络接口。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115452531.png" alt="image-20231110115452531"></p>
+<p>主要操作：</p>
 <ul>
 <li>建立、接受连接</li>
 <li>读写、关闭、超时</li>
 <li>获取地址、端口</li>
 </ul>
-<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p class="fireman-p-indent" >可靠连接，面向连接的协议。</p>
-<p class="fireman-p-indent" ><code>TCP/IP</code>(<code>Transmission Control Protocol/Internet Protocol</code>)，即传输控制协议&#x2F;网间协议，是一种面向连接（连接导向）的】可靠的、基于字节流的传输层（<code>Transport layer</code>）通信协议，因为是面向连接的协议。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115750950.png" alt="image-20231110115750950"></p>
-<p class="fireman-p-indent" >服务端流程：</p>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p>可靠连接，面向连接的协议。</p>
+<p><code>TCP/IP</code>(<code>Transmission Control Protocol/Internet Protocol</code>)，即传输控制协议&#x2F;网间协议，是一种面向连接（连接导向）的】可靠的、基于字节流的传输层（<code>Transport layer</code>）通信协议，因为是面向连接的协议。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115750950.png" alt="image-20231110115750950"></p>
+<p>服务端流程：</p>
 <ul>
 <li>监听端口</li>
 <li>接收客户端请求建立连接</li>
 <li>创建 <code>goroutine</code> 处理连接</li>
 </ul>
-<p class="fireman-p-indent" >客户端流程：</p>
+<p>客户端流程：</p>
 <ul>
 <li>建立与服务端的连接</li>
 <li>进行数据收发</li>
 <li>关闭连接</li>
 </ul>
-<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p class="fireman-p-indent" >不可靠连接，允许广播或多播</p>
-<p class="fireman-p-indent" >UDP协议（<code>User Datagram Protocol</code>）中文名称是用户数据报协议，是 <code>OSI</code>（<code>Open Sysetm Interconnection</code>，开放式系统互联）参考模型中一种无连接的传输层协议。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115924836.png" alt="image-20231110115924836"></p>
-<p class="fireman-p-indent" >一个简单的传输层协议：</p>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p>不可靠连接，允许广播或多播</p>
+<p>UDP协议（<code>User Datagram Protocol</code>）中文名称是用户数据报协议，是 <code>OSI</code>（<code>Open Sysetm Interconnection</code>，开放式系统互联）参考模型中一种无连接的传输层协议。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110115924836.png" alt="image-20231110115924836"></p>
+<p>一个简单的传输层协议：</p>
 <ul>
 <li>不需要建立连接</li>
 <li>不可靠的、没有时序的通信</li>
@@ -373,20 +366,20 @@
 <li>低延迟，实时性比较好（但是国内有些设备 <code>UDP</code> 会降级，导致一些丢包）</li>
 <li>应用于视频直播、游戏同步</li>
 </ul>
-<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><p class="fireman-p-indent" >超文本传输协议</p>
-<p class="fireman-p-indent" ><code>HTTP</code>（<code>HyperText Transfer Protocol</code>）是互联网上应用最为广泛的一种网络协议，它详细规定了浏览器和万维网服务器之间互相通信的规则，通过因特网传送万维网文档的数据传送协议。</p>
+<h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><p>超文本传输协议</p>
+<p><code>HTTP</code>（<code>HyperText Transfer Protocol</code>）是互联网上应用最为广泛的一种网络协议，它详细规定了浏览器和万维网服务器之间互相通信的规则，通过因特网传送万维网文档的数据传送协议。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: www.google.com</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line">--------</span><br><span class="line"></span><br><span class="line">HTTP/1.1 200 OK</span><br><span class="line"></span><br><span class="line">Content-Length: 3059</span><br><span class="line">Server: GWS/2.0</span><br><span class="line">Content-Type: text/html</span><br><span class="line">Connection: keep-alive</span><br><span class="line"></span><br><span class="line">&lt;html&gt;...</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >请求报文</p>
+<p>请求报文</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Method: HEAD/GET/POST/PUT/DELETE</span><br><span class="line">Accept：text/html、application/json</span><br><span class="line">Content-Type: </span><br><span class="line">	application/json</span><br><span class="line">	application/x-www-form-urlencoded</span><br><span class="line">请求正文</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >响应报文</p>
+<p>响应报文</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">状态行(200/400/500)</span><br><span class="line">响应头(Response Header)</span><br><span class="line">响应正文</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >一些运维工具</p>
+<p>一些运维工具</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nload</span><br><span class="line">tcpflow</span><br><span class="line">ss</span><br><span class="line">netstat</span><br><span class="line">nmon</span><br><span class="line">top</span><br></pre></td></tr></table></figure>
 
-<h3 id="演进"><a href="#演进" class="headerlink" title="演进"></a>演进</h3><p class="fireman-p-indent" ><code>HTTP</code> 发展史：</p>
+<h3 id="演进"><a href="#演进" class="headerlink" title="演进"></a>演进</h3><p><code>HTTP</code> 发展史：</p>
 <ul>
 <li>1991 年发布初代 <code>HTTP/0.9</code> 版本</li>
 <li>1996 年发布 <code>HTTP/1.0</code> 版本</li>
@@ -394,23 +387,23 @@
 <li>2015 年发布了 <code>HTTP/2.0</code> 版，优化了 <code>HTTP/1.1</code> 的性能和安全性</li>
 <li>2018 年发布了 <code>HTTP/3.0</code> 版，使用 <code>UDP</code> 取代 <code>TCP</code> 协议</li>
 </ul>
-<p class="fireman-p-indent" ><code>HTTP2</code>:</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110145230009.png" alt="image-20231110145230009"></p>
+<p><code>HTTP2</code>:</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110145230009.png" alt="image-20231110145230009"></p>
 <ul>
 <li>二进制分帧，按帧方式传输</li>
 <li>多路复用，代替原来的序列和阻塞机制</li>
 <li>头部压缩，通过 <code>HPACK</code> 压缩格式（例如 header 中不变的一些信息，传过一次之后，没有变化则可以不用传）</li>
 <li>服务器推送，服务端可以主动推送资源</li>
 </ul>
-<p class="fireman-p-indent" ><code>HTTP/3</code>:</p>
+<p><code>HTTP/3</code>:</p>
 <ul>
 <li>连接建立延时低，一次往返可建立 <code>HTTPS</code> 连接</li>
 <li>改进的拥塞控制，高效的重传确认机制</li>
 <li>切换网络保持连接，从 4G 切换到 WI-FI 不用重建连接</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110145235930.png" alt="image-20231110145235930"></p>
-<h1 id="Go-网络编程"><a href="#Go-网络编程" class="headerlink" title="Go 网络编程"></a>Go 网络编程</h1><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110152629917.png" alt="image-20231110152629917"></p>
-<p class="fireman-p-indent" >基础概念：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110145235930.png" alt="image-20231110145235930"></p>
+<h1 id="Go-网络编程"><a href="#Go-网络编程" class="headerlink" title="Go 网络编程"></a>Go 网络编程</h1><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110152629917.png" alt="image-20231110152629917"></p>
+<p>基础概念：</p>
 <ul>
 <li><code>Socket</code>： 数据传输</li>
 <li><code>Encoding</code>：内容编码（<code>Content-Type: Application/json</code>）</li>
@@ -418,30 +411,30 @@
 <li><code>C/S</code>模式：通过客户端实现双端通信</li>
 <li><code>B/S</code>模式：通过浏览器即可完成数据的传输</li>
 </ul>
-<p class="fireman-p-indent" >简单例子：</p>
+<p>简单例子：</p>
 <ul>
 <li>通过 <code>TCP/UDP</code> 实现网络通信</li>
 </ul>
-<p class="fireman-p-indent" >网络轮询器：</p>
+<p>网络轮询器：</p>
 <ul>
 <li>多路复用模型</li>
 <li>多路复用模块</li>
 <li>文件描述符</li>
 <li><code>Goroutine</code> 唤醒</li>
 </ul>
-<h2 id="TCP简单例子"><a href="#TCP简单例子" class="headerlink" title="TCP简单例子"></a>TCP简单例子</h2><p class="fireman-p-indent" >服务端</p>
+<h2 id="TCP简单例子"><a href="#TCP简单例子" class="headerlink" title="TCP简单例子"></a>TCP简单例子</h2><p>服务端</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	listen, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:10000&quot;</span>)  <span class="comment">// 建立监听地址和端口</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatalf(<span class="string">&quot;listen error: %v\n&quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> &#123;    <span class="comment">// 死循环处理连接</span></span><br><span class="line">		conn, err := listen.Accept()    <span class="comment">// 接受请求，建立连接</span></span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Printf(<span class="string">&quot;accept error: %v\n&quot;</span>, err)</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 开始goroutine监听连接，处理请求</span></span><br><span class="line">		<span class="keyword">go</span> handleConn(conn)  </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >处理逻辑</p>
+<p>处理逻辑</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handleConn</span><span class="params">(conn net.Conn)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> conn.Close()</span><br><span class="line">	<span class="comment">// 读写缓冲区</span></span><br><span class="line">	rd := bufio.NewReader(conn)  <span class="comment">// 从内核读取数据时使用缓冲区，尽可能减少内核调用 syscall</span></span><br><span class="line">	wr := bufio.NewWriter(conn)</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		line, _, err := rd.ReadLine()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Printf(<span class="string">&quot;read error: %v\n&quot;</span>, err)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		wr.WriteString(<span class="string">&quot;hello &quot;</span>)</span><br><span class="line">		wr.Write(line)</span><br><span class="line">		wr.Flush() <span class="comment">// 一次性syscall</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >客户端，直接使用 <code>telnet</code> 连接</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153027893.png" alt="image-20231110153027893"></p>
-<h2 id="UDP简单例子"><a href="#UDP简单例子" class="headerlink" title="UDP简单例子"></a>UDP简单例子</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153401296.png" alt="image-20231110153401296"></p>
+<p>客户端，直接使用 <code>telnet</code> 连接</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153027893.png" alt="image-20231110153027893"></p>
+<h2 id="UDP简单例子"><a href="#UDP简单例子" class="headerlink" title="UDP简单例子"></a>UDP简单例子</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153401296.png" alt="image-20231110153401296"></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	listen, err := net.ListenUDP(<span class="string">&quot;udp&quot;</span>, &amp;net.UDPAddr&#123;Port: <span class="number">20000</span>&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatalf(<span class="string">&quot;listen error: %v\n&quot;</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> listen.Close()</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">var</span> buf [<span class="number">1024</span>]<span class="type">byte</span></span><br><span class="line">		n, addr, err := listen.ReadFromUDP(buf[:]) <span class="comment">// 读了之后直接写，不需要建立网络连接</span></span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Printf(<span class="string">&quot;read udp error: %v\n&quot;</span>, err)</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line">		data := <span class="built_in">append</span>([]<span class="type">byte</span>(<span class="string">&quot;hello &quot;</span>), buf[:n]...)</span><br><span class="line">		listen.WriteToUDP(data, addr)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153408855.png" alt="image-20231110153408855"></p>
-<h2 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I&#x2F;O 模型"></a>I&#x2F;O 模型</h2><p class="fireman-p-indent" >Linux 下主要的 <code>I/O</code> 模型分为：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110153408855.png" alt="image-20231110153408855"></p>
+<h2 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I&#x2F;O 模型"></a>I&#x2F;O 模型</h2><p>Linux 下主要的 <code>I/O</code> 模型分为：</p>
 <ul>
 <li>Blocking IO - 阻塞 IO</li>
 <li>Nonblocking IO - 非阻塞IO</li>
@@ -449,25 +442,25 @@
 <li>Signal-driven IO - 信号驱动式 IO （注册一个 <code>signal</code>，基于拦截到信号通知）（异步阻塞）</li>
 <li>Asynchronous IO - 异步IO （注册 <code>callback</code>，例如 <code>redis</code> 处理 <code>bgsave</code> 使用 <code>aio</code>）</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120170052422.png" alt="image-20231120170052422"></p>
-<p class="fireman-p-indent" >同步：调用端会一直等待服务端响应，直到返回结果；</p>
-<p class="fireman-p-indent" >异步：调用端会发起调用之后会立刻返回，不会等待服务端响应</p>
-<p class="fireman-p-indent" >阻塞：服务端返回结果之前，客户端线程会被挂起，此时线程不可被 CPU 调度，线程暂停运行</p>
-<p class="fireman-p-indent" >非阻塞：在服务端返回前，函数不会阻塞调用端线程，而会立刻返回</p>
-<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p class="fireman-p-indent" >Go 语言采用  <code>IO多路复用</code> 模型处理 <code>IO</code> 操作，但是他没有选择常见的系统调用 <code>select</code>。虽然 <code>select</code> 也可以提供 <code>IO</code> 多路复用能力，但是使用它有较多的限制：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120170052422.png" alt="image-20231120170052422"></p>
+<p>同步：调用端会一直等待服务端响应，直到返回结果；</p>
+<p>异步：调用端会发起调用之后会立刻返回，不会等待服务端响应</p>
+<p>阻塞：服务端返回结果之前，客户端线程会被挂起，此时线程不可被 CPU 调度，线程暂停运行</p>
+<p>非阻塞：在服务端返回前，函数不会阻塞调用端线程，而会立刻返回</p>
+<h3 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>Go 语言采用  <code>IO多路复用</code> 模型处理 <code>IO</code> 操作，但是他没有选择常见的系统调用 <code>select</code>。虽然 <code>select</code> 也可以提供 <code>IO</code> 多路复用能力，但是使用它有较多的限制：</p>
 <ul>
 <li>监听能力有限 - 最多只能监听 1024 个文件描述符；</li>
 <li>内存拷贝开销大 - 需要维护一个较大的数据结构存储文件描述符，该结构需要拷贝到内核中；</li>
 <li>时间复杂度 <code>O(n)</code> - 返回准备就绪的事件个数后，需要遍历所有的文件描述符；</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120170947189.png" alt="image-20231120170947189"></p>
-<p class="fireman-p-indent" ><code>IO</code> 多路复用：进程阻塞于 <code>select</code>，等待多个 <code>IO</code> 中的任意一个变为可读，<code>select</code> 调用返回，通知响应 <code>IO</code> 可以读。它可以支持单线程响应多个请求这种模式。</p>
-<h3 id="多路复用模块"><a href="#多路复用模块" class="headerlink" title="多路复用模块"></a>多路复用模块</h3><p class="fireman-p-indent" >为了提高 <code>IO</code>多路复用的性能，不同的操作系统也都实现了自己的 <code>IO</code> 多路复用函数，例如： <code>epoll</code>、<code>kqueue</code> 和 <code>evport</code> 等。</p>
-<p class="fireman-p-indent" >Go 语言为了提高在不同操作系统上的 <code>IO</code> 操作性能，使用平台特定的函数实现了多个版本的网络轮询模块：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120170947189.png" alt="image-20231120170947189"></p>
+<p><code>IO</code> 多路复用：进程阻塞于 <code>select</code>，等待多个 <code>IO</code> 中的任意一个变为可读，<code>select</code> 调用返回，通知响应 <code>IO</code> 可以读。它可以支持单线程响应多个请求这种模式。</p>
+<h3 id="多路复用模块"><a href="#多路复用模块" class="headerlink" title="多路复用模块"></a>多路复用模块</h3><p>为了提高 <code>IO</code>多路复用的性能，不同的操作系统也都实现了自己的 <code>IO</code> 多路复用函数，例如： <code>epoll</code>、<code>kqueue</code> 和 <code>evport</code> 等。</p>
+<p>Go 语言为了提高在不同操作系统上的 <code>IO</code> 操作性能，使用平台特定的函数实现了多个版本的网络轮询模块：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">src/runtime/netpoll_epoll.<span class="keyword">go</span></span><br><span class="line">src/runtime/netpoll_kqueue.<span class="keyword">go</span></span><br><span class="line">src/runtime/netpoll_solaris.<span class="keyword">go</span></span><br><span class="line">src/runtime/netpoll_windows.<span class="keyword">go</span></span><br><span class="line">src/runtime/netpoll_aix.<span class="keyword">go</span></span><br><span class="line">src/runtime/netpoll_fake.<span class="keyword">go</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="Goim-长连接-TCP-编程"><a href="#Goim-长连接-TCP-编程" class="headerlink" title="Goim 长连接 TCP 编程"></a>Goim 长连接 TCP 编程</h1><p class="fireman-p-indent" >使用长连接做一个聊天室。</p>
-<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120171913308.png" alt="image-20231120171913308"></p>
+<h1 id="Goim-长连接-TCP-编程"><a href="#Goim-长连接-TCP-编程" class="headerlink" title="Goim 长连接 TCP 编程"></a>Goim 长连接 TCP 编程</h1><p>使用长连接做一个聊天室。</p>
+<h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120171913308.png" alt="image-20231120171913308"></p>
 <ul>
 <li><p>Comet</p>
 <p>长连接管理层，主要是监听外网 <code>TCP/Websocket</code> 端口，并且通过设备 ID 进行绑定 <code>Channel</code> 实现，以及实现了 <code>Room</code> 合适直播等大房间消息广播（逻辑上将一些用户组合在一起）。专门管理网络层连接。为了满足超大连接量，一般直接使用物理机。</p>
@@ -483,13 +476,13 @@
 <p>存储用户id或者设备id对应的 <code>comet</code> 上</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >各个模块之间，通过 <code>gRPC</code> 进行通信。</p>
-<h2 id="协议设计"><a href="#协议设计" class="headerlink" title="协议设计"></a>协议设计</h2><p class="fireman-p-indent" >一般分为两个部分：头部（<code>header</code>）和身体（<code>body</code>）</p>
+<p>各个模块之间，通过 <code>gRPC</code> 进行通信。</p>
+<h2 id="协议设计"><a href="#协议设计" class="headerlink" title="协议设计"></a>协议设计</h2><p>一般分为两个部分：头部（<code>header</code>）和身体（<code>body</code>）</p>
 <ul>
 <li><code>header</code>：一般存放和协议相关的元数据，例如魔数（做比较粗略的校验，例如几个字段的长度）、协议版本、数据长度（可以解析出<code>body</code>）</li>
 <li><code>body</code>：请求内容</li>
 </ul>
-<p class="fireman-p-indent" >常见头部字段：</p>
+<p>常见头部字段：</p>
 <ul>
 <li>魔数：没啥实际作用，一般就是用来标记某个协议，用作报文快速检测</li>
 <li>版本：用于版本控制，使得服务端和客户端可以做到前后兼容</li>
@@ -499,8 +492,8 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120173607411.png" alt="image-20231120173607411"></p>
-<p class="fireman-p-indent" >主要以包&#x2F;针方式：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231120173607411.png" alt="image-20231120173607411"></p>
+<p>主要以包&#x2F;针方式：</p>
 <ul>
 <li>Package Length，包长度，避免<code>tcp</code>粘包</li>
 <li>Header Length，头长度</li>
@@ -509,23 +502,23 @@
 <li>Sequence 请求序列号ID，避免出现由于处理消息顺序不一致导致的问题</li>
 <li>Body，包内容</li>
 </ul>
-<p class="fireman-p-indent" >使用 <code>encoding/binary</code> 包编码成字节序，将 <code>int32</code> 转换为包中占用 4 byte 的数据。</p>
-<p class="fireman-p-indent" >Operation可以是：</p>
+<p>使用 <code>encoding/binary</code> 包编码成字节序，将 <code>int32</code> 转换为包中占用 4 byte 的数据。</p>
+<p>Operation可以是：</p>
 <ul>
 <li>Auth：TCP 建联之后发送的第一个包</li>
 <li>Heartbeat</li>
 <li>Message</li>
 </ul>
-<p class="fireman-p-indent" >Sequence：</p>
+<p>Sequence：</p>
 <ul>
 <li>按请求、响应对应递增ID</li>
 </ul>
 <h3 id="粘包"><a href="#粘包" class="headerlink" title="粘包"></a>粘包</h3><blockquote>
-<p class="fireman-p-indent" >在计算机网络中，粘包（Packet Sticking）是指发送方在发送数据时将多个较小的数据包粘合在一起发送，而接收方在接收数据时将这些数据包作为一个较大的数据块接收的现象。</p>
-<p class="fireman-p-indent" >粘包问题通常出现在基于流式传输协议（如TCP）的通信中。由于网络传输的特性，发送方在发送数据时可能会将多个较小的数据包合并成一个较大的数据块进行发送。而接收方在接收数据时，可能会一次性接收到多个数据包，导致粘包现象。</p>
-<p class="fireman-p-indent" >造成粘包问题的原因有多种，包括网络延迟、缓冲区大小设置不合理、发送方连续发送数据等。这种现象在高负载、高并发的网络环境中较为常见。</p>
+<p>在计算机网络中，粘包（Packet Sticking）是指发送方在发送数据时将多个较小的数据包粘合在一起发送，而接收方在接收数据时将这些数据包作为一个较大的数据块接收的现象。</p>
+<p>粘包问题通常出现在基于流式传输协议（如TCP）的通信中。由于网络传输的特性，发送方在发送数据时可能会将多个较小的数据包合并成一个较大的数据块进行发送。而接收方在接收数据时，可能会一次性接收到多个数据包，导致粘包现象。</p>
+<p>造成粘包问题的原因有多种，包括网络延迟、缓冲区大小设置不合理、发送方连续发送数据等。这种现象在高负载、高并发的网络环境中较为常见。</p>
 </blockquote>
-<p class="fireman-p-indent" >粘包问题可能会导致接收方无法正确解析数据，从而造成数据解析错误或数据处理异常。为了解决粘包问题，常见的方法包括：</p>
+<p>粘包问题可能会导致接收方无法正确解析数据，从而造成数据解析错误或数据处理异常。为了解决粘包问题，常见的方法包括：</p>
 <ol>
 <li><p>定长消息：发送方在发送数据时，将每个数据包固定长度，接收方按照固定长度进行拆包。适用于简单的网路协议，或者很低层的通讯协议，例如 <code>MTU</code></p>
 </li>
@@ -536,74 +529,74 @@
 <li><p>使用消息边界：发送方在每个数据包之间添加消息边界标识，接收方根据消息边界进行拆包。</p>
 </li>
 </ol>
-<p class="fireman-p-indent" >实际应用中，根据具体的需求和协议，可以选择适合的方法来解决粘包问题，以确保数据的正确传输和解析。</p>
-<h2 id="边缘节点"><a href="#边缘节点" class="headerlink" title="边缘节点"></a>边缘节点</h2><p class="fireman-p-indent" ><code>Comet</code> 长连接连续节点，通常部署在距离用户比较近，通过 <code>TCP</code> 或者 <code>WebSocket</code> 建立连接，并且通过应用层 <code>Heartbeat</code> 进行保活检测，保证连接可用性。</p>
-<p class="fireman-p-indent" >节点之间通过云 <code>VPC</code> 专线通信，按地区部署分布。</p>
+<p>实际应用中，根据具体的需求和协议，可以选择适合的方法来解决粘包问题，以确保数据的正确传输和解析。</p>
+<h2 id="边缘节点"><a href="#边缘节点" class="headerlink" title="边缘节点"></a>边缘节点</h2><p><code>Comet</code> 长连接连续节点，通常部署在距离用户比较近，通过 <code>TCP</code> 或者 <code>WebSocket</code> 建立连接，并且通过应用层 <code>Heartbeat</code> 进行保活检测，保证连接可用性。</p>
+<p>节点之间通过云 <code>VPC</code> 专线通信，按地区部署分布。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127170213257.png" alt="image-20231127170213257" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >国内：</p>
+<p>国内：</p>
 <ul>
 <li>华北（北京）</li>
 <li>华中（上海、杭州）</li>
 <li>华南（广州、深圳）</li>
 <li>华西（四川）</li>
 </ul>
-<p class="fireman-p-indent" >国外：</p>
+<p>国外：</p>
 <ul>
 <li>香港、日本、美国、欧洲</li>
 </ul>
-<p class="fireman-p-indent" >全国范围内的连接需要考虑负载均衡，而且长连接的负载均衡无法直接使用四层负载均衡。</p>
-<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p class="fireman-p-indent" >长连接负载均衡比较特殊，需要按一定的负载算法进行分配节点（也无法直接通过 <code>DNS</code> 来实现负载均衡），可以通过 <code>HTTPDNS</code> 方式，请求获取到对应的节点 <code>IP</code> 列表，例如，返回固定数量 <code>IP</code>，按一定的权重或者最少连接数进行排序（可以有内部逻辑来实现负载均衡，例如连接用户数量），客户端通过 <code>IP</code> 逐个重试链接；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127170446224.png" alt="image-20231127170446224"></p>
+<p>全国范围内的连接需要考虑负载均衡，而且长连接的负载均衡无法直接使用四层负载均衡。</p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>长连接负载均衡比较特殊，需要按一定的负载算法进行分配节点（也无法直接通过 <code>DNS</code> 来实现负载均衡），可以通过 <code>HTTPDNS</code> 方式，请求获取到对应的节点 <code>IP</code> 列表，例如，返回固定数量 <code>IP</code>，按一定的权重或者最少连接数进行排序（可以有内部逻辑来实现负载均衡，例如连接用户数量），客户端通过 <code>IP</code> 逐个重试链接；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127170446224.png" alt="image-20231127170446224"></p>
 <ul>
 <li>Comet 注册 IP 地址，以及节点权重，定时 <code>Renew</code> 当前节点连接数量；</li>
 <li><code>Balancer</code> 按地区经纬度计算，按最近地区（经纬度）提供 <code>Comet</code> 节点 <code>IP</code> 列表，以及权重计算排序；</li>
 <li><code>BFF</code> 返回对应的长连接节点 <code>IP</code>，客户端可以通过 <code>IP</code> 直接连；</li>
 <li>客户端按返回 <code>IP</code> 列表顺序，逐个连接尝试建立长连接；</li>
 </ul>
-<h2 id="心跳保活机制"><a href="#心跳保活机制" class="headerlink" title="心跳保活机制"></a>心跳保活机制</h2><p class="fireman-p-indent" >长连接断开的原因：</p>
+<h2 id="心跳保活机制"><a href="#心跳保活机制" class="headerlink" title="心跳保活机制"></a>心跳保活机制</h2><p>长连接断开的原因：</p>
 <ul>
 <li>长连接所在的进程被杀死</li>
 <li><code>NAT</code> 超时</li>
 <li>网络状态发生变化，如移动网络 、 WI-FI 切换、断开、重连</li>
 <li>其他不可抗因素（网络状态差、DHCP 的租期等等）</li>
 </ul>
-<p class="fireman-p-indent" >高效维持长连接方案</p>
+<p>高效维持长连接方案</p>
 <ul>
 <li>进程保活（防止进程被杀死，特别是移动端设备，一些厂商会维护热本应用，也可以考虑 APP 之间相互拉活）</li>
 <li>心跳保活（防止 <code>NAT</code> 超时，<code>client</code>发送 <code>ping</code> <code>pong</code> 包，单向保活即可）</li>
 <li>断线重连（断网以后重新连接网络）</li>
 </ul>
-<p class="fireman-p-indent" >自适应心跳时间</p>
+<p>自适应心跳时间</p>
 <ul>
 <li>心跳可选区间，<code>[ min = 60s, max = 300s]</code></li>
 <li>心跳增加步长，<code>step = 30s</code>，减少耗电</li>
 <li>心跳周期探测，<code>success = current + step、fail = current - step</code>，当出现丢包等情况导致心跳失败，则降低周期</li>
 </ul>
-<h2 id="用户鉴权和-Session-信息"><a href="#用户鉴权和-Session-信息" class="headerlink" title="用户鉴权和 Session 信息"></a>用户鉴权和 <code>Session</code> 信息</h2><p class="fireman-p-indent" >用户鉴权，在长连接建立成功后，需要先进行连接鉴权，并且绑定对应的会话信息；</p>
-<p class="fireman-p-indent" ><code>client</code> 与 <code>comet</code> 建立连接之后，<code>Comet</code> 将注册信息转发到 <code>Logic</code> 进行 <code>Auth</code>。<code>Comet</code> 负责与 <code>client</code> 建立连接，并且维护连接。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127172321386.png" alt="image-20231127172321386"></p>
-<p class="fireman-p-indent" ><code>Connect</code>，建立连接进行鉴权，保存 <code>Session</code> 信息：</p>
+<h2 id="用户鉴权和-Session-信息"><a href="#用户鉴权和-Session-信息" class="headerlink" title="用户鉴权和 Session 信息"></a>用户鉴权和 <code>Session</code> 信息</h2><p>用户鉴权，在长连接建立成功后，需要先进行连接鉴权，并且绑定对应的会话信息；</p>
+<p><code>client</code> 与 <code>comet</code> 建立连接之后，<code>Comet</code> 将注册信息转发到 <code>Logic</code> 进行 <code>Auth</code>。<code>Comet</code> 负责与 <code>client</code> 建立连接，并且维护连接。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127172321386.png" alt="image-20231127172321386"></p>
+<p><code>Connect</code>，建立连接进行鉴权，保存 <code>Session</code> 信息：</p>
 <ul>
 <li><code>DeviceID</code>，设备唯一ID</li>
 <li><code>Token</code>，用户鉴权 <code>Token</code>，认证得到用户<code>ID</code></li>
 <li><code>Comet</code>，连接所在 <code>Comet</code> 节点</li>
 </ul>
-<p class="fireman-p-indent" ><code>Disconnect</code>，断开连接，删除对应 <code>Session</code> 信息：</p>
+<p><code>Disconnect</code>，断开连接，删除对应 <code>Session</code> 信息：</p>
 <ul>
 <li><code>DeviceID</code>，设备唯一 ID</li>
 <li><code>CometID</code>，连接所在 <code>Comet</code> 节点</li>
 <li><code>UserID</code>，用户ID</li>
 </ul>
-<p class="fireman-p-indent" ><code>Session</code>，会话信息通过 <code>Redis</code> 保存连接路由信息：</p>
+<p><code>Session</code>，会话信息通过 <code>Redis</code> 保存连接路由信息：</p>
 <ul>
 <li>连接维度，通过设备 <code>ID</code> 找到所在 <code>Comet</code> 节点</li>
 <li>用户维度，通过用户 <code>ID</code> 找到对应的连接和 <code>Comet</code> 所在节点</li>
 </ul>
-<p class="fireman-p-indent" >当两个用户 <code>P2P</code> 发送消息，首先将消息发送到 <code>Comet</code>，由 <code>Comet</code> 将消息转发到 <code>Logic</code>，再由 <code>job</code> 处理的时候查询接受者所在 <code>Comet</code>，将消息转发到 对应<code>Comet</code>。</p>
-<p class="fireman-p-indent" >连接的时候也可以实现一些安全防护，例如使用不同的 <code>ip</code> + <code>token</code> 进行连接攻击，可以在七层做特殊格式 <code>token</code> 进行<code>七层cc</code></p>
-<h2 id="Comet"><a href="#Comet" class="headerlink" title="Comet"></a><code>Comet</code></h2><p class="fireman-p-indent" ><code>Comet</code> 长连接层，实现连接管理和消息推送：</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127173029262.png" alt="image-20231127173029262"></p>
+<p>当两个用户 <code>P2P</code> 发送消息，首先将消息发送到 <code>Comet</code>，由 <code>Comet</code> 将消息转发到 <code>Logic</code>，再由 <code>job</code> 处理的时候查询接受者所在 <code>Comet</code>，将消息转发到 对应<code>Comet</code>。</p>
+<p>连接的时候也可以实现一些安全防护，例如使用不同的 <code>ip</code> + <code>token</code> 进行连接攻击，可以在七层做特殊格式 <code>token</code> 进行<code>七层cc</code></p>
+<h2 id="Comet"><a href="#Comet" class="headerlink" title="Comet"></a><code>Comet</code></h2><p><code>Comet</code> 长连接层，实现连接管理和消息推送：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231127173029262.png" alt="image-20231127173029262"></p>
 <ul>
 <li><code>Protocol</code>，<code>TCP/Websocket</code> 协议监听；</li>
 <li><code>Packet</code>，长连接消息包，每个包都有固定长度；</li>
@@ -611,42 +604,42 @@
 <li><code>Bucket</code>，连接通过 <code>DeviceID</code> 进行管理，用于读写锁拆解，并且实现房间消息推送，类似 <code>Nginx Worker</code>;</li>
 <li><code>Room</code>，房间管理通过 <code>RoomID</code> 进行管理，通过双链表进行 <code>Channel</code> 遍历推送消息，这样的好处是当用户退出房间，将链表的指针替换即可；为了避免房间人数过多时导致发送消息慢，需要将 <code>Room</code> 打散成 <code>Bucket</code> 的粒度；</li>
 </ul>
-<p class="fireman-p-indent" >每个 <code>Bucket</code> 都有独立的 <code>Goroutine</code> 和读写锁优化：</p>
+<p>每个 <code>Bucket</code> 都有独立的 <code>Goroutine</code> 和读写锁优化：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Buckets <span class="keyword">struct</span> &#123;</span><br><span class="line">	channels 	<span class="keyword">map</span>[<span class="type">string</span>]*Channel <span class="comment">// 维护channel信息</span></span><br><span class="line">	rooms 		<span class="keyword">map</span>[<span class="type">string</span>]*Room    <span class="comment">// 维护 room 信息</span></span><br><span class="line">&#125;  <span class="comment">// 有独立的 goroutine 来运作，轮询负载均衡派发任务</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="Logic"><a href="#Logic" class="headerlink" title="Logic"></a><code>Logic</code></h2><p class="fireman-p-indent" ><code>Logic</code> 业务逻辑层，处理连接鉴权、消息路由、用户会话管理；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128171144094.png" alt="image-20231128171144094"></p>
-<p class="fireman-p-indent" >主要分为三层：</p>
+<h2 id="Logic"><a href="#Logic" class="headerlink" title="Logic"></a><code>Logic</code></h2><p><code>Logic</code> 业务逻辑层，处理连接鉴权、消息路由、用户会话管理；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128171144094.png" alt="image-20231128171144094"></p>
+<p>主要分为三层：</p>
 <ul>
 <li><code>sdk</code>，通过 <code>TCP/Websocket</code> 建立长连接，进行重连、心跳保活；</li>
 <li><code>goim</code>，主要负责连接管理，提供消息长连接能力；</li>
 <li><code>backend</code>，处理业务逻辑，对推送消息过滤，以及持久化相关等；也依赖一些 <code>backend</code> 的服务</li>
 </ul>
-<h2 id="Job"><a href="#Job" class="headerlink" title="Job"></a>Job</h2><p class="fireman-p-indent" >业务通过对应的推送方式，可以对连接设备、房间、用户ID进行推送，通过 <code>Session</code> 信息定位到所在的 <code>Comet</code> 连接节点，并通过 <code>Job</code> 推送消息；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128171311154.png" alt="image-20231128171311154"></p>
-<p class="fireman-p-indent" >通过 <code>Kafka</code> 进行推送削峰，保证消息逐步推送成功；</p>
-<p class="fireman-p-indent" >在 <code>Push</code> 到 <code>Kafka</code> 的时候，查询到用户信息之后，消费时就不需要再次查询，降低查询压力负载。</p>
-<p class="fireman-p-indent" >另外，推送到大型房间（或者所有房间）的消息，可以不需要根据<code>RoomID</code>具体推送，而是推送到所有的 <code>Comet</code> 节点。</p>
-<p class="fireman-p-indent" >支持的多种推送方式：</p>
+<h2 id="Job"><a href="#Job" class="headerlink" title="Job"></a>Job</h2><p>业务通过对应的推送方式，可以对连接设备、房间、用户ID进行推送，通过 <code>Session</code> 信息定位到所在的 <code>Comet</code> 连接节点，并通过 <code>Job</code> 推送消息；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128171311154.png" alt="image-20231128171311154"></p>
+<p>通过 <code>Kafka</code> 进行推送削峰，保证消息逐步推送成功；</p>
+<p>在 <code>Push</code> 到 <code>Kafka</code> 的时候，查询到用户信息之后，消费时就不需要再次查询，降低查询压力负载。</p>
+<p>另外，推送到大型房间（或者所有房间）的消息，可以不需要根据<code>RoomID</code>具体推送，而是推送到所有的 <code>Comet</code> 节点。</p>
+<p>支持的多种推送方式：</p>
 <ul>
 <li><code>Push</code>(<code>DeviceID</code>, <code>Message</code>)</li>
 <li><code>Push</code>(<code>UserID</code>, <code>Message</code>)</li>
 <li><code>Push</code>(<code>RoomID</code>, <code>Message</code>)</li>
 <li><code>Push</code>(<code>Message</code>)</li>
 </ul>
-<h2 id="推拉结合"><a href="#推拉结合" class="headerlink" title="推拉结合"></a>推拉结合</h2><p class="fireman-p-indent" >在长连接中，如果想把消息通知所有人，主要有两种模式：</p>
-<p class="fireman-p-indent" >一种是自己拿广播通知所有人，这个叫<strong>推</strong>模式；</p>
-<p class="fireman-p-indent" >一种是有人主动来找你要，这个叫<strong>拉</strong>模式；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128172101216.png" alt="image-20231128172101216"></p>
-<p class="fireman-p-indent" >在业务系统中，通常会有三种可能的做法：</p>
+<h2 id="推拉结合"><a href="#推拉结合" class="headerlink" title="推拉结合"></a>推拉结合</h2><p>在长连接中，如果想把消息通知所有人，主要有两种模式：</p>
+<p>一种是自己拿广播通知所有人，这个叫<strong>推</strong>模式；</p>
+<p>一种是有人主动来找你要，这个叫<strong>拉</strong>模式；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128172101216.png" alt="image-20231128172101216"></p>
+<p>在业务系统中，通常会有三种可能的做法：</p>
 <ul>
 <li>推模式，有新消息时服务器主动推给客户端；</li>
 <li>拉模式，由前端主动发起拉取消息的请求；</li>
 <li>推拉结合模式，有新消息实时通知，客户端再进行新的消息摘取；</li>
 </ul>
-<h2 id="读写扩散"><a href="#读写扩散" class="headerlink" title="读写扩散"></a>读写扩散</h2><p class="fireman-p-indent" >一般消息系统中，通常会比较关注消息存储；主要进行考虑读、写扩散，也就是性能问题；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128172236626.png" alt="image-20231128172236626"></p>
-<p class="fireman-p-indent" >在不同场景，可能选择不同的方式：</p>
+<h2 id="读写扩散"><a href="#读写扩散" class="headerlink" title="读写扩散"></a>读写扩散</h2><p>一般消息系统中，通常会比较关注消息存储；主要进行考虑读、写扩散，也就是性能问题；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128172236626.png" alt="image-20231128172236626"></p>
+<p>在不同场景，可能选择不同的方式：</p>
 <ul>
 <li>读扩散，在 IM 系统里的读扩散通常是每两个相关联的人就有一个信箱，或者每个群一个信箱；<ul>
 <li>优点：写操作（发消息）很轻量，只用写自己信箱</li>
@@ -659,9 +652,9 @@
 </ul>
 </li>
 </ul>
-<h2 id="唯一-ID-设计"><a href="#唯一-ID-设计" class="headerlink" title="唯一 ID 设计"></a>唯一 ID 设计</h2><p class="fireman-p-indent" >唯一 ID，需要保证全局唯一，绝对不会出现重复的 ID，且 ID 整体趋势递增。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128173555811.png" alt="image-20231128173555811"></p>
-<p class="fireman-p-indent" >通常情况下，ID 的设计主要有以下几大类：</p>
+<h2 id="唯一-ID-设计"><a href="#唯一-ID-设计" class="headerlink" title="唯一 ID 设计"></a>唯一 ID 设计</h2><p>唯一 ID，需要保证全局唯一，绝对不会出现重复的 ID，且 ID 整体趋势递增。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128173555811.png" alt="image-20231128173555811"></p>
+<p>通常情况下，ID 的设计主要有以下几大类：</p>
 <ul>
 <li>UUID</li>
 <li>基于 <code>Snowflake</code> 的 ID 生成方式，雪花算法</li>
@@ -669,43 +662,43 @@
 <li>基于 Redis 或者 DB 的自增 ID 生成方式</li>
 <li>特殊的规则生成唯一 ID，发号器</li>
 </ul>
-<h3 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h3><p class="fireman-p-indent" >雪花（Snowflake）是一种网络服务，用于在简单保证的前提下大规模生成唯一的 ID 号。</p>
+<h3 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h3><p>雪花（Snowflake）是一种网络服务，用于在简单保证的前提下大规模生成唯一的 ID 号。</p>
 <blockquote>
-<p class="fireman-p-indent" >Snowflake，is a network service for generating unique ID numbers at high scale with some simple guarantees.</p>
+<p>Snowflake，is a network service for generating unique ID numbers at high scale with some simple guarantees.</p>
 </blockquote>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128173907409.png" alt="image-20231128173907409"></p>
-<p class="fireman-p-indent" >ID 由以下部分组成:</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128173907409.png" alt="image-20231128173907409"></p>
+<p>ID 由以下部分组成:</p>
 <ul>
 <li>time - 41 bits (millisecond precision w&#x2F; a custom epoch gives us 69 years)：时间戳，保证递增</li>
 <li>configured machine id - 10 bits - gives us up to 1024 machines：机器id</li>
 <li>sequence number - 12 bits - rolls over every 4096 per machine (with protection to avoid rollover in the same ms)：序列号，可以让同一时间、同一机器生成大量的id</li>
 </ul>
-<h3 id="Sonyflake"><a href="#Sonyflake" class="headerlink" title="Sonyflake"></a>Sonyflake</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128174042747.png" alt="image-20231128174042747"></p>
-<p class="fireman-p-indent" >Sonyflake，is a distributed unique ID generator inspired by Twitter’s Snowflake.</p>
-<p class="fireman-p-indent" >id is composed of:</p>
+<h3 id="Sonyflake"><a href="#Sonyflake" class="headerlink" title="Sonyflake"></a>Sonyflake</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128174042747.png" alt="image-20231128174042747"></p>
+<p>Sonyflake，is a distributed unique ID generator inspired by Twitter’s Snowflake.</p>
+<p>id is composed of:</p>
 <ul>
 <li>39 bits for time in units of 10 msec</li>
 <li>8 bits for a sequence number</li>
 <li>16 bits for a machine id</li>
 </ul>
-<p class="fireman-p-indent" >As a result, Sonyflake has the following advantages and disadvantages:</p>
+<p>As a result, Sonyflake has the following advantages and disadvantages:</p>
 <ul>
 <li>The lifetime (174 years) is longer than that of Snowflake (69 years)</li>
 <li>It can work in more distributed machines (2^16) than Snowflake (2^10)</li>
 <li>It can generate 2^8 IDs per 10 msec at most in a single machine&#x2F;thread (slower than Snowflake)</li>
 </ul>
-<h3 id="ID生成器"><a href="#ID生成器" class="headerlink" title="ID生成器"></a>ID生成器</h3><p class="fireman-p-indent" >基于步长递增的分布式 ID 生成器，可以生成基于递增，并且比较小的唯一 ID；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128174241302.png" alt="image-20231128174241302"></p>
-<p class="fireman-p-indent" >服务主要分为：</p>
+<h3 id="ID生成器"><a href="#ID生成器" class="headerlink" title="ID生成器"></a>ID生成器</h3><p>基于步长递增的分布式 ID 生成器，可以生成基于递增，并且比较小的唯一 ID；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128174241302.png" alt="image-20231128174241302"></p>
+<p>服务主要分为：</p>
 <ul>
 <li>通过 gRPC 通信，提供 ID 生成接口，并且携带业务标记，为不同业务分配ID；</li>
 <li>部署多个 <code>id-server</code> 服务，通过数据库进行申请 ID 步长，并且持久化最大的 ID，例如，每次批量获取 1000 到内存中，可以减少对 DB 的压力；</li>
 <li>数据库记录分配的业务 MAX_ID 和对应 <code>Step</code> ，供 <code>Sequence</code> 请求获取；</li>
 </ul>
-<h2 id="IM-私信系统"><a href="#IM-私信系统" class="headerlink" title="IM 私信系统"></a>IM 私信系统</h2><p class="fireman-p-indent" >在聊天系统中，几乎每个人都在使用聊天应用，并且对消息及时性要求也非常高；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175125629.png" alt="image-20231128175125629"></p>
-<p class="fireman-p-indent" >对消息也需要有一致性保证；</p>
-<p class="fireman-p-indent" >并且都有着丰富的多媒体传输功能：</p>
+<h2 id="IM-私信系统"><a href="#IM-私信系统" class="headerlink" title="IM 私信系统"></a>IM 私信系统</h2><p>在聊天系统中，几乎每个人都在使用聊天应用，并且对消息及时性要求也非常高；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175125629.png" alt="image-20231128175125629"></p>
+<p>对消息也需要有一致性保证；</p>
+<p>并且都有着丰富的多媒体传输功能：</p>
 <ul>
 <li>1 on 1：私聊</li>
 <li>Group Chat：群聊</li>
@@ -713,44 +706,44 @@
 <li>Multiple device support：多设备支持（多设备同步消息，也需要服务端记录已同步的消息版本号）</li>
 <li>Push nofifications：推送通知</li>
 </ul>
-<p class="fireman-p-indent" >聊天系统中，主要是客户端和服务端之间进行通信；</p>
-<p class="fireman-p-indent" >客户端可以是 <code>Android</code>、<code>iOS</code>、<code>Web</code> 应用；</p>
-<p class="fireman-p-indent" >通常客户端之间不会进行直接通信，可是客户端链接到服务端进行通信；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175424700.png" alt="image-20231128175424700"></p>
-<p class="fireman-p-indent" >服务端需要支持：</p>
+<p>聊天系统中，主要是客户端和服务端之间进行通信；</p>
+<p>客户端可以是 <code>Android</code>、<code>iOS</code>、<code>Web</code> 应用；</p>
+<p>通常客户端之间不会进行直接通信，可是客户端链接到服务端进行通信；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175424700.png" alt="image-20231128175424700"></p>
+<p>服务端需要支持：</p>
 <ul>
 <li>接收各个客户端消息</li>
 <li>消息转发到对应的人</li>
 <li>用户不在线，存储新消息</li>
 <li>用户上线，同步所有新消息</li>
 </ul>
-<p class="fireman-p-indent" >聊天系统中，最重要的是通信协议，如何有保证地及时送达消息；</p>
-<p class="fireman-p-indent" >一般来看移动端基本都是通过长连接方式实现，而 Web 端可以使用 HTTP、Websocket 实现实时通信；</p>
+<p>聊天系统中，最重要的是通信协议，如何有保证地及时送达消息；</p>
+<p>一般来看移动端基本都是通过长连接方式实现，而 Web 端可以使用 HTTP、Websocket 实现实时通信；</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175604491.png" alt="image-20231128175604491" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >通用通信方式：</p>
+<p>通用通信方式：</p>
 <ul>
 <li>HTTP 定时轮询</li>
 <li>HTTP 长轮询</li>
 <li>WebSocket</li>
 <li>TCP</li>
 </ul>
-<p class="fireman-p-indent" >在聊天系统中，有着很多用户、消息功能，比如：登录、注册、用户信息，可以通过 <code>HTTP API</code> 方式；</p>
-<p class="fireman-p-indent" >消息、群聊、用户状态，可以通过实时通信方式；</p>
-<p class="fireman-p-indent" >可能集成一些三方的服务，比如小米、华为推送、APNs 等；</p>
+<p>在聊天系统中，有着很多用户、消息功能，比如：登录、注册、用户信息，可以通过 <code>HTTP API</code> 方式；</p>
+<p>消息、群聊、用户状态，可以通过实时通信方式；</p>
+<p>可能集成一些三方的服务，比如小米、华为推送、APNs 等；</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128175756264.png" alt="image-20231128175756264" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >所以，主要服务可为三大类：</p>
+<p>所以，主要服务可为三大类：</p>
 <ul>
 <li>无状态服务：登录、注册、获取用户信息、验证、群管理</li>
 <li>有状态服务：群聊、消息、获取用户状态</li>
 <li>第三方集成：推送、APNs</li>
 </ul>
-<p class="fireman-p-indent" >聊天系统中，<code>Goim</code> 主要角色是 <code>Real time service</code>，实现对 连接 和 状态 的管理：</p>
-<p class="fireman-p-indent" >可以通过 <code>API servers</code> 进行系统之间的解耦；</p>
+<p>聊天系统中，<code>Goim</code> 主要角色是 <code>Real time service</code>，实现对 连接 和 状态 的管理：</p>
+<p>可以通过 <code>API servers</code> 进行系统之间的解耦；</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231128180055532.png" alt="image-20231128180055532" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >各个服务的主要功能为：</p>
+<p>各个服务的主要功能为：</p>
 <ul>
 <li>聊天服务进行消息的发送和接收</li>
 <li>在线状态服务管理用户在线和离线</li>
@@ -758,18 +751,18 @@
 <li>通知服务器发送推送通知（<code>Notification</code>）</li>
 <li>通过 KV 存储进行存储、查询聊天信息</li>
 </ul>
-<p class="fireman-p-indent" >聊天系统中，消息存储是最主要的，通常会有海量的消息需要存储，可以想到关系数据库还是 <code>NoSQL</code> 数据库；</p>
-<p class="fireman-p-indent" >而关系数据库主要进行存储用户信息，好友列表，群组信息，通过主从、分片基本满足；</p>
-<p class="fireman-p-indent" >由于消息存储比较单一，可以通过 <code>KV</code> 存储（也需要支持排序和过滤，有些也需要支持索引）；</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129113741132.png" alt="image-20231129113741132" style="zoom: 50%;" /><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129113744856.png" alt="image-20231129113744856" style="zoom: 50%;" /></p>
-<p class="fireman-p-indent" ><code>KV</code> 存储消息的好处：</p>
+<p>聊天系统中，消息存储是最主要的，通常会有海量的消息需要存储，可以想到关系数据库还是 <code>NoSQL</code> 数据库；</p>
+<p>而关系数据库主要进行存储用户信息，好友列表，群组信息，通过主从、分片基本满足；</p>
+<p>由于消息存储比较单一，可以通过 <code>KV</code> 存储（也需要支持排序和过滤，有些也需要支持索引）；</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129113741132.png" alt="image-20231129113741132" style="zoom: 50%;" /><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129113744856.png" alt="image-20231129113744856" style="zoom: 50%;" /></p>
+<p><code>KV</code> 存储消息的好处：</p>
 <ul>
 <li>水平扩展</li>
 <li>延迟低</li>
 <li>访问成本低</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129114101404.png" alt="image-20231129114101404"></p>
-<p class="fireman-p-indent" >一对一聊天，主要的消息发送流程：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129114101404.png" alt="image-20231129114101404"></p>
+<p>一对一聊天，主要的消息发送流程：</p>
 <ul>
 <li>用户 A 向聊天服务器发送消息给用户 B </li>
 <li>聊天服务从生成器获取消息 ID</li>
@@ -780,28 +773,28 @@
 </ul>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129114436189.png" alt="image-20231129114436189" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >群聊，较为复杂，通常有多写、多读两种方式；</p>
-<p class="fireman-p-indent" >单信箱（多写），每个用户都保存一份消息：</p>
+<p>群聊，较为复杂，通常有多写、多读两种方式；</p>
+<p>单信箱（多写），每个用户都保存一份消息：</p>
 <ul>
 <li>消息同步流程比较简单，每个客户端仅需要读取自己的信箱，即可获取新消息</li>
 <li>当群组比较小时，成本也不是很高，例如微信群通常为 500 用户上限</li>
 <li>对数组数量无上限</li>
 </ul>
-<p class="fireman-p-indent" >多信箱（多读），每个群仅保存一份消息：</p>
+<p>多信箱（多读），每个群仅保存一份消息：</p>
 <ul>
 <li>用户需要同时查询多个信箱（可以优化一下只获取活跃的群）</li>
 <li>如果信箱比较多，查询成本比较高</li>
 <li>需要控制用户已加入的群组上限</li>
 </ul>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kcmF2ZW5lc3MubWUvZ29sYW5nL2RvY3MvcGFydDMtcnVudGltZS9jaDA2LWNvbmN1cnJlbmN5L2dvbGFuZy1uZXRwb2xsZXIvIzY2LSVFNyVCRCU5MSVFNyVCQiU5QyVFOCVCRCVBRSVFOCVBRiVBMiVFNSU5OSVBOA==">6.6 网络轮询器<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cubGl3ZW56aG91LmNvbS9wb3N0cy9Hby8xNV9zb2NrZXQv">Go语言基础之网络编程<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xMDMwNjYw">Android微信智能心跳方案<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly94aWUuaW5mb3EuY24vYXJ0aWNsZS8xOWU5NWE3OGUyZjUzODk1ODhkZWJmYjFj">如何设计一个亿级消息量的 IM 系统<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly90ZWNoLm1laXR1YW4uY29tLzIwMTkvMDMvMDcvb3Blbi1zb3VyY2UtcHJvamVjdC1sZWFmLmh0bWw=">Leaf：美团分布式ID生成服务开源<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvOFdtQVNpZV9EakRETVFSZFFpMUZEZw==">系统调优，你所不知道的TIME_WAIT和CLOSE_WAIT<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuaW1vb2MuY29tL2FydGljbGUvMjY1ODcx">Java核心（五）深入理解BIO、NIO、AIO<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5mb3EuY24vYXJ0aWNsZS90aGUtcm9hZC1vZi10aGUtZ3Jvd3RoLXdlaXhpbi1iYWNrZ3JvdW5k">从无到有：微信后台系统的演进之路<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ieXRlYnl0ZWdvLmNvbS9jb3Vyc2VzL3N5c3RlbS1kZXNpZ24taW50ZXJ2aWV3L2Rlc2lnbi1hLWNoYXQtc3lzdGVt">Design A Chat System<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly9kcmF2ZW5lc3MubWUvZ29sYW5nL2RvY3MvcGFydDMtcnVudGltZS9jaDA2LWNvbmN1cnJlbmN5L2dvbGFuZy1uZXRwb2xsZXIvIzY2LSVFNyVCRCU5MSVFNyVCQiU5QyVFOCVCRCVBRSVFOCVBRiVBMiVFNSU5OSVBOA==">6.6 网络轮询器<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cubGl3ZW56aG91LmNvbS9wb3N0cy9Hby8xNV9zb2NrZXQv">Go语言基础之网络编程<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xMDMwNjYw">Android微信智能心跳方案<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly94aWUuaW5mb3EuY24vYXJ0aWNsZS8xOWU5NWE3OGUyZjUzODk1ODhkZWJmYjFj">如何设计一个亿级消息量的 IM 系统<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly90ZWNoLm1laXR1YW4uY29tLzIwMTkvMDMvMDcvb3Blbi1zb3VyY2UtcHJvamVjdC1sZWFmLmh0bWw=">Leaf：美团分布式ID生成服务开源<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvOFdtQVNpZV9EakRETVFSZFFpMUZEZw==">系统调优，你所不知道的TIME_WAIT和CLOSE_WAIT<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuaW1vb2MuY29tL2FydGljbGUvMjY1ODcx">Java核心（五）深入理解BIO、NIO、AIO<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuaW5mb3EuY24vYXJ0aWNsZS90aGUtcm9hZC1vZi10aGUtZ3Jvd3RoLXdlaXhpbi1iYWNrZ3JvdW5k">从无到有：微信后台系统的演进之路<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ieXRlYnl0ZWdvLmNvbS9jb3Vyc2VzL3N5c3RlbS1kZXNpZ24taW50ZXJ2aWV3L2Rlc2lnbi1hLWNoYXQtc3lzdGVt">Design A Chat System<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

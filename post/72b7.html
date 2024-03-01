@@ -71,14 +71,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -289,8 +282,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p class="fireman-p-indent" >一组<code>sql</code>语句操作单元，组内所有<code>SQL</code>语句完成一个业务，如果整租成功：意味着全部<code>SQL</code>都实现；如果其中一个失败：意味着整个操作都失败。数据库回到操作前的初始状态。这种特性，叫做“事务”。</p>
-<p class="fireman-p-indent" >使用场景：</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>一组<code>sql</code>语句操作单元，组内所有<code>SQL</code>语句完成一个业务，如果整租成功：意味着全部<code>SQL</code>都实现；如果其中一个失败：意味着整个操作都失败。数据库回到操作前的初始状态。这种特性，叫做“事务”。</p>
+<p>使用场景：</p>
 <ul>
 <li>失败后，可以回到开始位置</li>
 <li>没有全部成功之前，别的用户（进程、会话）是不能看到操作内的数据修改</li>
@@ -310,11 +303,11 @@
 <p>是事务的保证，事务终结的标志，也就是内存的数据持久化到硬盘文件中。</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >例如，在<code>gORM</code>中</p>
+<p>例如，在<code>gORM</code>中</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 事务开始</span></span><br><span class="line">tx := db.Begin()</span><br><span class="line"><span class="keyword">var</span> u User</span><br><span class="line">err = tx.First(&amp;u, <span class="number">1</span>).Error</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	<span class="comment">// 出现报错，回滚</span></span><br><span class="line">	tx.Rollback()</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// do something, if error != nil  tx.Rollback</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 事务提交</span></span><br><span class="line">tx.Commit()</span><br></pre></td></tr></table></figure>
 
-<h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><p class="fireman-p-indent" >分布式事务是在分布式系统中实现事务，其实是由多个本地事务组合而成。</p>
-<h3 id="数据不一致的情况"><a href="#数据不一致的情况" class="headerlink" title="数据不一致的情况"></a>数据不一致的情况</h3><p class="fireman-p-indent" >在分布式的场景下，可能出现数据不一致的情况比较多</p>
+<h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><p>分布式事务是在分布式系统中实现事务，其实是由多个本地事务组合而成。</p>
+<h3 id="数据不一致的情况"><a href="#数据不一致的情况" class="headerlink" title="数据不一致的情况"></a>数据不一致的情况</h3><p>在分布式的场景下，可能出现数据不一致的情况比较多</p>
 <ol>
 <li>网络问题（网络拥塞或者网络抖动）<ol>
 <li>例如请求没有发送出去（这种情况，回滚即可）</li>
@@ -326,10 +319,10 @@
 </ol>
 </li>
 </ol>
-<h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><h5 id="强一致性"><a href="#强一致性" class="headerlink" title="强一致性"></a>强一致性</h5><p class="fireman-p-indent" >任何一次读都能读到某个数据的最近一次写的数据。系统中的所有进程，看到的操作顺序，都和全局时钟下的顺序一致。简言之，在任意时刻，所有节点中的数据是一样的。</p>
-<h5 id="弱一致性"><a href="#弱一致性" class="headerlink" title="弱一致性"></a>弱一致性</h5><p class="fireman-p-indent" >数据更新后，如果能容忍后续的访问只能访问到部分或者全部访问不到，则是弱一致性。</p>
-<h5 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h5><p class="fireman-p-indent" >不保证在任意时刻任意节点上的同一份数据都是相同的，但是随着时间的迁移，不同节点上的同一份数据总是在向趋同的方向变化。简单说，就是在一段时间后，节点间的数据会最终达到一致状态。</p>
-<h3 id="分布式理论"><a href="#分布式理论" class="headerlink" title="分布式理论"></a>分布式理论</h3><h4 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h4><p class="fireman-p-indent" >实现分布式系统，就需要先明确CAP理论</p>
+<h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><h5 id="强一致性"><a href="#强一致性" class="headerlink" title="强一致性"></a>强一致性</h5><p>任何一次读都能读到某个数据的最近一次写的数据。系统中的所有进程，看到的操作顺序，都和全局时钟下的顺序一致。简言之，在任意时刻，所有节点中的数据是一样的。</p>
+<h5 id="弱一致性"><a href="#弱一致性" class="headerlink" title="弱一致性"></a>弱一致性</h5><p>数据更新后，如果能容忍后续的访问只能访问到部分或者全部访问不到，则是弱一致性。</p>
+<h5 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h5><p>不保证在任意时刻任意节点上的同一份数据都是相同的，但是随着时间的迁移，不同节点上的同一份数据总是在向趋同的方向变化。简单说，就是在一段时间后，节点间的数据会最终达到一致状态。</p>
+<h3 id="分布式理论"><a href="#分布式理论" class="headerlink" title="分布式理论"></a>分布式理论</h3><h4 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h4><p>实现分布式系统，就需要先明确CAP理论</p>
 <ul>
 <li><p>一致性 <code>Consistency</code></p>
 <p>更新操作成功并返回客户端后，所有节点在同一时间的数据完全一致，这就是分布式的一致性。一致性的问题在并发系统上不可避免，对于客户端，一致性指的是并发访问时更新过的数据如何获取的问题。从服务端来看，则是更新如何复制分布到整个系统，以保证数据最终一致。</p>
@@ -344,15 +337,15 @@
 <p>例如现在的分布式系统中某一个或者多个节点宕机，剩下的节点还可以正常工作，而且对于用户而言没有体验上的影响。</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >CAP 原则的精髓就是要么 AP，要么 CP，要么 AC，但是不存在 CAP。如果在某个分布式系统中数据无副本， 那么系统必然满足强一致性条件， 因为只有独一数据，不会出现数据不一致的情况，此时 C 和 P 两要素具备，但是如果系统发生了网络分区状况或者宕机，必然导致某些数据不可以访问，此时可用性条件就不能被满足，即在此情况下获得了 CP 系统，但是 CAP 不可同时满足。</p>
-<p class="fireman-p-indent" >例如</p>
+<p>CAP 原则的精髓就是要么 AP，要么 CP，要么 AC，但是不存在 CAP。如果在某个分布式系统中数据无副本， 那么系统必然满足强一致性条件， 因为只有独一数据，不会出现数据不一致的情况，此时 C 和 P 两要素具备，但是如果系统发生了网络分区状况或者宕机，必然导致某些数据不可以访问，此时可用性条件就不能被满足，即在此情况下获得了 CP 系统，但是 CAP 不可同时满足。</p>
+<p>例如</p>
 <ul>
 <li>CA：单机mysql，通过事务实现，不是一个分布式系统。</li>
 <li>CP：MongoDB，HBase，Zookeeper。当有一个节点宕机，此时系统无法访问，需要宕机节点数据恢复到其他节点或者需要选举出新的Master。Zookeeper中，如果Master宕机，此时客户端访问会失败，并且会重试。这几种应用，Leader的选举非常快，所以这种重试对于用户来说几乎是感知不到的。</li>
 <li>AP：DynamoDB，Redis哨兵模式，Eureka。数据写入会覆盖到集群中所有节点，所有节点都可以读取和写入（Redis中只有Master可以写入），当一个节点宕机，依然可以读写，但是牺牲了一致性。</li>
 </ul>
-<p class="fireman-p-indent" >也就是说，分布式系统中，一定要满足的是AP或者是CP。</p>
-<h4 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h4><p class="fireman-p-indent" >对CAP中一致性和可用性权衡的结果，来源于对大规模互联网系统分布式实践的总结，是基于CAP理论逐步演化。思想是根据业务特点，牺牲强一致性，而是做到最终一致性。</p>
+<p>也就是说，分布式系统中，一定要满足的是AP或者是CP。</p>
+<h4 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h4><p>对CAP中一致性和可用性权衡的结果，来源于对大规模互联网系统分布式实践的总结，是基于CAP理论逐步演化。思想是根据业务特点，牺牲强一致性，而是做到最终一致性。</p>
 <ul>
 <li><p>基本可用 <code>Basically Available</code> </p>
 <p>分布式系统故障时，允许损失的部分可用性，即保证核心可用</p>
@@ -364,20 +357,20 @@
 <p>系统中的所有数据副本经过一定时间后，最终能够达到一致的状态</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >一致性的几种情况</p>
-<p class="fireman-p-indent" >从客户端访问到一致性内容的时间角度：</p>
+<p>一致性的几种情况</p>
+<p>从客户端访问到一致性内容的时间角度：</p>
 <ul>
 <li>实时一致性：要求数据内容一旦发生更新，客户端立刻可以访问到最新的数据。在集群环境下无法实现，只能在单机环境中实现。</li>
 <li>最终一致性：要求数据内容一旦发生更新，经过一小段时间后，客户端可以访问到最新的数据</li>
 </ul>
-<p class="fireman-p-indent" >从客户端访问到的内容角度：</p>
+<p>从客户端访问到的内容角度：</p>
 <ul>
 <li>强一致性：也称为严格一致性，要求客户端访问到的一定是更新过的新数据</li>
 <li>弱一致性：允许客户端从集群不同节点访问到的数据是不一致的</li>
 </ul>
-<h5 id="幂等操作"><a href="#幂等操作" class="headerlink" title="幂等操作"></a>幂等操作</h5><p class="fireman-p-indent" >最终一致性可能出现多次请求，为了避免结果重复，需要这部分操作具备幂等性。</p>
-<p class="fireman-p-indent" >在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。</p>
-<h3 id="分布式事务解决方案"><a href="#分布式事务解决方案" class="headerlink" title="分布式事务解决方案"></a>分布式事务解决方案</h3><p class="fireman-p-indent" >常见的解决方案：</p>
+<h5 id="幂等操作"><a href="#幂等操作" class="headerlink" title="幂等操作"></a>幂等操作</h5><p>最终一致性可能出现多次请求，为了避免结果重复，需要这部分操作具备幂等性。</p>
+<p>在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。幂等函数，或幂等方法，是指可以使用相同参数重复执行，并能获得相同结果的函数。这些函数不会影响系统状态，也不用担心重复执行会对系统造成改变。</p>
+<h3 id="分布式事务解决方案"><a href="#分布式事务解决方案" class="headerlink" title="分布式事务解决方案"></a>分布式事务解决方案</h3><p>常见的解决方案：</p>
 <ul>
 <li>二阶段提交（2PC，Two-phase Commit）</li>
 <li>TCC补偿模式</li>
@@ -385,66 +378,66 @@
 <li>最大努力通知</li>
 <li>基于可靠消息最终一致性方案（最为常用）</li>
 </ul>
-<h4 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h4><p class="fireman-p-indent" >顾名思义，第一阶段是准备阶段，将所有需要执行的操作发送到对端，当所有对端通知可执行时，指定第二步，提交操作，让所有对端都执行。如果第一阶段或者第二节点有部分对端失败，则将所有对端都进行回滚。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/XA-first.jpg" alt="img"></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/XA-second.jpg" alt="img"></p>
-<p class="fireman-p-indent" >大致的流程：</p>
-<p class="fireman-p-indent" >第一阶段（<code>prepare</code>）：事务管理器向所有本地资源管理器发起请求，询问是否是 ready 状态，所有参与者都将本事务能否成功的信息反馈发给协调者；<br><span class="fireman-span-indent"></span>第二阶段 (<code>commit/rollback</code>)：事务管理器根据所有本地资源管理器的反馈，通知所有本地资源管理器，步调一致地在所有分支上提交或者回滚。</p>
-<p class="fireman-p-indent" >存在的问题：</p>
+<h4 id="二阶段提交"><a href="#二阶段提交" class="headerlink" title="二阶段提交"></a>二阶段提交</h4><p>顾名思义，第一阶段是准备阶段，将所有需要执行的操作发送到对端，当所有对端通知可执行时，指定第二步，提交操作，让所有对端都执行。如果第一阶段或者第二节点有部分对端失败，则将所有对端都进行回滚。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/XA-first.jpg" alt="img"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/XA-second.jpg" alt="img"></p>
+<p>大致的流程：</p>
+<p>第一阶段（<code>prepare</code>）：事务管理器向所有本地资源管理器发起请求，询问是否是 ready 状态，所有参与者都将本事务能否成功的信息反馈发给协调者；<br>第二阶段 (<code>commit/rollback</code>)：事务管理器根据所有本地资源管理器的反馈，通知所有本地资源管理器，步调一致地在所有分支上提交或者回滚。</p>
+<p>存在的问题：</p>
 <ul>
 <li>使用事务占用资源，其他的事务只能阻塞等待资源释放</li>
 <li>单点故障，一旦事务管理器故障，整个系统不可用</li>
 <li>数据不一致，阶段二，如果只commit了部分消息，此时网络异常，那么之后部分参与者收到commit消息，或者说只有部分参与者提交了事务，导致数据不一致</li>
 <li>不确定性，当事务管理器commit之后，如果只有一个参与者收到commit，那么该参与者与事务管理器同时宕机之后，重新选举的事务管理器无法确定该消息是否提交成功</li>
 </ul>
-<p class="fireman-p-indent" >总结：虽然实现简单，但是隐患比较多，例如如何处理部分消息失败之后的回滚，如何处理资源卡主。因此使用场景比较少，不常用。</p>
-<h4 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h4><p class="fireman-p-indent" >Try-Confirm-Cancel，相比二阶段提交，解决了几个缺点：</p>
+<p>总结：虽然实现简单，但是隐患比较多，例如如何处理部分消息失败之后的回滚，如何处理资源卡主。因此使用场景比较少，不常用。</p>
+<h4 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h4><p>Try-Confirm-Cancel，相比二阶段提交，解决了几个缺点：</p>
 <ol>
 <li>解决了协调者单点，由主业务方发起并完成业务活动，业务活动管理器变成多点，引入集群</li>
 <li>同步阻塞，引入超市，超时后进行补偿，并且不会锁定整个资源，将资源转换为业务逻辑的形式，粒度变小。</li>
 <li>数据一致性，有了补偿机制之后，由业务活动管理器控制一致性</li>
 </ol>
-<p class="fireman-p-indent" >Try阶段：尝试执行，完成所有业务检查（一致性），预留必须业务资源（准隔离性，例如转账场景，冻结部分资金）</p>
-<p class="fireman-p-indent" >Confirm阶段：确认执行，真正执行业务，使用Try阶段的业务资源，Confirm需要满足幂等性，以备失败后重试</p>
-<p class="fireman-p-indent" >Cancel阶段：取消执行，释放Try阶段预留的业务资源，Cancel也要满足幂等性，以备失败后重试（例如转账场景，回复冻结的部分资金）</p>
-<p class="fireman-p-indent" >基于 TCC 实现分布式事务，将这个操作的逻辑拆分三个接口， <code>Try</code>、<code>Confirm</code>、<code>Cancel</code> 三个接口，所以代码实现复杂度相对较高。当中途出现异常需要回滚，则需要执行所有服务的<code>Cancel</code>接口，如果<code>Try</code>所有的服务正常，则需要执行所有微服务的<code>Confirm</code>接口。另外，如果接口执行失败，则需要重试，因此相对而言，代码复杂度比较高，最好是使用<code>TCC</code>框架，通过统一的TCC事务管理器实现。</p>
+<p>Try阶段：尝试执行，完成所有业务检查（一致性），预留必须业务资源（准隔离性，例如转账场景，冻结部分资金）</p>
+<p>Confirm阶段：确认执行，真正执行业务，使用Try阶段的业务资源，Confirm需要满足幂等性，以备失败后重试</p>
+<p>Cancel阶段：取消执行，释放Try阶段预留的业务资源，Cancel也要满足幂等性，以备失败后重试（例如转账场景，回复冻结的部分资金）</p>
+<p>基于 TCC 实现分布式事务，将这个操作的逻辑拆分三个接口， <code>Try</code>、<code>Confirm</code>、<code>Cancel</code> 三个接口，所以代码实现复杂度相对较高。当中途出现异常需要回滚，则需要执行所有服务的<code>Cancel</code>接口，如果<code>Try</code>所有的服务正常，则需要执行所有微服务的<code>Confirm</code>接口。另外，如果接口执行失败，则需要重试，因此相对而言，代码复杂度比较高，最好是使用<code>TCC</code>框架，通过统一的TCC事务管理器实现。</p>
 <blockquote>
-<p class="fireman-p-indent" >如果一些意外情况发生，例如服务挂掉，再次重启，TCC分布式事务框架需要解决保证之前没执行完的分布式继续执行，因此需要日志记录。</p>
-<p class="fireman-p-indent" >如果接口调用一直不成功，反复重试还在重试，此时还需要引入日志通知。</p>
-<p class="fireman-p-indent" >tcc也会使用锁保证数据一致性，因此也会导致性能不高</p>
+<p>如果一些意外情况发生，例如服务挂掉，再次重启，TCC分布式事务框架需要解决保证之前没执行完的分布式继续执行，因此需要日志记录。</p>
+<p>如果接口调用一直不成功，反复重试还在重试，此时还需要引入日志通知。</p>
+<p>tcc也会使用锁保证数据一致性，因此也会导致性能不高</p>
 </blockquote>
-<h4 id="基于本地消息表的最终一致性"><a href="#基于本地消息表的最终一致性" class="headerlink" title="基于本地消息表的最终一致性"></a>基于本地消息表的最终一致性</h4><p class="fireman-p-indent" >最终一致性强调结果，而弱化过程中的一致性。</p>
-<p class="fireman-p-indent" >例如使用本地消息队列，完成本地任务之后，将跨服务的任务发送到MQ中，其他服务获取MQ中的任务，通过确认机制完成任务。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/bank-transfer.jpg" alt="img"></p>
-<p class="fireman-p-indent" >虽然事务中途数据不一致，但是最终一定会一致。</p>
-<p class="fireman-p-indent" >可能出现的问题和解决方案：</p>
+<h4 id="基于本地消息表的最终一致性"><a href="#基于本地消息表的最终一致性" class="headerlink" title="基于本地消息表的最终一致性"></a>基于本地消息表的最终一致性</h4><p>最终一致性强调结果，而弱化过程中的一致性。</p>
+<p>例如使用本地消息队列，完成本地任务之后，将跨服务的任务发送到MQ中，其他服务获取MQ中的任务，通过确认机制完成任务。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/bank-transfer.jpg" alt="img"></p>
+<p>虽然事务中途数据不一致，但是最终一定会一致。</p>
+<p>可能出现的问题和解决方案：</p>
 <ul>
 <li><p>本地服务发送MQ的过程可能出现问题</p>
 <ul>
 <li>如果MQ异常，则需要将数据库的变更回滚，此时为了保证上层业务正常，需要额外记录一张更新数据的表，需要引入本地消息表。</li>
 </ul>
-<p class="fireman-p-indent" >那么这个方案就变成异步任务获取本地消息表中的数据，推送到MQ中</p>
+<p>那么这个方案就变成异步任务获取本地消息表中的数据，推送到MQ中</p>
 </li>
-<li><p class="fireman-p-indent" >如果网络出现抖动，导致数据重复发送</p>
+<li><p>如果网络出现抖动，导致数据重复发送</p>
 <ul>
 <li>需要在接收端具备幂等性</li>
 </ul>
 </li>
 </ul>
-<h4 id="基于可靠消息的最终一致性"><a href="#基于可靠消息的最终一致性" class="headerlink" title="基于可靠消息的最终一致性"></a>基于可靠消息的最终一致性</h4><p class="fireman-p-indent" >解决本地消息表的消息不可靠问题，也就是通过事务消息。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221012215950056.png" alt="image-20221012215950056"></p>
-<p class="fireman-p-indent" >基于<code>RocketMQ</code>实现事务消息。</p>
-<p class="fireman-p-indent" >通过<code>half</code>消息，<code>commit</code>或<code>rollback</code>机制实现事务，通过回查实现消息确认。</p>
-<h4 id="最大努力通知"><a href="#最大努力通知" class="headerlink" title="最大努力通知"></a>最大努力通知</h4><p class="fireman-p-indent" >利用回调的形式，请求HTTP接口发送结果通知。</p>
-<p class="fireman-p-indent" >最大努力通知最常见的场景就是支付回调，支付服务收到第三方服务支付成功通知后，先更新自己库中订单支付状态，然后同步通知订单服务支付成功。如果此次同步通知失败，会通过异步脚步不断重试地调用订单服务的接口。</p>
-<p class="fireman-p-indent" >核心点就是保证回调成功，如果由于服务问题、网络问题导致通知无法到达，则需要重试到最大次数。</p>
-<p class="fireman-p-indent" >这种重试策略可能设置为重试次数越大间隔时间越长，然后达到最大次数之后，就不再通知。</p>
-<p class="fireman-p-indent" >服务除了需要最大努力通知能力之外，还需要加上查询能力，当最大通知次数之后，不再通知，提供客户端的查询能力。</p>
-<p class="fireman-p-indent" >参考：</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA0MjU3NzYvYXJ0aWNsZS9kZXRhaWxzLzc5NTE2Mjk4">常用的分布式事务解决方案<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9iYWlrZS5iYWlkdS5jb20vaXRlbS9DQVAlRTUlOEUlOUYlRTUlODglOTk=">CAP原则<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9iYWlrZS5iYWlkdS5jb20vaXRlbS8lRTQlQkElOEIlRTUlOEElQTEvNTk0NTg4Mg==">事务<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9iYWlrZS5iYWlkdS5jb20vaXRlbS8lRTUlODglODYlRTUlQjglODMlRTUlQkMlOEYlRTQlQkElOEIlRTUlOEElQTE=">分布式事务<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="基于可靠消息的最终一致性"><a href="#基于可靠消息的最终一致性" class="headerlink" title="基于可靠消息的最终一致性"></a>基于可靠消息的最终一致性</h4><p>解决本地消息表的消息不可靠问题，也就是通过事务消息。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221012215950056.png" alt="image-20221012215950056"></p>
+<p>基于<code>RocketMQ</code>实现事务消息。</p>
+<p>通过<code>half</code>消息，<code>commit</code>或<code>rollback</code>机制实现事务，通过回查实现消息确认。</p>
+<h4 id="最大努力通知"><a href="#最大努力通知" class="headerlink" title="最大努力通知"></a>最大努力通知</h4><p>利用回调的形式，请求HTTP接口发送结果通知。</p>
+<p>最大努力通知最常见的场景就是支付回调，支付服务收到第三方服务支付成功通知后，先更新自己库中订单支付状态，然后同步通知订单服务支付成功。如果此次同步通知失败，会通过异步脚步不断重试地调用订单服务的接口。</p>
+<p>核心点就是保证回调成功，如果由于服务问题、网络问题导致通知无法到达，则需要重试到最大次数。</p>
+<p>这种重试策略可能设置为重试次数越大间隔时间越长，然后达到最大次数之后，就不再通知。</p>
+<p>服务除了需要最大努力通知能力之外，还需要加上查询能力，当最大通知次数之后，不再通知，提供客户端的查询能力。</p>
+<p>参考：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA0MjU3NzYvYXJ0aWNsZS9kZXRhaWxzLzc5NTE2Mjk4">常用的分布式事务解决方案<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iYWlrZS5iYWlkdS5jb20vaXRlbS9DQVAlRTUlOEUlOUYlRTUlODglOTk=">CAP原则<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iYWlrZS5iYWlkdS5jb20vaXRlbS8lRTQlQkElOEIlRTUlOEElQTEvNTk0NTg4Mg==">事务<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iYWlrZS5iYWlkdS5jb20vaXRlbS8lRTUlODglODYlRTUlQjglODMlRTUlQkMlOEYlRTQlQkElOEIlRTUlOEElQTE=">分布式事务<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

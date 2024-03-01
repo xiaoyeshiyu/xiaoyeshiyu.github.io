@@ -103,14 +103,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -321,7 +314,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="inner-workings"><a href="#inner-workings" class="headerlink" title="inner workings"></a>inner workings</h1><h2 id="concurrency-features"><a href="#concurrency-features" class="headerlink" title="concurrency features"></a>concurrency features</h2><p class="fireman-p-indent" >并发能力</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="inner-workings"><a href="#inner-workings" class="headerlink" title="inner workings"></a>inner workings</h1><h2 id="concurrency-features"><a href="#concurrency-features" class="headerlink" title="concurrency features"></a>concurrency features</h2><p>并发能力</p>
 <ul>
 <li><p>goroutines</p>
 <p>to execute tasks independently, potentially in parallel.</p>
@@ -332,16 +325,16 @@
 <p>在两个 goroutine 之间提供信息共享和同步</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >例如：处理每一个任务</p>
+<p>例如：处理每一个任务</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  tasks := getTasks()</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Process each task.</span></span><br><span class="line">  <span class="keyword">for</span> _, task := <span class="keyword">range</span> tasks &#123;</span><br><span class="line">		process(task) </span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >优化，使用 <code>channel</code> 缓存任务</p>
+<p>优化，使用 <code>channel</code> 缓存任务</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="comment">// Buffered channel.</span></span><br><span class="line">   ch := <span class="built_in">make</span>(<span class="keyword">chan</span> Task, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >使用多个 <code>goroutine</code> ，并发处理任务</p>
+<p>使用多个 <code>goroutine</code> ，并发处理任务</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="comment">// Buffered channel.</span></span><br><span class="line">   ch := <span class="built_in">make</span>(<span class="keyword">chan</span> Task, <span class="number">3</span>)</span><br><span class="line">   <span class="comment">// Run fixed number of workers.</span></span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; numWorkers; i++ &#123;</span><br><span class="line">     <span class="keyword">go</span> worker(ch)</span><br><span class="line">	 &#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过 <code>channel</code> 发送任务，并发处理任务</p>
+<p>通过 <code>channel</code> 发送任务，并发处理任务</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="comment">// Buffered channel.</span></span><br><span class="line">   ch := <span class="built_in">make</span>(<span class="keyword">chan</span> Task, <span class="number">3</span>)</span><br><span class="line">   <span class="comment">// Run fixed number of workers.</span></span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; numWorkers; i++ &#123;</span><br><span class="line">     <span class="keyword">go</span> worker(ch)</span><br><span class="line">	 &#125;</span><br><span class="line">   <span class="comment">// Send tasks to workers.</span></span><br><span class="line">   hellaTasks := getTasks()</span><br><span class="line">   <span class="keyword">for</span> _, task := <span class="keyword">range</span> hellaTasks &#123;</span><br><span class="line">     taskCh &lt;- task</span><br><span class="line">	 &#125;</span><br><span class="line">	 ...  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">(ch)</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> &#123;</span><br><span class="line">    <span class="comment">// Receive task.</span></span><br><span class="line">		task := &lt;-taskCh</span><br><span class="line">    process(task)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="channels-are-inherently-interesting"><a href="#channels-are-inherently-interesting" class="headerlink" title="channels are inherently interesting"></a>channels are inherently interesting</h2><ul>
@@ -358,45 +351,45 @@
 <p>可能导致 goroutine 阻塞和唤醒。</p>
 </li>
 </ul>
-<h1 id="making-channels"><a href="#making-channels" class="headerlink" title="making channels"></a>making channels</h1><p class="fireman-p-indent" >the hchan struct </p>
-<p class="fireman-p-indent" >创建 <code>channels</code>，也就是 <code>hchan</code> 结构体。</p>
-<h2 id="make-chan"><a href="#make-chan" class="headerlink" title="make chan"></a>make chan</h2><p class="fireman-p-indent" >创建 <code>chan</code> 有两种方式，无缓冲和带缓冲</p>
+<h1 id="making-channels"><a href="#making-channels" class="headerlink" title="making channels"></a>making channels</h1><p>the hchan struct </p>
+<p>创建 <code>channels</code>，也就是 <code>hchan</code> 结构体。</p>
+<h2 id="make-chan"><a href="#make-chan" class="headerlink" title="make chan"></a>make chan</h2><p>创建 <code>chan</code> 有两种方式，无缓冲和带缓冲</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># buffered channel</span><br><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> Task, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># unbuffered channel </span><br><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >带缓冲的 <code>channel</code> 具备上述四个特点。</p>
-<p class="fireman-p-indent" ><code>go/src/runtime/chan.go</code></p>
+<p>带缓冲的 <code>channel</code> 具备上述四个特点。</p>
+<p><code>go/src/runtime/chan.go</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> hchan <span class="keyword">struct</span> &#123;</span><br><span class="line">	qcount   <span class="type">uint</span>           <span class="comment">// total data in the queue</span></span><br><span class="line">	dataqsiz <span class="type">uint</span>           <span class="comment">// size of the circular queue</span></span><br><span class="line">	buf      unsafe.Pointer <span class="comment">// points to an array of dataqsiz elements  环形队列</span></span><br><span class="line">	elemsize <span class="type">uint16</span></span><br><span class="line">	closed   <span class="type">uint32</span></span><br><span class="line">	elemtype *_type <span class="comment">// element type</span></span><br><span class="line">	sendx    <span class="type">uint</span>   <span class="comment">// send index      			发送时的下标</span></span><br><span class="line">	recvx    <span class="type">uint</span>   <span class="comment">// receive index   			接受时的下标</span></span><br><span class="line">	recvq    waitq  <span class="comment">// list of recv waiters</span></span><br><span class="line">	sendq    waitq  <span class="comment">// list of send waiters</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// lock protects all fields in hchan, as well as several</span></span><br><span class="line">	<span class="comment">// fields in sudogs blocked on this channel.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// Do not change another G&#x27;s status while holding this lock</span></span><br><span class="line">	<span class="comment">// (in particular, do not ready a G), as this can deadlock</span></span><br><span class="line">	<span class="comment">// with stack shrinking.</span></span><br><span class="line">  <span class="comment">// 锁保护了hchan中的所有字段，以及在该通道上被阻塞的几个 sudogs 中的一些字段。</span></span><br><span class="line">  <span class="comment">// 在持有此锁时，请不要更改另一个G的状态（特别是不要准备一个G），因为这可能会与堆栈收缩发生死锁。</span></span><br><span class="line">	lock mutex								<span class="comment">// 互斥锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >空 <code>chan</code>，<code>sendx = 0</code>，<code>revex = 0</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103520748.png" alt="image-20231225103520748"></p>
-<p class="fireman-p-indent" >一个入队，<code>sendx = 1</code>，<code>revex = 0</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103853807.png" alt="image-20231225103853807"></p>
-<p class="fireman-p-indent" >再入两个，满队，<code>sendx = 0</code>，<code>revex = 0</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103929168.png" alt="image-20231225103929168"></p>
-<p class="fireman-p-indent" >出队一个，<code>sendx = 0</code>，<code>revex = 1</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104154814.png" alt="image-20231225104154814"></p>
-<h2 id="allocates-memory"><a href="#allocates-memory" class="headerlink" title="allocates memory"></a>allocates memory</h2><p class="fireman-p-indent" >内存分配</p>
-<p class="fireman-p-indent" >allocates an hchan struct on the heap.</p>
+<p>空 <code>chan</code>，<code>sendx = 0</code>，<code>revex = 0</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103520748.png" alt="image-20231225103520748"></p>
+<p>一个入队，<code>sendx = 1</code>，<code>revex = 0</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103853807.png" alt="image-20231225103853807"></p>
+<p>再入两个，满队，<code>sendx = 0</code>，<code>revex = 0</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103929168.png" alt="image-20231225103929168"></p>
+<p>出队一个，<code>sendx = 0</code>，<code>revex = 1</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104154814.png" alt="image-20231225104154814"></p>
+<h2 id="allocates-memory"><a href="#allocates-memory" class="headerlink" title="allocates memory"></a>allocates memory</h2><p>内存分配</p>
+<p>allocates an hchan struct on the heap.</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104435846.png" alt="image-20231225104435846" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >初始化 <code>channel</code> 的时候（也就是 <code>hchan</code>），内存分配在堆上。同时返回一个 <code>hchan</code> 的指针。</p>
+<p>初始化 <code>channel</code> 的时候（也就是 <code>hchan</code>），内存分配在堆上。同时返回一个 <code>hchan</code> 的指针。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104627325.png" alt="image-20231225104627325" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >这也就是为什么可以在两个函数之间传递 <code>channels</code>，而不需要传递 <code>channels</code> 的指针。</p>
-<h1 id="sends-and-receives"><a href="#sends-and-receives" class="headerlink" title="sends and receives"></a>sends and receives</h1><p class="fireman-p-indent" >goroutine scheduling </p>
-<p class="fireman-p-indent" >发送和接受，也就是 <code>goroutine</code> 之间调度</p>
-<h2 id="sends"><a href="#sends" class="headerlink" title="sends"></a>sends</h2><h3 id="task-queue"><a href="#task-queue" class="headerlink" title="task queue"></a>task queue</h3><p class="fireman-p-indent" >例如在任务队列中，G1 负责分发任务，G2 负责接收任务。</p>
-<p class="fireman-p-indent" >G1:</p>
+<p>这也就是为什么可以在两个函数之间传递 <code>channels</code>，而不需要传递 <code>channels</code> 的指针。</p>
+<h1 id="sends-and-receives"><a href="#sends-and-receives" class="headerlink" title="sends and receives"></a>sends and receives</h1><p>goroutine scheduling </p>
+<p>发送和接受，也就是 <code>goroutine</code> 之间调度</p>
+<h2 id="sends"><a href="#sends" class="headerlink" title="sends"></a>sends</h2><h3 id="task-queue"><a href="#task-queue" class="headerlink" title="task queue"></a>task queue</h3><p>例如在任务队列中，G1 负责分发任务，G2 负责接收任务。</p>
+<p>G1:</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">     ...</span><br><span class="line">	<span class="keyword">for</span> _, task := <span class="keyword">range</span> tasks &#123;</span><br><span class="line">     taskCh &lt;- task</span><br><span class="line">  &#125;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >G2:</p>
+<p>G2:</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> &#123;</span><br><span class="line">		task := &lt;-taskCh</span><br><span class="line">		process(task)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >实际情况：</p>
-<p class="fireman-p-indent" >在 G1 侧：<code>ch &lt;- task0</code></p>
-<p class="fireman-p-indent" >将 <code>task0</code> 发送到 <code>ch</code></p>
+<p>实际情况：</p>
+<p>在 G1 侧：<code>ch &lt;- task0</code></p>
+<p>将 <code>task0</code> 发送到 <code>ch</code></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105049154.png" alt="image-20231225105049154" style="zoom:25%;" />
 
 <ol>
@@ -409,8 +402,8 @@
 <li><p>释放锁</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105622677.png" alt="image-20231225105622677" style="zoom:25%;" /></li>
 </ol>
-<p class="fireman-p-indent" >在 G2 侧：<code>t := &lt;- ch</code></p>
-<p class="fireman-p-indent" >从 <code>ch</code> 中获取任务</p>
+<p>在 G2 侧：<code>t := &lt;- ch</code></p>
+<p>从 <code>ch</code> 中获取任务</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105908552.png" alt="image-20231225105908552" style="zoom:25%;" />
 
 <ol>
@@ -423,13 +416,13 @@
 <li><p>释放锁</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225110153190.png" alt="image-20231225110153190" style="zoom:25%;" /></li>
 </ol>
-<p class="fireman-p-indent" >no shared memory ( except hchan )</p>
-<p class="fireman-p-indent" >可以看到，整个过程没有共享内存（除了 <code>hchan</code> 之外），而是使用 <code>copies</code> 拷贝对象。</p>
+<p>no shared memory ( except hchan )</p>
+<p>可以看到，整个过程没有共享内存（除了 <code>hchan</code> 之外），而是使用 <code>copies</code> 拷贝对象。</p>
 <blockquote>
 <p>Do not communicate by sharing memory;   instead, share memory by communicating.</p>
-<p class="fireman-p-indent" >​				(no shared memory)						copies</p>
+<p>​				(no shared memory)						copies</p>
 </blockquote>
-<p class="fireman-p-indent" >如果超过队列最大限度</p>
+<p>如果超过队列最大限度</p>
 <ul>
 <li><p>发送两个任务到 <code>ch</code></p>
 <p><code>ch &lt;- task1</code></p>
@@ -444,79 +437,79 @@
 <p><code>ch &lt;- task4</code></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225111307480.png" alt="image-20231225111307480" style="zoom:25%;" /></li>
 </ul>
-<p class="fireman-p-indent" >此时 <code>chanel is full</code>，队列已满。</p>
-<p class="fireman-p-indent" >G1 执行阻塞，在队列接受后恢复。（通过 <code>GMP</code> 调度模型，当 G1 在阻塞之后，P 会切换到 <code>g0</code> 到 M 上执行，G1 的状态变为 <code>gopark</code>，从而避免其他 <code>goroutine</code> 无法被调度执行。）</p>
-<p class="fireman-p-indent" >当 <code>task</code> 被取走，G1 从阻塞状态恢复到正常状态。</p>
-<h3 id="the-runtime-scheduler"><a href="#the-runtime-scheduler" class="headerlink" title="the runtime scheduler"></a>the runtime scheduler</h3><p class="fireman-p-indent" >运行时调度</p>
-<p class="fireman-p-indent" ><code>goroutine</code> 是<strong>用户空间的线程</strong>，也就是说，创建和管理都是通过 Go runtime（<code>g0</code>），并不是 OS，相比 OS 的线程，Go runtime 的线程更加轻量。 </p>
-<p class="fireman-p-indent" >runtime 调度会将 goroutines 调度到 OS 的线程上。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225112558323.png" alt="image-20231225112558323"></p>
-<p class="fireman-p-indent" >Go 的 <code>M:N</code> 调度模型可以用三个结构体来表示</p>
-<p class="fireman-p-indent" >M：OS thread，操作系统线程</p>
-<p class="fireman-p-indent" >G：goroutine</p>
-<p class="fireman-p-indent" >P：context for scheduling，调度器：</p>
+<p>此时 <code>chanel is full</code>，队列已满。</p>
+<p>G1 执行阻塞，在队列接受后恢复。（通过 <code>GMP</code> 调度模型，当 G1 在阻塞之后，P 会切换到 <code>g0</code> 到 M 上执行，G1 的状态变为 <code>gopark</code>，从而避免其他 <code>goroutine</code> 无法被调度执行。）</p>
+<p>当 <code>task</code> 被取走，G1 从阻塞状态恢复到正常状态。</p>
+<h3 id="the-runtime-scheduler"><a href="#the-runtime-scheduler" class="headerlink" title="the runtime scheduler"></a>the runtime scheduler</h3><p>运行时调度</p>
+<p><code>goroutine</code> 是<strong>用户空间的线程</strong>，也就是说，创建和管理都是通过 Go runtime（<code>g0</code>），并不是 OS，相比 OS 的线程，Go runtime 的线程更加轻量。 </p>
+<p>runtime 调度会将 goroutines 调度到 OS 的线程上。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225112558323.png" alt="image-20231225112558323"></p>
+<p>Go 的 <code>M:N</code> 调度模型可以用三个结构体来表示</p>
+<p>M：OS thread，操作系统线程</p>
+<p>G：goroutine</p>
+<p>P：context for scheduling，调度器：</p>
 <ul>
 <li>负责调度</li>
 <li>为了运行 G，M 一定会持有一个 P</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225112929699.png" alt="image-20231225112929699"></p>
-<h3 id="pausing-goroutines"><a href="#pausing-goroutines" class="headerlink" title="pausing goroutines"></a>pausing goroutines</h3><p class="fireman-p-indent" >阻塞 goroutines</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225112929699.png" alt="image-20231225112929699"></p>
+<h3 id="pausing-goroutines"><a href="#pausing-goroutines" class="headerlink" title="pausing goroutines"></a>pausing goroutines</h3><p>阻塞 goroutines</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113211310.png" alt="image-20231225113211310" style="zoom:25%;" />
 
 <p><code>ch &lt;- task4</code></p>
-<p class="fireman-p-indent" >往满 <code>channel</code> 中发送时，这个 G 进入阻塞状态，G 进入 <code>gopark</code>，G1 改为 <code>waiting</code></p>
+<p>往满 <code>channel</code> 中发送时，这个 G 进入阻塞状态，G 进入 <code>gopark</code>，G1 改为 <code>waiting</code></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113223575.png" alt="image-20231225113223575" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >取消 G1 和 M 之间的关联关系</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113256978.png" alt="image-20231225113256978"></p>
-<p class="fireman-p-indent" >从 P 中调度一个可运行的 G到 M 上执行，让 M 不处于阻塞状态。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113351332.png" alt="image-20231225113351332"></p>
-<p class="fireman-p-indent" >这种处理方式，G1 根据需要被阻塞，但操作系统线程没有被阻塞。</p>
-<p class="fireman-p-indent" >当有一个消息从 <code>channel</code> 中被取出，<code>ch</code> 没有满时，G1 不再被阻塞，从阻塞状态中恢复回来。</p>
-<h3 id="resuming-goroutines"><a href="#resuming-goroutines" class="headerlink" title="resuming goroutines"></a>resuming goroutines</h3><p class="fireman-p-indent" ><code>hchan</code> 结构体中存储等待的 <code>senders</code> 和 <code>receivers</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113950734.png" alt="image-20231225113950734"></p>
-<p class="fireman-p-indent" ><code>go/src/runtime/chan.go</code></p>
+<p>取消 G1 和 M 之间的关联关系</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113256978.png" alt="image-20231225113256978"></p>
+<p>从 P 中调度一个可运行的 G到 M 上执行，让 M 不处于阻塞状态。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113351332.png" alt="image-20231225113351332"></p>
+<p>这种处理方式，G1 根据需要被阻塞，但操作系统线程没有被阻塞。</p>
+<p>当有一个消息从 <code>channel</code> 中被取出，<code>ch</code> 没有满时，G1 不再被阻塞，从阻塞状态中恢复回来。</p>
+<h3 id="resuming-goroutines"><a href="#resuming-goroutines" class="headerlink" title="resuming goroutines"></a>resuming goroutines</h3><p><code>hchan</code> 结构体中存储等待的 <code>senders</code> 和 <code>receivers</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113950734.png" alt="image-20231225113950734"></p>
+<p><code>go/src/runtime/chan.go</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> hchan <span class="keyword">struct</span> &#123;</span><br><span class="line">	qcount   <span class="type">uint</span>           <span class="comment">// total data in the queue</span></span><br><span class="line">	dataqsiz <span class="type">uint</span>           <span class="comment">// size of the circular queue</span></span><br><span class="line">	buf      unsafe.Pointer <span class="comment">// points to an array of dataqsiz elements</span></span><br><span class="line">	elemsize <span class="type">uint16</span></span><br><span class="line">	closed   <span class="type">uint32</span></span><br><span class="line">	elemtype *_type <span class="comment">// element type</span></span><br><span class="line">	sendx    <span class="type">uint</span>   <span class="comment">// send index</span></span><br><span class="line">	recvx    <span class="type">uint</span>   <span class="comment">// receive index</span></span><br><span class="line">	recvq    waitq  <span class="comment">// list of recv waiters  接受者的等待列表 </span></span><br><span class="line">	sendq    waitq  <span class="comment">// list of send waiters  发送者的等待列表</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// lock protects all fields in hchan, as well as several</span></span><br><span class="line">	<span class="comment">// fields in sudogs blocked on this channel.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// Do not change another G&#x27;s status while holding this lock</span></span><br><span class="line">	<span class="comment">// (in particular, do not ready a G), as this can deadlock</span></span><br><span class="line">	<span class="comment">// with stack shrinking.</span></span><br><span class="line">	lock mutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> waitq <span class="keyword">struct</span> &#123;  <span class="comment">// 等待列表中</span></span><br><span class="line">	first *sudog       <span class="comment">// 候补 g 的链表</span></span><br><span class="line">	last  *sudog</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><code>go/src/runtime/runtime2.go</code></p>
+<p><code>go/src/runtime/runtime2.go</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sudog represents a g in a wait list, such as for sending/receiving</span></span><br><span class="line"><span class="comment">// on a channel.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// sudog is necessary because the g ↔ synchronization object relation</span></span><br><span class="line"><span class="comment">// is many-to-many. A g can be on many wait lists, so there may be</span></span><br><span class="line"><span class="comment">// many sudogs for one g; and many gs may be waiting on the same</span></span><br><span class="line"><span class="comment">// synchronization object, so there may be many sudogs for one object.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// sudogs are allocated from a special pool. Use acquireSudog and</span></span><br><span class="line"><span class="comment">// releaseSudog to allocate and free them.</span></span><br><span class="line"><span class="keyword">type</span> sudog <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">// The following fields are protected by the hchan.lock of the</span></span><br><span class="line">	<span class="comment">// channel this sudog is blocking on. shrinkstack depends on</span></span><br><span class="line">	<span class="comment">// this for sudogs involved in channel ops.</span></span><br><span class="line"></span><br><span class="line">	g *g            <span class="comment">// 阻塞的 G</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// isSelect indicates g is participating in a select, so</span></span><br><span class="line">	<span class="comment">// g.selectDone must be CAS&#x27;d to win the wake-up race.</span></span><br><span class="line">	isSelect <span class="type">bool</span></span><br><span class="line">	next     *sudog</span><br><span class="line">	prev     *sudog</span><br><span class="line">	elem     unsafe.Pointer <span class="comment">// data element (may point to stack)   阻塞时，往 channel 中发送的数据的指针</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// The following fields are never accessed concurrently.</span></span><br><span class="line">	<span class="comment">// For channels, waitlink is only accessed by g.</span></span><br><span class="line">	<span class="comment">// For semaphores, all fields (including the ones above)</span></span><br><span class="line">	<span class="comment">// are only accessed when holding a semaRoot lock.</span></span><br><span class="line"></span><br><span class="line">	acquiretime <span class="type">int64</span></span><br><span class="line">	releasetime <span class="type">int64</span></span><br><span class="line">	ticket      <span class="type">uint32</span></span><br><span class="line">	parent      *sudog <span class="comment">// semaRoot binary tree</span></span><br><span class="line">	waitlink    *sudog <span class="comment">// g.waiting list or semaRoot</span></span><br><span class="line">	waittail    *sudog <span class="comment">// semaRoot</span></span><br><span class="line">	c           *hchan <span class="comment">// channel</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >G1 阻塞时，会创建一个 <code>sudog</code>，并且将自己存储进去</p>
+<p>G1 阻塞时，会创建一个 <code>sudog</code>，并且将自己存储进去</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114044216.png" alt="image-20231225114044216" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >并且将这个 <code>sudog</code> 放到 <code>sendq</code>  中。<code>receiver</code> 通过 <code>sendq</code> 来唤醒 G1。而且是在执行调度之前就将 G 唤醒（也就是先唤醒 G ，然后 G 等待被 M 调度）<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114151682.png" alt="image-20231225114151682"></p>
-<p class="fireman-p-indent" >G2 开始执行</p>
-<p class="fireman-p-indent" ><code>t := &lt;- ch</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114411502.png" alt="image-20231225114411502"></p>
-<p class="fireman-p-indent" >将 <code>task1</code> 从 <code>ch</code> 中取出来</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114658029.png" alt="image-20231225114658029"> </p>
-<p class="fireman-p-indent" >取走之后，从 <code>sendq</code> 中获取链表中的 <code>first sodug</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114825515.png" alt="image-20231225114825515"></p>
-<p class="fireman-p-indent" >将 <code>sudog</code> 中的 <code>elem</code> 中的 <code>task4</code> 放到 <code>ch</code> 中</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114918534.png" alt="image-20231225114918534"></p>
-<p class="fireman-p-indent" >将 G1 的状态从 <code>gopark</code> 改为 <code>goready</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115132024.png" alt="image-20231225115132024"></p>
-<p class="fireman-p-indent" >并且将 G1 调度到本地队列，依据亲缘性原则，将 G1 放到 <code>gonext</code> 中</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115205734.png" alt="image-20231225115205734"></p>
-<p class="fireman-p-indent" >sends and receives when the receiver comes first.</p>
-<p class="fireman-p-indent" >发送和接受，是接收首先发生。</p>
-<h2 id="receives"><a href="#receives" class="headerlink" title="receives"></a>receives</h2><p class="fireman-p-indent" >当接收者阻塞</p>
-<p class="fireman-p-indent" ><code>t := &lt;- ch</code></p>
-<p class="fireman-p-indent" >从一个空 <code>channel</code> 中接收数据</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115424467.png" alt="image-20231225115424467"></p>
-<p class="fireman-p-indent" >此时，会将 G2 暂停，同样，将 G2 状态改为 <code>gopark</code>，将 <code>G2</code> 放到 <code>sudog</code> 中，加入到 <code>ch</code> 的 <code>recvq</code> 中。</p>
-<p class="fireman-p-indent" ><strong>并且将 t 的指针存储到 elem 中</strong>（这是很有意思的点）</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115604787.png" alt="image-20231225115604787"></p>
-<p class="fireman-p-indent" >在 G1 中，当 <code>task</code> 被放到 <code>ch</code> 中时：</p>
-<p class="fireman-p-indent" >本应该将 <code>task</code> 放到 <code>buf</code> 中，然后修改 G2 状态到 <code>goready</code>。</p>
-<p class="fireman-p-indent" >但是这里有一个 <code>smarter</code> 的方法：</p>
-<p class="fireman-p-indent" >在 <code>elem</code> 中存储了 <code>t</code> 的指针，G1 将 <code>task</code> 直接存储到 <code>t</code> 上。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115938753.png" alt="image-20231225115938753"></p>
-<p class="fireman-p-indent" >而 <code>t</code> 其实是一个局部变量，也就是 <code>t</code> 是存储在栈上的。也就是说，G1 直接操作了 G2 的栈。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225153720777.png" alt="image-20231225153720777"></p>
-<p class="fireman-p-indent" >正常情况下，如果一个线程操作另外一个线程的栈，会直接报错，或者引起数据不一致。但是在 Go 中，可以通过保证 <code>happens before</code> 来确保数据一致性。</p>
-<p class="fireman-p-indent" >这种情况，只会发生在 <code>runtime</code> 中。</p>
-<p class="fireman-p-indent" >在恢复时，G2不需要获取通道锁并操作缓冲区。同时，也只会有很少的内存拷贝。</p>
+<p>并且将这个 <code>sudog</code> 放到 <code>sendq</code>  中。<code>receiver</code> 通过 <code>sendq</code> 来唤醒 G1。而且是在执行调度之前就将 G 唤醒（也就是先唤醒 G ，然后 G 等待被 M 调度）<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114151682.png" alt="image-20231225114151682"></p>
+<p>G2 开始执行</p>
+<p><code>t := &lt;- ch</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114411502.png" alt="image-20231225114411502"></p>
+<p>将 <code>task1</code> 从 <code>ch</code> 中取出来</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114658029.png" alt="image-20231225114658029"> </p>
+<p>取走之后，从 <code>sendq</code> 中获取链表中的 <code>first sodug</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114825515.png" alt="image-20231225114825515"></p>
+<p>将 <code>sudog</code> 中的 <code>elem</code> 中的 <code>task4</code> 放到 <code>ch</code> 中</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114918534.png" alt="image-20231225114918534"></p>
+<p>将 G1 的状态从 <code>gopark</code> 改为 <code>goready</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115132024.png" alt="image-20231225115132024"></p>
+<p>并且将 G1 调度到本地队列，依据亲缘性原则，将 G1 放到 <code>gonext</code> 中</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115205734.png" alt="image-20231225115205734"></p>
+<p>sends and receives when the receiver comes first.</p>
+<p>发送和接受，是接收首先发生。</p>
+<h2 id="receives"><a href="#receives" class="headerlink" title="receives"></a>receives</h2><p>当接收者阻塞</p>
+<p><code>t := &lt;- ch</code></p>
+<p>从一个空 <code>channel</code> 中接收数据</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115424467.png" alt="image-20231225115424467"></p>
+<p>此时，会将 G2 暂停，同样，将 G2 状态改为 <code>gopark</code>，将 <code>G2</code> 放到 <code>sudog</code> 中，加入到 <code>ch</code> 的 <code>recvq</code> 中。</p>
+<p><strong>并且将 t 的指针存储到 elem 中</strong>（这是很有意思的点）</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115604787.png" alt="image-20231225115604787"></p>
+<p>在 G1 中，当 <code>task</code> 被放到 <code>ch</code> 中时：</p>
+<p>本应该将 <code>task</code> 放到 <code>buf</code> 中，然后修改 G2 状态到 <code>goready</code>。</p>
+<p>但是这里有一个 <code>smarter</code> 的方法：</p>
+<p>在 <code>elem</code> 中存储了 <code>t</code> 的指针，G1 将 <code>task</code> 直接存储到 <code>t</code> 上。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115938753.png" alt="image-20231225115938753"></p>
+<p>而 <code>t</code> 其实是一个局部变量，也就是 <code>t</code> 是存储在栈上的。也就是说，G1 直接操作了 G2 的栈。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225153720777.png" alt="image-20231225153720777"></p>
+<p>正常情况下，如果一个线程操作另外一个线程的栈，会直接报错，或者引起数据不一致。但是在 Go 中，可以通过保证 <code>happens before</code> 来确保数据一致性。</p>
+<p>这种情况，只会发生在 <code>runtime</code> 中。</p>
+<p>在恢复时，G2不需要获取通道锁并操作缓冲区。同时，也只会有很少的内存拷贝。</p>
 <h2 id="understand-channels"><a href="#understand-channels" class="headerlink" title="understand channels"></a>understand channels</h2><ul>
 <li><p>goroutine-safe</p>
 <p><code>hchan</code> 中有互斥锁</p>
@@ -529,12 +522,12 @@
 <p>调用运行时调度器，<code>gopark</code>，<code>goready</code></p>
 </li>
 </ul>
-<h3 id="unbuffered-channels"><a href="#unbuffered-channels" class="headerlink" title="unbuffered channels"></a>unbuffered channels</h3><p class="fireman-p-indent" >无缓冲的 <code>channels</code> 的工作方式总是与 <code>direct send</code> 方式一致：</p>
+<h3 id="unbuffered-channels"><a href="#unbuffered-channels" class="headerlink" title="unbuffered channels"></a>unbuffered channels</h3><p>无缓冲的 <code>channels</code> 的工作方式总是与 <code>direct send</code> 方式一致：</p>
 <ul>
 <li>接收者先行：发送者写入到接收者的 <code>stack</code> 上</li>
 <li>发送者先行：接收者直接从 <code>sudog</code> 上直接获取数据</li>
 </ul>
-<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><p class="fireman-p-indent" >一般情况下：</p>
+<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><p>一般情况下：</p>
 <ul>
 <li>给所有的 channel 加锁</li>
 <li>将一个 <code>sudog</code> 放到所有 <code>channel</code> 的 <code>sendq/recvq</code> 队列中</li>
@@ -542,43 +535,43 @@
 <li>使用 CAS 操作，因此只会有一个 <code>channel</code> 可继续执行</li>
 <li>resuming mirrors the pause sequence.（恢复镜像暂停序列）</li>
 </ul>
-<h1 id="stepping-back"><a href="#stepping-back" class="headerlink" title="stepping back:"></a>stepping back:</h1><p class="fireman-p-indent" >design considerations，设计思想。</p>
-<p class="fireman-p-indent" >Go channel 的设计思想主要是 简单(simplicity) 和 高效(performance)。</p>
-<h2 id="Simplicity"><a href="#Simplicity" class="headerlink" title="Simplicity"></a>Simplicity</h2><p class="fireman-p-indent" >使用锁的队列优先与无锁队列：</p>
+<h1 id="stepping-back"><a href="#stepping-back" class="headerlink" title="stepping back:"></a>stepping back:</h1><p>design considerations，设计思想。</p>
+<p>Go channel 的设计思想主要是 简单(simplicity) 和 高效(performance)。</p>
+<h2 id="Simplicity"><a href="#Simplicity" class="headerlink" title="Simplicity"></a>Simplicity</h2><p>使用锁的队列优先与无锁队列：</p>
 <blockquote>
-<p class="fireman-p-indent" >“The performance improvement does not materialize from the air, it comes with code complexity increase.” — dvyokov</p>
-<p class="fireman-p-indent" >“性能的提升并非凭空出现，而是伴随着代码复杂度的增加。” — dvyokov</p>
+<p>“The performance improvement does not materialize from the air, it comes with code complexity increase.” — dvyokov</p>
+<p>“性能的提升并非凭空出现，而是伴随着代码复杂度的增加。” — dvyokov</p>
 </blockquote>
-<p class="fireman-p-indent" >使用锁，相比代码和使用更加简单。</p>
-<h2 id="performance"><a href="#performance" class="headerlink" title="performance"></a>performance</h2><p class="fireman-p-indent" >调用 <code>runtime</code> 调度器：</p>
+<p>使用锁，相比代码和使用更加简单。</p>
+<h2 id="performance"><a href="#performance" class="headerlink" title="performance"></a>performance</h2><p>调用 <code>runtime</code> 调度器：</p>
 <ul>
 <li>OS 线程不会被阻塞（G 阻塞时，M上会执行其他 G）</li>
 </ul>
-<p class="fireman-p-indent" >跨 <code>goroutine</code> 栈的读和写</p>
+<p>跨 <code>goroutine</code> 栈的读和写</p>
 <ul>
 <li>goroutine 唤醒的路径是无锁的（唤醒后，不再从 <code>buffer</code> 中加锁获取数据）</li>
 <li>减少潜在的内存拷贝（唤醒后，直接通过 <code>sudog</code> 拿到数据，无需拷贝到 <code>buffer</code>；或者唤醒前，将数据放到 <code>sudog</code>，也无需拷贝到 <code>buffer</code>）</li>
 </ul>
-<p class="fireman-p-indent" >这两点，通过在 GC、压缩栈上，优化了内存管理。</p>
-<p class="fireman-p-indent" >这是在简单性和高效性上做的精确的取舍。</p>
-<h2 id="unbuffered-channels-1"><a href="#unbuffered-channels-1" class="headerlink" title="unbuffered channels"></a>unbuffered channels</h2><p class="fireman-p-indent" >无缓冲的 <code>channels</code></p>
+<p>这两点，通过在 GC、压缩栈上，优化了内存管理。</p>
+<p>这是在简单性和高效性上做的精确的取舍。</p>
+<h2 id="unbuffered-channels-1"><a href="#unbuffered-channels-1" class="headerlink" title="unbuffered channels"></a>unbuffered channels</h2><p>无缓冲的 <code>channels</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="type">int</span>)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >无缓冲 <code>channel</code> 的工作方式：</p>
-<p class="fireman-p-indent" >如果是接收者先行：（接收者从 <code>ch</code> 中接收数据，<code>&lt;- ch</code>）</p>
+<p>无缓冲 <code>channel</code> 的工作方式：</p>
+<p>如果是接收者先行：（接收者从 <code>ch</code> 中接收数据，<code>&lt;- ch</code>）</p>
 <ul>
 <li>将 <code>sudog</code> 放到 <code>recvq</code> 队列中，然后阻塞</li>
 <li>随后，接收者将 <strong>直接发送</strong> 数据到 <code>sudog</code>，然后恢复接收者</li>
 </ul>
-<p class="fireman-p-indent" >如果是发送者先行：（发送者往 <code>ch</code> 中发送数据，<code>ch &lt;- 1</code> ）</p>
+<p>如果是发送者先行：（发送者往 <code>ch</code> 中发送数据，<code>ch &lt;- 1</code> ）</p>
 <ul>
 <li>将它自己作为 <code>sudog</code> 放到 <code>sendq</code> 队列中，然后阻塞</li>
 <li>接收者从 <code>sudog</code>中 <strong>直接接收</strong> 数据，并且恢复发送者</li>
 </ul>
-<h2 id="selects"><a href="#selects" class="headerlink" title="selects"></a>selects</h2><p class="fireman-p-indent" >使用方式和例子</p>
+<h2 id="selects"><a href="#selects" class="headerlink" title="selects"></a>selects</h2><p>使用方式和例子</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> taskCh = <span class="built_in">make</span>(<span class="keyword">chan</span> Task, <span class="number">3</span>)</span><br><span class="line"><span class="keyword">var</span> cmdCh = <span class="built_in">make</span>(<span class="keyword">chan</span> Command)</span><br><span class="line">                </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">worker</span><span class="params">()</span></span> &#123;</span><br><span class="line">     <span class="keyword">for</span> &#123;</span><br><span class="line">       	<span class="keyword">select</span> &#123;</span><br><span class="line">          	<span class="keyword">case</span> task := &lt;-taskCh:</span><br><span class="line">            	process(task)</span><br><span class="line">          	<span class="keyword">case</span> cmd := &lt;-cmdCh:</span><br><span class="line">            	execute(cmd)</span><br><span class="line">       	&#125;</span><br><span class="line">		&#125; </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1LQlpsTjBpemVpWQ==">GopherCon 2017: Kavya Joshi - Understanding Channels<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1LQlpsTjBpemVpWQ==">GopherCon 2017: Kavya Joshi - Understanding Channels<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

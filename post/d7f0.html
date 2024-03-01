@@ -66,14 +66,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -289,31 +282,31 @@
 <li>Duration：持续时间以int64纳秒计数表示两个瞬间之间经过的时间。</li>
 <li>Ticker：一个channel，该channel每隔一段时间发送当前时间。</li>
 </ul>
-<h4 id="Time"><a href="#Time" class="headerlink" title="Time"></a>Time</h4><p class="fireman-p-indent" >表示时间，可以以多种形式返回这个时间的具体信息</p>
+<h4 id="Time"><a href="#Time" class="headerlink" title="Time"></a>Time</h4><p>表示时间，可以以多种形式返回这个时间的具体信息</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">now := time.Now() // time.Time</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >返回不同时间不同格式</p>
+<p>返回不同时间不同格式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(now.Second()) // 返回秒</span><br><span class="line">fmt.Println(now.Day())	// 返回天</span><br><span class="line">fmt.Println(now.Clock()) // 返回 &quot;小时 分钟 秒&quot; 时钟</span><br><span class="line">fmt.Println(now.Date())		// 返回 &quot;年 月 日&quot;日期</span><br><span class="line">fmt.Println(now.Weekday())  //	返回周几</span><br><span class="line">fmt.Println(now.Format(&quot;Mon Jan 2 15:04:05 MST 2006&quot;)) // 按照这个格式返回，注意，这里必须按照1月2号下午3点4分5秒2006年的格式填写</span><br><span class="line">fmt.Println(time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)) // 返回这个时间节点的time格式时间</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >时间解析</p>
+<p>时间解析</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t1 := &quot;2022-07-21 15:09:36.874858&quot;</span><br><span class="line">t2 := &quot;2006-01-02 15:04:05&quot;</span><br><span class="line">parse1, err := time.Parse(t2, t1)    // 将t1时间按照t2格式展示</span><br><span class="line">parse2, _ := time.ParseInLocation(t2, t1, time.Local) // 将t1时间按照t2格式展示，并且指定市区为local</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >对时间操作 </p>
+<p>对时间操作 </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(time.Now().Unix()) // 返回时间戳</span><br><span class="line">time.Now().Nanosecond()  纳秒时间戳</span><br><span class="line">time.Unix(timestamp, 0).Local() // 时间戳转换为时间，时区为当地时间</span><br><span class="line"></span><br><span class="line">// 统计时间间隔</span><br><span class="line">start := time.Now()</span><br><span class="line">//...func</span><br><span class="line">fmt.Println(time.Since(start))</span><br><span class="line"></span><br><span class="line">start.Add(time.Hour * 1) // 返回一小时之后的时间</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >判断时间顺序</p>
+<p>判断时间顺序</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">now.After(after) // 返回now的时间点是否比after后</span><br></pre></td></tr></table></figure>
 
-<h4 id="Dutation"><a href="#Dutation" class="headerlink" title="Dutation"></a>Dutation</h4><p class="fireman-p-indent" >两个时间的间隔，可以用于计算两个时间的差，或者在sleep中常用</p>
+<h4 id="Dutation"><a href="#Dutation" class="headerlink" title="Dutation"></a>Dutation</h4><p>两个时间的间隔，可以用于计算两个时间的差，或者在sleep中常用</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t1 := time.Now()</span><br><span class="line">//</span><br><span class="line">t2 := time.Now()</span><br><span class="line">fmt.Println(t2.Sub(t1))</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >sleep需要传入duration</p>
+<p>sleep需要传入duration</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">time.Sleep(time.Duration(1) * time.Second)</span><br></pre></td></tr></table></figure>
 
-<h4 id="Ticker"><a href="#Ticker" class="headerlink" title="Ticker"></a>Ticker</h4><p class="fireman-p-indent" >定时器和倒计时，通过一个channel实现定时和倒计时的功能。</p>
+<h4 id="Ticker"><a href="#Ticker" class="headerlink" title="Ticker"></a>Ticker</h4><p>定时器和倒计时，通过一个channel实现定时和倒计时的功能。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">tick := time.Tick(time.Second)</span><br><span class="line">after := time.After(5 * time.Second)</span><br><span class="line">for &#123;</span><br><span class="line">	select &#123;</span><br><span class="line">	case c := &lt;-tick:</span><br><span class="line">		fmt.Printf(&quot;tick clock: %v\n&quot;, c)</span><br><span class="line">	case d := &lt;-after:</span><br><span class="line">		fmt.Printf(&quot;time up: %v\n&quot;, d)</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >输出</p>
+<p>输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tick clock: 2022-07-26 16:43:38.303502 +0800 CST m=+1.000336793</span><br><span class="line">tick clock: 2022-07-26 16:43:39.304435 +0800 CST m=+2.001268376</span><br><span class="line">tick clock: 2022-07-26 16:43:40.303358 +0800 CST m=+3.000189376</span><br><span class="line">tick clock: 2022-07-26 16:43:41.303761 +0800 CST m=+4.000590835</span><br><span class="line">tick clock: 2022-07-26 16:43:42.303389 +0800 CST m=+5.000217585</span><br><span class="line">time up: 2022-07-26 16:43:42.303396 +0800 CST m=+5.000223668</span><br></pre></td></tr></table></figure>
 
 

@@ -69,14 +69,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -288,9 +281,9 @@
     
     
     <div class="post-body" itemprop="articleBody"><blockquote>
-<p class="fireman-p-indent" >LoadBalance 中文意思为负载均衡，它的职责是将网络请求，或者其他形式的负载“均摊”到不同的机器上。 避免集群中部分服务器压力过大，而另一些服务器比较空闲的情况。 通过负载均衡，可以让每台服务器获取到适合自己处理能力的负载。 在为高负载服务器分流的同时，还可以避免资源浪费，一举两得。</p>
+<p>LoadBalance 中文意思为负载均衡，它的职责是将网络请求，或者其他形式的负载“均摊”到不同的机器上。 避免集群中部分服务器压力过大，而另一些服务器比较空闲的情况。 通过负载均衡，可以让每台服务器获取到适合自己处理能力的负载。 在为高负载服务器分流的同时，还可以避免资源浪费，一举两得。</p>
 </blockquote>
-<p class="fireman-p-indent" >应用层的负载均衡器，例如<code>nginx</code>，可以将请求发散到后端多个服务，实现负载均衡。</p>
+<p>应用层的负载均衡器，例如<code>nginx</code>，可以将请求发散到后端多个服务，实现负载均衡。</p>
 <h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><ul>
 <li><p>集中式</p>
 <p>在客户端和服务端之间有一个独立的LB（通常是专门的硬件设备如FS，或者基于软件如LVS，HAproxy等实现）</p>
@@ -304,41 +297,41 @@
 </li>
 </ul>
 <h2 id="负载均衡算法"><a href="#负载均衡算法" class="headerlink" title="负载均衡算法"></a>负载均衡算法</h2><blockquote>
-<p class="fireman-p-indent" >负载均衡算法决定了后端的哪些健康服务器会被选中。几个常用的算法：</p>
+<p>负载均衡算法决定了后端的哪些健康服务器会被选中。几个常用的算法：</p>
 <ul>
 <li><strong>Round Robin（轮询）：</strong>为第一个请求选择列表中的第一个服务器，然后按顺序向下移动列表直到结尾，然后循环。</li>
 <li><strong>Least Connections（最小连接）：</strong>优先选择连接数最少的服务器，在普遍会话较长的情况下推荐使用。</li>
 <li><strong>Source：</strong>根据请求源的 IP 的散列（hash）来选择要转发的服务器。这种方式可以一定程度上保证特定用户能连接到相同的服务器。</li>
 </ul>
 </blockquote>
-<p class="fireman-p-indent" >在<code>k8s</code>环境上，<code>k8s</code>通过<code>svc</code>和<code>probe</code>实现服务发现，但是没有提供七层负载均衡能力，在pod扩容时，负载均衡能力就失效了。因此，需要gRPC自己实现负载均衡。</p>
-<p class="fireman-p-indent" >具体实现方案可以查看推荐文档：<span class="exturl" data-url="aHR0cHM6Ly93d3cubGl4dWVkdWFuLmNvbS9wb3N0cy9ncnBjLzEzLWxvYWRiYWxhbmNlLW9uLWs4cy8=">gRPC(Go)教程(十三)— Kubernetes 环境下的 gRPC 负载均衡<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >相比较之下，更加推荐使用专门提供负载能力的<code>consul</code>实现</p>
-<h2 id="gRPC使用负载均衡"><a href="#gRPC使用负载均衡" class="headerlink" title="gRPC使用负载均衡"></a>gRPC使用负载均衡</h2><p class="fireman-p-indent" >官方文档：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dycGMvZ3JwYy9ibG9iL21hc3Rlci9kb2MvbG9hZC1iYWxhbmNpbmcubWQ=">Load Balancing in gRPC<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220929165837352.png" alt="image-20220929165837352"></p>
-<p class="fireman-p-indent" >使用consul配合gRPC</p>
-<p class="fireman-p-indent" >安装</p>
+<p>在<code>k8s</code>环境上，<code>k8s</code>通过<code>svc</code>和<code>probe</code>实现服务发现，但是没有提供七层负载均衡能力，在pod扩容时，负载均衡能力就失效了。因此，需要gRPC自己实现负载均衡。</p>
+<p>具体实现方案可以查看推荐文档：<span class="exturl" data-url="aHR0cHM6Ly93d3cubGl4dWVkdWFuLmNvbS9wb3N0cy9ncnBjLzEzLWxvYWRiYWxhbmNlLW9uLWs4cy8=">gRPC(Go)教程(十三)— Kubernetes 环境下的 gRPC 负载均衡<i class="fa fa-external-link-alt"></i></span></p>
+<p>相比较之下，更加推荐使用专门提供负载能力的<code>consul</code>实现</p>
+<h2 id="gRPC使用负载均衡"><a href="#gRPC使用负载均衡" class="headerlink" title="gRPC使用负载均衡"></a>gRPC使用负载均衡</h2><p>官方文档：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dycGMvZ3JwYy9ibG9iL21hc3Rlci9kb2MvbG9hZC1iYWxhbmNpbmcubWQ=">Load Balancing in gRPC<i class="fa fa-external-link-alt"></i></span></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220929165837352.png" alt="image-20220929165837352"></p>
+<p>使用consul配合gRPC</p>
+<p>安装</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/mbobakov/grpc-consul-resolver</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >客户端实例代码</p>
+<p>客户端实例代码</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line"></span><br><span class="line">	_ <span class="string">&quot;github.com/mbobakov/grpc-consul-resolver&quot;</span> <span class="comment">// It&#x27;s important</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    conn, err := grpc.Dial(</span><br><span class="line">      	<span class="comment">// 请求服务的名称</span></span><br><span class="line">        <span class="string">&quot;consul://127.0.0.1:8500/mitaka-grpc?wait=14s&quot;</span>,</span><br><span class="line">        grpc.WithInsecure(),</span><br><span class="line">        grpc.WithDefaultServiceConfig(<span class="string">`&#123;&quot;loadBalancingPolicy&quot;: &quot;round_robin&quot;&#125;`</span>),</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> conn.Close()</span><br><span class="line">    ...</span><br><span class="line">  </span><br><span class="line">	  client := minegrpc.NewGreeterClient(dial)</span><br><span class="line">  </span><br><span class="line">  	<span class="comment">// 获取到的client在多goroutine中使用，可以起到lb的作用</span></span><br><span class="line">  	reply, err := client.SayHello(ctx, &amp;minegrpc.HelloRequest&#123;Name: <span class="string">&quot;mitaka&quot;</span>&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >用法：</p>
-<p class="fireman-p-indent" ><code>consul://[user:password@]127.0.0.127:8555/my-service?[healthy=]&amp;[wait=]&amp;[near=]&amp;[insecure=]&amp;[limit=]&amp;[tag=]&amp;[token=]</code></p>
-<p class="fireman-p-indent" >真实测试案例</p>
-<p class="fireman-p-indent" >启动两个<code>gRPC</code>服务，都注册到<code>consul</code>中</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221009172559703.png" alt="image-20221009172559703"></p>
-<p class="fireman-p-indent" >负载均衡的现象</p>
+<p>用法：</p>
+<p><code>consul://[user:password@]127.0.0.127:8555/my-service?[healthy=]&amp;[wait=]&amp;[near=]&amp;[insecure=]&amp;[limit=]&amp;[tag=]&amp;[token=]</code></p>
+<p>真实测试案例</p>
+<p>启动两个<code>gRPC</code>服务，都注册到<code>consul</code>中</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221009172559703.png" alt="image-20221009172559703"></p>
+<p>负载均衡的现象</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜  client go run main.go</span><br><span class="line">reply: message:&quot;i am service 1&quot;</span><br><span class="line">➜  client go run main.go</span><br><span class="line">reply: message:&quot;i am service&quot;</span><br><span class="line">➜  client go run main.go</span><br><span class="line">reply: message:&quot;i am service&quot;</span><br><span class="line">➜  client go run main.go</span><br><span class="line">reply: message:&quot;i am service 1&quot;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >关于长连接：</p>
-<p class="fireman-p-indent" >发送请求时</p>
+<p>关于长连接：</p>
+<p>发送请求时</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[root@n206 ~]# netstat -an | grep -E &quot;36937|40941|8500&quot;</span><br><span class="line">tcp        0      0 10.0.0.1:37638          10.0.0.206:36937        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:33788          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:34094          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:60304          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 127.0.0.1:43786         127.0.0.1:8500          FIN_WAIT2</span><br><span class="line">tcp        0      0 10.0.0.1:38040          10.0.0.206:36937        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:33284          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:32842          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:59526          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:35834          10.0.0.206:36937        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:36790          10.0.0.206:36937        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:34748          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:59916          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:40278          10.0.0.206:36937        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:39350          10.0.0.206:36937        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:40042          10.0.0.206:36937        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:60674          10.0.0.161:40941        TIME_WAIT</span><br><span class="line">tcp        0      0 10.0.0.1:38968          10.0.0.206:36937        TIME_WAIT</span><br><span class="line">tcp6       0      0 :::8500                 :::*                    LISTEN</span><br><span class="line">tcp6       0      0 127.0.0.1:8500          127.0.0.1:43786         CLOSE_WAIT</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >客户端在本地，<code>127.0.0.1:43786</code>请求<code>127.0.0.1:8500</code>，也就是<code>rpc</code>客户端请求<code>consul</code>服务端而不是<code>rpc</code>客户端与<code>rpc</code>服务端直接通信。<code>consul</code>服务端与<code>rpc</code>服务端保持长连接，中间过程类似于一个代理的作用。</p>
-<p class="fireman-p-indent" >推荐阅读：</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMjg0MTQ3OQ==">什么是负载均衡？<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cubGl4dWVkdWFuLmNvbS9wb3N0cy9ncnBjLzEzLWxvYWRiYWxhbmNlLW9uLWs4cy8=">gRPC(Go)教程(十三)— Kubernetes 环境下的 gRPC 负载均衡<i class="fa fa-external-link-alt"></i></span></p>
+<p>客户端在本地，<code>127.0.0.1:43786</code>请求<code>127.0.0.1:8500</code>，也就是<code>rpc</code>客户端请求<code>consul</code>服务端而不是<code>rpc</code>客户端与<code>rpc</code>服务端直接通信。<code>consul</code>服务端与<code>rpc</code>服务端保持长连接，中间过程类似于一个代理的作用。</p>
+<p>推荐阅读：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMjg0MTQ3OQ==">什么是负载均衡？<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cubGl4dWVkdWFuLmNvbS9wb3N0cy9ncnBjLzEzLWxvYWRiYWxhbmNlLW9uLWs4cy8=">gRPC(Go)教程(十三)— Kubernetes 环境下的 gRPC 负载均衡<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

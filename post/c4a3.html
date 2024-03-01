@@ -66,14 +66,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -284,20 +277,20 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p class="fireman-p-indent" >在日常工作中很多时候查询一个数组中的某个值，需要用到查找算法，有的查找算法前提是做好了排序，有的没有，这里对常用的算法做一个归纳。</p>
-<h2 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h2><p class="fireman-p-indent" >二分法的思想是每次查询都排除掉一半。使用二分法需要注意已经做好了排序。</p>
-<p class="fireman-p-indent" >首尾作为二分的首尾，将目标值和中间值比较，比较之后，将范围缩小，将中值作为首或者尾，缩小成首为中值+1或者尾为中值-1，当首不大于尾进行循环判断。</p>
+    <div class="post-body" itemprop="articleBody"><p>在日常工作中很多时候查询一个数组中的某个值，需要用到查找算法，有的查找算法前提是做好了排序，有的没有，这里对常用的算法做一个归纳。</p>
+<h2 id="二分法"><a href="#二分法" class="headerlink" title="二分法"></a>二分法</h2><p>二分法的思想是每次查询都排除掉一半。使用二分法需要注意已经做好了排序。</p>
+<p>首尾作为二分的首尾，将目标值和中间值比较，比较之后，将范围缩小，将中值作为首或者尾，缩小成首为中值+1或者尾为中值-1，当首不大于尾进行循环判断。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">start, end := 0, len(s)-1</span><br><span class="line">for start &lt;= end &#123;</span><br><span class="line">	mid := (start + end) / 2</span><br><span class="line">	if s[mid] &lt; target &#123;</span><br><span class="line">		start = mid + 1</span><br><span class="line">	&#125; else if s[mid] &gt; target &#123;</span><br><span class="line">		end = mid - 1</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		return mid</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">return -1</span><br></pre></td></tr></table></figure>
 
-<h2 id="拉格朗日中值查找"><a href="#拉格朗日中值查找" class="headerlink" title="拉格朗日中值查找"></a>拉格朗日中值查找</h2><p class="fireman-p-indent" >拉格朗日中值查找法的思想建立在二分法的思想上，二分法是平均分配，拉格朗日是按照查询的数字按照比例分配。</p>
-<p class="fireman-p-indent" >这个比例是值大小和尾部大小的差比头尾大小的差</p>
+<h2 id="拉格朗日中值查找"><a href="#拉格朗日中值查找" class="headerlink" title="拉格朗日中值查找"></a>拉格朗日中值查找</h2><p>拉格朗日中值查找法的思想建立在二分法的思想上，二分法是平均分配，拉格朗日是按照查询的数字按照比例分配。</p>
+<p>这个比例是值大小和尾部大小的差比头尾大小的差</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">if s[0] &gt; target || s[len(s)-1] &lt; target &#123;</span><br><span class="line">	return -1</span><br><span class="line">&#125;</span><br><span class="line">start, end := 0, len(s)-1</span><br><span class="line">for start &lt;= end &#123;</span><br><span class="line">	mid := start + int(float64(target-s[start])/float64(s[end]-s[start])*float64(end-start))</span><br><span class="line">	fmt.Println(mid)</span><br><span class="line">	if s[mid] &lt; target &#123;</span><br><span class="line">		start = mid + 1</span><br><span class="line">	&#125; else if s[mid] &gt; target &#123;</span><br><span class="line">		end = mid - 1</span><br><span class="line">	&#125; else &#123;</span><br><span class="line">		return mid</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">return -1</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >核心改动：取值的比例，通过值的比例判断索引跳跃的比例。</p>
+<p>核心改动：取值的比例，通过值的比例判断索引跳跃的比例。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mid := start + int(float64(target-s[start])/float64(s[end]-s[start])*float64(end-start))</span><br></pre></td></tr></table></figure>
 
-<h2 id="在一大堆的数字中，查找第n大的数字"><a href="#在一大堆的数字中，查找第n大的数字" class="headerlink" title="在一大堆的数字中，查找第n大的数字"></a>在一大堆的数字中，查找第n大的数字</h2><p class="fireman-p-indent" >首先，如果直接排序，无论是使用冒泡、快排、堆排，都可以先将局部数据进行排序，然后进行对比。例如冒泡，则需要排n次，如果是快排，则全员排序，如果是堆排，则创建k个数字的堆，后续数字与堆顶比较。这里介绍另外一种方式，也就是分而治之的思想。</p>
-<p class="fireman-p-indent" >当需要解决的问题非常非常大时，面向的情况多、数据量大，则需要使用到分而治之的思想，也就是以大化小，处理小的数字。</p>
+<h2 id="在一大堆的数字中，查找第n大的数字"><a href="#在一大堆的数字中，查找第n大的数字" class="headerlink" title="在一大堆的数字中，查找第n大的数字"></a>在一大堆的数字中，查找第n大的数字</h2><p>首先，如果直接排序，无论是使用冒泡、快排、堆排，都可以先将局部数据进行排序，然后进行对比。例如冒泡，则需要排n次，如果是快排，则全员排序，如果是堆排，则创建k个数字的堆，后续数字与堆顶比较。这里介绍另外一种方式，也就是分而治之的思想。</p>
+<p>当需要解决的问题非常非常大时，面向的情况多、数据量大，则需要使用到分而治之的思想，也就是以大化小，处理小的数字。</p>
 <ol>
 <li>先将一堆数字按照一定的范围区分，例如区分<code>1-100</code>,<code>101-200</code>,<code>201-300</code>，便利所有文件，将文件区分成个数比较少的一堆数字</li>
 <li>目的堆中数字的个数在可接受范围内，则使用排序算法排序这堆数据</li>

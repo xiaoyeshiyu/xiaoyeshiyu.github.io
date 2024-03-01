@@ -69,14 +69,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -287,36 +280,36 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><p class="fireman-p-indent" >缓存相比于存储，应该是高性能的，缺点则是易失效的。</p>
-<p class="fireman-p-indent" >使用缓存，其实是选择高性能，而放弃一致性。一般缓存的实现方案是使用内存，要么使用本地内存作为缓存，要么使用<code>Redis</code>这种内存数据库作为分布式缓存。</p>
-<h2 id="同步更新方案，数据一致性"><a href="#同步更新方案，数据一致性" class="headerlink" title="同步更新方案，数据一致性"></a>同步更新方案，数据一致性</h2><h3 id="先同步持久化，再操作cache"><a href="#先同步持久化，再操作cache" class="headerlink" title="先同步持久化，再操作cache"></a>先同步持久化，再操作cache</h3><p class="fireman-p-indent" >往往最好的选择是优先更新持久化，然后再同步操作cache。</p>
-<p class="fireman-p-indent" >这个方案虽然可能出现更新数据库之后，操作cache失败，导致数据不一致，因此cache中的数据需要设置过期时间，过期之后，获取到的数据就是新的。</p>
-<p class="fireman-p-indent" >相比先更新cache再更新持久化，如果更新持久化失败，客户看到的数据会是错误的数据。</p>
-<p class="fireman-p-indent" >先同步持久化的方式，可以保证数据最终一致性。</p>
-<h4 id="短暂不一致的情况"><a href="#短暂不一致的情况" class="headerlink" title="短暂不一致的情况"></a>短暂不一致的情况</h4><p class="fireman-p-indent" ><strong>获取到cache之后马上更新</strong></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160527476.png" alt="image-20230629160527476"></p>
-<p class="fireman-p-indent" >但是可能出现另外一种情况：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h1><p>缓存相比于存储，应该是高性能的，缺点则是易失效的。</p>
+<p>使用缓存，其实是选择高性能，而放弃一致性。一般缓存的实现方案是使用内存，要么使用本地内存作为缓存，要么使用<code>Redis</code>这种内存数据库作为分布式缓存。</p>
+<h2 id="同步更新方案，数据一致性"><a href="#同步更新方案，数据一致性" class="headerlink" title="同步更新方案，数据一致性"></a>同步更新方案，数据一致性</h2><h3 id="先同步持久化，再操作cache"><a href="#先同步持久化，再操作cache" class="headerlink" title="先同步持久化，再操作cache"></a>先同步持久化，再操作cache</h3><p>往往最好的选择是优先更新持久化，然后再同步操作cache。</p>
+<p>这个方案虽然可能出现更新数据库之后，操作cache失败，导致数据不一致，因此cache中的数据需要设置过期时间，过期之后，获取到的数据就是新的。</p>
+<p>相比先更新cache再更新持久化，如果更新持久化失败，客户看到的数据会是错误的数据。</p>
+<p>先同步持久化的方式，可以保证数据最终一致性。</p>
+<h4 id="短暂不一致的情况"><a href="#短暂不一致的情况" class="headerlink" title="短暂不一致的情况"></a>短暂不一致的情况</h4><p><strong>获取到cache之后马上更新</strong></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160527476.png" alt="image-20230629160527476"></p>
+<p>但是可能出现另外一种情况：</p>
 <ol>
 <li>一个进程获取<code>cache miss</code>，从db中获取数据</li>
 <li>另外一个进程更新数据（可异步，例如<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FsaWJhYmEvY2FuYWw=">cannel<i class="fa fa-external-link-alt"></i></span>），在<code>cache</code>中删除这个空的<code>cache</code></li>
 <li>第一个进程将<code>cache miss</code>的<code>key</code>放到<code>cache</code>中</li>
 </ol>
-<p class="fireman-p-indent" >这种情况下，就会造成数据不一致的现象。</p>
-<p class="fireman-p-indent" ><strong>同时更新</strong></p>
-<p class="fireman-p-indent" >还有一种情况，就是多个线程同时<code>set cache</code>，由于无法确定更新之后，往<code>cache</code>中<code>set</code>的线程顺序（一般进程的顺序不会有很大的影响）</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160954138.png" alt="image-20230629160954138"></p>
-<h3 id="删缓存还是更新缓存"><a href="#删缓存还是更新缓存" class="headerlink" title="删缓存还是更新缓存"></a>删缓存还是更新缓存</h3><p class="fireman-p-indent" >删除缓存：更新DB中的数据之后，将cache中的数据删除；缺点是如果出现热key，影响会很大。解决方案是不删除，而是将这个key的ttl改短，是否使用交由业务层决定。</p>
-<p class="fireman-p-indent" >更新缓存：更新DB中的数据之后，再更新cache，通过MQ或者Binlog保证最终一致性；缺点是无法保证发生顺序，可能出现<code>ABA</code>的现象，先获取A，然后刷新下变成B，然后刷新下变成C</p>
-<h3 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h3><p class="fireman-p-indent" >版本号和使用从库做标签类似。</p>
-<p class="fireman-p-indent" >当cache miss的时候，生成一个版本号，set DB之后回填，通过新的版本号判断是否是旧数据。</p>
-<p class="fireman-p-indent" >这个就可以解决脏数据被写入的情况。同时还需要通过双删的做法，保证数据正确性。</p>
-<h2 id="多级缓存"><a href="#多级缓存" class="headerlink" title="多级缓存"></a>多级缓存</h2><p class="fireman-p-indent" >在微服务场景下，可能出现下层支撑服务和上层业务服务之间，都需要使用缓存，为了降低服务之间调用频率，经常会在上下游都使用缓存，实现多级缓存。</p>
-<p class="fireman-p-indent" >多级缓存需要注意：</p>
+<p>这种情况下，就会造成数据不一致的现象。</p>
+<p><strong>同时更新</strong></p>
+<p>还有一种情况，就是多个线程同时<code>set cache</code>，由于无法确定更新之后，往<code>cache</code>中<code>set</code>的线程顺序（一般进程的顺序不会有很大的影响）</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/06/image-20230629160954138.png" alt="image-20230629160954138"></p>
+<h3 id="删缓存还是更新缓存"><a href="#删缓存还是更新缓存" class="headerlink" title="删缓存还是更新缓存"></a>删缓存还是更新缓存</h3><p>删除缓存：更新DB中的数据之后，将cache中的数据删除；缺点是如果出现热key，影响会很大。解决方案是不删除，而是将这个key的ttl改短，是否使用交由业务层决定。</p>
+<p>更新缓存：更新DB中的数据之后，再更新cache，通过MQ或者Binlog保证最终一致性；缺点是无法保证发生顺序，可能出现<code>ABA</code>的现象，先获取A，然后刷新下变成B，然后刷新下变成C</p>
+<h3 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h3><p>版本号和使用从库做标签类似。</p>
+<p>当cache miss的时候，生成一个版本号，set DB之后回填，通过新的版本号判断是否是旧数据。</p>
+<p>这个就可以解决脏数据被写入的情况。同时还需要通过双删的做法，保证数据正确性。</p>
+<h2 id="多级缓存"><a href="#多级缓存" class="headerlink" title="多级缓存"></a>多级缓存</h2><p>在微服务场景下，可能出现下层支撑服务和上层业务服务之间，都需要使用缓存，为了降低服务之间调用频率，经常会在上下游都使用缓存，实现多级缓存。</p>
+<p>多级缓存需要注意：</p>
 <ol>
 <li>清理优先级：先清理下游，再清理上游；避免出现清理上游之后，马上有上游进程cache miss之后将下游数据set到上游缓存</li>
 <li>下游缓存的expire要大于上游，里面穿透回源；避免出现上游数据过期之后，cache miss时查询下游，出现缓存穿透</li>
 </ol>
-<h2 id="热点缓存"><a href="#热点缓存" class="headerlink" title="热点缓存"></a>热点缓存</h2><p class="fireman-p-indent" >对于热点缓存<code>key</code>，可以按照如下思路：</p>
+<h2 id="热点缓存"><a href="#热点缓存" class="headerlink" title="热点缓存"></a>热点缓存</h2><p>对于热点缓存<code>key</code>，可以按照如下思路：</p>
 <ul>
 <li>小表广播，从<code>Remote Cache</code>提升为<code>LocalCache</code>，App定时更新，甚至可以支持广播刷新<code>LocalCache</code></li>
 <li>主动监控防御预热，比如一些大表高更新的情况下，直接外挂服务主动防御，将Remote Cache变成Local Cache</li>
@@ -361,7 +354,7 @@
 <li>尽可能的PIPELINE指令，但是避免集合过大</li>
 <li>避免超大Value</li>
 </ul>
-<h1 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h1><p class="fireman-p-indent" >分布式缓存是一种常见的技术，用于提高系统的性能和可扩展性。以下是几种常见的分布式缓存实现方案：</p>
+<h1 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h1><p>分布式缓存是一种常见的技术，用于提高系统的性能和可扩展性。以下是几种常见的分布式缓存实现方案：</p>
 <ol>
 <li><p>Memcached：Memcached 是一种常用的开源分布式内存对象缓存系统。它以键值对的形式存储数据，并使用哈希算法将数据分布到多个节点上。Memcached 提供了简单而高效的缓存机制，适用于许多应用场景。</p>
 </li>
@@ -372,10 +365,10 @@
 <li><p>Hazelcast：Hazelcast 是一个开源的内存数据网格解决方案，它提供了分布式缓存和分布式计算的功能。Hazelcast 可以将数据存储在内存中，并通过分布式算法将数据分散到多个节点上。它还提供了事务支持和集群管理功能。</p>
 </li>
 </ol>
-<p class="fireman-p-indent" >这些是常见的分布式缓存实现方案，每个方案都有其特点和适用场景。选择适合你的需求的方案时，需要考虑数据一致性、可用性、性能要求以及系统的复杂性等因素。</p>
-<h2 id="Redis-特点"><a href="#Redis-特点" class="headerlink" title="Redis 特点"></a>Redis 特点</h2><p class="fireman-p-indent" >单线程处理读写请求。多线程下，也是单线程处理读写，其他的线程处理磁盘读写。</p>
-<p class="fireman-p-indent" >集群下，Redis 使用一致性哈希算法（Consistent Hashing）来实现分布式缓存的数据分片和负载均衡。一致性哈希算法的主要思想是将缓存键（Key）通过哈希函数映射到一个固定大小的哈希环上，然后将节点（缓存服务器）也映射到同一个哈希环上。</p>
-<p class="fireman-p-indent" >以下是 Redis 一致性哈希算法的基本原理和步骤：</p>
+<p>这些是常见的分布式缓存实现方案，每个方案都有其特点和适用场景。选择适合你的需求的方案时，需要考虑数据一致性、可用性、性能要求以及系统的复杂性等因素。</p>
+<h2 id="Redis-特点"><a href="#Redis-特点" class="headerlink" title="Redis 特点"></a>Redis 特点</h2><p>单线程处理读写请求。多线程下，也是单线程处理读写，其他的线程处理磁盘读写。</p>
+<p>集群下，Redis 使用一致性哈希算法（Consistent Hashing）来实现分布式缓存的数据分片和负载均衡。一致性哈希算法的主要思想是将缓存键（Key）通过哈希函数映射到一个固定大小的哈希环上，然后将节点（缓存服务器）也映射到同一个哈希环上。</p>
+<p>以下是 Redis 一致性哈希算法的基本原理和步骤：</p>
 <ol>
 <li><p>构建哈希环：将所有的缓存节点（服务器）通过哈希函数映射到一个固定大小的哈希环上，形成一个环状结构。</p>
 </li>
@@ -388,54 +381,54 @@
 <li><p>节点变动处理：当添加或移除节点时，只会影响到环上的少部分键的映射，大部分键的映射仍然保持不变。这样可以避免大规模数据迁移的开销。</p>
 </li>
 </ol>
-<p class="fireman-p-indent" >通过使用一致性哈希算法，Redis 可以实现动态的节点扩展和收缩，而不需要重新分配大部分数据。这样可以使缓存系统具备高可用性和可扩展性。</p>
-<p class="fireman-p-indent" >需要注意的是，一致性哈希算法并不能完全解决数据倾斜（数据在节点上分布不均匀）的问题。为了解决数据倾斜，可以使用虚拟节点（Virtual Nodes）来增加节点的数量，使数据更加均匀地分布在各个节点上。</p>
-<h3 id="缓存一致性"><a href="#缓存一致性" class="headerlink" title="缓存一致性"></a>缓存一致性</h3><p class="fireman-p-indent" >一致性无法满足的情况大部分是在更新数据和获取的数据不一致。</p>
+<p>通过使用一致性哈希算法，Redis 可以实现动态的节点扩展和收缩，而不需要重新分配大部分数据。这样可以使缓存系统具备高可用性和可扩展性。</p>
+<p>需要注意的是，一致性哈希算法并不能完全解决数据倾斜（数据在节点上分布不均匀）的问题。为了解决数据倾斜，可以使用虚拟节点（Virtual Nodes）来增加节点的数量，使数据更加均匀地分布在各个节点上。</p>
+<h3 id="缓存一致性"><a href="#缓存一致性" class="headerlink" title="缓存一致性"></a>缓存一致性</h3><p>一致性无法满足的情况大部分是在更新数据和获取的数据不一致。</p>
 <ol>
 <li>更新数据更新之后，先逐条更新<code>redis</code>，同时更新<code>sql</code>。</li>
 <li>监听<code>sql</code>的<code>binlog</code>，再次更新<code>redis</code>。</li>
 </ol>
-<p class="fireman-p-indent" >解决方法：产生数据不一致，可以在数据查询时更新<code>redis</code>，使用<code>nx</code>更新。在更新数据是，使用<code>set</code>覆盖。</p>
-<p class="fireman-p-indent" >那么，更新<code>sql</code>之后，是使用删除<code>redis</code>里面的<code>key</code>还是更新<code>key</code>？</p>
+<p>解决方法：产生数据不一致，可以在数据查询时更新<code>redis</code>，使用<code>nx</code>更新。在更新数据是，使用<code>set</code>覆盖。</p>
+<p>那么，更新<code>sql</code>之后，是使用删除<code>redis</code>里面的<code>key</code>还是更新<code>key</code>？</p>
 <ul>
 <li>更新key可能会出现的问题是两个更新，无法确定前后，导致数据不一致</li>
 <li>删除key可能会出现的问题是热key被删除之后，请求会打到数据库</li>
 </ul>
-<p class="fireman-p-indent" >有一种方式是，redis过期之后，在数据上加一个tag，在获取到缓存之后，能够知道这个key过期，需要请求数据库。</p>
-<h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p class="fireman-p-indent" >分布式事务，指的是：跨表，跨集群，跨服务的事务。（直白来说，就是跨进程）</p>
-<p class="fireman-p-indent" >分布式理论：</p>
+<p>有一种方式是，redis过期之后，在数据上加一个tag，在获取到缓存之后，能够知道这个key过期，需要请求数据库。</p>
+<h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p>分布式事务，指的是：跨表，跨集群，跨服务的事务。（直白来说，就是跨进程）</p>
+<p>分布式理论：</p>
 <ul>
 <li>ACID：原子、一致性、持久化、事务隔离。</li>
 <li>CAP：满足分布式的三大要素，但是C（一致性）和A（可用性）不能同时满足。</li>
 <li>BASE：CAP理论的进一步扩充</li>
 </ul>
-<p class="fireman-p-indent" >分布式事务方案的一种思路：使用插件或者说代理，让代理作为中间件，实现事务。比如 <span class="exturl" data-url="aHR0cHM6Ly9zZWF0YS5pby9lbi11cy9pbmRleC5odG1s">Seata<i class="fa fa-external-link-alt"></i></span></p>
-<h3 id="分布式式事务实现方案"><a href="#分布式式事务实现方案" class="headerlink" title="分布式式事务实现方案"></a>分布式式事务实现方案</h3><p class="fireman-p-indent" >实现方案：</p>
+<p>分布式事务方案的一种思路：使用插件或者说代理，让代理作为中间件，实现事务。比如 <span class="exturl" data-url="aHR0cHM6Ly9zZWF0YS5pby9lbi11cy9pbmRleC5odG1s">Seata<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="分布式式事务实现方案"><a href="#分布式式事务实现方案" class="headerlink" title="分布式式事务实现方案"></a>分布式式事务实现方案</h3><p>实现方案：</p>
 <ul>
 <li>方案1、服务a生成一张伴随表，记录中间处理状态，服务b任务完成，回调服务a，服务a将半生表中的字段删除，或者更新字段。</li>
 <li>方案2、服务b定期查询服务a的伴随表，处理任务，处理成功之后，更新b服务的表，b服务作为新的服务状态表。这个方案，会定时查询表，可能会对数据库有压力。</li>
 <li>方案3、伴随表的binlog变更订阅推送到kafka，消费者更新本地事务。</li>
 </ul>
-<h2 id="通过消息队列实现分布式事务"><a href="#通过消息队列实现分布式事务" class="headerlink" title="通过消息队列实现分布式事务"></a>通过消息队列实现分布式事务</h2><p class="fireman-p-indent" >需要解决的问题有幂等。</p>
-<h3 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h3><p class="fireman-p-indent" >消息重复投递，或者重复消费。通过全局唯一ID+去重表。</p>
-<p class="fireman-p-indent" >做法1、启一个本地事务，查询伴随表，是否存在这个id，如果不存在，则插入这个任务id（或者叫流水号），创建这个任务，并且在伴随表中插入这个字段。  </p>
-<p class="fireman-p-indent" >也可以通过状态判断、或者通过版本号来解决。</p>
-<h3 id="二阶段提交协议"><a href="#二阶段提交协议" class="headerlink" title="二阶段提交协议"></a>二阶段提交协议</h3><p class="fireman-p-indent" >发送方</p>
+<h2 id="通过消息队列实现分布式事务"><a href="#通过消息队列实现分布式事务" class="headerlink" title="通过消息队列实现分布式事务"></a>通过消息队列实现分布式事务</h2><p>需要解决的问题有幂等。</p>
+<h3 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h3><p>消息重复投递，或者重复消费。通过全局唯一ID+去重表。</p>
+<p>做法1、启一个本地事务，查询伴随表，是否存在这个id，如果不存在，则插入这个任务id（或者叫流水号），创建这个任务，并且在伴随表中插入这个字段。  </p>
+<p>也可以通过状态判断、或者通过版本号来解决。</p>
+<h3 id="二阶段提交协议"><a href="#二阶段提交协议" class="headerlink" title="二阶段提交协议"></a>二阶段提交协议</h3><p>发送方</p>
 <ol>
 <li>先发送消息<code>perpared</code>，再执行本地事务，事务成功，再发送<code>commit_message</code>确认消息；</li>
 <li>可以确保消息一定会成功发送到消息队列中，第二步或者第三步失败，消息队列会反向请求业务消息是否确认，如果本地事务异常，则丢弃消息。</li>
 </ol>
-<p class="fireman-p-indent" >接收方</p>
+<p>接收方</p>
 <ol>
 <li>接受消息，处理本地事务，处理成功，ack消息。</li>
 <li>这个过程需要在接收方处理幂等性。</li>
 </ol>
-<h3 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h3><p class="fireman-p-indent" ><code>try confirm cancel</code>：也就是事务的三个分支，预处理try，确认confirm，撤销cancel。</p>
-<p class="fireman-p-indent" >例如，预处理阶段，可以在表中新增一个冻结字段，描述资源变化。在两个服务中都做一个冻结。</p>
-<p class="fireman-p-indent" >确认阶段，两个服务均按照逻辑处理，处理成功，则确认。处理失败，则撤销，通过冻结字段进行撤销。</p>
-<p class="fireman-p-indent" >这个过程需要注意：</p>
-<p class="fireman-p-indent" >空回滚：try失败，也就是什么都没有执行，需要能支持回滚。</p>
-<p class="fireman-p-indent" >防悬挂：如果因为一些原因，cancel比try先到达，操作乱序的情况下，应该取消本次事务。</p>
+<h3 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h3><p><code>try confirm cancel</code>：也就是事务的三个分支，预处理try，确认confirm，撤销cancel。</p>
+<p>例如，预处理阶段，可以在表中新增一个冻结字段，描述资源变化。在两个服务中都做一个冻结。</p>
+<p>确认阶段，两个服务均按照逻辑处理，处理成功，则确认。处理失败，则撤销，通过冻结字段进行撤销。</p>
+<p>这个过程需要注意：</p>
+<p>空回滚：try失败，也就是什么都没有执行，需要能支持回滚。</p>
+<p>防悬挂：如果因为一些原因，cancel比try先到达，操作乱序的情况下，应该取消本次事务。</p>
 
     </div>
 

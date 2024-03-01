@@ -77,14 +77,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -295,15 +288,15 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="功能模块"><a href="#功能模块" class="headerlink" title="功能模块"></a>功能模块</h1><p class="fireman-p-indent" >为了大部分用户的基本功能体验，满足用户需求，例如播放历史查看、播放进度同步等。离线性用户，app本地保留历史记录数据。又比如浏览过的帖子，查看过的用户，检索过的店铺等。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="功能模块"><a href="#功能模块" class="headerlink" title="功能模块"></a>功能模块</h1><p>为了大部分用户的基本功能体验，满足用户需求，例如播放历史查看、播放进度同步等。离线性用户，app本地保留历史记录数据。又比如浏览过的帖子，查看过的用户，检索过的店铺等。</p>
 <ul>
 <li>变更功能：添加记录、删除记录、清空历史</li>
 <li>读取功能：按照 <code>timeline</code> 返回 <code>topN</code>，点查获取进度信息</li>
 <li>其他功能：暂停&#x2F;恢复记录，首次观看增加经验等</li>
 </ul>
-<p class="fireman-p-indent" >历史记录类型的业务，是一个极高 <code>tps</code> 写入，高 <code>qps</code> 读取的业务服务。每隔 5s 写入，用户基数大，会产生很高的写入请求。用户点击视频时，需要请求播放历史进度，也会产生很高的读取请求，而且这部分绝大部分不会命中缓存。</p>
-<p class="fireman-p-indent" >需要分析清楚系统的 <code>hot path</code>，投入优化。</p>
-<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1><h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031151431362.png" alt="image-20231031151431362"></p>
+<p>历史记录类型的业务，是一个极高 <code>tps</code> 写入，高 <code>qps</code> 读取的业务服务。每隔 5s 写入，用户基数大，会产生很高的写入请求。用户点击视频时，需要请求播放历史进度，也会产生很高的读取请求，而且这部分绝大部分不会命中缓存。</p>
+<p>需要分析清楚系统的 <code>hot path</code>，投入优化。</p>
+<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1><h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031151431362.png" alt="image-20231031151431362"></p>
 <ul>
 <li><p>BFF：<code>app-interface/history</code></p>
 <p>历史 <code>BFF</code> 层接受来自外部用户的读请求，依赖其他例如稿件、漫画服务来组装完整的面向历史业务（页面）需要的数据的组合。同时接受来自内部其他业务线的写请求，通常都是业务方自己进行业务ID的判定，然后投递到历史服务的 <code>BFF</code> 写接口中。最终 <code>BFF</code> 是是打包在 <code>app-interface</code> 大杂烩 <code>BFF</code> 中，考虑到隔离性，读写流量很大，独立成 <code>history BFF</code> 服务</p>
@@ -312,7 +305,7 @@
 <p>服务层，去平台业务的逻辑，专注在历史数据的持久化上（因为对于播放业务类，<code>BFF</code> 专注平台业务数据组织，<code>service</code> 负责数据的读、写、删、清理等操作。播放进度是非常高频同步的，需要考虑性能优化）</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >使用 <code>write-back</code> 的思路，把状态数据先入分布式缓存，再回写数据库。</p>
+<p>使用 <code>write-back</code> 的思路，把状态数据先入分布式缓存，再回写数据库。</p>
 <ul>
 <li><p>Job：<code>history-job</code></p>
 <p><code>job</code> 消费上游 <code>kafka</code> 的数据，利用消息队列的堆积能力，对于存储层的差速（消费能力跟不上生产速度时），可以进行一定的数据反压。配合上游 <code>service</code> 批量打包过来的数据持久化。</p>
@@ -321,91 +314,91 @@
 <p>整个历史服务还会被一些外部 <code>gRPC</code> 服务所依赖，所以 <code>history</code> 还充当了内网的 <code>gRPC Provider</code>，这些上游服务，使用历史服务的写接口，把自己业务的数据进行持久化。</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >历史服务最重要的设计，就是批量打包（<code>pipeline</code>）聚合数据。将高频、密集的写请求先入缓存（<code>write-back</code>），批量消费减少对存储的直接压力，类似的设计随处可见。写入 <code>kafka</code> 之前，也需要将数据批量打包，投递到 <code>kafka</code>，减少 <code>kafka</code> 的流量压力。</p>
-<p class="fireman-p-indent" >风险点：</p>
+<p>历史服务最重要的设计，就是批量打包（<code>pipeline</code>）聚合数据。将高频、密集的写请求先入缓存（<code>write-back</code>），批量消费减少对存储的直接压力，类似的设计随处可见。写入 <code>kafka</code> 之前，也需要将数据批量打包，投递到 <code>kafka</code>，减少 <code>kafka</code> 的流量压力。</p>
+<p>风险点：</p>
 <ol>
 <li><code>redis</code> 挂掉，可能导致部分数据丢失，主要是在主备同步过程中</li>
 <li><code>history-service</code> 在聚合数据时，如果服务挂掉，内存中聚合的数据会丢失</li>
 <li><code>kafka</code> 挂掉时，可能在主备同步时的数据丢失，为了高性能，一般会设置为有一个节点收到数据 <code>client</code> 就返回</li>
 </ol>
-<p class="fireman-p-indent" >这样的设计主要是考量高性能的需求性大于历史浏览数据完整性，用户丢失部分播放历史数据影响不大。</p>
-<h2 id="history-service"><a href="#history-service" class="headerlink" title="history-service"></a>history-service</h2><p class="fireman-p-indent" ><code>history-service</code>，专注在历史数据处理。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031162408957.png" alt="image-20231031162408957"></p>
-<p class="fireman-p-indent" >写的核心逻辑：</p>
-<p class="fireman-p-indent" >用户观看、浏览的数据，带有进度信息的数据，同一个 id 最后一次的数据即可，即 <code>last-write win</code>，高频的用户端同步逻辑，只需要最后一次数据持久化即可。可以在 <code>in-process</code> 内存中，定时定量来聚合不同用户的<strong>同一个对象的最后一次进度</strong>，使用 <code>kafka</code> 消息队列来消除写入峰值。但同时需要保证用户数据可以实现被观察到，不能出现上报进度后，需要一阵子才能体现进度变化。所以在内存中打包数据，同时实时写入到 <code>redis</code> 中，这样既保证了实时，又避免海量写入冲击存储。</p>
-<p class="fireman-p-indent" ><code>kafka</code> 是为高吞吐设计，超高频的写入并不是最优，所以内存聚合和分片算法比较重要，按照 <code>uid</code> 来 <code>sharding</code> 数据，写放大仍然很大，这里使用 <code>region sharding</code>，打包一组数据当作一个 <code>kafka message</code>（比如 <code>uid%100</code> 数据打包）</p>
-<p class="fireman-p-indent" >写的数据流向：实时写 <code>redis</code> -&gt; 内存维护用户数据 -&gt; 定时&#x2F;定量写入到 <code>kafka</code></p>
-<p class="fireman-p-indent" >读的核心逻辑：</p>
-<p class="fireman-p-indent" >历史数据，实时写入 <code>redis</code> 后，不会无限制的存储，会按量阶段，所以分布式缓存中数据不是完整数据。历史数据从 <code>redis sortedset</code> 中读取后，如果发现尾部数据不足，会触发 <code>cache-aside</code> 模式，从存储中回捞数据，但是不会重新回填缓存，因为拉取过更久远的数据，属于用户维度的低频度行为。历史数据通常是按照 <code>timeline</code> 来组织，游标的 <code>key</code> 可以使用时间戳进行翻页或者下拉。</p>
-<h2 id="history-job"><a href="#history-job" class="headerlink" title="history-job"></a>history-job</h2><p class="fireman-p-indent" ><code>history-job</code>，获取打包好的用户数据，进行批量持久化。</p>
-<p class="fireman-p-indent" >上游 <code>history-service</code> 按照 <code>uid region sharding</code> 聚合好的数据，在 <code>job</code> 中消费取出，为了节约传输过程，以及 <code>history-service</code> 的 <code>in-process cache</code> 的内存使用，只维护了用户 <code>uid</code> 以及 <code>id</code> 列表，最小化存储和传输。因为数据是不完整的，额外需要从 <code>redis</code> 中按照 <code>id</code> 对应的数据内存，再持久化。从原来的 <code>N</code> 条记录变为一个用户一条记录。</p>
-<p class="fireman-p-indent" >对于存储的选型，<code>HBase</code> 非常适合高密度写入。</p>
-<h2 id="history-BFF"><a href="#history-BFF" class="headerlink" title="history-BFF"></a>history-BFF</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031164123134.png" alt="`image-20231031164123134`"></p>
-<p class="fireman-p-indent" ><code>history</code>  作为 BFF，对于用户端提供统一的用户记录记录入口接口，同时也对内提供 <code>gRPC</code> 写入历史接口。如果业务场景中不存在统一的用户入口访问历史记录，可以去掉 <code>BFF</code> 层，直接使用 <code>history-serivce</code> 提供读接口，这样需要每个业务方自己实现自己的数据组装。</p>
-<p class="fireman-p-indent" >也可以做类似用户首次播放、观看等加经验或者奖励积分类似的操作，所以这里依赖 <code>redis</code>，进行判定用户当天是否是首次访问，比较容易想到使用 <code>bitmap</code> 或者 <code>bloom filter</code> 来进&#96;&#96;行判断，然后往下游 <code>kafka</code> 投递消息，而不直接依赖业务的某个服务。</p>
-<p class="fireman-p-indent" >因为有关闭历史记录的功能，这样每次写入操作都需要前置读取一次，是否打开了开关，同样每次首次发送奖励也是一样。比较好的方法是可以交给客户端判断，也可以在 <code>redis</code> 中存储用户配置，将配置使用过期时间缓存到内存中，每隔几秒同步配置。</p>
-<h1 id="存储设计"><a href="#存储设计" class="headerlink" title="存储设计"></a>存储设计</h1><h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><p class="fireman-p-indent" >最早的主力存储选型是：<code>HBase</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031165314909.png" alt="image-20231031165314909"></p>
-<p class="fireman-p-indent" >数据写入：</p>
-<p class="fireman-p-indent" ><code>PUT mid, values</code>，只需要写入 <code>column_family</code> 的 <code>info</code> 列簇，<code>rowkey</code> 使用用户 <code>id md5</code>以后的头两位+用户，避免 <code>rowkey</code> 热点密集到一个 <code>region</code> 中，导致写、读热点。</p>
-<p class="fireman-p-indent" >对于 <code>column_family:info</code>，存储一个列 <code>obj_id + obj_type</code>，例如稿件业务：1、稿件ID：100，100_1 作为列名，对于 <code>value</code> 使用 <code>protobuf</code> 序列化一个结构体接入。所以只需要单次更新 <code>kv store</code>。另外我们使用 <code>HBase TTL</code>的能力，只需要保存 90 天的用户数据即可。（删除同理）</p>
-<p class="fireman-p-indent" >数据读取：</p>
-<p class="fireman-p-indent" >列表获取为 <code>GET mid</code>，直接获取1000条，在内存中排序和翻页。点查 <code>GET mid columns</code>，在茫茫多视频查看当前视频的阅读进度，<code>cache miss</code> 会非常严重，虽然支持点查，但是对于上层 <code>cache miss</code> 后，不再回源请求 <code>HBase</code>，只查询 <code>redis</code>获取当前视频进度。</p>
-<h2 id="缓存设计"><a href="#缓存设计" class="headerlink" title="缓存设计"></a>缓存设计</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031170726012.png" alt="image-20231031170726012"></p>
-<p class="fireman-p-indent" >数据写入：</p>
-<p class="fireman-p-indent" >每次产生的历史数据，需要立马更新 <code>redis</code>，使用 <code>sorted set</code> 基于时间排序的列表，<code>member</code> 为业务id，同时存储一份数据到 <code>redis string</code> 中，使用 <code>protobuf</code> 序列化完整的数据内容。为了避免 <code>redis</code> 中单个用户数据无限增长，需要超过一定量后对数据进行截断。</p>
-<p class="fireman-p-indent" >数据读取：</p>
-<p class="fireman-p-indent" >分为两个场景，一个是历史页面，这时候使用 <code>sorted set</code>，排序查找即可，拿到列表后，<code>mget</code> 批量获取 <code>history_content</code> 内容。</p>
-<p class="fireman-p-indent" >另外一个是点查进度，比如点击进入一个视频详情页，这时候直接查找 <code>history_content</code> 进行点查，不再回源 <code>HBase</code>，因为命中率太低。</p>
-<p class="fireman-p-indent" >首次触发某行为，增加经验的，在缓存设计中，经常使用 <code>bitmap(roaring bitmap)</code>、<code>bloom filter</code> 缓存加速访问，但是在使用缓存时，需要注意规避热点问题，某个 <code>key sharding</code> 命中 <code>node</code> 是固定的，因此可以利用构建多组 <code>bitmap</code> 或 <code>bloom filter</code> ，来进行打散。</p>
-<p class="fireman-p-indent" ><code>prefix_key = hash(mid) % 1000</code></p>
-<p class="fireman-p-indent" >根据 <code>prefix_key</code> 找到对应的 <code>cache</code> 再进行操作，这样 1000 个 key 尽可能均匀的分布到更小集合的 node，而不会产生数据热点。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031170358940.png" alt="image-20231031170358940"></p>
-<p class="fireman-p-indent" ><code>bloom filter</code> 的误判率，可以前置计算预估下，通过数据量和 <code>hash</code> 函数的个数可以预估出来。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031170516857.png" alt="image-20231031170516857"></p>
-<p class="fireman-p-indent" >分布式环境下，使用本地 <code>Bloom Filter</code>，关键在做好负载均衡，也就是 <code>Bloom Filter</code> 的 <code>Key</code> 也应该是负载均衡的 <code>Key</code>。这时可以通过七层负载均衡，将用户请求转发到特定 <code>backend</code> 上。</p>
-<h1 id="可用性设计"><a href="#可用性设计" class="headerlink" title="可用性设计"></a>可用性设计</h1><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031171950825.png" alt="image-20231031171950825"></p>
-<h2 id="Write-Back"><a href="#Write-Back" class="headerlink" title="Write-Back"></a>Write-Back</h2><p class="fireman-p-indent" >在 <code>history-service</code> 中实时写入 <code>redis</code> 数据，因此只需要重点优化缓存架构中，扛住峰值的流量写入。之后在服务内存中，使用 <code>map[int]map[int]struct&#123;&#125;</code> 聚合数据，之后利用 <code>chan</code> 在内部发送每个小消息，再聚合成一个大 <code>map</code>，在 <code>sendproc</code> 中，使用 <code>timer</code> 和定量判定逻辑，发送到下游 <code>kafka</code> 中。</p>
-<p class="fireman-p-indent" >在 <code>history-job</code> 中，获取消息后，重新去 <code>redis</code> 中回捞数据即：<code>history-content</code>，然后构建完整的数据批量写入到 <code>HBase</code> 中。</p>
-<p class="fireman-p-indent" >这里存在两个风险：</p>
+<p>这样的设计主要是考量高性能的需求性大于历史浏览数据完整性，用户丢失部分播放历史数据影响不大。</p>
+<h2 id="history-service"><a href="#history-service" class="headerlink" title="history-service"></a>history-service</h2><p><code>history-service</code>，专注在历史数据处理。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031162408957.png" alt="image-20231031162408957"></p>
+<p>写的核心逻辑：</p>
+<p>用户观看、浏览的数据，带有进度信息的数据，同一个 id 最后一次的数据即可，即 <code>last-write win</code>，高频的用户端同步逻辑，只需要最后一次数据持久化即可。可以在 <code>in-process</code> 内存中，定时定量来聚合不同用户的<strong>同一个对象的最后一次进度</strong>，使用 <code>kafka</code> 消息队列来消除写入峰值。但同时需要保证用户数据可以实现被观察到，不能出现上报进度后，需要一阵子才能体现进度变化。所以在内存中打包数据，同时实时写入到 <code>redis</code> 中，这样既保证了实时，又避免海量写入冲击存储。</p>
+<p><code>kafka</code> 是为高吞吐设计，超高频的写入并不是最优，所以内存聚合和分片算法比较重要，按照 <code>uid</code> 来 <code>sharding</code> 数据，写放大仍然很大，这里使用 <code>region sharding</code>，打包一组数据当作一个 <code>kafka message</code>（比如 <code>uid%100</code> 数据打包）</p>
+<p>写的数据流向：实时写 <code>redis</code> -&gt; 内存维护用户数据 -&gt; 定时&#x2F;定量写入到 <code>kafka</code></p>
+<p>读的核心逻辑：</p>
+<p>历史数据，实时写入 <code>redis</code> 后，不会无限制的存储，会按量阶段，所以分布式缓存中数据不是完整数据。历史数据从 <code>redis sortedset</code> 中读取后，如果发现尾部数据不足，会触发 <code>cache-aside</code> 模式，从存储中回捞数据，但是不会重新回填缓存，因为拉取过更久远的数据，属于用户维度的低频度行为。历史数据通常是按照 <code>timeline</code> 来组织，游标的 <code>key</code> 可以使用时间戳进行翻页或者下拉。</p>
+<h2 id="history-job"><a href="#history-job" class="headerlink" title="history-job"></a>history-job</h2><p><code>history-job</code>，获取打包好的用户数据，进行批量持久化。</p>
+<p>上游 <code>history-service</code> 按照 <code>uid region sharding</code> 聚合好的数据，在 <code>job</code> 中消费取出，为了节约传输过程，以及 <code>history-service</code> 的 <code>in-process cache</code> 的内存使用，只维护了用户 <code>uid</code> 以及 <code>id</code> 列表，最小化存储和传输。因为数据是不完整的，额外需要从 <code>redis</code> 中按照 <code>id</code> 对应的数据内存，再持久化。从原来的 <code>N</code> 条记录变为一个用户一条记录。</p>
+<p>对于存储的选型，<code>HBase</code> 非常适合高密度写入。</p>
+<h2 id="history-BFF"><a href="#history-BFF" class="headerlink" title="history-BFF"></a>history-BFF</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031164123134.png" alt="`image-20231031164123134`"></p>
+<p><code>history</code>  作为 BFF，对于用户端提供统一的用户记录记录入口接口，同时也对内提供 <code>gRPC</code> 写入历史接口。如果业务场景中不存在统一的用户入口访问历史记录，可以去掉 <code>BFF</code> 层，直接使用 <code>history-serivce</code> 提供读接口，这样需要每个业务方自己实现自己的数据组装。</p>
+<p>也可以做类似用户首次播放、观看等加经验或者奖励积分类似的操作，所以这里依赖 <code>redis</code>，进行判定用户当天是否是首次访问，比较容易想到使用 <code>bitmap</code> 或者 <code>bloom filter</code> 来进&#96;&#96;行判断，然后往下游 <code>kafka</code> 投递消息，而不直接依赖业务的某个服务。</p>
+<p>因为有关闭历史记录的功能，这样每次写入操作都需要前置读取一次，是否打开了开关，同样每次首次发送奖励也是一样。比较好的方法是可以交给客户端判断，也可以在 <code>redis</code> 中存储用户配置，将配置使用过期时间缓存到内存中，每隔几秒同步配置。</p>
+<h1 id="存储设计"><a href="#存储设计" class="headerlink" title="存储设计"></a>存储设计</h1><h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><p>最早的主力存储选型是：<code>HBase</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031165314909.png" alt="image-20231031165314909"></p>
+<p>数据写入：</p>
+<p><code>PUT mid, values</code>，只需要写入 <code>column_family</code> 的 <code>info</code> 列簇，<code>rowkey</code> 使用用户 <code>id md5</code>以后的头两位+用户，避免 <code>rowkey</code> 热点密集到一个 <code>region</code> 中，导致写、读热点。</p>
+<p>对于 <code>column_family:info</code>，存储一个列 <code>obj_id + obj_type</code>，例如稿件业务：1、稿件ID：100，100_1 作为列名，对于 <code>value</code> 使用 <code>protobuf</code> 序列化一个结构体接入。所以只需要单次更新 <code>kv store</code>。另外我们使用 <code>HBase TTL</code>的能力，只需要保存 90 天的用户数据即可。（删除同理）</p>
+<p>数据读取：</p>
+<p>列表获取为 <code>GET mid</code>，直接获取1000条，在内存中排序和翻页。点查 <code>GET mid columns</code>，在茫茫多视频查看当前视频的阅读进度，<code>cache miss</code> 会非常严重，虽然支持点查，但是对于上层 <code>cache miss</code> 后，不再回源请求 <code>HBase</code>，只查询 <code>redis</code>获取当前视频进度。</p>
+<h2 id="缓存设计"><a href="#缓存设计" class="headerlink" title="缓存设计"></a>缓存设计</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031170726012.png" alt="image-20231031170726012"></p>
+<p>数据写入：</p>
+<p>每次产生的历史数据，需要立马更新 <code>redis</code>，使用 <code>sorted set</code> 基于时间排序的列表，<code>member</code> 为业务id，同时存储一份数据到 <code>redis string</code> 中，使用 <code>protobuf</code> 序列化完整的数据内容。为了避免 <code>redis</code> 中单个用户数据无限增长，需要超过一定量后对数据进行截断。</p>
+<p>数据读取：</p>
+<p>分为两个场景，一个是历史页面，这时候使用 <code>sorted set</code>，排序查找即可，拿到列表后，<code>mget</code> 批量获取 <code>history_content</code> 内容。</p>
+<p>另外一个是点查进度，比如点击进入一个视频详情页，这时候直接查找 <code>history_content</code> 进行点查，不再回源 <code>HBase</code>，因为命中率太低。</p>
+<p>首次触发某行为，增加经验的，在缓存设计中，经常使用 <code>bitmap(roaring bitmap)</code>、<code>bloom filter</code> 缓存加速访问，但是在使用缓存时，需要注意规避热点问题，某个 <code>key sharding</code> 命中 <code>node</code> 是固定的，因此可以利用构建多组 <code>bitmap</code> 或 <code>bloom filter</code> ，来进行打散。</p>
+<p><code>prefix_key = hash(mid) % 1000</code></p>
+<p>根据 <code>prefix_key</code> 找到对应的 <code>cache</code> 再进行操作，这样 1000 个 key 尽可能均匀的分布到更小集合的 node，而不会产生数据热点。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031170358940.png" alt="image-20231031170358940"></p>
+<p><code>bloom filter</code> 的误判率，可以前置计算预估下，通过数据量和 <code>hash</code> 函数的个数可以预估出来。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031170516857.png" alt="image-20231031170516857"></p>
+<p>分布式环境下，使用本地 <code>Bloom Filter</code>，关键在做好负载均衡，也就是 <code>Bloom Filter</code> 的 <code>Key</code> 也应该是负载均衡的 <code>Key</code>。这时可以通过七层负载均衡，将用户请求转发到特定 <code>backend</code> 上。</p>
+<h1 id="可用性设计"><a href="#可用性设计" class="headerlink" title="可用性设计"></a>可用性设计</h1><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231031171950825.png" alt="image-20231031171950825"></p>
+<h2 id="Write-Back"><a href="#Write-Back" class="headerlink" title="Write-Back"></a>Write-Back</h2><p>在 <code>history-service</code> 中实时写入 <code>redis</code> 数据，因此只需要重点优化缓存架构中，扛住峰值的流量写入。之后在服务内存中，使用 <code>map[int]map[int]struct&#123;&#125;</code> 聚合数据，之后利用 <code>chan</code> 在内部发送每个小消息，再聚合成一个大 <code>map</code>，在 <code>sendproc</code> 中，使用 <code>timer</code> 和定量判定逻辑，发送到下游 <code>kafka</code> 中。</p>
+<p>在 <code>history-job</code> 中，获取消息后，重新去 <code>redis</code> 中回捞数据即：<code>history-content</code>，然后构建完整的数据批量写入到 <code>HBase</code> 中。</p>
+<p>这里存在两个风险：</p>
 <ol>
 <li><code>history-service</code> 重启过程中，预聚合的消息丢失；</li>
 <li><code>history-job</code> 读取 <code>redis</code> 构建数据，但 <code>redis</code> 丢失；</li>
 </ol>
-<p class="fireman-p-indent" >这里进行了 <code>trade-off</code>，高收敛比的设计，意味着存在数据丢失的风险，对于历史场景，非 <code>L0</code> 的业务服务&#x2F;数据，在极端情况下可接受。</p>
-<h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h2><p class="fireman-p-indent" >经过 <code>BFF history</code> 的流量 <code>per-request</code> 都会发送给 <code>history-service</code> ，最容易想到的优化就是聚合上移来减少发送给下游的 <code>rpc</code>。但是按照 <code>mid region sharding</code> 的思路非常具有业务的耦合性，所以不应该把逻辑上移，而只是数据上移，所以可以考虑简单 <code>batch put</code> 请求，做一个无逻辑的数据聚合再发送给 <code>history-service</code>，这样可以大大的减少内网的流量，节约资源。</p>
-<p class="fireman-p-indent" >经过 <code>API Gateway</code> 的流量都会触发高频的 <code>pre-rpc auth</code>，给内网的 <code>identify-service</code> 带来了不少压力。因为大部分历史行为通过心跳的方式同步进度，所以可以维护一个长链接，长链接服务再握手后先进行用户级的身份验证，之后维护身份信息，而不是每次发送 <code>request</code> 都进行验证，这样可以大大减少内网的 <code>identify-service</code> 的流量。</p>
-<p class="fireman-p-indent" >内网使用 <code>boardcast(goim)</code> 服务维护长链接，长链接一次验证，不断使用。</p>
-<h2 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h2><p class="fireman-p-indent" >用户首次触发的行为，需要发送消息给下游系统进行触发其他奖励等。如何减少这类一天只用一次的标记位缓存请求？</p>
-<p class="fireman-p-indent" >使用 <code>in-process localcache</code>，只有高频的用户访问，带来的收益就越大。因此可以使用 <code>LRU</code>维护这个集合，但用户分布很广，很难覆盖，命中率很低。</p>
-<p class="fireman-p-indent" >越源头解决架构问题，通常越简单，效率越高。</p>
-<p class="fireman-p-indent" >在写操作(高频请求)中，把当前的 <code>flag</code> 返回到 API 协议中，作为一个日期值，客户端保存到本地，下次请求的时候带上，如果发现垓值在，获取以后直接使用不再请求缓存，例如:<code>2023-1-1</code>，发现当前时间还是 <code>2023-1-1</code>，直接不再请求 <code>redis</code>，如果发现当前时间是 <code>2023-1-2</code>，需要触发一次 <code>redis</code> 访问，返回新的 <code>flag</code> 到客户端，这样把状态广播同步到任何其他设备，可以大大减少判定缓存。</p>
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><h2 id="热点预热"><a href="#热点预热" class="headerlink" title="热点预热"></a>热点预热</h2><p class="fireman-p-indent" >热点预热实际上是构建缓存。</p>
-<p class="fireman-p-indent" >缓存预加载：在启动的时候提前加载热点数据的所有缓存。（订阅式的那种热点通知无法做到这点）</p>
-<p class="fireman-p-indent" >小流量预热：小流量线运行一段时间，订阅式会在这段时间内逐步构建好热点缓存；也可能是自珍在这段时间自己计算出来热点</p>
-<p class="fireman-p-indent" >对等节点同步热点本地缓存。</p>
-<h2 id="负载均衡和本地缓存"><a href="#负载均衡和本地缓存" class="headerlink" title="负载均衡和本地缓存"></a>负载均衡和本地缓存</h2><p class="fireman-p-indent" >业务无关的负载均衡和本地缓存搭配，效果很差：</p>
+<p>这里进行了 <code>trade-off</code>，高收敛比的设计，意味着存在数据丢失的风险，对于历史场景，非 <code>L0</code> 的业务服务&#x2F;数据，在极端情况下可接受。</p>
+<h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h2><p>经过 <code>BFF history</code> 的流量 <code>per-request</code> 都会发送给 <code>history-service</code> ，最容易想到的优化就是聚合上移来减少发送给下游的 <code>rpc</code>。但是按照 <code>mid region sharding</code> 的思路非常具有业务的耦合性，所以不应该把逻辑上移，而只是数据上移，所以可以考虑简单 <code>batch put</code> 请求，做一个无逻辑的数据聚合再发送给 <code>history-service</code>，这样可以大大的减少内网的流量，节约资源。</p>
+<p>经过 <code>API Gateway</code> 的流量都会触发高频的 <code>pre-rpc auth</code>，给内网的 <code>identify-service</code> 带来了不少压力。因为大部分历史行为通过心跳的方式同步进度，所以可以维护一个长链接，长链接服务再握手后先进行用户级的身份验证，之后维护身份信息，而不是每次发送 <code>request</code> 都进行验证，这样可以大大减少内网的 <code>identify-service</code> 的流量。</p>
+<p>内网使用 <code>boardcast(goim)</code> 服务维护长链接，长链接一次验证，不断使用。</p>
+<h2 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h2><p>用户首次触发的行为，需要发送消息给下游系统进行触发其他奖励等。如何减少这类一天只用一次的标记位缓存请求？</p>
+<p>使用 <code>in-process localcache</code>，只有高频的用户访问，带来的收益就越大。因此可以使用 <code>LRU</code>维护这个集合，但用户分布很广，很难覆盖，命中率很低。</p>
+<p>越源头解决架构问题，通常越简单，效率越高。</p>
+<p>在写操作(高频请求)中，把当前的 <code>flag</code> 返回到 API 协议中，作为一个日期值，客户端保存到本地，下次请求的时候带上，如果发现垓值在，获取以后直接使用不再请求缓存，例如:<code>2023-1-1</code>，发现当前时间还是 <code>2023-1-1</code>，直接不再请求 <code>redis</code>，如果发现当前时间是 <code>2023-1-2</code>，需要触发一次 <code>redis</code> 访问，返回新的 <code>flag</code> 到客户端，这样把状态广播同步到任何其他设备，可以大大减少判定缓存。</p>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><h2 id="热点预热"><a href="#热点预热" class="headerlink" title="热点预热"></a>热点预热</h2><p>热点预热实际上是构建缓存。</p>
+<p>缓存预加载：在启动的时候提前加载热点数据的所有缓存。（订阅式的那种热点通知无法做到这点）</p>
+<p>小流量预热：小流量线运行一段时间，订阅式会在这段时间内逐步构建好热点缓存；也可能是自珍在这段时间自己计算出来热点</p>
+<p>对等节点同步热点本地缓存。</p>
+<h2 id="负载均衡和本地缓存"><a href="#负载均衡和本地缓存" class="headerlink" title="负载均衡和本地缓存"></a>负载均衡和本地缓存</h2><p>业务无关的负载均衡和本地缓存搭配，效果很差：</p>
 <ul>
 <li>缓存命中率低</li>
 <li>缓存占据内存更大</li>
 </ul>
-<p class="fireman-p-indent" >业务相关负载均衡，例如根据用户 ID 来做负载均衡（分库分表大部分都可以看做是业务相关的），存在热点问题。</p>
-<p class="fireman-p-indent" >业务无关的负载均衡条件下，数据被更新之后，通知其他实例更新数据。本地缓存中间件具备这种能力，其他实例上的本地缓存会同步更新。本地缓存订阅数据变更。</p>
-<h2 id="七层负载均衡和四层负载均衡"><a href="#七层负载均衡和四层负载均衡" class="headerlink" title="七层负载均衡和四层负载均衡"></a>七层负载均衡和四层负载均衡</h2><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xNTkzMDc5">[转] 四层和七层负载均衡的特点及常用负载均衡Nginx、Haproxy、LVS对比<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >七层负载均衡：应用层负载均衡，关键在于在第七层能够获得应用信息，因此可以根据应用信息来做负载均衡。典型的依据 HTTP 请求路径来分发到不同服务器。非常的灵活，能够满足绝大多数需求。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102145729823.png" alt="image-20231102145729823"></p>
-<p class="fireman-p-indent" >四层负载均衡：传输层负载均衡，拿不到任何应用层面上的信息，职能根据传输层所具备的信息来做负载均衡。简单来说，四层负载均衡就是依赖IP和端口做转发。核心要点是通过重写 <code>SourceIP:SourcePort</code> 和 <code>TargetIP:TargetPort</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102145907044.png" alt="image-20231102145907044"></p>
-<p class="fireman-p-indent" >其余层的负载均衡：</p>
+<p>业务相关负载均衡，例如根据用户 ID 来做负载均衡（分库分表大部分都可以看做是业务相关的），存在热点问题。</p>
+<p>业务无关的负载均衡条件下，数据被更新之后，通知其他实例更新数据。本地缓存中间件具备这种能力，其他实例上的本地缓存会同步更新。本地缓存订阅数据变更。</p>
+<h2 id="七层负载均衡和四层负载均衡"><a href="#七层负载均衡和四层负载均衡" class="headerlink" title="七层负载均衡和四层负载均衡"></a>七层负载均衡和四层负载均衡</h2><p><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xNTkzMDc5">[转] 四层和七层负载均衡的特点及常用负载均衡Nginx、Haproxy、LVS对比<i class="fa fa-external-link-alt"></i></span></p>
+<p>七层负载均衡：应用层负载均衡，关键在于在第七层能够获得应用信息，因此可以根据应用信息来做负载均衡。典型的依据 HTTP 请求路径来分发到不同服务器。非常的灵活，能够满足绝大多数需求。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102145729823.png" alt="image-20231102145729823"></p>
+<p>四层负载均衡：传输层负载均衡，拿不到任何应用层面上的信息，职能根据传输层所具备的信息来做负载均衡。简单来说，四层负载均衡就是依赖IP和端口做转发。核心要点是通过重写 <code>SourceIP:SourcePort</code> 和 <code>TargetIP:TargetPort</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102145907044.png" alt="image-20231102145907044"></p>
+<p>其余层的负载均衡：</p>
 <ul>
 <li>二层：MAC 地址转发</li>
 <li>三层：IP转发（没有端口）</li>
 </ul>
-<h1 id="参阅"><a href="#参阅" class="headerlink" title="参阅"></a>参阅</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQ2FjaGVfKGNvbXB1dGluZyk=">Cache (computing)<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvSW50ZXJTeXN0ZW1zX0NhY2glQzMlQTk=">InterSystems Caché<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ppYW9tZW5nL2FydGljbGUvZGV0YWlscy8xNDk1NTAw">Bloom Filter概念和原理<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3lpemlzaG91L2FydGljbGUvZGV0YWlscy83ODM0MjQ5OQ==">RoaringBitmap数据结构及原理<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Nhb3NoYW5ncGEvYXJ0aWNsZS9kZXRhaWxzLzc4NzgzNzQ5">C++笔试题之LRU Cache原理和实现<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="参阅"><a href="#参阅" class="headerlink" title="参阅"></a>参阅</h1><p><span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQ2FjaGVfKGNvbXB1dGluZyk=">Cache (computing)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvSW50ZXJTeXN0ZW1zX0NhY2glQzMlQTk=">InterSystems Caché<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ppYW9tZW5nL2FydGljbGUvZGV0YWlscy8xNDk1NTAw">Bloom Filter概念和原理<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3lpemlzaG91L2FydGljbGUvZGV0YWlscy83ODM0MjQ5OQ==">RoaringBitmap数据结构及原理<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Nhb3NoYW5ncGEvYXJ0aWNsZS9kZXRhaWxzLzc4NzgzNzQ5">C++笔试题之LRU Cache原理和实现<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

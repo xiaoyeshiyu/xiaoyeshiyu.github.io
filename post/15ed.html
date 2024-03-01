@@ -37,8 +37,8 @@
 <meta property="article:published_time" content="2022-07-06T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-09-08T01:11:56.619Z">
 <meta property="article:author" content="Mitaka xu">
-<meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="数据库">
+<meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
 
 
@@ -67,14 +67,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -285,51 +278,51 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p class="fireman-p-indent" >mysql是程序员一定会打交道的数据库，在学习和练习阶段，都需要准备环境。这里介绍通过<code>deploy</code>、<code>svc</code>、<code>sc</code>、<code>pvc</code>部署单机版<code>mysql，通过</code>helm&#96;部署集群版。生产环境推荐使用集群模式，支持高可用。</p>
-<h2 id="单机版"><a href="#单机版" class="headerlink" title="单机版"></a>单机版</h2><p class="fireman-p-indent" >单机版通过手动部署一个一个服务即可，单机版本可用于学习部署方案，单机部署方案理解之后，也可以引申到集群方案部署。单机部署的要点是将单机中的资源通过<code>yaml</code>声明，包括持久化存储<code>pv</code>，卷供应<code>pvc</code>，资源管理<code>deployment</code>，服务发现<code>svc</code>。</p>
-<p class="fireman-p-indent" ><code>pv.yaml</code>：使用本地存储作为后端存储</p>
+    <div class="post-body" itemprop="articleBody"><p>mysql是程序员一定会打交道的数据库，在学习和练习阶段，都需要准备环境。这里介绍通过<code>deploy</code>、<code>svc</code>、<code>sc</code>、<code>pvc</code>部署单机版<code>mysql，通过</code>helm&#96;部署集群版。生产环境推荐使用集群模式，支持高可用。</p>
+<h2 id="单机版"><a href="#单机版" class="headerlink" title="单机版"></a>单机版</h2><p>单机版通过手动部署一个一个服务即可，单机版本可用于学习部署方案，单机部署方案理解之后，也可以引申到集群方案部署。单机部署的要点是将单机中的资源通过<code>yaml</code>声明，包括持久化存储<code>pv</code>，卷供应<code>pvc</code>，资源管理<code>deployment</code>，服务发现<code>svc</code>。</p>
+<p><code>pv.yaml</code>：使用本地存储作为后端存储</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv-nfs</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">  - ReadWriteOnce</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 8Gi</span><br><span class="line">  local:</span><br><span class="line">    path: /data/nfs-pv</span><br><span class="line">  volumeMode: Filesystem</span><br><span class="line">  persistentVolumeReclaimPolicy: Delete</span><br><span class="line">  storageClassName: local-storage</span><br><span class="line">  claimRef:</span><br><span class="line">    name: mysql-pv-claim</span><br><span class="line">    namespace: mysql</span><br><span class="line">  nodeAffinity:</span><br><span class="line">    required:</span><br><span class="line">      nodeSelectorTerms:</span><br><span class="line">      - matchExpressions:</span><br><span class="line">        - key: kubernetes.io/os</span><br><span class="line">          operator: In</span><br><span class="line">          values:</span><br><span class="line">          - linux</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><code>pvc.yaml</code>：指定pv</p>
+<p><code>pvc.yaml</code>：指定pv</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolumeClaim</span><br><span class="line">metadata:</span><br><span class="line">  name: mysql-pv-claim</span><br><span class="line">  labels:</span><br><span class="line">    app: mysql</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  volumeName: pv-nfs</span><br><span class="line">  storageClassName: &quot;&quot;</span><br><span class="line">  resources:</span><br><span class="line">    requests:</span><br><span class="line">      storage: 1Gi</span><br><span class="line">  claimRef:</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><code>deployment.yaml</code></p>
+<p><code>deployment.yaml</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: mysql-deployment</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: mysql</span><br><span class="line">  strategy:</span><br><span class="line">    type: Recreate</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: mysql</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">        - image: mysql:5.7</span><br><span class="line">          name: mysql-con</span><br><span class="line">          imagePullPolicy: Never</span><br><span class="line">          env:</span><br><span class="line">            - name: MYSQL_ROOT_PASSWORD</span><br><span class="line">              value: root 						 // root密码</span><br><span class="line">            - name: MYSQL_USER</span><br><span class="line">              value: dbuser            // 用户</span><br><span class="line">            - name: MYSQL_PASSWORD</span><br><span class="line">              value: dbpaassword       // 密码</span><br><span class="line">          args: [&quot;--default-authentication-plugin=mysql_native_password&quot;]</span><br><span class="line">          ports:</span><br><span class="line">            - containerPort: 3306</span><br><span class="line">              name: mysql</span><br><span class="line">          volumeMounts:</span><br><span class="line">            - name: mysql-persistent-storage</span><br><span class="line">              mountPath: /var/lib/mysql</span><br><span class="line">      volumes:</span><br><span class="line">        - name: mysql-persistent-storage</span><br><span class="line">          persistentVolumeClaim:</span><br><span class="line">            claimName: mysql-pv-claim</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><code>svc.yaml</code></p>
+<p><code>svc.yaml</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: mysql-service</span><br><span class="line">  labels:</span><br><span class="line">    app: mysql</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  selector:</span><br><span class="line">      app: mysql</span><br><span class="line">  ports:</span><br><span class="line">  - protocol : TCP</span><br><span class="line">    port: 3306</span><br><span class="line">    targetPort: 3306</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >部署起来</p>
+<p>部署起来</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># kubectl create -f pv.yaml</span><br><span class="line"># kubectl create -f pvc.yaml</span><br><span class="line"># kubectl create -f deployment.yaml</span><br><span class="line"># kubectl create -f svc.yaml</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >查看端口</p>
+<p>查看端口</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># kubectl get svc</span><br><span class="line">NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE</span><br><span class="line">mysql-service      NodePort    10.1.214.59    &lt;none&gt;        3306:30749/TCP    8m55s</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过IP地址、端口、用户名、密码连接即可。</p>
-<p class="fireman-p-indent" >如果<code>pod</code>状态卡在<code>ContainerCreating</code>，并且日志显示<code>  Warning  FailedMount  95s (x2 over 3m52s)  kubelet            Unable to attach or mount volumes: unmounted volumes=[mysql-persistent-storage], unattached volumes=[mysql-persistent-storage kube-api-access-h4tln]: timed out waiting for the condition</code>，则需要在对应节点上手动创建目录。</p>
-<h2 id="集群版"><a href="#集群版" class="headerlink" title="集群版"></a>集群版</h2><p class="fireman-p-indent" >集群版和单机版比较大的区别是实用动态卷供应，可以响应多个副本<code>pod</code>，学习阶段可以通过<code>nfs</code>作为<code>sc</code>，最为简单方便。集群版通过<code>bitname</code>的<code>chart</code>包实现。</p>
-<p class="fireman-p-indent" >添加<code>helm</code>仓</p>
+<p>通过IP地址、端口、用户名、密码连接即可。</p>
+<p>如果<code>pod</code>状态卡在<code>ContainerCreating</code>，并且日志显示<code>  Warning  FailedMount  95s (x2 over 3m52s)  kubelet            Unable to attach or mount volumes: unmounted volumes=[mysql-persistent-storage], unattached volumes=[mysql-persistent-storage kube-api-access-h4tln]: timed out waiting for the condition</code>，则需要在对应节点上手动创建目录。</p>
+<h2 id="集群版"><a href="#集群版" class="headerlink" title="集群版"></a>集群版</h2><p>集群版和单机版比较大的区别是实用动态卷供应，可以响应多个副本<code>pod</code>，学习阶段可以通过<code>nfs</code>作为<code>sc</code>，最为简单方便。集群版通过<code>bitname</code>的<code>chart</code>包实现。</p>
+<p>添加<code>helm</code>仓</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm repo add bitnami https://charts.bitnami.com/bitnami</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >查询<code>mysql</code>包</p>
+<p>查询<code>mysql</code>包</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># helm search repo mysql</span><br><span class="line">NAME                  	CHART VERSION	APP VERSION	DESCRIPTION</span><br><span class="line">bitnami/mysql         	9.2.0        	8.0.29     	MySQL is a fast, reliable, scalable, and easy t...</span><br><span class="line">bitnami/phpmyadmin    	10.1.12      	5.2.0      	phpMyAdmin is a free software tool written in P...</span><br><span class="line">bitnami/mariadb       	11.0.14      	10.6.8     	MariaDB is an open source, community-developed ...</span><br><span class="line">bitnami/mariadb-galera	7.3.6        	10.6.8     	MariaDB Galera is a multi-primary database clus...</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >使用<code>mysql</code>，拉到本地</p>
+<p>使用<code>mysql</code>，拉到本地</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm pull bitnami/mysql</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >修改<code>values.yaml</code></p>
+<p>修改<code>values.yaml</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">global:</span><br><span class="line">  storageClass: &quot;nfs-client&quot;</span><br><span class="line">architecture: replication 	// 副本模式</span><br><span class="line">primary:</span><br><span class="line">  service:</span><br><span class="line">    type: NodePort</span><br><span class="line">secondary:</span><br><span class="line">  service:</span><br><span class="line">    type: NodePort</span><br><span class="line">auth:</span><br><span class="line">  rootPassword: &quot;password&quot;</span><br><span class="line">  createDatabase: true</span><br><span class="line">  database: &quot;my_database&quot;</span><br><span class="line">  username: &quot;user&quot;</span><br><span class="line">  password: &quot;password&quot;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >部署</p>
+<p>部署</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm install mysql -f values.yaml ./ -n mysql</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >用户密码</p>
+<p>用户密码</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo Username: root</span><br><span class="line">MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace mysql mysql -o jsonpath=&quot;&#123;.data.mysql-root-password&#125;&quot; | base64 -d)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >端口</p>
+<p>端口</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># kubectl get svc -n mysql</span><br><span class="line">NAME                       TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">mysql-primary              NodePort    10.1.45.111    &lt;none&gt;        3306:31398/TCP   35s</span><br><span class="line">mysql-primary-headless     ClusterIP   None           &lt;none&gt;        3306/TCP         35s</span><br><span class="line">mysql-secondary            NodePort    10.1.171.237   &lt;none&gt;        3306:30464/TCP   35s</span><br><span class="line">mysql-secondary-headless   ClusterIP   None           &lt;none&gt;        3306/TCP         35s</span><br></pre></td></tr></table></figure>
 
-<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p class="fireman-p-indent" >集群下安装的mysql版本比较高，是8.x版本，需要手动分配权限。</p>
+<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p>集群下安装的mysql版本比较高，是8.x版本，需要手动分配权限。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># kubectl exec -it mysql-primary-0 -n mysql bash</span><br><span class="line">mysql&gt; SELECT host FROM mysql.user WHERE User = &#x27;root&#x27;;</span><br><span class="line">mysql&gt; CREATE USER &#x27;root&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;password&#x27;;</span><br><span class="line">mysql&gt; GRANT ALL PRIVILEGES ON *.* TO &#x27;root&#x27;@&#x27;%&#x27;;</span><br><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
 
 
@@ -343,8 +336,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
               <a href="/tags/database/" rel="tag"># 数据库</a>
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
           </div>
 
         

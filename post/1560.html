@@ -37,8 +37,8 @@
 <meta property="article:published_time" content="2022-07-14T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-09-08T01:35:40.356Z">
 <meta property="article:author" content="Mitaka xu">
-<meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="数据库">
+<meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
 
 
@@ -67,14 +67,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -285,40 +278,40 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="准备sc"><a href="#准备sc" class="headerlink" title="准备sc"></a>准备sc</h2><p class="fireman-p-indent" >选择一个<code>k8s</code>节点安装<code>nfs</code>服务，作为<code>sc</code>的提供者</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="准备sc"><a href="#准备sc" class="headerlink" title="准备sc"></a>准备sc</h2><p>选择一个<code>k8s</code>节点安装<code>nfs</code>服务，作为<code>sc</code>的提供者</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 安装服务</span><br><span class="line"># yum install nfs-utils rpcbind -y</span><br><span class="line"># mkdir /data</span><br><span class="line"></span><br><span class="line">// nfs配置</span><br><span class="line"># cat /etc/exports</span><br><span class="line">/data 192.168.111.0/24(rw,sync,insecure,no_subtree_check,no_root_squash) // 集群网络</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >启动服务</p>
+<p>启动服务</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># systemctl start nfs &amp;&amp; systemctl enable nfs</span><br><span class="line"># systemctl start rpcbind &amp;&amp; systemctl enable rpcbind</span><br><span class="line"></span><br><span class="line"># showmount -e localhost</span><br><span class="line">Export list for localhost:</span><br><span class="line">/data 192.168.111.0/24</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >所有节点都安装<code>nfs-common</code>，没有安装时，<code>nfs-storage-nfs-client-provisioner-dcf475cdb-22zm9</code>状态无法正常启动，报错日志如下：</p>
+<p>所有节点都安装<code>nfs-common</code>，没有安装时，<code>nfs-storage-nfs-client-provisioner-dcf475cdb-22zm9</code>状态无法正常启动，报错日志如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Events:</span><br><span class="line">  Type     Reason       Age               From               Message</span><br><span class="line">  ----     ------       ----              ----               -------</span><br><span class="line">  Normal   Scheduled    32s               default-scheduler  Successfully assigned default/nfs-storage-nfs-client-provisioner-dcf475cdb-z5jn6 to node02</span><br><span class="line">  Warning  FailedMount  0s (x7 over 31s)  kubelet            MountVolume.SetUp failed for volume &quot;nfs-client-root&quot; : mount failed: exit status 32</span><br><span class="line">Mounting command: mount</span><br><span class="line">Mounting arguments: -t nfs 192.168.111.128:/data /var/lib/kubelet/pods/54c0d134-37bc-4661-a1a1-34691f914224/volumes/kubernetes.io~nfs/nfs-client-root</span><br><span class="line">Output: mount: wrong fs type, bad option, bad superblock on 192.168.111.128:/data,</span><br><span class="line">       missing codepage or helper program, or other error</span><br><span class="line">       (for several filesystems (e.g. nfs, cifs) you might</span><br><span class="line">       need a /sbin/mount.&lt;type&gt; helper program)</span><br><span class="line"></span><br><span class="line">       In some cases useful info is found in syslog - try</span><br><span class="line">       dmesg | tail or so.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install nfs-common  nfs-utils -y</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >手动安装<code>sc</code>的过程涉及权限相关，虽然不复杂，但是如果出错排查不方便，这里选择通过<code>helm</code>安装<code>nfs</code>的<code>sc</code>，方案更加成熟。</p>
-<p class="fireman-p-indent" >安装<code>helm</code>，<span class="exturl" data-url="aHR0cHM6Ly9oZWxtLnNoL3poL2RvY3MvaW50cm8vaW5zdGFsbC8=">helm安装<i class="fa fa-external-link-alt"></i></span></p>
+<p>手动安装<code>sc</code>的过程涉及权限相关，虽然不复杂，但是如果出错排查不方便，这里选择通过<code>helm</code>安装<code>nfs</code>的<code>sc</code>，方案更加成熟。</p>
+<p>安装<code>helm</code>，<span class="exturl" data-url="aHR0cHM6Ly9oZWxtLnNoL3poL2RvY3MvaW50cm8vaW5zdGFsbC8=">helm安装<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># wget https://get.helm.sh/helm-v3.9.0-linux-amd64.tar.gz</span><br><span class="line"># tar zxvf helm-v3.9.0-linux-amd64.tar.gz</span><br><span class="line"># cp helm /usr/local/bin/helm</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >增加<code>helm</code>库</p>
+<p>增加<code>helm</code>库</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># helm repo add azure http://mirror.azure.cn/kubernetes/charts/</span><br><span class="line">&quot;azure&quot; has been added to your repositories</span><br><span class="line"># helm search repo nfs</span><br><span class="line">NAME                        	CHART VERSION	APP VERSION	DESCRIPTION</span><br><span class="line">azure/nfs-client-provisioner	1.2.11       	3.1.0      	DEPRECATED - nfs-client is an automatic provisi...</span><br><span class="line">azure/nfs-server-provisioner	1.1.3        	2.3.0      	DEPRECATED - nfs-server-provisioner is an out-o...</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装<code>helm</code></p>
+<p>安装<code>helm</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># helm pull azure/nfs-client-provisioner</span><br><span class="line"># tar zxvf nfs-client-provisioner-1.2.11.tgz</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >修改变量</p>
+<p>修改变量</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nfs:</span><br><span class="line"> 	server: 192.168.111.128</span><br><span class="line">  path: /data</span><br><span class="line">storageClass:</span><br><span class="line"> 	defaultClass: true</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装</p>
+<p>安装</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm install nfs-storage -f values.yaml ./</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >查看结果</p>
+<p>查看结果</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># kubectl get pod -o wide</span><br><span class="line">NAME                                                 READY   STATUS    RESTARTS   AGE     IP            NODE     NOMINATED NODE   READINESS GATES</span><br><span class="line">nfs-storage-nfs-client-provisioner-dcf475cdb-22zm9   1/1     Running   0          2m3s    10.244.2.21   node02   &lt;none&gt;           &lt;none&gt;</span><br><span class="line"># kubectl get sc</span><br><span class="line">NAME                   PROVISIONER                                        RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE</span><br><span class="line">nfs-client (default)   cluster.local/nfs-storage-nfs-client-provisioner   Delete          Immediate           true                   12m</span><br></pre></td></tr></table></figure>
 
-<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p class="fireman-p-indent" >通过<code>nfs</code>的<code>sc</code>无法创建<code>pvc</code>，<code>pod</code>日志</p>
+<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p>通过<code>nfs</code>的<code>sc</code>无法创建<code>pvc</code>，<code>pod</code>日志</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">E0710 06:40:34.902614       1 controller.go:1004] provision &quot;default/mysql-pv-claim&quot; class &quot;nfs-client&quot;: unexpected error getting claim reference: selfLink was empty, can&#x27;t make reference</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >解决方案:<span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vemhhbmdzaS1senEvcC8xNDI5MjYyOC5odG1s">nfs-provisioner报错问题:”selfLink was empty”<i class="fa fa-external-link-alt"></i></span></p>
+<p>解决方案:<span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vemhhbmdzaS1senEvcC8xNDI5MjYyOC5odG1s">nfs-provisioner报错问题:”selfLink was empty”<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># vim /etc/kubernetes/manifests/kube-apiserver.yaml</span><br><span class="line">// 增加</span><br><span class="line">    - --feature-gates=RemoveSelfLink=false　　#添加此行</span><br></pre></td></tr></table></figure>
 
 
@@ -330,8 +323,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
               <a href="/tags/database/" rel="tag"># 数据库</a>
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
           </div>
 
         

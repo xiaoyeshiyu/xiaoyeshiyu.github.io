@@ -85,14 +85,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -303,8 +296,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="etcd-简介"><a href="#etcd-简介" class="headerlink" title="etcd 简介"></a>etcd 简介</h1><p class="fireman-p-indent" ><code>Etcd</code> 是 <code>CoreOS</code> 基于 <code>Raft</code> 开发的分布式 <code>key</code> - <code>value</code> 存储，可用于<strong>服务发现</strong>、<strong>共享配置</strong>以及<strong>一致性保障</strong>（如数据库选主、分布式锁等）。</p>
-<p class="fireman-p-indent" >在分布式系统中，如何管理节点间的状态一直是一个难题，etcd 像是专门为集群环境的服务发现和注册而设计，它提供了数据 <code>TTL</code> 失效、数据改变监视、多值、目录监听、分布式锁原子操作等功能，可以方便的跟踪并管理集群节点的状态。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="etcd-简介"><a href="#etcd-简介" class="headerlink" title="etcd 简介"></a>etcd 简介</h1><p><code>Etcd</code> 是 <code>CoreOS</code> 基于 <code>Raft</code> 开发的分布式 <code>key</code> - <code>value</code> 存储，可用于<strong>服务发现</strong>、<strong>共享配置</strong>以及<strong>一致性保障</strong>（如数据库选主、分布式锁等）。</p>
+<p>在分布式系统中，如何管理节点间的状态一直是一个难题，etcd 像是专门为集群环境的服务发现和注册而设计，它提供了数据 <code>TTL</code> 失效、数据改变监视、多值、目录监听、分布式锁原子操作等功能，可以方便的跟踪并管理集群节点的状态。</p>
 <ul>
 <li>键值对存储：将数据存储在分层组织的目录中，如同在标准文件系统中</li>
 <li>检测变更：检测特定的键或目录以进行更改，并对值的更改做出反应</li>
@@ -324,7 +317,7 @@
 <li><code>etcd</code> 比较多的应用场景是用于服务注册与发现</li>
 <li>基于监听机制的分布式异步系统</li>
 </ul>
-<h2 id="键值对存储"><a href="#键值对存储" class="headerlink" title="键值对存储"></a>键值对存储</h2><p class="fireman-p-indent" ><code>etcd</code> 是一个键值存储的组件，其他的应用都是基于其键值存储的功能展开。</p>
+<h2 id="键值对存储"><a href="#键值对存储" class="headerlink" title="键值对存储"></a>键值对存储</h2><p><code>etcd</code> 是一个键值存储的组件，其他的应用都是基于其键值存储的功能展开。</p>
 <ul>
 <li>采用 <code>kv</code> 型数据存储，一般情况下比关系型数据库快</li>
 <li>支持动态存储（内存）以及静态存储（磁盘）</li>
@@ -345,7 +338,7 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111145201033.png" alt="image-20240111145201033"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111145201033.png" alt="image-20240111145201033"></p>
 <h2 id="消息发布与订阅"><a href="#消息发布与订阅" class="headerlink" title="消息发布与订阅"></a>消息发布与订阅</h2><ul>
 <li>在分布式系统中，最适用的一种组件间通信方式就是消息发布与订阅；</li>
 <li>即构建一个配置共享中心，数据提供者在这个配置中心发布消息，而消息使用者则订阅他们关心的主题，一旦主题有消息发布，就会实时通知订阅者；</li>
@@ -353,11 +346,11 @@
 <li>应用中用到的一些配置信息放到 <code>etcd</code> 上进行集中管理；</li>
 <li>应用在启动的时候主动从 <code>etcd</code> 获取一次配置信息，同时，在 <code>etcd</code> 节点上注册一个 <code>Watcher</code> 并等待，以后每次配置有更新的时候，<code>etcd</code> 都会实时通知订阅者，以此达到获取最新配置信息的目的。</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111145603647.png" alt="image-20240111145603647"></p>
-<h2 id="Etcd-的安装"><a href="#Etcd-的安装" class="headerlink" title="Etcd 的安装"></a>Etcd 的安装</h2><p class="fireman-p-indent" >下载安装包，参考 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V0Y2QtaW8vZXRjZC9yZWxlYXNlcw==">https://github.com/etcd-io/etcd/releases<i class="fa fa-external-link-alt"></i></span></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111145603647.png" alt="image-20240111145603647"></p>
+<h2 id="Etcd-的安装"><a href="#Etcd-的安装" class="headerlink" title="Etcd 的安装"></a>Etcd 的安装</h2><p>下载安装包，参考 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V0Y2QtaW8vZXRjZC9yZWxlYXNlcw==">https://github.com/etcd-io/etcd/releases<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ETCD_VER=v3.4.29</span><br><span class="line"></span><br><span class="line"># choose either URL</span><br><span class="line">GOOGLE_URL=https://storage.googleapis.com/etcd</span><br><span class="line">GITHUB_URL=https://github.com/etcd-io/etcd/releases/download</span><br><span class="line">DOWNLOAD_URL=$&#123;GOOGLE_URL&#125;</span><br><span class="line"></span><br><span class="line">rm -f /tmp/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz</span><br><span class="line">rm -rf /tmp/etcd-download-test &amp;&amp; mkdir -p /tmp/etcd-download-test</span><br><span class="line"></span><br><span class="line">curl -L $&#123;DOWNLOAD_URL&#125;/$&#123;ETCD_VER&#125;/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz -o /tmp/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz</span><br><span class="line">tar xzvf /tmp/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz -C /tmp/etcd-download-test --strip-components=1</span><br><span class="line">rm -f /tmp/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">/tmp/etcd-download-test/etcd --version</span><br><span class="line">/tmp/etcd-download-test/etcdctl version</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >为避免跟本地的 hostNetwork 的 etcd 容器冲突，我们需要修改 etcd 的监听端口</p>
+<p>为避免跟本地的 hostNetwork 的 etcd 容器冲突，我们需要修改 etcd 的监听端口</p>
 <ul>
 <li><p><code>initial-cluster</code>：初始化集群，需要列所有 member 地址</p>
 <blockquote>
@@ -386,42 +379,42 @@
 </ul>
 </li>
 </ul>
-<h3 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h3><p class="fireman-p-indent" >查看集群成员状态</p>
+<h3 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h3><p>查看集群成员状态</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">etcdctl member list --write-out=table</span><br><span class="line">+------------------+---------+---------+-----------------------+-----------------------+------------+</span><br><span class="line">| ID | STATUS | NAME | PEER ADDRS | CLIENT ADDRS | IS LEARNER |</span><br><span class="line">+------------------+---------+---------+-----------------------+-----------------------+------------+</span><br><span class="line">| 8e9e05c52164694d | started | default | http://localhost:2380 | http://localhost:2379 | false |</span><br><span class="line">+------------------+---------+---------+-----------------------+-----------------------+------------+</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >基本的数据读写操作：</p>
-<p class="fireman-p-indent" >写入数据</p>
+<p>基本的数据读写操作：</p>
+<p>写入数据</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">etcdctl --endpoints=localhost:12379 put /a b</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >读取数据（获取键值对）</p>
+<p>读取数据（获取键值对）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">etcdctl --endpoints=localhost:12379 get /a</span><br><span class="line">/a  // 键</span><br><span class="line">b   // 值</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >按 <code>key</code> 的前缀查询数据</p>
+<p>按 <code>key</code> 的前缀查询数据</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl --endpoints=localhost:12379 get --prefix /</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >只显示键值</p>
+<p>只显示键值</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl --endpoints=localhost:12379 get --prefix / --keys-only --debug</span><br></pre></td></tr></table></figure>
 
-<h2 id="核心：-TTL-CAS"><a href="#核心：-TTL-CAS" class="headerlink" title="核心： TTL &amp; CAS"></a>核心： TTL &amp; CAS</h2><p class="fireman-p-indent" ><code>TTL</code>（<code>time to live</code>）指的是给一个 <code>key</code> 设置一个有效期，到期后这个 <code>key</code> 就会被自动删掉，这在很多分布式锁的实现上都会用到，可以保证锁的实时有效性。</p>
-<p class="fireman-p-indent" ><code>Atomic Compare-and-Swap</code>（<code>CAS</code>）指的是在对 <code>key</code> 进行赋值的时候，客户端需要提供一些条件，当这些条件满足后，才能赋值成功。这些条件包括：</p>
+<h2 id="核心：-TTL-CAS"><a href="#核心：-TTL-CAS" class="headerlink" title="核心： TTL &amp; CAS"></a>核心： TTL &amp; CAS</h2><p><code>TTL</code>（<code>time to live</code>）指的是给一个 <code>key</code> 设置一个有效期，到期后这个 <code>key</code> 就会被自动删掉，这在很多分布式锁的实现上都会用到，可以保证锁的实时有效性。</p>
+<p><code>Atomic Compare-and-Swap</code>（<code>CAS</code>）指的是在对 <code>key</code> 进行赋值的时候，客户端需要提供一些条件，当这些条件满足后，才能赋值成功。这些条件包括：</p>
 <ul>
 <li><code>prevExist</code>：<code>key</code> 当前赋值前是否存在</li>
 <li><code>prevValue</code>：<code>key</code> 当前赋值前的值</li>
 <li><code>prevIndex</code>：<code>key</code> 当前赋值前的 <code>Index</code></li>
 </ul>
-<p class="fireman-p-indent" >这样的话，<code>key</code> 的设置是有前提的，需要知道这个 <code>key</code> 当前的具体情况才可以对其设置</p>
-<h1 id="Raft-协议"><a href="#Raft-协议" class="headerlink" title="Raft 协议"></a>Raft 协议</h1><h2 id="Raft-协议概览"><a href="#Raft-协议概览" class="headerlink" title="Raft 协议概览"></a>Raft 协议概览</h2><p class="fireman-p-indent" ><code>Raft</code> 协议基于 <code>quorum</code> 机制，即大多数同意原则，任何的变更都需要超过半数的成员确认。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111151519295.png" alt="image-20240111151519295"></p>
-<p class="fireman-p-indent" >请求发送到服务器端，服务器中的一致性模块进行一致性协商，一致性模块将请求发送到另外两个服务器，并且将本次请求写入到本地的日志模块（临时存储）中，其他服务器接收到之后，记录到本地日志模块，记录完成之后，返回给第一个节点，当超过半数返回，则更新状态机（可以理解为持久化组件）。</p>
-<h2 id="理解-Raft-协议"><a href="#理解-Raft-协议" class="headerlink" title="理解 Raft 协议"></a>理解 Raft 协议</h2><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly90aGVzZWNyZXRsaXZlc29mZGF0YS5jb20vcmFmdC8=">https://thesecretlivesofdata.com/raft/<i class="fa fa-external-link-alt"></i></span></p>
-<h2 id="learner"><a href="#learner" class="headerlink" title="learner"></a>learner</h2><p class="fireman-p-indent" ><code>Raft</code> 4.2.1 引入的新角色</p>
-<p class="fireman-p-indent" >当出现一个 <code>etcd</code> 集群需要增加节点时，新节点与 <code>Leader</code> 的数据差异较大，需要较多数据同步才能跟上 <code>leader</code> 的最新的数据。</p>
-<p class="fireman-p-indent" >此时 <code>Leader</code>  的网络带宽很可能被用尽，进而使得 <code>leader</code> 无法正常保持心跳。</p>
-<p class="fireman-p-indent" >进而导致 <code>follower</code> 重新发起投票。</p>
-<p class="fireman-p-indent" >进而可能引发 <code>etcd</code> 集群不可用。</p>
-<p class="fireman-p-indent" ><code>Learner</code> 角色只接收数据而不参与投票，因此增加 <code>learner</code> 节点时，集群的 <code>quorum</code> 不变。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111152850124.png" alt="image-20240111152850124"></p>
-<h2 id="etcd-基于-Raft-的一致性"><a href="#etcd-基于-Raft-的一致性" class="headerlink" title="etcd 基于 Raft 的一致性"></a>etcd 基于 Raft 的一致性</h2><p class="fireman-p-indent" >选举方法：</p>
+<p>这样的话，<code>key</code> 的设置是有前提的，需要知道这个 <code>key</code> 当前的具体情况才可以对其设置</p>
+<h1 id="Raft-协议"><a href="#Raft-协议" class="headerlink" title="Raft 协议"></a>Raft 协议</h1><h2 id="Raft-协议概览"><a href="#Raft-协议概览" class="headerlink" title="Raft 协议概览"></a>Raft 协议概览</h2><p><code>Raft</code> 协议基于 <code>quorum</code> 机制，即大多数同意原则，任何的变更都需要超过半数的成员确认。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111151519295.png" alt="image-20240111151519295"></p>
+<p>请求发送到服务器端，服务器中的一致性模块进行一致性协商，一致性模块将请求发送到另外两个服务器，并且将本次请求写入到本地的日志模块（临时存储）中，其他服务器接收到之后，记录到本地日志模块，记录完成之后，返回给第一个节点，当超过半数返回，则更新状态机（可以理解为持久化组件）。</p>
+<h2 id="理解-Raft-协议"><a href="#理解-Raft-协议" class="headerlink" title="理解 Raft 协议"></a>理解 Raft 协议</h2><p><span class="exturl" data-url="aHR0cHM6Ly90aGVzZWNyZXRsaXZlc29mZGF0YS5jb20vcmFmdC8=">https://thesecretlivesofdata.com/raft/<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="learner"><a href="#learner" class="headerlink" title="learner"></a>learner</h2><p><code>Raft</code> 4.2.1 引入的新角色</p>
+<p>当出现一个 <code>etcd</code> 集群需要增加节点时，新节点与 <code>Leader</code> 的数据差异较大，需要较多数据同步才能跟上 <code>leader</code> 的最新的数据。</p>
+<p>此时 <code>Leader</code>  的网络带宽很可能被用尽，进而使得 <code>leader</code> 无法正常保持心跳。</p>
+<p>进而导致 <code>follower</code> 重新发起投票。</p>
+<p>进而可能引发 <code>etcd</code> 集群不可用。</p>
+<p><code>Learner</code> 角色只接收数据而不参与投票，因此增加 <code>learner</code> 节点时，集群的 <code>quorum</code> 不变。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111152850124.png" alt="image-20240111152850124"></p>
+<h2 id="etcd-基于-Raft-的一致性"><a href="#etcd-基于-Raft-的一致性" class="headerlink" title="etcd 基于 Raft 的一致性"></a>etcd 基于 Raft 的一致性</h2><p>选举方法：</p>
 <ul>
 <li>初始启动时，节点处于 <code>follower</code> 状态并设定一个 <code>election timeout</code>，如果在这一时间周期内没有收到来自 <code>leader</code> 的 <code>heartbeat</code>，节点将会发起选择：将自己切换为 <code>candidate</code> 之后，向集群中其他 <code>candidate</code> 节点（满足1:自己没有 <code>leader</code>，2:自己没有投票，才会投票）发送请求，询问其是否选举自己成为 <code>leader</code>。</li>
 <li>当收到来自集群中过半数节点的接收投票后，节点即为 <code>leader</code>，开始接收保存 <code>client</code> 的数据并向其他的 <code>follower</code> 节点同步日志。</li>
@@ -435,23 +428,23 @@
 <li><code>Follower</code> 接收到日志后，记录日志然后向 <code>Leader</code> 发送 <code>ACK</code></li>
 <li>当 <code>Leader</code> 收到大多数（<code>n/2</code>+1）<code>Follower</code> 的 <code>ACK</code> 信息后将该日志设置为已提交并追加到本地磁盘中，通知客户端并在下个 <code>heartbeat</code> 中 <code>Leader</code> 将通知所有的 <code>Follower</code> 将该日志存储在自己的磁盘中。</li>
 </ul>
-<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p class="fireman-p-indent" >安全性是用于保证每个节点都执行相同序列的安全机制。</p>
+<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>安全性是用于保证每个节点都执行相同序列的安全机制。</p>
 <ul>
 <li>如当某个 <code>Follower</code> 在当前 <code>Leader</code> <code>commit Log</code> 时变得不可用了，稍候可能该 <code>Follower</code> 又会被选举为 <code>Leader</code>，</li>
 <li>这时新 <code>Leader</code> 可能会用新的 <code>Log</code> 覆盖先前已 <code>committed</code> 的 <code>Log</code>，这就是导致节点执行不同序列；</li>
 </ul>
-<p class="fireman-p-indent" ><code>Safety</code> 就是用于保证选举出来的 <code>Leader</code> 一定包含先前 <code>committed Log</code> 的机制。</p>
-<p class="fireman-p-indent" >选举安全性（<code>Election Safety</code>）：每个任期（<code>Term</code>）只能选举出一个 <code>Leader</code> （数据同步由 <code>Leader</code> 管理。）</p>
-<p class="fireman-p-indent" ><code>Leader</code> 完整性（<code>Leader Completeness</code>）：指 <code>Leader</code> 日志的完整性，当 <code>Log</code> 在任期 <code>Term1</code> 被 <code>Commit</code> 后，那么以后任期 <code>Term2</code>、<code>Term3</code> … 等的 <code>Leader</code> 必须包含该 <code>Log</code>；</p>
-<p class="fireman-p-indent" ><code>Raft</code> 在选举阶段就使用 <code>Term</code> 的判断用于保证完整性：当请求投票的该 <code>Candidate</code> 的 <code>Term</code> 较大或 <code>Index</code> 更大，则投票，否则拒绝该请求。</p>
+<p><code>Safety</code> 就是用于保证选举出来的 <code>Leader</code> 一定包含先前 <code>committed Log</code> 的机制。</p>
+<p>选举安全性（<code>Election Safety</code>）：每个任期（<code>Term</code>）只能选举出一个 <code>Leader</code> （数据同步由 <code>Leader</code> 管理。）</p>
+<p><code>Leader</code> 完整性（<code>Leader Completeness</code>）：指 <code>Leader</code> 日志的完整性，当 <code>Log</code> 在任期 <code>Term1</code> 被 <code>Commit</code> 后，那么以后任期 <code>Term2</code>、<code>Term3</code> … 等的 <code>Leader</code> 必须包含该 <code>Log</code>；</p>
+<p><code>Raft</code> 在选举阶段就使用 <code>Term</code> 的判断用于保证完整性：当请求投票的该 <code>Candidate</code> 的 <code>Term</code> 较大或 <code>Index</code> 更大，则投票，否则拒绝该请求。</p>
 <h2 id="失效处理"><a href="#失效处理" class="headerlink" title="失效处理"></a>失效处理</h2><ol>
 <li><code>Leader</code> 失效：其他没有收到 <code>heartbeat</code> 的节点会发起新的选举，而当 <code>Leader</code> 恢复后由于步进数小会自动成为 <code>follower</code>（日志也会被新 <code>leader</code> 的日志覆盖）；</li>
 <li><code>follower</code> 节点不可用：<code>follower</code> 节点不可用的情况相对容易解决。因为集群中的日志内容始终是从 <code>leader</code> 节点同步的，只要这一节点再次加入集群时重新从 <code>leader</code> 节点出复制日志即可；</li>
 <li>多个 <code>candidate</code>：冲突后 <code>candidate</code> 将随机选择一个等待间隔（<code>150ms</code> ~ <code>300ms</code>）再次发起投票，得到集群半数以上 <code>follower</code> 接受的 <code>candidate</code> 将会成为 <code>leader</code></li>
 </ol>
-<h2 id="wal-日志"><a href="#wal-日志" class="headerlink" title="wal 日志"></a>wal 日志</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111160127124.png" alt="image-20240111160127124"></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jaHJvbWl1bS5nb29nbGVzb3VyY2UuY29tL2V4dGVybmFsL2dpdGh1Yi5jb20vY29yZW9zL2V0Y2QvKy9IRUFEL3JhZnQvcmFmdHBiL3JhZnQucHJvdG8=">https://chromium.googlesource.com/external/github.com/coreos/etcd/+/HEAD/raft/raftpb/raft.proto<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><code>wal</code> 日志是二进制的，解析出来以后是以上数据结构 <code>LogEntry</code>。</p>
+<h2 id="wal-日志"><a href="#wal-日志" class="headerlink" title="wal 日志"></a>wal 日志</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111160127124.png" alt="image-20240111160127124"></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jaHJvbWl1bS5nb29nbGVzb3VyY2UuY29tL2V4dGVybmFsL2dpdGh1Yi5jb20vY29yZW9zL2V0Y2QvKy9IRUFEL3JhZnQvcmFmdHBiL3JhZnQucHJvdG8=">https://chromium.googlesource.com/external/github.com/coreos/etcd/+/HEAD/raft/raftpb/raft.proto<i class="fa fa-external-link-alt"></i></span></p>
+<p><code>wal</code> 日志是二进制的，解析出来以后是以上数据结构 <code>LogEntry</code>。</p>
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">Entry</span> &#123;</span><br><span class="line">	<span class="keyword">option</span> (versionpb.etcd_version_msg) = <span class="string">&quot;3.0&quot;</span>;</span><br><span class="line">	<span class="keyword">optional</span> <span class="type">uint64</span>     Term  = <span class="number">2</span> [(gogoproto.nullable) = <span class="literal">false</span>]; <span class="comment">// must be 64-bit aligned for atomic operations</span></span><br><span class="line">	<span class="keyword">optional</span> <span class="type">uint64</span>     Index = <span class="number">3</span> [(gogoproto.nullable) = <span class="literal">false</span>]; <span class="comment">// must be 64-bit aligned for atomic operations</span></span><br><span class="line">	<span class="keyword">optional</span> EntryType  Type  = <span class="number">1</span> [(gogoproto.nullable) = <span class="literal">false</span>];</span><br><span class="line">	<span class="keyword">optional</span> <span class="type">bytes</span>      Data  = <span class="number">4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -462,28 +455,28 @@
 <li>2: 表示 <code>ConfChangeV2</code></li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >第二个字段是 <code>term</code></p>
-<p class="fireman-p-indent" >每个 <code>term</code> 代表一个主节点的任期，每次主节点变更 <code>term</code> 就会变化。</p>
+<li><p>第二个字段是 <code>term</code></p>
+<p>每个 <code>term</code> 代表一个主节点的任期，每次主节点变更 <code>term</code> 就会变化。</p>
 </li>
-<li><p class="fireman-p-indent" >第三个字段是 <code>index</code></p>
-<p class="fireman-p-indent" >这个序号是严格有序递增的，代表变更序号</p>
+<li><p>第三个字段是 <code>index</code></p>
+<p>这个序号是严格有序递增的，代表变更序号</p>
 </li>
-<li><p class="fireman-p-indent" >第四个字段是二进制的 <code>data</code></p>
-<p class="fireman-p-indent" >将 <code>raft request</code> 对象的 <code>pb</code> 结构（使用 <code>protoc buffers</code> 二进制，相比 <code>json</code> 更加节省空间）整个保存下。</p>
+<li><p>第四个字段是二进制的 <code>data</code></p>
+<p>将 <code>raft request</code> 对象的 <code>pb</code> 结构（使用 <code>protoc buffers</code> 二进制，相比 <code>json</code> 更加节省空间）整个保存下。</p>
 </li>
 </ul>
-<p class="fireman-p-indent" ><code>etcd</code> 源码下有个 <code>tools/etcd-dump-logs</code>，可以将 <code>wal</code> 日志 <code>dump</code> 成文本查看，可以协助分析 <code>Raft</code> 协议。</p>
-<p class="fireman-p-indent" ><code>Raft</code> 协议本身不关心应用数据，也就是 <code>data</code> 中的部分，一致性都通过同步 <code>wal</code> 日志来实现，每个节点将从主节点收到的 <code>data apply</code> 到本地的存储，<code>Raft</code> 只关心日志的同步状态，如果本地存储实现的有 <code>bug</code>，比如没有正确的将 <code>data apply</code> 到本地，也可能会导致数据不一致。</p>
-<h1 id="etcd-使用"><a href="#etcd-使用" class="headerlink" title="etcd 使用"></a>etcd 使用</h1><h2 id="etcd-v3-存储，Watch-以及过期机制"><a href="#etcd-v3-存储，Watch-以及过期机制" class="headerlink" title="etcd v3 存储，Watch 以及过期机制"></a>etcd v3 存储，Watch 以及过期机制</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111162008166.png" alt="image-20240111162008166"></p>
-<h3 id="存储机制"><a href="#存储机制" class="headerlink" title="存储机制"></a>存储机制</h3><p class="fireman-p-indent" ><code>etcd v3 store</code> 分为两部分，一部分是内存中的索引，<code>kvindex</code>，是基于 <code>Google</code> 开源的一个 <code>Golang</code> 的 <code>btree</code> 实现的。</p>
-<p class="fireman-p-indent" >另一部分是后端存储。按照它的设计，<code>backend</code> 可以对接多种存储，当前使用的 <code>boltdb</code>。<code>boltdb</code> 是一个单机的支持事务的 <code>kv</code> 存储，<code>etcd</code> 的事务是基于 <code>boltdb</code> 的事务实现的。</p>
-<p class="fireman-p-indent" ><code>etcd</code> 在 <code>boltdb</code> 中存储的 <code>key</code> 是 <code>reversion</code>，<code>value</code> 是 <code>etcd</code> 自己的 <code>key-value</code> 组合，也就是说 <code>etcd</code> 会在 <code>boltdb</code> 中把每个版本都保存下，从而实现了多版本机制。（一个数据存储多份，也就是多份版本。）</p>
-<p class="fireman-p-indent" ><code>reversion</code> 主要由两部分组成，第一部分 <code>main rev</code>，每次事务进行加一，第二部分 <code>sub rev</code>，同一个事务中的每次操作加一。</p>
+<p><code>etcd</code> 源码下有个 <code>tools/etcd-dump-logs</code>，可以将 <code>wal</code> 日志 <code>dump</code> 成文本查看，可以协助分析 <code>Raft</code> 协议。</p>
+<p><code>Raft</code> 协议本身不关心应用数据，也就是 <code>data</code> 中的部分，一致性都通过同步 <code>wal</code> 日志来实现，每个节点将从主节点收到的 <code>data apply</code> 到本地的存储，<code>Raft</code> 只关心日志的同步状态，如果本地存储实现的有 <code>bug</code>，比如没有正确的将 <code>data apply</code> 到本地，也可能会导致数据不一致。</p>
+<h1 id="etcd-使用"><a href="#etcd-使用" class="headerlink" title="etcd 使用"></a>etcd 使用</h1><h2 id="etcd-v3-存储，Watch-以及过期机制"><a href="#etcd-v3-存储，Watch-以及过期机制" class="headerlink" title="etcd v3 存储，Watch 以及过期机制"></a>etcd v3 存储，Watch 以及过期机制</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111162008166.png" alt="image-20240111162008166"></p>
+<h3 id="存储机制"><a href="#存储机制" class="headerlink" title="存储机制"></a>存储机制</h3><p><code>etcd v3 store</code> 分为两部分，一部分是内存中的索引，<code>kvindex</code>，是基于 <code>Google</code> 开源的一个 <code>Golang</code> 的 <code>btree</code> 实现的。</p>
+<p>另一部分是后端存储。按照它的设计，<code>backend</code> 可以对接多种存储，当前使用的 <code>boltdb</code>。<code>boltdb</code> 是一个单机的支持事务的 <code>kv</code> 存储，<code>etcd</code> 的事务是基于 <code>boltdb</code> 的事务实现的。</p>
+<p><code>etcd</code> 在 <code>boltdb</code> 中存储的 <code>key</code> 是 <code>reversion</code>，<code>value</code> 是 <code>etcd</code> 自己的 <code>key-value</code> 组合，也就是说 <code>etcd</code> 会在 <code>boltdb</code> 中把每个版本都保存下，从而实现了多版本机制。（一个数据存储多份，也就是多份版本。）</p>
+<p><code>reversion</code> 主要由两部分组成，第一部分 <code>main rev</code>，每次事务进行加一，第二部分 <code>sub rev</code>，同一个事务中的每次操作加一。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// set </span><br><span class="line"></span><br><span class="line">// 获取详情 json</span><br><span class="line"></span><br><span class="line">// 再次 set</span><br><span class="line"></span><br><span class="line">// 获取详情 json，可以看到 reversion 更新</span><br><span class="line"></span><br><span class="line">// 指定 reversion 版本获取对应版本的值</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><code>etcd</code> 提供了命令和设置选项来控制 <code>compact</code>，同时支持 <code>put</code> 操作的参数来精确控制某个 <code>key</code> 的历史版本数。</p>
-<p class="fireman-p-indent" >内存 <code>kvindex</code> 保存的就是 <code>key</code> 和 <code>reversion</code> 之前的映射关系，用来加速查询。</p>
-<h3 id="etcd-写入数据的流程"><a href="#etcd-写入数据的流程" class="headerlink" title="etcd 写入数据的流程"></a>etcd 写入数据的流程</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112175505965.png" alt="image-20240112175505965"></p>
+<p><code>etcd</code> 提供了命令和设置选项来控制 <code>compact</code>，同时支持 <code>put</code> 操作的参数来精确控制某个 <code>key</code> 的历史版本数。</p>
+<p>内存 <code>kvindex</code> 保存的就是 <code>key</code> 和 <code>reversion</code> 之前的映射关系，用来加速查询。</p>
+<h3 id="etcd-写入数据的流程"><a href="#etcd-写入数据的流程" class="headerlink" title="etcd 写入数据的流程"></a>etcd 写入数据的流程</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112175505965.png" alt="image-20240112175505965"></p>
 <ol>
 <li>客户端写入数据</li>
 <li><code>leader</code> 在预检查中做一系列的检测（配额、限速、鉴权、包大小例如 <code>1.5M</code> 等）</li>
@@ -500,8 +493,8 @@
 <li>在 <code>treeIndex</code> 中会记录对应 <code>key</code> 的当前版本，创建版本，历史版本</li>
 <li>在 <code>BoltDB</code> 里面使用 <code>BTree</code> 存储，存储的 <code>key</code> 是版本信息，<code>value</code> 是 <code>key</code>-<code>value</code> 的键值对，创建版本、修改版本、当前版本</li>
 </ol>
-<p class="fireman-p-indent" >也就是说，在 <code>MVCC</code> 模块中，要读取某个数据的某个版本，先从 <code>treeIndex</code> 中找到 <code>key</code> 对应数据，获取数据版本信息，在从 <code>BoltDB</code> 中通过 <code>key</code> 查对应版本，在 <code>value</code> 中获取值。</p>
-<h3 id="etcd-数据一致性"><a href="#etcd-数据一致性" class="headerlink" title="etcd 数据一致性"></a>etcd 数据一致性</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112181201356.png" alt="image-20240112181201356"></p>
+<p>也就是说，在 <code>MVCC</code> 模块中，要读取某个数据的某个版本，先从 <code>treeIndex</code> 中找到 <code>key</code> 对应数据，获取数据版本信息，在从 <code>BoltDB</code> 中通过 <code>key</code> 查对应版本，在 <code>value</code> 中获取值。</p>
+<h3 id="etcd-数据一致性"><a href="#etcd-数据一致性" class="headerlink" title="etcd 数据一致性"></a>etcd 数据一致性</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112181201356.png" alt="image-20240112181201356"></p>
 <ol>
 <li>集群中有三个 <code>node</code>，<code>Leader</code> 是 <code>A</code>，<code>Follower</code> 是 <code>B</code>、<code>C</code></li>
 <li>日志数据顺序写入，使用 <code>Index</code> 单调递增</li>
@@ -510,124 +503,124 @@
 <li>当出现数据 <code>f</code> 、<code>g</code>，只有 <code>C</code> 没有收到，但是超过半数，也会提交</li>
 <li>最后写入的 <code>h</code>，只有 <code>A</code> 收到，没有超过半数，<code>h</code> 不会提交</li>
 </ol>
-<h3 id="Watch机制"><a href="#Watch机制" class="headerlink" title="Watch机制"></a>Watch机制</h3><p class="fireman-p-indent" ><code>etcd v3</code> 的 <code>watch</code> 机制支持 <code>watch</code> 某个固定的 <code>key</code>，也支持 <code>watch</code> 一个范围（可以用于模拟目录的结构 <code>watch</code>），所以 <code>watchGroup</code> 包含两种 <code>watcher：</code></p>
+<h3 id="Watch机制"><a href="#Watch机制" class="headerlink" title="Watch机制"></a>Watch机制</h3><p><code>etcd v3</code> 的 <code>watch</code> 机制支持 <code>watch</code> 某个固定的 <code>key</code>，也支持 <code>watch</code> 一个范围（可以用于模拟目录的结构 <code>watch</code>），所以 <code>watchGroup</code> 包含两种 <code>watcher：</code></p>
 <ul>
 <li>一种是 <code>key watchers</code>，数据结构是每个 <code>key</code> 对应一组 <code>watcher；</code></li>
 <li>另外一种是 <code>range watchers</code>，数据结构是一个 <code>IntervalTree</code>，方便通过区间查找到对应的 <code>watcher</code></li>
 </ul>
-<p class="fireman-p-indent" >同时，每个 <code>WatchableStore</code> 包含两种 <code>watcherGroup</code>：</p>
+<p>同时，每个 <code>WatchableStore</code> 包含两种 <code>watcherGroup</code>：</p>
 <ul>
 <li>一种是 <code>synced</code>，表示该 <code>group</code> 的 <code>watcher</code> 数据都已经同步完毕，在等待新的变更；</li>
 <li>一种是 <code>unsynced</code>，表示该 <code>group</code> 的 <code>watcher</code> 数据同步落后于当前最新变更，还在追赶；</li>
 </ul>
-<p class="fireman-p-indent" >当 <code>etcd</code> 收到客户端的 <code>watch</code> 请求，如果请求携带了 <code>revision</code> 参数，则比较请求的 <code>revision</code> 和 <code>store</code> 当前的 <code>revision</code>：</p>
+<p>当 <code>etcd</code> 收到客户端的 <code>watch</code> 请求，如果请求携带了 <code>revision</code> 参数，则比较请求的 <code>revision</code> 和 <code>store</code> 当前的 <code>revision</code>：</p>
 <ul>
 <li>如果大于当前 <code>revision</code>，则放入 <code>synced</code> 组中；</li>
 <li>否则放入 <code>unsynced</code> 组；（也就是请求老版本数据，需要从 <code>boltdb</code> 中读取）</li>
 </ul>
-<p class="fireman-p-indent" >同时 <code>etcd</code> 会启动一个后台的 <code>goroutine</code> 持续同步 <code>unsynced</code> 的 <code>watcher</code> ，然后将其迁移到 <code>synced</code> 组。</p>
-<p class="fireman-p-indent" >也就是这种机制下，<code>etcd v3</code> 支持从任意版本开始 <code>watch</code>，没有 <code>v2</code> 的 1000 条历史 <code>event</code> 表限制的问题（当然这是指没有 <code>compact</code> 的情况下）</p>
-<h3 id="watch-练习"><a href="#watch-练习" class="headerlink" title="watch 练习"></a>watch 练习</h3><p class="fireman-p-indent" >查看集群成员状态</p>
+<p>同时 <code>etcd</code> 会启动一个后台的 <code>goroutine</code> 持续同步 <code>unsynced</code> 的 <code>watcher</code> ，然后将其迁移到 <code>synced</code> 组。</p>
+<p>也就是这种机制下，<code>etcd v3</code> 支持从任意版本开始 <code>watch</code>，没有 <code>v2</code> 的 1000 条历史 <code>event</code> 表限制的问题（当然这是指没有 <code>compact</code> 的情况下）</p>
+<h3 id="watch-练习"><a href="#watch-练习" class="headerlink" title="watch 练习"></a>watch 练习</h3><p>查看集群成员状态</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl member list --write-out=table</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >启动新 <code>etcd</code> 集群</p>
+<p>启动新 <code>etcd</code> 集群</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d registry.aliyuncs.com/google_containers/etcd:3.5.0-0 /usr/local/bin/etcd</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >进入 <code>etcd</code> 容器</p>
+<p>进入 <code>etcd</code> 容器</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker ps|grep etcd</span><br><span class="line">docker exec –it &lt;containerid&gt; sh</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >存入数据</p>
+<p>存入数据</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl put x 0</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >读取数据</p>
+<p>读取数据</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">etcdctl get x -w=json</span><br><span class="line">&#123;&quot;header&quot;:&#123;&quot;cluster_id&quot;:14841639068965178418,&quot;member_id&quot;:10276657743932975437,&quot;r</span><br><span class="line">evision&quot;:2,&quot;raft_term&quot;:2&#125;,&quot;kvs&quot;:[&#123;&quot;key&quot;:&quot;eA==&quot;,&quot;create_revision&quot;:2,&quot;mod_revision&quot;:2,&quot;versi</span><br><span class="line">on&quot;:1,&quot;value&quot;:&quot;MA==&quot;&#125;],&quot;count&quot;:1&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >修改值</p>
+<p>修改值</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcdctl put x 1</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >查询最新值</p>
+<p>查询最新值</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">etcdctl get x</span><br><span class="line">x</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >查询历史版本值</p>
+<p>查询历史版本值</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">etcdctl get x --rev=2</span><br><span class="line">x</span><br><span class="line">0</span><br></pre></td></tr></table></figure>
 
-<h2 id="etcd-重要参数"><a href="#etcd-重要参数" class="headerlink" title="etcd 重要参数"></a>etcd 重要参数</h2><p class="fireman-p-indent" >成员相关参数</p>
+<h2 id="etcd-重要参数"><a href="#etcd-重要参数" class="headerlink" title="etcd 重要参数"></a>etcd 重要参数</h2><p>成员相关参数</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">--name &#x27;default&#x27;</span><br><span class="line">	Human-readable name for this member.  指定成员名字</span><br><span class="line">--data-dir &#x27;$&#123;name&#125;.etcd&#x27;</span><br><span class="line">	Path to the data directory.						指定 db 文件存储位置</span><br><span class="line">--listen-peer-urls &#x27;http://localhost:2380&#x27;   </span><br><span class="line">	List of URLs to listen on for peer traffic.			member 之间协商的端口</span><br><span class="line">--listen-client-urls &#x27;http://localhost:2379&#x27;</span><br><span class="line">	List of URLs to listen on for client traffic.		客户端连接的 地址</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >集群相关参数</p>
+<p>集群相关参数</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">--initial-advertise-peer-urls &#x27;http://localhost:2380&#x27;</span><br><span class="line">	List of this member&#x27;s peer URLs to advertise to the rest of the cluster.	</span><br><span class="line">--initial-cluster &#x27;default=http://localhost:2380&#x27;</span><br><span class="line">	Initial cluster configuration for bootstrapping.</span><br><span class="line">--initial-cluster-state &#x27;new&#x27;</span><br><span class="line">	Initial cluster state (&#x27;new&#x27; or &#x27;existing&#x27;).</span><br><span class="line">--initial-cluster-token &#x27;etcd-cluster&#x27;</span><br><span class="line">	Initial cluster token for the etcd cluster during bootstrap.</span><br><span class="line">--advertise-client-urls &#x27;http://localhost:2379&#x27;</span><br><span class="line">	List of this member&#x27;s client URLs to advertise to the public.</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安全相关参数</p>
+<p>安全相关参数</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">--cert-file &#x27;&#x27;</span><br><span class="line">	Path to the client server TLS cert file.</span><br><span class="line">--key-file &#x27;&#x27;</span><br><span class="line">	Path to the client server TLS key file.</span><br><span class="line">--client-crl-file &#x27;&#x27;</span><br><span class="line">	Path to the client certificate revocation list file.</span><br><span class="line">--trusted-ca-file &#x27;&#x27;</span><br><span class="line">	Path to the client server TLS trusted CA cert file.</span><br><span class="line">--peer-cert-file &#x27;&#x27;</span><br><span class="line">	Path to the peer server TLS cert file.</span><br><span class="line">--peer-key-file &#x27;&#x27;</span><br><span class="line">	Path to the peer server TLS key file.</span><br><span class="line">--peer-trusted-ca-file &#x27;&#x27;</span><br><span class="line">	Path to the peer server TLS trusted CA file.</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >客户端操作</p>
+<p>客户端操作</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">etcdctl --endpoints=https://192.168.239.128:2379 \</span><br><span class="line">	--cert /etc/kubernetes/pki/etcd/server.crt \</span><br><span class="line">	--key /etc/kubernetes/pki/etcd/server.key \</span><br><span class="line">	--cacert /etc/kubernetes/pki/etcd/ca.crt member list</span><br></pre></td></tr></table></figure>
 
-<h2 id="灾备"><a href="#灾备" class="headerlink" title="灾备"></a>灾备</h2><p class="fireman-p-indent" >创建 <code>Snapshot</code></p>
+<h2 id="灾备"><a href="#灾备" class="headerlink" title="灾备"></a>灾备</h2><p>创建 <code>Snapshot</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">etcdctl \</span><br><span class="line">	--endpoints https://127.0.0.1:3379 \</span><br><span class="line">	--cert /tmp/etcd-certs/certs/127.0.0.1.pem \</span><br><span class="line">	--key /tmp/etcd-certs/certs/127.0.0.1-key.pem \</span><br><span class="line">	--cacert /tmp/etcd-certs/certs/ca.pem \</span><br><span class="line">	snapshot save snapshot.db</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >恢复数据（可直接通过集群恢复，也可通过单节点恢复之后，再加入其他节点）</p>
+<p>恢复数据（可直接通过集群恢复，也可通过单节点恢复之后，再加入其他节点）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">etcdctl snapshot restore snapshot.db \</span><br><span class="line">	--name infra2 \</span><br><span class="line">	--data-dir=/tmp/etcd/infra2 \</span><br><span class="line">	--initial-cluster infra0=http://127.0.0.1:3380,infra1=http://127.0.0.1:4380,infra2=http://127.0.0.1:5380 \</span><br><span class="line">	--initial-cluster-token etcd-cluster-1 \</span><br><span class="line">	--initial-advertise-peer-urls http://127.0.0.1:5380</span><br></pre></td></tr></table></figure>
 
-<h2 id="容量管理"><a href="#容量管理" class="headerlink" title="容量管理"></a>容量管理</h2><p class="fireman-p-indent" >单个对象不建议超过 <code>1.5M</code></p>
-<p class="fireman-p-indent" >默认容量 <code>2G</code></p>
-<p class="fireman-p-indent" >不建议超过 <code>8G</code> （除了本就存储在内存中的 <code>kvindex</code>，还会将 <code>blotdb</code> 映射到内存里面，加快访问速度。）</p>
-<h2 id="ALarm-Disarm-ALarm"><a href="#ALarm-Disarm-ALarm" class="headerlink" title="ALarm &amp; Disarm ALarm"></a>ALarm &amp; Disarm ALarm</h2><p class="fireman-p-indent" >设置 <code>etcd</code> 存储大小 </p>
+<h2 id="容量管理"><a href="#容量管理" class="headerlink" title="容量管理"></a>容量管理</h2><p>单个对象不建议超过 <code>1.5M</code></p>
+<p>默认容量 <code>2G</code></p>
+<p>不建议超过 <code>8G</code> （除了本就存储在内存中的 <code>kvindex</code>，还会将 <code>blotdb</code> 映射到内存里面，加快访问速度。）</p>
+<h2 id="ALarm-Disarm-ALarm"><a href="#ALarm-Disarm-ALarm" class="headerlink" title="ALarm &amp; Disarm ALarm"></a>ALarm &amp; Disarm ALarm</h2><p>设置 <code>etcd</code> 存储大小 </p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">etcd --quota-backend-bytes=$((16*1024*1024))</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >写爆磁盘</p>
+<p>写爆磁盘</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">while [ 1 ]; do dd if=/dev/urandom bs=1024 count=1024 | ETCDCTL_API=3 etcdctl put key || break; done</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >写满了之后，数据库变成只读。</p>
-<p class="fireman-p-indent" >查看 <code>endpoint</code> 状态</p>
+<p>写满了之后，数据库变成只读。</p>
+<p>查看 <code>endpoint</code> 状态</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ETCDCTL_API=3 etcdctl --write-out=table endpoint status</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >查看 <code>alarm</code> </p>
+<p>查看 <code>alarm</code> </p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ETCDCTL_API=3 etcdctl alarm list</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >清理碎片</p>
+<p>清理碎片</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ETCDCTL_API=3 etcdctl defrag</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >清理 <code>alarm</code></p>
+<p>清理 <code>alarm</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ETCDCTL_API=3 etcdctl alarm disarm</span><br></pre></td></tr></table></figure>
 
 <h2 id="碎片整理"><a href="#碎片整理" class="headerlink" title="碎片整理"></a>碎片整理</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">keep one hour of <span class="built_in">history</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">etcd --auto-compaction-retention=1</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">compact up to revision 3</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">etcdctl compact 3</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">etcdctl defrag</span></span><br><span class="line">Finished defragmenting etcd member[127.0.0.1:2379]</span><br></pre></td></tr></table></figure>
 
-<h2 id="高可用-etcd-解决方案"><a href="#高可用-etcd-解决方案" class="headerlink" title="高可用 etcd 解决方案"></a>高可用 <code>etcd</code> 解决方案</h2><p class="fireman-p-indent" ><code>etcd-operator</code>：<code>coreos</code> 开源的，基于 Kubernetes CRD 完成 <code>etcd</code> 集群配置。<code>Archived</code>：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NvcmVvcy9ldGNkLW9wZXJhdG9yJUVGJUJDJTg4JUU4JUFGJUE1JUU5JUExJUI5JUU3JTlCJUFFJUU0JUI4JThEJUU1JTg2JThEJUU3JUE3JUFGJUU2JTlFJTgxJUU1JUJDJTgwJUU1JThGJTkxJUU2JTg4JTk2JUU3JUJCJUI0JUU2JThBJUE0JUVGJUJDJTg5">https://github.com/coreos/etcd-operator（该项目不再积极开发或维护）<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><code>Etcd statefulset Helm chart: Bitnami</code>（<code>powered by vmware</code>）</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9iaXRuYW1pLmNvbS9zdGFjay9ldGNkL2hlbG0=">https://bitnami.com/stack/etcd/helm<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2JpdG5hbWkvY2hhcnRzL3RyZWUvbWFpbi9iaXRuYW1pL2V0Y2Q=">https://github.com/bitnami/charts/tree/main/bitnami/etcd<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="高可用-etcd-解决方案"><a href="#高可用-etcd-解决方案" class="headerlink" title="高可用 etcd 解决方案"></a>高可用 <code>etcd</code> 解决方案</h2><p><code>etcd-operator</code>：<code>coreos</code> 开源的，基于 Kubernetes CRD 完成 <code>etcd</code> 集群配置。<code>Archived</code>：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NvcmVvcy9ldGNkLW9wZXJhdG9yJUVGJUJDJTg4JUU4JUFGJUE1JUU5JUExJUI5JUU3JTlCJUFFJUU0JUI4JThEJUU1JTg2JThEJUU3JUE3JUFGJUU2JTlFJTgxJUU1JUJDJTgwJUU1JThGJTkxJUU2JTg4JTk2JUU3JUJCJUI0JUU2JThBJUE0JUVGJUJDJTg5">https://github.com/coreos/etcd-operator（该项目不再积极开发或维护）<i class="fa fa-external-link-alt"></i></span></p>
+<p><code>Etcd statefulset Helm chart: Bitnami</code>（<code>powered by vmware</code>）</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9iaXRuYW1pLmNvbS9zdGFjay9ldGNkL2hlbG0=">https://bitnami.com/stack/etcd/helm<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2JpdG5hbWkvY2hhcnRzL3RyZWUvbWFpbi9iaXRuYW1pL2V0Y2Q=">https://github.com/bitnami/charts/tree/main/bitnami/etcd<i class="fa fa-external-link-alt"></i></span></p>
 <h3 id="Etcd-Operator"><a href="#Etcd-Operator" class="headerlink" title="Etcd-Operator"></a>Etcd-Operator</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NvcmVvcy9ldGNkLW9wZXJhdG9y">https://github.com/coreos/etcd-operator<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112141506850.png" alt="image-20240112141506850"></p>
-<h3 id="基于-Bitnami-安装-etcd-高可用集群"><a href="#基于-Bitnami-安装-etcd-高可用集群" class="headerlink" title="基于 Bitnami 安装 etcd 高可用集群"></a>基于 Bitnami 安装 <code>etcd</code> 高可用集群</h3><p class="fireman-p-indent" >安装 <code>heml</code></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2hlbG0vaGVsbS9yZWxlYXNlcw==">https://github.com/helm/helm/releases<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >通过 <code>helm</code> 安装 <code>etcd</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112141506850.png" alt="image-20240112141506850"></p>
+<h3 id="基于-Bitnami-安装-etcd-高可用集群"><a href="#基于-Bitnami-安装-etcd-高可用集群" class="headerlink" title="基于 Bitnami 安装 etcd 高可用集群"></a>基于 Bitnami 安装 <code>etcd</code> 高可用集群</h3><p>安装 <code>heml</code></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2hlbG0vaGVsbS9yZWxlYXNlcw==">https://github.com/helm/helm/releases<i class="fa fa-external-link-alt"></i></span></p>
+<p>通过 <code>helm</code> 安装 <code>etcd</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helm repo add bitnami https://charts.bitnami.com/bitnami</span><br><span class="line">helm install my-release bitnami/etcd</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过客户端与 <code>serve</code> 交互</p>
+<p>通过客户端与 <code>serve</code> 交互</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kubectl run my-release-etcd-client \</span><br><span class="line">	--restart=&#x27;Never&#x27; \</span><br><span class="line">	--image docker.io/bitnami/etcd:3.5.0-debian-10-r94 \</span><br><span class="line">	--env ROOT_PASSWORD=$(kubectl get secret --namespace default my-release-etcd -o jsonpath=&quot;&#123;.data.etcd-root-password&#125;&quot; | base64 --decode) \</span><br><span class="line">	--env ETCDCTL_ENDPOINTS=&quot;my-release-etcd.default.svc.cluster.local:2379&quot; \</span><br><span class="line">	--namespace default \</span><br><span class="line">	--command -- sleep infinity</span><br></pre></td></tr></table></figure>
 
-<h2 id="Kubernetes-使用-etcd"><a href="#Kubernetes-使用-etcd" class="headerlink" title="Kubernetes 使用 etcd"></a>Kubernetes 使用 etcd</h2><p class="fireman-p-indent" ><code>etcd</code> 是 Kubernetes 的后端存储，对于每一个 Kubernetes <code>Object</code>，都有对应的 <code>storage.go</code> 负责对象的存储操作</p>
-<p class="fireman-p-indent" ><code>pkg/registry/core/pod/storage/storage.go</code></p>
-<p class="fireman-p-indent" ><code>API server</code> 启动脚本中指定 <code>etcd</code> <code>servers</code> 集群</p>
+<h2 id="Kubernetes-使用-etcd"><a href="#Kubernetes-使用-etcd" class="headerlink" title="Kubernetes 使用 etcd"></a>Kubernetes 使用 etcd</h2><p><code>etcd</code> 是 Kubernetes 的后端存储，对于每一个 Kubernetes <code>Object</code>，都有对应的 <code>storage.go</code> 负责对象的存储操作</p>
+<p><code>pkg/registry/core/pod/storage/storage.go</code></p>
+<p><code>API server</code> 启动脚本中指定 <code>etcd</code> <code>servers</code> 集群</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">spec:</span><br><span class="line">	containers:</span><br><span class="line">	- command:</span><br><span class="line">		- kube-apiserver</span><br><span class="line">		- --advertise-address=192.168.34.2</span><br><span class="line">		- --enable-bootstrap-token-auth=true</span><br><span class="line">		- --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt</span><br><span class="line">		- --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt</span><br><span class="line">		- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key</span><br><span class="line">		- --etcd-servers=https://127.0.0.1:2379</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >早期 <code>API server</code> 对 <code>etcd</code> 做简单的 <code>Ping</code> <code>check</code>，现在已经改为真实的 <code>etcd api call</code>。</p>
+<p>早期 <code>API server</code> 对 <code>etcd</code> 做简单的 <code>Ping</code> <code>check</code>，现在已经改为真实的 <code>etcd api call</code>。</p>
 <h2 id="Kubernetes-对象在etcd-中的存储路径"><a href="#Kubernetes-对象在etcd-中的存储路径" class="headerlink" title="Kubernetes 对象在etcd 中的存储路径"></a>Kubernetes 对象在etcd 中的存储路径</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ks exec -it etcd -cadminsh</span><br><span class="line">ETCDCTL_API=3</span><br><span class="line">alias ectl =&#x27;etcdctl--endpoints https://127.0.0.1:2379 \</span><br><span class="line">	--cacert /etc/kubernetes/pki/etcd/ca.crt\</span><br><span class="line">	--cert /etc/kubernetes/pki/etcd/ server.crt\</span><br><span class="line">	--key /etc/kubernetes/pki/etcd/server.key&#x27;</span><br><span class="line">ectl get --prefix --keys-only \</span><br><span class="line">	/registry/namespaces/calico-apiserver \</span><br><span class="line">	/registry/networkpolicies/calico-apiserver/allow-apiserver \</span><br><span class="line">	/registry/operator.tigera.io/tigerastatuses/apiserver \</span><br><span class="line">	/registry/pods/calico-apiserver/calico-apiserver-77dffffcdf-g2tcx \</span><br><span class="line">	/registry/pods/default/toolbox-68f79dd5f8-4664n</span><br></pre></td></tr></table></figure>
 
-<h2 id="etcd-在集群中所处的位置"><a href="#etcd-在集群中所处的位置" class="headerlink" title="etcd 在集群中所处的位置"></a>etcd 在集群中所处的位置</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142212166.png" alt="image-20240112142212166"></p>
+<h2 id="etcd-在集群中所处的位置"><a href="#etcd-在集群中所处的位置" class="headerlink" title="etcd 在集群中所处的位置"></a>etcd 在集群中所处的位置</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142212166.png" alt="image-20240112142212166"></p>
 <p><code>API server</code> 启动脚本中指定 <code>etcd servers</code> 集群</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/kube-apiserver \</span><br><span class="line">	--etcd_servers=https://localhost:4001 \</span><br><span class="line">	--etcd-cafile=/etc/ssl/kubernetes/ca.crt--storage-backend=etcd3 \</span><br><span class="line">	--etcd-servers-overrides=/events#https://localhost:4002</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >将变动频繁的（例如 <code>events</code>）的数据使用  <code>overrides</code> 指定到另外一个 <code>etcd</code> 集群。</p>
-<h2 id="etcd-集群"><a href="#etcd-集群" class="headerlink" title="etcd 集群"></a>etcd 集群</h2><h3 id="堆叠式-etcd-集群的高可用拓扑"><a href="#堆叠式-etcd-集群的高可用拓扑" class="headerlink" title="堆叠式 etcd 集群的高可用拓扑"></a>堆叠式 <code>etcd</code> 集群的高可用拓扑</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142419159.png" alt="image-20240112142419159"></p>
-<p class="fireman-p-indent" >这种拓扑将相同节点上的控制平面和 <code>etcd</code> 成员耦合在一起。</p>
-<p class="fireman-p-indent" >优点在于建立起来非常容易，并且对副本的管理也更容易。但是，堆叠式存在耦合失败的风险。</p>
-<p class="fireman-p-indent" >如果一个节点发生故障，则 <code>etcd</code> 成员和控制平面实例都会丢失，并且集群冗余也会收到损害。可以通过添加更多控制平面节点来减轻这种风险。因此为实现集群高可用应该至少运行三个堆叠的 <code>Master</code> 节点。</p>
-<h3 id="外部-etcd-集群的高可用拓扑"><a href="#外部-etcd-集群的高可用拓扑" class="headerlink" title="外部 etcd 集群的高可用拓扑"></a>外部 <code>etcd</code> 集群的高可用拓扑</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142636405.png" alt="image-20240112142636405"></p>
-<p class="fireman-p-indent" >该拓扑将控制平面和 <code>etcd</code> 成员解耦。如果丢失一个 <code>Master</code> 节点，对 <code>etcd</code> 成员的影响较小，并且不会像堆叠式拓扑那样对集群冗余产生太大影响。</p>
-<p class="fireman-p-indent" >但是，此拓扑所需的主机数量是堆叠式拓扑的两倍。具有此拓扑的集群至少需要三个主机用于控制平面节点，三个主机用于 <code>etcd</code> 集群。</p>
-<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><p class="fireman-p-indent" >多少个 <code>peer</code> 最合适？</p>
+<p>将变动频繁的（例如 <code>events</code>）的数据使用  <code>overrides</code> 指定到另外一个 <code>etcd</code> 集群。</p>
+<h2 id="etcd-集群"><a href="#etcd-集群" class="headerlink" title="etcd 集群"></a>etcd 集群</h2><h3 id="堆叠式-etcd-集群的高可用拓扑"><a href="#堆叠式-etcd-集群的高可用拓扑" class="headerlink" title="堆叠式 etcd 集群的高可用拓扑"></a>堆叠式 <code>etcd</code> 集群的高可用拓扑</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142419159.png" alt="image-20240112142419159"></p>
+<p>这种拓扑将相同节点上的控制平面和 <code>etcd</code> 成员耦合在一起。</p>
+<p>优点在于建立起来非常容易，并且对副本的管理也更容易。但是，堆叠式存在耦合失败的风险。</p>
+<p>如果一个节点发生故障，则 <code>etcd</code> 成员和控制平面实例都会丢失，并且集群冗余也会收到损害。可以通过添加更多控制平面节点来减轻这种风险。因此为实现集群高可用应该至少运行三个堆叠的 <code>Master</code> 节点。</p>
+<h3 id="外部-etcd-集群的高可用拓扑"><a href="#外部-etcd-集群的高可用拓扑" class="headerlink" title="外部 etcd 集群的高可用拓扑"></a>外部 <code>etcd</code> 集群的高可用拓扑</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142636405.png" alt="image-20240112142636405"></p>
+<p>该拓扑将控制平面和 <code>etcd</code> 成员解耦。如果丢失一个 <code>Master</code> 节点，对 <code>etcd</code> 成员的影响较小，并且不会像堆叠式拓扑那样对集群冗余产生太大影响。</p>
+<p>但是，此拓扑所需的主机数量是堆叠式拓扑的两倍。具有此拓扑的集群至少需要三个主机用于控制平面节点，三个主机用于 <code>etcd</code> 集群。</p>
+<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><p>多少个 <code>peer</code> 最合适？</p>
 <ul>
 <li>1个？3个？5个？</li>
 <li>保证高可用是首要目标，节点过多也会影响性能；但是3个节点时，一个节点故障，需要运维立马介入，而5个风险更小。</li>
@@ -639,7 +632,7 @@
 </li>
 <li>需要动态 <code>flex up</code> 吗？</li>
 </ul>
-<p class="fireman-p-indent" >保证 <code>apiserver</code> 和 <code>etcd</code> 之间的高效性通讯</p>
+<p>保证 <code>apiserver</code> 和 <code>etcd</code> 之间的高效性通讯</p>
 <ul>
 <li><p><code>apiserver</code> 和 <code>etcd</code> 部署在同一节点</p>
 </li>
@@ -659,7 +652,7 @@
 </li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >本地 <code>vs</code> 远程？</p>
+<li><p>本地 <code>vs</code> 远程？</p>
 <ul>
 <li><code>Remote Storage</code><ul>
 <li>优势是假设永远可用，现实真实如此吗？</li>
@@ -673,7 +666,7 @@
 </li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >多少空间？</p>
+<li><p>多少空间？</p>
 <ul>
 <li><p>与集群规模相关，思考：为什么每个 <code>member</code> 的 <code>DB size</code> 不一致？</p>
 <p>包含的碎片大小不一样，<code>defrag</code> 和 <code>snap</code>。</p>
@@ -682,7 +675,7 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" >安全性</p>
+<p>安全性</p>
 <ul>
 <li><p><code>peer</code> 和 <code>peer</code> 之间的通讯加密</p>
 <ul>
@@ -692,7 +685,7 @@
 <li>运营复杂度增加</li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" >数据加密</p>
+<li><p>数据加密</p>
 <ul>
 <li><p>是否有需求</p>
 </li>
@@ -704,14 +697,14 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" >事件分离</p>
+<p>事件分离</p>
 <ul>
 <li><p>对于大规模集群，大量的事件会对 <code>etcd</code> 造成压力</p>
 </li>
 <li><p><code>API server</code> 启动脚本中指定 <code>etcd servers</code> 集群</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/kube-apiserver \</span><br><span class="line">	--etcd_servers=https://localhost:4001 \</span><br><span class="line">	--etcd-cafile=/etc/ssl/kubernetes/ca.crt--storage-backend=etcd3 \</span><br><span class="line">	--etcd-servers-overrides=/events#https://localhost:4002</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p class="fireman-p-indent" >如何监控？</p>
+<p>如何监控？</p>
 <h4 id="减少网络延迟"><a href="#减少网络延迟" class="headerlink" title="减少网络延迟"></a>减少网络延迟</h4><ul>
 <li><p>数据中心内的 <code>RTT</code> 大概是数毫秒，国内的典型 <code>RTT</code> 约为 <code>50ms</code>，两大洲之间的 <code>RTT</code> 可能慢至 <code>400ms</code>。因此建议 <code>etcd</code> 集群尽量同地域部署。（外加异地备份）</p>
 </li>
@@ -721,25 +714,25 @@
 <li><p>可以在节点上通过流量控制工具（<code>Traffic Control</code>）提高 <code>etcd</code> 成员之间发送数据的优先级来避免。</p>
 </li>
 </ul>
-<h4 id="减少磁盘-I-O-延迟"><a href="#减少磁盘-I-O-延迟" class="headerlink" title="减少磁盘 I&#x2F;O 延迟"></a>减少磁盘 I&#x2F;O 延迟</h4><p class="fireman-p-indent" >对于磁盘延迟，典型的旋转磁盘写延迟约为 <code>10ms</code>。对于 SSD（<code>Solid State Drivers</code>，固态硬盘），延迟通常低于 <code>1ms</code>。HDD（<code>Hard Disk Drive</code>，硬盘驱动器）或者网盘在大量数据读写操作的情况下延迟会不稳定。因此强烈建议使用 SSD。</p>
-<p class="fireman-p-indent" >同时为了降低其他应用程序的 <code>I/O</code> 操作对 <code>etcd</code> 的干扰，建议将 <code>etcd</code> 的数据存放在单独的磁盘内。也可以将不同类型的对象存储在不同的若干个 <code>etcd</code> 集群中，比如将频繁变更的 <code>event</code> 对象从主 <code>etcd</code> 集群中分离出来，以保证主集群的高性能。在 <code>APIServer</code> 处这是可以通过参数配置的。这些 <code>etcd</code> 集群最好也分别能有一块单独的存储磁盘。</p>
-<p class="fireman-p-indent" >如果不可避免地，<code>etcd</code> 和其他的业务共享存储磁盘，那么就需要通过下面 <code>ionice</code> 命令对 <code>etcd</code> 服务设置更高的磁盘 <code>I/O</code> 优先级，尽可能避免其他进程的影响。</p>
+<h4 id="减少磁盘-I-O-延迟"><a href="#减少磁盘-I-O-延迟" class="headerlink" title="减少磁盘 I&#x2F;O 延迟"></a>减少磁盘 I&#x2F;O 延迟</h4><p>对于磁盘延迟，典型的旋转磁盘写延迟约为 <code>10ms</code>。对于 SSD（<code>Solid State Drivers</code>，固态硬盘），延迟通常低于 <code>1ms</code>。HDD（<code>Hard Disk Drive</code>，硬盘驱动器）或者网盘在大量数据读写操作的情况下延迟会不稳定。因此强烈建议使用 SSD。</p>
+<p>同时为了降低其他应用程序的 <code>I/O</code> 操作对 <code>etcd</code> 的干扰，建议将 <code>etcd</code> 的数据存放在单独的磁盘内。也可以将不同类型的对象存储在不同的若干个 <code>etcd</code> 集群中，比如将频繁变更的 <code>event</code> 对象从主 <code>etcd</code> 集群中分离出来，以保证主集群的高性能。在 <code>APIServer</code> 处这是可以通过参数配置的。这些 <code>etcd</code> 集群最好也分别能有一块单独的存储磁盘。</p>
+<p>如果不可避免地，<code>etcd</code> 和其他的业务共享存储磁盘，那么就需要通过下面 <code>ionice</code> 命令对 <code>etcd</code> 服务设置更高的磁盘 <code>I/O</code> 优先级，尽可能避免其他进程的影响。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ionice -c2 -n0 -p &#x27;pgrep etcd&#x27;</span><br></pre></td></tr></table></figure>
 
-<h4 id="保持合理的日志文件大小"><a href="#保持合理的日志文件大小" class="headerlink" title="保持合理的日志文件大小"></a>保持合理的日志文件大小</h4><p class="fireman-p-indent" ><code>etcd</code> 以日志的形式保存数据，无论是数据创建还是修改，它都将操作追加到日志文件，因此日志文件大小会随着数据修改次数而线性增长。</p>
-<p class="fireman-p-indent" >当 Kubernetes 集群规模较大时，其对 <code>etcd</code> 集群中的数据更加也会很频繁，集群日志文件会迅速增长。</p>
-<p class="fireman-p-indent" >为了有效降低日志文件大小，<code>etcd</code> 会以固定周期创建快照保存系统的当前状态，兵移除旧日志文件。另外，当修改次数达到一定的数量（默认是 10000，通过参数 <code>--snapshot-count</code> 指定），<code>etcd</code> 也会创建快照文件。</p>
-<p class="fireman-p-indent" >如果 <code>etcd</code> 的内存使用和磁盘使用过高，可以先分析是否数据写入频度过大导致快照频度过高，确认后可通过调低快照触发的阈值来降低其对内存和磁盘的使用。</p>
-<h3 id="设置合理的存储配额"><a href="#设置合理的存储配额" class="headerlink" title="设置合理的存储配额"></a>设置合理的存储配额</h3><p class="fireman-p-indent" >存储空间的配额用于控制 <code>etcd</code> 数据空间的大小。合理的存储配额可保证集群操作的可靠性。</p>
-<p class="fireman-p-indent" >如果没有存储配额，也就是 <code>etcd</code> 可以利用整个磁盘空间，<code>etcd</code> 的性能会因为存储空间的持续增长而严重下降，甚至有耗完集群磁盘空间导致不可预测集群行为的风险。</p>
-<p class="fireman-p-indent" >如果设置的存储配额太小，一旦其中一个节点的后台数据库的存储空间超出了存储配额，<code>etcd</code> 就会触发集群范围的告警，并将集群置于只接受读和删除请求的维护模式。</p>
-<p class="fireman-p-indent" >只有在释放足够的空间、消除后端数据库的碎片和清除存储配额告警之后，集群才能恢复正常操作。</p>
-<h3 id="自动压缩历史版本"><a href="#自动压缩历史版本" class="headerlink" title="自动压缩历史版本"></a>自动压缩历史版本</h3><p class="fireman-p-indent" ><code>etcd</code> 会为每个键都保存了历史版本。为了避免出现性能问题或存储空间消耗完导致写不进去的问题，这些历史版本需要进行周期性地压缩。</p>
-<p class="fireman-p-indent" >压缩历史版本就是丢弃该键给定版本之前的所有信息，节省出来的空间可以用于后续的写操作。</p>
-<p class="fireman-p-indent" ><code>etcd</code> 支持自动压缩历史版本，在启动参数中指定参数 <code>--auto-compaction</code>，其值以小时为单位。也就是 <code>etcd</code> 会自动压缩该值设置的时间窗口之前的历史版本。</p>
-<h3 id="定期消除碎片化"><a href="#定期消除碎片化" class="headerlink" title="定期消除碎片化"></a>定期消除碎片化</h3><p class="fireman-p-indent" >压缩历史版本，相当于离散的抹去 <code>etcd</code> 存储空间某些数据，<code>etcd</code> 存储空间中将会出现碎片。</p>
-<p class="fireman-p-indent" >这些碎片无法被后台存储使用，却仍占据节点的存储空间。</p>
-<p class="fireman-p-indent" >因此定期消除存储碎片，将释放碎片化的存储空间，重新调整整个存储空间。</p>
+<h4 id="保持合理的日志文件大小"><a href="#保持合理的日志文件大小" class="headerlink" title="保持合理的日志文件大小"></a>保持合理的日志文件大小</h4><p><code>etcd</code> 以日志的形式保存数据，无论是数据创建还是修改，它都将操作追加到日志文件，因此日志文件大小会随着数据修改次数而线性增长。</p>
+<p>当 Kubernetes 集群规模较大时，其对 <code>etcd</code> 集群中的数据更加也会很频繁，集群日志文件会迅速增长。</p>
+<p>为了有效降低日志文件大小，<code>etcd</code> 会以固定周期创建快照保存系统的当前状态，兵移除旧日志文件。另外，当修改次数达到一定的数量（默认是 10000，通过参数 <code>--snapshot-count</code> 指定），<code>etcd</code> 也会创建快照文件。</p>
+<p>如果 <code>etcd</code> 的内存使用和磁盘使用过高，可以先分析是否数据写入频度过大导致快照频度过高，确认后可通过调低快照触发的阈值来降低其对内存和磁盘的使用。</p>
+<h3 id="设置合理的存储配额"><a href="#设置合理的存储配额" class="headerlink" title="设置合理的存储配额"></a>设置合理的存储配额</h3><p>存储空间的配额用于控制 <code>etcd</code> 数据空间的大小。合理的存储配额可保证集群操作的可靠性。</p>
+<p>如果没有存储配额，也就是 <code>etcd</code> 可以利用整个磁盘空间，<code>etcd</code> 的性能会因为存储空间的持续增长而严重下降，甚至有耗完集群磁盘空间导致不可预测集群行为的风险。</p>
+<p>如果设置的存储配额太小，一旦其中一个节点的后台数据库的存储空间超出了存储配额，<code>etcd</code> 就会触发集群范围的告警，并将集群置于只接受读和删除请求的维护模式。</p>
+<p>只有在释放足够的空间、消除后端数据库的碎片和清除存储配额告警之后，集群才能恢复正常操作。</p>
+<h3 id="自动压缩历史版本"><a href="#自动压缩历史版本" class="headerlink" title="自动压缩历史版本"></a>自动压缩历史版本</h3><p><code>etcd</code> 会为每个键都保存了历史版本。为了避免出现性能问题或存储空间消耗完导致写不进去的问题，这些历史版本需要进行周期性地压缩。</p>
+<p>压缩历史版本就是丢弃该键给定版本之前的所有信息，节省出来的空间可以用于后续的写操作。</p>
+<p><code>etcd</code> 支持自动压缩历史版本，在启动参数中指定参数 <code>--auto-compaction</code>，其值以小时为单位。也就是 <code>etcd</code> 会自动压缩该值设置的时间窗口之前的历史版本。</p>
+<h3 id="定期消除碎片化"><a href="#定期消除碎片化" class="headerlink" title="定期消除碎片化"></a>定期消除碎片化</h3><p>压缩历史版本，相当于离散的抹去 <code>etcd</code> 存储空间某些数据，<code>etcd</code> 存储空间中将会出现碎片。</p>
+<p>这些碎片无法被后台存储使用，却仍占据节点的存储空间。</p>
+<p>因此定期消除存储碎片，将释放碎片化的存储空间，重新调整整个存储空间。</p>
 <h3 id="备份方案"><a href="#备份方案" class="headerlink" title="备份方案"></a>备份方案</h3><ul>
 <li><p><code>etcd</code> 备份：备份完整的集群信息，灾难恢复</p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NvcmVvcy9ldGNkLW9wZXJhdG9y">https://github.com/coreos/etcd-operator<i class="fa fa-external-link-alt"></i></span></p>
@@ -749,7 +742,7 @@
 <li><p>备份 Kubernetes event</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >备份频度</p>
+<p>备份频度</p>
 <ul>
 <li>时间间隔太长：<ul>
 <li>能否接受 <code>user data lost</code>？</li>
@@ -766,42 +759,42 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" >如何保证备份的时效性，同时防止磁盘爆掉？</p>
+<p>如何保证备份的时效性，同时防止磁盘爆掉？</p>
 <ul>
 <li><code>Auto defrag</code>？</li>
 </ul>
-<h3 id="优化运行参数"><a href="#优化运行参数" class="headerlink" title="优化运行参数"></a>优化运行参数</h3><p class="fireman-p-indent" >当网络延迟和磁盘延迟固定的情况下，可以优化 <code>etcd</code> 运行参数来提升集群的工作效率。</p>
-<p class="fireman-p-indent" ><code>etcd</code> 基于 <code>Raft</code> 协议进行 <code>Leader</code> 选举，当 <code>Leader</code> 选定以后才能开始数据读写操作，因此频繁的 <code>Leader</code> 选举会导致数据读写性能显著降低。可以通过调整心跳周期（<code>Heartbeat Interval</code>）和选举超时时间（<code>Election Timeout</code>），来降低 <code>Leader</code> 选举的可能性。</p>
-<p class="fireman-p-indent" >心跳周期是控制 <code>Leader</code> 以何种频度向 <code>Follower</code> 发起心跳通知。心跳通知处表明 <code>Leader</code> 活跃状态之外，还带有待写入数据信息，<code>Follower</code> 依据心跳信息进行数据写入，默认心跳周期是 <code>100ms</code>。选举超时时间定义了当 <code>Follower</code> 多久没有收到 <code>Leader</code> 心跳，则重新发起选举，该参数的默认设置是 <code>1000ms</code>。</p>
-<p class="fireman-p-indent" >如果 <code>etcd</code> 集群的不同实例是部署在延迟较低的相同数据中心，通常使用默认配置即可。</p>
-<p class="fireman-p-indent" >如果不同实例部署在多数据中心或者网络延迟较高的集群环境，则需要对心跳周期和选举超时时间进行调整。建议心跳周期参数推荐设置为接近 <code>etcd</code> 多个成员之间平均数据往返周期的最大值，一般是平均 <code>RTT</code> 的 <code>0.55</code> - <code>1.5</code> 倍。</p>
-<p class="fireman-p-indent" >如果心跳周期设置得过低，<code>etcd</code> 会发送很多不必要的心跳信息，从而增加 <code>CPU</code> 和网络的负担。 如果设置得过高，则会导致选举频繁超时。</p>
-<p class="fireman-p-indent" >选举超时时间也需要根据 <code>etcd</code> 成员之间的平均 <code>RTT</code> 时间来设置。选举超时时间最少设置为 <code>etcd</code> 成员之间 <code>RTT</code> 时间的 <code>10</code> 倍，以便应对网络波动。</p>
-<p class="fireman-p-indent" >心跳间隔和选举超时时间的值必须对同一个 <code>etcd</code> 集群的所有节点都生效，如果各个节点配置不同，就会导致集群成员之间协商结果不可预知而不稳定。</p>
-<h3 id="etcd-备份存储"><a href="#etcd-备份存储" class="headerlink" title="etcd 备份存储"></a>etcd 备份存储</h3><p class="fireman-p-indent" ><code>etcd</code> 的默认工作目录下会生成两个子目录：<code>wal</code> 和 <code>snap</code>。</p>
+<h3 id="优化运行参数"><a href="#优化运行参数" class="headerlink" title="优化运行参数"></a>优化运行参数</h3><p>当网络延迟和磁盘延迟固定的情况下，可以优化 <code>etcd</code> 运行参数来提升集群的工作效率。</p>
+<p><code>etcd</code> 基于 <code>Raft</code> 协议进行 <code>Leader</code> 选举，当 <code>Leader</code> 选定以后才能开始数据读写操作，因此频繁的 <code>Leader</code> 选举会导致数据读写性能显著降低。可以通过调整心跳周期（<code>Heartbeat Interval</code>）和选举超时时间（<code>Election Timeout</code>），来降低 <code>Leader</code> 选举的可能性。</p>
+<p>心跳周期是控制 <code>Leader</code> 以何种频度向 <code>Follower</code> 发起心跳通知。心跳通知处表明 <code>Leader</code> 活跃状态之外，还带有待写入数据信息，<code>Follower</code> 依据心跳信息进行数据写入，默认心跳周期是 <code>100ms</code>。选举超时时间定义了当 <code>Follower</code> 多久没有收到 <code>Leader</code> 心跳，则重新发起选举，该参数的默认设置是 <code>1000ms</code>。</p>
+<p>如果 <code>etcd</code> 集群的不同实例是部署在延迟较低的相同数据中心，通常使用默认配置即可。</p>
+<p>如果不同实例部署在多数据中心或者网络延迟较高的集群环境，则需要对心跳周期和选举超时时间进行调整。建议心跳周期参数推荐设置为接近 <code>etcd</code> 多个成员之间平均数据往返周期的最大值，一般是平均 <code>RTT</code> 的 <code>0.55</code> - <code>1.5</code> 倍。</p>
+<p>如果心跳周期设置得过低，<code>etcd</code> 会发送很多不必要的心跳信息，从而增加 <code>CPU</code> 和网络的负担。 如果设置得过高，则会导致选举频繁超时。</p>
+<p>选举超时时间也需要根据 <code>etcd</code> 成员之间的平均 <code>RTT</code> 时间来设置。选举超时时间最少设置为 <code>etcd</code> 成员之间 <code>RTT</code> 时间的 <code>10</code> 倍，以便应对网络波动。</p>
+<p>心跳间隔和选举超时时间的值必须对同一个 <code>etcd</code> 集群的所有节点都生效，如果各个节点配置不同，就会导致集群成员之间协商结果不可预知而不稳定。</p>
+<h3 id="etcd-备份存储"><a href="#etcd-备份存储" class="headerlink" title="etcd 备份存储"></a>etcd 备份存储</h3><p><code>etcd</code> 的默认工作目录下会生成两个子目录：<code>wal</code> 和 <code>snap</code>。</p>
 <ul>
 <li><code>wal</code> 是用于存放预写式日志，其最大的作用是记录整个数据变化的全部历程。所有数据的修改在提交前，都要先写入 <code>wal</code> 中。</li>
 <li><code>snap</code> 是用于存放快照数据。为防止 <code>wal</code> 文件过多，<code>etcd</code> 会定期（当 <code>wal</code> 中数据超过 10000 条记录时，由参数 <code>--snapshot-count</code> 设置）创建快照。当快照生成后，<code>wal</code> 中数据就可以被删除了。</li>
 </ul>
-<p class="fireman-p-indent" >如果数据遭到破坏或错误修改需要回滚到之前某个状态时，方法就有两个：</p>
+<p>如果数据遭到破坏或错误修改需要回滚到之前某个状态时，方法就有两个：</p>
 <ul>
 <li>一是从快照中恢复数据主体，但是未被拍入快照的数据会丢失</li>
 <li>二是执行所有 <code>wal</code> 中记录的修改操作，从最原始的数据恢复到数据损坏之前的状态，但恢复的时间较长</li>
 </ul>
-<h3 id="备份方案实践"><a href="#备份方案实践" class="headerlink" title="备份方案实践"></a>备份方案实践</h3><p class="fireman-p-indent" >官方推荐 <code>etcd</code> 集群的备份方式是定期创建快照。</p>
+<h3 id="备份方案实践"><a href="#备份方案实践" class="headerlink" title="备份方案实践"></a>备份方案实践</h3><p>官方推荐 <code>etcd</code> 集群的备份方式是定期创建快照。</p>
 <ul>
 <li>和 <code>etcd</code> 内部定期创建快照的目的不同，该备份方式依赖外部程序定期创建快照，并将快照上传到网络存储设备以实现 <code>etcd</code> 数据的冗余备份。</li>
 <li>上传到网络设备的数据，都应进行了加密。</li>
 <li>即使当所有 <code>etcd</code> 实例都丢失了数据，也能允许 <code>etcd</code> 集群从一个已知的良好状态的时间点在任一地方进行恢复。</li>
 </ul>
-<p class="fireman-p-indent" >根据集群对 <code>etcd</code> 备份粒度的要求，可适当调节备份的周期。在生产环境中实测，拍摄快照通常会影响集群当时的性能，因此不建议频繁创建快照。但是备份周期太长，就可能导致大量数据的丢失。</p>
-<p class="fireman-p-indent" >这里可以使用增量备份的方式。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112151247242.png" alt="image-20240112151247242"></p>
-<p class="fireman-p-indent" >备份程序每 <code>30</code> 分钟触发一次快照的拍摄。</p>
-<p class="fireman-p-indent" >紧接着它从快照结束的版本（<code>Revision</code>）开始，监听 <code>etcd</code> 集群的事件，并每 <code>10</code> 秒钟将事件保存到文件中，并将快照和事件文件上传到网络存储设备中。</p>
-<p class="fireman-p-indent" >30分钟的快照周期对集群性能影响甚微。当大灾难来临时，也至多丢失 <code>10s</code> 的数据。</p>
-<p class="fireman-p-indent" >至于数据修复，首先把数据从网络设备存储中下载下来，然后从快照中恢复大块数据，并在此基础上依次应用存储的所有事件。这样就可以将集群数据恢复到灾难发生前。</p>
-<h2 id="增强版-backup-方案"><a href="#增强版-backup-方案" class="headerlink" title="增强版 backup 方案"></a>增强版 backup 方案</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112151539027.png" alt="image-20240112151539027"></p>
+<p>根据集群对 <code>etcd</code> 备份粒度的要求，可适当调节备份的周期。在生产环境中实测，拍摄快照通常会影响集群当时的性能，因此不建议频繁创建快照。但是备份周期太长，就可能导致大量数据的丢失。</p>
+<p>这里可以使用增量备份的方式。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112151247242.png" alt="image-20240112151247242"></p>
+<p>备份程序每 <code>30</code> 分钟触发一次快照的拍摄。</p>
+<p>紧接着它从快照结束的版本（<code>Revision</code>）开始，监听 <code>etcd</code> 集群的事件，并每 <code>10</code> 秒钟将事件保存到文件中，并将快照和事件文件上传到网络存储设备中。</p>
+<p>30分钟的快照周期对集群性能影响甚微。当大灾难来临时，也至多丢失 <code>10s</code> 的数据。</p>
+<p>至于数据修复，首先把数据从网络设备存储中下载下来，然后从快照中恢复大块数据，并在此基础上依次应用存储的所有事件。这样就可以将集群数据恢复到灾难发生前。</p>
+<h2 id="增强版-backup-方案"><a href="#增强版-backup-方案" class="headerlink" title="增强版 backup 方案"></a>增强版 backup 方案</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112151539027.png" alt="image-20240112151539027"></p>
 <h2 id="etcd-数据加密"><a href="#etcd-数据加密" class="headerlink" title="etcd 数据加密"></a>etcd 数据加密</h2><p><span class="exturl" data-url="aHR0cHM6Ly9rdWJlcm5ldGVzLmlvL2RvY3MvdGFza3MvYWRtaW5pc3Rlci1jbHVzdGVyL2VuY3J5cHQtZGF0YS8=">https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apiserver.config.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">EncryptionConfiguration</span></span><br><span class="line"><span class="attr">resources:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">resources:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">secrets</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">configmaps</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">pandas.awesome.bears.example</span></span><br><span class="line">    <span class="attr">providers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">aescbc:</span></span><br><span class="line">          <span class="attr">keys:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">key1</span></span><br><span class="line">              <span class="comment"># See the following text for more details about the secret value</span></span><br><span class="line">              <span class="attr">secret:</span> <span class="string">&lt;BASE</span> <span class="number">64</span> <span class="string">ENCODED</span> <span class="string">SECRET&gt;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">identity:</span> &#123;&#125; <span class="comment"># this fallback allows reading unencrypted secrets;</span></span><br><span class="line">                     <span class="comment"># for example, during initial migration</span></span><br></pre></td></tr></table></figure>
 
@@ -811,7 +804,7 @@
 <li><p><code>API server</code> 启动脚本中指定 <code>etcd servers</code> 集群</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/kube-apiserver \</span><br><span class="line">	--etcd-servers=https://localhost:4001 \</span><br><span class="line">	--etcd-cafile=/etc/ssl/kubernetes/ca.crt \</span><br><span class="line">	--storage-backend=etcd3 \</span><br><span class="line">	--etcd-servers-overrides=/events#https://localhost:4002</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="查询-APIServer"><a href="#查询-APIServer" class="headerlink" title="查询 APIServer"></a>查询 APIServer</h2><p class="fireman-p-indent" >返回某 <code>namespace</code> 中的所有 <code>Pod</code></p>
+<h2 id="查询-APIServer"><a href="#查询-APIServer" class="headerlink" title="查询 APIServer"></a>查询 APIServer</h2><p>返回某 <code>namespace</code> 中的所有 <code>Pod</code></p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /api/v1/namespaces/test/pods</span><br><span class="line">---</span><br><span class="line"><span class="number">200</span> OK</span><br><span class="line">Content-Type<span class="punctuation">:</span> application/json</span><br><span class="line"></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;PodList&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;apiVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v1&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;resourceVersion&quot;</span><span class="punctuation">:</span><span class="string">&quot;10245&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;items&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>...<span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="从-10245-版本开始，监听所有对象变化"><a href="#从-10245-版本开始，监听所有对象变化" class="headerlink" title="从 10245 版本开始，监听所有对象变化"></a>从 10245 版本开始，监听所有对象变化</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET /api/v1/namespaces/test/pods?watch=<span class="number">1</span>&amp;resourceVersion=<span class="number">10245</span></span><br><span class="line">---</span><br><span class="line"><span class="number">200</span> OK</span><br><span class="line">Transfer-Encoding<span class="punctuation">:</span> chunked</span><br><span class="line">Content-Type<span class="punctuation">:</span> application/json</span><br><span class="line"></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ADDED&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Pod&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;apiVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v1&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;resourceVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;10596&quot;</span><span class="punctuation">,</span> ...<span class="punctuation">&#125;</span><span class="punctuation">,</span> ...<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;MODIFIED&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Pod&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;apiVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v1&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;resourceVersion&quot;</span><span class="punctuation">:</span> <span class="string">&quot;11020&quot;</span><span class="punctuation">,</span> ...<span class="punctuation">&#125;</span><span class="punctuation">,</span> ...<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
@@ -826,12 +819,12 @@
 <li>对象的最后修改 <code>resourceVersion</code></li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" ><code>List</code> 对象的 <code>resourceVersion</code></p>
+<li><p><code>List</code> 对象的 <code>resourceVersion</code></p>
 <ul>
 <li>生成 <code>list response</code> 时的 <code>resourceVersion</code></li>
 </ul>
 </li>
-<li><p class="fireman-p-indent" ><code>List</code> 行为</p>
+<li><p><code>List</code> 行为</p>
 <ul>
 <li><p><code>List</code> 对象时，如果不加 <code>resourceVersion</code>，意味着需要 <code>Most Recent</code> 数据，请求会击穿 <code>APIServer</code> 缓存，直接发送至 <code>etcd</code></p>
 </li>
@@ -848,20 +841,20 @@
 <li>与 <code>apiserver</code> 之间的链路阻塞</li>
 <li>磁盘暴涨</li>
 </ul>
-<h2 id="少数-etcd-成员-Down"><a href="#少数-etcd-成员-Down" class="headerlink" title="少数 etcd 成员 Down"></a>少数 etcd 成员 Down</h2><p class="fireman-p-indent" >老版本可能出现少数 <code>etcd</code> 异常，但是上层 <code>apiserver</code> 正常，可能会导致两个节点上的 <code>pod</code> 出现异常。</p>
-<p class="fireman-p-indent" >解决方法是健康检查，<code>apiserver</code> 检测 <code>etcd</code> 异常之后，自杀，让<code>apiserver</code>调用其他节点上的 <code>etcd</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152444763.png" alt="image-20240112152444763"></p>
-<h2 id="Master-节点出现网络分区"><a href="#Master-节点出现网络分区" class="headerlink" title="Master 节点出现网络分区"></a>Master 节点出现网络分区</h2><p class="fireman-p-indent" >网络分区出现：</p>
+<h2 id="少数-etcd-成员-Down"><a href="#少数-etcd-成员-Down" class="headerlink" title="少数 etcd 成员 Down"></a>少数 etcd 成员 Down</h2><p>老版本可能出现少数 <code>etcd</code> 异常，但是上层 <code>apiserver</code> 正常，可能会导致两个节点上的 <code>pod</code> 出现异常。</p>
+<p>解决方法是健康检查，<code>apiserver</code> 检测 <code>etcd</code> 异常之后，自杀，让<code>apiserver</code>调用其他节点上的 <code>etcd</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152444763.png" alt="image-20240112152444763"></p>
+<h2 id="Master-节点出现网络分区"><a href="#Master-节点出现网络分区" class="headerlink" title="Master 节点出现网络分区"></a>Master 节点出现网络分区</h2><p>网络分区出现：</p>
 <ul>
 <li><code>Group#1</code>: <code>master-1</code>、<code>master-2</code></li>
 <li><code>Group#2</code>: <code>master-3</code>、<code>master-4</code>、<code>master-5</code></li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152601108.png" alt="image-20240112152601108"></p>
-<h1 id="references"><a href="#references" class="headerlink" title="references"></a>references</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NodW5taWFvMzAzMi9hcnRpY2xlL2RldGFpbHMvMTI1NTcxNjUx">ETCD如何处理读写请求<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V0Y2QtaW8vZXRjZA==">etcd-io&#x2F;etcd<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ldGNkLmlvL2RvY3MvdjMuNS8=">v3.5 docs<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9zZWdtZW50ZmF1bHQuY29tL2EvMTE5MDAwMDAyMDQxNjU3Nw==">面试官问你B树和B+树，就把这篇文章丢给他<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cubGl4dWVkdWFuLmNvbS9wb3N0cy9ldGNkLzA3LXJlYWQtcHJvY2Vzcy8=">etcd教程(七)—读请求执行流程分析<i class="fa fa-external-link-alt"></i></span></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152601108.png" alt="image-20240112152601108"></p>
+<h1 id="references"><a href="#references" class="headerlink" title="references"></a>references</h1><p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NodW5taWFvMzAzMi9hcnRpY2xlL2RldGFpbHMvMTI1NTcxNjUx">ETCD如何处理读写请求<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V0Y2QtaW8vZXRjZA==">etcd-io&#x2F;etcd<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ldGNkLmlvL2RvY3MvdjMuNS8=">v3.5 docs<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9zZWdtZW50ZmF1bHQuY29tL2EvMTE5MDAwMDAyMDQxNjU3Nw==">面试官问你B树和B+树，就把这篇文章丢给他<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cubGl4dWVkdWFuLmNvbS9wb3N0cy9ldGNkLzA3LXJlYWQtcHJvY2Vzcy8=">etcd教程(七)—读请求执行流程分析<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

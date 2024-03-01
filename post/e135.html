@@ -69,14 +69,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -287,63 +280,63 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="并行特性"><a href="#并行特性" class="headerlink" title="并行特性"></a>并行特性</h2><p class="fireman-p-indent" >通过goroutines实现并行执行程序。</p>
-<p class="fireman-p-indent" >通过channel实现goroutine之间的通信。</p>
-<p class="fireman-p-indent" >例如不使用并行执行任务：</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="并行特性"><a href="#并行特性" class="headerlink" title="并行特性"></a>并行特性</h2><p>通过goroutines实现并行执行程序。</p>
+<p>通过channel实现goroutine之间的通信。</p>
+<p>例如不使用并行执行任务：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	tasks := getTasks()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, task := <span class="keyword">range</span> tasks &#123;</span><br><span class="line">		do(task)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过go关键字使用协程并发执行</p>
+<p>通过go关键字使用协程并发执行</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	tasks := getTasks()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, task := <span class="keyword">range</span> tasks &#123;</span><br><span class="line">		task := task </span><br><span class="line">		<span class="keyword">go</span> do(task)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过channel实现任务队列分发，并且限定worker个数</p>
+<p>通过channel实现任务队列分发，并且限定worker个数</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	tasks := getTasks()</span><br><span class="line"></span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> Task, <span class="number">3</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">3</span>; i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> worker(ch)</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> _, task := <span class="keyword">range</span> tasks &#123;</span><br><span class="line">		ch &lt;- task </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="channel特性"><a href="#channel特性" class="headerlink" title="channel特性"></a>channel特性</h2><p class="fireman-p-indent" >channel在使用过程中的特性：</p>
+<h2 id="channel特性"><a href="#channel特性" class="headerlink" title="channel特性"></a>channel特性</h2><p>channel在使用过程中的特性：</p>
 <ul>
 <li>并发安全</li>
 <li>在goroutine之间存储、传递values</li>
 <li>提供FIFO（fist in first out）语义</li>
 <li>可能导致goroutine阻塞（block）和唤醒（unblock）</li>
 </ul>
-<h3 id="make-chan"><a href="#make-chan" class="headerlink" title="make chan"></a>make chan</h3><p class="fireman-p-indent" >不带缓冲的channel</p>
+<h3 id="make-chan"><a href="#make-chan" class="headerlink" title="make chan"></a>make chan</h3><p>不带缓冲的channel</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := make(chan Task)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >带缓冲的channel</p>
+<p>带缓冲的channel</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := make(chan Task, 1)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >结构体，在<code>runtime/chan.go</code>中</p>
+<p>结构体，在<code>runtime/chan.go</code>中</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> hchan <span class="keyword">struct</span> &#123;</span><br><span class="line">	qcount   <span class="type">uint</span>           <span class="comment">// total data in the queue</span></span><br><span class="line">	dataqsiz <span class="type">uint</span>           <span class="comment">// size of the circular queue</span></span><br><span class="line">	buf      unsafe.Pointer <span class="comment">// points to an array of dataqsiz elements  所传递元素的指针，是一个环队列</span></span><br><span class="line">	elemsize <span class="type">uint16</span></span><br><span class="line">	closed   <span class="type">uint32</span></span><br><span class="line">	elemtype *_type <span class="comment">// element type</span></span><br><span class="line">	sendx    <span class="type">uint</span>   <span class="comment">// send index								发送数据的角标</span></span><br><span class="line">	recvx    <span class="type">uint</span>   <span class="comment">// receive index          	接收数据的角标</span></span><br><span class="line">	recvq    waitq  <span class="comment">// list of recv waiters			接受者列表</span></span><br><span class="line">	sendq    waitq  <span class="comment">// list of send waiters			发送者列表</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// lock protects all fields in hchan, as well as several</span></span><br><span class="line">	<span class="comment">// fields in sudogs blocked on this channel.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// Do not change another G&#x27;s status while holding this lock</span></span><br><span class="line">	<span class="comment">// (in particular, do not ready a G), as this can deadlock</span></span><br><span class="line">	<span class="comment">// with stack shrinking.</span></span><br><span class="line">	lock mutex																		互斥锁</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> waitq <span class="keyword">struct</span> &#123;</span><br><span class="line">	first *sudog</span><br><span class="line">	last  *sudog</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> sudog <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">// The following fields are protected by the hchan.lock of the</span></span><br><span class="line">	<span class="comment">// channel this sudog is blocking on. shrinkstack depends on</span></span><br><span class="line">	<span class="comment">// this for sudogs involved in channel ops.</span></span><br><span class="line"></span><br><span class="line">	g *g										<span class="comment">// Go routine</span></span><br><span class="line">	</span><br><span class="line">	next *sudog</span><br><span class="line">	prev *sudog</span><br><span class="line">	elem unsafe.Pointer <span class="comment">// data element (may point to stack)  // 即将发送的数据</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// The following fields are never accessed concurrently.</span></span><br><span class="line">	<span class="comment">// For channels, waitlink is only accessed by g.</span></span><br><span class="line">	<span class="comment">// For semaphores, all fields (including the ones above)</span></span><br><span class="line">	<span class="comment">// are only accessed when holding a semaRoot lock.</span></span><br><span class="line"></span><br><span class="line">	acquiretime <span class="type">int64</span></span><br><span class="line">	releasetime <span class="type">int64</span></span><br><span class="line">	ticket      <span class="type">uint32</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// isSelect indicates g is participating in a select, so</span></span><br><span class="line">	<span class="comment">// g.selectDone must be CAS&#x27;d to win the wake-up race.</span></span><br><span class="line">	isSelect <span class="type">bool</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// success indicates whether communication over channel c</span></span><br><span class="line">	<span class="comment">// succeeded. It is true if the goroutine was awoken because a</span></span><br><span class="line">	<span class="comment">// value was delivered over channel c, and false if awoken</span></span><br><span class="line">	<span class="comment">// because c was closed.</span></span><br><span class="line">	success <span class="type">bool</span></span><br><span class="line"></span><br><span class="line">	parent   *sudog <span class="comment">// semaRoot binary tree</span></span><br><span class="line">	waitlink *sudog <span class="comment">// g.waiting list or semaRoot</span></span><br><span class="line">	waittail *sudog <span class="comment">// semaRoot</span></span><br><span class="line">	c        *hchan <span class="comment">// channel</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >当一个数据往channel中发送，占据buf容量如下：</p>
+<p>当一个数据往channel中发送，占据buf容量如下：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220919204303358.png" alt="image-20220919204303358" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >此时 <code>sedx</code> 为1，<code>recvx</code>为0，当环队列满的时候，则无法继续发送到队列中。</p>
-<p class="fireman-p-indent" >创建channel，make chan 会分配到堆上，最终返回一个指针。</p>
+<p>此时 <code>sedx</code> 为1，<code>recvx</code>为0，当环队列满的时候，则无法继续发送到队列中。</p>
+<p>创建channel，make chan 会分配到堆上，最终返回一个指针。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220919204452147.png" alt="image-20220919204452147" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >返回的一个堆区的地址，因此channel可以安全的在两个函数之间传递。</p>
-<h3 id="receives-sends"><a href="#receives-sends" class="headerlink" title="receives &amp; sends"></a>receives &amp; sends</h3><p class="fireman-p-indent" >ch &lt;- task0 :</p>
+<p>返回的一个堆区的地址，因此channel可以安全的在两个函数之间传递。</p>
+<h3 id="receives-sends"><a href="#receives-sends" class="headerlink" title="receives &amp; sends"></a>receives &amp; sends</h3><p>ch &lt;- task0 :</p>
 <ol>
 <li>加锁，lock.Lock()</li>
 <li>将task0，copy一份，放到buf的数组中</li>
 <li>释放锁，lock.Unlock()</li>
 </ol>
-<p class="fireman-p-indent" >t :&#x3D; &lt;- ch :</p>
+<p>t :&#x3D; &lt;- ch :</p>
 <ol>
 <li>加锁，lock.Lock()</li>
 <li>出队，将task0，copy到t</li>
 <li>释放锁，lock.Unlock()</li>
 </ol>
-<h2 id="阻塞和唤醒"><a href="#阻塞和唤醒" class="headerlink" title="阻塞和唤醒"></a>阻塞和唤醒</h2><h3 id="发送这阻塞"><a href="#发送这阻塞" class="headerlink" title="发送这阻塞"></a>发送这阻塞</h3><p class="fireman-p-indent" >当队列满时，发送者再往队里中发送消息会出现阻塞。除非有接受者从另一端接受数据。</p>
-<p class="fireman-p-indent" >goroutines是go runtime创建和维护的。</p>
-<p class="fireman-p-indent" >当队列满，此时发送者的G1（goroutine）会进入gopark阶段，会唤醒go的调度器，将该G1的状态改成waiting状态，M和G1解绑，M执行G0，调度local queue中的G到M上执行。</p>
-<p class="fireman-p-indent" >在从G1调度到G0之前，channel的sendq字段会记录该G的信息，以及发送的数据，暂存到sudog的elem中。</p>
-<p class="fireman-p-indent" >此时，G2从队列中取出1个数据：</p>
-<p class="fireman-p-indent" >首先，会将sendq中的elem取出来，放到channel中，然后将G1的状态设置为runanble。（也就是G2将G1唤醒）</p>
-<h3 id="接受者阻塞"><a href="#接受者阻塞" class="headerlink" title="接受者阻塞"></a>接受者阻塞</h3><p class="fireman-p-indent" >当队列为空，接受者G2从队列中获取数据，接受者此时阻塞。</p>
-<p class="fireman-p-indent" >此时，接受者G2队列信息记录在recvq的字段中，g字段保留G2的信息，elem字段为队列接受者的地址（t :&#x3D; &lt;- ch，t的地址），将G2状态设置为gopard。</p>
-<p class="fireman-p-indent" >当G1往队列中发送1个数据：</p>
-<p class="fireman-p-indent" >通过runtime，实现goroutine之间栈内存的操作，G1直接将数据写入到t中。（这个过程就不需要加锁、操作环形队列、赋值等过程，减少了内存拷贝的过程）。</p>
+<h2 id="阻塞和唤醒"><a href="#阻塞和唤醒" class="headerlink" title="阻塞和唤醒"></a>阻塞和唤醒</h2><h3 id="发送这阻塞"><a href="#发送这阻塞" class="headerlink" title="发送这阻塞"></a>发送这阻塞</h3><p>当队列满时，发送者再往队里中发送消息会出现阻塞。除非有接受者从另一端接受数据。</p>
+<p>goroutines是go runtime创建和维护的。</p>
+<p>当队列满，此时发送者的G1（goroutine）会进入gopark阶段，会唤醒go的调度器，将该G1的状态改成waiting状态，M和G1解绑，M执行G0，调度local queue中的G到M上执行。</p>
+<p>在从G1调度到G0之前，channel的sendq字段会记录该G的信息，以及发送的数据，暂存到sudog的elem中。</p>
+<p>此时，G2从队列中取出1个数据：</p>
+<p>首先，会将sendq中的elem取出来，放到channel中，然后将G1的状态设置为runanble。（也就是G2将G1唤醒）</p>
+<h3 id="接受者阻塞"><a href="#接受者阻塞" class="headerlink" title="接受者阻塞"></a>接受者阻塞</h3><p>当队列为空，接受者G2从队列中获取数据，接受者此时阻塞。</p>
+<p>此时，接受者G2队列信息记录在recvq的字段中，g字段保留G2的信息，elem字段为队列接受者的地址（t :&#x3D; &lt;- ch，t的地址），将G2状态设置为gopard。</p>
+<p>当G1往队列中发送1个数据：</p>
+<p>通过runtime，实现goroutine之间栈内存的操作，G1直接将数据写入到t中。（这个过程就不需要加锁、操作环形队列、赋值等过程，减少了内存拷贝的过程）。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li><p>线程安全（内部使用互斥锁）</p>
 </li>

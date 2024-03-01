@@ -71,14 +71,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -289,57 +282,57 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p class="fireman-p-indent" >使用<code>Docker</code>、<code>Jenkins</code>、<code>SonarQube</code>搭建代码质量持续检测环境。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p class="fireman-p-indent" >通过<code>Docker</code>安装<code>Jenkins</code></p>
+    <div class="post-body" itemprop="articleBody"><p>使用<code>Docker</code>、<code>Jenkins</code>、<code>SonarQube</code>搭建代码质量持续检测环境。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>通过<code>Docker</code>安装<code>Jenkins</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 10240:8080 -p 10241:50000 -v /var/jenkins_mount:/var/jenkins_home -v /etc/localtime:/etc/localtime --name myjenkins jenkins/jenkins</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装插件：</p>
+<p>安装插件：</p>
 <ul>
 <li>GitLab</li>
 <li>SonarQube Scanner</li>
 </ul>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZnV6b25nbGUvcC8xMjgzNDA4MC5odG1s">Docker 快速安装Jenkins完美教程 （亲测采坑后详细步骤）<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuamVua2lucy5pby96aC9kb2MvYm9vay9pbnN0YWxsaW5nLyMlRTUlOUMlQThtYWNvcyVFNSU5MiU4Q2xpbnV4JUU0JUI4JThB">在macOS和Linux上<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >通过<code>Docker</code>安装<code>Gitlab</code></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZnV6b25nbGUvcC8xMjgzNDA4MC5odG1s">Docker 快速安装Jenkins完美教程 （亲测采坑后详细步骤）<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamVua2lucy5pby96aC9kb2MvYm9vay9pbnN0YWxsaW5nLyMlRTUlOUMlQThtYWNvcyVFNSU5MiU4Q2xpbnV4JUU0JUI4JThB">在macOS和Linux上<i class="fa fa-external-link-alt"></i></span></p>
+<p>通过<code>Docker</code>安装<code>Gitlab</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">--hostname gitlab.xxx.com \           # 域名，设置成自己的</span><br><span class="line">--name gitlab \</span><br><span class="line">--restart always \</span><br><span class="line">-p 8082:443 -p 8083:80 -p 8084:22 \</span><br><span class="line">-v /etc/localtime:/etc/localtime:ro \</span><br><span class="line">-v /usr/local/gitlab_data/gitlab/config:/etc/gitlab \</span><br><span class="line">-v /usr/local/gitlab_data/gitlab/logs:/var/log/gitlab \</span><br><span class="line">-v /usr/local/gitlab_data/gitlab/data:/var/opt/gitlab \</span><br><span class="line">gitlab/gitlab-ce</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdpdGxhYi5jb20vZWUvaW5zdGFsbC9kb2NrZXIuaHRtbA==">GitLab Docker images<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >通过<code>Docker</code>安装<code>SonarQube</code></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmdpdGxhYi5jb20vZWUvaW5zdGFsbC9kb2NrZXIuaHRtbA==">GitLab Docker images<i class="fa fa-external-link-alt"></i></span></p>
+<p>通过<code>Docker</code>安装<code>SonarQube</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9000:9000 sonarqube:latest</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnNvbmFycXViZS5vcmcvOS42L3RyeS1vdXQtc29uYXJxdWJlLw==">Try out SonarQube<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >安装一些插件：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLnNvbmFycXViZS5vcmcvOS42L3RyeS1vdXQtc29uYXJxdWJlLw==">Try out SonarQube<i class="fa fa-external-link-alt"></i></span></p>
+<p>安装一些插件：</p>
 <ul>
 <li>Chinese Pack</li>
 </ul>
-<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p class="fireman-p-indent" ><code>Jenkins</code>上配置<code>GtiLab</code></p>
-<p class="fireman-p-indent" ><code>Jenkins</code>上配置<code>SonarQube</code></p>
-<p class="fireman-p-indent" >修改通知，可选邮件通知，以及发送邮件时机。</p>
-<h3 id="配置任务"><a href="#配置任务" class="headerlink" title="配置任务"></a>配置任务</h3><p class="fireman-p-indent" >创建自定义任务，配置时由于golang需要使用gopath，选择自定义工作空间。填写git源码地址，配置gitlab用户名密码。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/01/image-20230116142921729.png" alt="image-20230116142921729"></p>
-<p class="fireman-p-indent" >选择触发器，可设置为推送代码时，合并代码时</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/01/image-20230116143025378.png" alt="image-20230116143025378"></p>
-<p class="fireman-p-indent" >增加构建步骤，这里可选一些<code>golang</code>的静态代码检查，例如<code>golint</code></p>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p><code>Jenkins</code>上配置<code>GtiLab</code></p>
+<p><code>Jenkins</code>上配置<code>SonarQube</code></p>
+<p>修改通知，可选邮件通知，以及发送邮件时机。</p>
+<h3 id="配置任务"><a href="#配置任务" class="headerlink" title="配置任务"></a>配置任务</h3><p>创建自定义任务，配置时由于golang需要使用gopath，选择自定义工作空间。填写git源码地址，配置gitlab用户名密码。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/01/image-20230116142921729.png" alt="image-20230116142921729"></p>
+<p>选择触发器，可设置为推送代码时，合并代码时</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/01/image-20230116143025378.png" alt="image-20230116143025378"></p>
+<p>增加构建步骤，这里可选一些<code>golang</code>的静态代码检查，例如<code>golint</code></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">golangci-lint run ./...</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >增加<code>SonarQube</code></p>
+<p>增加<code>SonarQube</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sonar.projectKey=com.company.projectkey1</span><br><span class="line">sonar.projectName=My Project Name</span><br><span class="line"></span><br><span class="line">sonar.sources=.</span><br><span class="line">sonar.exclusions=**/*_test.go</span><br><span class="line"></span><br><span class="line">sonar.tests=.</span><br><span class="line">sonar.test.inclusions=**/*_test.go</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cucGx1cmFsc2lnaHQuY29tL2d1aWRlcy9zdGF0aWMtY29kZS1hbmFseXNpcy13aXRoLWdvLWFuZC1zb25hcnF1YmUjbW9kdWxlLWludHJvZHVjdGlvbg==">Introduction<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >在Jenkins中安装golang环境及工具</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cucGx1cmFsc2lnaHQuY29tL2d1aWRlcy9zdGF0aWMtY29kZS1hbmFseXNpcy13aXRoLWdvLWFuZC1zb25hcnF1YmUjbW9kdWxlLWludHJvZHVjdGlvbg==">Introduction<i class="fa fa-external-link-alt"></i></span></p>
+<p>在Jenkins中安装golang环境及工具</p>
 <ol>
 <li>进入Jenkins容器中，安装golang以及一些工具，<code>vgo</code>、<code>gometalinter</code>等</li>
 </ol>
-<p class="fireman-p-indent" ><code>GitLab</code>系统配置</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/01/image-20230116143121867.png" alt="image-20230116143121867"></p>
-<p class="fireman-p-indent" >代码线配置集成触发器</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/01/image-20230116143248265.png" alt="image-20230116143248265"></p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p class="fireman-p-indent" >拉取代码，修改代码，推送代码进行测试。</p>
+<p><code>GitLab</code>系统配置</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/01/image-20230116143121867.png" alt="image-20230116143121867"></p>
+<p>代码线配置集成触发器</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/01/image-20230116143248265.png" alt="image-20230116143248265"></p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>拉取代码，修改代码，推送代码进行测试。</p>
 <ul>
 <li>是否会自动构建和执行静态检测</li>
 <li>是否会发送邮件或者配置的其他结果通知</li>
 </ul>
-<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RhbGtnby9uaWdodC9ibG9iL21hc3Rlci9jb250ZW50L2FydGljbGVzL3NvbmFycXViZS1mb3ItZ29sYW5nLzIwMTgtMDctMjItc29uYXJxdWJlLWZvci1nb2xhbmcubWQ=">sonarqube-for-golang<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RhbGtnby9uaWdodC9ibG9iL21hc3Rlci9jb250ZW50L2FydGljbGVzL3NvbmFycXViZS1mb3ItZ29sYW5nLzIwMTgtMDctMjItc29uYXJxdWJlLWZvci1nb2xhbmcubWQ=">sonarqube-for-golang<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

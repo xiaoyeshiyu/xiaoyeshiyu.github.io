@@ -93,14 +93,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -311,13 +304,13 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="API设计"><a href="#API设计" class="headerlink" title="API设计"></a>API设计</h1><h2 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a>gRPC</h2><p class="fireman-p-indent" >gRPC 可以用官网的一句话来概括：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="API设计"><a href="#API设计" class="headerlink" title="API设计"></a>API设计</h1><h2 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a>gRPC</h2><p>gRPC 可以用官网的一句话来概括：</p>
 <blockquote>
-<p class="fireman-p-indent" >A high-performance, open-source universal RPC framework</p>
+<p>A high-performance, open-source universal RPC framework</p>
 </blockquote>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016164410719.png" alt="image-20231016164410719" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >gRPC 有这几个特点：</p>
+<p>gRPC 有这几个特点：</p>
 <ul>
 <li><p>多语言支持：语言中立，支持多种语言</p>
 </li>
@@ -346,11 +339,11 @@
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protoc --go_out=. --go_opt=paths=source_relative \</span><br><span class="line">    --go-grpc_out=. --go-grpc_opt=paths=source_relative \</span><br><span class="line">    helloworld/helloworld.proto</span><br></pre></td></tr></table></figure>
 
-<h2 id="API-Project"><a href="#API-Project" class="headerlink" title="API Project"></a>API Project</h2><p class="fireman-p-indent" >例如在对接开发时，一般情况下需要根据对方的文档进行开发对接，很容易因为文档与线上环境不一致导致问题。而一些大厂为了统一检索和规范 API，会在内部建议一个统一的 <code>apis</code> 仓库，整合所有对内对外 API。</p>
-<p class="fireman-p-indent" >例如：</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZWFwaXMvZ29vZ2xlYXBpcw==">https://github.com/googleapis/googleapis<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Vudm95cHJveHkvZGF0YS1wbGFuZS1hcGk=">https://github.com/envoyproxy/data-plane-api<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2lzdGlvL2FwaQ==">https://github.com/istio/api<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="API-Project"><a href="#API-Project" class="headerlink" title="API Project"></a>API Project</h2><p>例如在对接开发时，一般情况下需要根据对方的文档进行开发对接，很容易因为文档与线上环境不一致导致问题。而一些大厂为了统一检索和规范 API，会在内部建议一个统一的 <code>apis</code> 仓库，整合所有对内对外 API。</p>
+<p>例如：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZWFwaXMvZ29vZ2xlYXBpcw==">https://github.com/googleapis/googleapis<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Vudm95cHJveHkvZGF0YS1wbGFuZS1hcGk=">https://github.com/envoyproxy/data-plane-api<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2lzdGlvL2FwaQ==">https://github.com/istio/api<i class="fa fa-external-link-alt"></i></span></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016165945722.png" alt="image-20231016165945722" style="zoom:50%;" />
 
 <ul>
@@ -360,18 +353,18 @@
 <li>API design review，变更 diff</li>
 <li>权限管理，目录 OWNERS</li>
 </ul>
-<h3 id="API-Project-Layout"><a href="#API-Project-Layout" class="headerlink" title="API Project Layout"></a>API Project Layout</h3><p class="fireman-p-indent" >以B站代码层级做实例。</p>
-<p class="fireman-p-indent" >项目中定义 <code>proto</code>，以 <code>api</code> 为包名根目录：</p>
+<h3 id="API-Project-Layout"><a href="#API-Project-Layout" class="headerlink" title="API Project Layout"></a>API Project Layout</h3><p>以B站代码层级做实例。</p>
+<p>项目中定义 <code>proto</code>，以 <code>api</code> 为包名根目录：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016170329361.png" alt="image-20231016170329361" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >在统一仓库中管理 <code>proto</code>，以仓库为包名根目录：</p>
+<p>在统一仓库中管理 <code>proto</code>，以仓库为包名根目录：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016170355703.png" alt="image-20231016170355703" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >在 <code>apis</code> 仓库中的目录：</p>
+<p>在 <code>apis</code> 仓库中的目录：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016170611132.png" alt="image-20231016170611132" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >在修改或者更新之后，可以将 <code>api</code> 目录拷贝到 <code>apis</code> 仓库的目录中。</p>
-<h2 id="API-Compatibility"><a href="#API-Compatibility" class="headerlink" title="API Compatibility"></a>API Compatibility</h2><p class="fireman-p-indent" >向后兼容（非破坏性）的修改</p>
+<p>在修改或者更新之后，可以将 <code>api</code> 目录拷贝到 <code>apis</code> 仓库的目录中。</p>
+<h2 id="API-Compatibility"><a href="#API-Compatibility" class="headerlink" title="API Compatibility"></a>API Compatibility</h2><p>向后兼容（非破坏性）的修改</p>
 <ul>
 <li><p>给API服务定义添加 API 接口</p>
 <p>从协议的角度来看，这始终是安全的</p>
@@ -383,7 +376,7 @@
 <p>在不改变其他响应字段的行为的前提下，非资源（例如，ListBooksResponse）的响应消息可以扩展而不必破坏客户端的兼容性。即使会引入冗余，先前在响应中填充的任何字段应继续使用相同的语义填充。</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >向后不兼容（破坏性）的修改</p>
+<p>向后不兼容（破坏性）的修改</p>
 <ul>
 <li><p>删除或重命名服务、字段、方法或枚举值</p>
 <p>从根本上说，如果客户端代码可以引退某些东西，那么删除或重命名它都是不兼容的变化，这时必须修改 major 版本号。</p>
@@ -397,47 +390,47 @@
 <li><p>给资源消息添加 读取&#x2F;写入 字段</p>
 </li>
 </ul>
-<h2 id="API-Naming-Comventions"><a href="#API-Naming-Comventions" class="headerlink" title="API Naming Comventions"></a>API Naming Comventions</h2><p class="fireman-p-indent" >包名为应用的标识（APP_ID），用于生成 gRPC 请求路径，或者 proto 之间进行引用 Message。文件中声明的包名称应该于产品和服务名称保持一致。带有版本的 API 的软件包名称必须以此版本结尾。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016172147914.png" alt="image-20231016172147914"></p>
+<h2 id="API-Naming-Comventions"><a href="#API-Naming-Comventions" class="headerlink" title="API Naming Comventions"></a>API Naming Comventions</h2><p>包名为应用的标识（APP_ID），用于生成 gRPC 请求路径，或者 proto 之间进行引用 Message。文件中声明的包名称应该于产品和服务名称保持一致。带有版本的 API 的软件包名称必须以此版本结尾。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016172147914.png" alt="image-20231016172147914"></p>
 <ul>
 <li><code>my.package.v1</code>，为 API 目录，定义 <code>service</code> 相关接口，用于提供业务使用。</li>
 </ul>
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RequestURL:</span></span><br><span class="line"><span class="comment">// &lt;package_name&gt;.&lt;version&gt;.&lt;service_name&gt;/&#123;method&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> &lt;package_name&gt;.&lt;version&gt;;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016172152618.png" alt="image-20231016172152618"></p>
-<p class="fireman-p-indent" >API 设计推荐阅读：<span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC5nb29nbGUuY29tL2FwaXMvZGVzaWduP2hsPXpoLWNu">Google API 设计指南<i class="fa fa-external-link-alt"></i></span></p>
-<h2 id="API-Primitive-Fields"><a href="#API-Primitive-Fields" class="headerlink" title="API Primitive Fields"></a>API Primitive Fields</h2><p class="fireman-p-indent" >gRPC 默认使用 <code>Protobuf v3</code> 格式，因为去除了 <code>required</code> 和 <code>optional</code> 关键字，默认全部都是 <code>optional</code> 字段。如果没有赋值的字段，默认会基础类型字段的默认值，比如 0 或者 “”。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016173954489.png" alt="image-20231016173954489"></p>
-<p class="fireman-p-indent" ><code>Protobuf v3</code> 中，建议使用：</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3Byb3RvY29sYnVmZmVycy9wcm90b2J1Zi9ibG9iL21hc3Rlci9zcmMvZ29vZ2xlL3Byb3RvYnVmL3dyYXBwZXJzLnByb3Rv">https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/wrappers.proto<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >Wrapper 类型的字段，即包装一个 message，使用时变为指针</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016174045445.png" alt="image-20231016174045445"></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016174100576.png" alt="image-20231016174100576"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016172152618.png" alt="image-20231016172152618"></p>
+<p>API 设计推荐阅读：<span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC5nb29nbGUuY29tL2FwaXMvZGVzaWduP2hsPXpoLWNu">Google API 设计指南<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="API-Primitive-Fields"><a href="#API-Primitive-Fields" class="headerlink" title="API Primitive Fields"></a>API Primitive Fields</h2><p>gRPC 默认使用 <code>Protobuf v3</code> 格式，因为去除了 <code>required</code> 和 <code>optional</code> 关键字，默认全部都是 <code>optional</code> 字段。如果没有赋值的字段，默认会基础类型字段的默认值，比如 0 或者 “”。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016173954489.png" alt="image-20231016173954489"></p>
+<p><code>Protobuf v3</code> 中，建议使用：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3Byb3RvY29sYnVmZmVycy9wcm90b2J1Zi9ibG9iL21hc3Rlci9zcmMvZ29vZ2xlL3Byb3RvYnVmL3dyYXBwZXJzLnByb3Rv">https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/wrappers.proto<i class="fa fa-external-link-alt"></i></span></p>
+<p>Wrapper 类型的字段，即包装一个 message，使用时变为指针</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016174045445.png" alt="image-20231016174045445"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016174100576.png" alt="image-20231016174100576"></p>
 <blockquote>
-<p class="fireman-p-indent" ><code>Protobuf</code> 作为强 <code>schema</code> 的描述文件，也可以方便扩展，也可以用于配置文件。</p>
+<p><code>Protobuf</code> 作为强 <code>schema</code> 的描述文件，也可以方便扩展，也可以用于配置文件。</p>
 </blockquote>
-<h2 id="API-Errors"><a href="#API-Errors" class="headerlink" title="API Errors"></a>API Errors</h2><p class="fireman-p-indent" >使用一小组标准错误配合大量资源</p>
+<h2 id="API-Errors"><a href="#API-Errors" class="headerlink" title="API Errors"></a>API Errors</h2><p>使用一小组标准错误配合大量资源</p>
 <ul>
 <li>例如，服务器没有定义不同类型的 “找不到” 错误，而是使用一个标准 <code>google.rpc.Code.NOT_FOUND</code> 错误代码并包俗客户端找不到哪个特定资源。状态空间变小降低了文档的复杂性，在客户端库中提供了更好的惯用映射，并降低了客户端的逻辑复杂性，同时不限制是否包含可操作信息（<code>/google/rpc/error_details</code></li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016174400185.png" alt="image-20231016174400185"></p>
-<h3 id="错误传播"><a href="#错误传播" class="headerlink" title="错误传播"></a>错误传播</h3><p class="fireman-p-indent" >如果 API 服务依赖于其他服务，则不应盲目地将这些服务的错误传播到上游的客户端。在翻译错误时，建议执行以下操作：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016174400185.png" alt="image-20231016174400185"></p>
+<h3 id="错误传播"><a href="#错误传播" class="headerlink" title="错误传播"></a>错误传播</h3><p>如果 API 服务依赖于其他服务，则不应盲目地将这些服务的错误传播到上游的客户端。在翻译错误时，建议执行以下操作：</p>
 <ul>
 <li>隐藏实现详细信息和机密信息</li>
 <li>调整负责该错误的一方。例如，从另一个服务接受 <code>INVALID_ARGUMENT</code> 错误的服务器应该将 <code>INTERNAL</code> 传播给它自己的调用者</li>
 </ul>
-<h3 id="全局错误码"><a href="#全局错误码" class="headerlink" title="全局错误码"></a>全局错误码</h3><p class="fireman-p-indent" >全局错误码，是松散、易被破坏契约的，基于上述讨论，在每个服务传播错误的时候，做一次翻译，这样保证每个服务 + 错误枚举，应该是唯一的，而且在 <code>proto</code> 定义中是可以写出来文档的。</p>
-<p class="fireman-p-indent" >自定义错误：</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016174939307.png" alt="image-20231016174939307"></p>
-<p class="fireman-p-indent" ><code>rpc</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016175002625.png" alt="image-20231016175002625"></p>
-<p class="fireman-p-indent" >根据这个结构体，定义一些全局错误。可以将业务层返回的 <code>error</code> 包裹在结构体中。</p>
-<h2 id="API-Design"><a href="#API-Design" class="headerlink" title="API Design"></a>API Design</h2><p class="fireman-p-indent" >API 接口设计</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016175312460.png" alt="image-20231016175312460"></p>
-<p class="fireman-p-indent" >如果需要返回 <code>Book</code> 是否已经被读过，可能需要增加一个字段</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016175347633.png" alt="image-20231016175347633"></p>
-<p class="fireman-p-indent" >此时，如果 <code>Book</code> 字段被其他接口引用，很容易影响到其他接口的返回。</p>
-<p class="fireman-p-indent" ><code>FieldMask</code> 部分更新的方案：</p>
+<h3 id="全局错误码"><a href="#全局错误码" class="headerlink" title="全局错误码"></a>全局错误码</h3><p>全局错误码，是松散、易被破坏契约的，基于上述讨论，在每个服务传播错误的时候，做一次翻译，这样保证每个服务 + 错误枚举，应该是唯一的，而且在 <code>proto</code> 定义中是可以写出来文档的。</p>
+<p>自定义错误：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016174939307.png" alt="image-20231016174939307"></p>
+<p><code>rpc</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016175002625.png" alt="image-20231016175002625"></p>
+<p>根据这个结构体，定义一些全局错误。可以将业务层返回的 <code>error</code> 包裹在结构体中。</p>
+<h2 id="API-Design"><a href="#API-Design" class="headerlink" title="API Design"></a>API Design</h2><p>API 接口设计</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016175312460.png" alt="image-20231016175312460"></p>
+<p>如果需要返回 <code>Book</code> 是否已经被读过，可能需要增加一个字段</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016175347633.png" alt="image-20231016175347633"></p>
+<p>此时，如果 <code>Book</code> 字段被其他接口引用，很容易影响到其他接口的返回。</p>
+<p><code>FieldMask</code> 部分更新的方案：</p>
 <ul>
 <li><p>客户端可以执行需要更新的字段信息：</p>
 <p><code>paths: &quot;author&quot;</code></p>
@@ -445,20 +438,20 @@
 <p>空 <code>FieldMask</code> 默认应用到<strong>所有字段</strong></p>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016175532500.png" alt="image-20231016175532500"></p>
-<h1 id="错误码实践"><a href="#错误码实践" class="headerlink" title="错误码实践"></a>错误码实践</h1><p class="fireman-p-indent" >错误码可以分为三种：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016175532500.png" alt="image-20231016175532500"></p>
+<h1 id="错误码实践"><a href="#错误码实践" class="headerlink" title="错误码实践"></a>错误码实践</h1><p>错误码可以分为三种：</p>
 <ol>
 <li>下游错误码</li>
 <li>内部业务错误码</li>
 <li>上游可感知错误码</li>
 </ol>
-<p class="fireman-p-indent" >可以从这三个角度考虑如何处理</p>
+<p>可以从这三个角度考虑如何处理</p>
 <ol>
 <li>是否希望上游的游服务知道下游的错误？如果不希望，则将下游的错误码转换，去掉敏感信息</li>
 <li>上游的服务能否理解下游的错误？如果不能，则转换成能理解的错误</li>
 <li>是否信任上游？不信任，则将内部业务错误码转换成安全的错误码，这样不会爆率过多的细节</li>
 </ol>
-<h1 id="中间件-API-设计方法论"><a href="#中间件-API-设计方法论" class="headerlink" title="中间件 API 设计方法论"></a>中间件 API 设计方法论</h1><p class="fireman-p-indent" >一般情况下，写中间件的过程会通过个人经验来逐步优化，一般是从自底向上到自顶向下。</p>
+<h1 id="中间件-API-设计方法论"><a href="#中间件-API-设计方法论" class="headerlink" title="中间件 API 设计方法论"></a>中间件 API 设计方法论</h1><p>一般情况下，写中间件的过程会通过个人经验来逐步优化，一般是从自底向上到自顶向下。</p>
 <h2 id="自底向上"><a href="#自底向上" class="headerlink" title="自底向上"></a>自底向上</h2><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019154835018.png" alt="image-20231019154835018" style="zoom:25%;" />
 
 <ol>
@@ -467,7 +460,7 @@
 <li>在不断抽象接口的时候，会发现有一些接口比另外一些接口更加抽象，也就是更为高级，最终组成一个类似金字塔的层级</li>
 <li>难点在于知识变更点 - 依赖于个人见识和经验</li>
 </ol>
-<h2 id="自顶向下"><a href="#自顶向下" class="headerlink" title="自顶向下"></a>自顶向下</h2><p class="fireman-p-indent" >在有了比较丰富的经验之后，就可以自顶向下</p>
+<h2 id="自顶向下"><a href="#自顶向下" class="headerlink" title="自顶向下"></a>自顶向下</h2><p>在有了比较丰富的经验之后，就可以自顶向下</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019154939626.png" alt="image-20231019154939626" style="zoom:25%;" />
 
 <ol>
@@ -488,7 +481,7 @@
 <li><p>越是靠近核心的接口，开发者越不想你扩展，甚至可能根本没有提供接入自定义实现的手段</p>
 </li>
 </ol>
-<p class="fireman-p-indent" >例如，在 <code>ORM</code> 中间件中，一个检索构建对象的接口。</p>
+<p>例如，在 <code>ORM</code> 中间件中，一个检索构建对象的接口。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019155637842.png" alt="image-20231019155637842" style="zoom:50%;" />
 
 <ol>
@@ -505,12 +498,12 @@
 
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019161314900.png" alt="image-20231019161314900" style="zoom:50%;" /></li>
 </ol>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC5nb29nbGUuY29tL2FwaXMvZGVzaWduL2Vycm9ycz9obD16aC1jbg==">错误数<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC80NjYwMzk4OA==">区分 Protobuf 中缺失值和默认值<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3Byb3RvY29sYnVmZmVycy9wcm90b2J1Zi9ibG9iL21haW4vc3JjL2dvb2dsZS9wcm90b2J1Zi93cmFwcGVycy5wcm90bw==">protobuf&#x2F;src&#x2F;google&#x2F;protobuf&#x2F;wrappers.proto<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNC8xMC8xNy9mdW5jdGlvbmFsLW9wdGlvbnMtZm9yLWZyaWVuZGx5LWFwaXM=">Functional options for friendly APIs<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jb21tYW5kY2VudGVyLmJsb2dzcG90LmNvbS8yMDE0LzAxL3NlbGYtcmVmZXJlbnRpYWwtZnVuY3Rpb25zLWFuZC1kZXNpZ24uaHRtbA==">Self-referential functions and the design of options<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9hcGlzeW91d29udGhhdGUuY29tL2Jsb2cvdXNlZnVsLWFwaS1lcnJvcnMtZm9yLXJlc3QtZ3JhcGhxbC1hbmQtZ3JwYy8=">Creating Good API Errors in REST, GraphQL and gRPC<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC5nb29nbGUuY29tL2FwaXMvZGVzaWduL2Vycm9ycz9obD16aC1jbg==">错误数<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC80NjYwMzk4OA==">区分 Protobuf 中缺失值和默认值<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3Byb3RvY29sYnVmZmVycy9wcm90b2J1Zi9ibG9iL21haW4vc3JjL2dvb2dsZS9wcm90b2J1Zi93cmFwcGVycy5wcm90bw==">protobuf&#x2F;src&#x2F;google&#x2F;protobuf&#x2F;wrappers.proto<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxNC8xMC8xNy9mdW5jdGlvbmFsLW9wdGlvbnMtZm9yLWZyaWVuZGx5LWFwaXM=">Functional options for friendly APIs<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jb21tYW5kY2VudGVyLmJsb2dzcG90LmNvbS8yMDE0LzAxL3NlbGYtcmVmZXJlbnRpYWwtZnVuY3Rpb25zLWFuZC1kZXNpZ24uaHRtbA==">Self-referential functions and the design of options<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9hcGlzeW91d29udGhhdGUuY29tL2Jsb2cvdXNlZnVsLWFwaS1lcnJvcnMtZm9yLXJlc3QtZ3JhcGhxbC1hbmQtZ3JwYy8=">Creating Good API Errors in REST, GraphQL and gRPC<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 
@@ -532,8 +525,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/post/70.html" rel="next" title="Go工程化实践之配置管理">
-                  Go工程化实践之配置管理 <i class="fa fa-angle-right"></i>
+                <a href="/post/c73a.html" rel="next" title="Go工程化实践之测试">
+                  Go工程化实践之测试 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

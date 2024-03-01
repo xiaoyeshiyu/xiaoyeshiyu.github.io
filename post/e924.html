@@ -72,14 +72,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -284,7 +277,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="包管理"><a href="#包管理" class="headerlink" title="包管理"></a>包管理</h1><h2 id="Go-Package-管理发展史"><a href="#Go-Package-管理发展史" class="headerlink" title="Go Package 管理发展史"></a>Go Package 管理发展史</h2><p class="fireman-p-indent" >Go 依赖管理是通过 Git 仓库模式实现，并随着版本的更迭已经逐渐完善。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="包管理"><a href="#包管理" class="headerlink" title="包管理"></a>包管理</h1><h2 id="Go-Package-管理发展史"><a href="#Go-Package-管理发展史" class="headerlink" title="Go Package 管理发展史"></a>Go Package 管理发展史</h2><p>Go 依赖管理是通过 Git 仓库模式实现，并随着版本的更迭已经逐渐完善。</p>
 <ul>
 <li><p>GOPATH 模式</p>
 <p>GOPATH 目录是所有工程的公共依赖包目录，所有需要编译的 go 工程的依赖包都放在 GOPATH 目录下。</p>
@@ -296,24 +289,24 @@
 <p>从 <code>GO 1.11</code> 以后开始支持 <code>Module</code> 依赖管理工具，从而实现了依赖包的升级更新，在 <code>GO 1.13</code> 版本后默认打开</p>
 </li>
 </ul>
-<h2 id="GOPATH-环境变量"><a href="#GOPATH-环境变量" class="headerlink" title="GOPATH 环境变量"></a>GOPATH 环境变量</h2><p class="fireman-p-indent" >GOPATH 为 Go 开发环境时所设置的一个环境变量。</p>
-<p class="fireman-p-indent" >历史版本的 go 语言开发时，需要将代码放在 GOPATH 目录的 <code>src</code> 文件夹下。<code>go get</code> 命令获取依赖，也会自动下载到 <code>GOPATH</code> 的 <code>src</code> 下。</p>
+<h2 id="GOPATH-环境变量"><a href="#GOPATH-环境变量" class="headerlink" title="GOPATH 环境变量"></a>GOPATH 环境变量</h2><p>GOPATH 为 Go 开发环境时所设置的一个环境变量。</p>
+<p>历史版本的 go 语言开发时，需要将代码放在 GOPATH 目录的 <code>src</code> 文件夹下。<code>go get</code> 命令获取依赖，也会自动下载到 <code>GOPATH</code> 的 <code>src</code> 下。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/foo/bar</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >会将代码下载到 <code>$GOPATH/github.com/foo/bar</code></p>
-<p class="fireman-p-indent" ><code>GOPATH</code> 具体结构如下，必须包含三个文件夹，具体如下图所示：</p>
+<p>会将代码下载到 <code>$GOPATH/github.com/foo/bar</code></p>
+<p><code>GOPATH</code> 具体结构如下，必须包含三个文件夹，具体如下图所示：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GOPATH</span><br><span class="line">├── bin								// 编译生成的二进制文件</span><br><span class="line">├── pkg								// 预编译文件，以加快程序的后续编译速度</span><br><span class="line">└── src								// 所有源代码</span><br><span class="line">			├── gitee.com</span><br><span class="line">			├── github.com</span><br></pre></td></tr></table></figure>
 
-<h2 id="Using-Go-Modules"><a href="#Using-Go-Modules" class="headerlink" title="Using Go Modules"></a>Using Go Modules</h2><p class="fireman-p-indent" >Go Modules 是从 Go 1.11 开始初步支持，解决了依赖版本的信息管理，并且保证安全性。</p>
-<p class="fireman-p-indent" >主要通过 <code>go.mod</code> 和 <code>go.sum</code> 组成，主要包括依赖模块路径定义，以及通过 <code>checksum</code> 方式进行保证包的安全性。并且可以在 GOPATH 外进行创建和编译项目。</p>
-<p class="fireman-p-indent" >通过 <code>go mod init xxx</code> 初始化一个项目</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017160148904.png" alt="image-20231017160148904"></p>
-<p class="fireman-p-indent" >使用时</p>
+<h2 id="Using-Go-Modules"><a href="#Using-Go-Modules" class="headerlink" title="Using Go Modules"></a>Using Go Modules</h2><p>Go Modules 是从 Go 1.11 开始初步支持，解决了依赖版本的信息管理，并且保证安全性。</p>
+<p>主要通过 <code>go.mod</code> 和 <code>go.sum</code> 组成，主要包括依赖模块路径定义，以及通过 <code>checksum</code> 方式进行保证包的安全性。并且可以在 GOPATH 外进行创建和编译项目。</p>
+<p>通过 <code>go mod init xxx</code> 初始化一个项目</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017160148904.png" alt="image-20231017160148904"></p>
+<p>使用时</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> log <span class="string">&quot;github.com/sirupsen/logrus&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	log.Info(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过 <code>go get github.com/sirupsen/logrus </code> ，可以下载或者更新依赖包，也可以指定版本 <code>path@v1.8.1</code></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017160804276.png" alt="image-20231017160804276"></p>
-<p class="fireman-p-indent" ><code>go.mod</code> 文件中可以使用到的语法关键词以及含意：</p>
+<p>通过 <code>go get github.com/sirupsen/logrus </code> ，可以下载或者更新依赖包，也可以指定版本 <code>path@v1.8.1</code></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017160804276.png" alt="image-20231017160804276"></p>
+<p><code>go.mod</code> 文件中可以使用到的语法关键词以及含意：</p>
 <ul>
 <li><code>module</code>：定义当前项目的模块路径</li>
 <li><code>go</code>：标识当前模块的 <code>GO</code> 语言版本，目前来看还只是个标识作用</li>
@@ -321,15 +314,15 @@
 <li><code>exclude</code>：用于从使用中排除一个特定的模块版本</li>
 <li><code>replace</code>：替换 <code>require</code> 中声明的依赖，使用另外的依赖及其版本号</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017161055173.png" alt="image-20231017161055173"></p>
-<h2 id="Go-Modules-Checksum"><a href="#Go-Modules-Checksum" class="headerlink" title="Go Modules Checksum"></a>Go Modules Checksum</h2><p class="fireman-p-indent" >为了解决 Go Modules 的包被篡改安全隐患，Go 开发团队在引入 <code>go.mod</code> 的同时也引入了 <code>go.sum</code> 文件，用于记录每个依赖包的哈希值，在构建时，如果本地的依赖包 <code>hash</code> 值与 <code>go.sum</code> 文件中记录的不一致，则会拒绝构建。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017161055173.png" alt="image-20231017161055173"></p>
+<h2 id="Go-Modules-Checksum"><a href="#Go-Modules-Checksum" class="headerlink" title="Go Modules Checksum"></a>Go Modules Checksum</h2><p>为了解决 Go Modules 的包被篡改安全隐患，Go 开发团队在引入 <code>go.mod</code> 的同时也引入了 <code>go.sum</code> 文件，用于记录每个依赖包的哈希值，在构建时，如果本地的依赖包 <code>hash</code> 值与 <code>go.sum</code> 文件中记录的不一致，则会拒绝构建。</p>
 <ul>
 <li><code>go.sum</code> 文件中每行记录由 module 名、版本和哈希组成，并由空格分开；</li>
 <li>在引入新的依赖时，通常会使用 <code>go get</code> 命令获取该依赖，将会下载该依赖包下载到本地缓存目录 <code>$GOPATH/pkg/mod/cache/download</code>，该依赖包为一个后缀为 <code>.zip</code> 的压缩包，并且把哈希运算同步到 <code>go.sum</code> 文件中；</li>
 <li>在构建应用时，会从本地缓存中查找所有 <code>go.mod</code> 中记录的依赖包，并计算本地依赖包的哈希值，然后与 <code>go.sum</code> 中的记录进行对比，当校验失败，go 命令将拒绝构建。</li>
 </ul>
-<h2 id="Go-Modules-Proxy"><a href="#Go-Modules-Proxy" class="headerlink" title="Go Modules Proxy"></a>Go Modules Proxy</h2><p class="fireman-p-indent" >Go 1.13 将 GOPROXY 默认成了中国大陆无法访问的 <code>https://proxy.golang.org</code>，所以在国内需要配置代理进行使用。</p>
-<p class="fireman-p-indent" >GOPROXY 可以解决一些公司内部的使用问题：</p>
+<h2 id="Go-Modules-Proxy"><a href="#Go-Modules-Proxy" class="headerlink" title="Go Modules Proxy"></a>Go Modules Proxy</h2><p>Go 1.13 将 GOPROXY 默认成了中国大陆无法访问的 <code>https://proxy.golang.org</code>，所以在国内需要配置代理进行使用。</p>
+<p>GOPROXY 可以解决一些公司内部的使用问题：</p>
 <ul>
 <li>访问公司内网的 <code>git server</code></li>
 <li>防止公网仓库变更或者消失，导致线上编译失败或者紧急回退失败</li>
@@ -337,39 +330,39 @@
 <li>防止公司内部开发人员配置不当造成 <code>import path</code> 泄露</li>
 <li>cache 热点依赖，降低公司公网出口带宽</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017162110185.png" alt="image-20231017162110185"></p>
-<h2 id="Go-Modules-Private"><a href="#Go-Modules-Private" class="headerlink" title="Go Modules Private"></a>Go Modules Private</h2><p class="fireman-p-indent" >GOPRIVATE 用来控制 go 命令把哪些仓库看作是私有的仓库，这样可以跳过 <code>proxy server</code> 和校验检查，这个变量的值支持用逗号分隔，可以填写多个值，例如：</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017162110185.png" alt="image-20231017162110185"></p>
+<h2 id="Go-Modules-Private"><a href="#Go-Modules-Private" class="headerlink" title="Go Modules Private"></a>Go Modules Private</h2><p>GOPRIVATE 用来控制 go 命令把哪些仓库看作是私有的仓库，这样可以跳过 <code>proxy server</code> 和校验检查，这个变量的值支持用逗号分隔，可以填写多个值，例如：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export GOPRIVATE=*.corp.example.com,github.com/org_name</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >当配置 GOPROVATE，它的值同时也将作为 GONOPROXY 和 GONOSUMDB 的默认值，所以当配置 GOPRIVATE 后将会跳过代理，以及 checksum 校验检查。</p>
-<p class="fireman-p-indent" >通常推荐配置 GOPROXY 和 GOPRIVATE 进行使用，GOPRIVATE 也可以识别 Git SSH KEY 进行权限校验。</p>
-<h2 id="GOPROXY-编译部署"><a href="#GOPROXY-编译部署" class="headerlink" title="GOPROXY 编译部署"></a>GOPROXY 编译部署</h2><p class="fireman-p-indent" ><code>goproxy.io</code> 是一个 Go Modules 开源代理，也可以作为公司内部代理。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvcHJveHlpby9nb3Byb3h5">https://github.com/goproxyio/goproxy<i class="fa fa-external-link-alt"></i></span></p>
+<p>当配置 GOPROVATE，它的值同时也将作为 GONOPROXY 和 GONOSUMDB 的默认值，所以当配置 GOPRIVATE 后将会跳过代理，以及 checksum 校验检查。</p>
+<p>通常推荐配置 GOPROXY 和 GOPRIVATE 进行使用，GOPRIVATE 也可以识别 Git SSH KEY 进行权限校验。</p>
+<h2 id="GOPROXY-编译部署"><a href="#GOPROXY-编译部署" class="headerlink" title="GOPROXY 编译部署"></a>GOPROXY 编译部署</h2><p><code>goproxy.io</code> 是一个 Go Modules 开源代理，也可以作为公司内部代理。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvcHJveHlpby9nb3Byb3h5">https://github.com/goproxyio/goproxy<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">下载以及编译</span></span><br><span class="line">git clone https://github.com/goproxyio/goproxy.git</span><br><span class="line">cd goproxy</span><br><span class="line">go build</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行 goproxy 代理</span></span><br><span class="line">./goproxy -listen=0.0.0.0:8081 -cacheDir=/tmp/cache -proxy https://goproxy.io -exclude &quot;github.com/private&quot;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >GOPROXY 配置信息</p>
-<p class="fireman-p-indent" >goproxy 运行配置信息：</p>
+<p>GOPROXY 配置信息</p>
+<p>goproxy 运行配置信息：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">./goproxy --help</span><br><span class="line">Usage of ./goproxy:</span><br><span class="line">  -cacheDir string</span><br><span class="line">    	Go Modules cache dir, default is $GOPATH/pkg/mod/cache/download 【指定 Go 模块的缓存目录】</span><br><span class="line">  -cacheExpire duration</span><br><span class="line">    	Go Modules cache expiration (min), default is 5 min (default 5m0s) 【缓存过期时间】</span><br><span class="line">  -exclude string</span><br><span class="line">    	exclude host pattern, you can exclude internal Git services   【proxy 模式下指定哪些 path 不经过上游服务器】</span><br><span class="line">  -listen string</span><br><span class="line">    	service listen address (default &quot;0.0.0.0:8081&quot;) 【服务监听端口，默认8081】</span><br><span class="line">  -proxy string</span><br><span class="line">    	next hop proxy for Go Modules, recommend use https://goproxy.io 【指定上游 proxy server，推荐 goproxy.io】</span><br></pre></td></tr></table></figure>
 
-<h2 id="GOPROXY-访问内网仓库"><a href="#GOPROXY-访问内网仓库" class="headerlink" title="GOPROXY 访问内网仓库"></a>GOPROXY 访问内网仓库</h2><p class="fireman-p-indent" >goproxy 配置访问公司内网的 <code>git server</code>：</p>
+<h2 id="GOPROXY-访问内网仓库"><a href="#GOPROXY-访问内网仓库" class="headerlink" title="GOPROXY 访问内网仓库"></a>GOPROXY 访问内网仓库</h2><p>goproxy 配置访问公司内网的 <code>git server</code>：</p>
 <ul>
 <li>用户本地配置 <code>GONOSUMDB=github.com/private</code></li>
 <li>goproxy server 配置 exclude 进行排除掉所代理仓库</li>
 <li>goproxy server 配置 SSH Key ，并且在仓库添加只读权限</li>
 <li>goproxy server 配置 .gitconfig 把 ssh 替换成 http 方式访问</li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017163331251.png" alt="image-20231017163331251"></p>
-<h2 id="推荐-proxy"><a href="#推荐-proxy" class="headerlink" title="推荐 proxy"></a>推荐 proxy</h2><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nb3Byb3h5LmlvLw==">https://goproxy.io<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbW9kcy9hdGhlbnM=">https://github.com/gomods/athens<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nb3Byb3h5LmNuLw==">https://goproxy.cn<i class="fa fa-external-link-alt"></i></span></p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nb2xhbmcub3JnL3JlZi9tb2Q=">Go Modules Reference<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlczIwMTk=">Go Modules in 2019<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvdXNpbmctZ28tbW9kdWxlcw==">Using Go Modules<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbWlncmF0aW5nLXRvLWdvLW1vZHVsZXM=">Migrating to Go Modules<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlLW1pcnJvci1sYXVuY2g=">Module Mirror and Checksum Database Launched<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvcHVibGlzaGluZy1nby1tb2R1bGVz">Publishing Go Modules<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvdjItZ28tbW9kdWxlcw==">Go Modules: v2 and Beyond<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlLWNvbXBhdGliaWxpdHk=">Keeping Your Modules Compatible<i class="fa fa-external-link-alt"></i></span></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017163331251.png" alt="image-20231017163331251"></p>
+<h2 id="推荐-proxy"><a href="#推荐-proxy" class="headerlink" title="推荐 proxy"></a>推荐 proxy</h2><p><span class="exturl" data-url="aHR0cHM6Ly9nb3Byb3h5LmlvLw==">https://goproxy.io<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbW9kcy9hdGhlbnM=">https://github.com/gomods/athens<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nb3Byb3h5LmNuLw==">https://goproxy.cn<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly9nb2xhbmcub3JnL3JlZi9tb2Q=">Go Modules Reference<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlczIwMTk=">Go Modules in 2019<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvdXNpbmctZ28tbW9kdWxlcw==">Using Go Modules<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbWlncmF0aW5nLXRvLWdvLW1vZHVsZXM=">Migrating to Go Modules<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlLW1pcnJvci1sYXVuY2g=">Module Mirror and Checksum Database Launched<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvcHVibGlzaGluZy1nby1tb2R1bGVz">Publishing Go Modules<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvdjItZ28tbW9kdWxlcw==">Go Modules: v2 and Beyond<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlLWNvbXBhdGliaWxpdHk=">Keeping Your Modules Compatible<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 
@@ -391,8 +384,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/post/40eb.html" rel="next" title="微服务可用性设计之隔离">
-                  微服务可用性设计之隔离 <i class="fa fa-angle-right"></i>
+                <a href="/post/70.html" rel="next" title="Go工程化实践之配置管理">
+                  Go工程化实践之配置管理 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

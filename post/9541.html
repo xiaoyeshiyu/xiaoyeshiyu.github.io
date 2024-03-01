@@ -84,14 +84,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -302,23 +295,23 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="堆和栈的定义"><a href="#堆和栈的定义" class="headerlink" title="堆和栈的定义"></a>堆和栈的定义</h2><p class="fireman-p-indent" >Go有两个地方可以分配内存：一个全局堆空间用来动态分配内存，另一个是每个goroutine都有的自身栈空间（初始2k大小）</p>
-<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><p class="fireman-p-indent" >栈区的内存一般由编译器自动进行分配和释放，其中存储着函数的入参以及局部变量，这些参数会随着函数的创建而创建，函数的返回而销毁。（函数内部的局部变量，可能分配在栈上，也可能逃逸到堆上，如果返回这个局部变量的指针到函数外部，就会逃逸到堆上。）</p>
-<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p class="fireman-p-indent" >堆区的内存（可能由make、new函数申请的变量占用）一般由编译器和工程师自己共同进行管理分配，交给runtime GC来释放。对上分配必须找一块足够大的内存来存放新的变量数据。后续释放时，垃圾回收器扫描堆空间寻找不再被使用的对象。（一个值如果在函数栈外可以被访问到，那么这个对象会被自动分配到堆上，也就是发生了逃逸。）</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="堆和栈的定义"><a href="#堆和栈的定义" class="headerlink" title="堆和栈的定义"></a>堆和栈的定义</h2><p>Go有两个地方可以分配内存：一个全局堆空间用来动态分配内存，另一个是每个goroutine都有的自身栈空间（初始2k大小）</p>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><p>栈区的内存一般由编译器自动进行分配和释放，其中存储着函数的入参以及局部变量，这些参数会随着函数的创建而创建，函数的返回而销毁。（函数内部的局部变量，可能分配在栈上，也可能逃逸到堆上，如果返回这个局部变量的指针到函数外部，就会逃逸到堆上。）</p>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p>堆区的内存（可能由make、new函数申请的变量占用）一般由编译器和工程师自己共同进行管理分配，交给runtime GC来释放。对上分配必须找一块足够大的内存来存放新的变量数据。后续释放时，垃圾回收器扫描堆空间寻找不再被使用的对象。（一个值如果在函数栈外可以被访问到，那么这个对象会被自动分配到堆上，也就是发生了逃逸。）</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122125380.png" alt="image-20220918122125380" style="zoom:33%;" />
 
-<p class="fireman-p-indent" >栈从内存高位往下使用，堆从内存地位往上使用。</p>
-<p class="fireman-p-indent" ><strong>栈分配廉价，堆分配昂贵。</strong></p>
-<p class="fireman-p-indent" >1、栈上的变量可以通过地址快速获取；堆上的变量，需要通过堆上的局部变量，再间接访问具体的地址，也就是经历了二次操作。</p>
-<p class="fireman-p-indent" >2、堆的分配成本更高；栈的内存分配只有goroutine自身使用，所以使用和释放都很快；堆的对象可能被其他的goroutine使用，所以最终还需要靠GC扫描和回收</p>
-<h3 id="变量是在堆上还是在栈上？"><a href="#变量是在堆上还是在栈上？" class="headerlink" title="变量是在堆上还是在栈上？"></a>变量是在堆上还是在栈上？</h3><p class="fireman-p-indent" >Go的语法没有提到推和栈，而是交给Go编译器决定在哪分配内存，保证程序的正确性。</p>
-<p class="fireman-p-indent" >从正确的角度来看，使用者不需要知道。GO中的每个变量只要有引用就会一直存在。变量的存储位置（栈还是堆）和语言的语义无关（通过make还是new，不能决定分配在堆上还是在栈上）。</p>
-<p class="fireman-p-indent" >存储位置对于写出高性能的程序确实有影响。如果可能，Go编译器将为该函数的堆栈帧（stack frame）中的函数分配本地变量。但是如果编译器在函数返回后无法证明变量未被引用，则编译器必须在会被垃圾回收的堆上分配变量以避免悬空指针错误（也就是函数返回后，这个局部变量不会被应用，则会被分配到堆上）。此外，如果局部变量非常大，将它存储在堆上而不是栈上可能更有意义。（goroutine的栈空间是2KB，如果局部变量过大，这是变量放在栈上，会扩栈，而相比之下，放在动态的堆上更好。）</p>
-<p class="fireman-p-indent" >在当前编译器中，如果变量存在取值，则该变量是堆上分配的<strong>候选变量</strong>（取地址之后，如果函数外部不会访问到，也会分配在栈上）。但是基础的逃逸分析可以即将那些生存不超过函数返回值的变量识别出来，并且因此可以分配在栈上。（这种情况下性能是最好的）</p>
-<h2 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h2><p class="fireman-p-indent" > 通过检查变量的作用域是否超过了它所在的栈来决定是否将它分配在堆上，其中”变量的作用域超出了它所在的栈“这种行为被称为逃逸。逃逸分析在大多数语言里属于静态分析：在编译期由静态代码分析来决定一个值是否能被分配到栈帧上，还是需要”逃逸“到堆上。</p>
+<p>栈从内存高位往下使用，堆从内存地位往上使用。</p>
+<p><strong>栈分配廉价，堆分配昂贵。</strong></p>
+<p>1、栈上的变量可以通过地址快速获取；堆上的变量，需要通过堆上的局部变量，再间接访问具体的地址，也就是经历了二次操作。</p>
+<p>2、堆的分配成本更高；栈的内存分配只有goroutine自身使用，所以使用和释放都很快；堆的对象可能被其他的goroutine使用，所以最终还需要靠GC扫描和回收</p>
+<h3 id="变量是在堆上还是在栈上？"><a href="#变量是在堆上还是在栈上？" class="headerlink" title="变量是在堆上还是在栈上？"></a>变量是在堆上还是在栈上？</h3><p>Go的语法没有提到推和栈，而是交给Go编译器决定在哪分配内存，保证程序的正确性。</p>
+<p>从正确的角度来看，使用者不需要知道。GO中的每个变量只要有引用就会一直存在。变量的存储位置（栈还是堆）和语言的语义无关（通过make还是new，不能决定分配在堆上还是在栈上）。</p>
+<p>存储位置对于写出高性能的程序确实有影响。如果可能，Go编译器将为该函数的堆栈帧（stack frame）中的函数分配本地变量。但是如果编译器在函数返回后无法证明变量未被引用，则编译器必须在会被垃圾回收的堆上分配变量以避免悬空指针错误（也就是函数返回后，这个局部变量不会被应用，则会被分配到堆上）。此外，如果局部变量非常大，将它存储在堆上而不是栈上可能更有意义。（goroutine的栈空间是2KB，如果局部变量过大，这是变量放在栈上，会扩栈，而相比之下，放在动态的堆上更好。）</p>
+<p>在当前编译器中，如果变量存在取值，则该变量是堆上分配的<strong>候选变量</strong>（取地址之后，如果函数外部不会访问到，也会分配在栈上）。但是基础的逃逸分析可以即将那些生存不超过函数返回值的变量识别出来，并且因此可以分配在栈上。（这种情况下性能是最好的）</p>
+<h2 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h2><p> 通过检查变量的作用域是否超过了它所在的栈来决定是否将它分配在堆上，其中”变量的作用域超出了它所在的栈“这种行为被称为逃逸。逃逸分析在大多数语言里属于静态分析：在编译期由静态代码分析来决定一个值是否能被分配到栈帧上，还是需要”逃逸“到堆上。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	num := getRandom()</span><br><span class="line">	<span class="built_in">println</span>(num)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getRandom</span><span class="params">()</span></span> *<span class="type">int</span> &#123;</span><br><span class="line">	tmp := rand.Int()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> &amp;tmp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过编译时加<code>-gcflags &quot;-m&quot;</code>参数</p>
+<p>通过编译时加<code>-gcflags &quot;-m&quot;</code>参数</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">go build -gcflags &quot;-m -l&quot;        // 其中 -l 取消内联</span><br><span class="line"># gostudy/memeory/shareMemory</span><br><span class="line">./main.go:13:2: moved to heap: tmp</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -326,19 +319,19 @@
 <li>减少内存碎片的产生（在栈上，内存分配是连续的）</li>
 <li>减轻分配堆内存的开销，提高程序的运行速度（相比而言，在堆上分配内存，效率更低）</li>
 </ul>
-<h3 id="超过栈帧（stack-frame）"><a href="#超过栈帧（stack-frame）" class="headerlink" title="超过栈帧（stack frame）"></a>超过栈帧（stack frame）</h3><p class="fireman-p-indent" >当一个函数被调用时，会在两个相关的帧边界进行上下文切换。（main函数调用getRandom函数）</p>
+<h3 id="超过栈帧（stack-frame）"><a href="#超过栈帧（stack-frame）" class="headerlink" title="超过栈帧（stack frame）"></a>超过栈帧（stack frame）</h3><p>当一个函数被调用时，会在两个相关的帧边界进行上下文切换。（main函数调用getRandom函数）</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918114037273.png" alt="image-20220918114037273" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >从调用函数切换到被调用函数，如果函数调用时需要传递参数，那么这些参数值也要传递到被调用函数的帧边界中。Go语言中帧边界间的数据传递是按值传递的。(值传递，传递指针地址，main中的num变量指向getRandom函数内部，当getRandom函数调用完成，内部的tmp变量也会被擦除，此时num无法访问到值。)</p>
+<p>从调用函数切换到被调用函数，如果函数调用时需要传递参数，那么这些参数值也要传递到被调用函数的帧边界中。Go语言中帧边界间的数据传递是按值传递的。(值传递，传递指针地址，main中的num变量指向getRandom函数内部，当getRandom函数调用完成，内部的tmp变量也会被擦除，此时num无法访问到值。)</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918114101148.png" alt="image-20220918114101148" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >任何在函数getRandom中的变量在函数返回时，不能访问。Go查找所有变量超过当前函数栈帧的，把他们分配到堆上，避免outlive变量。</p>
-<p class="fireman-p-indent" >这种情况下，num变量不能指向之前的栈。</p>
-<p class="fireman-p-indent" >变量tmp在栈上分配，但是它包含了指向堆内存的地址，所以可以安全的从一个函数的栈帧复制到另外一个函数的栈帧。</p>
-<p class="fireman-p-indent" >变量tmp此时放在堆区，tmp变量指向堆区的地址，返回地址之后，num也指向堆区的地址。</p>
+<p>任何在函数getRandom中的变量在函数返回时，不能访问。Go查找所有变量超过当前函数栈帧的，把他们分配到堆上，避免outlive变量。</p>
+<p>这种情况下，num变量不能指向之前的栈。</p>
+<p>变量tmp在栈上分配，但是它包含了指向堆内存的地址，所以可以安全的从一个函数的栈帧复制到另外一个函数的栈帧。</p>
+<p>变量tmp此时放在堆区，tmp变量指向堆区的地址，返回地址之后，num也指向堆区的地址。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122217742.png" alt="image-20220918122217742" style="zoom:50%;" />
 
-<h3 id="逃逸案例"><a href="#逃逸案例" class="headerlink" title="逃逸案例"></a>逃逸案例</h3><p class="fireman-p-indent" > 栈对象逃逸比较典型的就是”多级间接赋值容易导致逃逸“，这里的多级间接指的是，对某个引用类对象中的引用类成员进行复制（Data.Filed &#x3D; value，如果Data，Filed都是引用类型的数据类型，则会导致value逃逸，这里的等号不仅仅是赋值，也表示参数传递。）Go与严重的引用类数据类型有：<code>func,interface,slice,map,chan,*Type</code>：</p>
+<h3 id="逃逸案例"><a href="#逃逸案例" class="headerlink" title="逃逸案例"></a>逃逸案例</h3><p> 栈对象逃逸比较典型的就是”多级间接赋值容易导致逃逸“，这里的多级间接指的是，对某个引用类对象中的引用类成员进行复制（Data.Filed &#x3D; value，如果Data，Filed都是引用类型的数据类型，则会导致value逃逸，这里的等号不仅仅是赋值，也表示参数传递。）Go与严重的引用类数据类型有：<code>func,interface,slice,map,chan,*Type</code>：</p>
 <ul>
 <li>一个值被分享到函数栈帧范围之外 </li>
 <li>在for循环外申明，在for循环内分配，同理闭环</li>
@@ -347,29 +340,29 @@
 <li>slice的背后数组被重新分配</li>
 <li>在interface类型上调用方法</li>
 </ul>
-<h2 id="连续栈"><a href="#连续栈" class="headerlink" title="连续栈"></a>连续栈</h2><h3 id="分段栈"><a href="#分段栈" class="headerlink" title="分段栈"></a>分段栈</h3><p class="fireman-p-indent" >Go应用程序运行时，每个goroutine都维护着一个自己的栈区，这个栈只能自己使用而不能被其他goroutine使用。</p>
-<p class="fireman-p-indent" > 栈区初始大小是2KB（x86_64架构下线程的默认栈2MB），在goroutine运行时，栈区会按照需要增长和收缩，占用的内存最大限制的默认值在64位系统上是1GB。</p>
+<h2 id="连续栈"><a href="#连续栈" class="headerlink" title="连续栈"></a>连续栈</h2><h3 id="分段栈"><a href="#分段栈" class="headerlink" title="分段栈"></a>分段栈</h3><p>Go应用程序运行时，每个goroutine都维护着一个自己的栈区，这个栈只能自己使用而不能被其他goroutine使用。</p>
+<p> 栈区初始大小是2KB（x86_64架构下线程的默认栈2MB），在goroutine运行时，栈区会按照需要增长和收缩，占用的内存最大限制的默认值在64位系统上是1GB。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122239078.png" alt="image-20220918122239078" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >扩容后，会通过指针指向新的栈，也就是分段栈。</p>
-<p class="fireman-p-indent" >分段栈的实现方式存在热分裂”hot split”问题。如果栈快满了，那么下一次的函数调用会强制触发栈扩容。</p>
-<p class="fireman-p-indent" >当函数返回时，新分配的”stack stunk”会被清理掉。如果这个函数调用产生的范围是在一个循环中，会导致严重的性能问题，频繁的alloc&#x2F;free。</p>
+<p>扩容后，会通过指针指向新的栈，也就是分段栈。</p>
+<p>分段栈的实现方式存在热分裂”hot split”问题。如果栈快满了，那么下一次的函数调用会强制触发栈扩容。</p>
+<p>当函数返回时，新分配的”stack stunk”会被清理掉。如果这个函数调用产生的范围是在一个循环中，会导致严重的性能问题，频繁的alloc&#x2F;free。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">G</span><span class="params">(items []<span class="type">string</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> _, item := <span class="keyword">range</span> itmes&#123;</span><br><span class="line">		H(item)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122346214.png" alt="image-20220918122346214" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >例如循环调用H函数，如果栈空间超过2KB，调用时，会申请新的栈内存分配，调用结束会销毁。</p>
-<p class="fireman-p-indent" >在Go 1.0-1.2版本中，将栈默认大小改成8KB，降低触发热分裂的问题，但是每个goroutine的内存开销就比较大。而且栈内存使用超过8KB也会出现这个问题。</p>
-<p class="fireman-p-indent" >直到实现了连续栈（contiguous stack），栈大小才改为2KB。</p>
-<h3 id="连续栈-1"><a href="#连续栈-1" class="headerlink" title="连续栈"></a>连续栈</h3><p class="fireman-p-indent" >采用复制栈的实现方式，在热分裂场景中不会频繁释放内存，即不像分配一个新的内存块并链接到老的栈内存块，而是会分配一个两倍大的内存块，并把老的内存块内容复制到新的内存块中，当栈缩减回之前大小时，也不会释放。</p>
+<p>例如循环调用H函数，如果栈空间超过2KB，调用时，会申请新的栈内存分配，调用结束会销毁。</p>
+<p>在Go 1.0-1.2版本中，将栈默认大小改成8KB，降低触发热分裂的问题，但是每个goroutine的内存开销就比较大。而且栈内存使用超过8KB也会出现这个问题。</p>
+<p>直到实现了连续栈（contiguous stack），栈大小才改为2KB。</p>
+<h3 id="连续栈-1"><a href="#连续栈-1" class="headerlink" title="连续栈"></a>连续栈</h3><p>采用复制栈的实现方式，在热分裂场景中不会频繁释放内存，即不像分配一个新的内存块并链接到老的栈内存块，而是会分配一个两倍大的内存块，并把老的内存块内容复制到新的内存块中，当栈缩减回之前大小时，也不会释放。</p>
 <ul>
 <li>runtime.newstack 分配更大的栈内存空间</li>
 <li>runtime.copystack 将旧栈中的内容复制到新栈中</li>
 <li>将指向旧栈对应变量的指针重新指向新栈（老栈中如果使用指针指向地址，拷贝到新栈之后，需要重新指向新的对象地址）</li>
 <li>runtime.stackfree 销毁并回收旧栈的内存空间</li>
 </ul>
-<p class="fireman-p-indent" >如果栈区的空间使用率不到1&#x2F;4，那么在垃圾回收时，使用runtime.shrinkstack进行栈所用，同样使用copystack。</p>
-<h3 id="栈扩容"><a href="#栈扩容" class="headerlink" title="栈扩容"></a>栈扩容</h3><p class="fireman-p-indent" >Go 运行时 判断栈空间是否足够，所以在call function 中会插入runtime.morestack，但每个函数调用都判定，成本会比较高。在编译期通过计算sp（栈指针）、func stack framesize（栈空间）确定需要哪个函数调用中插入runtime.morestack。</p>
+<p>如果栈区的空间使用率不到1&#x2F;4，那么在垃圾回收时，使用runtime.shrinkstack进行栈所用，同样使用copystack。</p>
+<h3 id="栈扩容"><a href="#栈扩容" class="headerlink" title="栈扩容"></a>栈扩容</h3><p>Go 运行时 判断栈空间是否足够，所以在call function 中会插入runtime.morestack，但每个函数调用都判定，成本会比较高。在编译期通过计算sp（栈指针）、func stack framesize（栈空间）确定需要哪个函数调用中插入runtime.morestack。</p>
 <ul>
 <li><p>当函数是叶子节点，且栈帧小于等于112，不插入指令（函数不会调用其他函数，且函数内栈容量较小）</p>
 </li>
@@ -382,8 +375,8 @@
 <p>SP - stackguard+StackGuard &lt;&#x3D; framesize + (StackGuard-StackSmall)</p>
 </li>
 </ul>
-<h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><p class="fireman-p-indent" >内存管理是指对堆上的内存管理。</p>
-<p class="fireman-p-indent" >TCMalloc 是 Thread Cache Malloc 的简称，是Go内存管理的起源，Go的内存管理是借鉴了TCMalloc：</p>
+<h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h3><p>内存管理是指对堆上的内存管理。</p>
+<p>TCMalloc 是 Thread Cache Malloc 的简称，是Go内存管理的起源，Go的内存管理是借鉴了TCMalloc：</p>
 <ul>
 <li><p>内存碎片</p>
 <p>随着内存不断的申请和释放，内存上会存在大量的碎片。（例如连续的内存申请之后，中间的内存释放，就会出现内存碎片）内存碎片会降低内存的使用率。为了解决内存碎片，可以将2个连续的未使用的内存块合并，减少碎片</p>
@@ -392,8 +385,8 @@
 <p>前面说了，堆上的内存是全局可以访问的。同一进程下所有的线程共享相同的内存空间，他们申请内存时需要加锁，如果不加锁就存在同一块内存被2个线程同时访问的问题。</p>
 </li>
 </ul>
-<h3 id="内存布局"><a href="#内存布局" class="headerlink" title="内存布局"></a>内存布局</h3><p class="fireman-p-indent" >Go借鉴了TCMalloc的思想，对内存进行管理。</p>
-<p class="fireman-p-indent" >内存布局中的几个概念：</p>
+<h3 id="内存布局"><a href="#内存布局" class="headerlink" title="内存布局"></a>内存布局</h3><p>Go借鉴了TCMalloc的思想，对内存进行管理。</p>
+<p>内存布局中的几个概念：</p>
 <ul>
 <li>page：内存页，一块8K大小的内存空间。Go与操作系统之间的内存申请和释放，都是以Page为单位。</li>
 <li>span：内存块，一个或多个连续的page组成一个span</li>
@@ -402,26 +395,26 @@
 </ul>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918130620395.png" alt="image-20220918130620395" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >例如，一个span中有一个page，这个span是8K，每个Object是8Byte，则可以分为1024个Object。</p>
-<h3 id="小于32KB内存分配"><a href="#小于32KB内存分配" class="headerlink" title="小于32KB内存分配"></a>小于32KB内存分配</h3><p class="fireman-p-indent" >当程序里发生了小于32kb一下的小内存申请时，Go会从一个叫做mcache的本地缓存给程序分配内存。（P的mcache，好处是一个P同时只能运行一个G，不需要加锁）。这样的内存块叫做mspan，它是要给程序分配内存时的分配单元。</p>
-<p class="fireman-p-indent" >在Go的调度器模型里，每个线程M会绑定给一个处理器P，在单一粒度的时间里，只能做最多处理运行一个goroutine，每个P都会绑定一个上面说的本地缓存mcache。当需要进行内存分配时，当前运行的goroutine会从mcache中查找可用的mspan。本地mcache里分配内存时不需要加锁，这种分配策略效率更高。</p>
+<p>例如，一个span中有一个page，这个span是8K，每个Object是8Byte，则可以分为1024个Object。</p>
+<h3 id="小于32KB内存分配"><a href="#小于32KB内存分配" class="headerlink" title="小于32KB内存分配"></a>小于32KB内存分配</h3><p>当程序里发生了小于32kb一下的小内存申请时，Go会从一个叫做mcache的本地缓存给程序分配内存。（P的mcache，好处是一个P同时只能运行一个G，不需要加锁）。这样的内存块叫做mspan，它是要给程序分配内存时的分配单元。</p>
+<p>在Go的调度器模型里，每个线程M会绑定给一个处理器P，在单一粒度的时间里，只能做最多处理运行一个goroutine，每个P都会绑定一个上面说的本地缓存mcache。当需要进行内存分配时，当前运行的goroutine会从mcache中查找可用的mspan。本地mcache里分配内存时不需要加锁，这种分配策略效率更高。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131049700.png" alt="image-20220918131049700" style="zoom: 33%;" />
 
-<p class="fireman-p-indent" > 先通过对象的大小，查找到具体的分类（二分法），然后在对应的span中申请内存。</p>
-<p class="fireman-p-indent" >申请内存时都会给他们一个mspan这样的单元会不会产生浪费。</p>
-<p class="fireman-p-indent" >其实mcache持有的这一系列的mspac并不都是统一大小的，而是啊按照大小，从8byte到32kb分了大概67*2类的mspan（指针类型和非指针类型，所以要乘以2）。</p>
-<p class="fireman-p-indent" >每个内存页分了多级固定大小的”空闲列表“，这有助于减少碎片。类似的思路在Linux Kernel，Memcache都可以见到Slab-Allactor。</p>
+<p> 先通过对象的大小，查找到具体的分类（二分法），然后在对应的span中申请内存。</p>
+<p>申请内存时都会给他们一个mspan这样的单元会不会产生浪费。</p>
+<p>其实mcache持有的这一系列的mspac并不都是统一大小的，而是啊按照大小，从8byte到32kb分了大概67*2类的mspan（指针类型和非指针类型，所以要乘以2）。</p>
+<p>每个内存页分了多级固定大小的”空闲列表“，这有助于减少碎片。类似的思路在Linux Kernel，Memcache都可以见到Slab-Allactor。</p>
 <img data-src="../../../../../Library/Application%20Support/typora-user-images/image-20220918131605478.png" alt="image-20220918131605478" style="zoom:25%;" />
 
-<p class="fireman-p-indent" > 例如一个标记为黄色，代表该内存已经被使用。此时需要找到下一个空闲的object。</p>
-<p class="fireman-p-indent" >如果分配内存时mcache里没有空闲的对口sizeclass的mspan了，Go里还为每种类别的mspan维护着一个mcentral。</p>
+<p> 例如一个标记为黄色，代表该内存已经被使用。此时需要找到下一个空闲的object。</p>
+<p>如果分配内存时mcache里没有空闲的对口sizeclass的mspan了，Go里还为每种类别的mspan维护着一个mcentral。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131843777.png" alt="image-20220918131843777" style="zoom:33%;" />
 
-<p class="fireman-p-indent" >mcentral的作用是为所有mcache提供切分好的mspan资源。每个central会持有一种特定大小的全局mspan列表，包括已分配出去的和未分配出去的。每个mcentral对应一种mspan，当工作线程的mcache中没有合适（也就是特定大小的）的msapn时，就会从mcentral中去获取。</p>
-<p class="fireman-p-indent" >mcentral被所有的工作线程共同享有，存在多个goroutine竞争的情况，因此从mcentral获取资源时需要加锁。</p>
-<p class="fireman-p-indent" >mcentral里维护着两个双向链表，nonempty表示链表里还有空闲的mspan待分配。empty表示这条链表里的mspan都被分配了object或缓存mcache中。</p>
-<p class="fireman-p-indent" >程序申请内存的时候，mcache里已经没有合适的空闲mspan，那么工作线程机会想下图这样去mcentral里去申请。</p>
-<p class="fireman-p-indent" >mcache从mcentral获取和归还mspan的流程：</p>
+<p>mcentral的作用是为所有mcache提供切分好的mspan资源。每个central会持有一种特定大小的全局mspan列表，包括已分配出去的和未分配出去的。每个mcentral对应一种mspan，当工作线程的mcache中没有合适（也就是特定大小的）的msapn时，就会从mcentral中去获取。</p>
+<p>mcentral被所有的工作线程共同享有，存在多个goroutine竞争的情况，因此从mcentral获取资源时需要加锁。</p>
+<p>mcentral里维护着两个双向链表，nonempty表示链表里还有空闲的mspan待分配。empty表示这条链表里的mspan都被分配了object或缓存mcache中。</p>
+<p>程序申请内存的时候，mcache里已经没有合适的空闲mspan，那么工作线程机会想下图这样去mcentral里去申请。</p>
+<p>mcache从mcentral获取和归还mspan的流程：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918132532871.png" alt="image-20220918132532871" style="zoom:33%;" />
 
 <ul>
@@ -442,40 +435,40 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" >mcentral是sizeclass相同的span会以链表的形式组织在一起，就是指该span用来存储哪种大小的对象。</p>
-<p class="fireman-p-indent" >当mcentral也没有空闲的mspan时，会向mheap申请。（mheap内部也维护一些msapn）</p>
-<p class="fireman-p-indent" >mheap没有资源时，会向操作系统申请新内存。</p>
-<p class="fireman-p-indent" >mheap主要用于大内存的内存分配，以及管理未切割的mspan，用于给mcentral切割成小对象。</p>
+<p>mcentral是sizeclass相同的span会以链表的形式组织在一起，就是指该span用来存储哪种大小的对象。</p>
+<p>当mcentral也没有空闲的mspan时，会向mheap申请。（mheap内部也维护一些msapn）</p>
+<p>mheap没有资源时，会向操作系统申请新内存。</p>
+<p>mheap主要用于大内存的内存分配，以及管理未切割的mspan，用于给mcentral切割成小对象。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133110695.png" alt="image-20220918133110695" style="zoom:33%;" />
 
-<p class="fireman-p-indent" >mheap中含有所有规格的mcentral，所以当一个mcache从mcentral申请mspan时，只需要在独立的mcentral中使用锁，并不影响申请其他规格的mspan。</p>
-<p class="fireman-p-indent" >所有mcentral的集合则存放于mheap中的。mheap里的arena区域是真正的堆区，运行时会将8KB看做一页，这些内存页中存储了所有在堆上初始化的对象，运行时使用二维的runtime.heapArena数组管理所有的内存,每个runtime.heapArena都会管理64MB的内存。</p>
-<p class="fireman-p-indent" >如果arena区域没有足够的空间，会调用runtime.mheap,sysAlloc从操作系统中申请更多的内存。（如下图Go1.11前的内存布局）</p>
+<p>mheap中含有所有规格的mcentral，所以当一个mcache从mcentral申请mspan时，只需要在独立的mcentral中使用锁，并不影响申请其他规格的mspan。</p>
+<p>所有mcentral的集合则存放于mheap中的。mheap里的arena区域是真正的堆区，运行时会将8KB看做一页，这些内存页中存储了所有在堆上初始化的对象，运行时使用二维的runtime.heapArena数组管理所有的内存,每个runtime.heapArena都会管理64MB的内存。</p>
+<p>如果arena区域没有足够的空间，会调用runtime.mheap,sysAlloc从操作系统中申请更多的内存。（如下图Go1.11前的内存布局）</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133621387.png" alt="image-20220918133621387" style="zoom: 33%;" />
 
-<p class="fireman-p-indent" > 此时内存分配是连续的，1.11之后，做了一些改动</p>
+<p> 此时内存分配是连续的，1.11之后，做了一些改动</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133832056.png" alt="image-20220918133832056" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >在mheap中，通过分割成64MB的Arena进行管理。 </p>
-<h3 id="大于32KB内存分配"><a href="#大于32KB内存分配" class="headerlink" title="大于32KB内存分配"></a>大于32KB内存分配</h3><p class="fireman-p-indent" >超过32KB的内存申请，会直接从堆上（mheap）上分配对应的数据量的内存页（每页是8K）给程序。（因为超过32KB很少会有内存碎片，因此直接从堆上分配即可。）</p>
+<p>在mheap中，通过分割成64MB的Arena进行管理。 </p>
+<h3 id="大于32KB内存分配"><a href="#大于32KB内存分配" class="headerlink" title="大于32KB内存分配"></a>大于32KB内存分配</h3><p>超过32KB的内存申请，会直接从堆上（mheap）上分配对应的数据量的内存页（每页是8K）给程序。（因为超过32KB很少会有内存碎片，因此直接从堆上分配即可。）</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918134410913.png" alt="image-20220918134410913" style="zoom: 33%;" />
 
-<p class="fireman-p-indent" >这个过程，需要所搜到合适的span分配，过程会用到一些搜索算法，Go版本更新过程经历了比较多的改动，有使用空链表，二叉排序树，在1.16版本使用奇数树和pagecache的方式</p>
-<h3 id="0size内存分配"><a href="#0size内存分配" class="headerlink" title="0size内存分配"></a>0size内存分配</h3><p class="fireman-p-indent" >Go针对没有分配内存的变量做了优化，指向同一个内存地址，nil（0x0）</p>
-<h3 id="小于16B内存分配"><a href="#小于16B内存分配" class="headerlink" title="小于16B内存分配"></a>小于16B内存分配</h3><p class="fireman-p-indent" >对于小于16B字节的对象（且<strong>无指针</strong>），Go语言将其划分为了tiny对象。划分tiny对象的主要目的是为了处理极小的字符串和独立的转义变量。对json的基准测试表明，使用tiny对象减少了12&amp;的分配次数和20%的堆大小。ting对象会被放入calss为2的span中（Object为16Byte的span）。</p>
+<p>这个过程，需要所搜到合适的span分配，过程会用到一些搜索算法，Go版本更新过程经历了比较多的改动，有使用空链表，二叉排序树，在1.16版本使用奇数树和pagecache的方式</p>
+<h3 id="0size内存分配"><a href="#0size内存分配" class="headerlink" title="0size内存分配"></a>0size内存分配</h3><p>Go针对没有分配内存的变量做了优化，指向同一个内存地址，nil（0x0）</p>
+<h3 id="小于16B内存分配"><a href="#小于16B内存分配" class="headerlink" title="小于16B内存分配"></a>小于16B内存分配</h3><p>对于小于16B字节的对象（且<strong>无指针</strong>），Go语言将其划分为了tiny对象。划分tiny对象的主要目的是为了处理极小的字符串和独立的转义变量。对json的基准测试表明，使用tiny对象减少了12&amp;的分配次数和20%的堆大小。ting对象会被放入calss为2的span中（Object为16Byte的span）。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918134928006.png" alt="image-20220918134928006" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >在16Byte的Object中线分配2Byte，再分配4Byte，分配之后，偏移量往后移动。（这个思路就类似于申请一个大的Object，再往这个Object中塞入对象，如果塞不下，就再申请一个）</p>
+<p>在16Byte的Object中线分配2Byte，再分配4Byte，分配之后，偏移量往后移动。（这个思路就类似于申请一个大的Object，再往这个Object中塞入对象，如果塞不下，就再申请一个）</p>
 <ul>
 <li>首先查看之前分配的元素是否有空余的空间</li>
 <li>如果不够，例如要分配16Byte的大小，或者已经分配了，剩余的不够，这时就需要找到下一个空闲的元素</li>
 </ul>
-<p class="fireman-p-indent" >tiny分配的第一步是尝试利用分配过的前一个元素的空间，达到节约内存的目录。</p>
-<h3 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h3><p class="fireman-p-indent" >整体的内存分配是一个分级存储。</p>
+<p>tiny分配的第一步是尝试利用分配过的前一个元素的空间，达到节约内存的目录。</p>
+<h3 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h3><p>整体的内存分配是一个分级存储。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918135324085.png" alt="image-20220918135324085" style="zoom: 33%;" />
 
-<p class="fireman-p-indent" >从P到mcache，从mcache到mcentral，从mcentral到meahp。</p>
-<p class="fireman-p-indent" >一般小对象通过mspan分内存；大对象则直接由mheap分配内存。</p>
+<p>从P到mcache，从mcache到mcentral，从mcentral到meahp。</p>
+<p>一般小对象通过mspan分内存；大对象则直接由mheap分配内存。</p>
 <ul>
 <li>Go在程序启动时，会向操作系统申请一大块内存，由mheap结构全局管理（现在Go版本不需要连续内存，所以不会申请一大堆内存，而是使用arena管理内存块）</li>
 <li>Go内存管理的基本单元是mspan，每种mspan可以分配特定大小的object</li>

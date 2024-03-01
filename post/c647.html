@@ -37,8 +37,8 @@
 <meta property="article:published_time" content="2022-07-05T16:00:00.000Z">
 <meta property="article:modified_time" content="2023-09-08T02:07:09.544Z">
 <meta property="article:author" content="Mitaka xu">
-<meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="数据库">
+<meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
 
 
@@ -67,14 +67,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -285,70 +278,70 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p class="fireman-p-indent" ><code>redis</code>是当前最为流行的缓存服务，内存存储，通过IO多路复用型使得即使是单线程，也有非常高的性能。学习<code>redis</code>时需要有<code>redis</code>环境，这里介绍四种方式，一种是单机模式，一种是主从模式，一种是哨兵模式，一种是集群模式。</p>
-<h2 id="单机模式"><a href="#单机模式" class="headerlink" title="单机模式"></a>单机模式</h2><p class="fireman-p-indent" >安装单机版的方式比较多，为了可以实现数据可持久化，这里使用动态存储。并且<code>pv</code>是由<code>nfs</code>作为<code>sc</code>提供。</p>
-<p class="fireman-p-indent" >pvc.yaml</p>
+    <div class="post-body" itemprop="articleBody"><p><code>redis</code>是当前最为流行的缓存服务，内存存储，通过IO多路复用型使得即使是单线程，也有非常高的性能。学习<code>redis</code>时需要有<code>redis</code>环境，这里介绍四种方式，一种是单机模式，一种是主从模式，一种是哨兵模式，一种是集群模式。</p>
+<h2 id="单机模式"><a href="#单机模式" class="headerlink" title="单机模式"></a>单机模式</h2><p>安装单机版的方式比较多，为了可以实现数据可持久化，这里使用动态存储。并且<code>pv</code>是由<code>nfs</code>作为<code>sc</code>提供。</p>
+<p>pvc.yaml</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolumeClaim</span><br><span class="line">metadata:</span><br><span class="line">  annotations:</span><br><span class="line">  labels:</span><br><span class="line">    app: redis</span><br><span class="line">  name: redis-pv-claim</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">  - ReadWriteOnce</span><br><span class="line">  resources:</span><br><span class="line">    requests:</span><br><span class="line">      storage: 1Gi</span><br><span class="line">  storageClassName: nfs-client</span><br><span class="line">  volumeMode: Filesystem</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >cm.yaml</p>
+<p>cm.yaml</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@master redis-single]# cat cm.yaml</span><br><span class="line">apiVersion: v1</span><br><span class="line">data:</span><br><span class="line">  redis.conf: |</span><br><span class="line">    port 6379</span><br><span class="line">    timeout 3000</span><br><span class="line">    tcp-keepalive 0</span><br><span class="line">    databases 99</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: redis-config</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >sts.yaml</p>
+<p>sts.yaml</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: StatefulSet</span><br><span class="line">metadata:</span><br><span class="line">  name: redis</span><br><span class="line">  labels:</span><br><span class="line">    app: redis</span><br><span class="line">spec:</span><br><span class="line">  serviceName: redis</span><br><span class="line">  replicas: 1</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: redis</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: redis</span><br><span class="line">    spec:</span><br><span class="line">      containers:</span><br><span class="line">        - name: redis</span><br><span class="line">          image: redis:5.0.6</span><br><span class="line">          imagePullPolicy: IfNotPresent</span><br><span class="line">          resources:</span><br><span class="line">            limits:</span><br><span class="line">              cpu: 450m</span><br><span class="line">              memory: 4000Mi</span><br><span class="line">            requests:</span><br><span class="line">              cpu: 400m</span><br><span class="line">              memory: 4000Mi</span><br><span class="line">          env:</span><br><span class="line">            - name: TZ</span><br><span class="line">              value: Asia/Shanghai</span><br><span class="line">          command: [&quot;redis-server&quot;,&quot;/usr/local/etc/redis/redis.conf&quot;,&quot;--appendonly yes&quot;]</span><br><span class="line">          ports:</span><br><span class="line">            - containerPort: 6379</span><br><span class="line">          volumeMounts:</span><br><span class="line">            - name: vol-conf</span><br><span class="line">              mountPath: /usr/local/etc/redis</span><br><span class="line">            - name: vol-data</span><br><span class="line">              mountPath: /data</span><br><span class="line">      volumes:</span><br><span class="line">        - name: vol-conf</span><br><span class="line">          configMap:</span><br><span class="line">            name: redis-config</span><br><span class="line">        - name: vol-data</span><br><span class="line">          persistentVolumeClaim:</span><br><span class="line">            claimName: redis-pv-claim</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >svc.yaml</p>
+<p>svc.yaml</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    app: redis</span><br><span class="line">  name: redis</span><br><span class="line">spec:</span><br><span class="line">  ports:</span><br><span class="line">  - name: &quot;6379&quot;</span><br><span class="line">    port: 6379</span><br><span class="line">    protocol: TCP</span><br><span class="line">    targetPort: 6379</span><br><span class="line">  selector:</span><br><span class="line">    app: redis</span><br><span class="line">  type: NodePort</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装</p>
+<p>安装</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># kubectl create -f pvc.yaml -n redis</span><br><span class="line"># kubectl create -f cm.yaml -n redis</span><br><span class="line"># kubectl create -f sts.yaml -n redis</span><br><span class="line"># kubectl create -f svc.yaml -n redis</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># kubectl get svc -n redis</span><br><span class="line">NAME    TYPE       CLUSTER-IP   EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">redis   NodePort   10.1.86.36   &lt;none&gt;        6379:30325/TCP   116s</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >连接</p>
+<p>连接</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -h 10.1.86.36 -p 6379</span><br></pre></td></tr></table></figure>
 
-<h2 id="主从模式"><a href="#主从模式" class="headerlink" title="主从模式"></a>主从模式</h2><p class="fireman-p-indent" >主从版<code>redis</code>使用<code>bitname</code>的<code>repo</code>源，通过<code>chart</code>直接安装。后端存储使用<code>nfs</code>提供的的<code>sc</code></p>
+<h2 id="主从模式"><a href="#主从模式" class="headerlink" title="主从模式"></a>主从模式</h2><p>主从版<code>redis</code>使用<code>bitname</code>的<code>repo</code>源，通过<code>chart</code>直接安装。后端存储使用<code>nfs</code>提供的的<code>sc</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm pull bitnami/redis</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">global:</span><br><span class="line">  storageClass: &quot;nfs-client&quot;</span><br><span class="line">architecture: replication</span><br><span class="line">master:</span><br><span class="line">  count: 1</span><br><span class="line">  startupProbe:</span><br><span class="line">    enabled: false</span><br><span class="line">  livenessProbe:</span><br><span class="line">    enabled: true</span><br><span class="line">  readinessProbe:</span><br><span class="line">    enabled: false</span><br><span class="line">  service:</span><br><span class="line">    type: NodePort</span><br><span class="line">replica:</span><br><span class="line">  replicaCount: 3</span><br><span class="line">  startupProbe:</span><br><span class="line">    enabled: true</span><br><span class="line">  livenessProbe:</span><br><span class="line">    enabled: true</span><br><span class="line">  readinessProbe:</span><br><span class="line">    enabled: false</span><br><span class="line">  service:</span><br><span class="line">    type: NodePort</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装</p>
+<p>安装</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm install redis-cluster -f values.yaml ./ -n redis</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >使用</p>
+<p>使用</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># redis-cli -h redis-cluster-master</span><br><span class="line"># redis-cli -h redis-cluster-replicas</span><br></pre></td></tr></table></figure>
 
-<h2 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h2><p class="fireman-p-indent" ><code>chart</code>包同主从模式，使用不同的配置即可</p>
+<h2 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h2><p><code>chart</code>包同主从模式，使用不同的配置即可</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">global:</span><br><span class="line">  storageClass: &quot;nfs-client&quot;</span><br><span class="line">architecture: replication</span><br><span class="line">sentinel:</span><br><span class="line">  enabled: true</span><br><span class="line">  startupProbe:</span><br><span class="line">    enabled: false</span><br><span class="line">  livenessProbe:</span><br><span class="line">    enabled: false</span><br><span class="line">  readinessProbe:</span><br><span class="line">    enabled: false</span><br><span class="line">  persistence:</span><br><span class="line">    enabled: true</span><br><span class="line">    storageClass: &quot;nfs-client&quot;</span><br><span class="line">  service:</span><br><span class="line">    type: ClusterIP</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装</p>
+<p>安装</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm install redis-sentinel -f values.yaml ./ -n redis</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >使用</p>
+<p>使用</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># kubectl get svc -n redis</span><br><span class="line">NAME                      TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)                                                          AGE</span><br><span class="line">redis-sentinel            NodePort    10.1.71.104   &lt;none&gt;        30001:30001/TCP,30000:30000/TCP,26379:30641/TCP,6379:30446/TCP   55s</span><br><span class="line">redis-sentinel-headless   ClusterIP   None          &lt;none&gt;        6379/TCP,26379/TCP                                               7m37s</span><br><span class="line">redis-sentinel-node-0     NodePort    10.1.215.86   &lt;none&gt;        30003:30003/TCP,30004:30004/TCP,26379:32280/TCP,6379:30801/TCP   55s</span><br><span class="line">redis-sentinel-node-1     NodePort    10.1.79.59    &lt;none&gt;        30005:30005/TCP,30006:30006/TCP,26379:31888/TCP,6379:30775/TCP   55s</span><br><span class="line">redis-sentinel-node-2     NodePort    10.1.71.91    &lt;none&gt;        30007:30007/TCP,30008:30008/TCP,26379:30772/TCP,6379:32272/TCP   55s</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >密码</p>
+<p>密码</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get secret --namespace redis redis-sentinel -o jsonpath=&quot;&#123;.data.redis-password&#125;&quot; | base64 -d</span><br></pre></td></tr></table></figure>
 
-<h2 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h2><p class="fireman-p-indent" >集群版<code>redis</code>使用<code>bitname</code>的<code>repo</code>源，通过<code>chart</code>直接安装。后端存储使用nfs提供的的sc</p>
+<h2 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h2><p>集群版<code>redis</code>使用<code>bitname</code>的<code>repo</code>源，通过<code>chart</code>直接安装。后端存储使用nfs提供的的sc</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm pull bitnami/redis-cluster</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >修改配置</p>
+<p>修改配置</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">global:</span><br><span class="line">  storageClass: &quot;nfs-client&quot;</span><br><span class="line">service:</span><br><span class="line">  type: NodePort</span><br><span class="line">redis:</span><br><span class="line">  livenessProbe:</span><br><span class="line">    enabled: false</span><br><span class="line">  readinessProbe:</span><br><span class="line">    enabled: false</span><br><span class="line">  startupProbe:</span><br><span class="line">    enabled: false</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装</p>
+<p>安装</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># helm install redis-cluster -f values.yaml ./ -n redis</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >密码</p>
+<p>密码</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get secret --namespace &quot;redis&quot; redis-cluster -o jsonpath=&quot;&#123;.data.redis-password&#125;&quot; | base64 -d</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >查看端口</p>
+<p>查看端口</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># kubectl get svc -n redis</span><br><span class="line">NAME                     TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)              AGE</span><br><span class="line">redis-cluster            NodePort    10.1.94.93   &lt;none&gt;        6379:32760/TCP       3m28s</span><br><span class="line">redis-cluster-headless   ClusterIP   None         &lt;none&gt;        6379/TCP,16379/TCP   3m28s</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >使用</p>
+<p>使用</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># redis-cli -c -h 10.1.94.93 -p 6379 -a t1vUbLlQCG</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >验证集群信息</p>
+<p>验证集群信息</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">10.1.94.93:6379&gt; CLUSTER info</span><br><span class="line">cluster_state:ok</span><br><span class="line">cluster_slots_assigned:16384</span><br><span class="line">cluster_slots_ok:16384</span><br><span class="line">cluster_slots_pfail:0</span><br><span class="line">cluster_slots_fail:0</span><br><span class="line">cluster_known_nodes:6</span><br><span class="line">cluster_size:3</span><br><span class="line">cluster_current_epoch:6</span><br><span class="line">cluster_my_epoch:1</span><br><span class="line">cluster_stats_messages_ping_sent:44</span><br><span class="line">cluster_stats_messages_pong_sent:44</span><br><span class="line">cluster_stats_messages_sent:88</span><br><span class="line">cluster_stats_messages_ping_received:39</span><br><span class="line">cluster_stats_messages_pong_received:44</span><br><span class="line">cluster_stats_messages_meet_received:5</span><br><span class="line">cluster_stats_messages_received:88</span><br></pre></td></tr></table></figure>
 
 
@@ -360,8 +353,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
               <a href="/tags/database/" rel="tag"># 数据库</a>
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
           </div>
 
         

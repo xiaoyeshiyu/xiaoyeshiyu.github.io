@@ -79,14 +79,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -297,8 +290,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p class="fireman-p-indent" >API网关除了提供对外部http接口统一管理，还需要实现动态路由、限流管理等能力。</p>
-<h2 id="网关能力"><a href="#网关能力" class="headerlink" title="网关能力"></a>网关能力</h2><p class="fireman-p-indent" ><strong>服务路由</strong></p>
+    <div class="post-body" itemprop="articleBody"><p>API网关除了提供对外部http接口统一管理，还需要实现动态路由、限流管理等能力。</p>
+<h2 id="网关能力"><a href="#网关能力" class="headerlink" title="网关能力"></a>网关能力</h2><p><strong>服务路由</strong></p>
 <ul>
 <li>静态路由策略配置</li>
 <li>后端服务的软负载均衡</li>
@@ -306,38 +299,38 @@
 <li>参数分流</li>
 <li>流量的镜像复制</li>
 </ul>
-<p class="fireman-p-indent" ><strong>服务治理</strong></p>
+<p><strong>服务治理</strong></p>
 <ul>
 <li>后端服务的故障隔离</li>
 <li>网关、服务、API 级别的限流和熔断</li>
 <li>固定时段和周期时段的 API 维护开关</li>
 </ul>
-<p class="fireman-p-indent" >服务治理框架层的服务治理和流量管理：</p>
-<p class="fireman-p-indent" ><strong>服务治理</strong></p>
+<p>服务治理框架层的服务治理和流量管理：</p>
+<p><strong>服务治理</strong></p>
 <ul>
 <li>服务限流，支持 QPS、Thread 等多种限流方式</li>
 <li>降级与熔断，支持基于RT、错误率的熔断策略以及手动降级策略</li>
 <li>服务容错，支持 failover、failfast、failback等多种容错机制</li>
 </ul>
-<p class="fireman-p-indent" ><strong>流量管理</strong></p>
+<p><strong>流量管理</strong></p>
 <ul>
 <li>路由管理，支持基于黑白名单的路由规则</li>
 <li>负载均衡，支持多种负载均衡规则，兼容 Spring Cloud Ribbon</li>
 <li>参数分流，支持参数取模、名单分流、权重分流等</li>
 </ul>
-<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016221436014.png" alt="image-20221016221436014"></p>
-<p class="fireman-p-indent" >这里使用<code>Kong</code>作为演示</p>
-<h2 id="Kong"><a href="#Kong" class="headerlink" title="Kong"></a>Kong</h2><p class="fireman-p-indent" >Kong是一个云原生，快速，可扩展和分布式微服务抽象层（也称为API网关，API中间件或某些情况下的Service Mesh）。作为2015年的开源项目，其核心价值在于高性能和可扩展性。</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p class="fireman-p-indent" >这里使用<code>postgres</code>作为后端存储，为了后续网络通信方便，使用新创建的网桥网络</p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016221436014.png" alt="image-20221016221436014"></p>
+<p>这里使用<code>Kong</code>作为演示</p>
+<h2 id="Kong"><a href="#Kong" class="headerlink" title="Kong"></a>Kong</h2><p>Kong是一个云原生，快速，可扩展和分布式微服务抽象层（也称为API网关，API中间件或某些情况下的Service Mesh）。作为2015年的开源项目，其核心价值在于高性能和可扩展性。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>这里使用<code>postgres</code>作为后端存储，为了后续网络通信方便，使用新创建的网桥网络</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network create kong-net</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >如果使用默认网络，使容器可以相互互通即可（官方提供自定义网桥，可以实现通过容器直接通信，如果使用默认<code>bridge</code>，则需要通过<code>--link name:name</code>通信）</p>
+<p>如果使用默认网络，使容器可以相互互通即可（官方提供自定义网桥，可以实现通过容器直接通信，如果使用默认<code>bridge</code>，则需要通过<code>--link name:name</code>通信）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name kong-database \</span><br><span class="line">  --network=kong-net \</span><br><span class="line">  -p 5432:5432 \</span><br><span class="line">  -e &quot;POSTGRES_USER=kong&quot; \</span><br><span class="line">  -e &quot;POSTGRES_DB=kong&quot; \</span><br><span class="line">  -e &quot;POSTGRES_PASSWORD=kongpass&quot; \</span><br><span class="line">  postgres:9.6</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >初始化数据库</p>
+<p>初始化数据库</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run --rm --network=kong-net \</span><br><span class="line">  -e &quot;KONG_DATABASE=postgres&quot; \</span><br><span class="line">  -e &quot;KONG_PG_HOST=kong-database&quot; \</span><br><span class="line">  -e &quot;KONG_PG_PASSWORD=kongpass&quot; \</span><br><span class="line">  -e &quot;KONG_PASSWORD=test&quot; \</span><br><span class="line"> kong/kong-gateway:3.0.0.0 kong migrations bootstrap</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >启动 <code>Kong Gateway</code>服务</p>
+<p>启动 <code>Kong Gateway</code>服务</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name kong-gateway \</span><br><span class="line">  --network=kong-net \</span><br><span class="line">  -e &quot;KONG_DATABASE=postgres&quot; \</span><br><span class="line">  -e &quot;KONG_PG_HOST=kong-database&quot; \</span><br><span class="line">  -e &quot;KONG_PG_USER=kong&quot; \</span><br><span class="line">  -e &quot;KONG_PG_PASSWORD=kongpass&quot; \</span><br><span class="line">  -e &quot;KONG_PROXY_ACCESS_LOG=/dev/stdout&quot; \</span><br><span class="line">  -e &quot;KONG_ADMIN_ACCESS_LOG=/dev/stdout&quot; \</span><br><span class="line">  -e &quot;KONG_PROXY_ERROR_LOG=/dev/stderr&quot; \</span><br><span class="line">  -e &quot;KONG_ADMIN_ERROR_LOG=/dev/stderr&quot; \</span><br><span class="line">  -e &quot;KONG_ADMIN_LISTEN=0.0.0.0:8001&quot; \</span><br><span class="line">  -e &quot;KONG_ADMIN_GUI_URL=http://localhost:8002&quot; \</span><br><span class="line">  -e KONG_LICENSE_DATA \</span><br><span class="line">  -p 8000:8000 \</span><br><span class="line">  -p 8443:8443 \</span><br><span class="line">  -p 8001:8001 \</span><br><span class="line">  -p 8444:8444 \</span><br><span class="line">  -p 8002:8002 \</span><br><span class="line">  -p 8445:8445 \</span><br><span class="line">  -p 8003:8003 \</span><br><span class="line">  -p 8004:8004 \</span><br><span class="line">  kong/kong-gateway:3.0.0.0</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -345,16 +338,16 @@
 <li>8002 管理员访问页面端口（功能较少，后续使用<code>konga</code>）</li>
 <li>8000 用户访问的端口</li>
 </ul>
-<p class="fireman-p-indent" >通过<code>8081</code>端口查看服务是否正常</p>
+<p>通过<code>8081</code>端口查看服务是否正常</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -i -X GET --url http://localhost:8001/services</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date: Sun, 16 Oct 2022 15:19:49 GMT</span><br><span class="line">Content-Type: application/json; charset=utf-8</span><br><span class="line">Connection: keep-alive</span><br><span class="line">Access-Control-Allow-Origin: http://localhost:8002</span><br><span class="line">X-Kong-Admin-Request-ID: IU4hDZVM8va4pHfxb3USILri1TmiOmn4</span><br><span class="line">vary: Origin</span><br><span class="line">Access-Control-Allow-Credentials: true</span><br><span class="line">Content-Length: 23</span><br><span class="line">X-Kong-Admin-Latency: 9</span><br><span class="line">Server: kong/3.0.0.0-enterprise-edition</span><br></pre></td></tr></table></figure>
 
-<h3 id="安装konga"><a href="#安装konga" class="headerlink" title="安装konga"></a>安装konga</h3><p class="fireman-p-indent" ><code>kongga</code> 是一个操作<code>kong</code>的图形化界面，也支持通过<code>docker</code>安装</p>
+<h3 id="安装konga"><a href="#安装konga" class="headerlink" title="安装konga"></a>安装konga</h3><p><code>kongga</code> 是一个操作<code>kong</code>的图形化界面，也支持通过<code>docker</code>安装</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 1337:1337 \</span><br><span class="line">             --network kong-net \</span><br><span class="line">             --name konga \</span><br><span class="line">             -e &quot;NODE_ENV=production&quot; \</span><br><span class="line">             -e &quot;TOKEN_SECRET=&#123;&#123;somerandomstring&#125;&#125;&quot; \</span><br><span class="line">             pantsel/konga</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >通过 <code>http://ip地址:1337/register</code>打开首次登录注册页面，注册之后，登录</p>
-<p class="fireman-p-indent" >通过 <code>8001</code>端口配置</p>
+<p>通过 <code>http://ip地址:1337/register</code>打开首次登录注册页面，注册之后，登录</p>
+<p>通过 <code>8001</code>端口配置</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016234427472.png" alt="image-20221016234427472" style="zoom:25%;" />
 
 <h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
@@ -378,58 +371,58 @@
 <p>Consumer对象表示Service服务的使用者或用户。您可以依靠Kong作为主数据存储，也可以将使用者列表与数据库映射，以保持Kong与现有主数据存储之间的一致性。</p>
 </li>
 </ul>
-<h3 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h3><p class="fireman-p-indent" ><strong>新增service</strong></p>
-<p class="fireman-p-indent" >点击 service-add service</p>
+<h3 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h3><p><strong>新增service</strong></p>
+<p>点击 service-add service</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017153931587.png" alt="image-20221017153931587" style="zoom:25%;" />
 
-<p class="fireman-p-indent" ><code>Url：http://192.168.41.68:8080</code>代表转发到的<code>Url</code></p>
-<p class="fireman-p-indent" ><code>upstream</code>可进行健康检查和负载均衡，在结合<code>consul</code>后，可以更好的实时变更后端服务状态。</p>
-<p class="fireman-p-indent" >设置<code>dns_resolver</code>为<code>consul</code>的地址，将<code>Url</code>改为<code>consul</code>的域名。</p>
-<p class="fireman-p-indent" ><strong>新增route</strong></p>
-<p class="fireman-p-indent" >在新增的service中，点击名称-routes-add route即可</p>
+<p><code>Url：http://192.168.41.68:8080</code>代表转发到的<code>Url</code></p>
+<p><code>upstream</code>可进行健康检查和负载均衡，在结合<code>consul</code>后，可以更好的实时变更后端服务状态。</p>
+<p>设置<code>dns_resolver</code>为<code>consul</code>的地址，将<code>Url</code>改为<code>consul</code>的域名。</p>
+<p><strong>新增route</strong></p>
+<p>在新增的service中，点击名称-routes-add route即可</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017154050865.png" alt="image-20221017154050865" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >需要注意，点击<code>path</code>后，需要通过回车，将该路径加入到<code>Paths</code>中</p>
-<p class="fireman-p-indent" >通过<code>Kong</code>的<code>8000</code>端口，以及对应服务的<code>path</code>，访问测试接口</p>
+<p>需要注意，点击<code>path</code>后，需要通过回车，将该路径加入到<code>Paths</code>中</p>
+<p>通过<code>Kong</code>的<code>8000</code>端口，以及对应服务的<code>path</code>，访问测试接口</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://192.168.41.68:8000/api/v1/version</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;code&quot;:200, &quot;result&quot;:&#123;&quot;go_version&quot;:&quot;go1.16.7&quot;&#125;&#125;%</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><strong>配置jwt的插件</strong></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3FpYW55dWdhbmcva29uZy1kb2NzLWNuL2Jsb2IvbWFzdGVyL0hVQi9qd3QubWQ=">JWT 插件<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >在<code>Consumers</code>中创建一个<code>consumer</code></p>
+<p><strong>配置jwt的插件</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3FpYW55dWdhbmcva29uZy1kb2NzLWNuL2Jsb2IvbWFzdGVyL0hVQi9qd3QubWQ=">JWT 插件<i class="fa fa-external-link-alt"></i></span></p>
+<p>在<code>Consumers</code>中创建一个<code>consumer</code></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017160415996.png" alt="image-20221017160415996" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >为这个<code>consumer</code>添加<code>jwt</code></p>
-<p class="fireman-p-indent" >点击<code>credentials</code>，点击<code>JWT</code>，点击<code>Create JWT</code></p>
+<p>为这个<code>consumer</code>添加<code>jwt</code></p>
+<p>点击<code>credentials</code>，点击<code>JWT</code>，点击<code>Create JWT</code></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017160806361.png" alt="image-20221017160806361" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >添加全局<code>JWT</code>，点击plugins-add global plugins-jwt</p>
+<p>添加全局<code>JWT</code>，点击plugins-add global plugins-jwt</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017162104367.png" alt="image-20221017162104367" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >设置<code>header</code>，与后端服务保持一致，通过回车添加。</p>
-<p class="fireman-p-indent" >在jwt.io中生成jwt</p>
+<p>设置<code>header</code>，与后端服务保持一致，通过回车添加。</p>
+<p>在jwt.io中生成jwt</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161300242.png" alt="image-20221017161300242" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >需要注意，在<code>payload</code>中添加<code>iss</code>，与创建全局<code>jwt</code>时默认的 <code>key claim name</code> 保持一致</p>
+<p>需要注意，在<code>payload</code>中添加<code>iss</code>，与创建全局<code>jwt</code>时默认的 <code>key claim name</code> 保持一致</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161411417.png" alt="image-20221017161411417" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >拷贝<code>consumer</code>中创建<code>jwt</code>时生成的<code>secret</code>作为生成jwt的<code>secret</code></p>
+<p>拷贝<code>consumer</code>中创建<code>jwt</code>时生成的<code>secret</code>作为生成jwt的<code>secret</code></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161539422.png" alt="image-20221017161539422" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >当没有配置jwt时发送请求</p>
+<p>当没有配置jwt时发送请求</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161803314.png" alt="image-20221017161803314" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >在<code>header</code>中配置<code>x-token: Bearer</code> 配置之后</p>
+<p>在<code>header</code>中配置<code>x-token: Bearer</code> 配置之后</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017162146227.png" alt="image-20221017162146227" style="zoom:25%;" />
 
 
 
-<p class="fireman-p-indent" >推荐阅读：</p>
-<p class="fireman-p-indent" >API 网关能做什么？](<span class="exturl" data-url="aHR0cHM6Ly93d3cucmVkaGF0LmNvbS96aC90b3BpY3MvYXBpL3doYXQtZG9lcy1hbi1hcGktZ2F0ZXdheS1kbw==">https://www.redhat.com/zh/topics/api/what-does-an-api-gateway-do<i class="fa fa-external-link-alt"></i></span>)</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VvbGlua2VyL2dva3VfbGl0ZS9ibG9iL21hc3Rlci9SRUFETUVfQ04ubWQ=">Goku<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VvbGlua2VyL2FwaW50by9ibG9iL21haW4vUkVBRE1FX0NOLm1k">Apinto<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3FpYW55dWdhbmcva29uZy1kb2NzLWNu">微服务 API 网关 Kong 中文文档<i class="fa fa-external-link-alt"></i></span></p>
+<p>推荐阅读：</p>
+<p>API 网关能做什么？](<span class="exturl" data-url="aHR0cHM6Ly93d3cucmVkaGF0LmNvbS96aC90b3BpY3MvYXBpL3doYXQtZG9lcy1hbi1hcGktZ2F0ZXdheS1kbw==">https://www.redhat.com/zh/topics/api/what-does-an-api-gateway-do<i class="fa fa-external-link-alt"></i></span>)</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VvbGlua2VyL2dva3VfbGl0ZS9ibG9iL21hc3Rlci9SRUFETUVfQ04ubWQ=">Goku<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VvbGlua2VyL2FwaW50by9ibG9iL21haW4vUkVBRE1FX0NOLm1k">Apinto<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3FpYW55dWdhbmcva29uZy1kb2NzLWNu">微服务 API 网关 Kong 中文文档<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

@@ -68,14 +68,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -286,13 +279,13 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p class="fireman-p-indent" >Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。</p>
-<p class="fireman-p-indent" >Casbin的核心概念是访问控制模型和策略。访问控制模型定义了一组规则，用于描述谁可以访问哪些资源以及在什么条件下可以访问。策略是基于模型定义的规则，描述了实际的访问控制规则集合。</p>
-<p class="fireman-p-indent" >Casbin支持多种访问控制模型，包括基于角色的访问控制（RBAC）、访问控制列表（ACL）和属性访问控制（ABAC）等。它还提供了灵活的策略管理机制，可以将策略存储在不同的持久化存储中，如文件、数据库或远程服务。</p>
-<p class="fireman-p-indent" >使用Casbin，你可以轻松地实现细粒度的权限管理，定义和管理角色、资源和操作之间的访问规则，并在应用程序中进行访问控制的验证。无论是Web应用程序、API服务还是其他类型的系统，Casbin都可以帮助你实现安全的访问控制机制。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvb3ZlcnZpZXc=">https://casbin.org/zh/docs/overview<i class="fa fa-external-link-alt"></i></span></p>
-<h2 id="几个关键概念"><a href="#几个关键概念" class="headerlink" title="几个关键概念"></a>几个关键概念</h2><p class="fireman-p-indent" >Casbin是一个开源的访问控制库，用于实现权限管理和访问控制策略。它基于访问控制模型（Access Control Model）和策略（Policy）来管理用户对资源的访问权限。</p>
-<p class="fireman-p-indent" >在Casbin中，有几个关键性的概念：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Casbin是一个开源的访问控制框架，用于实现权限管理和访问控制的功能。它提供了一种简单而灵活的访问控制模型，可以用于保护应用程序、服务或其他系统中的资源。Casbin的设计目标是提供一种通用的访问控制模型，并支持多种编程语言。</p>
+<p>Casbin的核心概念是访问控制模型和策略。访问控制模型定义了一组规则，用于描述谁可以访问哪些资源以及在什么条件下可以访问。策略是基于模型定义的规则，描述了实际的访问控制规则集合。</p>
+<p>Casbin支持多种访问控制模型，包括基于角色的访问控制（RBAC）、访问控制列表（ACL）和属性访问控制（ABAC）等。它还提供了灵活的策略管理机制，可以将策略存储在不同的持久化存储中，如文件、数据库或远程服务。</p>
+<p>使用Casbin，你可以轻松地实现细粒度的权限管理，定义和管理角色、资源和操作之间的访问规则，并在应用程序中进行访问控制的验证。无论是Web应用程序、API服务还是其他类型的系统，Casbin都可以帮助你实现安全的访问控制机制。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvb3ZlcnZpZXc=">https://casbin.org/zh/docs/overview<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="几个关键概念"><a href="#几个关键概念" class="headerlink" title="几个关键概念"></a>几个关键概念</h2><p>Casbin是一个开源的访问控制库，用于实现权限管理和访问控制策略。它基于访问控制模型（Access Control Model）和策略（Policy）来管理用户对资源的访问权限。</p>
+<p>在Casbin中，有几个关键性的概念：</p>
 <ol>
 <li><p>模型（Model）：模型定义了访问控制策略的基本结构和规则。它由多个规则组成，每个规则包含多个字段，如”sub”（Subject，主体，表示用户）、”obj”（Object，对象，表示资源）、”act”（Action，动作，表示操作）等。</p>
 </li>
@@ -307,7 +300,7 @@
 <li><p>策略存储（Policy Store）：策略存储用于存储和管理策略规则。Casbin支持多种策略存储后端，如内存、文件、数据库等。</p>
 </li>
 </ol>
-<p class="fireman-p-indent" >通过定义模型、策略和访问请求，Casbin可以进行访问控制决策，判断是否允许主体执行特定的操作。它提供了灵活的访问控制模型和丰富的策略管理功能，使开发人员能够轻松实现细粒度的权限管理和访问控制策略。</p>
+<p>通过定义模型、策略和访问请求，Casbin可以进行访问控制决策，判断是否允许主体执行特定的操作。它提供了灵活的访问控制模型和丰富的策略管理功能，使开发人员能够轻松实现细粒度的权限管理和访问控制策略。</p>
 <h2 id="能做什么"><a href="#能做什么" class="headerlink" title="能做什么"></a>能做什么</h2><ol>
 <li>以典型的 { 主体、对象、动作 } 形式或您定义的自定义形式形成策略。支持允许和拒绝授权。</li>
 <li>具有访问控制模型 <code>model</code> 和策略 <code>policy</code> 两个核心概念。</li>
@@ -319,10 +312,10 @@
 <li>验证（又称用户登录时验证用户名和密码）</li>
 <li>管理用户列表或角色列表。</li>
 </ol>
-<p class="fireman-p-indent" >项目管理用户、角色或密码列表更加方便。用户通常有他们的密码，但是 Casbin 的设计思想并不是把它作为一个存储密码的容器。 而是存储RBAC方案中用户和角色之间的映射关系。</p>
+<p>项目管理用户、角色或密码列表更加方便。用户通常有他们的密码，但是 Casbin 的设计思想并不是把它作为一个存储密码的容器。 而是存储RBAC方案中用户和角色之间的映射关系。</p>
 <h1 id="开始使用"><a href="#开始使用" class="headerlink" title="开始使用"></a>开始使用</h1><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/casbin/casbin/v2</span><br></pre></td></tr></table></figure>
 
-<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p class="fireman-p-indent" >casbin支持多种模型，适用于多种业务场景</p>
+<h2 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h2><p>casbin支持多种模型，适用于多种业务场景</p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Access_control_list"><strong>ACL (Access Control List, 访问控制列表)</strong></a></li>
 <li><strong>具有 <span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvU3VwZXJ1c2Vy">超级用户<i class="fa fa-external-link-alt"></i></span> 的 ACL</strong></li>
@@ -336,33 +329,33 @@
 <li><strong>Deny-override</strong>: 在允许拒绝覆盖的情况下，允许和拒绝授权都受支持。</li>
 <li><strong>Priority</strong>: 策略规则可以按优先级排列，类似于防火墙规则。</li>
 </ol>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvc3VwcG9ydGVkLW1vZGVscw==">https://casbin.org/zh/docs/supported-models<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >一般会通过使用场景确定模型，然后在官网实例中查询模型，直接使用。</p>
-<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p class="fireman-p-indent" >casbin 支持通过加载存储的模型、策略、策略子集实现动态调整。</p>
-<h3 id="模型的存储"><a href="#模型的存储" class="headerlink" title="模型的存储"></a>模型的存储</h3><p class="fireman-p-indent" >与策略不同，模型只能加载，不能保存。我们认为，模型不是动态组件，不应在运行时修改，因此我们没有实现将模型保存到存储中的应用程序接口。</p>
-<p class="fireman-p-indent" >不过，有一个好消息。我们提供了三种等效的方法来静态或动态加载模型：</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvc3VwcG9ydGVkLW1vZGVscw==">https://casbin.org/zh/docs/supported-models<i class="fa fa-external-link-alt"></i></span></p>
+<p>一般会通过使用场景确定模型，然后在官网实例中查询模型，直接使用。</p>
+<h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>casbin 支持通过加载存储的模型、策略、策略子集实现动态调整。</p>
+<h3 id="模型的存储"><a href="#模型的存储" class="headerlink" title="模型的存储"></a>模型的存储</h3><p>与策略不同，模型只能加载，不能保存。我们认为，模型不是动态组件，不应在运行时修改，因此我们没有实现将模型保存到存储中的应用程序接口。</p>
+<p>不过，有一个好消息。我们提供了三种等效的方法来静态或动态加载模型：</p>
 <ul>
 <li>从 <code>.conf</code> 文件中加载 model</li>
 <li>从代码加载 model</li>
 <li>从字符串加载 model</li>
 </ul>
-<h3 id="策略的存储"><a href="#策略的存储" class="headerlink" title="策略的存储"></a>策略的存储</h3><p class="fireman-p-indent" >在 casbin 中，策略存储作为 <strong>适配器</strong> 来实现</p>
+<h3 id="策略的存储"><a href="#策略的存储" class="headerlink" title="策略的存储"></a>策略的存储</h3><p>在 casbin 中，策略存储作为 <strong>适配器</strong> 来实现</p>
 <ul>
 <li>从 <code>.csv</code> 文件加载</li>
 <li>从后端存储加载实现</li>
 </ul>
-<h3 id="策略子集加载"><a href="#策略子集加载" class="headerlink" title="策略子集加载"></a>策略子集加载</h3><p class="fireman-p-indent" >一些adapter支持过滤策略管理。 这意味着 Casbin 加载的策略是根据给定过滤器存储在数据库中的策略的子集。这样就能在大型多租户环境中高效执行策略，因为在这种环境中，解析整个策略会成为性能瓶颈。</p>
-<p class="fireman-p-indent" >为了防止意外数据丢失，当策略已经加载， SavePolicy 方法会被禁用。</p>
-<p class="fireman-p-indent" >要使用支持的adapter处理过滤后的策略，只需调用 <code>LoadFilteredPolicy</code> 方法。 过滤器参数的有效格式取决于所用的适配器。 为了防止意外数据丢失，当策略已经加载， <code>SavePolicy</code> 方法会被禁用。</p>
-<h2 id="执行器"><a href="#执行器" class="headerlink" title="执行器"></a>执行器</h2><p class="fireman-p-indent" >Casbin 使用配置文件来定义访问控制模型。</p>
-<p class="fireman-p-indent" >例如使用文件记录模型和策略存储文件，作为两个配置文件：<code>model.conf</code> 和 <code>policy.csv</code>。<code>model.conf</code> 保存访问模型，而 <code>policy.csv</code> 保存具体的用户权限配置。<code>Casbin</code> 的使用非常简单。我们只需创建一个主要结构：<code>enforcer</code>。当构造这个结构的时候，<code>model.conf</code> 和 <code>policy.csv</code> 将会被加载。</p>
-<p class="fireman-p-indent" >换句话说，要创建一个 Casbin 执行器，您需要提供一个模型和一个适配器。</p>
-<p class="fireman-p-indent" >Casbin 提供了一个 <code>FileAdapter</code>，您可以使用它。更多信息，请参阅适配器。</p>
-<p class="fireman-p-indent" >使用模型文件和默认 <code>FileAdapter</code> 的示例：</p>
+<h3 id="策略子集加载"><a href="#策略子集加载" class="headerlink" title="策略子集加载"></a>策略子集加载</h3><p>一些adapter支持过滤策略管理。 这意味着 Casbin 加载的策略是根据给定过滤器存储在数据库中的策略的子集。这样就能在大型多租户环境中高效执行策略，因为在这种环境中，解析整个策略会成为性能瓶颈。</p>
+<p>为了防止意外数据丢失，当策略已经加载， SavePolicy 方法会被禁用。</p>
+<p>要使用支持的adapter处理过滤后的策略，只需调用 <code>LoadFilteredPolicy</code> 方法。 过滤器参数的有效格式取决于所用的适配器。 为了防止意外数据丢失，当策略已经加载， <code>SavePolicy</code> 方法会被禁用。</p>
+<h2 id="执行器"><a href="#执行器" class="headerlink" title="执行器"></a>执行器</h2><p>Casbin 使用配置文件来定义访问控制模型。</p>
+<p>例如使用文件记录模型和策略存储文件，作为两个配置文件：<code>model.conf</code> 和 <code>policy.csv</code>。<code>model.conf</code> 保存访问模型，而 <code>policy.csv</code> 保存具体的用户权限配置。<code>Casbin</code> 的使用非常简单。我们只需创建一个主要结构：<code>enforcer</code>。当构造这个结构的时候，<code>model.conf</code> 和 <code>policy.csv</code> 将会被加载。</p>
+<p>换句话说，要创建一个 Casbin 执行器，您需要提供一个模型和一个适配器。</p>
+<p>Casbin 提供了一个 <code>FileAdapter</code>，您可以使用它。更多信息，请参阅适配器。</p>
+<p>使用模型文件和默认 <code>FileAdapter</code> 的示例：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import &quot;github.com/casbin/casbin/v2&quot;</span><br><span class="line"></span><br><span class="line">e, err := casbin.NewEnforcer(&quot;path/to/model.conf&quot;, &quot;path/to/policy.csv&quot;)</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >在 Casbin 中，执行器（Enforcer）是负责执行访问控制策略的核心组件。它提供了一系列方法，用于判断主体是否被授予对特定资源执行特定操作的权限。</p>
-<p class="fireman-p-indent" >执行器的主要功能包括：</p>
+<p>在 Casbin 中，执行器（Enforcer）是负责执行访问控制策略的核心组件。它提供了一系列方法，用于判断主体是否被授予对特定资源执行特定操作的权限。</p>
+<p>执行器的主要功能包括：</p>
 <ol>
 <li><p>加载策略：执行器可以从不同的策略存储（如文件、数据库）中加载访问控制策略。它可以读取和解析策略规则，并将其转换为内部模型进行处理。</p>
 </li>
@@ -373,8 +366,8 @@
 <li><p>角色管理：执行器支持角色（Role）的管理，包括角色的添加、删除和关联。角色可以用于实现基于角色的访问控制（RBAC）模型。</p>
 </li>
 </ol>
-<p class="fireman-p-indent" >通过执行器，开发人员可以轻松地集成 Casbin 的访问控制功能到他们的应用程序中。执行器提供了简单而强大的 API，使开发人员能够方便地进行访问控制决策和策略管理。</p>
-<h3 id="几种执行器"><a href="#几种执行器" class="headerlink" title="几种执行器"></a>几种执行器</h3><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvZW5mb3JjZXJz">https://casbin.org/zh/docs/enforcers<i class="fa fa-external-link-alt"></i></span></p>
+<p>通过执行器，开发人员可以轻松地集成 Casbin 的访问控制功能到他们的应用程序中。执行器提供了简单而强大的 API，使开发人员能够方便地进行访问控制决策和策略管理。</p>
+<h3 id="几种执行器"><a href="#几种执行器" class="headerlink" title="几种执行器"></a>几种执行器</h3><p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvZW5mb3JjZXJz">https://casbin.org/zh/docs/enforcers<i class="fa fa-external-link-alt"></i></span></p>
 <ul>
 <li>通用执行器：最基础的执行器，Enforcer 是用户与 Casbin 策略和模型交互的基本结构。</li>
 <li>带缓存的执行器：<code>CachedEnforcer</code> 基于 <code>Enforcer</code>，支持使用 <code>map</code> 将请求的判断结果（是否具有能力）缓存在内存中。它能在指定的过期时间内清除缓存。此外，它还通过读写锁保证线程安全。您可以使用 <code>EnableCache</code> 启用缓存评估结果（默认为启用）。<code>CachedEnforcer</code> 的其他 API 方法与 <code>Enforcer</code> 相同。</li>
@@ -382,7 +375,7 @@
 <li>同步执行器：<code>SyncedEnforcer</code> 同步执行器提供并发功能，是线程安全的。</li>
 <li>带缓存的同步执行器：<code>SyncedCachedEnforcer</code> ，同步执行器和带缓存的执行器结合</li>
 </ul>
-<p class="fireman-p-indent" >简单来说:</p>
+<p>简单来说:</p>
 <ul>
 <li>如果是简单环境，使用通用执行器：<code>casbin.NewEnforcer()</code></li>
 <li>如果需要提高判断结果的并发，则使用带缓存的执行器：<code>casbin.NewCachedEnforcer()</code>   </li>
@@ -390,37 +383,37 @@
 <li>如果会频繁变动策略，而且是并发场景，则使用同步执行器：<code>casbin.NewSyncedEnforcer()</code></li>
 <li>如果既要频繁变动策略，也要求判断结果的高并发，则使用带缓存的同步执行器：<code>casbin.NewSyncedCachedEnforcer()</code></li>
 </ul>
-<p class="fireman-p-indent" >在当下云原生的场景下，部署在 <code>k8s</code> 上，并且后端使用同一个存储，多个实例，推荐使用同步执行器或者带缓存的同步执行器。</p>
-<h2 id="适配器"><a href="#适配器" class="headerlink" title="适配器"></a>适配器</h2><p class="fireman-p-indent" >在Casbin中，策略存储作为adapter(Casbin的中间件) 实现。 Casbin用户可以使用adapter从存储中加载策略规则 (aka <code>LoadPolicy()</code>) 或者将策略规则保存到其中 (aka <code>SavePolicy()</code>)。 为了保持代码轻量级，我们没有把adapter代码放在主库中。</p>
-<p class="fireman-p-indent" >Casbin的适配器完整列表如下。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvYWRhcHRlcnM=">https://casbin.org/zh/docs/adapters<i class="fa fa-external-link-alt"></i></span></p>
+<p>在当下云原生的场景下，部署在 <code>k8s</code> 上，并且后端使用同一个存储，多个实例，推荐使用同步执行器或者带缓存的同步执行器。</p>
+<h2 id="适配器"><a href="#适配器" class="headerlink" title="适配器"></a>适配器</h2><p>在Casbin中，策略存储作为adapter(Casbin的中间件) 实现。 Casbin用户可以使用adapter从存储中加载策略规则 (aka <code>LoadPolicy()</code>) 或者将策略规则保存到其中 (aka <code>SavePolicy()</code>)。 为了保持代码轻量级，我们没有把adapter代码放在主库中。</p>
+<p>Casbin的适配器完整列表如下。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvYWRhcHRlcnM=">https://casbin.org/zh/docs/adapters<i class="fa fa-external-link-alt"></i></span></p>
 <blockquote>
-<p class="fireman-p-indent" >备注</p>
+<p>备注</p>
 <ol>
 <li>如果使用显式或隐式adapter调用<code>casbin.NewEnforcer()</code>，策略将自动加载。</li>
 <li>可以调用<code>e.LoadPolicy()</code> 来从存储中重新加载策略规则。</li>
 <li>如果adapter不支持<code>Auto-Save</code>特性，则在添加或删除策略时不能将策略规则自动保存回存储器。 你必须手动调用 <code>SavePolicy()</code> 来保存所有的策略规则</li>
 </ol>
 </blockquote>
-<h2 id="监视器"><a href="#监视器" class="headerlink" title="监视器"></a>监视器</h2><p class="fireman-p-indent" >casbin 支持使用分布式消息系统（如 etcd）来保持多个 Casbin 执行器实例之间的一致性。这样，用户就可以同时使用多个 Casbin 执行器来处理大量权限检查请求。</p>
-<p class="fireman-p-indent" >与策略存储适配器类似，casbin 在主库中不包含监视器代码。任何对新消息系统的支持都应该作为监视程序来实现。 Casbin 监视器的完整列表如下。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvd2F0Y2hlcnM=">https://casbin.org/zh/docs/watchers<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >推荐使用 Redis ，内部是通过 redis 的 channel 实现多个实例之间通讯。</p>
-<h2 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h2><p class="fireman-p-indent" >调度程序提供了一种同步策略增量变化的方法。它们应基于 Raft 等一致性算法，以确保所有执行者实例的一致性。通过调度器，用户可以轻松建立分布式集群。</p>
-<p class="fireman-p-indent" >调度器的方法分为两部分。 第一部分是与 Casbin 结合的方法。这些方法应在 Casbin 内部调用。用户可以使用 Casbin 本身提供的更完整的 API。</p>
-<p class="fireman-p-indent" >另一部分是调度器自身定义的方法，包括调度器初始化方法和不同算法提供的不同功能，如动态成员资格和配置更改。</p>
+<h2 id="监视器"><a href="#监视器" class="headerlink" title="监视器"></a>监视器</h2><p>casbin 支持使用分布式消息系统（如 etcd）来保持多个 Casbin 执行器实例之间的一致性。这样，用户就可以同时使用多个 Casbin 执行器来处理大量权限检查请求。</p>
+<p>与策略存储适配器类似，casbin 在主库中不包含监视器代码。任何对新消息系统的支持都应该作为监视程序来实现。 Casbin 监视器的完整列表如下。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvd2F0Y2hlcnM=">https://casbin.org/zh/docs/watchers<i class="fa fa-external-link-alt"></i></span></p>
+<p>推荐使用 Redis ，内部是通过 redis 的 channel 实现多个实例之间通讯。</p>
+<h2 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h2><p>调度程序提供了一种同步策略增量变化的方法。它们应基于 Raft 等一致性算法，以确保所有执行者实例的一致性。通过调度器，用户可以轻松建立分布式集群。</p>
+<p>调度器的方法分为两部分。 第一部分是与 Casbin 结合的方法。这些方法应在 Casbin 内部调用。用户可以使用 Casbin 本身提供的更完整的 API。</p>
+<p>另一部分是调度器自身定义的方法，包括调度器初始化方法和不同算法提供的不同功能，如动态成员资格和配置更改。</p>
 <blockquote>
-<p class="fireman-p-indent" >我们希望调度器只在运行时确保 Casbin 执行器的一致性。因此，如果策略在初始化时不一致，调度程序将无法正常工作。用户需要在使用调度程序前确保所有实例的状态一致。</p>
+<p>我们希望调度器只在运行时确保 Casbin 执行器的一致性。因此，如果策略在初始化时不一致，调度程序将无法正常工作。用户需要在使用调度程序前确保所有实例的状态一致。</p>
 </blockquote>
-<p class="fireman-p-indent" >下面是 Casbin 调度程序的完整列表。欢迎任何第三方提供新的调度程序。请通知我们，我们将把它添加到此列表中。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvZGlzcGF0Y2hlcnM=">https://casbin.org/zh/docs/dispatchers<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/dispatcher-architecture.svg" alt="overall architecture"></p>
-<p class="fireman-p-indent" >调度器的使用场景更合适分布式的环境下。</p>
-<h2 id="角色管理器"><a href="#角色管理器" class="headerlink" title="角色管理器"></a>角色管理器</h2><p class="fireman-p-indent" >角色管理器用于管理 Casbin 中的 RBAC 角色层次结构（用户角色映射）。 角色管理器可从 Casbin 策略规则或外部来源（如 LDAP、Okta、Auth0、Azure AD 等）检索角色数据。我们支持不同的角色管理器实现。 为了保持轻量级，我们在主库中不包含角色管理器代码（默认角色管理器除外）。</p>
-<p class="fireman-p-indent" >下面提供了 Casbin 角色管理器的完整列表。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvcm9sZS1tYW5hZ2Vycw==">https://casbin.org/zh/docs/role-managers<i class="fa fa-external-link-alt"></i></span></p>
-<h1 id="使用场景介绍"><a href="#使用场景介绍" class="headerlink" title="使用场景介绍"></a>使用场景介绍</h1><p class="fireman-p-indent" >casbin 的 API 比较简单，基本上在官网直接搜索就可以找到。例如经常使用的一个场景是 后端 使用 MySQL 或者 PostgreSQL 存储策略，模型使用 RBAC 或者 基于域的 RBAC 。</p>
-<p class="fireman-p-indent" >注意点：</p>
+<p>下面是 Casbin 调度程序的完整列表。欢迎任何第三方提供新的调度程序。请通知我们，我们将把它添加到此列表中。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3MvZGlzcGF0Y2hlcnM=">https://casbin.org/zh/docs/dispatchers<i class="fa fa-external-link-alt"></i></span></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/dispatcher-architecture.svg" alt="overall architecture"></p>
+<p>调度器的使用场景更合适分布式的环境下。</p>
+<h2 id="角色管理器"><a href="#角色管理器" class="headerlink" title="角色管理器"></a>角色管理器</h2><p>角色管理器用于管理 Casbin 中的 RBAC 角色层次结构（用户角色映射）。 角色管理器可从 Casbin 策略规则或外部来源（如 LDAP、Okta、Auth0、Azure AD 等）检索角色数据。我们支持不同的角色管理器实现。 为了保持轻量级，我们在主库中不包含角色管理器代码（默认角色管理器除外）。</p>
+<p>下面提供了 Casbin 角色管理器的完整列表。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvcm9sZS1tYW5hZ2Vycw==">https://casbin.org/zh/docs/role-managers<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="使用场景介绍"><a href="#使用场景介绍" class="headerlink" title="使用场景介绍"></a>使用场景介绍</h1><p>casbin 的 API 比较简单，基本上在官网直接搜索就可以找到。例如经常使用的一个场景是 后端 使用 MySQL 或者 PostgreSQL 存储策略，模型使用 RBAC 或者 基于域的 RBAC 。</p>
+<p>注意点：</p>
 <ol>
 <li><p>手动增加权限时，需要注意参数位置：</p>
 <p>例如模型定义：</p>
@@ -437,21 +430,21 @@
 <li>去掉自动保存会出现更大的问题，增加的策略都保存在内存中，而不是在数据库中</li>
 <li>监视器不使用增量，获取到变更时加载数据库。这种方案很重量，如果策略很多，这个操作会很耗时，而且对内存和数据库都有不小的开销。casbin 是直接将数据库的所有数据都一次性读取到内存中。</li>
 </ol>
-<p class="fireman-p-indent" >最终解决方法是使用 PostgreSQL 作为适配器时，如果冲突，则 <code>DoNothing</code> 。</p>
+<p>最终解决方法是使用 PostgreSQL 作为适配器时，如果冲突，则 <code>DoNothing</code> 。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">db = db.Clauses(clause.OnConflict&#123;</span><br><span class="line">	DoNothing: <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 </li>
-<li><p class="fireman-p-indent" >提升性能的小技巧：通过调整 <code>matchers</code> ，可以加快匹配速度。</p>
-<p class="fireman-p-indent" >例如：</p>
+<li><p>提升性能的小技巧：通过调整 <code>matchers</code> ，可以加快匹配速度。</p>
+<p>例如：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[matchers]</span><br><span class="line">m = g(r.sub, p.sub) &amp;&amp; r.obj == p.obj &amp;&amp; r.act == p.act</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >将函数等比较耗时的表达式放在后面，执行时间就会很短。</p>
+<p>将函数等比较耗时的表达式放在后面，执行时间就会很短。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[matchers]</span><br><span class="line">m = r.obj == p.obj &amp;&amp; g(r.sub, p.sub) &amp;&amp; r.act == p.act</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvb3ZlcnZpZXc=">casbin官方文档<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9jYXNiaW4=">casbin<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9jYXNiaW4vYmxvYi9tYXN0ZXIvZW5mb3JjZXJfc3luY2VkLmdv">enforcer_sync<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9nb3JtLWFkYXB0ZXI=">Gorm Adapter<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9yZWRpcy13YXRjaGVy">Redis Watcher<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly9jYXNiaW4ub3JnL3poL2RvY3Mvb3ZlcnZpZXc=">casbin官方文档<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9jYXNiaW4=">casbin<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9jYXNiaW4vYmxvYi9tYXN0ZXIvZW5mb3JjZXJfc3luY2VkLmdv">enforcer_sync<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9nb3JtLWFkYXB0ZXI=">Gorm Adapter<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2Nhc2Jpbi9yZWRpcy13YXRjaGVy">Redis Watcher<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

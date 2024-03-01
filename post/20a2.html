@@ -66,14 +66,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -320,90 +313,90 @@
 <td>2核4G</td>
 </tr>
 </tbody></table>
-<p class="fireman-p-indent" ><code>vmware</code>虚拟机环境，网络全部是<code>NAT</code>模式，其中<code>master</code>有另外一张网卡，桥接模式，<code>IP：192.168.41.249</code>。</p>
-<p class="fireman-p-indent" >以下操作覆盖所有节点</p>
-<p class="fireman-p-indent" >关闭防火墙</p>
+<p><code>vmware</code>虚拟机环境，网络全部是<code>NAT</code>模式，其中<code>master</code>有另外一张网卡，桥接模式，<code>IP：192.168.41.249</code>。</p>
+<p>以下操作覆盖所有节点</p>
+<p>关闭防火墙</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >修改k8s配置文件</p>
+<p>修改k8s配置文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt;  /etc/sysctl.d/k8s.conf</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">EOF</span><br><span class="line">sysctl --system</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >开启转发</p>
+<p>开启转发</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo 1 &gt; /proc/sys/net/ipv4/ip_forward</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >关闭swap</p>
+<p>关闭swap</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a</span><br><span class="line"></span><br><span class="line">// 注释/etc/fstab中的这行</span><br><span class="line">/dev/mapper/centos-swap</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >关闭selinux</p>
+<p>关闭selinux</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sed -i &#x27;s/enforcing/disabled/&#x27; /etc/selinux/config</span><br><span class="line">setenforce 0</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >打开时间同步服务</p>
+<p>打开时间同步服务</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable chronyd</span><br><span class="line">systemctl start chronyd</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >如果可以同步</p>
-<h2 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h2><p class="fireman-p-indent" >所有节点都需要安装</p>
+<p>如果可以同步</p>
+<h2 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h2><p>所有节点都需要安装</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum install -y yum-utils</span><br><span class="line">yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin</span><br><span class="line">mkdir -p /etc/containerd</span><br><span class="line">containerd config default | sudo tee /etc/containerd/config.toml</span><br><span class="line">systemctl restart containerd</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >修改docker配置文件</p>
+<p>修改docker配置文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF | sudo tee /etc/docker/daemon.json</span><br><span class="line">&#123;</span><br><span class="line">	&quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;],</span><br><span class="line">  &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">  &quot;log-opts&quot;: &#123;</span><br><span class="line">  	&quot;max-size&quot;: &quot;100m&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;storage-driver&quot;: &quot;overlay2&quot;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">systemctl enable docker</span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
 
-<h3 id="安装kubeadm-kubelet-kubectl服务"><a href="#安装kubeadm-kubelet-kubectl服务" class="headerlink" title="安装kubeadm kubelet kubectl服务"></a>安装kubeadm kubelet kubectl服务</h3><p class="fireman-p-indent" >所有节点都需要配置和安装</p>
-<p class="fireman-p-indent" >配置yum源</p>
+<h3 id="安装kubeadm-kubelet-kubectl服务"><a href="#安装kubeadm-kubelet-kubectl服务" class="headerlink" title="安装kubeadm kubelet kubectl服务"></a>安装kubeadm kubelet kubectl服务</h3><p>所有节点都需要配置和安装</p>
+<p>配置yum源</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=0</span><br><span class="line">repo_gpgcheck=0</span><br><span class="line">gpgkey=http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装（使用1.23.7版，不用最新版，最新版可能有坑，例如镜像仓库无法替换，镜像下载不下来）</p>
+<p>安装（使用1.23.7版，不用最新版，最新版可能有坑，例如镜像仓库无法替换，镜像下载不下来）</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install kubeadm-1.23.7-0  kubelet-1.23.7-0 kubectl-1.23.7-0 -y</span><br></pre></td></tr></table></figure>
 
-<h2 id="部署k8s"><a href="#部署k8s" class="headerlink" title="部署k8s"></a>部署k8s</h2><p class="fireman-p-indent" >主节点上初始化master</p>
+<h2 id="部署k8s"><a href="#部署k8s" class="headerlink" title="部署k8s"></a>部署k8s</h2><p>主节点上初始化master</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init --kubernetes-version=1.23.7 \</span><br><span class="line">--apiserver-advertise-address=192.168.111.128 \</span><br><span class="line">--image-repository registry.aliyuncs.com/google_containers \</span><br><span class="line">--service-cidr=10.1.0.0/16 \</span><br><span class="line">--pod-network-cidr=10.244.0.0/16 --v=7</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><code>kubernetes-version</code>：指定<code>k8s</code>版本，与安装版本一致</p>
-<p class="fireman-p-indent" ><code>image-repository</code>：指定镜像仓</p>
-<p class="fireman-p-indent" ><code>apiserver-advertise-address</code>：<code>apiserver</code>监听地址（IP要在本机）</p>
-<p class="fireman-p-indent" ><code>service-cidr</code>：<code>svc</code>的地址段</p>
-<p class="fireman-p-indent" ><code>pod-network-cidr</code>：<code>pod</code>的地址段</p>
-<p class="fireman-p-indent" >正常情况下，部署成功。不正常情况，在踩坑中有汇总。</p>
+<p><code>kubernetes-version</code>：指定<code>k8s</code>版本，与安装版本一致</p>
+<p><code>image-repository</code>：指定镜像仓</p>
+<p><code>apiserver-advertise-address</code>：<code>apiserver</code>监听地址（IP要在本机）</p>
+<p><code>service-cidr</code>：<code>svc</code>的地址段</p>
+<p><code>pod-network-cidr</code>：<code>pod</code>的地址段</p>
+<p>正常情况下，部署成功。不正常情况，在踩坑中有汇总。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">I0706 16:46:45.150346   12488 loader.go:372] Config loaded from file:  /etc/kubernetes/admin.conf</span><br><span class="line"></span><br><span class="line">Your Kubernetes control-plane has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p $HOME/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) $HOME/.kube/config</span><br><span class="line"></span><br><span class="line">Alternatively, if you are the root user, you can run:</span><br><span class="line"></span><br><span class="line">  export KUBECONFIG=/etc/kubernetes/admin.conf</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">Then you can join any number of worker nodes by running the following on each as root:</span><br><span class="line"></span><br><span class="line">kubeadm join 192.168.111.128:6443 --token nks44r.gkygece3delpvvfv \</span><br><span class="line">	--discovery-token-ca-cert-hash sha256:c75ee26ea8d28e9703affae319d0479a5a3ece6c82448cbae527821c96271a66</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >其中，最下面的一串命令会在后续其他节点加入集群时会用到。如果没有保存下来也没关系，可以通过命令重新生成。</p>
+<p>其中，最下面的一串命令会在后续其他节点加入集群时会用到。如果没有保存下来也没关系，可以通过命令重新生成。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># kubeadm token create --print-join-command</span><br><span class="line">kubeadm join 192.168.111.128:6443 --token i95sh4.acf1p80elxaku7y0 --discovery-token-ca-cert-hash sha256:c75ee26ea8d28e9703affae319d0479a5a3ece6c82448cbae527821c96271a66</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >配置<code>kubectl</code>工具</p>
+<p>配置<code>kubectl</code>工具</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cp -a /etc/kubernetes/admin.conf .kube/config</span><br><span class="line"></span><br><span class="line"># kubectl get nodes</span><br><span class="line">NAME     STATUS     ROLES                  AGE     VERSION</span><br><span class="line">master   NotReady   control-plane,master   4m14s   v1.23.7</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装flannel</p>
+<p>安装flannel</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir k8s</span><br><span class="line">cd k8s/</span><br><span class="line">wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >修改<code>yml</code>，将网络改成初始化时<code>pod</code>网络</p>
+<p>修改<code>yml</code>，将网络改成初始化时<code>pod</code>网络</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">net-conf.json: |</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;Network&quot;: &quot;10.244.0.0/16&quot;,</span><br><span class="line">    &quot;Backend&quot;: &#123;</span><br><span class="line">      &quot;Type&quot;: &quot;vxlan&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >安装<code>flannel</code></p>
+<p>安装<code>flannel</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f kube-flannel.yml</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>可能出现镜像拉不下来导致<code>pod</code>启动不起来，可手动<code>docker pull</code>拉一下镜像。</li>
 </ul>
-<p class="fireman-p-indent" >安装完<code>flannel</code>之后，<code>node</code>状态恢复成<code>Ready</code></p>
+<p>安装完<code>flannel</code>之后，<code>node</code>状态恢复成<code>Ready</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># kubectl get nodes</span><br><span class="line">NAME     STATUS   ROLES                  AGE   VERSION</span><br><span class="line">master   Ready    control-plane,master   39m   v1.23.7</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >命令补全</p>
+<p>命令补全</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install -y bash-completion</span><br><span class="line"></span><br><span class="line">source &lt;(kubectl completion bash)</span><br><span class="line">echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">source  ~/.bashrc</span><br></pre></td></tr></table></figure>
 
-<h3 id="将其他节点加入到集群中"><a href="#将其他节点加入到集群中" class="headerlink" title="将其他节点加入到集群中"></a>将其他节点加入到集群中</h3><p class="fireman-p-indent" >执行上面的<code>kubeadm join</code></p>
+<h3 id="将其他节点加入到集群中"><a href="#将其他节点加入到集群中" class="headerlink" title="将其他节点加入到集群中"></a>将其他节点加入到集群中</h3><p>执行上面的<code>kubeadm join</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm join 192.168.111.128:6443 --token i95sh4.acf1p80elxaku7y0 --discovery-token-ca-cert-hash sha256:c75ee26ea8d28e9703affae319d0479a5a3ece6c82448cbae527821c96271a66</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >集群状态</p>
+<p>集群状态</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># kubectl get nodes</span><br><span class="line">NAME     STATUS   ROLES                  AGE   VERSION</span><br><span class="line">master   Ready    control-plane,master   10m   v1.23.7</span><br><span class="line">node01   Ready    &lt;none&gt;                 10m   v1.23.7</span><br><span class="line">node02   Ready    &lt;none&gt;                 10m   v1.23.7</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >每个节点的<code>kubelet</code>都设置自启动</p>
+<p>每个节点的<code>kubelet</code>都设置自启动</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable kubelet</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >检查功能</p>
+<p>检查功能</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create deployment my-dep --image=nginx --port=80 --replicas=10</span><br><span class="line">kubectl expose deployment my-dep --port=8080 --target-port=80</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl 10.244.1.3:80</span><br><span class="line">kubectl get svc</span><br><span class="line">curl 10.1.163.249:8080</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" >关机，快照。</p>
+<p>关机，快照。</p>
 <h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><ul>
 <li><p><code>kubeadm init</code>时，<code>kubelet</code>启动不起</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -u kubelet</span><br></pre></td></tr></table></figure>

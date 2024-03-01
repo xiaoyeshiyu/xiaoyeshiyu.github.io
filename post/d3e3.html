@@ -97,14 +97,7 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<!-- hexo injector head_end start --><style>
-        .fireman-p-indent{
-            text-indent:2em;
-        }
-        .fireman-span-indent{
-            padding-left:2em;
-        }
-    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -315,8 +308,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="标准Go项目结构"><a href="#标准Go项目结构" class="headerlink" title="标准Go项目结构"></a>标准Go项目结构</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy1zdGFuZGFyZHMvcHJvamVjdC1sYXlvdXQvYmxvYi9tYXN0ZXIvUkVBRE1FX3poLm1kI3N0YW5kYXJkLWdvLXByb2plY3QtbGF5b3V0">Standard Go Project Layout<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >当一个项目需要更多的人参与进来，项目比较复杂，那么这个项目就需要更多的结构，包括需要一个 <code>toolkit</code> 来方便生成项目的模板，尽可能大家统一的工程目录布局。（比如 <code>go-micro</code>、<code>go-zero</code>、<code>kratos</code>）</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="标准Go项目结构"><a href="#标准Go项目结构" class="headerlink" title="标准Go项目结构"></a>标准Go项目结构</h1><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy1zdGFuZGFyZHMvcHJvamVjdC1sYXlvdXQvYmxvYi9tYXN0ZXIvUkVBRE1FX3poLm1kI3N0YW5kYXJkLWdvLXByb2plY3QtbGF5b3V0">Standard Go Project Layout<i class="fa fa-external-link-alt"></i></span></p>
+<p>当一个项目需要更多的人参与进来，项目比较复杂，那么这个项目就需要更多的结构，包括需要一个 <code>toolkit</code> 来方便生成项目的模板，尽可能大家统一的工程目录布局。（比如 <code>go-micro</code>、<code>go-zero</code>、<code>kratos</code>）</p>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
 <li><p><code>/cmd</code></p>
 <p>本项目的主干</p>
@@ -345,22 +338,22 @@
 <p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925115030312.png" alt="image-20230925115030312"></p>
 </li>
 </ul>
-<h2 id="工具包"><a href="#工具包" class="headerlink" title="工具包"></a>工具包</h2><p class="fireman-p-indent" >Kit Project Layout </p>
-<p class="fireman-p-indent" >每个公司都应当为不同的微服务建立一个统一的 kit 工具包项目（基础库&#x2F;框架）和 <code>app</code> 项目。</p>
-<p class="fireman-p-indent" >基础库 <code>kit</code> 为独立项目，公司级建议只有一个，按照功能目录来拆分会带来不少的管理工作，因此建议合并整合。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDIvcGFja2FnZS1vcmllbnRlZC1kZXNpZ24uaHRtbA==">Package Oriented Design<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="工具包"><a href="#工具包" class="headerlink" title="工具包"></a>工具包</h2><p>Kit Project Layout </p>
+<p>每个公司都应当为不同的微服务建立一个统一的 kit 工具包项目（基础库&#x2F;框架）和 <code>app</code> 项目。</p>
+<p>基础库 <code>kit</code> 为独立项目，公司级建议只有一个，按照功能目录来拆分会带来不少的管理工作，因此建议合并整合。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDIvcGFja2FnZS1vcmllbnRlZC1kZXNpZ24uaHRtbA==">Package Oriented Design<i class="fa fa-external-link-alt"></i></span></p>
 <blockquote>
-<p class="fireman-p-indent" >To this end, the <code>Kit</code> project is not allowed to have a vendor folder. If any of packages are dependent on 3rd party packages, they must always build against the latest version of those dependences.</p>
-<p class="fireman-p-indent" >为此，<code>Kit</code> 项目不允许有<code>vendor</code>文件夹。如果软件包依赖于第三方软件包，则必须始终根据这些依赖包的最新版本进行构建。</p>
+<p>To this end, the <code>Kit</code> project is not allowed to have a vendor folder. If any of packages are dependent on 3rd party packages, they must always build against the latest version of those dependences.</p>
+<p>为此，<code>Kit</code> 项目不允许有<code>vendor</code>文件夹。如果软件包依赖于第三方软件包，则必须始终根据这些依赖包的最新版本进行构建。</p>
 </blockquote>
-<p class="fireman-p-indent" ><code>kit</code> 项目必须具备的特点：</p>
+<p><code>kit</code> 项目必须具备的特点：</p>
 <ul>
 <li>统一</li>
 <li>标准库方式布局</li>
 <li>高度抽象</li>
 <li>支持插件</li>
 </ul>
-<h1 id="服务端应用程序布局"><a href="#服务端应用程序布局" class="headerlink" title="服务端应用程序布局"></a>服务端应用程序布局</h1><p class="fireman-p-indent" >Service Application Project Layout</p>
+<h1 id="服务端应用程序布局"><a href="#服务端应用程序布局" class="headerlink" title="服务端应用程序布局"></a>服务端应用程序布局</h1><p>Service Application Project Layout</p>
 <ul>
 <li><p><code>/api</code></p>
 <p>API 协议定义目录，<code>xxapi.proto</code> <code>protobuf</code> 文件，以及生成的 <code>go</code> 文件。我们通常把 <code>api</code> 文档直接在 <code>proto</code> 文件中描述。</p>
@@ -375,14 +368,14 @@
 <p>有些 Go 项目确实有一个 <code>src</code> 文件夹，但这通常发生在开发人员有 <code>Java</code> 北京，在那里它是一种常见的模式。不要将项目级别 <code>src</code> 目录与 <code>Go</code> 用于其工作空间的 <code>src</code> 目录。</p>
 </li>
 </ul>
-<p class="fireman-p-indent" >一个 <code>gitlab</code> 的 <code>project</code> 里可以放置多个微服务的 <code>app</code>（类似 <span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC83NzU3NzQxNQ==">monorepo<i class="fa fa-external-link-alt"></i></span>）。也可以按照 <code>gitlab</code> 的 <code>group</code> 里建立多个 <code>project</code>，每个 <code>project</code> 对应一个 <code>app</code>。</p>
+<p>一个 <code>gitlab</code> 的 <code>project</code> 里可以放置多个微服务的 <code>app</code>（类似 <span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC83NzU3NzQxNQ==">monorepo<i class="fa fa-external-link-alt"></i></span>）。也可以按照 <code>gitlab</code> 的 <code>group</code> 里建立多个 <code>project</code>，每个 <code>project</code> 对应一个 <code>app</code>。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925144605598.png" alt="image-20230925144605598" style="zoom:25%;" />
 
 <ul>
 <li>多 <code>app</code> 的方式，<code>app</code>目录内的每个微服务按照自己的全局唯一名称，比如 <code>account.service.vip</code> 来建立目录，如：<code>account/vip/*</code></li>
 <li>和 <code>app</code> 平级的目录 <code>pkg</code> 存放业务有关的公共库（非基础框架库）。如果应用不希望导出这些目录，可以放置到 <code>myapp/internal/pkg</code> 中。</li>
 </ul>
-<p class="fireman-p-indent" >微服务中的 <code>app</code> 服务类型分为4类：<code>interface</code>、<code>service</code>、<code>job</code>、<code>admin</code></p>
+<p>微服务中的 <code>app</code> 服务类型分为4类：<code>interface</code>、<code>service</code>、<code>job</code>、<code>admin</code></p>
 <ul>
 <li><code>interface</code>：对外的 <code>BFF</code> 服务，接受来自用户的请求，比如暴露了 <code>HTTP/gRPC</code> 接口</li>
 <li><code>service</code>：对内的微服务，仅接受来自内部其他服务或者网关的请求，比如暴露了 <code>gRPC</code> 接口只对内服务</li>
@@ -390,10 +383,10 @@
 <li><code>job</code>：流式任务处理的服务，上游一般依赖 <code>message broker</code></li>
 <li><code>task</code>：定时任务，类似 <code>cronjob</code>，部署到 <code>task</code> 托管平台中。</li>
 </ul>
-<p class="fireman-p-indent" ><code>cmd</code> 应用目录负责程序的：启动、关闭、配置初始化等。</p>
+<p><code>cmd</code> 应用目录负责程序的：启动、关闭、配置初始化等。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925145723401.png" alt="image-20230925145723401" style="zoom:25%;" />
 
-<h1 id="服务端应用目录层级划分-v1"><a href="#服务端应用目录层级划分-v1" class="headerlink" title="服务端应用目录层级划分-v1"></a>服务端应用目录层级划分-v1</h1><p class="fireman-p-indent" >在老布局里面，<code>app</code> 目录下有 <code>api</code> 、<code>cmd</code>、<code>configs</code>、<code>internal</code> 目录，目录里一般还会放置 <code>README</code>、<code>CHANGELOG</code>、<code>OWNERS</code>。</p>
+<h1 id="服务端应用目录层级划分-v1"><a href="#服务端应用目录层级划分-v1" class="headerlink" title="服务端应用目录层级划分-v1"></a>服务端应用目录层级划分-v1</h1><p>在老布局里面，<code>app</code> 目录下有 <code>api</code> 、<code>cmd</code>、<code>configs</code>、<code>internal</code> 目录，目录里一般还会放置 <code>README</code>、<code>CHANGELOG</code>、<code>OWNERS</code>。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925151531304.png" alt="image-20230925151531304" style="zoom:25%;" />
 
 <ul>
@@ -402,8 +395,8 @@
 <li><code>internal</code>：是为了避免有同业务下有人跨目录引用了内部的 <code>model</code>、<code>dao</code> 等内部 <code>struct</code></li>
 <li><code>server</code>：放置 <code>HTTP/gRPC</code> 的路由代码，以及 <code>DTO</code> 转换的代码</li>
 </ul>
-<p class="fireman-p-indent" ><code>DTO(Data Transfer Object)</code>：数据传输对象，这个概念来源于 <code>J2EE</code> 的设计模式。但在这里，泛指用于展示层、 API 层于服务层（业务逻辑层）之间的数据传输对象。</p>
-<p class="fireman-p-indent" >项目的依赖路径为：<code>model</code> &lt;- <code>dao</code> -&gt; <code>service</code> -&gt; <code>api</code>，<code>model struct</code> 串联各个层，直到 <code>api</code> 需要做 <code>DTO</code> 对象转换。</p>
+<p><code>DTO(Data Transfer Object)</code>：数据传输对象，这个概念来源于 <code>J2EE</code> 的设计模式。但在这里，泛指用于展示层、 API 层于服务层（业务逻辑层）之间的数据传输对象。</p>
+<p>项目的依赖路径为：<code>model</code> &lt;- <code>dao</code> -&gt; <code>service</code> -&gt; <code>api</code>，<code>model struct</code> 串联各个层，直到 <code>api</code> 需要做 <code>DTO</code> 对象转换。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925152920064.png" alt="image-20230925152920064" style="zoom:25%;" />
 
 <ul>
@@ -413,9 +406,9 @@
 <li><code>server</code>：依赖 <code>proto</code> 定义的服务作为入参，提供快捷的启动服务全局方法</li>
 <li><code>api</code>：定义了 API <code>proto</code> 文件，和生成的 <code>stub</code> 代码，它生成的 <code>interface</code>，其实现者在 <code>service</code> 中。</li>
 </ul>
-<p class="fireman-p-indent" ><code>service</code> 的方法签名因为实现了 API 的接口定义，DTO 在业务逻辑层直接使用了，更有 <code>dao</code> 直接使用，最简化代码。</p>
-<p class="fireman-p-indent" >DO（Domain Object）：领域对象，就是从现实世界中抽象出来的有形或无形的业务实体（是一个面向业务的结构体，例如需要返回给上层使用的结构体）。缺乏 DTO -&gt; DO 的对象转换。</p>
-<h1 id="服务端应用目录层级划分-v2"><a href="#服务端应用目录层级划分-v2" class="headerlink" title="服务端应用目录层级划分-v2"></a>服务端应用目录层级划分-v2</h1><p class="fireman-p-indent" ><code>app</code>目录下有 <code>api</code>、<code>configs</code>、<code>internal</code> 目录，目录里一般还会放置 <code>README</code>、<code>CHANGELOG</code>、<code>OWNERS</code></p>
+<p><code>service</code> 的方法签名因为实现了 API 的接口定义，DTO 在业务逻辑层直接使用了，更有 <code>dao</code> 直接使用，最简化代码。</p>
+<p>DO（Domain Object）：领域对象，就是从现实世界中抽象出来的有形或无形的业务实体（是一个面向业务的结构体，例如需要返回给上层使用的结构体）。缺乏 DTO -&gt; DO 的对象转换。</p>
+<h1 id="服务端应用目录层级划分-v2"><a href="#服务端应用目录层级划分-v2" class="headerlink" title="服务端应用目录层级划分-v2"></a>服务端应用目录层级划分-v2</h1><p><code>app</code>目录下有 <code>api</code>、<code>configs</code>、<code>internal</code> 目录，目录里一般还会放置 <code>README</code>、<code>CHANGELOG</code>、<code>OWNERS</code></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925154629249.png" alt="image-20230925154629249" style="zoom:25%;" />
 
 <ul>
@@ -426,28 +419,28 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016161954739.png" alt="image-20231016161954739"></p>
-<p class="fireman-p-indent" >PO（Persistent Object）：持久化对象，它跟持久层（通常是关系型数据库的数据结构，形成一一对应的映射关系，如果持久层是关系型数据库，那么数据表中的每个字段（或若干个）就对应 PO 的一个（或若干个）属性。</p>
-<p class="fireman-p-indent" >如果将 DDD 设计中的一些思想和工程结构做一些简化，映射到 api、service、biz、data 各层</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162210509.png" alt="image-20231016162210509"></p>
-<p class="fireman-p-indent" >松散分层架构（ Relaxed Layout System）</p>
-<p class="fireman-p-indent" >层间关系不那么严格。每层都可以使用它下面所有层的服务，而不仅仅是下一层的服务。每层都可能是半透明的，这意味着有些服务只对上一层可见，而有些服务对上面的所有层都可见。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162445903.png" alt="image-20231016162445903"></p>
-<p class="fireman-p-indent" >同时在领域驱动设计（DDD）中也采用了继承分层架构（Layering Through Inheritance），高层继承并实现低层接口。</p>
-<p class="fireman-p-indent" >调整一下各层的顺序，并且将基础设施层移动到最高层。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162509133.png" alt="image-20231016162509133"></p>
-<p class="fireman-p-indent" >注意：继承分层架构依然是单相依赖，这也意味着领域层、应用层、表现层能不将依赖基础设施层，相反基础设施层可以依赖它们。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9sdXNodW5qaWFuLmdpdGVlLmlvLzIwMjIvMDIvMjAvc2hpLXhpZS1tby14aW5nLXl1LWNob25nLXhpZS1tby14aW5nLw==">失血模型与充血模型<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" >在这里，可以理解为：</p>
-<p class="fireman-p-indent" >失血模型：<code>model</code> 中的 <code>struct</code> 只有纯数据结构，所有的业务逻辑（例如 getter&#x2F;setter）由 <code>service</code> 层完成</p>
-<p class="fireman-p-indent" >贫血模型：<code>struct</code> 带有一部分属性判断逻辑，在 <code>service</code> 层可以直接调用使用，不包含依赖持久层的业务逻辑。这部分依赖于持久层的业务逻辑将会放到服务层中。可以看出。贫血模型中的领域对象是不依赖于持久层的。</p>
-<p class="fireman-p-indent" >充血模型：充血模型中包含了所有的业务逻辑，闹括依赖于持久层的业务逻辑。所以，使用充血模型的领域层是依赖于持久层，简单表示就是 UI层 -&gt; 服务层 -&gt; 领域层 -&gt; 持久层。</p>
-<p class="fireman-p-indent" >胀血模型：胀血模型就是把和业务逻辑不相关的其他应用逻辑（如授权、事务等），都放在领域模型中。比较臃肿，服务层小时，领域层干了服务层的事，相对服务层而言，服务层变成失血模型。</p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VudC9lbnQvYmxvYi9tYXN0ZXIvUkVBRE1FX3poLm1kI2VudC0tLSVFNCVCOCU4MCVFNCVCOCVBQSVFNSVCQyVCQSVFNSVBNCVBNyVFNyU5QSU4NGdvJUU4JUFGJUFEJUU4JUE4JTgwJUU1JUFFJTlFJUU0JUJEJTkzJUU2JUExJTg2JUU2JTlFJUI2">ent - 一个强大的Go语言实体框架<i class="fa fa-external-link-alt"></i></span></p>
-<h1 id="经济适用版项目布局-单体应用"><a href="#经济适用版项目布局-单体应用" class="headerlink" title="经济适用版项目布局 - 单体应用"></a>经济适用版项目布局 - 单体应用</h1><p class="fireman-p-indent" >如果写一个简单的单体服务，不需要参杂多个服务作为微服务形式，可以采用更加简单的项目布局</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016161954739.png" alt="image-20231016161954739"></p>
+<p>PO（Persistent Object）：持久化对象，它跟持久层（通常是关系型数据库的数据结构，形成一一对应的映射关系，如果持久层是关系型数据库，那么数据表中的每个字段（或若干个）就对应 PO 的一个（或若干个）属性。</p>
+<p>如果将 DDD 设计中的一些思想和工程结构做一些简化，映射到 api、service、biz、data 各层</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162210509.png" alt="image-20231016162210509"></p>
+<p>松散分层架构（ Relaxed Layout System）</p>
+<p>层间关系不那么严格。每层都可以使用它下面所有层的服务，而不仅仅是下一层的服务。每层都可能是半透明的，这意味着有些服务只对上一层可见，而有些服务对上面的所有层都可见。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162445903.png" alt="image-20231016162445903"></p>
+<p>同时在领域驱动设计（DDD）中也采用了继承分层架构（Layering Through Inheritance），高层继承并实现低层接口。</p>
+<p>调整一下各层的顺序，并且将基础设施层移动到最高层。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231016162509133.png" alt="image-20231016162509133"></p>
+<p>注意：继承分层架构依然是单相依赖，这也意味着领域层、应用层、表现层能不将依赖基础设施层，相反基础设施层可以依赖它们。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9sdXNodW5qaWFuLmdpdGVlLmlvLzIwMjIvMDIvMjAvc2hpLXhpZS1tby14aW5nLXl1LWNob25nLXhpZS1tby14aW5nLw==">失血模型与充血模型<i class="fa fa-external-link-alt"></i></span></p>
+<p>在这里，可以理解为：</p>
+<p>失血模型：<code>model</code> 中的 <code>struct</code> 只有纯数据结构，所有的业务逻辑（例如 getter&#x2F;setter）由 <code>service</code> 层完成</p>
+<p>贫血模型：<code>struct</code> 带有一部分属性判断逻辑，在 <code>service</code> 层可以直接调用使用，不包含依赖持久层的业务逻辑。这部分依赖于持久层的业务逻辑将会放到服务层中。可以看出。贫血模型中的领域对象是不依赖于持久层的。</p>
+<p>充血模型：充血模型中包含了所有的业务逻辑，闹括依赖于持久层的业务逻辑。所以，使用充血模型的领域层是依赖于持久层，简单表示就是 UI层 -&gt; 服务层 -&gt; 领域层 -&gt; 持久层。</p>
+<p>胀血模型：胀血模型就是把和业务逻辑不相关的其他应用逻辑（如授权、事务等），都放在领域模型中。比较臃肿，服务层小时，领域层干了服务层的事，相对服务层而言，服务层变成失血模型。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2VudC9lbnQvYmxvYi9tYXN0ZXIvUkVBRE1FX3poLm1kI2VudC0tLSVFNCVCOCU4MCVFNCVCOCVBQSVFNSVCQyVCQSVFNSVBNCVBNyVFNyU5QSU4NGdvJUU4JUFGJUFEJUU4JUE4JTgwJUU1JUFFJTlFJUU0JUJEJTkzJUU2JUExJTg2JUU2JTlFJUI2">ent - 一个强大的Go语言实体框架<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="经济适用版项目布局-单体应用"><a href="#经济适用版项目布局-单体应用" class="headerlink" title="经济适用版项目布局 - 单体应用"></a>经济适用版项目布局 - 单体应用</h1><p>如果写一个简单的单体服务，不需要参杂多个服务作为微服务形式，可以采用更加简单的项目布局</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019151429320.png" alt="image-20231019151429320" style="zoom: 50%;" />
 
-<p class="fireman-p-indent" >可以考虑替换的：</p>
+<p>可以考虑替换的：</p>
 <ol>
 <li><code>data</code> 里面放的是 <code>PO</code> ，也可以改名叫作 <code>model</code></li>
 <li>在业务逻辑不复杂的情况下，<code>DO</code> 和 <code>PO</code> 可以只保留一个。也就是，在这种场景下，也可以改名叫作 model。它会被直接用于持久化，以及承担 <strong>轻量的</strong> 业务逻辑 - 如果要承担很多逻辑，最好将 <code>DO</code> 分离出来</li>
@@ -457,7 +450,7 @@
 <li><code>cmd</code> 也尽量依赖于 <code>biz</code>，相当于只是将业务逻辑暴露为简单的命令行</li>
 <li><code>pkg</code> 里面绝对不能依赖任何别的包（因为可以在多个项目中使用，例如可以 雪花算法 <code>id</code> 生成器、切片去重等处理）</li>
 </ol>
-<p class="fireman-p-indent" >如果单体应用内容较多，则可以再通过目录细化出来</p>
+<p>如果单体应用内容较多，则可以再通过目录细化出来</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019152644777.png" alt="image-20231019152644777" style="zoom:50%;" />
 
 <ol>
@@ -465,36 +458,36 @@
 <li>不必每一部分都直接全部分到最细，比如说 <code>data</code> 里面 <code>user</code> 部分很多内容，就单独一个文件夹放着，但是其他部分不多，就直接放在 <code>data</code> 下，将来再考虑拆分；</li>
 <li>在按照业务细分之后，可以考虑使用集中的 <code>VO</code> 目录，也可以直接定义在各自的业务文件夹下。例如 <code>user</code> 的 <code>VO</code> 可以直接放在 <code>/web/user</code> 里面，也可以有一个 <code>/web/vo</code>。<code>biz</code> 和 <code>data</code> 也是类似处理；</li>
 </ol>
-<h2 id="拆分"><a href="#拆分" class="headerlink" title="拆分"></a>拆分</h2><p class="fireman-p-indent" >如果目录结构演化到比较复杂的底部，那么只需要将某个业务的全部层级里面的代码拆出来，挪到一个新的项目就可以。</p>
-<p class="fireman-p-indent" >例如同目录下文件非常多</p>
+<h2 id="拆分"><a href="#拆分" class="headerlink" title="拆分"></a>拆分</h2><p>如果目录结构演化到比较复杂的底部，那么只需要将某个业务的全部层级里面的代码拆出来，挪到一个新的项目就可以。</p>
+<p>例如同目录下文件非常多</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019153147314.png" alt="image-20231019153147314" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >此时，可以将用户服务和订单服务拆开</p>
+<p>此时，可以将用户服务和订单服务拆开</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019153221689.png" alt="image-20231019153221689" style="zoom:50%;" />
 
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019153232852.png" alt="image-20231019153232852" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >将 <code>pkg</code> 复制两份即可</p>
+<p>将 <code>pkg</code> 复制两份即可</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019153327533.png" alt="image-20231019153327533" style="zoom:50%;" />
 
-<p class="fireman-p-indent" >按照 <code>BFF</code> 分层的话，还可以拆分出一个 <code>web</code> 应用和多个领域服务，以及可能的一个 <code>kit</code></p>
+<p>按照 <code>BFF</code> 分层的话，还可以拆分出一个 <code>web</code> 应用和多个领域服务，以及可能的一个 <code>kit</code></p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019153446738.png" alt="image-20231019153446738" style="zoom:50%;" />
 
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019153455743.png" alt="image-20231019153455743" style="zoom:50%;" />
 
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019153503618.png" alt="image-20231019153503618" style="zoom:50%;" />
 
-<h2 id="服务拆分的思路"><a href="#服务拆分的思路" class="headerlink" title="服务拆分的思路"></a>服务拆分的思路</h2><p class="fireman-p-indent" >核心原则：高内聚，低耦合</p>
+<h2 id="服务拆分的思路"><a href="#服务拆分的思路" class="headerlink" title="服务拆分的思路"></a>服务拆分的思路</h2><p>核心原则：高内聚，低耦合</p>
 <ol>
 <li>横向按照层级分，或者说按照功能分：如 <code>service</code>，<code>biz</code>，<code>data</code>。这种划分有很明显的层级结构</li>
 <li>竖向按照业务分</li>
 </ol>
-<p class="fireman-p-indent" >那么，按照横向分或者竖向分的原则：</p>
+<p>那么，按照横向分或者竖向分的原则：</p>
 <ol>
 <li>因为业务复杂度演进而带来的，应该竖向分。典型例子是针对商家还是买家，细化用户服务</li>
 <li>因为引入中间层级，尝试维系 <strong>内聚耦合</strong> 的，应该横向分。典型例子是在 <code>data</code> 里面引入 <code>cache</code></li>
 </ol>
-<p class="fireman-p-indent" >一些简单粗暴的原则</p>
+<p>一些简单粗暴的原则</p>
 <ol>
 <li>需要被别的项目使用的代码，相当于是 <code>pkg</code>。因此被别的项目使用的代码要非常谨慎，因为 <code>pkg</code> 的代码丢过去就收不回来（类似于，一个大写开头的方法，暴露出去之后被调用，就无法改回来了）</li>
 <li>纯粹的微服务项目，<code>web</code> 项目，没啥代码在项目间复用的代码，全部丢过去 <code>internal</code></li>
@@ -503,21 +496,21 @@
 <li>以公司规范为准，没有规范就以 <code>v2</code> 版本为主。如果项目特别小，就是 <code>CRUD</code>，可以裁剪一部分 <code>V2</code></li>
 <li>甚至在单体应用中，可以将 <code>internal</code> 目录也去掉，直接将内部目录暴露出来</li>
 </ol>
-<h1 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h1><p class="fireman-p-indent" >Lifecycle 需要考虑服务应用的对象初始化以及生命周期的管理，所有 HTTP&#x2F;gRPC 依赖的前置资源初始化，包括 <code>data</code>、<code>biz</code>、<code>service</code>，之后再启动监听服务。使用 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJl">wire<i class="fa fa-external-link-alt"></i></span> ，来管理所有资源的 <strong>依赖注入</strong>。控制反转的一种方式就是依赖注入。为何需要依赖注入？</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925160248473.png" alt="image-20230925160248473"></p>
-<p class="fireman-p-indent" >前者：需要在初始化的过程中，通过变量创建 <code>redis</code> 对象。但是在测试的时候，就不方便使用，还是需要手动创建对象。</p>
-<p class="fireman-p-indent" >后者：先创建一个 <code>redis</code> 对象，然后在初始化的时候，使用这个对象。好处是在测试的时候，或者在其他模块，可以通过使用对象直接进行调用。</p>
-<p class="fireman-p-indent" >核心是为了：</p>
+<h1 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h1><p>Lifecycle 需要考虑服务应用的对象初始化以及生命周期的管理，所有 HTTP&#x2F;gRPC 依赖的前置资源初始化，包括 <code>data</code>、<code>biz</code>、<code>service</code>，之后再启动监听服务。使用 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJl">wire<i class="fa fa-external-link-alt"></i></span> ，来管理所有资源的 <strong>依赖注入</strong>。控制反转的一种方式就是依赖注入。为何需要依赖注入？</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925160248473.png" alt="image-20230925160248473"></p>
+<p>前者：需要在初始化的过程中，通过变量创建 <code>redis</code> 对象。但是在测试的时候，就不方便使用，还是需要手动创建对象。</p>
+<p>后者：先创建一个 <code>redis</code> 对象，然后在初始化的时候，使用这个对象。好处是在测试的时候，或者在其他模块，可以通过使用对象直接进行调用。</p>
+<p>核心是为了：</p>
 <ol>
 <li>方便测试</li>
 <li>单词初始化和复用</li>
 </ol>
-<p class="fireman-p-indent" >使用依赖注入，可以方便的进行生命周期的管理。</p>
-<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925160629527.png" alt="image-20230925160629527"></p>
-<h2 id="Wire"><a href="#Wire" class="headerlink" title="Wire"></a>Wire</h2><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvd2lyZQ==">Compile-time Dependency Injection With Go Cloud’s Wire<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJl">wire<i class="fa fa-external-link-alt"></i></span> </p>
-<p class="fireman-p-indent" >手撸资源的初始化和关闭是非常繁琐，容易出错的。上面提到我们使用依赖注入的思路 <code>DI</code>，结合 <code>google wire</code>，静态的 <code>go generate</code> 生成静态的代码，可以很方便和查看，不是在运行时利用 <code>reflection</code> 实现。</p>
-<p class="fireman-p-indent" >手动创建和初始化：</p>
+<p>使用依赖注入，可以方便的进行生命周期的管理。</p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925160629527.png" alt="image-20230925160629527"></p>
+<h2 id="Wire"><a href="#Wire" class="headerlink" title="Wire"></a>Wire</h2><p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvd2lyZQ==">Compile-time Dependency Injection With Go Cloud’s Wire<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJl">wire<i class="fa fa-external-link-alt"></i></span> </p>
+<p>手撸资源的初始化和关闭是非常繁琐，容易出错的。上面提到我们使用依赖注入的思路 <code>DI</code>，结合 <code>google wire</code>，静态的 <code>go generate</code> 生成静态的代码，可以很方便和查看，不是在运行时利用 <code>reflection</code> 实现。</p>
+<p>手动创建和初始化：</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925161932955.png" alt="image-20230925161932955" style="zoom:25%;" />
 
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925161937974.png" alt="image-20230925161937974" style="zoom:25%;" />
@@ -528,52 +521,52 @@
 
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925162012361.png" alt="image-20230925162012361" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >通过 <code>wire</code> 实现依赖注入</p>
+<p>通过 <code>wire</code> 实现依赖注入</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230925162046300.png" alt="image-20230925162046300" style="zoom:25%;" />
 
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDIvcGFja2FnZS1vcmllbnRlZC1kZXNpZ24uaHRtbA==">Package Oriented Design<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDIvZGVzaWduLXBoaWxvc29waHktb24tcGFja2FnaW5nLmh0bWw=">Design Philosophy On Packaging<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy1zdGFuZGFyZHMvcHJvamVjdC1sYXlvdXQjc3RhbmRhcmQtZ28tcHJvamVjdC1sYXlvdXQ=">Standard Go Project Layout<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy1zdGFuZGFyZHMvcHJvamVjdC1sYXlvdXQvYmxvYi9tYXN0ZXIvUkVBRE1FX3poLm1kI3N0YW5kYXJkLWdvLXByb2plY3QtbGF5b3V0">Standard Go Project Layout 中文<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20venhmMzMwMzAxL3AvNjUzNDY0My5odG1s">浅析VO、DTO、DO、PO的概念、区别和用处<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2s2VDlROFhLczZpSWtaUFBJRnEvYXJ0aWNsZS9kZXRhaWxzLzEwOTE5MjQ3NQ==">阿里文娱技术专家战獒: 领域驱动设计详解之What, Why, How?<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoaWt1YWk5OTk1L2FydGljbGUvZGV0YWlscy8xMDA3MjM1NDA=">阿里技术专家详解 DDD 系列- Domain Primitive<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1Rhb2Jhb2ppc2h1L2FydGljbGUvZGV0YWlscy8xMDE0NDQzMjQ=">阿里技术专家详解DDD系列 第二弹 - 应用架构<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Rhb2Jhb2ppc2h1L2FydGljbGUvZGV0YWlscy8xMDYxNTI2NDE=">阿里技术专家详解DDD系列 第三讲 - Repository模式<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9rYi5jbmJsb2dzLmNvbS9wYWdlLzUyMDc0My8=">贫血，充血模型的解释以及一些经验<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDU0NjY2NTY=">领域驱动设计 实践手册(1.Get Started)<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDU2NDg5ODY=">DDD 实践手册(2. 实现分层架构)<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDY2MzQzNzM=">DDD 实践手册(3. Entity, Value Object)<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDczNDc1OTM=">DDD 实践手册(4. Aggregate — 聚合)<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDkwNDg1MzI=">DDD 实践手册(5. Factory 与 Repository)<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMTAyNTIzOTQ=">DDD 实践手册(6. Bounded Context - 限界上下文)<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC9kZmE0Mjc3NjI5NzU=">01、DDD和微服务的关系<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9nby1kZGQv">Domain Driven Design in Go<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9wYXJ0LTItZG9tYWluLWRyaXZlbi1kZXNpZ24taW4tZ28v">Domain Driven Design in Go: Part 2<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9wYXJ0LTMtZG9tYWluLWRyaXZlbi1kZXNpZ24taW4tZ28v">Domain Driven Design in Go: Part 3<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81NzMyYjY5YmQxYTE=">当中台遇上DDD，我们该如何设计微服务？<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC8xMDc4OTYxMi5odG1s">领域驱动设计系列文章（1）——通过现实例子显示领域驱动设计的威力<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC80MzkwMDg2Lmh0bWw=">领域驱动设计系列文章（2）——浅析VO、DTO、DO、PO的概念、区别和用处<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC8xMDc4OTYyMS5odG1s">领域驱动设计系列文章（3）——有选择性的使用领域驱动设计<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNsZWFuY29kZXIuY29tL3VuY2xlLWJvYi8yMDEyLzA4LzEzL3RoZS1jbGVhbi1hcmNoaXRlY3R1cmUuaHRtbA==">The Clean Architecture<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1vTDZKQlVrNnRqMA==">How Do You Structure Your Go Apps<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3ppdHJ5c3MvZ28tc2FtcGxl">zitryss&#x2F;go-sample<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RhbmNleW91bmcvcGFwZXItY29kZS9ibG9iL21hc3Rlci9wYWNrYWdlLW9yaWVudGVkLWRlc2lnbi9wYWNrYWdlb3JpZW50ZWRkZXNpZ24ubWQjZ28tJUU5JTlEJUEyJUU1JTkwJTkxJUU1JThDJTg1JUU3JTlBJTg0JUU4JUFFJUJFJUU4JUFFJUExJUU1JTkyJThDJUU2JTlFJUI2JUU2JTlFJTg0JUU1JTg4JTg2JUU1JUIxJTgy">Go 面向包的设计和架构分层<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9lbWluZXR0by5tZWRpdW0uY29tL2NsZWFuLWFyY2hpdGVjdHVyZS11c2luZy1nb2xhbmctYjYzNTg3YWE1ZTNm">Clean Architecture using Golang<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJub29uLmNvbS9nb2xhbmctY2xlYW4tYXJjaGl0aGVjdHVyZS1lZmQ2ZDdjNDMwNDc=">Trying Clean Architecture on Golang<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tZWRpdW0uY29tL0BiZW5iam9obnNvbi9zdGFuZGFyZC1wYWNrYWdlLWxheW91dC03Y2RiYzgzOTFmYzE=">Standard Package Layout<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2JlbmJqb2huc29uL3d0Zg==">benbjohnson&#x2F;wtf<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJub29uLmNvbS9nb2xhbmctY2xlYW4tYXJjaGl0aGVjdHVyZS1lZmQ2ZDdjNDMwNDc=">Trying Clean Architecture on Golang<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJub29uLmNvbS90cnlpbmctY2xlYW4tYXJjaGl0ZWN0dXJlLW9uLWdvbGFuZy0yLTQ0ZDYxNWJmOGZkZg==">Trying Clean Architecture on Golang — 2<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tYW51ZWwua2llc3NsaW5nLm5ldC8yMDEyLzA5LzI4L2FwcGx5aW5nLXRoZS1jbGVhbi1hcmNoaXRlY3R1cmUtdG8tZ28tYXBwbGljYXRpb25zLw==">Applying The Clean Architecture to Go applications<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2thdHppZW4vZ28tc3RydWN0dXJlLWV4YW1wbGVzI2V4YW1wbGVzLWZvci1teS10YWxrLW9uLXN0cnVjdHVyaW5nLWdvLWFwcHM=">Examples for my talk on structuring Go apps.<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1NelRjc0k2dG4tMA==">Ashley McNamara + Brian Ketelsen. Go best practices.<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXBwc2RldmVsb3BlcmJsb2cuY29tL2R0by10by1lbnRpdHktYW5kLWVudGl0eS10by1kdG8tY29udmVyc2lvbi8=">DTO to Entity Conversion in Java<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly90cmF2aXNqZWZmZXJ5LmNvbS9iLzIwMTkvMTEvaS1sbC10YWtlLXBrZy1vdmVyLWludGVybmFsLw==">I’ll take pkg over internal<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJlL2Jsb2IvbWFpbi9kb2NzL2Jlc3QtcHJhY3RpY2VzLm1kI2Jlc3QtcHJhY3RpY2Vz">Wire Best Practices<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJlL2Jsb2IvbWFpbi9kb2NzL2d1aWRlLm1kI3dpcmUtdXNlci1ndWlkZQ==">Wire User Guide<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy93aXJl">Compile-time Dependency Injection With Go Cloud’s Wire<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJlI3dpcmUtYXV0b21hdGVkLWluaXRpYWxpemF0aW9uLWluLWdv">Wire: Automated Initialization in Go<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDIvcGFja2FnZS1vcmllbnRlZC1kZXNpZ24uaHRtbA==">Package Oriented Design<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTcvMDIvZGVzaWduLXBoaWxvc29waHktb24tcGFja2FnaW5nLmh0bWw=">Design Philosophy On Packaging<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy1zdGFuZGFyZHMvcHJvamVjdC1sYXlvdXQjc3RhbmRhcmQtZ28tcHJvamVjdC1sYXlvdXQ=">Standard Go Project Layout<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvbGFuZy1zdGFuZGFyZHMvcHJvamVjdC1sYXlvdXQvYmxvYi9tYXN0ZXIvUkVBRE1FX3poLm1kI3N0YW5kYXJkLWdvLXByb2plY3QtbGF5b3V0">Standard Go Project Layout 中文<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20venhmMzMwMzAxL3AvNjUzNDY0My5odG1s">浅析VO、DTO、DO、PO的概念、区别和用处<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2s2VDlROFhLczZpSWtaUFBJRnEvYXJ0aWNsZS9kZXRhaWxzLzEwOTE5MjQ3NQ==">阿里文娱技术专家战獒: 领域驱动设计详解之What, Why, How?<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoaWt1YWk5OTk1L2FydGljbGUvZGV0YWlscy8xMDA3MjM1NDA=">阿里技术专家详解 DDD 系列- Domain Primitive<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1Rhb2Jhb2ppc2h1L2FydGljbGUvZGV0YWlscy8xMDE0NDQzMjQ=">阿里技术专家详解DDD系列 第二弹 - 应用架构<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3Rhb2Jhb2ppc2h1L2FydGljbGUvZGV0YWlscy8xMDYxNTI2NDE=">阿里技术专家详解DDD系列 第三讲 - Repository模式<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9rYi5jbmJsb2dzLmNvbS9wYWdlLzUyMDc0My8=">贫血，充血模型的解释以及一些经验<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDU0NjY2NTY=">领域驱动设计 实践手册(1.Get Started)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDU2NDg5ODY=">DDD 实践手册(2. 实现分层架构)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDY2MzQzNzM=">DDD 实践手册(3. Entity, Value Object)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDczNDc1OTM=">DDD 实践手册(4. Aggregate — 聚合)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMDkwNDg1MzI=">DDD 实践手册(5. Factory 与 Repository)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMTAyNTIzOTQ=">DDD 实践手册(6. Bounded Context - 限界上下文)<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC9kZmE0Mjc3NjI5NzU=">01、DDD和微服务的关系<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9nby1kZGQv">Domain Driven Design in Go<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9wYXJ0LTItZG9tYWluLWRyaXZlbi1kZXNpZ24taW4tZ28v">Domain Driven Design in Go: Part 2<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY2l0ZXJ1cy5zZS9wYXJ0LTMtZG9tYWluLWRyaXZlbi1kZXNpZ24taW4tZ28v">Domain Driven Design in Go: Part 3<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuamlhbnNodS5jb20vcC81NzMyYjY5YmQxYTE=">当中台遇上DDD，我们该如何设计微服务？<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC8xMDc4OTYxMi5odG1s">领域驱动设计系列文章（1）——通过现实例子显示领域驱动设计的威力<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC80MzkwMDg2Lmh0bWw=">领域驱动设计系列文章（2）——浅析VO、DTO、DO、PO的概念、区别和用处<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vcWl4dWVqaWEvcC8xMDc4OTYyMS5odG1s">领域驱动设计系列文章（3）——有选择性的使用领域驱动设计<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNsZWFuY29kZXIuY29tL3VuY2xlLWJvYi8yMDEyLzA4LzEzL3RoZS1jbGVhbi1hcmNoaXRlY3R1cmUuaHRtbA==">The Clean Architecture<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1vTDZKQlVrNnRqMA==">How Do You Structure Your Go Apps<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3ppdHJ5c3MvZ28tc2FtcGxl">zitryss&#x2F;go-sample<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RhbmNleW91bmcvcGFwZXItY29kZS9ibG9iL21hc3Rlci9wYWNrYWdlLW9yaWVudGVkLWRlc2lnbi9wYWNrYWdlb3JpZW50ZWRkZXNpZ24ubWQjZ28tJUU5JTlEJUEyJUU1JTkwJTkxJUU1JThDJTg1JUU3JTlBJTg0JUU4JUFFJUJFJUU4JUFFJUExJUU1JTkyJThDJUU2JTlFJUI2JUU2JTlFJTg0JUU1JTg4JTg2JUU1JUIxJTgy">Go 面向包的设计和架构分层<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9lbWluZXR0by5tZWRpdW0uY29tL2NsZWFuLWFyY2hpdGVjdHVyZS11c2luZy1nb2xhbmctYjYzNTg3YWE1ZTNm">Clean Architecture using Golang<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJub29uLmNvbS9nb2xhbmctY2xlYW4tYXJjaGl0aGVjdHVyZS1lZmQ2ZDdjNDMwNDc=">Trying Clean Architecture on Golang<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tZWRpdW0uY29tL0BiZW5iam9obnNvbi9zdGFuZGFyZC1wYWNrYWdlLWxheW91dC03Y2RiYzgzOTFmYzE=">Standard Package Layout<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2JlbmJqb2huc29uL3d0Zg==">benbjohnson&#x2F;wtf<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJub29uLmNvbS9nb2xhbmctY2xlYW4tYXJjaGl0aGVjdHVyZS1lZmQ2ZDdjNDMwNDc=">Trying Clean Architecture on Golang<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9oYWNrZXJub29uLmNvbS90cnlpbmctY2xlYW4tYXJjaGl0ZWN0dXJlLW9uLWdvbGFuZy0yLTQ0ZDYxNWJmOGZkZg==">Trying Clean Architecture on Golang — 2<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9tYW51ZWwua2llc3NsaW5nLm5ldC8yMDEyLzA5LzI4L2FwcGx5aW5nLXRoZS1jbGVhbi1hcmNoaXRlY3R1cmUtdG8tZ28tYXBwbGljYXRpb25zLw==">Applying The Clean Architecture to Go applications<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2thdHppZW4vZ28tc3RydWN0dXJlLWV4YW1wbGVzI2V4YW1wbGVzLWZvci1teS10YWxrLW9uLXN0cnVjdHVyaW5nLWdvLWFwcHM=">Examples for my talk on structuring Go apps.<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj1NelRjc0k2dG4tMA==">Ashley McNamara + Brian Ketelsen. Go best practices.<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXBwc2RldmVsb3BlcmJsb2cuY29tL2R0by10by1lbnRpdHktYW5kLWVudGl0eS10by1kdG8tY29udmVyc2lvbi8=">DTO to Entity Conversion in Java<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly90cmF2aXNqZWZmZXJ5LmNvbS9iLzIwMTkvMTEvaS1sbC10YWtlLXBrZy1vdmVyLWludGVybmFsLw==">I’ll take pkg over internal<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJlL2Jsb2IvbWFpbi9kb2NzL2Jlc3QtcHJhY3RpY2VzLm1kI2Jlc3QtcHJhY3RpY2Vz">Wire Best Practices<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJlL2Jsb2IvbWFpbi9kb2NzL2d1aWRlLm1kI3dpcmUtdXNlci1ndWlkZQ==">Wire User Guide<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy93aXJl">Compile-time Dependency Injection With Go Cloud’s Wire<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS93aXJlI3dpcmUtYXV0b21hdGVkLWluaXRpYWxpemF0aW9uLWluLWdv">Wire: Automated Initialization in Go<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 
