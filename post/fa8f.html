@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -78,7 +78,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -289,10 +296,10 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p>例如经典转账问题：</p>
-<p>支付宝账户表：<code>A(id, user_id, amount)</code></p>
-<p>余额宝账户表：<code>B(id, user_id, amount)</code></p>
-<p>用户的 <code>user_id = 1</code>，从支付宝转账1万块到余额宝分为两个步骤：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><p class="fireman-p-indent" >例如经典转账问题：</p>
+<p class="fireman-p-indent" >支付宝账户表：<code>A(id, user_id, amount)</code></p>
+<p class="fireman-p-indent" >余额宝账户表：<code>B(id, user_id, amount)</code></p>
+<p class="fireman-p-indent" >用户的 <code>user_id = 1</code>，从支付宝转账1万块到余额宝分为两个步骤：</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160013634.png" alt="image-20231106160013634" style="zoom:25%;" />
 
 <ol>
@@ -303,70 +310,70 @@
 <p><code>UPDATE B SET amount = amount + 10000 WHERE user_id = 1;</code></p>
 </li>
 </ol>
-<p>要保证数据一致性，则需要开启事务。</p>
-<p>单个数据库，可以保证 <code>ACID</code> 使用数据库事务。</p>
-<p>随着系统变大，进行了微服务架构的改造，因为每个微服务独占了一个数据库实例，从 <code>user_id = 1</code>，发起的转账动作，跨越了两个微服务：<code>pay</code> 和 <code>balance</code> 服务。</p>
+<p class="fireman-p-indent" >要保证数据一致性，则需要开启事务。</p>
+<p class="fireman-p-indent" >单个数据库，可以保证 <code>ACID</code> 使用数据库事务。</p>
+<p class="fireman-p-indent" >随着系统变大，进行了微服务架构的改造，因为每个微服务独占了一个数据库实例，从 <code>user_id = 1</code>，发起的转账动作，跨越了两个微服务：<code>pay</code> 和 <code>balance</code> 服务。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160148107.png" alt="image-20231106160148107" style="zoom:25%;" />
 
-<p>需要保证，跨多个服务的步骤数据一致性：</p>
+<p class="fireman-p-indent" >需要保证，跨多个服务的步骤数据一致性：</p>
 <ol>
 <li>微服务 <code>pay</code> 的支付宝表扣除 1万；</li>
 <li>微服务 <code>balance</code> 的余额包表增加 1万；</li>
 </ol>
-<p>每个系统都对应一个独立的数据源，且可能位于不同机房，同时调用多个系统的服务很难保证同时成功，这就是跨服务分布式事务的问题。</p>
-<p>系统应该能保证每个服务自身的 <code>ACID</code>，基于这个假设，事务消息解决分布式事务问题。</p>
-<h2 id="事务消息"><a href="#事务消息" class="headerlink" title="事务消息"></a>事务消息</h2><p>例如北京很有名的姚记炒肝，点了炒肝并付了钱后，他们并不会直接把你的炒肝给你，往往是给你一张小票，然后让你拿小票到出货区排队去取。</p>
-<p>这是将付钱和取货两个动作分开。其中一个很重要的原因是为了使他们接待能力增强（并发量更高）。</p>
-<p>只要这张小票在，用户最终是能拿到炒肝的。同理转账服务也是如此。</p>
+<p class="fireman-p-indent" >每个系统都对应一个独立的数据源，且可能位于不同机房，同时调用多个系统的服务很难保证同时成功，这就是跨服务分布式事务的问题。</p>
+<p class="fireman-p-indent" >系统应该能保证每个服务自身的 <code>ACID</code>，基于这个假设，事务消息解决分布式事务问题。</p>
+<h2 id="事务消息"><a href="#事务消息" class="headerlink" title="事务消息"></a>事务消息</h2><p class="fireman-p-indent" >例如北京很有名的姚记炒肝，点了炒肝并付了钱后，他们并不会直接把你的炒肝给你，往往是给你一张小票，然后让你拿小票到出货区排队去取。</p>
+<p class="fireman-p-indent" >这是将付钱和取货两个动作分开。其中一个很重要的原因是为了使他们接待能力增强（并发量更高）。</p>
+<p class="fireman-p-indent" >只要这张小票在，用户最终是能拿到炒肝的。同理转账服务也是如此。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160601768.png" alt="image-20231106160601768" style="zoom:25%;" />
 
-<p>当支付宝账户扣除 1万后，我们只要生成一个凭证（消息）即可，这个凭证（消息）上写着<strong>让余额宝账户增加1万</strong>，只要这个凭证（消息）能可靠保存，最终是可以拿着这个凭证（消息）让余额宝账户增加1万的，即我们能依靠这个凭证（消息）完成最终一致性。</p>
-<p>问题的关键就是可靠的保存消息凭证。</p>
-<p>要解决消息可靠存储，实际上需要解决的问题是：本地的 <code>MySQL</code> 存储和 <code>message</code> 存储的一致性问题。</p>
+<p class="fireman-p-indent" >当支付宝账户扣除 1万后，我们只要生成一个凭证（消息）即可，这个凭证（消息）上写着<strong>让余额宝账户增加1万</strong>，只要这个凭证（消息）能可靠保存，最终是可以拿着这个凭证（消息）让余额宝账户增加1万的，即我们能依靠这个凭证（消息）完成最终一致性。</p>
+<p class="fireman-p-indent" >问题的关键就是可靠的保存消息凭证。</p>
+<p class="fireman-p-indent" >要解决消息可靠存储，实际上需要解决的问题是：本地的 <code>MySQL</code> 存储和 <code>message</code> 存储的一致性问题。</p>
 <ul>
 <li><code>Transactional outbox</code>：事务投递箱</li>
 <li><code>Polling publisher</code>：从原始生产方拖消息</li>
 <li><code>Transaction log tailing</code>：<code>binlog</code> 订阅</li>
 <li><code>2PC Message Queue</code>：二阶段提交</li>
 </ul>
-<p>事务消息一旦被可靠的持久化，整个分布式事务，变为了最终一致性，消息的消费才能保障最终业务数据的完整性，所以要尽最大努力，把消息送达到下游的业务消费方，称为：<code>Best Effort</code>。只有消息被消费，整个交易才能算是完整完结。</p>
-<p>大多数事务消息都是利用二阶段提交来实现，例如 <code>RabbitMQ</code> 的事务消息机制是二阶段提交 + 事务回查。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129174140873.png" alt="image-20231129174140873"></p>
-<h2 id="Best-Effort"><a href="#Best-Effort" class="headerlink" title="Best Effort"></a>Best Effort</h2><p>尽最大努力交付，主要用于在这样一种场景：不同的服务平台之间的事务性保证。</p>
-<p>比如在电商购物，使用支付宝支付；又比如玩网游的时候，通过 <code>App Store</code> 充值。</p>
-<p>拿购物为例，电商平台与支付平台是相互独立的，隶属于不同的公司，即使是同一个公司也很可能是独立的部门。</p>
+<p class="fireman-p-indent" >事务消息一旦被可靠的持久化，整个分布式事务，变为了最终一致性，消息的消费才能保障最终业务数据的完整性，所以要尽最大努力，把消息送达到下游的业务消费方，称为：<code>Best Effort</code>。只有消息被消费，整个交易才能算是完整完结。</p>
+<p class="fireman-p-indent" >大多数事务消息都是利用二阶段提交来实现，例如 <code>RabbitMQ</code> 的事务消息机制是二阶段提交 + 事务回查。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129174140873.png" alt="image-20231129174140873"></p>
+<h2 id="Best-Effort"><a href="#Best-Effort" class="headerlink" title="Best Effort"></a>Best Effort</h2><p class="fireman-p-indent" >尽最大努力交付，主要用于在这样一种场景：不同的服务平台之间的事务性保证。</p>
+<p class="fireman-p-indent" >比如在电商购物，使用支付宝支付；又比如玩网游的时候，通过 <code>App Store</code> 充值。</p>
+<p class="fireman-p-indent" >拿购物为例，电商平台与支付平台是相互独立的，隶属于不同的公司，即使是同一个公司也很可能是独立的部门。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161230211.png" alt="image-20231106161230211" style="zoom:25%;" />
 
 <blockquote>
-<p>做过支付宝交易接口的同学都知道，我们一般会在支付宝的回调页面和接口里，解密参数，然后调用系统中更新交易状态相关的服务，将订单更新为付款成功。</p>
-<p>同时，只有当我们回调页面中输出了 <code>success</code> 字样或者标识业务处理成功相应状态码时，支付宝才会停止回调请求。否则，支付宝会每间隔一段时间后，再向客户方发起回调请求，直到输出成功标识为止。</p>
+<p class="fireman-p-indent" >做过支付宝交易接口的同学都知道，我们一般会在支付宝的回调页面和接口里，解密参数，然后调用系统中更新交易状态相关的服务，将订单更新为付款成功。</p>
+<p class="fireman-p-indent" >同时，只有当我们回调页面中输出了 <code>success</code> 字样或者标识业务处理成功相应状态码时，支付宝才会停止回调请求。否则，支付宝会每间隔一段时间后，再向客户方发起回调请求，直到输出成功标识为止。</p>
 </blockquote>
-<p>需要注意，回调接口需要处理幂等，当交付平台重复回调接口，发送请求成功信息时，可以避免出现产生多次交易成功的情况。</p>
-<h2 id="Transactional-outbox"><a href="#Transactional-outbox" class="headerlink" title="Transactional outbox"></a>Transactional outbox</h2><p><code>Transactional outbox</code>（事务型收件箱），支付宝在完成扣款的同时，同时记录消息数据，这个消息数据与业务数据保存在同一数据库实例里（消息记录表表名为 <code>msg</code>）</p>
+<p class="fireman-p-indent" >需要注意，回调接口需要处理幂等，当交付平台重复回调接口，发送请求成功信息时，可以避免出现产生多次交易成功的情况。</p>
+<h2 id="Transactional-outbox"><a href="#Transactional-outbox" class="headerlink" title="Transactional outbox"></a>Transactional outbox</h2><p class="fireman-p-indent" ><code>Transactional outbox</code>（事务型收件箱），支付宝在完成扣款的同时，同时记录消息数据，这个消息数据与业务数据保存在同一数据库实例里（消息记录表表名为 <code>msg</code>）</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161546297.png" alt="image-20231106161546297" style="zoom:25%;" />
 
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BEGIN</span> TRANSACTION</span><br><span class="line">    <span class="keyword">UPDATE</span> A <span class="keyword">SET</span> amount <span class="operator">=</span> amount <span class="operator">-</span> <span class="number">10000</span> <span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">INSERT</span> <span class="keyword">INTO</span> msg(user_id, amount, status) <span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="number">10000</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">END</span> TRANSACTION</span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br></pre></td></tr></table></figure>
 
-<p>上述事务能保证只要支付宝账户里被扣了钱，消息一定能保存下来。当上述事务提交成功后，我们想办法将此消息通知余额宝，余额宝处理成功后发送回复成功消息，支付宝收到回复后删除该条消息数据。余额宝处理成功之后回调，修改消息状态。当然，除了在交易的时候调用余额宝的接口，还需要定期轮询消息表，以防一些消息漏掉没有发送给余额宝。</p>
+<p class="fireman-p-indent" >上述事务能保证只要支付宝账户里被扣了钱，消息一定能保存下来。当上述事务提交成功后，我们想办法将此消息通知余额宝，余额宝处理成功后发送回复成功消息，支付宝收到回复后删除该条消息数据。余额宝处理成功之后回调，修改消息状态。当然，除了在交易的时候调用余额宝的接口，还需要定期轮询消息表，以防一些消息漏掉没有发送给余额宝。</p>
 <h2 id="Polling-publisher"><a href="#Polling-publisher" class="headerlink" title="Polling publisher"></a>Polling publisher</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161855224.png" alt="image-20231106161855224" style="zoom:25%;" />
 
-<p><code>Polling publisher</code>，我们定时的轮询 <code>msg</code> 表，把 <code>status = 1</code> 的消息统统拿出来消费，可以按照自增 <code>id</code> 排序，保证顺序消费。在这里我们独立了一个 <code>pay_task</code> 服务，把拖出来的消息 <code>publish</code> 给我们消息队列，<code>balance</code> 服务自己来消费队列，或者直接 <code>rpc</code> 发送给 <code>balance</code> 服务。同步调用成功之后，再修改数据库 <code>status</code>。</p>
-<p>实际我们第一个版本的 <code>archive-service</code> 在使用 <code>CQRS</code> 时，就用的这个模型，<code>Pull</code> 的模型，从延迟来说不够好，<code>Pull</code> 太猛对 <code>Database</code> 有一定的压力，<code>Pull</code> 频次低了，延迟比较高。</p>
-<p>缺陷：</p>
+<p class="fireman-p-indent" ><code>Polling publisher</code>，我们定时的轮询 <code>msg</code> 表，把 <code>status = 1</code> 的消息统统拿出来消费，可以按照自增 <code>id</code> 排序，保证顺序消费。在这里我们独立了一个 <code>pay_task</code> 服务，把拖出来的消息 <code>publish</code> 给我们消息队列，<code>balance</code> 服务自己来消费队列，或者直接 <code>rpc</code> 发送给 <code>balance</code> 服务。同步调用成功之后，再修改数据库 <code>status</code>。</p>
+<p class="fireman-p-indent" >实际我们第一个版本的 <code>archive-service</code> 在使用 <code>CQRS</code> 时，就用的这个模型，<code>Pull</code> 的模型，从延迟来说不够好，<code>Pull</code> 太猛对 <code>Database</code> 有一定的压力，<code>Pull</code> 频次低了，延迟比较高。</p>
+<p class="fireman-p-indent" >缺陷：</p>
 <ol>
 <li>定时操作，也就是会有延迟</li>
 <li>如果要减少延迟，那么频次会很高，数据库查询压力大</li>
 </ol>
 <h2 id="Transaction-log-tailing"><a href="#Transaction-log-tailing" class="headerlink" title="Transaction log tailing"></a>Transaction log tailing</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162256025.png" alt="image-20231106162256025" style="zoom:25%;" />
 
-<p><code>Transaction log tailing</code>，上述保存消息的方式使得消息数据和业务数据紧耦合在一起，从架构上看不够优雅，而且容易诱发其他问题。</p>
-<p>有一些业务场景，可以直接使用主表被 <code>canal</code> 订阅使用，有一些业务场景自带这类 <code>message</code> 表，比如订单或者交易流水，可以直接使用这类流水表作为 <code>message</code> 表使用。这样就不需要轮询查询数据库，甚至订阅订单表和流水表的话，可以不需要 <code>msg</code> 表。（一般这种用法叫作 <code>CDC</code>，<code>Change Data Capture</code>，用于捕获和跟踪数据库中发生的数据变更。）</p>
-<p>使用 <code>canal</code> 订阅以后，是实时流式消费数据，在消费者 <code>balance</code> 或者 <code>balance-job</code> 必须努力送达到。</p>
-<p>所有努力送达的模型，必须是先预扣（预占资源）的做法。</p>
-<h2 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h2><p>还有一个很严重的问题就是消息重复投递，如果相同的消息被重复投递两次（或者获取消息消费了两次），那么我们余额宝账户将会增加 2万而不是 1万了。</p>
-<p>为什么相同的消息会被重复投递？比如余额宝处理完消息 <code>msg</code> 后，发送了处理成功的消息给支付宝，正常情况下支付宝应该要删除消息 <code>msg</code>，但如果支付宝这时候悲剧的挂了，重启后一看消息 <code>msg</code> 还在，就会继续发送消息 <code>msg</code>。</p>
-<p>消息队列一般都有两种模式：至少一次消费（<code>ack</code>）；至多一次消费。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162535314.png" alt="image-20231106162535314"></p>
+<p class="fireman-p-indent" ><code>Transaction log tailing</code>，上述保存消息的方式使得消息数据和业务数据紧耦合在一起，从架构上看不够优雅，而且容易诱发其他问题。</p>
+<p class="fireman-p-indent" >有一些业务场景，可以直接使用主表被 <code>canal</code> 订阅使用，有一些业务场景自带这类 <code>message</code> 表，比如订单或者交易流水，可以直接使用这类流水表作为 <code>message</code> 表使用。这样就不需要轮询查询数据库，甚至订阅订单表和流水表的话，可以不需要 <code>msg</code> 表。（一般这种用法叫作 <code>CDC</code>，<code>Change Data Capture</code>，用于捕获和跟踪数据库中发生的数据变更。）</p>
+<p class="fireman-p-indent" >使用 <code>canal</code> 订阅以后，是实时流式消费数据，在消费者 <code>balance</code> 或者 <code>balance-job</code> 必须努力送达到。</p>
+<p class="fireman-p-indent" >所有努力送达的模型，必须是先预扣（预占资源）的做法。</p>
+<h2 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h2><p class="fireman-p-indent" >还有一个很严重的问题就是消息重复投递，如果相同的消息被重复投递两次（或者获取消息消费了两次），那么我们余额宝账户将会增加 2万而不是 1万了。</p>
+<p class="fireman-p-indent" >为什么相同的消息会被重复投递？比如余额宝处理完消息 <code>msg</code> 后，发送了处理成功的消息给支付宝，正常情况下支付宝应该要删除消息 <code>msg</code>，但如果支付宝这时候悲剧的挂了，重启后一看消息 <code>msg</code> 还在，就会继续发送消息 <code>msg</code>。</p>
+<p class="fireman-p-indent" >消息队列一般都有两种模式：至少一次消费（<code>ack</code>）；至多一次消费。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162535314.png" alt="image-20231106162535314"></p>
 <ul>
 <li><p>全局唯一 <code>ID</code> + 去重表</p>
 <p>在余额宝这边增加消息应用状态表 <code>msg_apply</code>，通俗来说就是个账本，用于记录消息的消费情况，每次来一个消息，在真正执行之前，先去消息应用状态表中查询一遍，如果找到说明是重复消息，丢弃即可，如果没找到才执行，同时插入到消息应用状态表（同一事务）</p>
@@ -374,53 +381,53 @@
 <li><p>版本号</p>
 </li>
 </ul>
-<h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110105746399.png" alt="image-20231110105746399"></p>
-<p>两阶段提交协议（<code>Two Phase Commitment Protocol</code>）中，涉及到两种角色。</p>
+<h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110105746399.png" alt="image-20231110105746399"></p>
+<p class="fireman-p-indent" >两阶段提交协议（<code>Two Phase Commitment Protocol</code>）中，涉及到两种角色。</p>
 <ul>
 <li>一个事务协调者（<code>coordinator</code>）：负责协调多个参与者进行业务投票及提交（回滚）</li>
 <li>多个事务参与者（<code>participants</code>）：即本地事务执行者</li>
 </ul>
-<p>总共处理步骤有两个：</p>
+<p class="fireman-p-indent" >总共处理步骤有两个：</p>
 <ol>
 <li>投票阶段（<code>voting phase</code>）：协调者将通知事务参与者准备提交或取消事务，然后进入表决过程。参与者将告知协调者自己的决策：同意（事务参与者本地事务执行成功，但未提交）或取消（本地事务执行故障）；</li>
 <li>提交阶段（<code>commit phase</code>）：收到参与者的通知后，协调者再向参与者发出通知，根据反馈情况决定各参与者是否要提交还是回滚；</li>
 </ol>
-<p>差不多的还有三阶段提交</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129173207159.png" alt="image-20231129173207159"></p>
-<h2 id="2PC-Message-Queue"><a href="#2PC-Message-Queue" class="headerlink" title="2PC Message Queue"></a>2PC Message Queue</h2><p>二阶段提交消息队列</p>
+<p class="fireman-p-indent" >差不多的还有三阶段提交</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129173207159.png" alt="image-20231129173207159"></p>
+<h2 id="2PC-Message-Queue"><a href="#2PC-Message-Queue" class="headerlink" title="2PC Message Queue"></a>2PC Message Queue</h2><p class="fireman-p-indent" >二阶段提交消息队列</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163109776.png" alt="image-20231106163109776"  />
 
-<h2 id="Seata-2PC"><a href="#Seata-2PC" class="headerlink" title="Seata 2PC"></a>Seata 2PC</h2><p><code>Seata</code> 实现 <code>2PC</code> 与传统 <code>2PC</code> 的差别</p>
+<h2 id="Seata-2PC"><a href="#Seata-2PC" class="headerlink" title="Seata 2PC"></a>Seata 2PC</h2><p class="fireman-p-indent" ><code>Seata</code> 实现 <code>2PC</code> 与传统 <code>2PC</code> 的差别</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163145422.png" alt="image-20231106163145422" style="zoom:25%;" />
 
 <ul>
 <li>架构层次方面：传统 <code>2PC</code> 方案的 <code>RM</code> 实际上是在数据库层，<code>RM</code> 本质上就是数据库自身，通过 <code>XA</code> 协议实现，而 <code>Seata</code> 的 <code>RM</code> 是以 <code>jar</code> 包的形式作为中间件层部署在应用程序这一侧的。</li>
 <li>两阶段提交方面：传统 <code>2PC</code> 无论第二阶段的决议是 <code>commit</code> 还是 <code>rollback</code>，事务性资源的锁都要保持到 <code>Phase2</code> 完成才释放。而 <code>Seata</code> 的做法是在 <code>Phase1</code> 就将本地事务提交，这样就可以省去 <code>Phase2</code> 持锁的时间，整体提高效率。</li>
 </ul>
-<h2 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h2><p><code>TCC</code> 是 <code>Try</code>、<code>Confirm</code>、<code>Cancel</code> 三个词语的缩写，<code>TCC</code> 要求每个分支事务实现三个操作：预处理 <code>Try</code>、确认<code>Confirm</code>、撤销 <code>Cancel</code>。</p>
+<h2 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h2><p class="fireman-p-indent" ><code>TCC</code> 是 <code>Try</code>、<code>Confirm</code>、<code>Cancel</code> 三个词语的缩写，<code>TCC</code> 要求每个分支事务实现三个操作：预处理 <code>Try</code>、确认<code>Confirm</code>、撤销 <code>Cancel</code>。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163801454.png" alt="image-20231106163801454" style="zoom:25%;" />
 
-<p><code>Try</code> 操作做业务检查及资源预留，<code>Confirm</code> 做业务确认操作，<code>Cancel</code> 实现一个与 <code>Try</code> 相反的操作即回滚操作。</p>
-<p><code>TM</code> 首先发起所有的分支事务 <code>Try</code> 操作，任何一个分支事务的 <code>Try</code> 操作执行失败，<code>TM</code> 将会发起所有分支事务的 <code>Cancel</code> 操作，若 <code>Try</code> 操作全部成功，<code>TM</code> 将会发起所有分支事务的 <code>Confirm</code> 操作，其中 <code>Confirm/Cancel</code> 操作若执行失败，<code>TM</code> 会进行重试。</p>
-<p>需要注意：</p>
+<p class="fireman-p-indent" ><code>Try</code> 操作做业务检查及资源预留，<code>Confirm</code> 做业务确认操作，<code>Cancel</code> 实现一个与 <code>Try</code> 相反的操作即回滚操作。</p>
+<p class="fireman-p-indent" ><code>TM</code> 首先发起所有的分支事务 <code>Try</code> 操作，任何一个分支事务的 <code>Try</code> 操作执行失败，<code>TM</code> 将会发起所有分支事务的 <code>Cancel</code> 操作，若 <code>Try</code> 操作全部成功，<code>TM</code> 将会发起所有分支事务的 <code>Confirm</code> 操作，其中 <code>Confirm/Cancel</code> 操作若执行失败，<code>TM</code> 会进行重试。</p>
+<p class="fireman-p-indent" >需要注意：</p>
 <ul>
 <li>幂等：避免网络原因产生的多次请求</li>
 <li>空回滚：<code>try</code> 失败的时候，再回滚，需要特殊处理；</li>
 <li>防悬挂：例如先 <code>cancel</code> 比 <code>try</code> 到达，导致乱序，这个时候应该停止交易；</li>
 </ul>
-<h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><p>除了上面的服务内部实现分布式事务，在微服务层面，也有一些分布式事务的解决方案：</p>
+<h1 id="微服务"><a href="#微服务" class="headerlink" title="微服务"></a>微服务</h1><p class="fireman-p-indent" >除了上面的服务内部实现分布式事务，在微服务层面，也有一些分布式事务的解决方案：</p>
 <ul>
 <li><code>Event sourcing</code>：事件驱动，将所有的操作落盘到一张表，然后读取数据库的这张表。</li>
 <li><code>Saga</code>：A服务发送消息给 <code>kafka</code>，B订阅，类似与一种编排服务，可以同步请求。</li>
 </ul>
-<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hvc2Fvcy9hcnRpY2xlL2RldGFpbHMvODkxMzY2NjY=">Seata实战-分布式事务简介及demo上手<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xODM3NTM3NzQ=">面试必问：分布式事务六种解决方案<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZHl6Y3MvcC8xMzc4MDY2OC5odG1s">分布式事务有这一篇就够了<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Jqd2VpbWVuZ3NodS9hcnRpY2xlL2RldGFpbHMvNzk2MDc1MjI=">漫画：什么是分布式事务？<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvZXZlbnQtc291cmNpbmcuaHRtbA==">Pattern: Event sourcing<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvc2FnYS5odG1s">Pattern: Saga<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvcG9sbGluZy1wdWJsaXNoZXIuaHRtbA==">Pattern: Polling publisher<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvdHJhbnNhY3Rpb24tbG9nLXRhaWxpbmcuaHRtbA==">Pattern: Transaction log tailing<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2hvc2Fvcy9hcnRpY2xlL2RldGFpbHMvODkxMzY2NjY=">Seata实战-分布式事务简介及demo上手<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xODM3NTM3NzQ=">面试必问：分布式事务六种解决方案<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZHl6Y3MvcC8xMzc4MDY2OC5odG1s">分布式事务有这一篇就够了<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Jqd2VpbWVuZ3NodS9hcnRpY2xlL2RldGFpbHMvNzk2MDc1MjI=">漫画：什么是分布式事务？<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvZXZlbnQtc291cmNpbmcuaHRtbA==">Pattern: Event sourcing<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvc2FnYS5odG1s">Pattern: Saga<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvcG9sbGluZy1wdWJsaXNoZXIuaHRtbA==">Pattern: Polling publisher<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9taWNyb3NlcnZpY2VzLmlvL3BhdHRlcm5zL2RhdGEvdHJhbnNhY3Rpb24tbG9nLXRhaWxpbmcuaHRtbA==">Pattern: Transaction log tailing<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -64,7 +64,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -275,17 +282,17 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="os-Args"><a href="#os-Args" class="headerlink" title="os.Args"></a>os.Args</h2><p>os包中提供命令行接收后续参数，但是使用比较简单。</p>
-<p>缺点是无法解析参数，只能通过位置值获取，内置的flag包则可以实现命令行参数的解析</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="os-Args"><a href="#os-Args" class="headerlink" title="os.Args"></a>os.Args</h2><p class="fireman-p-indent" >os包中提供命令行接收后续参数，但是使用比较简单。</p>
+<p class="fireman-p-indent" >缺点是无法解析参数，只能通过位置值获取，内置的flag包则可以实现命令行参数的解析</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">	for i := range os.Args &#123;</span><br><span class="line">		fmt.Println(os.Args[i])</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	go run main.go 1 2 3 4</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
 
-<h2 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h2><p>flag包支持的命令行参数类型：bool int int64 uint uint64 float64 string duration </p>
+<h2 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h2><p class="fireman-p-indent" >flag包支持的命令行参数类型：bool int int64 uint uint64 float64 string duration </p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">b := flag.Bool(&quot;bool&quot;, false, &quot;bool类型&quot;)</span><br><span class="line">i := flag.Int(&quot;int&quot;, 0, &quot;int类型&quot;)</span><br><span class="line">i64 := flag.Int64(&quot;int64&quot;, 0, &quot;int64类型&quot;)</span><br><span class="line">u := flag.Uint(&quot;uint&quot;, 0, &quot;uint类型&quot;)</span><br><span class="line">u64 := flag.Uint64(&quot;uint64&quot;, 0, &quot;uint64类型&quot;)</span><br><span class="line">f64 := flag.Float64(&quot;float64&quot;, 0.0, &quot;float64类型&quot;)</span><br><span class="line">s := flag.String(&quot;string&quot;, &quot;&quot;, &quot;string类型&quot;)</span><br><span class="line">d := flag.Duration(&quot;duration&quot;, time.Second, &quot;时间类型&quot;)</span><br><span class="line"></span><br><span class="line">// 语法分析</span><br><span class="line">flag.Parse()</span><br><span class="line"></span><br><span class="line">// 也可以类似os.Args接收参数</span><br><span class="line">fmt.Printf(&quot;所有参数：%v,参数个数：%d\n&quot;, flag.Args(), flag.NArg())</span><br><span class="line">for i := 0; i &lt; flag.NArg(); i++ &#123;</span><br><span class="line">	fmt.Printf(&quot;第%d个参数，值是%v\n&quot;, i, flag.Arg(i))</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(&quot;bool: %t,int: %d,int64: %d,uint: %d,uint64: %d,float64: %f,string: %s,duration: %v\n&quot;,</span><br><span class="line">	*b, *i, *i64, *u, *u64, *f64, *s, *d)</span><br></pre></td></tr></table></figure>
 
-<p>输出</p>
+<p class="fireman-p-indent" >输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">go run main.go --int64=64 --uint64=164 --bool=true --int=123 --uint=2 --float64=1.7 --string=a --duration=10s arg1</span><br><span class="line"></span><br><span class="line">所有参数：[arg1],参数个数：1</span><br><span class="line">第0个参数，值是arg1</span><br><span class="line">bool: true,int: 123,int64: 64,uint: 2,uint64: 164,float64: 1.700000,string: a,duration: 10s</span><br></pre></td></tr></table></figure>
 
-<h2 id="viper"><a href="#viper" class="headerlink" title="viper"></a>viper</h2><p>适用于Go应用程序的完整配置解决方案。（不全面，这里列举几个经常会用到的特性，更全面的特性可以查看官方RM文档）：</p>
+<h2 id="viper"><a href="#viper" class="headerlink" title="viper"></a>viper</h2><p class="fireman-p-indent" >适用于Go应用程序的完整配置解决方案。（不全面，这里列举几个经常会用到的特性，更全面的特性可以查看官方RM文档）：</p>
 <ul>
 <li>设置默认配置</li>
 <li>从JSON，YAML格式的配置文件读取配置信息</li>
@@ -293,10 +300,10 @@
 <li>从命令行参数读取</li>
 <li>显示配置值</li>
 </ul>
-<p>安装</p>
+<p class="fireman-p-indent" >安装</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/spf13/viper</span><br></pre></td></tr></table></figure>
 
-<p>参数设置优先级，从高到低：</p>
+<p class="fireman-p-indent" >参数设置优先级，从高到低：</p>
 <ul>
 <li>显示调用Set设置值</li>
 <li>命令行参数(flag)</li>
@@ -305,90 +312,90 @@
 <li>Key&#x2F;value存储</li>
 <li>默认值</li>
 </ul>
-<p>viper的用法是将配置存入viper，使用时，从viper读出来</p>
+<p class="fireman-p-indent" >viper的用法是将配置存入viper，使用时，从viper读出来</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">viper.Set(&quot;service&quot;, &quot;viper&quot;)</span><br><span class="line">viper.Get(&quot;service&quot;) // 返回viper</span><br></pre></td></tr></table></figure>
 
-<h3 id="将值存入viper"><a href="#将值存入viper" class="headerlink" title="将值存入viper"></a>将值存入viper</h3><p>设置值</p>
+<h3 id="将值存入viper"><a href="#将值存入viper" class="headerlink" title="将值存入viper"></a>将值存入viper</h3><p class="fireman-p-indent" >设置值</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">viper.Set(&quot;service&quot;, &quot;viper&quot;)</span><br></pre></td></tr></table></figure>
 
-<p>默认值</p>
+<p class="fireman-p-indent" >默认值</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">viper.SetDefault(&quot;service&quot;, &quot;abc&quot;)</span><br></pre></td></tr></table></figure>
 
-<p>通过配置文件</p>
-<p>viper可以从多个目录搜索各种格式的配置文件</p>
+<p class="fireman-p-indent" >通过配置文件</p>
+<p class="fireman-p-indent" >viper可以从多个目录搜索各种格式的配置文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">viper.SetConfigFile(&quot;./config.yaml&quot;) // 直接指定</span><br><span class="line"></span><br><span class="line">viper.SetConfigName(&quot;config&quot;) // 配置文件名称(无扩展名)</span><br><span class="line"> viper.SetConfigType(&quot;yaml&quot;) // 如果配置文件的名称中没有扩展名，则需要配置此项</span><br><span class="line"> viper.AddConfigPath(&quot;/etc/xxx/&quot;)   // 查找配置文件所在的路径</span><br><span class="line"> viper.AddConfigPath(&quot;.&quot;)               // 多次调用以添加多个搜索路径</span><br><span class="line"> </span><br><span class="line"> err := viper.ReadInConfig() // 查找并读取配置文件，返回的报错可能是没找到，也可能是找到了但是有其他的错误</span><br></pre></td></tr></table></figure>
 
-<p>监控并重新读取配置文件</p>
-<p>Viper支持在运行时实时读取配置文件的功能。通过回调函数，实现改动之后的逻辑</p>
+<p class="fireman-p-indent" >监控并重新读取配置文件</p>
+<p class="fireman-p-indent" >Viper支持在运行时实时读取配置文件的功能。通过回调函数，实现改动之后的逻辑</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">viper.SetConfigFile(&quot;./config.yaml&quot;)</span><br><span class="line">go func() &#123;</span><br><span class="line">	viper.WatchConfig()</span><br><span class="line">	viper.OnConfigChange(func(e fsnotify.Event) &#123;</span><br><span class="line">		// 配置文件发生变更之后会调用的回调函数</span><br><span class="line">		fmt.Println(&quot;Config file changed:&quot;, e.Name, e.Op)</span><br><span class="line">		err := viper.ReadInConfig()</span><br><span class="line">		if err != nil &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(viper.Get(&quot;service&quot;))</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
 
-<p>改动之后</p>
+<p class="fireman-p-indent" >改动之后</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Config file changed: config.yaml WRITE|CHMOD</span><br><span class="line">viper12345</span><br></pre></td></tr></table></figure>
 
-<p>从io.Reader读取配置</p>
-<p>viper可以通过读取的字符串中的获取配置</p>
+<p class="fireman-p-indent" >从io.Reader读取配置</p>
+<p class="fireman-p-indent" >viper可以通过读取的字符串中的获取配置</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">f, err := os.Open(&quot;./config.yaml&quot;)</span><br><span class="line">if err != nil &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">defer f.Close()</span><br><span class="line">viper.SetConfigType(&quot;yaml&quot;)</span><br><span class="line">err = viper.ReadConfig(f)</span><br><span class="line">if err != nil &#123;</span><br><span class="line">	log.Fatal(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(viper.Get(&quot;service&quot;))</span><br></pre></td></tr></table></figure>
 
-<p>别名</p>
-<p>别名允许多个键引用一个值</p>
+<p class="fireman-p-indent" >别名</p>
+<p class="fireman-p-indent" >别名允许多个键引用一个值</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">viper.RegisterAlias(&quot;service&quot;, &quot;anotherService&quot;)</span><br><span class="line">viper.Set(&quot;service&quot;, &quot;viper&quot;)</span><br><span class="line">fmt.Println(viper.Get(&quot;anotherService&quot;))</span><br></pre></td></tr></table></figure>
 
-<p>使用环境变量</p>
+<p class="fireman-p-indent" >使用环境变量</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SetEnvPrefix(string) 设置环境变量前缀</span><br><span class="line">SetEnvKeyReplacer(string...) *strings.Replacer 环境变量字符串变更</span><br><span class="line"></span><br><span class="line">AutomaticEnv()							在get时，自动获取对应的环境变量</span><br><span class="line">BindEnv(string...) : error	绑定环境变量的值到viper中</span><br><span class="line"></span><br><span class="line">AllowEmptyEnv(bool)			空环境变量，默认为false</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">viper.AutomaticEnv()							// 自动绑定</span><br><span class="line">viper.SetEnvPrefix(&quot;vip&quot;)</span><br><span class="line">os.Setenv(&quot;VIP_ID&quot;, &quot;13&quot;)	</span><br><span class="line">fmt.Println(viper.Get(&quot;id&quot;))			// 自动绑定之后获取										//	13</span><br><span class="line">replacer := strings.NewReplacer(&quot;VIP&quot;, &quot;NVIP&quot;) // 将获取的前缀从VIP改成NVIP</span><br><span class="line">viper.SetEnvKeyReplacer(replacer)</span><br><span class="line">os.Setenv(&quot;NVIP_ID&quot;, &quot;14&quot;)</span><br><span class="line">viper.BindEnv(&quot;id&quot;)</span><br><span class="line">fmt.Println(viper.Get(&quot;id&quot;))											// 14</span><br></pre></td></tr></table></figure>
 
-<p>使用<code>Pflag</code></p>
-<p>类似于<code>falg</code>，在命令行中通过参数传递。例如在<code>Cobra</code>库中使用<code>Pflag</code></p>
+<p class="fireman-p-indent" >使用<code>Pflag</code></p>
+<p class="fireman-p-indent" >类似于<code>falg</code>，在命令行中通过参数传递。例如在<code>Cobra</code>库中使用<code>Pflag</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var rootCmd = &amp;cobra.Command&#123;</span><br><span class="line">	Use:   &quot;hugo&quot;,</span><br><span class="line">	Short: &quot;Hugo is a very fast static site generator&quot;,</span><br><span class="line">	Long: `A Fast and Flexible Static Site Generator built with</span><br><span class="line">               love by spf13 and friends in Go.</span><br><span class="line">               Complete documentation is available at http://hugo.spf13.com`,</span><br><span class="line">	Run: func(cmd *cobra.Command, args []string) &#123;</span><br><span class="line">		// Do Stuff Here</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br><span class="line">rootCmd.Flags().Int(&quot;port&quot;, 1138, &quot;Port to run Application server on&quot;) // 当如果没有参数传入，使用默认值1138</span><br><span class="line">viper.BindPFlag(&quot;port&quot;, rootCmd.Flags().Lookup(&quot;port&quot;))</span><br><span class="line">fmt.Println(viper.Get(&quot;port&quot;))</span><br></pre></td></tr></table></figure>
 
-<p>或者直接使用<code>pflag</code></p>
+<p class="fireman-p-indent" >或者直接使用<code>pflag</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pflag.String(&quot;service&quot;, &quot;viper&quot;, &quot;this is service name&quot;)</span><br><span class="line">pflag.Parse()</span><br><span class="line">viper.BindPFlags(pflag.CommandLine)</span><br><span class="line">fmt.Println(viper.Get(&quot;service&quot;))</span><br></pre></td></tr></table></figure>
 
-<p>也可以自己实现<code>flag</code>接口，具体实现方式在详细说明文档中。</p>
-<p>远程<code>Key/Value</code>存储</p>
-<p>在Viper中启用远程支持，需要在代码中匿名导入<code>viper/remote</code>这个包。</p>
+<p class="fireman-p-indent" >也可以自己实现<code>flag</code>接口，具体实现方式在详细说明文档中。</p>
+<p class="fireman-p-indent" >远程<code>Key/Value</code>存储</p>
+<p class="fireman-p-indent" >在Viper中启用远程支持，需要在代码中匿名导入<code>viper/remote</code>这个包。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import _ &quot;github.com/spf13/viper/remote&quot;</span><br></pre></td></tr></table></figure>
 
-<p><code>Viper</code>可以从<code>etcd</code>或<code>Consul</code>中读取配置，并且设置加密。在<code>etcd</code>中可以监控配置值是否被修改。</p>
-<h3 id="将配置写入文件"><a href="#将配置写入文件" class="headerlink" title="将配置写入文件"></a>将配置写入文件</h3><p>viper支持当配置改动之后，将配置写入到文件，可以安全的写入，也就是不覆盖，只新建</p>
+<p class="fireman-p-indent" ><code>Viper</code>可以从<code>etcd</code>或<code>Consul</code>中读取配置，并且设置加密。在<code>etcd</code>中可以监控配置值是否被修改。</p>
+<h3 id="将配置写入文件"><a href="#将配置写入文件" class="headerlink" title="将配置写入文件"></a>将配置写入文件</h3><p class="fireman-p-indent" >viper支持当配置改动之后，将配置写入到文件，可以安全的写入，也就是不覆盖，只新建</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">	viper.AddConfigPath(&quot;./&quot;)</span><br><span class="line">	viper.SetConfigName(&quot;config2&quot;)</span><br><span class="line">	viper.SetConfigType(&quot;yaml&quot;)</span><br><span class="line">	</span><br><span class="line">viper.WriteConfig() // 将当前配置写入“viper.AddConfigPath()”和“viper.SetConfigName”设置的预定义路径</span><br><span class="line">viper.SafeWriteConfig()</span><br><span class="line">viper.WriteConfigAs(&quot;config.yaml&quot;)</span><br><span class="line">viper.SafeWriteConfigAs(&quot;./config&quot;) // 因为该配置文件写入过，所以会报错  Config File &quot;xxx/config2.yaml&quot; Already Exists</span><br></pre></td></tr></table></figure>
 
-<h3 id="从Viper中获取值"><a href="#从Viper中获取值" class="headerlink" title="从Viper中获取值"></a>从Viper中获取值</h3><p>可以通过值的类型获取值</p>
+<h3 id="从Viper中获取值"><a href="#从Viper中获取值" class="headerlink" title="从Viper中获取值"></a>从Viper中获取值</h3><p class="fireman-p-indent" >可以通过值的类型获取值</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Get(key string) : interface&#123;&#125;</span><br><span class="line">GetBool(key string) : bool</span><br><span class="line">GetFloat64(key string) : float64</span><br><span class="line">GetInt(key string) : int</span><br><span class="line">GetIntSlice(key string) : []int</span><br><span class="line">GetString(key string) : string</span><br><span class="line">GetStringMap(key string) : map[string]interface&#123;&#125;</span><br><span class="line">GetStringMapString(key string) : map[string]string</span><br><span class="line">GetStringSlice(key string) : []string</span><br><span class="line">GetTime(key string) : time.Time</span><br><span class="line">GetDuration(key string) : time.Duration</span><br><span class="line">IsSet(key string) : bool</span><br><span class="line">AllSettings() : map[string]interface&#123;&#125;</span><br></pre></td></tr></table></figure>
 
-<p>每一个Get方法在找不到值的时候都会返回零值。为了检查给定的键是否存在，提供了<code>IsSet()</code>方法。</p>
+<p class="fireman-p-indent" >每一个Get方法在找不到值的时候都会返回零值。为了检查给定的键是否存在，提供了<code>IsSet()</code>方法。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">viper.Set(&quot;service&quot;, &quot;viper&quot;)</span><br><span class="line">if viper.IsSet(&quot;service&quot;) &#123;</span><br><span class="line">	fmt.Println(viper.Get(&quot;service&quot;))</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
 
-<p>嵌套数据访问</p>
+<p class="fireman-p-indent" >嵌套数据访问</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">viper.Set(&quot;service.name&quot;, &quot;viper&quot;)</span><br><span class="line">fmt.Println(viper.Get(&quot;service&quot;))		//	map[name:viper]</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p>这遵守上面建立的优先规则；搜索路径将遍历其余配置注册表，直到找到为止。(译注：因为Viper支持从多种配置来源，例如磁盘上的配置文件&gt;命令行标志位&gt;环境变量&gt;远程Key&#x2F;Value存储&gt;默认值，我们在查找一个配置的时候如果在当前配置源中没找到，就会继续从后续的配置源查找，直到找到为止。)</p>
-<p>例如，在给定此配置文件的情况下，<code>datastore.metric.host</code>和<code>datastore.metric.port</code>均已定义（并且可以被覆盖）。如果另外在默认值中定义了<code>datastore.metric.protocol</code>，Viper也会找到它。</p>
-<p>然而，如果<code>datastore.metric</code>被直接赋值覆盖（被flag，环境变量，<code>set()</code>方法等等…），那么<code>datastore.metric</code>的所有子键都将变为未定义状态，它们被高优先级配置级别“遮蔽”（shadowed）了。</p>
+<p class="fireman-p-indent" >这遵守上面建立的优先规则；搜索路径将遍历其余配置注册表，直到找到为止。(译注：因为Viper支持从多种配置来源，例如磁盘上的配置文件&gt;命令行标志位&gt;环境变量&gt;远程Key&#x2F;Value存储&gt;默认值，我们在查找一个配置的时候如果在当前配置源中没找到，就会继续从后续的配置源查找，直到找到为止。)</p>
+<p class="fireman-p-indent" >例如，在给定此配置文件的情况下，<code>datastore.metric.host</code>和<code>datastore.metric.port</code>均已定义（并且可以被覆盖）。如果另外在默认值中定义了<code>datastore.metric.protocol</code>，Viper也会找到它。</p>
+<p class="fireman-p-indent" >然而，如果<code>datastore.metric</code>被直接赋值覆盖（被flag，环境变量，<code>set()</code>方法等等…），那么<code>datastore.metric</code>的所有子键都将变为未定义状态，它们被高优先级配置级别“遮蔽”（shadowed）了。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;datastore.metric.host&quot;: &quot;0.0.0.0&quot;,</span><br><span class="line">    &quot;host&quot;: &#123;</span><br><span class="line">        &quot;address&quot;: &quot;localhost&quot;,</span><br><span class="line">        &quot;port&quot;: 5799</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;datastore&quot;: &#123;</span><br><span class="line">        &quot;metric&quot;: &#123;</span><br><span class="line">            &quot;host&quot;: &quot;127.0.0.1&quot;,</span><br><span class="line">            &quot;port&quot;: 3099</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;warehouse&quot;: &#123;</span><br><span class="line">            &quot;host&quot;: &quot;198.0.0.1&quot;,</span><br><span class="line">            &quot;port&quot;: 2112</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GetString(&quot;datastore.metric.host&quot;) // 返回 &quot;0.0.0.0&quot;</span><br></pre></td></tr></table></figure>
 </blockquote>
-<p>反序列化</p>
-<p><code>viper</code>支持直接将配置反序列化到结构体对象中</p>
+<p class="fireman-p-indent" >反序列化</p>
+<p class="fireman-p-indent" ><code>viper</code>支持直接将配置反序列化到结构体对象中</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Unmarshal(rawVal interface&#123;&#125;) : error</span><br><span class="line">UnmarshalKey(key string, rawVal interface&#123;&#125;) : error</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">viper.Set(<span class="string">&quot;service.name&quot;</span>, <span class="string">&quot;viper&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> s = <span class="keyword">struct</span> &#123;</span><br><span class="line">	Service <span class="keyword">struct</span> &#123;</span><br><span class="line">     <span class="comment">// 注意，这里的tag是mapstructure</span></span><br><span class="line">		Name1 <span class="type">string</span> <span class="string">`mapstructure:&quot;name&quot;`</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;&#123;&#125;</span><br><span class="line">err := viper.Unmarshal(&amp;s)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatalln(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Printf(<span class="string">&quot;%+v\n&quot;</span>, s)</span><br></pre></td></tr></table></figure>
 
-<p>输出</p>
+<p class="fireman-p-indent" >输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;Service:&#123;Name1:viper&#125;&#125;</span><br></pre></td></tr></table></figure>
 
-<p>将所有的配置序列化成字符串，后续可以反序列化成不同的格式</p>
+<p class="fireman-p-indent" >将所有的配置序列化成字符串，后续可以反序列化成不同的格式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">viper.Set(&quot;service.name&quot;, &quot;viper&quot;)</span><br><span class="line">viper.Set(&quot;service.type&quot;, &quot;test&quot;)</span><br><span class="line">s := viper.AllSettings()</span><br><span class="line">fmt.Printf(&quot;%+v\n&quot;, s)</span><br><span class="line">bytes, _ := yaml.Marshal(s)</span><br><span class="line">fmt.Println(string(bytes))</span><br></pre></td></tr></table></figure>
 
-<p>输出</p>
+<p class="fireman-p-indent" >输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">map[service:map[name:viper type:test]]</span><br><span class="line">service:</span><br><span class="line">  name: viper</span><br><span class="line">  type: test</span><br></pre></td></tr></table></figure>
 
 <h3 id="用法推荐"><a href="#用法推荐" class="headerlink" title="用法推荐"></a>用法推荐</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">pflag.String(&quot;service.name&quot;, &quot;viper&quot;, &quot;this is service name&quot;) // 设置pflag默认值</span><br><span class="line"></span><br><span class="line">// 如果没有指定，就使用配置文件中默认配置</span><br><span class="line">var configFile string </span><br><span class="line">pflag.StringVar(&amp;configFile, &quot;configFile&quot;, &quot;./config.yaml&quot;, &quot;server config file&quot;)</span><br><span class="line">pflag.Parse() // 命令行参数也可以传配置文件路径</span><br><span class="line"></span><br><span class="line">// 绑定配置文件</span><br><span class="line">if configFile != &quot;&quot; &#123;</span><br><span class="line">	viper.SetConfigFile(configFile)</span><br><span class="line">	err := viper.ReadInConfig()</span><br><span class="line">	if err != nil &amp;&amp; !os.IsNotExist(err) &#123;</span><br><span class="line">		fmt.Println(&quot;config file: &quot;, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 绑定cmd参数</span><br><span class="line">_ = viper.BindPFlags(pflag.CommandLine)</span><br><span class="line"></span><br><span class="line">// 绑定环境变量</span><br><span class="line">viper.SetEnvPrefix(&quot;viper&quot;)</span><br><span class="line">viper.AutomaticEnv()</span><br><span class="line">viper.SetEnvKeyReplacer(strings.NewReplacer(&quot;.&quot;, &quot;_&quot;)) // 将.替换成_解析，VIPER.xxx和VIPER_xxx都可以解析</span><br><span class="line"></span><br><span class="line">// 解析绑定的参数</span><br><span class="line">common.Service.Name = viper.GetString(&quot;service.name&quot;)</span><br></pre></td></tr></table></figure>
 
-<p>同时支持命令行参数、环境变量、配置文件，参数优先级是命令行大于环境变量大于配置文件。</p>
-<h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><p>推荐阅读中的文档更加详细：</p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NwZjEzL3ZpcGVyL2Jsb2IvbWFzdGVyL1JFQURNRS5tZA==">官方文档<i class="fa fa-external-link-alt"></i></span><br>更详细文档：<span class="exturl" data-url="aHR0cHM6Ly93d3cubGl3ZW56aG91LmNvbS9wb3N0cy9Hby92aXBlcl90dXRvcmlhbC8jYXV0b2lkLTEtNC0x">李文周的博客<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" >同时支持命令行参数、环境变量、配置文件，参数优先级是命令行大于环境变量大于配置文件。</p>
+<h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><p class="fireman-p-indent" >推荐阅读中的文档更加详细：</p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NwZjEzL3ZpcGVyL2Jsb2IvbWFzdGVyL1JFQURNRS5tZA==">官方文档<i class="fa fa-external-link-alt"></i></span><br><span class="fireman-span-indent"></span>更详细文档：<span class="exturl" data-url="aHR0cHM6Ly93d3cubGl3ZW56aG91LmNvbS9wb3N0cy9Hby92aXBlcl90dXRvcmlhbC8jYXV0b2lkLTEtNC0x">李文周的博客<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

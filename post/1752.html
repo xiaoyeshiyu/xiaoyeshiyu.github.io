@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -86,7 +86,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -174,7 +181,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">内存回收实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%BD%E8%B8%AA%E5%BC%8F%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">追踪式实现方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-amp-Sweep"><span class="nav-number">1.2.</span> <span class="nav-text">Mark &amp; Sweep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">三色标记法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tri-color-Marking"><span class="nav-number">1.4.</span> <span class="nav-text">Tri-color Marking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tri-color-Coloring"><span class="nav-number">1.5.</span> <span class="nav-text">Tri-color Coloring</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Write-Barrier"><span class="nav-number">1.6.</span> <span class="nav-text">Write Barrier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E5%B1%8F%E9%9A%9C"><span class="nav-number">1.7.</span> <span class="nav-text">删屏障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E5%B1%8F%E9%9A%9C"><span class="nav-number">1.8.</span> <span class="nav-text">混合屏障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sweep"><span class="nav-number">1.9.</span> <span class="nav-text">Sweep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#STW"><span class="nav-number">1.10.</span> <span class="nav-text">STW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pacing"><span class="nav-number">1.11.</span> <span class="nav-text">Pacing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E5%99%A8"><span class="nav-number">1.12.</span> <span class="nav-text">终止器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90GC%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">分析GC过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gc%E6%B5%81%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">gc流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91GC"><span class="nav-number">2.2.</span> <span class="nav-text">触发GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gctrace"><span class="nav-number">2.3.</span> <span class="nav-text">gctrace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#go-tool-trace"><span class="nav-number">2.4.</span> <span class="nav-text">go tool trace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#debug-ReadGCStats"><span class="nav-number">2.5.</span> <span class="nav-text">debug.ReadGCStats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime-ReadMemStats"><span class="nav-number">2.6.</span> <span class="nav-text">runtime.ReadMemStats</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2"><span class="nav-number">3.</span> <span class="nav-text">内存泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E9%99%84%E7%9D%80%E5%9C%A8%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">3.1.</span> <span class="nav-text">变量附着在全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%84%E9%9C%B2"><span class="nav-number">3.2.</span> <span class="nav-text">泄露</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">内存回收实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%BD%E8%B8%AA%E5%BC%8F%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">追踪式实现方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mark-Sweep"><span class="nav-number">1.2.</span> <span class="nav-text">Mark &amp; Sweep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">三色标记法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tri-color-Marking"><span class="nav-number">1.4.</span> <span class="nav-text">Tri-color Marking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tri-color-Coloring"><span class="nav-number">1.5.</span> <span class="nav-text">Tri-color Coloring</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Write-Barrier"><span class="nav-number">1.6.</span> <span class="nav-text">Write Barrier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E5%B1%8F%E9%9A%9C"><span class="nav-number">1.7.</span> <span class="nav-text">删屏障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%B7%E5%90%88%E5%B1%8F%E9%9A%9C"><span class="nav-number">1.8.</span> <span class="nav-text">混合屏障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sweep"><span class="nav-number">1.9.</span> <span class="nav-text">Sweep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#STW"><span class="nav-number">1.10.</span> <span class="nav-text">STW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pacing"><span class="nav-number">1.11.</span> <span class="nav-text">Pacing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E5%99%A8"><span class="nav-number">1.12.</span> <span class="nav-text">终止器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90GC%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">分析GC过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gc%E6%B5%81%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">gc流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91GC"><span class="nav-number">2.2.</span> <span class="nav-text">触发GC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gctrace"><span class="nav-number">2.3.</span> <span class="nav-text">gctrace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#go-tool-trace"><span class="nav-number">2.4.</span> <span class="nav-text">go tool trace</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#debug-ReadGCStats"><span class="nav-number">2.5.</span> <span class="nav-text">debug.ReadGCStats</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime-ReadMemStats"><span class="nav-number">2.6.</span> <span class="nav-text">runtime.ReadMemStats</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2"><span class="nav-number">3.</span> <span class="nav-text">内存泄露</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E9%99%84%E7%9D%80%E5%9C%A8%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">3.1.</span> <span class="nav-text">变量附着在全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%84%E9%9C%B2"><span class="nav-number">3.2.</span> <span class="nav-text">泄露</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -297,7 +304,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="内存回收实现方式"><a href="#内存回收实现方式" class="headerlink" title="内存回收实现方式"></a>内存回收实现方式</h2><p>现代高级编程语言管理内的方式分为两种：自动和手动。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="内存回收实现方式"><a href="#内存回收实现方式" class="headerlink" title="内存回收实现方式"></a>内存回收实现方式</h2><p class="fireman-p-indent" >现代高级编程语言管理内的方式分为两种：自动和手动。</p>
 <ul>
 <li><p>手动：</p>
 <p>像C、C++等编程语言使用手动管理内存的方式，编写代码过程中需要主动申请或者释放内存；</p>
@@ -308,7 +315,7 @@
 </ul>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918204112669.png" alt="image-20220918204112669" style="zoom:25%;" />
 
-<p>主流的GC形式：</p>
+<p class="fireman-p-indent" >主流的GC形式：</p>
 <ul>
 <li><p>追踪式垃圾回收</p>
 <p>从根对象出发，根据对象之间的引用信息，一步步推进直到扫描完毕整个堆，并确定需要保留的对象，从而回收所有可回收的对象。Golang、Java用的是这种。</p>
@@ -324,125 +331,125 @@
 <li>增量整理：在增量的基础上，增加对对象的整理过程</li>
 <li>分代式：将对象根据时间长短进行分类，通过存活时间分为年轻代、老年代、永久代，根据分代式假设对对象进行回收</li>
 </ul>
-<p>Golang使用的GC是无分代（golang的编译器会通过逃逸分析，将大部分新生对象存储在栈上，只有那些需要长期存在的对象才会被分配到需要进行垃圾回收的堆中。对于在堆上对象的分代没有优势，分代优势在频繁分配的对象上，而这些对象通常被栈管理）、不整理（golang内存分配基于tcmalloc的现代内存分配算法，没有碎片问题）、并发的三色<strong>标记清扫</strong>算法。通过独立的进程执行，会搜索不再使用的变量，将其释放，需要注意GC在运行时会占用机器资源。</p>
-<p>GC是自动的，也可以手动显式执行。</p>
-<h3 id="Mark-amp-Sweep"><a href="#Mark-amp-Sweep" class="headerlink" title="Mark &amp; Sweep"></a>Mark &amp; Sweep</h3><p>标记和清扫</p>
+<p class="fireman-p-indent" >Golang使用的GC是无分代（golang的编译器会通过逃逸分析，将大部分新生对象存储在栈上，只有那些需要长期存在的对象才会被分配到需要进行垃圾回收的堆中。对于在堆上对象的分代没有优势，分代优势在频繁分配的对象上，而这些对象通常被栈管理）、不整理（golang内存分配基于tcmalloc的现代内存分配算法，没有碎片问题）、并发的三色<strong>标记清扫</strong>算法。通过独立的进程执行，会搜索不再使用的变量，将其释放，需要注意GC在运行时会占用机器资源。</p>
+<p class="fireman-p-indent" >GC是自动的，也可以手动显式执行。</p>
+<h3 id="Mark-Sweep"><a href="#Mark-Sweep" class="headerlink" title="Mark &amp; Sweep"></a>Mark &amp; Sweep</h3><p class="fireman-p-indent" >标记和清扫</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918204450757.png" alt="image-20220918204450757" style="zoom:25%;" />
 
-<p>STW：</p>
-<p>可以是stop the world的缩写，也可以是start the world的缩写，指从stop the world阶段到start the world阶段的时间间隔。STW在垃圾回收过程中为了保证实现的准确性、防止无止境的内存增长等问题而不可避免的需要停止赋值进一步操作对象的一段过程。</p>
-<p>stop the world，GC的一些阶段需要停止所有的mutator（应用程序）以确定当前的引用关系。这边是很多人对GC担心的来源，这也是GC算法优化的重点。</p>
-<p>Root：</p>
-<p>根对象是mutator不需要通过其他对象就可以直接访问到的对象。比如全局对象，栈对象中的数据等。通过Root对象可以追踪到其他存活的对象。例如上图中Root set对象，通过跟对象寻找到应用对象，清除E和F对象。</p>
-<p>Mark Sweep两个阶段：标记（Mark）和清除（Sweep）两个阶段，所以也叫Mark-Sweep垃圾回收算法。</p>
-<p>这个算法就是严格按照追踪式算法的思路来实现：</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image70.GIF" alt="image70"></p>
+<p class="fireman-p-indent" >STW：</p>
+<p class="fireman-p-indent" >可以是stop the world的缩写，也可以是start the world的缩写，指从stop the world阶段到start the world阶段的时间间隔。STW在垃圾回收过程中为了保证实现的准确性、防止无止境的内存增长等问题而不可避免的需要停止赋值进一步操作对象的一段过程。</p>
+<p class="fireman-p-indent" >stop the world，GC的一些阶段需要停止所有的mutator（应用程序）以确定当前的引用关系。这边是很多人对GC担心的来源，这也是GC算法优化的重点。</p>
+<p class="fireman-p-indent" >Root：</p>
+<p class="fireman-p-indent" >根对象是mutator不需要通过其他对象就可以直接访问到的对象。比如全局对象，栈对象中的数据等。通过Root对象可以追踪到其他存活的对象。例如上图中Root set对象，通过跟对象寻找到应用对象，清除E和F对象。</p>
+<p class="fireman-p-indent" >Mark Sweep两个阶段：标记（Mark）和清除（Sweep）两个阶段，所以也叫Mark-Sweep垃圾回收算法。</p>
+<p class="fireman-p-indent" >这个算法就是严格按照追踪式算法的思路来实现：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image70.GIF" alt="image70"></p>
 <ol>
 <li>Stop the World</li>
 <li>Mark：通过Root和Root直接间接访问到的对象，来寻找所有可达的对象，并进行标记</li>
 <li>Sweep：对堆对象迭代，已标记的对象置位标记。所有未标记的对象加入freelist，可用于再分配。</li>
 <li>Start the World</li>
 </ol>
-<p>这个算法最大的问题是GC执行期间需要把<strong>整个程序完全暂停</strong>，朴素的Mark Sweep是整体STW，并且分配速度慢，内存碎片率高。</p>
-<p>在Go 1.1版本，STW阶段（从stop the world 到start the world）可能需要秒级。</p>
-<p>标记过程需要STW，因为对象引用关系如果在标记阶段做了修改，会影响标记结果的正确性。</p>
-<p>在1.3版本，引入并发GC，相比1.1版本，将sweep的过程移动到STW之后，减少STW的时间。</p>
+<p class="fireman-p-indent" >这个算法最大的问题是GC执行期间需要把<strong>整个程序完全暂停</strong>，朴素的Mark Sweep是整体STW，并且分配速度慢，内存碎片率高。</p>
+<p class="fireman-p-indent" >在Go 1.1版本，STW阶段（从stop the world 到start the world）可能需要秒级。</p>
+<p class="fireman-p-indent" >标记过程需要STW，因为对象引用关系如果在标记阶段做了修改，会影响标记结果的正确性。</p>
+<p class="fireman-p-indent" >在1.3版本，引入并发GC，相比1.1版本，将sweep的过程移动到STW之后，减少STW的时间。</p>
 <ul>
 <li>每个mark或sweep本身是多个线程（协程）执行的（concurrent并行的）</li>
 <li>mutator 和collector同时运行（background应用程序和收集器同时运行，收集器在后台运行）</li>
 </ul>
-<p>concurrent这一层是比较好实现的，GC时整体进行STW，那么对象引用关系不会再改变，对mark或者sweep任务进行分块，就能多个线程concurrent执行任务mark或sweep。</p>
-<p>background这一层，也就是说mutator和mark，sweep同时运行，相对复杂一点</p>
+<p class="fireman-p-indent" >concurrent这一层是比较好实现的，GC时整体进行STW，那么对象引用关系不会再改变，对mark或者sweep任务进行分块，就能多个线程concurrent执行任务mark或sweep。</p>
+<p class="fireman-p-indent" >background这一层，也就是说mutator和mark，sweep同时运行，相对复杂一点</p>
 <ul>
 <li>1.3以前的版本使用标记-清扫的方式，整个过程都需要STW</li>
 <li>1.3版本分离了标记和清扫的操作，标记过程STW，清扫过程并发执行</li>
 </ul>
-<p>background sweep是比较容易实现的，因为mark后，哪些对象是存活，哪些是要被sweep是已知的，sweep的是不再被引用的对象。</p>
-<p>sweep结束前，这些对象不会再被分配到，所以sweep和mutator运行共存。无论全局还是栈不可能能访问到的这些对象，可以安全清理。</p>
-<p>1.5版本再标记过程使用三色标记法，标记和清扫都是并发执行的，但标记阶段的前后需要STW一定时间来做GC的准备工作和栈的re-scan。</p>
-<h3 id="三色标记法"><a href="#三色标记法" class="headerlink" title="三色标记法"></a>三色标记法</h3><p>三色标记是对标记清除法的改进，标记清楚法在珍格格执行时要求长时间STW。Glang 在1.5版本改用三色标记法。三色标记法中有两个重要概念，对象的三色抽象和波面推进。</p>
-<p>三色抽象是一种描述追踪式回收器的方法，从逻辑上严密推导标记清理这种垃圾回收方法的正确性。</p>
-<p>初始将所有内存标记为白色，然后将roots加入带扫描队列（进入队列即被视为变成灰色），然后使用并发goroutine扫描队列中的指针，如果指针还引用了其他指针，那么被引用的也进入了队列，被扫描的对象视为黑色。</p>
-<p>三色抽象规定了三种不同类型的对象，用颜色区分：</p>
+<p class="fireman-p-indent" >background sweep是比较容易实现的，因为mark后，哪些对象是存活，哪些是要被sweep是已知的，sweep的是不再被引用的对象。</p>
+<p class="fireman-p-indent" >sweep结束前，这些对象不会再被分配到，所以sweep和mutator运行共存。无论全局还是栈不可能能访问到的这些对象，可以安全清理。</p>
+<p class="fireman-p-indent" >1.5版本再标记过程使用三色标记法，标记和清扫都是并发执行的，但标记阶段的前后需要STW一定时间来做GC的准备工作和栈的re-scan。</p>
+<h3 id="三色标记法"><a href="#三色标记法" class="headerlink" title="三色标记法"></a>三色标记法</h3><p class="fireman-p-indent" >三色标记是对标记清除法的改进，标记清楚法在珍格格执行时要求长时间STW。Glang 在1.5版本改用三色标记法。三色标记法中有两个重要概念，对象的三色抽象和波面推进。</p>
+<p class="fireman-p-indent" >三色抽象是一种描述追踪式回收器的方法，从逻辑上严密推导标记清理这种垃圾回收方法的正确性。</p>
+<p class="fireman-p-indent" >初始将所有内存标记为白色，然后将roots加入带扫描队列（进入队列即被视为变成灰色），然后使用并发goroutine扫描队列中的指针，如果指针还引用了其他指针，那么被引用的也进入了队列，被扫描的对象视为黑色。</p>
+<p class="fireman-p-indent" >三色抽象规定了三种不同类型的对象，用颜色区分：</p>
 <ul>
 <li>白色（潜在垃圾）：未被回收器访问到的对象，在回收开始阶段，所有对象均为白色，回收结束后，白色对象均不可达</li>
 <li>灰色（波面）：已被回收器访问到的对象，但回收器需要对其中一个或多个指针进行扫描，因为他们可能还指向白色对象</li>
 <li>黑色对象（确定存活）：已被回收器访问到的对象，其中所有字段都已被扫描，黑色对象中任何一个对象都不可能直接访问白色对象</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image72.GIF" alt="image72"></p>
-<p>回收过程是一个波面不断推荐的过程，回收开始，所有对象均为白色，标记过程开始，灰色对象开始出现，随着波面扩大，当一个对象的所有子节点均完成扫描，被着色成黑色。整个堆便利完成，只剩下黑色和白色对象。黑色对象为可达对象，白色为不可达，即垃圾对象。</p>
-<h3 id="Tri-color-Marking"><a href="#Tri-color-Marking" class="headerlink" title="Tri-color Marking"></a>Tri-color Marking</h3><p>三色标记的过程</p>
-<p>垃圾收集器从root开始，然后跟随指针递归整个内存空间。</p>
-<p>分配于noscan的span的对象（也就是不包含指针的span），不会进行扫描。</p>
-<p>这个过程不是由同一个goroutine完成的，每个指针都排队在工作池（待扫描的队列）中，然后，先看到的被标记为工作协程的后台协程从该池中出队，扫描对象，然后将在其中找到的指针排入队列。</p>
-<h3 id="Tri-color-Coloring"><a href="#Tri-color-Coloring" class="headerlink" title="Tri-color Coloring"></a>Tri-color Coloring</h3><p>三色染色的过程</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image72.GIF" alt="image72"></p>
+<p class="fireman-p-indent" >回收过程是一个波面不断推荐的过程，回收开始，所有对象均为白色，标记过程开始，灰色对象开始出现，随着波面扩大，当一个对象的所有子节点均完成扫描，被着色成黑色。整个堆便利完成，只剩下黑色和白色对象。黑色对象为可达对象，白色为不可达，即垃圾对象。</p>
+<h3 id="Tri-color-Marking"><a href="#Tri-color-Marking" class="headerlink" title="Tri-color Marking"></a>Tri-color Marking</h3><p class="fireman-p-indent" >三色标记的过程</p>
+<p class="fireman-p-indent" >垃圾收集器从root开始，然后跟随指针递归整个内存空间。</p>
+<p class="fireman-p-indent" >分配于noscan的span的对象（也就是不包含指针的span），不会进行扫描。</p>
+<p class="fireman-p-indent" >这个过程不是由同一个goroutine完成的，每个指针都排队在工作池（待扫描的队列）中，然后，先看到的被标记为工作协程的后台协程从该池中出队，扫描对象，然后将在其中找到的指针排入队列。</p>
+<h3 id="Tri-color-Coloring"><a href="#Tri-color-Coloring" class="headerlink" title="Tri-color Coloring"></a>Tri-color Coloring</h3><p class="fireman-p-indent" >三色染色的过程</p>
 <ul>
 <li>一开始所有对象被认为是白色</li>
 <li>跟节点（stacks，heap，global variables）被染色为灰色</li>
 </ul>
-<p>一旦主流程走完，gc会：</p>
+<p class="fireman-p-indent" >一旦主流程走完，gc会：</p>
 <ul>
 <li>选一个灰色对象，标记为黑色</li>
 <li>便利这个对象的所有指针，标记所有其引用的对象为灰色</li>
 </ul>
-<p>最终直到所有对象需要被染色。</p>
-<p>标记结束后，黑色对象是内存中正在使用的对象，而白色对象是要收集的对象。比如，一个从匿名函数中创建的实例struct，无法从堆栈中访问，因此它保持为白色，可以清除。</p>
+<p class="fireman-p-indent" >最终直到所有对象需要被染色。</p>
+<p class="fireman-p-indent" >标记结束后，黑色对象是内存中正在使用的对象，而白色对象是要收集的对象。比如，一个从匿名函数中创建的实例struct，无法从堆栈中访问，因此它保持为白色，可以清除。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918213655891.png" alt="image-20220918213655891" style="zoom:25%;" />
 
-<p>颜色在内部实现原理：</p>
-<p>每个span中有一个名为gcmarkBits的位图属性，该属性跟踪扫描，并将相应的位设置为1。</p>
-<h3 id="Write-Barrier"><a href="#Write-Barrier" class="headerlink" title="Write Barrier"></a>Write Barrier</h3><p>写屏障</p>
-<p>1.5版本再标记过程中使用三色标记法。</p>
-<p>回收过程主要有四个阶段，其中<strong>标记和清扫都并发执行</strong>。但标记阶段的前后需要STW一定时间来做GC的准备工作和栈的re-scan（清扫阶段和应用程序要同时执行，避免出现在标记过程中增量引用的部分被误识别）。</p>
-<p>使用并发的垃圾回收，也就是多个mutator与mark并发执行，想要在并发或者增量的标记算法中保证正确性，需要达成以下两种三色不变性（Tri-color invariant）中的任意一种：</p>
+<p class="fireman-p-indent" >颜色在内部实现原理：</p>
+<p class="fireman-p-indent" >每个span中有一个名为gcmarkBits的位图属性，该属性跟踪扫描，并将相应的位设置为1。</p>
+<h3 id="Write-Barrier"><a href="#Write-Barrier" class="headerlink" title="Write Barrier"></a>Write Barrier</h3><p class="fireman-p-indent" >写屏障</p>
+<p class="fireman-p-indent" >1.5版本再标记过程中使用三色标记法。</p>
+<p class="fireman-p-indent" >回收过程主要有四个阶段，其中<strong>标记和清扫都并发执行</strong>。但标记阶段的前后需要STW一定时间来做GC的准备工作和栈的re-scan（清扫阶段和应用程序要同时执行，避免出现在标记过程中增量引用的部分被误识别）。</p>
+<p class="fireman-p-indent" >使用并发的垃圾回收，也就是多个mutator与mark并发执行，想要在并发或者增量的标记算法中保证正确性，需要达成以下两种三色不变性（Tri-color invariant）中的任意一种：</p>
 <ul>
 <li>强三色不变性：黑色对象不会指向白色对象，只会指向灰色对象或者黑色对象</li>
 <li>弱三色不变性：黑色对象指向的白色对象必须包含一条从灰色对象经由多个白色对象的可达路径（也就是这个白色对象会被其他的灰色对象访问到）</li>
 </ul>
-<p>一个白色对象被黑色对象引用，是注定无法通过这个黑色对象来保证自身存活的，于此同时，如果所有能到达它的灰色对象与它之间的可达关系全部遭到破坏，那么这个白色对象必然会被视为垃圾清除掉。</p>
-<p>故当上述两个条件同时满足时，就会出现对象丢失的问题。</p>
-<p>如果这个白色对象下游还引用了其他对象，并且这条路径是指向下游对象的唯一路径，那么他们也是必死无疑的。</p>
+<p class="fireman-p-indent" >一个白色对象被黑色对象引用，是注定无法通过这个黑色对象来保证自身存活的，于此同时，如果所有能到达它的灰色对象与它之间的可达关系全部遭到破坏，那么这个白色对象必然会被视为垃圾清除掉。</p>
+<p class="fireman-p-indent" >故当上述两个条件同时满足时，就会出现对象丢失的问题。</p>
+<p class="fireman-p-indent" >如果这个白色对象下游还引用了其他对象，并且这条路径是指向下游对象的唯一路径，那么他们也是必死无疑的。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918215343800.png" alt="image-20220918215343800" style="zoom:25%;" />
 
-<p>例如在程序运行过程，进行标记，标记B对象为灰色对象，B对象引用C对象，此时可能A是栈上一个对象指向C，B是一个堆上对象指向C，当B指向C的关系被破坏，此时C还是白色，被回收之后，A无法访问到C，出现对象丢失的错误。</p>
-<p>为了方式这种现象，最简单的方式就是STW，直接禁止掉其他用户程序对对象应用关系的干扰，但是STW的过程有明显的资源浪费，对所有的用户程序都有很大影响。为了解决STW的问题，引入写屏障。</p>
-<p>写屏障，也叫做插入屏障，1.5版本使用的Dijkstra 写屏障用的就是这个原理。插入屏障拦截将白色指针插入黑色对象的操作，标记其对应对象为灰色状态（也就是当A引用C时，将C状态改为灰色），这样就不存在黑色对象引用白色对象的情况了，满足强三色不变式。在插入指针f时将c对象标记为灰色。</p>
+<p class="fireman-p-indent" >例如在程序运行过程，进行标记，标记B对象为灰色对象，B对象引用C对象，此时可能A是栈上一个对象指向C，B是一个堆上对象指向C，当B指向C的关系被破坏，此时C还是白色，被回收之后，A无法访问到C，出现对象丢失的错误。</p>
+<p class="fireman-p-indent" >为了方式这种现象，最简单的方式就是STW，直接禁止掉其他用户程序对对象应用关系的干扰，但是STW的过程有明显的资源浪费，对所有的用户程序都有很大影响。为了解决STW的问题，引入写屏障。</p>
+<p class="fireman-p-indent" >写屏障，也叫做插入屏障，1.5版本使用的Dijkstra 写屏障用的就是这个原理。插入屏障拦截将白色指针插入黑色对象的操作，标记其对应对象为灰色状态（也就是当A引用C时，将C状态改为灰色），这样就不存在黑色对象引用白色对象的情况了，满足强三色不变式。在插入指针f时将c对象标记为灰色。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918220016592.png" alt="image-20220918220016592" style="zoom:25%;" />
 
-<p>如果对栈上的写做屏障，那么流程代码会非常复杂，并且性能下降会非常大。根据局部性的原理来说，其实程序跑起来，大部分其实都是操作在栈上，函数参数、函数调用导致的压栈、出栈、局部变量、协程栈，这些如果也弄起写屏障，复杂度和性能是无法解决的。</p>
-<p>所以Go选择仅对堆上的指针插入增加写屏障（图中A插入指针指向C），这样就会出现在扫描结束后，栈上仍存在引用白色对象的情况，这时的C是灰色的，不满足三色不变式，所以需要对栈进行重新扫描使其变黑，完成剩余对象的标记，这个过程需要STW。（也就是前面说的栈的re-scan）</p>
+<p class="fireman-p-indent" >如果对栈上的写做屏障，那么流程代码会非常复杂，并且性能下降会非常大。根据局部性的原理来说，其实程序跑起来，大部分其实都是操作在栈上，函数参数、函数调用导致的压栈、出栈、局部变量、协程栈，这些如果也弄起写屏障，复杂度和性能是无法解决的。</p>
+<p class="fireman-p-indent" >所以Go选择仅对堆上的指针插入增加写屏障（图中A插入指针指向C），这样就会出现在扫描结束后，栈上仍存在引用白色对象的情况，这时的C是灰色的，不满足三色不变式，所以需要对栈进行重新扫描使其变黑，完成剩余对象的标记，这个过程需要STW。（也就是前面说的栈的re-scan）</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918220512045.png" alt="image-20220918220512045" style="zoom: 33%;" />
 
-<p>初始化GC任务，包括开启写屏障，和开启辅助GC，统计root对象的任务数量等，这个过程需要STW。</p>
-<p>扫描所有root对象，包括全局指针和goroutine（G）栈上的指针（扫描对应G栈时需要停止该G），将其加入扫描队列（灰色队列），并循环处理灰色队列的对象，直到灰色队列为空，该过程后台并行执行。</p>
-<p>完成标记工作，重新扫描（re-scan）全局指针和栈。因为Mark和mutator是并行的，所以在mark过程中可能会有新的对象分配和指针赋值，这个时候就需要通过写屏障记录下来，re-scan再检查一下，这个过程也是会STW的，按照标记结果回收所有的白色对象，该过程后台并发执行。</p>
-<h3 id="删屏障"><a href="#删屏障" class="headerlink" title="删屏障"></a>删屏障</h3><p>删除屏障 Yuasa，也是拦截写操作的，但是是通过保护灰色对象到白色对象的路径不会断来实现的。</p>
+<p class="fireman-p-indent" >初始化GC任务，包括开启写屏障，和开启辅助GC，统计root对象的任务数量等，这个过程需要STW。</p>
+<p class="fireman-p-indent" >扫描所有root对象，包括全局指针和goroutine（G）栈上的指针（扫描对应G栈时需要停止该G），将其加入扫描队列（灰色队列），并循环处理灰色队列的对象，直到灰色队列为空，该过程后台并行执行。</p>
+<p class="fireman-p-indent" >完成标记工作，重新扫描（re-scan）全局指针和栈。因为Mark和mutator是并行的，所以在mark过程中可能会有新的对象分配和指针赋值，这个时候就需要通过写屏障记录下来，re-scan再检查一下，这个过程也是会STW的，按照标记结果回收所有的白色对象，该过程后台并发执行。</p>
+<h3 id="删屏障"><a href="#删屏障" class="headerlink" title="删屏障"></a>删屏障</h3><p class="fireman-p-indent" >删除屏障 Yuasa，也是拦截写操作的，但是是通过保护灰色对象到白色对象的路径不会断来实现的。</p>
 <img src="../../../../../Library/Application%20Support/typora-user-images/image-20220918221243078.png" alt="image-20220918221243078" style="zoom:33%;" />
 
-<p>如图，在删除指针e时，将对象C标记为灰色，这样下游的所有白色对象，即使会被黑色对象引用，最终也还是会被扫描标记的，满足了弱三色不变式。这种方式的回报精度低，一个对象即使被删除了最后一个指向它的指针也依旧可以活过这一轮在下一轮GC中被清理掉。</p>
-<h3 id="混合屏障"><a href="#混合屏障" class="headerlink" title="混合屏障"></a>混合屏障</h3><p>插入屏障和删除屏障各有优缺点。</p>
-<p>插入屏障在标记开始时无需STW，可直接开始，并发进行，但是结束时需要STW来重新扫描栈，标记栈上引用的白色对象的存活。</p>
-<p>删除屏障则需要再GC开始时STW扫描堆栈来记录初始快照，这个过程会保护开始时刻的所有存活对象，但结束时无需STW。</p>
+<p class="fireman-p-indent" >如图，在删除指针e时，将对象C标记为灰色，这样下游的所有白色对象，即使会被黑色对象引用，最终也还是会被扫描标记的，满足了弱三色不变式。这种方式的回报精度低，一个对象即使被删除了最后一个指向它的指针也依旧可以活过这一轮在下一轮GC中被清理掉。</p>
+<h3 id="混合屏障"><a href="#混合屏障" class="headerlink" title="混合屏障"></a>混合屏障</h3><p class="fireman-p-indent" >插入屏障和删除屏障各有优缺点。</p>
+<p class="fireman-p-indent" >插入屏障在标记开始时无需STW，可直接开始，并发进行，但是结束时需要STW来重新扫描栈，标记栈上引用的白色对象的存活。</p>
+<p class="fireman-p-indent" >删除屏障则需要再GC开始时STW扫描堆栈来记录初始快照，这个过程会保护开始时刻的所有存活对象，但结束时无需STW。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918221939296.png" alt="image-20220918221939296" style="zoom:33%;" />
 
-<p>Go中的混合写屏障满足的是变形的弱三色不变式，同样允许黑色对象引用白色对象，白色对象处于灰色保护状态，但是只由堆上的灰色对象保护。</p>
-<p>混合屏障结合了删除屏障和写入屏障的有点，只需要在开始时并发扫描各个goroutine的栈，使其变黑并一直保持，这个过程不需要STW，标记结束后，因为栈在扫描后使用是黑色的，也无需再进行re-scan操作了，减少了STW的时间。</p>
+<p class="fireman-p-indent" >Go中的混合写屏障满足的是变形的弱三色不变式，同样允许黑色对象引用白色对象，白色对象处于灰色保护状态，但是只由堆上的灰色对象保护。</p>
+<p class="fireman-p-indent" >混合屏障结合了删除屏障和写入屏障的有点，只需要在开始时并发扫描各个goroutine的栈，使其变黑并一直保持，这个过程不需要STW，标记结束后，因为栈在扫描后使用是黑色的，也无需再进行re-scan操作了，减少了STW的时间。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918222917762.png" alt="image-20220918222917762" style="zoom:33%;" />
 
-<p>为了移除栈的重扫描过程，除了引入混合写屏障之外，在垃圾收集的标记阶段，还需要将创建的所有堆上新对象都标记成黑色，防止新分配的栈内存和堆内存中的对象被错误的回收，因为栈内存在标记阶段最终都会变为黑色，所以不再需要重新扫描栈空间。</p>
-<h3 id="Sweep"><a href="#Sweep" class="headerlink" title="Sweep"></a>Sweep</h3><p>清扫阶段</p>
-<p>sweep让GO知道哪些内存可以重新分配使用，然而，sweep过程并不会处理释放的对象内存置为0，而是在分配重新使用的时候，重新reset bit。</p>
-<p>每个span内有一个bitmap allocBits，表示上一次GC之后每一个object的分配情况，</p>
+<p class="fireman-p-indent" >为了移除栈的重扫描过程，除了引入混合写屏障之外，在垃圾收集的标记阶段，还需要将创建的所有堆上新对象都标记成黑色，防止新分配的栈内存和堆内存中的对象被错误的回收，因为栈内存在标记阶段最终都会变为黑色，所以不再需要重新扫描栈空间。</p>
+<h3 id="Sweep"><a href="#Sweep" class="headerlink" title="Sweep"></a>Sweep</h3><p class="fireman-p-indent" >清扫阶段</p>
+<p class="fireman-p-indent" >sweep让GO知道哪些内存可以重新分配使用，然而，sweep过程并不会处理释放的对象内存置为0，而是在分配重新使用的时候，重新reset bit。</p>
+<p class="fireman-p-indent" >每个span内有一个bitmap allocBits，表示上一次GC之后每一个object的分配情况，</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918223048189.png" alt="image-20220918223048189" style="zoom:33%;" />
 
-<p>1：表示已分配</p>
-<p>0：表示未使用或者已释放</p>
-<p>GC将会启动去释放不再被使用的内存。在标记期间，GC会用一个位图gcmarkBits来跟踪在使用中的内存。</p>
-<p>正在被使用的内存被标记为黑色，然而当前执行并不能够到达的那些内存会保持为白色。</p>
+<p class="fireman-p-indent" >1：表示已分配</p>
+<p class="fireman-p-indent" >0：表示未使用或者已释放</p>
+<p class="fireman-p-indent" >GC将会启动去释放不再被使用的内存。在标记期间，GC会用一个位图gcmarkBits来跟踪在使用中的内存。</p>
+<p class="fireman-p-indent" >正在被使用的内存被标记为黑色，然而当前执行并不能够到达的那些内存会保持为白色。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918223405879.png" alt="image-20220918223405879" style="zoom:33%;" />
 
-<p>现在，可以使用gcmarkBits精确查看可用于分配的内存。Go使用gcmarkBits赋值了allocBits，这个操作就是内存清理。（将gcmarkBits替换allocBits）</p>
-<p>然而必须每个span都来一次类似的处理，需要耗费大量时间，Go的目标是在清理内存时不阻碍执行，并未次提供了两种策略。</p>
+<p class="fireman-p-indent" >现在，可以使用gcmarkBits精确查看可用于分配的内存。Go使用gcmarkBits赋值了allocBits，这个操作就是内存清理。（将gcmarkBits替换allocBits）</p>
+<p class="fireman-p-indent" >然而必须每个span都来一次类似的处理，需要耗费大量时间，Go的目标是在清理内存时不阻碍执行，并未次提供了两种策略。</p>
 <ul>
 <li><p>在后台启动一个worker等待清理内存一个一个mspan处理</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918223813575.png" alt="image-20220918223813575" style="zoom: 33%;" />
@@ -460,15 +467,15 @@
 <p>由于后台只有一个worker在清理内存块，清理过程可能会花费一些时间。但是，如果另一个GC周期在一次清理过程中启动会发生什么。在这种情况下，这个运行GC的goroutine就会在开始标记阶段前去协助完成剩余的清理工作。</p>
 </li>
 </ul>
-<h3 id="STW"><a href="#STW" class="headerlink" title="STW"></a>STW</h3><p>在Stop the world阶段，当前运行的所有程序将被暂停，扫描内存的root节点和添加写屏障。</p>
+<h3 id="STW"><a href="#STW" class="headerlink" title="STW"></a>STW</h3><p class="fireman-p-indent" >在Stop the world阶段，当前运行的所有程序将被暂停，扫描内存的root节点和添加写屏障。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918231249565.png" alt="image-20220918231249565" style="zoom:25%;" />
 
-<p>这个阶段的第一步，时抢占所有正在运行的goroutine，被抢占之后，这些goroutine会被悬停在一个相对安全的状态。</p>
-<p>在1.14版本之后，支持信号抢占，相对以前全局变量（preemptable）的方式时间更短。</p>
-<p>处理器P（无论是正在运行代码的P还是在idle列表中的P），都会被标记成停止状态（stopped），不再运行任何代码，调度器把每个P的M从对应P分离出来，当道idle列表中。</p>
+<p class="fireman-p-indent" >这个阶段的第一步，时抢占所有正在运行的goroutine，被抢占之后，这些goroutine会被悬停在一个相对安全的状态。</p>
+<p class="fireman-p-indent" >在1.14版本之后，支持信号抢占，相对以前全局变量（preemptable）的方式时间更短。</p>
+<p class="fireman-p-indent" >处理器P（无论是正在运行代码的P还是在idle列表中的P），都会被标记成停止状态（stopped），不再运行任何代码，调度器把每个P的M从对应P分离出来，当道idle列表中。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918231555886.png" alt="image-20220918231555886" style="zoom:25%;" />
 
-<p>对于goroutine而言，他们会被放到一个全局队列中等待。</p>
+<p class="fireman-p-indent" >对于goroutine而言，他们会被放到一个全局队列中等待。</p>
 <h3 id="Pacing"><a href="#Pacing" class="headerlink" title="Pacing"></a>Pacing</h3><ul>
 <li><p>运行时，只有GC Percentage（GC百分比）的配置选项，默认情况下为100。</p>
 <p>此值表示在下一次垃圾收集必须启动之前可以分配多少新内存的比率。比如将GC百分比设置为100意味着，基于在垃圾收集完成后标记为活动的堆内存量，下次垃圾收集前，堆内存使用可以增加100%。</p>
@@ -480,19 +487,19 @@
 <li><p>如果超过2分钟没有触发，sysmon会强制GC。</p>
 </li>
 </ul>
-<h3 id="终止器"><a href="#终止器" class="headerlink" title="终止器"></a>终止器</h3><p>通过终止器验证Golang会GC。finalizer 终止器，GC时某个对象无法被访问，则finalizer就会调用这个对象。</p>
+<h3 id="终止器"><a href="#终止器" class="headerlink" title="终止器"></a>终止器</h3><p class="fireman-p-indent" >通过终止器验证Golang会GC。finalizer 终止器，GC时某个对象无法被访问，则finalizer就会调用这个对象。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runtime.SetFinalizer(obj any, finalizer any)</span><br></pre></td></tr></table></figure>
 
-<p>只有对象被GC时，终止器才会被执行。</p>
+<p class="fireman-p-indent" >只有对象被GC时，终止器才会被执行。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">type Road int</span><br><span class="line"></span><br><span class="line">func findRoad(r *Road) &#123;		// r does not escape</span><br><span class="line">	log.Printf(&quot;road: %v&quot;, *r)	// *r escapes to heap</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func entry() &#123;</span><br><span class="line">	var rd Road = Road(99)	// moved to heap: rd</span><br><span class="line">	r := &amp;rd</span><br><span class="line">	runtime.SetFinalizer(r, findRoad)   // 在gc时候，判断gc是否能被访问到</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	entry()</span><br><span class="line">	runtime.GC()		// 第一次GC，取消对象r的关联</span><br><span class="line">	runtime.GC()		// 第二次GC，r被gc，findRoad被执行</span><br><span class="line">	time.Sleep(time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>执行结果</p>
+<p class="fireman-p-indent" >执行结果</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2022/07/25 17:25:48 road: 99</span><br></pre></td></tr></table></figure>
 
-<p><code>runtime</code>的函数</p>
+<p class="fireman-p-indent" ><code>runtime</code>的函数</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(runtime.NumCPU()) // 返回当前CPU个数</span><br><span class="line">fmt.Println(runtime.Version()) // 返回当前golang版本</span><br><span class="line">runtime.GC()	// 手动GC</span><br><span class="line">fmt.Println(runtime.NumGoroutine())	// 返回当前存在的goroutine个数	</span><br><span class="line">runtime.Gosched()	// 强制切换goroutine</span><br><span class="line">runtime.Goexit()	// 关闭当前调用这个函数的goroutine</span><br></pre></td></tr></table></figure>
 
-<h2 id="分析GC过程"><a href="#分析GC过程" class="headerlink" title="分析GC过程"></a>分析GC过程</h2><h3 id="gc流程"><a href="#gc流程" class="headerlink" title="gc流程"></a>gc流程</h3><p>以STW为界限，可以将GC划分为五个阶段：</p>
+<h2 id="分析GC过程"><a href="#分析GC过程" class="headerlink" title="分析GC过程"></a>分析GC过程</h2><h3 id="gc流程"><a href="#gc流程" class="headerlink" title="gc流程"></a>gc流程</h3><p class="fireman-p-indent" >以STW为界限，可以将GC划分为五个阶段：</p>
 <ul>
 <li>sweep Termination：清扫终止阶段，为下一个阶段的并发标记做准备工作，启动写屏障</li>
 <li>Mark：扫描标记阶段，与复制器并发执行，写屏障开启</li>
@@ -500,13 +507,13 @@
 <li>GCoff：内存清扫阶段，将需要回收的内存归还到堆中，写屏障关闭</li>
 <li>GCoff：内存归还阶段，将过多的内存归还给操作系统，写凭证关闭</li>
 </ul>
-<h3 id="触发GC"><a href="#触发GC" class="headerlink" title="触发GC"></a>触发GC</h3><p>​	触发GC有两种方式：一种是手动，一种是自动。</p>
-<p>​	手动触发：调用runtime.gc</p>
-<p>​	自动触发：自动触发机制有两种方式，一种是时间间隔，大约2分钟没有任何GC系统会强制触发，二种是步调算法，当内存增长达到一定比例时触发GC</p>
-<h3 id="gctrace"><a href="#gctrace" class="headerlink" title="gctrace"></a>gctrace</h3><p>通过开启gctrace，可以看到gc的过程</p>
+<h3 id="触发GC"><a href="#触发GC" class="headerlink" title="触发GC"></a>触发GC</h3><p class="fireman-p-indent" >​	触发GC有两种方式：一种是手动，一种是自动。</p>
+<p class="fireman-p-indent" >​	手动触发：调用runtime.gc</p>
+<p class="fireman-p-indent" >​	自动触发：自动触发机制有两种方式，一种是时间间隔，大约2分钟没有任何GC系统会强制触发，二种是步调算法，当内存增长达到一定比例时触发GC</p>
+<h3 id="gctrace"><a href="#gctrace" class="headerlink" title="gctrace"></a>gctrace</h3><p class="fireman-p-indent" >通过开启gctrace，可以看到gc的过程</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GODEBUG=gctrace=1 go run main.go</span><br></pre></td></tr></table></figure>
 
-<p>截取部分</p>
+<p class="fireman-p-indent" >截取部分</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gc 1 @0.005s 2%: 0.009+0.63+0.037 ms clock, 0.090+0.39/0.69/0+0.37 ms cpu, 4-&gt;4-&gt;0 MB, 4 MB goal, 0 MB stacks, 0 MB globals, 10 P</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -538,33 +545,33 @@
 </li>
 <li>10 P：使用的处理器数量</li>
 </ul>
-<h3 id="go-tool-trace"><a href="#go-tool-trace" class="headerlink" title="go tool trace"></a>go tool trace</h3><p>将统计的信息通过可视化的方式展现出来，在代码中调用trace的API</p>
+<h3 id="go-tool-trace"><a href="#go-tool-trace" class="headerlink" title="go tool trace"></a>go tool trace</h3><p class="fireman-p-indent" >将统计的信息通过可视化的方式展现出来，在代码中调用trace的API</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">f, _ := os.Create(&quot;trace.out&quot;)</span><br><span class="line">defer f.Close()</span><br><span class="line">trace.Start(f)</span><br><span class="line">defer trace.Stop()</span><br><span class="line">entry()</span><br><span class="line">runtime.GC()</span><br><span class="line">runtime.GC()</span><br><span class="line">time.Sleep(time.Second)</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go tool trace ./trace.out</span><br></pre></td></tr></table></figure>
 
-<h3 id="debug-ReadGCStats"><a href="#debug-ReadGCStats" class="headerlink" title="debug.ReadGCStats"></a>debug.ReadGCStats</h3><p>通过debug的包</p>
+<h3 id="debug-ReadGCStats"><a href="#debug-ReadGCStats" class="headerlink" title="debug.ReadGCStats"></a>debug.ReadGCStats</h3><p class="fireman-p-indent" >通过debug的包</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s := debug.GCStats&#123;&#125;</span><br><span class="line">for i := 0; i &lt; 100; i++ &#123;</span><br><span class="line">	member()</span><br><span class="line">	debug.ReadGCStats(&amp;s)</span><br><span class="line">	fmt.Printf(&quot;gc %d last@%v, PauseTotal %v\n&quot;, s.NumGC, s.LastGC, s.PauseTotal)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>输出</p>
+<p class="fireman-p-indent" >输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gc 93 last@2022-07-25 21:19:50.388347 +0800 CST, PauseTotal 4.190662ms</span><br><span class="line">gc 94 last@2022-07-25 21:19:50.388729 +0800 CST, PauseTotal 4.259787ms</span><br></pre></td></tr></table></figure>
 
-<h3 id="runtime-ReadMemStats"><a href="#runtime-ReadMemStats" class="headerlink" title="runtime.ReadMemStats"></a>runtime.ReadMemStats</h3><p>通过运行时的内存相关API</p>
+<h3 id="runtime-ReadMemStats"><a href="#runtime-ReadMemStats" class="headerlink" title="runtime.ReadMemStats"></a>runtime.ReadMemStats</h3><p class="fireman-p-indent" >通过运行时的内存相关API</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s := runtime.MemStats&#123;&#125;</span><br><span class="line">for i := 0; i &lt; 100; i++ &#123;</span><br><span class="line">	member()</span><br><span class="line">	runtime.ReadMemStats(&amp;s)</span><br><span class="line">	fmt.Printf(&quot;gc %d last@%v, next_heap_size %vMB\n&quot;, s.NumGC, time.Unix(int64(time.Duration(s.LastGC).Seconds()), 0), s.NextGC/(1&lt;&lt;20))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>输出</p>
+<p class="fireman-p-indent" >输出</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gc 98 last@2022-07-25 21:25:04 +0800 CST, next_heap_size 8MB</span><br><span class="line">gc 99 last@2022-07-25 21:25:04 +0800 CST, next_heap_size 8MB</span><br></pre></td></tr></table></figure>
 
-<h2 id="内存泄露"><a href="#内存泄露" class="headerlink" title="内存泄露"></a>内存泄露</h2><p>即使有GC，也会出现内存泄漏。从上面GC目标是堆上的内存来看，如果让变量附着在堆上，则会出现内存泄露。</p>
+<h2 id="内存泄露"><a href="#内存泄露" class="headerlink" title="内存泄露"></a>内存泄露</h2><p class="fireman-p-indent" >即使有GC，也会出现内存泄漏。从上面GC目标是堆上的内存来看，如果让变量附着在堆上，则会出现内存泄露。</p>
 <h3 id="变量附着在全局变量"><a href="#变量附着在全局变量" class="headerlink" title="变量附着在全局变量"></a>变量附着在全局变量</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">var m = make(map[int]interface&#123;&#125;)</span><br><span class="line"></span><br><span class="line">func env(i int) &#123;</span><br><span class="line">	s := make([]int, 1&lt;&lt;20)</span><br><span class="line">	m[i] = s</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	f, _ := os.Create(&quot;trace1.out&quot;)</span><br><span class="line">	defer f.Close()</span><br><span class="line">	trace.Start(f)</span><br><span class="line">	defer trace.Stop()</span><br><span class="line">	for i := 0; i &lt; 10000; i++ &#123;</span><br><span class="line">		env(i)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726101606183.png" alt="image-20220726101606183"></p>
-<p>可见Heap一直在增长</p>
-<h3 id="泄露"><a href="#泄露" class="headerlink" title="泄露"></a>泄露</h3><p>除了附着在堆上出现内存泄露，还有可能出现channel泄露。当goroutine往一个没有接受者接收的channel发送信息，goroutine无法执行完成，goroutine及其执行栈得不到释放</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726101606183.png" alt="image-20220726101606183"></p>
+<p class="fireman-p-indent" >可见Heap一直在增长</p>
+<h3 id="泄露"><a href="#泄露" class="headerlink" title="泄露"></a>泄露</h3><p class="fireman-p-indent" >除了附着在堆上出现内存泄露，还有可能出现channel泄露。当goroutine往一个没有接受者接收的channel发送信息，goroutine无法执行完成，goroutine及其执行栈得不到释放</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">f, _ := os.Create(&quot;trace2.out&quot;)</span><br><span class="line">defer f.Close()</span><br><span class="line">trace.Start(f)</span><br><span class="line">defer trace.Stop()</span><br><span class="line">ch := make(chan struct&#123;&#125;)</span><br><span class="line">for i := 0; i &lt; 100000; i++ &#123;</span><br><span class="line">	go func() &#123;</span><br><span class="line">		ch &lt;- struct&#123;&#125;&#123;&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">&#125;</span><br><span class="line">time.Sleep(5 * time.Second)</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726102814647.png" alt="image-20220726102814647"></p>
-<p>引申：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726102814647.png" alt="image-20220726102814647"></p>
+<p class="fireman-p-indent" >引申：</p>
 <ul>
 <li><span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L3J1bnRpbWVAZ28xLjE5cmMy">go doc 1.19<i class="fa fa-external-link-alt"></i></span></li>
 </ul>

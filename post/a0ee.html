@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -68,7 +68,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -279,15 +286,15 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>RPC和REST协议的区别，这些协议都是建立在TCP基础上的可靠传输协议。</p>
-<h2 id="传输协议"><a href="#传输协议" class="headerlink" title="传输协议"></a>传输协议</h2><h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>规定传输方式：</p>
+    <div class="post-body" itemprop="articleBody"><p class="fireman-p-indent" >RPC和REST协议的区别，这些协议都是建立在TCP基础上的可靠传输协议。</p>
+<h2 id="传输协议"><a href="#传输协议" class="headerlink" title="传输协议"></a>传输协议</h2><h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p class="fireman-p-indent" >规定传输方式：</p>
 <ul>
 <li>Method：方法：GET PUT POST DELETE …</li>
 <li>URL：地址</li>
 <li>Data：具体数据或者二进制data</li>
 <li>Header：</li>
 </ul>
-<h3 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h3><p>借用HTTP协议，携带RPC数据。</p>
+<h3 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h3><p class="fireman-p-indent" >借用HTTP协议，携带RPC数据。</p>
 <ul>
 <li><p>Method：只有POST</p>
 </li>
@@ -296,113 +303,113 @@
 <li><p>Data：请求的数据</p>
 </li>
 </ul>
-<h3 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h3><p>在HTTP协议，根据HTTP框架设计的一种接口方式，用于CRUD</p>
+<h3 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h3><p class="fireman-p-indent" >在HTTP协议，根据HTTP框架设计的一种接口方式，用于CRUD</p>
 <ul>
 <li>C：创建 POST xxx.xxx.com&#x2F;user，内容放在Data中，Data以json的形式</li>
 <li>R：获取 GET xxx.xxx.com&#x2F;user&#x2F;{id}</li>
 <li>U：更新 PUT xxx.xxx.com&#x2F;user&#x2F;{id}，更新内容放在Data中，以json的形式</li>
 <li>D：删除 DELETE xxx.xxx.com&#x2F;user&#x2F;{id}</li>
 </ul>
-<p>选择RPC或者REST需要根据服务工程化来决定，微服务下，服务之间通过RPC访问可以不用对外暴露接口，统一由RPC Gateway做反向代理转发。</p>
-<h2 id="RPC-1"><a href="#RPC-1" class="headerlink" title="RPC"></a>RPC</h2><p><code>Remote Procedure Call</code>：远程过程调用。可以将远端的函数、方法当做本地的函数或方法使用，通过<code>Protobuf</code>实现跨语言通信。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/v2-b2e222999c280f36d79cd4dcc062ab24_1440w.jpg" alt="img"></p>
-<p>RPC中解决的问题：</p>
+<p class="fireman-p-indent" >选择RPC或者REST需要根据服务工程化来决定，微服务下，服务之间通过RPC访问可以不用对外暴露接口，统一由RPC Gateway做反向代理转发。</p>
+<h2 id="RPC-1"><a href="#RPC-1" class="headerlink" title="RPC"></a>RPC</h2><p class="fireman-p-indent" ><code>Remote Procedure Call</code>：远程过程调用。可以将远端的函数、方法当做本地的函数或方法使用，通过<code>Protobuf</code>实现跨语言通信。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/v2-b2e222999c280f36d79cd4dcc062ab24_1440w.jpg" alt="img"></p>
+<p class="fireman-p-indent" >RPC中解决的问题：</p>
 <ol>
 <li>Call的id映射（需要确定调用的远程函数具体是哪个函数）（在HTTP协议上，通过path代表Call ID）</li>
 <li>序列化和反序列化（如何传输数据，使用rpc默认的序列化协议还是<code>json</code>还是<code>protobuf</code>）（在HTTP协议上，通过header头指定的序列化协议）</li>
 <li>网络传输（通过<code>tcp</code>还是<code>http</code>传输数据，确保数据传输以及传输格式）（HTTP1协议默认短链接，过程中要经历三次握手和四次挥手）（gRPC框架基于http2.0，使用长连接流式传输，无论是网络连接还是序列化反序列化，性能更高）</li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/45366c44f775abfd0ac3b43bccc1abc3_r-20220920205634844.jpg" alt="preview"></p>
-<p>RPC通信的四个部分：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/45366c44f775abfd0ac3b43bccc1abc3_r-20220920205634844.jpg" alt="preview"></p>
+<p class="fireman-p-indent" >RPC通信的四个部分：</p>
 <ol>
 <li>服务端</li>
 <li>服务端存根</li>
 <li>客户端</li>
 <li>客户端存根</li>
 </ol>
-<p>类似于一个HTTP服务</p>
+<p class="fireman-p-indent" >类似于一个HTTP服务</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">http.HandleFunc(<span class="string">&quot;/hello&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(writer http.ResponseWriter, request *http.Request)</span></span> &#123;</span><br><span class="line">	_ = request.ParseForm()</span><br><span class="line">	a := request.Form[<span class="string">&quot;a&quot;</span>]</span><br><span class="line">	b := request.Form[<span class="string">&quot;b&quot;</span>]</span><br><span class="line">	res := <span class="keyword">map</span>[<span class="type">string</span>]<span class="type">string</span>&#123;</span><br><span class="line">		<span class="string">&quot;a + b&quot;</span>: a[<span class="number">0</span>] + b[<span class="number">0</span>],</span><br><span class="line">	&#125;</span><br><span class="line">   writer.Header().Add(<span class="string">&quot;content-type&quot;</span>, <span class="string">&quot;application/json&quot;</span>)</span><br><span class="line">	datas, _ := json.Marshal(res)</span><br><span class="line">	writer.Write(datas)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
-<p>请求时，通过<code>/hello</code>确定call ID，通过<code>writer.Header().Add(&quot;content-type&quot;, &quot;application/json&quot;)</code>确定序列化方式，通过HTTP网络传输，这也是一种RPC。</p>
-<p>通过RPC框架进行封装，则可以将Call ID进行封装，序列化和反序列化的方式进行封装，通信方式也进行封装，例如RPC协议</p>
+<p class="fireman-p-indent" >请求时，通过<code>/hello</code>确定call ID，通过<code>writer.Header().Add(&quot;content-type&quot;, &quot;application/json&quot;)</code>确定序列化方式，通过HTTP网络传输，这也是一种RPC。</p>
+<p class="fireman-p-indent" >通过RPC框架进行封装，则可以将Call ID进行封装，序列化和反序列化的方式进行封装，通信方式也进行封装，例如RPC协议</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> RPC <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将请求参数封装到req中，返回参数封装到reply中，RPC就是一个stub</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *RPC)</span></span> Hello(req <span class="type">string</span>, reply *<span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">	*reply = req + req</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	err := rpc.RegisterName(<span class="string">&quot;hello&quot;</span>, &amp;RPC&#123;&#125;) <span class="comment">// 注册服务</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	listener, _ := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:8080&quot;</span>)		<span class="comment">// 网络传输基于tcp</span></span><br><span class="line">	rpc.Accept(listener)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>客户端调用</p>
+<p class="fireman-p-indent" >客户端调用</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dial, _ := rpc.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:8080&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> reply <span class="type">string</span></span><br><span class="line">err := dial.Call(<span class="string">&quot;hello.Hello&quot;</span>, <span class="string">&quot;nihao&quot;</span>, &amp;reply) <span class="comment">// 通过hello指定服务，Hello指定方法，&quot;nihao&quot;为传入参数，reply为出参</span></span><br></pre></td></tr></table></figure>
 
-<p><code>RPC</code>有标准的用法，步骤如下：</p>
+<p class="fireman-p-indent" ><code>RPC</code>有标准的用法，步骤如下：</p>
 <ul>
 <li>服务端注册带名称的服务，第一个入参是请求，第二个入参是指针，代表返回内容</li>
 <li>服务端通过<code>TCP</code>套接字层监听并且接收请求</li>
 <li>客户端建立<code>TCP</code>连接</li>
 <li>客户端通过服务名称和两个参数调用连接</li>
 </ul>
-<p>因此可以看到，rpc协议的序列化和反序列化，可以通过rpc自带的协议实现，也可以通过json实现，也可以通过http协议实现。</p>
-<p>rpc协议的通信，可以继续tcp的socket变成实现，也可以通过http协议实现。具体例子可以看另外一篇文档：<a href="https://www.xiaoyeshiyu.com/2022/08/11/Golang%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">golang中的网络编程</a></p>
-<h2 id="Protobuf"><a href="#Protobuf" class="headerlink" title="Protobuf"></a>Protobuf</h2><p>全称是<code>Protocl Buffers</code>，是一种数据描述语言，类似<code>json</code>、<code>xml</code>，可通过附带工具生成代码并实现将结构化数据序列化的功能。例如通过<code>proto</code>文件生成<code>golang</code>文件</p>
+<p class="fireman-p-indent" >因此可以看到，rpc协议的序列化和反序列化，可以通过rpc自带的协议实现，也可以通过json实现，也可以通过http协议实现。</p>
+<p class="fireman-p-indent" >rpc协议的通信，可以继续tcp的socket变成实现，也可以通过http协议实现。具体例子可以看另外一篇文档：<a href="https://www.xiaoyeshiyu.com/2022/08/11/Golang%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">golang中的网络编程</a></p>
+<h2 id="Protobuf"><a href="#Protobuf" class="headerlink" title="Protobuf"></a>Protobuf</h2><p class="fireman-p-indent" >全称是<code>Protocl Buffers</code>，是一种数据描述语言，类似<code>json</code>、<code>xml</code>，可通过附带工具生成代码并实现将结构化数据序列化的功能。例如通过<code>proto</code>文件生成<code>golang</code>文件</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>; <span class="comment">// 版本</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> gostudy; 	<span class="comment">// </span></span><br><span class="line">option go_package = <span class="string">&quot;gostudy/proto/gen/go;userpb&quot;</span>; <span class="comment">// 生成的代码位置和package</span></span><br><span class="line"></span><br><span class="line">message User &#123;</span><br><span class="line">  <span class="type">int64</span> id = <span class="number">1</span>;      <span class="comment">// 由于二进制，需要用id表示位置</span></span><br><span class="line">  <span class="type">string</span> name = <span class="number">2</span>;</span><br><span class="line">  <span class="type">int64</span> duty_d = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>通过<code>protoc</code>生成<code>go</code>代码</p>
+<p class="fireman-p-indent" >通过<code>protoc</code>生成<code>go</code>代码</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --go_out=plugins=grpc:. hello.proto</span><br></pre></td></tr></table></figure>
 
-<p>生成之后的结构体</p>
+<p class="fireman-p-indent" >生成之后的结构体</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	state         protoimpl.MessageState</span><br><span class="line">	sizeCache     protoimpl.SizeCache</span><br><span class="line">	unknownFields protoimpl.UnknownFields</span><br><span class="line"><span class="comment">// 可被外部访问的参数有两个tag，一个是protobuf，另一个是json</span></span><br><span class="line">	Id    <span class="type">int64</span>  <span class="string">`protobuf:&quot;varint,1,opt,name=id,proto3&quot; json:&quot;id,omitempty&quot;`</span>					</span><br><span class="line">	Name  <span class="type">string</span> <span class="string">`protobuf:&quot;bytes,2,opt,name=name,proto3&quot; json:&quot;name,omitempty&quot;`</span></span><br><span class="line">	DutyD <span class="type">int64</span>  <span class="string">`protobuf:&quot;varint,3,opt,name=duty_d,json=dutyD,proto3&quot; json:&quot;duty_d,omitempty&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>通过<code>proto</code>序列化和反序列化</p>
+<p class="fireman-p-indent" >通过<code>proto</code>序列化和反序列化</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;encoding/json&quot;</span></span><br><span class="line">	userpb <span class="string">&quot;gostudy/proto/gen/go&quot;</span> <span class="comment">// 通过protobuf文件中指定的package引用</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	user := userpb.User&#123;</span><br><span class="line">		Id:    <span class="number">1</span>,</span><br><span class="line">		Name:  <span class="string">&quot;mitaka&quot;</span>,</span><br><span class="line">		DutyD: <span class="number">5</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(&amp;user)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过proto序列化</span></span><br><span class="line">	bytes, err := proto.Marshal(&amp;user)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%X\n&quot;</span>, bytes)</span><br><span class="line"><span class="comment">// 通过proto反序列化</span></span><br><span class="line">	user1 := userpb.User&#123;&#125;</span><br><span class="line">	err = proto.Unmarshal(bytes, &amp;user1)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(&amp;user1)</span><br><span class="line"><span class="comment">// 通过json序列化</span></span><br><span class="line">	b, err := json.Marshal(&amp;user)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%s\n&quot;</span>, b)</span><br><span class="line"><span class="comment">// 通过json反序列化</span></span><br><span class="line">	user2 := userpb.User&#123;&#125;</span><br><span class="line">	err = json.Unmarshal(b, &amp;user2)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(&amp;user2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>复合类型和枚举</p>
+<p class="fireman-p-indent" >复合类型和枚举</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">message User &#123;</span><br><span class="line">  <span class="type">int64</span> id = <span class="number">1</span>;</span><br><span class="line">  Book now_book = <span class="number">4</span>;</span><br><span class="line">  repeated Book carry_books =<span class="number">5</span>;</span><br><span class="line">  <span class="type">string</span> name = <span class="number">2</span>;</span><br><span class="line">  <span class="type">int64</span> duty_d = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message Book &#123;</span><br><span class="line">  <span class="type">int64</span> id = <span class="number">1</span>;</span><br><span class="line">  <span class="type">string</span> name = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>生成代码:</p>
+<p class="fireman-p-indent" >生成代码:</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Book <span class="keyword">struct</span> &#123;</span><br><span class="line">	state         protoimpl.MessageState</span><br><span class="line">	sizeCache     protoimpl.SizeCache</span><br><span class="line">	unknownFields protoimpl.UnknownFields</span><br><span class="line"></span><br><span class="line">	Id   <span class="type">int64</span>  <span class="string">`protobuf:&quot;varint,1,opt,name=id,proto3&quot; json:&quot;id,omitempty&quot;`</span></span><br><span class="line">	Name <span class="type">string</span> <span class="string">`protobuf:&quot;bytes,2,opt,name=name,proto3&quot; json:&quot;name,omitempty&quot;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	state         protoimpl.MessageState</span><br><span class="line">	sizeCache     protoimpl.SizeCache</span><br><span class="line">	unknownFields protoimpl.UnknownFields</span><br><span class="line"></span><br><span class="line">	Id         <span class="type">int64</span>   <span class="string">`protobuf:&quot;varint,1,opt,name=id,proto3&quot; json:&quot;id,omitempty&quot;`</span></span><br><span class="line">	NowBook    *Book   <span class="string">`protobuf:&quot;bytes,4,opt,name=now_book,json=nowBook,proto3&quot; json:&quot;now_book,omitempty&quot;`</span></span><br><span class="line">	CarryBooks []*Book <span class="string">`protobuf:&quot;bytes,5,rep,name=carry_books,json=carryBooks,proto3&quot; json:&quot;carry_books,omitempty&quot;`</span></span><br><span class="line">	Name       <span class="type">string</span>  <span class="string">`protobuf:&quot;bytes,2,opt,name=name,proto3&quot; json:&quot;name,omitempty&quot;`</span></span><br><span class="line">	DutyD      <span class="type">int64</span>   <span class="string">`protobuf:&quot;varint,3,opt,name=duty_d,json=dutyD,proto3&quot; json:&quot;duty_d,omitempty&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>可以看到复合类型和枚举都是指针。</p>
-<p>字段可选性</p>
+<p class="fireman-p-indent" >可以看到复合类型和枚举都是指针。</p>
+<p class="fireman-p-indent" >字段可选性</p>
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">User</span> &#123;</span><br><span class="line">	...</span><br><span class="line">  BookStatus status = <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">enum </span><span class="title class_">BookStatus</span> &#123;</span><br><span class="line">  BS_NOT_SPECIFIED = <span class="number">0</span>; <span class="comment">// 没有这个字段时，默认值</span></span><br><span class="line">  NOT_STARTED = <span class="number">1</span>;</span><br><span class="line">  IN_PROCESS = <span class="number">2</span>;</span><br><span class="line">  FINISHED = <span class="number">3</span>;</span><br><span class="line">  PAID = <span class="number">4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>限定<code>User</code>的<code>status</code>，只能在这些状态。  </p>
-<p>结构体中所有的字段都是可选的，当这个字段不填，则是零值。如果要区分是零值还是没有填写，那么需要增加一个字段,<code>is_xxx bool</code>，需要确保<code>false</code>的含义，与老版本匹配。</p>
-<h2 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a>gRPC</h2><p>为了解决RPC协议中，对客户端存根和服务端存根的封装，而且可以实现跨语言，则需要通过一种框架实现，RPC框架中，使用的最为广泛的，就是gRPC框架。</p>
-<p><code>gRPC</code>是基于<code>ProtoBuf</code>开发的跨语言的开源<code>RPC</code>框架。</p>
-<p>客户端和服务端通信，中间经过网络，需要确定网络协议（<code>tcp</code>、<code>udp</code>），确定服务端地址（域名、ip和端口），服务路径（<code>url</code>）服务参数（<code>body</code>，<code>query</code>，<code>path</code>），数据类型（<code>string</code>，<code>int</code>），数据编码（<code>json</code>、<code>xml</code>），安全性（<code>ssl</code>加密，<code>token</code>），错误处理（<code>error</code> <code>response</code>）。使用<code>HTTP</code>通信可以满足上述所有条件，使用<code>gRPC</code>协议可以满足。<code>gRPC</code>使用<code>HTTP/2</code>协议，数据传输使用二进制，流式传输streaming，多路复用一个<code>TCP</code>连接。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/landing-2.svg" alt="Concept Diagram"></p>
-<p>定义服务方法、请求参数、返回参数</p>
+<p class="fireman-p-indent" >限定<code>User</code>的<code>status</code>，只能在这些状态。  </p>
+<p class="fireman-p-indent" >结构体中所有的字段都是可选的，当这个字段不填，则是零值。如果要区分是零值还是没有填写，那么需要增加一个字段,<code>is_xxx bool</code>，需要确保<code>false</code>的含义，与老版本匹配。</p>
+<h2 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a>gRPC</h2><p class="fireman-p-indent" >为了解决RPC协议中，对客户端存根和服务端存根的封装，而且可以实现跨语言，则需要通过一种框架实现，RPC框架中，使用的最为广泛的，就是gRPC框架。</p>
+<p class="fireman-p-indent" ><code>gRPC</code>是基于<code>ProtoBuf</code>开发的跨语言的开源<code>RPC</code>框架。</p>
+<p class="fireman-p-indent" >客户端和服务端通信，中间经过网络，需要确定网络协议（<code>tcp</code>、<code>udp</code>），确定服务端地址（域名、ip和端口），服务路径（<code>url</code>）服务参数（<code>body</code>，<code>query</code>，<code>path</code>），数据类型（<code>string</code>，<code>int</code>），数据编码（<code>json</code>、<code>xml</code>），安全性（<code>ssl</code>加密，<code>token</code>），错误处理（<code>error</code> <code>response</code>）。使用<code>HTTP</code>通信可以满足上述所有条件，使用<code>gRPC</code>协议可以满足。<code>gRPC</code>使用<code>HTTP/2</code>协议，数据传输使用二进制，流式传输streaming，多路复用一个<code>TCP</code>连接。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/landing-2.svg" alt="Concept Diagram"></p>
+<p class="fireman-p-indent" >定义服务方法、请求参数、返回参数</p>
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">GetUserRequest</span> &#123; 		<span class="comment">// 输入参数</span></span><br><span class="line">  <span class="type">int64</span> id = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">GetUserResponse</span> &#123;		<span class="comment">// 返回参数</span></span><br><span class="line">  <span class="type">int64</span> id = <span class="number">1</span>;</span><br><span class="line">  Book book = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">service </span><span class="title class_">UserService</span> &#123;			<span class="comment">// 方法、功能</span></span><br><span class="line">  <span class="function"><span class="keyword">rpc</span> GetUser (GetUserRequest) <span class="keyword">returns</span> (GetUserResponse)</span>;		</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>生成代码，通过<code>plugins=grpc</code>指定<code>plgins</code></p>
+<p class="fireman-p-indent" >生成代码，通过<code>plugins=grpc</code>指定<code>plgins</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc -I=. --go_out=plugins=grpc,paths=source_relative:gen/go user.proto</span><br></pre></td></tr></table></figure>
 
-<p>生成的方法</p>
+<p class="fireman-p-indent" >生成的方法</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> UserServiceServer <span class="keyword">interface</span> &#123;</span><br><span class="line">	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, <span class="type">error</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>服务端实现interface</p>
+<p class="fireman-p-indent" >服务端实现interface</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Service <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*Service)</span></span> GetUser(ctx context.Context, in *userpb.GetUserRequest) (*userpb.GetUserResponse, <span class="type">error</span>) &#123;</span><br><span class="line">	user := userpb.User&#123;</span><br><span class="line">		Id:    <span class="number">1</span>,</span><br><span class="line">		Name:  <span class="string">&quot;mitaka&quot;</span>,</span><br><span class="line">		DutyD: <span class="number">5</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> &amp;userpb.GetUserResponse&#123;</span><br><span class="line">		Id:   in.Id,</span><br><span class="line">		User: &amp;user,</span><br><span class="line">	&#125;, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>服务端开启socket监听</p>
+<p class="fireman-p-indent" >服务端开启socket监听</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">listen, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:8081&quot;</span>) <span class="comment">// net监听</span></span><br><span class="line">s := grpc.NewServer()											<span class="comment">// grpc server</span></span><br><span class="line">userpb.RegisterUserServiceServer(s, &amp;userservice.Service&#123;&#125;) <span class="comment">// UserService服务注册</span></span><br><span class="line">err = s.Serve(listen)											<span class="comment">// 开启监听</span></span><br></pre></td></tr></table></figure>
 
-<p>客户端连接</p>
+<p class="fireman-p-indent" >客户端连接</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dial, err := grpc.Dial(<span class="string">&quot;localhost:8081&quot;</span>, grpc.WithInsecure()) <span class="comment">// grpc调用端口，设置为不安全传输，练习环境，不加密</span></span><br><span class="line">userclient := userpb.NewUserServiceClient(dial)	 <span class="comment">// 调用服务</span></span><br><span class="line">user, err := userclient.GetUser(context.Background(), &amp;userpb.GetUserRequest&#123;Id: <span class="number">1</span>&#125;) <span class="comment">// 传输数据</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="GRPC-GATEWAY"><a href="#GRPC-GATEWAY" class="headerlink" title="GRPC GATEWAY"></a>GRPC GATEWAY</h2><p>为了对外兼容gRPC请求和HTTP请求，而且不需要写两份代码，维护两份逻辑，可以通过gRPC-gatewag实现一种代理功能，在gRPC协议外层代理一层HTTP协议。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220706224053892.png" alt="image-20220706224053892"></p>
-<p>通过grpc-gateway反向代理，服务器内部通信使用grpc，外部访问通过http</p>
-<p>user.yaml</p>
+<h2 id="GRPC-GATEWAY"><a href="#GRPC-GATEWAY" class="headerlink" title="GRPC GATEWAY"></a>GRPC GATEWAY</h2><p class="fireman-p-indent" >为了对外兼容gRPC请求和HTTP请求，而且不需要写两份代码，维护两份逻辑，可以通过gRPC-gatewag实现一种代理功能，在gRPC协议外层代理一层HTTP协议。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220706224053892.png" alt="image-20220706224053892"></p>
+<p class="fireman-p-indent" >通过grpc-gateway反向代理，服务器内部通信使用grpc，外部访问通过http</p>
+<p class="fireman-p-indent" >user.yaml</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">type:</span> <span class="string">google.api.Service</span></span><br><span class="line"><span class="attr">config_version:</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="attr">http:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">selector:</span> <span class="string">gostudy.UserService.GetUser</span></span><br><span class="line">      <span class="attr">get:</span> <span class="string">/user/&#123;id&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p>生成gateway文件</p>
+<p class="fireman-p-indent" >生成gateway文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc -I=. --grpc-gateway_out=paths=source_relative,grpc_api_configuration=user.yaml:gen/go user.proto</span><br></pre></td></tr></table></figure>
 
-<p>生成的文件</p>
+<p class="fireman-p-indent" >生成的文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">Package userpb is a reverse proxy.   // 反向代理</span><br><span class="line"></span><br><span class="line">It translates gRPC into RESTful JSON APIs. // 将gRPC转换成RESTful风格的JSON APIs</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
 
-<p>这个过程其实是内部调用grpc，并且启动一个http服务</p>
+<p class="fireman-p-indent" >这个过程其实是内部调用grpc，并且启动一个http服务</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ctx := context.Background()</span><br><span class="line">ctx, cancel := context.WithCancel(ctx)</span><br><span class="line"><span class="keyword">defer</span> cancel()</span><br><span class="line">mux := runtime.NewServeMux()</span><br><span class="line">err = userpb.RegisterUserServiceHandlerFromEndpoint( <span class="comment">// 调用本地8081端口的grpc服务</span></span><br><span class="line">	ctx, mux, <span class="string">&quot;0.0.0.0:8081&quot;</span>, []grpc.DialOption&#123;grpc.WithInsecure()&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatalf(<span class="string">&quot;register handler error: %v&quot;</span>, err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">err = http.ListenAndServe(<span class="string">&quot;:8080&quot;</span>, mux) <span class="comment">// 监听8080端口的http服务</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	log.Fatalf(<span class="string">&quot;grpc gateway listen error: %v&quot;</span>, err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> curl http://127.0.0.1:8080/user/1</span><br><span class="line">&#123;&quot;id&quot;:&quot;1&quot;, &quot;user&quot;:&#123;&quot;id&quot;:&quot;1&quot;, &quot;nowBook&quot;:null, &quot;carryBooks&quot;:[], &quot;name&quot;:&quot;mitaka&quot;, &quot;dutyD&quot;:&quot;5&quot;, &quot;status&quot;:&quot;BS_NOT_SPECIFIED&quot;&#125;&#125;          </span><br></pre></td></tr></table></figure>
 
-<p>从结果可以看到：</p>
+<p class="fireman-p-indent" >从结果可以看到：</p>
 <ol>
 <li><p><code>&quot;dutyD&quot;:&quot;5&quot;</code>,int64转换成string，需要改成int32</p>
 </li>
@@ -413,8 +420,8 @@
 </li>
 </ol>
 <blockquote>
-<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dycGMtZWNvc3lzdGVtL2dycGMtZ2F0ZXdheQ==">grpc-gateway<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ncnBjLWVjb3N5c3RlbS5naXRodWIuaW8vZ3JwYy1nYXRld2F5Lw==">grpc-gateway wiki<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dycGMtZWNvc3lzdGVtL2dycGMtZ2F0ZXdheQ==">grpc-gateway<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ncnBjLWVjb3N5c3RlbS5naXRodWIuaW8vZ3JwYy1nYXRld2F5Lw==">grpc-gateway wiki<i class="fa fa-external-link-alt"></i></span></p>
 </blockquote>
 
     </div>

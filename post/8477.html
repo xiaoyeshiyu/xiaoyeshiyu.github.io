@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -84,7 +84,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -295,9 +302,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><code>goroutine</code>是一个与其他<code>goroutines</code>并行运行在同一地址空间的Go函数或方法。一个程序由一个或更多个<code>goroutine</code>组成。它与线程、协程、进程等不同，是一个<code>goroutine</code>。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215543926.png" alt="image-20220913215543926"></p>
-<p>goroutines在同一个用户地址空间里并行独立执行functions，channels则用于goroutines间的通信和同步访问控制。</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p class="fireman-p-indent" ><code>goroutine</code>是一个与其他<code>goroutines</code>并行运行在同一地址空间的Go函数或方法。一个程序由一个或更多个<code>goroutine</code>组成。它与线程、协程、进程等不同，是一个<code>goroutine</code>。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215543926.png" alt="image-20220913215543926"></p>
+<p class="fireman-p-indent" >goroutines在同一个用户地址空间里并行独立执行functions，channels则用于goroutines间的通信和同步访问控制。</p>
 <h3 id="goroutine和线程thread的区别"><a href="#goroutine和线程thread的区别" class="headerlink" title="goroutine和线程thread的区别"></a>goroutine和线程thread的区别</h3><ul>
 <li><p>内存占用</p>
 <p>创建一个goroutine的栈内存消耗为2KB，运行过程中，如果栈空间不够荣，会自动扩容</p>
@@ -316,19 +323,19 @@
 <p>goroutine则是一个线程级别的多路复用，一个goroutine阻塞，会执行其他的goroutine。</p>
 </li>
 </ul>
-<h3 id="M：N模型"><a href="#M：N模型" class="headerlink" title="M：N模型"></a>M：N模型</h3><p>Go创建M个线程（CPU执行调度的单元，内核的task_struct），之后创建的N个goroutine都会依附在这M个线程上执行，即M:N模型。它们可以同时运行，与线程类似，相比之下非常轻量。因此，程序运行时，goroutines的个数远大于线程的个数。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215646923.png" alt="image-20220913215646923"></p>
-<p>同一时刻，一个线程只能跑一个goroutine，当goroutine发生阻塞，go会把当前goroutine调度走，让其他的goroutine来继续执行，而不是让线程阻塞休眠。</p>
-<h2 id="GMP调度模型"><a href="#GMP调度模型" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h2><p>G：goroutine的缩写，每次<code>go func()</code>都代表一个G，无限制</p>
-<p>源码包中<code>runtime/runtime2.go</code>的 <code>type g struct &#123;&#125;</code>中，包含当前goroutine的状态、堆栈、上下文。</p>
-<p>M：工作线程OS thread，也被称为Machine，所有M都有线程栈，M有两种状态，自旋和非自旋</p>
-<p>源码包中<code>runtime/runtime2.go</code>的 <code>type m struct &#123;&#125;</code>中</p>
-<p>如果不对该线程栈提供内存的话，系统会给该线程栈提供内存（不同操作系统提供的线程栈大小不同）。当指定了线程栈，则<code>M.stack-&gt;G.stack</code>，M的PC寄存器指向G提供的函数，然后去执行。</p>
-<p>P：逻辑<code>process</code>，是线程M的执行的上下文</p>
-<p>P的最大作用是拥有各种G对象队列、链表、cache和状态</p>
-<h3 id="早期调度模型，GM调度器"><a href="#早期调度模型，GM调度器" class="headerlink" title="早期调度模型，GM调度器"></a>早期调度模型，GM调度器</h3><p>Go 1.2前的调度器实现，限制了Go并发程序的伸缩性。每个goroutine对应于runtime中的一个抽象结构：G，而thread作为物理CPU的存在而被抽象为一个结构M（Machine）。当goroutine调用一个阻塞的系统调用，运行这个goroutine的线程就会被阻塞，这是至少应该再创建、唤醒一个线程来运行其他没有被阻塞的goroutine。线程这里可以创建不止一个，可以按需不断创建，而活跃的线程的最大个数存储在变量GOMAXPROCS中。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215706672.png" alt="image-20220913215706672"></p>
-<p>问题：</p>
+<h3 id="M：N模型"><a href="#M：N模型" class="headerlink" title="M：N模型"></a>M：N模型</h3><p class="fireman-p-indent" >Go创建M个线程（CPU执行调度的单元，内核的task_struct），之后创建的N个goroutine都会依附在这M个线程上执行，即M:N模型。它们可以同时运行，与线程类似，相比之下非常轻量。因此，程序运行时，goroutines的个数远大于线程的个数。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215646923.png" alt="image-20220913215646923"></p>
+<p class="fireman-p-indent" >同一时刻，一个线程只能跑一个goroutine，当goroutine发生阻塞，go会把当前goroutine调度走，让其他的goroutine来继续执行，而不是让线程阻塞休眠。</p>
+<h2 id="GMP调度模型"><a href="#GMP调度模型" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h2><p class="fireman-p-indent" >G：goroutine的缩写，每次<code>go func()</code>都代表一个G，无限制</p>
+<p class="fireman-p-indent" >源码包中<code>runtime/runtime2.go</code>的 <code>type g struct &#123;&#125;</code>中，包含当前goroutine的状态、堆栈、上下文。</p>
+<p class="fireman-p-indent" >M：工作线程OS thread，也被称为Machine，所有M都有线程栈，M有两种状态，自旋和非自旋</p>
+<p class="fireman-p-indent" >源码包中<code>runtime/runtime2.go</code>的 <code>type m struct &#123;&#125;</code>中</p>
+<p class="fireman-p-indent" >如果不对该线程栈提供内存的话，系统会给该线程栈提供内存（不同操作系统提供的线程栈大小不同）。当指定了线程栈，则<code>M.stack-&gt;G.stack</code>，M的PC寄存器指向G提供的函数，然后去执行。</p>
+<p class="fireman-p-indent" >P：逻辑<code>process</code>，是线程M的执行的上下文</p>
+<p class="fireman-p-indent" >P的最大作用是拥有各种G对象队列、链表、cache和状态</p>
+<h3 id="早期调度模型，GM调度器"><a href="#早期调度模型，GM调度器" class="headerlink" title="早期调度模型，GM调度器"></a>早期调度模型，GM调度器</h3><p class="fireman-p-indent" >Go 1.2前的调度器实现，限制了Go并发程序的伸缩性。每个goroutine对应于runtime中的一个抽象结构：G，而thread作为物理CPU的存在而被抽象为一个结构M（Machine）。当goroutine调用一个阻塞的系统调用，运行这个goroutine的线程就会被阻塞，这是至少应该再创建、唤醒一个线程来运行其他没有被阻塞的goroutine。线程这里可以创建不止一个，可以按需不断创建，而活跃的线程的最大个数存储在变量GOMAXPROCS中。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215706672.png" alt="image-20220913215706672"></p>
+<p class="fireman-p-indent" >问题：</p>
 <ul>
 <li><p>单一的全局互斥锁，和集中状态存储</p>
 <p>导致所有goroutine相关操作，创建、结束、重新调度都要上锁</p>
@@ -343,20 +350,20 @@
 <p>系统调用下，工作线程经常被阻塞和取消阻塞，增加了很多开销。比如M找不到G，此时M就会进入频繁阻塞、唤醒（没有新的G需要执行），来进行检查的逻辑，以便及时发现新的G来执行（创建新的goroutine）。</p>
 </li>
 </ul>
-<h3 id="GMP调度模型-1"><a href="#GMP调度模型-1" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h3><p>P：Process，抽象概念，并不是真正的物理CPU。</p>
-<p>源码包中<code>runtime/runtime2.go</code>的 <code>type p struct &#123;&#125;</code>中。</p>
-<p>代表M所需的上下文环境，也是处理用户级代码逻辑的处理器。负责衔接M和G的调度上下文，将等待执行的G与M对接。当P有任务时，需要创建或者唤醒一个M来执行它队列里的任务。所以P&#x2F;M需要绑定，构成一个执行单元。P决定并行任务的数量，可通过runtime.GOMAXPROCS来设定。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215826739.png" alt="image-20220913215826739"></p>
-<p>mcache&#x2F;stackalloc 从M移到了P，而G队列也被分成两类，保留全局G队列，同时每个P都会有一个本地G队列。</p>
-<p>local queue：</p>
-<p>因为P的存在，runtime并不需要做一个集中式的goroutine调度，每一个M都会在P的local queue、global queue或其他P队列中找G执行，减少全局锁对性能的影响。</p>
-<p>当然，P的本地G队列还是可能出现并发访问的场景（也就是work-stealing，当一个P处于饥饿状态，此时可能出现多个P并发访问一个G），为了避免加锁，P的本地队列是一个LockFree的队列，窃取G时使用CAS原子操作来完成。 </p>
-<h3 id="Work-stealing"><a href="#Work-stealing" class="headerlink" title="Work-stealing"></a>Work-stealing</h3><p>工作窃取。</p>
-<p>当一个P执行完本地所有的G之后，并且全局队列为空的时候，会随机挑选一个P，从它的G队列中窃取一半的G（P从local queue中的头部拿任务，从其他的P的local queue尾部抢任务）。如果global queue有，则会从global queue中获取（当前个数&#x2F;GOMAXPROCS）个G 。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215927512.png" alt="image-20220913215927512"></p>
-<p>图中，P0的local queue空闲，此时会从P1的local queue中窃取一半的G</p>
-<p>为了保证公平性，从随机位置P开始，便利的顺序也是一个小于GOMAXPROCS的的，互为质数的步长。</p>
-<p> P的调度算法中，还会每个N轮调度之后，就去全局队列拿一个G。（保证global中的G会被调度）。</p>
+<h3 id="GMP调度模型-1"><a href="#GMP调度模型-1" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h3><p class="fireman-p-indent" >P：Process，抽象概念，并不是真正的物理CPU。</p>
+<p class="fireman-p-indent" >源码包中<code>runtime/runtime2.go</code>的 <code>type p struct &#123;&#125;</code>中。</p>
+<p class="fireman-p-indent" >代表M所需的上下文环境，也是处理用户级代码逻辑的处理器。负责衔接M和G的调度上下文，将等待执行的G与M对接。当P有任务时，需要创建或者唤醒一个M来执行它队列里的任务。所以P&#x2F;M需要绑定，构成一个执行单元。P决定并行任务的数量，可通过runtime.GOMAXPROCS来设定。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215826739.png" alt="image-20220913215826739"></p>
+<p class="fireman-p-indent" >mcache&#x2F;stackalloc 从M移到了P，而G队列也被分成两类，保留全局G队列，同时每个P都会有一个本地G队列。</p>
+<p class="fireman-p-indent" >local queue：</p>
+<p class="fireman-p-indent" >因为P的存在，runtime并不需要做一个集中式的goroutine调度，每一个M都会在P的local queue、global queue或其他P队列中找G执行，减少全局锁对性能的影响。</p>
+<p class="fireman-p-indent" >当然，P的本地G队列还是可能出现并发访问的场景（也就是work-stealing，当一个P处于饥饿状态，此时可能出现多个P并发访问一个G），为了避免加锁，P的本地队列是一个LockFree的队列，窃取G时使用CAS原子操作来完成。 </p>
+<h3 id="Work-stealing"><a href="#Work-stealing" class="headerlink" title="Work-stealing"></a>Work-stealing</h3><p class="fireman-p-indent" >工作窃取。</p>
+<p class="fireman-p-indent" >当一个P执行完本地所有的G之后，并且全局队列为空的时候，会随机挑选一个P，从它的G队列中窃取一半的G（P从local queue中的头部拿任务，从其他的P的local queue尾部抢任务）。如果global queue有，则会从global queue中获取（当前个数&#x2F;GOMAXPROCS）个G 。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215927512.png" alt="image-20220913215927512"></p>
+<p class="fireman-p-indent" >图中，P0的local queue空闲，此时会从P1的local queue中窃取一半的G</p>
+<p class="fireman-p-indent" >为了保证公平性，从随机位置P开始，便利的顺序也是一个小于GOMAXPROCS的的，互为质数的步长。</p>
+<p class="fireman-p-indent" > P的调度算法中，还会每个N轮调度之后，就去全局队列拿一个G。（保证global中的G会被调度）。</p>
 <ul>
 <li>有1&#x2F;61的概率优先从global queue获取G</li>
 <li>然后查看local queue是否有G</li>
@@ -364,36 +371,36 @@
 <li>如果没有，获取global queue</li>
 <li>如果没有，获取netpoll</li>
 </ul>
-<p>新建G时，P的本地队列放不下去，已满256个的时候，会放半数G到全局队列中。从syscall阻塞的系统调用返回时，找不到空闲P也会放到全局队列。</p>
-<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p>syscall：系统调用，例如os.Open()函数。</p>
-<p>G调用syscall后，M会与P解绑，然后M和G进入阻塞（G等待syscall返回，M等待G响应），而P此时的状态就是syscall，表明这个P的G正在syscall中，这时的P是不能被调度给别的M的。如果在短时间内阻塞的M就唤醒了，那么M会优先来重新获取这个P，能获取到就继续绑回去，这样有利于数据的局部性。（减少上下文切换）</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220051401.png" alt="image-20220913220051401"></p>
-<p>例如图中，G执行os.Open()，进入syscall，此时如果时间较长，sysmon线程会将p3和M解绑，由其他的M调度P3，保障P3其他的G可以正常执行。</p>
-<p>注意：系统监视器system monitor，称为sysmon，会定时扫描。 执行syscall时，如果某个P的G执行超过一个sysmon tick（10ms），就会把他设为idle，重新调度给需要的M，强制解绑。 也就是说，如果短时间内M没有唤醒（超过sysmon），由于P上有其他的G，因此P会进入idle list，等待被调度（需要M处理P上其他的G）。 </p>
-<p>在 p struc中，维护一个idle P的链表。将P推送给需要的M使用。</p>
-<p> P和M脱离后，目前在idle list中等待被绑定。（例如上面在syscall执行时间超过sysmon）。而syscall结束后M按照如下规则执行，直到满足其中一个条件：</p>
+<p class="fireman-p-indent" >新建G时，P的本地队列放不下去，已满256个的时候，会放半数G到全局队列中。从syscall阻塞的系统调用返回时，找不到空闲P也会放到全局队列。</p>
+<h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p class="fireman-p-indent" >syscall：系统调用，例如os.Open()函数。</p>
+<p class="fireman-p-indent" >G调用syscall后，M会与P解绑，然后M和G进入阻塞（G等待syscall返回，M等待G响应），而P此时的状态就是syscall，表明这个P的G正在syscall中，这时的P是不能被调度给别的M的。如果在短时间内阻塞的M就唤醒了，那么M会优先来重新获取这个P，能获取到就继续绑回去，这样有利于数据的局部性。（减少上下文切换）</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220051401.png" alt="image-20220913220051401"></p>
+<p class="fireman-p-indent" >例如图中，G执行os.Open()，进入syscall，此时如果时间较长，sysmon线程会将p3和M解绑，由其他的M调度P3，保障P3其他的G可以正常执行。</p>
+<p class="fireman-p-indent" >注意：系统监视器system monitor，称为sysmon，会定时扫描。 执行syscall时，如果某个P的G执行超过一个sysmon tick（10ms），就会把他设为idle，重新调度给需要的M，强制解绑。 也就是说，如果短时间内M没有唤醒（超过sysmon），由于P上有其他的G，因此P会进入idle list，等待被调度（需要M处理P上其他的G）。 </p>
+<p class="fireman-p-indent" >在 p struc中，维护一个idle P的链表。将P推送给需要的M使用。</p>
+<p class="fireman-p-indent" > P和M脱离后，目前在idle list中等待被绑定。（例如上面在syscall执行时间超过sysmon）。而syscall结束后M按照如下规则执行，直到满足其中一个条件：</p>
 <ul>
 <li>尝试获取同一个P，恢复执行G（如果短时间，P没有被调度到idle list上或者其他的M上，这样有利于数据亲和）（猜测：G的上下文会保留在P上）</li>
 <li>尝试获取idle list中其他空闲的P，恢复执行G（先从idle list中获取）</li>
 <li>找不到空闲P，把G放回global queue，M放回idle list（P有自身的idle list，M也有自身的idle list）</li>
 </ul>
-<p>当使用syscall，Go无法限制Block OS threads的数量。（GOMAXPROCS只能显示P的数量，不能限制M的数量）</p>
-<p>Tips：使用syscall写程序要认真考虑pthread exhaust的问题。（例如大量的请求，调用syscall，读写文件，而如果读写文件特别慢，syscall响应需要很久，此时就会出现P和M解绑，解绑的P需要被调度则需要创建M，导致资源耗尽）</p>
-<p>Spining thread</p>
-<p>线程自旋。</p>
-<p>线程自旋是相对于线程阻塞而言，表象就是循环执行一个指定逻辑（调度逻辑，目的是不停的寻找G）。这样做的问题显而易见，如果G迟迟不来，CPU会白白浪费在这无意义的计算上。好处也明显，降低了M的上下文切换成本，提高性能。M在这两个地方引入自旋：</p>
+<p class="fireman-p-indent" >当使用syscall，Go无法限制Block OS threads的数量。（GOMAXPROCS只能显示P的数量，不能限制M的数量）</p>
+<p class="fireman-p-indent" >Tips：使用syscall写程序要认真考虑pthread exhaust的问题。（例如大量的请求，调用syscall，读写文件，而如果读写文件特别慢，syscall响应需要很久，此时就会出现P和M解绑，解绑的P需要被调度则需要创建M，导致资源耗尽）</p>
+<p class="fireman-p-indent" >Spining thread</p>
+<p class="fireman-p-indent" >线程自旋。</p>
+<p class="fireman-p-indent" >线程自旋是相对于线程阻塞而言，表象就是循环执行一个指定逻辑（调度逻辑，目的是不停的寻找G）。这样做的问题显而易见，如果G迟迟不来，CPU会白白浪费在这无意义的计算上。好处也明显，降低了M的上下文切换成本，提高性能。M在这两个地方引入自旋：</p>
 <ul>
 <li>类型1：M不带P的找P挂载，一有P释放就结合（例如syscall导致P释放，此时会有自旋的M绑定P）</li>
 <li>类型2：M带P的找G运行，一有runable的G就执行（例如P没有G执行，此时会有1&#x2F;61往global queue获取G，然后从其他的P窃取，最后获取网络poll）</li>
 </ul>
-<p>为了避免过多的浪费CPU资源，自旋的M最多只允许GOMAXPROCS个。同时当有类型1的自旋M存在时，类型2的自旋M就不阻塞，阻塞会释放P，一释放P就会马上被类型1的自旋M抢走了，所以类型2的自旋不会陷入阻塞。</p>
-<p>在新的G被创建、M进入syscall、M从空闲被激活这三种状态前，调度器会确保至少有一个自旋的M存在（唤醒或者创建一个M），除非没有空闲P。</p>
+<p class="fireman-p-indent" >为了避免过多的浪费CPU资源，自旋的M最多只允许GOMAXPROCS个。同时当有类型1的自旋M存在时，类型2的自旋M就不阻塞，阻塞会释放P，一释放P就会马上被类型1的自旋M抢走了，所以类型2的自旋不会陷入阻塞。</p>
+<p class="fireman-p-indent" >在新的G被创建、M进入syscall、M从空闲被激活这三种状态前，调度器会确保至少有一个自旋的M存在（唤醒或者创建一个M），除非没有空闲P。</p>
 <ul>
 <li>当创建新的G，如果有可用P，那么G可以被立即执行，即便不在同一个P也无妨，所以保留一个自旋的M就可以保证新的G很快被运行（此时没有类型1的自旋，只有类型2的自旋。）</li>
 <li>当M进入syscall，意味着M不知道恢复，那么M对应的P剩下的G就需要有新的M执行，所以保留一个自旋的M执行剩下的G（此时只有类型1的自旋，没有类型2的自旋）</li>
 <li>如果M从空闲变成活跃，意味着可能一个处于自旋状态的M进入工作状态，这时要检查并确保还有一个自旋M存在，以防还有G或者还有P空着。</li>
 </ul>
-<p>这种机制，能够保证G被立即调用，提高性能。</p>
+<p class="fireman-p-indent" >这种机制，能够保证G被立即调用，提高性能。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
 <li><p>单一全局互斥锁和集中状态存储</p>
 <p>G被分成全局队列和P的本地队列，全局队列依旧是全局锁，但是使用场景很少，P本地队列使用无锁队列 ，使用原子操作来面对可能得并发场景。 </p>
@@ -408,8 +415,8 @@
 <p>通过自旋，虽然浪费一点CPU，但是保证了任何时候都有处于等待状态的自旋M，避免在等待可用的P和G时频繁的阻塞和唤醒。</p>
 </li>
 </ul>
-<h3 id="sysmon"><a href="#sysmon" class="headerlink" title="sysmon"></a>sysmon</h3><p>监控线程，不需要 P也可以运行。</p>
-<p>sysmon是一个死循环，每隔20us~10ms循环一次，循环之后sleep一会，周期变动的原因是避免空转。如果循环没有要做的事，sleep的时间会加大。</p>
+<h3 id="sysmon"><a href="#sysmon" class="headerlink" title="sysmon"></a>sysmon</h3><p class="fireman-p-indent" >监控线程，不需要 P也可以运行。</p>
+<p class="fireman-p-indent" >sysmon是一个死循环，每隔20us~10ms循环一次，循环之后sleep一会，周期变动的原因是避免空转。如果循环没有要做的事，sleep的时间会加大。</p>
 <ul>
 <li>释放限制超过5分钟的span物理内存；</li>
 <li>超过2分钟没有垃圾回收，则强制执行gc；</li>
@@ -417,20 +424,20 @@
 <li>向长时间运行的G任务发出抢占调度；</li>
 <li>收回因syscall长时间阻塞的P；</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220309784.png" alt="image-20220913220309784"></p>
-<p>例如图中，由于G7运行时间超过10ms，此时sysmon进程会将G7调度到全局queue中。</p>
-<p>抢占调度：当P在M上执行时间超过10ms，sysmon调用preemptone将G标记为stackPreempt（栈扩容）。Go在检查栈是否溢出的地方判断是否有栈扩容，此时M会保存当前G的上下文，重新进入调度逻辑。（例如1.14以及之前的版本中，for一个死循环，GOMAXPROCS为1，此时会出现死循环）</p>
-<h3 id="Network-Poller"><a href="#Network-Poller" class="headerlink" title="Network Poller"></a>Network Poller</h3><p>Go所有的IO都是阻塞的。然后通过goroutine和channel来处理并发，因此所有的IO逻辑都是直来直去。</p>
-<p>G发起网络IO操作也不会导致M被阻塞（仅阻塞G），从而不会导致大量M被创建出来，将异步IO转换为阻塞IO的部分称为netpoller。打开或接受连接都被设置为非阻塞模式。如果试图对其进行IO操作，并且文件描述符数据还没有准备好G会进入gopark函数，将当前正在执行的G状态保存起来，然后切换到新的堆栈上执行新的G。netpoller等待epoll返回时，会通过sysmon触发或者其他条件，最终处理网络IO。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220431976.png" alt="image-20220913220431976"></p>
-<p>netpoller被调度的三种情况：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220309784.png" alt="image-20220913220309784"></p>
+<p class="fireman-p-indent" >例如图中，由于G7运行时间超过10ms，此时sysmon进程会将G7调度到全局queue中。</p>
+<p class="fireman-p-indent" >抢占调度：当P在M上执行时间超过10ms，sysmon调用preemptone将G标记为stackPreempt（栈扩容）。Go在检查栈是否溢出的地方判断是否有栈扩容，此时M会保存当前G的上下文，重新进入调度逻辑。（例如1.14以及之前的版本中，for一个死循环，GOMAXPROCS为1，此时会出现死循环）</p>
+<h3 id="Network-Poller"><a href="#Network-Poller" class="headerlink" title="Network Poller"></a>Network Poller</h3><p class="fireman-p-indent" >Go所有的IO都是阻塞的。然后通过goroutine和channel来处理并发，因此所有的IO逻辑都是直来直去。</p>
+<p class="fireman-p-indent" >G发起网络IO操作也不会导致M被阻塞（仅阻塞G），从而不会导致大量M被创建出来，将异步IO转换为阻塞IO的部分称为netpoller。打开或接受连接都被设置为非阻塞模式。如果试图对其进行IO操作，并且文件描述符数据还没有准备好G会进入gopark函数，将当前正在执行的G状态保存起来，然后切换到新的堆栈上执行新的G。netpoller等待epoll返回时，会通过sysmon触发或者其他条件，最终处理网络IO。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220431976.png" alt="image-20220913220431976"></p>
+<p class="fireman-p-indent" >netpoller被调度的三种情况：</p>
 <ul>
 <li>sysmon</li>
 <li>scheduler函数，M找G的调度函数（例如获取到global queue的G）</li>
 <li>GC：start the world</li>
 </ul>
-<h3 id="Scheduler-Affinity"><a href="#Scheduler-Affinity" class="headerlink" title="Scheduler Affinity"></a>Scheduler Affinity</h3><p>调度优先级</p>
-<p>在GM调度器时代，chan 操作导致的切换代价。</p>
+<h3 id="Scheduler-Affinity"><a href="#Scheduler-Affinity" class="headerlink" title="Scheduler Affinity"></a>Scheduler Affinity</h3><p class="fireman-p-indent" >调度优先级</p>
+<p class="fireman-p-indent" >在GM调度器时代，chan 操作导致的切换代价。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220551854.png" alt="image-20220913220551854" style="zoom:50%;" />
 
 <ul>
@@ -443,13 +450,13 @@
 <li><p>G8从chan中获取消息，被调度到全局queue中，此时M调度G7运行。</p>
 </li>
 </ul>
-<p>这种方式没有优先级概念，每次跨M调用，都包含大量的上下文切换。</p>
-<p>GMP模式</p>
-<p> 在chan来回通信的goroutine会导致频繁block，也就是会在local queue中频繁重新排队。然而，由于本地队里是IFIO实现，如果另一个goroutine占用线程，unblock goroutine不能保证尽快运行。而且可能会被其他的P窃取。</p>
-<p>针对这种情况，在Go 1.5版本引入了runnext字段，可以高优先级执行unblock G。当G从chan阻塞中恢复，P会优先调度这个G。</p>
+<p class="fireman-p-indent" >这种方式没有优先级概念，每次跨M调用，都包含大量的上下文切换。</p>
+<p class="fireman-p-indent" >GMP模式</p>
+<p class="fireman-p-indent" > 在chan来回通信的goroutine会导致频繁block，也就是会在local queue中频繁重新排队。然而，由于本地队里是IFIO实现，如果另一个goroutine占用线程，unblock goroutine不能保证尽快运行。而且可能会被其他的P窃取。</p>
+<p class="fireman-p-indent" >针对这种情况，在Go 1.5版本引入了runnext字段，可以高优先级执行unblock G。当G从chan阻塞中恢复，P会优先调度这个G。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220949059.png" alt="image-20220913220949059" style="zoom:50%;" />
 
-<h3 id="goroutine生命周期"><a href="#goroutine生命周期" class="headerlink" title="goroutine生命周期"></a>goroutine生命周期</h3><p>从一个主函数启动开始</p>
+<h3 id="goroutine生命周期"><a href="#goroutine生命周期" class="headerlink" title="goroutine生命周期"></a>goroutine生命周期</h3><p class="fireman-p-indent" >从一个主函数启动开始</p>
 <ul>
 <li><p>绑定m0和g0，m0就是程序的主线程，程序启动必然会拥有一个主线程，这个就是m0，g0负责调度，也就是schedule()函数</p>
 </li>
@@ -458,19 +465,19 @@
 <li><p>新建任务g到p0本地队列，m0的g0会创建一个指向runtime.main()的g，并放到p0的本地队列</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221007188.png" alt="image-20220913221007188" style="zoom:50%;" /></li>
 </ul>
-<p>runtime.main()：启动sysmon线程；启动GC协程，执行init函数，执行main.main函数</p>
-<p> 执行main.main函数之后，会创建很多的goroutine，新的goroutine将唤醒P以更好地分发工作。这个P将创建一个与之关联的M绑定到一个OS thread。</p>
-<p>有空闲的P但是没有spinning状态的M时，需要唤醒一个空闲的M或者新建一个。当线程首次创建时，会执行一个特殊的G，也就是g0，负责调度和管理G。 </p>
+<p class="fireman-p-indent" >runtime.main()：启动sysmon线程；启动GC协程，执行init函数，执行main.main函数</p>
+<p class="fireman-p-indent" > 执行main.main函数之后，会创建很多的goroutine，新的goroutine将唤醒P以更好地分发工作。这个P将创建一个与之关联的M绑定到一个OS thread。</p>
+<p class="fireman-p-indent" >有空闲的P但是没有spinning状态的M时，需要唤醒一个空闲的M或者新建一个。当线程首次创建时，会执行一个特殊的G，也就是g0，负责调度和管理G。 </p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221053647.png" alt="image-20220913221053647" style="zoom:50%;" />
 
-<h3 id="g0"><a href="#g0" class="headerlink" title="g0"></a>g0</h3><p>主要用于执行go.scheduler函数，用于调度G。</p>
-<p>g0基于两种端点将G调度到线程上：</p>
+<h3 id="g0"><a href="#g0" class="headerlink" title="g0"></a>g0</h3><p class="fireman-p-indent" >主要用于执行go.scheduler函数，用于调度G。</p>
+<p class="fireman-p-indent" >g0基于两种端点将G调度到线程上：</p>
 <ul>
 <li>当G阻塞时：系统调用、互斥锁或chan。阻塞的G进入睡眠模式、进入队列，并允许g0安排和运行等待其他G。（也就是G阻塞，需要切换到其他的G执行）</li>
 <li>函数调用期间，如果G必须扩展内存栈，这个断点允许Go调度另一个G，避免运行G占用CPU。</li>
 </ul>
-<p>这两种情况下，运行调度的g0会将当前G替换成另一个G。然后选择的G替换g0在线程上运行。与常规的G相反，g0有一个固定和更大的栈。</p>
-<p>g0还负责：</p>
+<p class="fireman-p-indent" >这两种情况下，运行调度的g0会将当前G替换成另一个G。然后选择的G替换g0在线程上运行。与常规的G相反，g0有一个固定和更大的栈。</p>
+<p class="fireman-p-indent" >g0还负责：</p>
 <ul>
 <li><p>Defer函数的分配</p>
 </li>
@@ -491,23 +498,23 @@
 <p>G7恢复运行，G0优先将G7调度到本地队列的前端。</p>
 </li>
 </ul>
-<h3 id="Schedule"><a href="#Schedule" class="headerlink" title="Schedule"></a>Schedule</h3><p>Go中，G的切换很轻便。其中需要保存的状态仅仅设计一下两个：</p>
+<h3 id="Schedule"><a href="#Schedule" class="headerlink" title="Schedule"></a>Schedule</h3><p class="fireman-p-indent" >Go中，G的切换很轻便。其中需要保存的状态仅仅设计一下两个：</p>
 <ul>
 <li><p>goroutine在停止运行前执行的指令，程序当前要运行的指令是记录在程序计数器PC中的，G稍后将在同一指令处恢复运行</p>
 </li>
 <li><p>G的堆栈，以便再次运行时还原局部变量</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221554930.png" alt="image-20220913221554930" style="zoom:50%;" /></li>
 </ul>
-<p>切换之前，堆栈将被保存，以便在G再次运行时进行恢复。</p>
+<p class="fireman-p-indent" >切换之前，堆栈将被保存，以便在G再次运行时进行恢复。</p>
 <ul>
 <li>当前g阻塞在chan上，并切换到g0，需要将PC寄存器和堆栈指针一起保存在g的内部结构中；再将g0设置为正在运行的goroutine，用g0的堆栈替换成当前堆栈；</li>
 <li>g0寻找新的goroutine来运行</li>
 <li>g0使用所选的goroutine进行切换，从goroutine内部结构中获取PC寄存器和堆栈指针，程序跳转到对应的pc地址，运行这个goroutine</li>
 </ul>
-<h3 id="goroutine-recycle"><a href="#goroutine-recycle" class="headerlink" title="goroutine recycle"></a>goroutine recycle</h3><p>G很容易创建，容易到可能运行和销毁都会造成浪费，因此每一个P都维护了一个freelist G。当G处理完，则放回freelist local queue。重新生成G的时候可以直接复用。</p>
-<p>当local queue长度超过64个，此时会将一般的free G推送到全局的free list中。</p>
-<p>Global list包含两个队列，一个包含已分配栈的G，一个包含释放过堆栈的G。由于堆栈是动态增长的，因此可能会有一个大栈，因此Go不会保留这些栈，在GC的时候会清除，清除之后，就是没有分配堆栈的G。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221620268.png" alt="image-20220913221620268"></p>
+<h3 id="goroutine-recycle"><a href="#goroutine-recycle" class="headerlink" title="goroutine recycle"></a>goroutine recycle</h3><p class="fireman-p-indent" >G很容易创建，容易到可能运行和销毁都会造成浪费，因此每一个P都维护了一个freelist G。当G处理完，则放回freelist local queue。重新生成G的时候可以直接复用。</p>
+<p class="fireman-p-indent" >当local queue长度超过64个，此时会将一般的free G推送到全局的free list中。</p>
+<p class="fireman-p-indent" >Global list包含两个队列，一个包含已分配栈的G，一个包含释放过堆栈的G。由于堆栈是动态增长的，因此可能会有一个大栈，因此Go不会保留这些栈，在GC的时候会清除，清除之后，就是没有分配堆栈的G。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221620268.png" alt="image-20220913221620268"></p>
 
     </div>
 

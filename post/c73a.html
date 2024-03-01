@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -69,7 +69,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -280,8 +287,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h1><h2 id="Unittest"><a href="#Unittest" class="headerlink" title="Unittest"></a>Unittest</h2><p>单元测试</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173148561.png" alt="image-20231017173148561"></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h1><h2 id="Unittest"><a href="#Unittest" class="headerlink" title="Unittest"></a>Unittest</h2><p class="fireman-p-indent" >单元测试</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173148561.png" alt="image-20231017173148561"></p>
 <ul>
 <li><p>小型测试带来优秀的代码质量、良好的异常处理、优雅的错误报告；</p>
 <p>大中型测试会带来整体产品质量和数据验证。</p>
@@ -293,24 +300,24 @@
 <p>如果是基础平台或者面向数据的项目，例如索引或者爬虫，则最好有大量的小型测试，中型测试和大型测试的数量要求会少很多。</p>
 </li>
 </ul>
-<p>小型测试一般是单元测试，使用 <code>go test</code> 即可；</p>
-<p>中型测试一般需要引入外包，例如 <code>mock</code></p>
-<p>大型测试则会更加整体，可能会使用 <code>docker</code> 构建服务进行自动化测试，一般会使用大型测试框架</p>
+<p class="fireman-p-indent" >小型测试一般是单元测试，使用 <code>go test</code> 即可；</p>
+<p class="fireman-p-indent" >中型测试一般需要引入外包，例如 <code>mock</code></p>
+<p class="fireman-p-indent" >大型测试则会更加整体，可能会使用 <code>docker</code> 构建服务进行自动化测试，一般会使用大型测试框架</p>
 <blockquote>
-<p>“自动化实现的，用于验证一个单独函数或独立功能模块的代码是否按照预期工作，着重于典型功能性问题、数据损坏、错误条件和大小差一错误（译注：大小差一(off-by-one)错误是一类常见的程序设计错误）等方面的验证”</p>
-<p>​                  - 《Google软件测试之道》</p>
+<p class="fireman-p-indent" >“自动化实现的，用于验证一个单独函数或独立功能模块的代码是否按照预期工作，着重于典型功能性问题、数据损坏、错误条件和大小差一错误（译注：大小差一(off-by-one)错误是一类常见的程序设计错误）等方面的验证”</p>
+<p class="fireman-p-indent" >​                  - 《Google软件测试之道》</p>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173928910.png" alt="image-20231017173928910"></p>
-<h2 id="Basic-Requirement"><a href="#Basic-Requirement" class="headerlink" title="Basic Requirement"></a>Basic Requirement</h2><p>单元测试的基本要求：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017173928910.png" alt="image-20231017173928910"></p>
+<h2 id="Basic-Requirement"><a href="#Basic-Requirement" class="headerlink" title="Basic Requirement"></a>Basic Requirement</h2><p class="fireman-p-indent" >单元测试的基本要求：</p>
 <ul>
 <li>快速：运行和执行速度</li>
 <li>环境一致：单元测试前后不影响环境，开始之前可能会预处理环境，测试之后还原环境</li>
 <li>任意顺序：单元测试之间的顺序不构成依赖关系</li>
 <li>并行：提高效率</li>
 </ul>
-<p>基于 <code>docker-compose</code> 实现跨平台跨语言环境的容器依赖管理方案，以解决运行 <code>unittest</code> 场景下的（<code>MySQL</code>，<code>Redis</code>，<code>mc</code>）容器依赖问题：</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174245099.png" alt="image-20231017174245099"></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174256653.png" alt="image-20231017174256653"></p>
+<p class="fireman-p-indent" >基于 <code>docker-compose</code> 实现跨平台跨语言环境的容器依赖管理方案，以解决运行 <code>unittest</code> 场景下的（<code>MySQL</code>，<code>Redis</code>，<code>mc</code>）容器依赖问题：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174245099.png" alt="image-20231017174245099"></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174256653.png" alt="image-20231017174256653"></p>
 <ul>
 <li>本地安装 Docker</li>
 <li>无侵入式的环境初始化</li>
@@ -324,8 +331,8 @@
 <li>对于 <code>service</code> 的单元测试，使用 <code>gomock</code> 等库，把 <code>dao mock</code> 掉，所以在设计包的时候，应该面向抽象编程</li>
 <li>在本地执行依赖 Docker，在 CI 环境里执行 Unittest ，需要考虑在物理机里的 Docker 网络，或者在 Docker 里再次启动一个 Docker。</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174437843.png" alt="image-20231017174437843"></p>
-<h2 id="Completed-Tests"><a href="#Completed-Tests" class="headerlink" title="Completed Tests"></a>Completed Tests</h2><p>利用 go 官方提供的：Subtests + Gomock 完成整个单元测试。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017174437843.png" alt="image-20231017174437843"></p>
+<h2 id="Completed-Tests"><a href="#Completed-Tests" class="headerlink" title="Completed Tests"></a>Completed Tests</h2><p class="fireman-p-indent" >利用 go 官方提供的：Subtests + Gomock 完成整个单元测试。</p>
 <ul>
 <li><p><code>/api</code></p>
 <p>比较适合进行集成测试，直接测试 API，使用 API 测试框架（例如：yapi），维护大量业务测试 case</p>
@@ -340,9 +347,9 @@
 <p>依赖 biz 的实现，构建 biz 的实现类传入，进行单元测试</p>
 </li>
 </ul>
-<p>基于 <code>git branch </code> 进行 <code>feature</code> 开发，本地进行 <code>unittest</code>，之后提交 <code>gitlab merge request</code> 进行 CI 的单元测试，基于 <code>feature branch</code> 进行构建，完成功能测试，之后合并 <code>master</code>，进行集成测试，上线后，进行回归测试。</p>
+<p class="fireman-p-indent" >基于 <code>git branch </code> 进行 <code>feature</code> 开发，本地进行 <code>unittest</code>，之后提交 <code>gitlab merge request</code> 进行 CI 的单元测试，基于 <code>feature branch</code> 进行构建，完成功能测试，之后合并 <code>master</code>，进行集成测试，上线后，进行回归测试。</p>
 <blockquote>
-<p>Without integration tests, it’s difficult to trust the end-to-end operation of a web service.</p>
+<p class="fireman-p-indent" >Without integration tests, it’s difficult to trust the end-to-end operation of a web service.</p>
 </blockquote>
 <h2 id="编写易于测试的代码"><a href="#编写易于测试的代码" class="headerlink" title="编写易于测试的代码"></a>编写易于测试的代码</h2><ol>
 <li><p>外部传入实例，而不是内部自己创建；</p>
@@ -353,16 +360,16 @@
 <li><p>可以尝试将复杂逻辑抽取出来单独测试，所以需要的组件都是作为参数传入进去</p>
 </li>
 </ol>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMDMvaW50ZWdyYXRpb24tdGVzdGluZy1pbi1nby1leGVjdXRpbmctdGVzdHMtd2l0aC1kb2NrZXIuaHRtbA==">Integration Testing in Go: Part I - Executing Tests with Docker<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMTAvaW50ZWdyYXRpb24tdGVzdGluZy1pbi1nby1zZXQtdXAtYW5kLXdyaXRpbmctdGVzdHMuaHRtbA==">Integration Testing in Go: Part II - Set-up and Writing Tests<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvZXhhbXBsZXM=">Testable Examples in Go<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9zdWJ0ZXN0cw==">Using Subtests and Sub-benchmarks<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvY292ZXI=">The cover story<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlLWNvbXBhdGliaWxpdHk=">Keeping Your Modules Compatible<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvdjItZ28tbW9kdWxlcw==">Go Modules: v2 and Beyond<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kZWNlbnRyaWMuZGUvd2lzc2Vucy1odWIvYmxvZy9nb21vY2stdHV0b3JpYWw=">Testing with GoMock: A Tutorial<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L2dpdGh1Yi5jb20vZ29sYW5nL21vY2tAdjEuNi4wL2dvbW9jaw==">gomock<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9iZXR0ZXJwcm9ncmFtbWluZy5wdWIvYS1nb21vY2stcXVpY2stc3RhcnQtZ3VpZGUtNzFiZWU0YjNhNmYx">A GoMock Quick Start Guide<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMDMvaW50ZWdyYXRpb24tdGVzdGluZy1pbi1nby1leGVjdXRpbmctdGVzdHMtd2l0aC1kb2NrZXIuaHRtbA==">Integration Testing in Go: Part I - Executing Tests with Docker<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMTAvaW50ZWdyYXRpb24tdGVzdGluZy1pbi1nby1zZXQtdXAtYW5kLXdyaXRpbmctdGVzdHMuaHRtbA==">Integration Testing in Go: Part II - Set-up and Writing Tests<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvZXhhbXBsZXM=">Testable Examples in Go<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9nby5kZXYvYmxvZy9zdWJ0ZXN0cw==">Using Subtests and Sub-benchmarks<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvY292ZXI=">The cover story<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvbW9kdWxlLWNvbXBhdGliaWxpdHk=">Keeping Your Modules Compatible<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmdvbGFuZy5vcmcvdjItZ28tbW9kdWxlcw==">Go Modules: v2 and Beyond<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kZWNlbnRyaWMuZGUvd2lzc2Vucy1odWIvYmxvZy9nb21vY2stdHV0b3JpYWw=">Testing with GoMock: A Tutorial<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L2dpdGh1Yi5jb20vZ29sYW5nL21vY2tAdjEuNi4wL2dvbW9jaw==">gomock<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9iZXR0ZXJwcm9ncmFtbWluZy5wdWIvYS1nb21vY2stcXVpY2stc3RhcnQtZ3VpZGUtNzFiZWU0YjNhNmYx">A GoMock Quick Start Guide<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 
@@ -379,13 +386,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/post/e924.html" rel="prev" title="Go工程化实践之包管理">
-                  <i class="fa fa-angle-left"></i> Go工程化实践之包管理
+                <a href="/post/7988.html" rel="prev" title="Go工程化实践之API设计">
+                  <i class="fa fa-angle-left"></i> Go工程化实践之API设计
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/post/40eb.html" rel="next" title="微服务可用性设计之隔离">
-                  微服务可用性设计之隔离 <i class="fa fa-angle-right"></i>
+                <a href="/post/70.html" rel="next" title="Go工程化实践之配置管理">
+                  Go工程化实践之配置管理 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

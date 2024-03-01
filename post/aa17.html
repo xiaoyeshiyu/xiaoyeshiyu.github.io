@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -67,7 +67,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -278,19 +285,19 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="通过Wireshark分析SMB2数据传输出现断层实例"><a href="#通过Wireshark分析SMB2数据传输出现断层实例" class="headerlink" title="通过Wireshark分析SMB2数据传输出现断层实例"></a>通过Wireshark分析SMB2数据传输出现断层实例</h1><p>今天碰到一个非编室五台非编工作站设备剪辑片子的时候出现花屏、卡屏的问题，排查之后觉得原因可能如下：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="通过Wireshark分析SMB2数据传输出现断层实例"><a href="#通过Wireshark分析SMB2数据传输出现断层实例" class="headerlink" title="通过Wireshark分析SMB2数据传输出现断层实例"></a>通过Wireshark分析SMB2数据传输出现断层实例</h1><p class="fireman-p-indent" >今天碰到一个非编室五台非编工作站设备剪辑片子的时候出现花屏、卡屏的问题，排查之后觉得原因可能如下：</p>
 <ul>
 <li>SMB服务出现问题，在运行过程中出现自重启导致数据传输出现断层</li>
 <li>网络问题，中途出现丢包或者数据帧被摧毁等情况</li>
 <li>非编软件兼容性问题，在对容量较大的素材进行剪辑的时候出现花屏</li>
 </ul>
-<p>经过排查，网络问题可能性最大。在非编机上安装Wireshark，进行剪辑的时候抓包查看</p>
+<p class="fireman-p-indent" >经过排查，网络问题可能性最大。在非编机上安装Wireshark，进行剪辑的时候抓包查看</p>
 <ol>
 <li>过滤器设置为</li>
 </ol>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ip.src==192.168.0.50 and ip.dst=192.168.0.100 and tcp.port==445</span><br></pre></td></tr></table></figure>
 
-<p>抓去源为<code>192.168.0.50</code>目标为<code>192.168.0.100</code>之间<code>445</code>端口的数据包</p>
+<p class="fireman-p-indent" >抓去源为<code>192.168.0.50</code>目标为<code>192.168.0.100</code>之间<code>445</code>端口的数据包</p>
 <ol start="2">
 <li><p>分析SMB数据包。</p>
 <p>SMB数据包正常的样子如下</p>
@@ -303,12 +310,12 @@
 </ol>
 </li>
 </ol>
-<p><img src="https://cl.ly/2U1F3f2d0029/Image%202017-09-06%20at%207.34.10%20PM.png" alt="I/O图标"></p>
+<p class="fireman-p-indent" ><img src="https://cl.ly/2U1F3f2d0029/Image%202017-09-06%20at%207.34.10%20PM.png" alt="I/O图标"></p>
 <ol start="4">
 <li>观察43-61秒数据传输过程，出现大量<code>NT Status: STATUS_INSUFFICIENT_RESOURCES (0xc000009a)</code>报错</li>
 </ol>
-<p><img src="https://cl.ly/1f110U0p0T0W/[471c4c821a012bb0b08f7f393774d9b4]_Image%202017-09-06%20at%207.37.56%20PM.png" alt="大量报错"></p>
-<p>​	出现的报错基本如下 </p>
+<p class="fireman-p-indent" ><img src="https://cl.ly/1f110U0p0T0W/[471c4c821a012bb0b08f7f393774d9b4]_Image%202017-09-06%20at%207.37.56%20PM.png" alt="大量报错"></p>
+<p class="fireman-p-indent" >​	出现的报错基本如下 </p>
 <ul>
 <li><code>NT Status: STATUS_NOTIFY_ENUM_DIR (0x0000010c)</code></li>
 <li><code>NT Status: STATUS_PENDING (0x00000103)</code></li>
@@ -346,7 +353,7 @@
 </tr>
 </tbody></table>
 </blockquote>
-<p>对解释的解读为服务器端资源不足，无法完成请求，或者资源不足请求的文件夹无法被服务器定位。造成上述原因在于SMB服务器内存资源不足，在同时对大量用户进行异步数据读取写入，并且数据量较大时会出现内存占用过多，无法及时回收，造成以上卡屏、花屏现象。</p>
+<p class="fireman-p-indent" >对解释的解读为服务器端资源不足，无法完成请求，或者资源不足请求的文件夹无法被服务器定位。造成上述原因在于SMB服务器内存资源不足，在同时对大量用户进行异步数据读取写入，并且数据量较大时会出现内存占用过多，无法及时回收，造成以上卡屏、花屏现象。</p>
 
     </div>
 

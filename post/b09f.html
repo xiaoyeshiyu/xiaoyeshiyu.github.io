@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -90,7 +90,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -315,38 +322,38 @@
 <p>无论数据同步方案如何设计，一旦出现极端异常的情况，总是会有部分数据出现异常的。例如，同步延迟、数据丢失、数据不一致等。异常处理就是假设在出现这些问题时，系统将采取什么措施来应对。常见的异常处理措施：1、多通道同步；2、同步和异步访问；3、日志记录；4、补偿；</p>
 </li>
 </ul>
-<p>多活不是整个体系业务的多活，而是分成不同维度，不同重要性的多活，比如我们业务观看体验为主（淘宝以交易单元，买家为维度），那么第一大前提就是浏览、观看上的多活。我们将资源分为三类：</p>
+<p class="fireman-p-indent" >多活不是整个体系业务的多活，而是分成不同维度，不同重要性的多活，比如我们业务观看体验为主（淘宝以交易单元，买家为维度），那么第一大前提就是浏览、观看上的多活。我们将资源分为三类：</p>
 <ul>
 <li><code>Global</code> 资源：多个 <code>Zone</code>（机房）共享访问的资源，每个 <code>Zone</code> 访问本 <code>Zone</code> 的资源，但是 <code>Global</code> 层面来说是单写 <code>Core Zone</code>（核心机房），即：单写 + 多读、利用数据复制（写 <code>Zone</code>单向）实现最终一致性方案实现（例如账号数据）；</li>
 <li><code>Multi Zone</code>资源：多个 <code>Zone</code> 分片部署，每个 <code>Zone</code> 拥有部分的 <code>Shard</code> 数据，比如我们按照用户维度拆分，用户 <code>A</code> 可能在 <code>ZoneA</code>，用户 <code>B</code> 可能在 <code>ZoneB</code>，即：多写+多读、利用数据复制（写 <code>Zone</code> 双向复制）方案实现；</li>
 <li><code>Single Zone</code> 资源：单机房部署业务；</li>
 </ul>
-<p>核心主要围绕：<code>PC/APP</code> 首页可观看、视频详情页可打开、账号可登录、鉴权来开展，我们认为最合适我们观看类业务最合适的场景就是采用 <code>Global</code> 资源策略，对于社区类（评论、弹幕）可能会采用 <code>Multi Zone</code> 的策略。</p>
-<p>蚂蚁金服单元化架构设计：</p>
-<p>单元化，指的是业务尽量在一个单元内完成的架构。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207175416162.png" alt="image-20231207175416162"></p>
-<p>整体架构包含<code>RZone</code>、<code>GZone</code>和<code>CZone</code>。</p>
-<p><code>GZone</code>，全局唯一：其中<code>GZone</code>部署的是无法拆分的数据和业务，<code>GZone</code>的数据和业务被<code>RZone</code>依赖，<code>GZone</code>全<code>Paxos</code>局只部署一份，而<code>RZone</code>部署的是可拆分的业务和对应的数据。</p>
-<p><code>RZone</code>，区域：每个<code>RZone</code>内的数据分片如图所示有五副本，实现三地五中心部署，每个分片内只有一个可写入的主副本，其余副本按照协议做数据强一致。每个<code>RZone</code>内实现业务单元封闭，独立完成自己的所有业务。</p>
-<p><code>CZone</code>，城市，只读副本：而<code>CZone</code>的出现是因为<code>GZone</code>全局只有一份，不同城市的<code>RZone</code>可能依赖<code>GZone</code>服务和数据的时候需要远距离调用，延迟比较大，所以在每个城市部署一个<code>CZone</code>作为<code>GZone</code>的只读副本，为本城市的<code>RZone</code>提供服务。</p>
-<p>核心指标：</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207180349760.png" alt="image-20231207180349760"></p>
+<p class="fireman-p-indent" >核心主要围绕：<code>PC/APP</code> 首页可观看、视频详情页可打开、账号可登录、鉴权来开展，我们认为最合适我们观看类业务最合适的场景就是采用 <code>Global</code> 资源策略，对于社区类（评论、弹幕）可能会采用 <code>Multi Zone</code> 的策略。</p>
+<p class="fireman-p-indent" >蚂蚁金服单元化架构设计：</p>
+<p class="fireman-p-indent" >单元化，指的是业务尽量在一个单元内完成的架构。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207175416162.png" alt="image-20231207175416162"></p>
+<p class="fireman-p-indent" >整体架构包含<code>RZone</code>、<code>GZone</code>和<code>CZone</code>。</p>
+<p class="fireman-p-indent" ><code>GZone</code>，全局唯一：其中<code>GZone</code>部署的是无法拆分的数据和业务，<code>GZone</code>的数据和业务被<code>RZone</code>依赖，<code>GZone</code>全<code>Paxos</code>局只部署一份，而<code>RZone</code>部署的是可拆分的业务和对应的数据。</p>
+<p class="fireman-p-indent" ><code>RZone</code>，区域：每个<code>RZone</code>内的数据分片如图所示有五副本，实现三地五中心部署，每个分片内只有一个可写入的主副本，其余副本按照协议做数据强一致。每个<code>RZone</code>内实现业务单元封闭，独立完成自己的所有业务。</p>
+<p class="fireman-p-indent" ><code>CZone</code>，城市，只读副本：而<code>CZone</code>的出现是因为<code>GZone</code>全局只有一份，不同城市的<code>RZone</code>可能依赖<code>GZone</code>服务和数据的时候需要远距离调用，延迟比较大，所以在每个城市部署一个<code>CZone</code>作为<code>GZone</code>的只读副本，为本城市的<code>RZone</code>提供服务。</p>
+<p class="fireman-p-indent" >核心指标：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231207180349760.png" alt="image-20231207180349760"></p>
 <ul>
 <li><code>RPO</code>（<code>Recovery Point Object</code>）：表示机房级别故障时，未被同步的数据时长。考虑到 <code>MySQL</code> 在特殊情况下复制延迟较大，<code>RPO</code> 设置为分钟级别，正常情况下 <code>RPO</code> 为秒级</li>
 <li><code>RTO</code>（<code>Recovery Target Object</code>）：表示机房故障情况下，关键流程或系统切换恢复时间，一般为分钟级别</li>
 <li><code>WRT</code>（<code>Work Recovery Time</code>）：表示故障时，由于 <code>RPO</code>导致的未同步异常数据修复完成时长，一般为小时级别。</li>
 </ul>
-<p>行业常见分布式架构分析：</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095338203.png" alt="image-20231208095338203"></p>
-<p>行业常见的分布式架构主要包含，单活架构、双活架构和冷备架构。从容灾能力角度来看，双活架构和冷备架构均能做到应用级跨机房容灾，但是数据库因为使用了异步复制的技术，无法做到机房级<code>RPO=0</code>的容灾（需要启动之后进行预热和备份数据同步）。</p>
-<h2 id="饿了么多活"><a href="#饿了么多活" class="headerlink" title="饿了么多活"></a>饿了么多活</h2><h3 id="业务模型"><a href="#业务模型" class="headerlink" title="业务模型"></a>业务模型</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095601395.png" alt="image-20231208095601395"></p>
-<p>业务过程中包含3个最重要的角色，分别是用户、商家和骑手，一个订单包含3个步骤：</p>
+<p class="fireman-p-indent" >行业常见分布式架构分析：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095338203.png" alt="image-20231208095338203"></p>
+<p class="fireman-p-indent" >行业常见的分布式架构主要包含，单活架构、双活架构和冷备架构。从容灾能力角度来看，双活架构和冷备架构均能做到应用级跨机房容灾，但是数据库因为使用了异步复制的技术，无法做到机房级<code>RPO=0</code>的容灾（需要启动之后进行预热和备份数据同步）。</p>
+<h2 id="饿了么多活"><a href="#饿了么多活" class="headerlink" title="饿了么多活"></a>饿了么多活</h2><h3 id="业务模型"><a href="#业务模型" class="headerlink" title="业务模型"></a>业务模型</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095601395.png" alt="image-20231208095601395"></p>
+<p class="fireman-p-indent" >业务过程中包含3个最重要的角色，分别是用户、商家和骑手，一个订单包含3个步骤：</p>
 <ol>
 <li>用户打开饿了么APP，系统会推荐出用户位置附近的各种美食，推荐顺序中结合了用户习惯，推荐排序，商户的推广等。用户找到中意的食物，下单并支付，订单会流转到商家。</li>
 <li>商家接单并开始制作食物，制作完成后，系统调度骑手赶到店面，取走食物。</li>
 <li>骑手按照配送地址，把食物送到客户手中。</li>
 </ol>
-<h3 id="基本原则"><a href="#基本原则" class="headerlink" title="基本原则"></a>基本原则</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095958862.png" alt="image-20231208095958862"></p>
+<h3 id="基本原则"><a href="#基本原则" class="headerlink" title="基本原则"></a>基本原则</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208095958862.png" alt="image-20231208095958862"></p>
 <ul>
 <li><p>业务内聚</p>
 <p>单个订单的履单过程，要在一个机房中完成，不允许跨机房调用。这个原则是为了保证实时性，履单过程中不依赖另外一个机房的服务，才能保证没有延迟。</p>
@@ -363,28 +370,28 @@
 <p>因为基础设施还没有强大到可以抹去跨机房的差异，需要让业务感知多活逻辑，业务代码要做一些改造，包括：需要业务代码能够识别出业务数据的归属，只处理本 <code>ezone</code> 的数据，过滤掉无关的数据。改善业务状态机，能够在数据出现不一致的时候，通过状态机发现和纠正。</p>
 </li>
 </ul>
-<h3 id="业务特征"><a href="#业务特征" class="headerlink" title="业务特征"></a>业务特征</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208100702477.png" alt="image-20231208100702477"></p>
-<p>为了实现业务内聚，我们首先要选择一个划分方法（<code>Sharding Key</code>），对服务进行分区，让用户，商户，骑手能够正确的内聚到同一个 <code>ezone</code>中。分区方案是整个多活的基础，它决定了之后的所有逻辑。</p>
-<p>根据饿了么的业务特性，可以自然的选择地理位置（地理围栏，地理围栏主体按照省界划分，再加上局部微调）作为划分业务的单元，把地理位置上接近的用户，商户，骑手划分到同一个 <code>ezone</code>，这样一个订单的履单流程就会在一个机房完成，能够保证最小的延时，在某个机房出现问题的时候，也可以按照地理位置把用户，商户，骑手打包迁移到别的机房即可。</p>
-<h3 id="位置划分"><a href="#位置划分" class="headerlink" title="位置划分"></a>位置划分</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101054457.png" alt="image-20231208101054457"></p>
-<p>基于地理位置划分规则，开发了统一的流量路由层（<code>API Router</code>），这一层负责对客户端过来的 <code>API</code> 调用进行路由，把流量导向到正确的 <code>ezone</code>，<code>API Router</code> 部署在多个公有云机房中，用户就近接入到公有云的 <code>API Router</code>，还可以提升接入质量。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101209876.png" alt="image-20231208101209876"></p>
-<p>最基础的分流标签是地理位置，有了地理位置，<code>API Router</code>就能计算出正确的 <code>shard</code> 归属。但业务是很复杂的，并不是所有的调用都能直接关联到某个地理位置上，我们使用了一种分层的路由方案，核心的路由逻辑是地理位置，但是也支持其他的一些 <code>High Level Sharding Key</code>，这些 <code>Sharding Key</code> 由 <code>API Router</code> 转换为核心的 <code>Sharding Key</code>，具体如上图。</p>
-<p>这样即减少了业务的改造工作量，也可以扩展出更多的分区方法。出了入口处的路由，我们还开发了 <code>SOA Proxy</code>，用于路由 <code>SOA</code> 调用的，和 <code>API Router</code> 基于相同的路由规则。</p>
-<h2 id="阿里多活"><a href="#阿里多活" class="headerlink" title="阿里多活"></a>阿里多活</h2><p>基本原则：</p>
+<h3 id="业务特征"><a href="#业务特征" class="headerlink" title="业务特征"></a>业务特征</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208100702477.png" alt="image-20231208100702477"></p>
+<p class="fireman-p-indent" >为了实现业务内聚，我们首先要选择一个划分方法（<code>Sharding Key</code>），对服务进行分区，让用户，商户，骑手能够正确的内聚到同一个 <code>ezone</code>中。分区方案是整个多活的基础，它决定了之后的所有逻辑。</p>
+<p class="fireman-p-indent" >根据饿了么的业务特性，可以自然的选择地理位置（地理围栏，地理围栏主体按照省界划分，再加上局部微调）作为划分业务的单元，把地理位置上接近的用户，商户，骑手划分到同一个 <code>ezone</code>，这样一个订单的履单流程就会在一个机房完成，能够保证最小的延时，在某个机房出现问题的时候，也可以按照地理位置把用户，商户，骑手打包迁移到别的机房即可。</p>
+<h3 id="位置划分"><a href="#位置划分" class="headerlink" title="位置划分"></a>位置划分</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101054457.png" alt="image-20231208101054457"></p>
+<p class="fireman-p-indent" >基于地理位置划分规则，开发了统一的流量路由层（<code>API Router</code>），这一层负责对客户端过来的 <code>API</code> 调用进行路由，把流量导向到正确的 <code>ezone</code>，<code>API Router</code> 部署在多个公有云机房中，用户就近接入到公有云的 <code>API Router</code>，还可以提升接入质量。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101209876.png" alt="image-20231208101209876"></p>
+<p class="fireman-p-indent" >最基础的分流标签是地理位置，有了地理位置，<code>API Router</code>就能计算出正确的 <code>shard</code> 归属。但业务是很复杂的，并不是所有的调用都能直接关联到某个地理位置上，我们使用了一种分层的路由方案，核心的路由逻辑是地理位置，但是也支持其他的一些 <code>High Level Sharding Key</code>，这些 <code>Sharding Key</code> 由 <code>API Router</code> 转换为核心的 <code>Sharding Key</code>，具体如上图。</p>
+<p class="fireman-p-indent" >这样即减少了业务的改造工作量，也可以扩展出更多的分区方法。出了入口处的路由，我们还开发了 <code>SOA Proxy</code>，用于路由 <code>SOA</code> 调用的，和 <code>API Router</code> 基于相同的路由规则。</p>
+<h2 id="阿里多活"><a href="#阿里多活" class="headerlink" title="阿里多活"></a>阿里多活</h2><p class="fireman-p-indent" >基本原则：</p>
 <ul>
 <li>按买家维度来进行数据切分</li>
 <li>只取与买家链路相关的业务（单元）做多活</li>
 <li>单元内最大限度的封闭</li>
 <li>无法接受数据最终一致的跨单元单点写</li>
 </ul>
-<h3 id="业务架构"><a href="#业务架构" class="headerlink" title="业务架构"></a>业务架构</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101919926.png" alt="image-20231208101919926"></p>
-<p>下单需要立即可见，就需要有多分数据存储在不同的单元，同时同步到中心机房。并且需要扩散到其他所有单元。</p>
-<p>又需要其他单元查询到卖家数据，因此卖家数据是通过中心全量复制到其他单元。</p>
-<h3 id="技术架构"><a href="#技术架构" class="headerlink" title="技术架构"></a>技术架构</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101933360.png" alt="image-20231208101933360"></p>
-<p>通过 <code>CDN</code> 实现路由功能，<code>CDN</code> 通过业务逻辑判断用户分流到具体的 <code>IDC</code>。</p>
-<p>除了多个 <code>IDC</code> 之外，还有一个中心机房，好处是复制过程简化，<code>IDC</code>数据先同步到中心机房，再由中心机房将数据同步到其他的 <code>IDC</code>。</p>
-<h3 id="容灾能力"><a href="#容灾能力" class="headerlink" title="容灾能力"></a>容灾能力</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101946001.png" alt="image-20231208101946001"></p>
+<h3 id="业务架构"><a href="#业务架构" class="headerlink" title="业务架构"></a>业务架构</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101919926.png" alt="image-20231208101919926"></p>
+<p class="fireman-p-indent" >下单需要立即可见，就需要有多分数据存储在不同的单元，同时同步到中心机房。并且需要扩散到其他所有单元。</p>
+<p class="fireman-p-indent" >又需要其他单元查询到卖家数据，因此卖家数据是通过中心全量复制到其他单元。</p>
+<h3 id="技术架构"><a href="#技术架构" class="headerlink" title="技术架构"></a>技术架构</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101933360.png" alt="image-20231208101933360"></p>
+<p class="fireman-p-indent" >通过 <code>CDN</code> 实现路由功能，<code>CDN</code> 通过业务逻辑判断用户分流到具体的 <code>IDC</code>。</p>
+<p class="fireman-p-indent" >除了多个 <code>IDC</code> 之外，还有一个中心机房，好处是复制过程简化，<code>IDC</code>数据先同步到中心机房，再由中心机房将数据同步到其他的 <code>IDC</code>。</p>
+<h3 id="容灾能力"><a href="#容灾能力" class="headerlink" title="容灾能力"></a>容灾能力</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208101946001.png" alt="image-20231208101946001"></p>
 <ul>
 <li><p>同城容灾</p>
 <p><code>RZone1</code> 出现故障先看同城容灾能力，我们目标将 <code>RZone1</code> 切换至同城同在 <code>RZone2</code>。先做数据库分片切换，<code>RZone1</code> 对应的分片为分片1，把分片1在 <code>RZone2</code> 的副本提升为主副本，数据库副本提升完毕后，将 <code>RZone1</code> 的流量切换至 <code>RZone2</code>，实现同城容灾 <code>RPO=0</code>、<code>RTO&lt;1min</code></p>
@@ -393,10 +400,10 @@
 <p>同样以 <code>RZone1</code> 故障为例。目标切换至 <code>RZone3</code>，先做数据库切换，分片1在 <code>RZone3</code> 的副本切换成主副本，完成后将 <code>RZone1</code> 的流量切换至 <code>RZone3</code>，实现异地容灾，该过程 <code>RPO=0</code>、<code>RTO&lt;1min</code></p>
 </li>
 </ul>
-<p>这种情况，使用 <code>Raft</code> 或者 <code>Paxos</code> 这种需要满足写入半数的强一致性，会牺牲写入延迟。</p>
-<h3 id="流量路由"><a href="#流量路由" class="headerlink" title="流量路由"></a>流量路由</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208102559035.png" alt="image-20231208102559035"></p>
-<p>流量路由模块核心是将用户的 <code>uid</code> 信息和对应的 <code>Zone</code>信息植入到 <code>cookie</code> 中，供路由模块做精准路由。</p>
-<p>服务路由分为本机房服务路由和跨机房服务路由调用。</p>
+<p class="fireman-p-indent" >这种情况，使用 <code>Raft</code> 或者 <code>Paxos</code> 这种需要满足写入半数的强一致性，会牺牲写入延迟。</p>
+<h3 id="流量路由"><a href="#流量路由" class="headerlink" title="流量路由"></a>流量路由</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208102559035.png" alt="image-20231208102559035"></p>
+<p class="fireman-p-indent" >流量路由模块核心是将用户的 <code>uid</code> 信息和对应的 <code>Zone</code>信息植入到 <code>cookie</code> 中，供路由模块做精准路由。</p>
+<p class="fireman-p-indent" >服务路由分为本机房服务路由和跨机房服务路由调用。</p>
 <ul>
 <li><p>本机房服务路由</p>
 <p>服务调用端向本机房服务注册中心订阅服务，发现服务地址后做本机房服务路由调用。</p>
@@ -405,9 +412,9 @@
 <p>服务调用端向其他 <code>IDC</code> 的注册中心订阅服务地址，发现服务地址后做跨机房服务调用。</p>
 </li>
 </ul>
-<h3 id="数据高可靠"><a href="#数据高可靠" class="headerlink" title="数据高可靠"></a>数据高可靠</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103036627.png" alt="image-20231208103036627"></p>
-<p>蚂蚁使用自研的分布式关系数据库 <code>OceanBase</code>，每个分片的数据库做5副本部署，部署地域实现三地五中心部署，5副本中有3副本实现强一致，如图所示可以实现同城、<code>IDC</code>容灾和异地容灾。（同城两副本，最近地域1副本，保证写入3副本时的延迟。）</p>
-<h2 id="苏宁多活"><a href="#苏宁多活" class="headerlink" title="苏宁多活"></a>苏宁多活</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103255417.png" alt="image-20231208103255417"></p>
+<h3 id="数据高可靠"><a href="#数据高可靠" class="headerlink" title="数据高可靠"></a>数据高可靠</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103036627.png" alt="image-20231208103036627"></p>
+<p class="fireman-p-indent" >蚂蚁使用自研的分布式关系数据库 <code>OceanBase</code>，每个分片的数据库做5副本部署，部署地域实现三地五中心部署，5副本中有3副本实现强一致，如图所示可以实现同城、<code>IDC</code>容灾和异地容灾。（同城两副本，最近地域1副本，保证写入3副本时的延迟。）</p>
+<h2 id="苏宁多活"><a href="#苏宁多活" class="headerlink" title="苏宁多活"></a>苏宁多活</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103255417.png" alt="image-20231208103255417"></p>
 <ul>
 <li><p><code>Cell</code></p>
 <p>业务可封闭收敛最小执行分片：业务对请求空间按一定维度（比如会员、门店等）划分分片</p>
@@ -426,7 +433,7 @@
 <p>地理区域，有多个可用区所组成的集合，区域之间故障域完全隔离</p>
 </li>
 </ul>
-<h3 id="服务架构"><a href="#服务架构" class="headerlink" title="服务架构"></a>服务架构</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103932501.png" alt="image-20231208103932501"></p>
+<h3 id="服务架构"><a href="#服务架构" class="headerlink" title="服务架构"></a>服务架构</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208103932501.png" alt="image-20231208103932501"></p>
 <ul>
 <li><p>分片服务</p>
 <p>对应数据仅在某个 <code>Cell</code> 存在，其他 <code>Cell</code> 不与交叉或共享，比如会员服务、订单服务等</p>
@@ -444,10 +451,10 @@
 <p>用于竞争服务前置服务，比如库存前置调拨服务（例如一次性获取100个库存）</p>
 </li>
 </ul>
-<h3 id="容灾能力-1"><a href="#容灾能力-1" class="headerlink" title="容灾能力"></a>容灾能力</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105133911.png" alt="image-20231208105133911"></p>
-<p>为了确保数据高可用以及任何一个机房故障都可被接管，所有数据中心都包含全量数据，当主数据中心的变更将会实时同步到各个从数据中心。</p>
-<p>数据中心之间的延迟相对数据中心内部延迟较大，数据中心之间的同步一般采用异步复制方式。在机房故障等极端情况，将出现少量数据未同步到其他数据中心，针对此类故障场景，在机房恢复后，需要对未同步的数据进行人工修复。</p>
-<h2 id="Facebook-Memcache-一致性"><a href="#Facebook-Memcache-一致性" class="headerlink" title="Facebook Memcache 一致性"></a>Facebook Memcache 一致性</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105346554.png" alt="image-20231208105346554"></p>
+<h3 id="容灾能力-1"><a href="#容灾能力-1" class="headerlink" title="容灾能力"></a>容灾能力</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105133911.png" alt="image-20231208105133911"></p>
+<p class="fireman-p-indent" >为了确保数据高可用以及任何一个机房故障都可被接管，所有数据中心都包含全量数据，当主数据中心的变更将会实时同步到各个从数据中心。</p>
+<p class="fireman-p-indent" >数据中心之间的延迟相对数据中心内部延迟较大，数据中心之间的同步一般采用异步复制方式。在机房故障等极端情况，将出现少量数据未同步到其他数据中心，针对此类故障场景，在机房恢复后，需要对未同步的数据进行人工修复。</p>
+<h2 id="Facebook-Memcache-一致性"><a href="#Facebook-Memcache-一致性" class="headerlink" title="Facebook Memcache 一致性"></a>Facebook Memcache 一致性</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105346554.png" alt="image-20231208105346554"></p>
 <ol>
 <li>写入缓存时带一个 marker</li>
 <li>将数据写入到主库</li>
@@ -455,29 +462,29 @@
 <li>另外有一个请求过来，如果标记存在，从主库读取；如果标记不存在，则从从库读取</li>
 <li>从主库到从库同步的时候，将 <code>cache</code> 中删除 <code>marker</code></li>
 </ol>
-<h2 id="微信朋友圈异地多活"><a href="#微信朋友圈异地多活" class="headerlink" title="微信朋友圈异地多活"></a>微信朋友圈异地多活</h2><p>因果关系对事件施加了一种顺序：</p>
-<p>因在果之前，消息发送在消息收取之前。而且就像现实生活中一样，一件事会顺序地导致另一件事发生：某个节点读取了一些数据然后写入一些结果，另一个节点读取其他写入的内容，并依次写入一些其他内容等等。这些因果依赖的操作链定义了系统中的因果顺序，即什么在什么之前发生。从而我们也引出了分布式系统的因果一致性，如果一个系统服从因果关系所规定的顺序，我们说它是因果一致性的。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105404479.png" alt="image-20231208105404479"></p>
-<p>微信朋友圈某条状态的评论以及对评论的答复（也是评论）所构成的因果关系。</p>
-<p>微信分布在全球四地的数据中心，可知用户小王有两个朋友：Mary、Kate，分别在不同的区域下（数据中心），所以他们要看到彼此朋友圈的内容时，必须等到相关的数据在不同数据中心间的副本同步到用户所在的IDC完成之后才能看到。</p>
-<p>需要保证不同数据中心的因果一致性来保证一个用户在刷朋友圈的时候不会出现看到评论所对应的答复，却看不到答复对应的评论。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208110338741.png" alt="image-20231208110338741"></p>
-<p>由于网络在不同副本间复制数据时的延迟、中断等分布式系统中常见的场景，导致两条消息在同步到用户 <code>Kate</code>（加拿大）所在数据中心上的副本时已经乱序了。</p>
-<p>即原先顺序是这样的：</p>
+<h2 id="微信朋友圈异地多活"><a href="#微信朋友圈异地多活" class="headerlink" title="微信朋友圈异地多活"></a>微信朋友圈异地多活</h2><p class="fireman-p-indent" >因果关系对事件施加了一种顺序：</p>
+<p class="fireman-p-indent" >因在果之前，消息发送在消息收取之前。而且就像现实生活中一样，一件事会顺序地导致另一件事发生：某个节点读取了一些数据然后写入一些结果，另一个节点读取其他写入的内容，并依次写入一些其他内容等等。这些因果依赖的操作链定义了系统中的因果顺序，即什么在什么之前发生。从而我们也引出了分布式系统的因果一致性，如果一个系统服从因果关系所规定的顺序，我们说它是因果一致性的。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208105404479.png" alt="image-20231208105404479"></p>
+<p class="fireman-p-indent" >微信朋友圈某条状态的评论以及对评论的答复（也是评论）所构成的因果关系。</p>
+<p class="fireman-p-indent" >微信分布在全球四地的数据中心，可知用户小王有两个朋友：Mary、Kate，分别在不同的区域下（数据中心），所以他们要看到彼此朋友圈的内容时，必须等到相关的数据在不同数据中心间的副本同步到用户所在的IDC完成之后才能看到。</p>
+<p class="fireman-p-indent" >需要保证不同数据中心的因果一致性来保证一个用户在刷朋友圈的时候不会出现看到评论所对应的答复，却看不到答复对应的评论。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208110338741.png" alt="image-20231208110338741"></p>
+<p class="fireman-p-indent" >由于网络在不同副本间复制数据时的延迟、中断等分布式系统中常见的场景，导致两条消息在同步到用户 <code>Kate</code>（加拿大）所在数据中心上的副本时已经乱序了。</p>
+<p class="fireman-p-indent" >即原先顺序是这样的：</p>
 <blockquote>
-<p>“Mary: 这是哪里”  -&gt; </p>
-<p>“小王：Mary，这是梅里雪山”</p>
+<p class="fireman-p-indent" >“Mary: 这是哪里”  -&gt; </p>
+<p class="fireman-p-indent" >“小王：Mary，这是梅里雪山”</p>
 </blockquote>
-<p>然而 <code>Kate</code> 去数据库中查到的消息却是这样的顺序：</p>
+<p class="fireman-p-indent" >然而 <code>Kate</code> 去数据库中查到的消息却是这样的顺序：</p>
 <blockquote>
-<p>“小王：Mary，这是梅里雪山”  -&gt;</p>
-<p>“Mary: 这是哪里” </p>
+<p class="fireman-p-indent" >“小王：Mary，这是梅里雪山”  -&gt;</p>
+<p class="fireman-p-indent" >“Mary: 这是哪里” </p>
 </blockquote>
-<p>或者中间的某个时刻只能查询到 “小王：Mary，这是梅里雪山” 这一条消息，你说 <code>Kate</code> 会不会懵逼。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208110812889.png" alt="image-20231208110812889"></p>
-<p>我们可以将 <code>Mary</code> 对小王所发布的朋友圈状态的评论 “Mary: 这是哪里” 当成因，而把小王对 <code>Mary</code> 评论的答复 “小王：Mary，这是梅里雪山” 当成果。</p>
-<p>按照这样的约定，当这两条数据同步到 <code>Kate</code> 所在的数据中心副本时，即使发生乱序，<code>Kate</code> 根据在刷朋友圈时，根据因果关系也可以将这个评论、答复的顺序调整到正确的、可阅读的方式。</p>
-<h3 id="因果一致性算法"><a href="#因果一致性算法" class="headerlink" title="因果一致性算法"></a>因果一致性算法</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208111047770.png" alt="image-20231208111047770"></p>
+<p class="fireman-p-indent" >或者中间的某个时刻只能查询到 “小王：Mary，这是梅里雪山” 这一条消息，你说 <code>Kate</code> 会不会懵逼。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208110812889.png" alt="image-20231208110812889"></p>
+<p class="fireman-p-indent" >我们可以将 <code>Mary</code> 对小王所发布的朋友圈状态的评论 “Mary: 这是哪里” 当成因，而把小王对 <code>Mary</code> 评论的答复 “小王：Mary，这是梅里雪山” 当成果。</p>
+<p class="fireman-p-indent" >按照这样的约定，当这两条数据同步到 <code>Kate</code> 所在的数据中心副本时，即使发生乱序，<code>Kate</code> 根据在刷朋友圈时，根据因果关系也可以将这个评论、答复的顺序调整到正确的、可阅读的方式。</p>
+<h3 id="因果一致性算法"><a href="#因果一致性算法" class="headerlink" title="因果一致性算法"></a>因果一致性算法</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208111047770.png" alt="image-20231208111047770"></p>
 <ul>
 <li><p>每条评论都有一个唯一的且递增的数字 <code>ID</code></p>
 <p>那么背后肯定是一个 <code>ID</code> 生成器，各个数据中心都有一个这样的入口来获取本<code>ID</code>内唯一、递增的<code>ID</code></p>
@@ -488,15 +495,15 @@
 <li><p>广播本地看到的所有评论和新评论到其他 <code>IDC</code>；相同 <code>ID</code> 的评论合并排重</p>
 </li>
 </ul>
-<p>本地域下的用户，针对同一条朋友圈状态有评论时，该地域就负责申请一个全局 <code>ID</code>，然后将这个评论的事件广播给其他的数据中心。</p>
-<p>注意这个过程需要合并所有看到的序列，例如香港数据中心就合并1，2，4，7，8等针对同一条朋友圈状态的一系列评论事件<code>IDs</code>，然后再整体广播出去，这样才能保证针对同一条状态的所有当前最新的事件整体被广播出去，否则此时香港<code>IDC</code>只广播8的话，如果前面的事件序列在广播的中途丢失了，那么其他节点比如加拿大<code>IDC</code>就会漏掉部分评论时间，这也是数据多重补位的措施。</p>
-<p>当然这个方法有一个前提就是：因为同一个朋友圈的发布状态，一般的评论不会很多，所以造成的数据冗余交互不会很大，否则是不执行的。之余相同<code>ID</code>的评论合并排重，加拿大<code>IDC</code>会收到来自香港<code>IDC</code>同步过来的1，4，7，8事件系列，这两个广播的事件系列有重复，所以需要去重。</p>
-<h1 id="账号多活"><a href="#账号多活" class="headerlink" title="账号多活"></a>账号多活</h1><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208112422472.png" alt="image-20231208112422472"></p>
-<p>A 中心注册了用户，数据还未同步到B中心，此时A中心宕机，为了支持注册业务多活，那我们可以挑选B中心让用户去重新注册。</p>
-<p>看起来很容易就支持多活了，但仔细思考一下会发现这样会有问题：一个手机号只能注册一个账号，A中心的数据没有同步过来，B中心无法判断这个手机号是否重复，如果B中心让用户注册，后来A中心恢复了，发现数据有冲突，怎么解决？</p>
-<p>实际上是无法解决的，因为注册账号不能说挑选最后一个生效；而如果B中心不支持本来属于A中心的业务进行注册，注册业务的双活又成了空谈。</p>
-<p>但很多朋友在考虑这个<strong>业务</strong>的时候，会不自觉的陷入一个思维误区：我要保证所有业务的<strong>异地多活</strong>。因此账号系统一般不会做多活，一般主写从读，多个备库支持读。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208112726491.png" alt="image-20231208112726491"></p>
+<p class="fireman-p-indent" >本地域下的用户，针对同一条朋友圈状态有评论时，该地域就负责申请一个全局 <code>ID</code>，然后将这个评论的事件广播给其他的数据中心。</p>
+<p class="fireman-p-indent" >注意这个过程需要合并所有看到的序列，例如香港数据中心就合并1，2，4，7，8等针对同一条朋友圈状态的一系列评论事件<code>IDs</code>，然后再整体广播出去，这样才能保证针对同一条状态的所有当前最新的事件整体被广播出去，否则此时香港<code>IDC</code>只广播8的话，如果前面的事件序列在广播的中途丢失了，那么其他节点比如加拿大<code>IDC</code>就会漏掉部分评论时间，这也是数据多重补位的措施。</p>
+<p class="fireman-p-indent" >当然这个方法有一个前提就是：因为同一个朋友圈的发布状态，一般的评论不会很多，所以造成的数据冗余交互不会很大，否则是不执行的。之余相同<code>ID</code>的评论合并排重，加拿大<code>IDC</code>会收到来自香港<code>IDC</code>同步过来的1，4，7，8事件系列，这两个广播的事件系列有重复，所以需要去重。</p>
+<h1 id="账号多活"><a href="#账号多活" class="headerlink" title="账号多活"></a>账号多活</h1><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208112422472.png" alt="image-20231208112422472"></p>
+<p class="fireman-p-indent" >A 中心注册了用户，数据还未同步到B中心，此时A中心宕机，为了支持注册业务多活，那我们可以挑选B中心让用户去重新注册。</p>
+<p class="fireman-p-indent" >看起来很容易就支持多活了，但仔细思考一下会发现这样会有问题：一个手机号只能注册一个账号，A中心的数据没有同步过来，B中心无法判断这个手机号是否重复，如果B中心让用户注册，后来A中心恢复了，发现数据有冲突，怎么解决？</p>
+<p class="fireman-p-indent" >实际上是无法解决的，因为注册账号不能说挑选最后一个生效；而如果B中心不支持本来属于A中心的业务进行注册，注册业务的双活又成了空谈。</p>
+<p class="fireman-p-indent" >但很多朋友在考虑这个<strong>业务</strong>的时候，会不自觉的陷入一个思维误区：我要保证所有业务的<strong>异地多活</strong>。因此账号系统一般不会做多活，一般主写从读，多个备库支持读。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208112726491.png" alt="image-20231208112726491"></p>
 <ul>
 <li><p>减少数据同步</p>
 <p>用户登录所产生的 <code>token</code> 或者 <code>session</code> 信息，数据量很大，但其实并不需要同步到其他业务中心，因为这些数据丢失后重新登录就可以了。</p>
@@ -505,46 +512,46 @@
 <li>对于登录的 <code>session</code> 数据，由于数据量很大，我们可以不同步数据；但当用户在 A 中心登录后，然后又在 B 中心登录，B 中心拿到用户上传的 <code>session id</code> 后，根据路由判断 <code>session</code> 属于 A 中心，直接去 A 中心请求 <code>session</code> 数据即可，反之亦然，A 中心也可以到 B 中心去拿取 <code>session</code> 数据。</li>
 </ul>
 </li>
-<li><p>最终一致性</p>
-<p>A机房注册了一个用户，业务上不能要求在 <code>50ms</code> 内就同步到所有机房，正常情况下要求 <code>5分钟</code> 同步到所有机房即可，异常情况下甚至可以允许 1小时 或者 1天 后能够一致。</p>
-<p>最终一致性在具体实现的时候，还需要根据不同的数据特征，进行差异化的处理，以满足业务需要。例如对<strong>账号信息</strong>来说，如果在 A机房新注册的用户 5分钟内正好跑到B机房了，此时B机房还没有这个用户的信息，为了保证业务的正确，B 机房就需要根据路由规则到A机房请求数据。</p>
-<p>而对<strong>用户信息</strong>来说，5分钟后同步也没有问题，也不需要采取其他措施来弥补，但还是会影响用户体验，即用户看到了旧的用户信息，这个问题怎么解决呢？</p>
+<li><p class="fireman-p-indent" >最终一致性</p>
+<p class="fireman-p-indent" >A机房注册了一个用户，业务上不能要求在 <code>50ms</code> 内就同步到所有机房，正常情况下要求 <code>5分钟</code> 同步到所有机房即可，异常情况下甚至可以允许 1小时 或者 1天 后能够一致。</p>
+<p class="fireman-p-indent" >最终一致性在具体实现的时候，还需要根据不同的数据特征，进行差异化的处理，以满足业务需要。例如对<strong>账号信息</strong>来说，如果在 A机房新注册的用户 5分钟内正好跑到B机房了，此时B机房还没有这个用户的信息，为了保证业务的正确，B 机房就需要根据路由规则到A机房请求数据。</p>
+<p class="fireman-p-indent" >而对<strong>用户信息</strong>来说，5分钟后同步也没有问题，也不需要采取其他措施来弥补，但还是会影响用户体验，即用户看到了旧的用户信息，这个问题怎么解决呢？</p>
 </li>
 </ul>
-<h2 id="数据流向"><a href="#数据流向" class="headerlink" title="数据流向"></a>数据流向</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208142552962.png" alt="image-20231208142552962"></p>
+<h2 id="数据流向"><a href="#数据流向" class="headerlink" title="数据流向"></a>数据流向</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208142552962.png" alt="image-20231208142552962"></p>
 <ol>
 <li>将用户账号密码等用户信息同步到所有机房节点，账号登录和认证都在本机房实现</li>
 <li>当本机房数据没有同步过来，则降级到中心机房</li>
 </ol>
-<h1 id="稿件多活"><a href="#稿件多活" class="headerlink" title="稿件多活"></a>稿件多活</h1><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208142600439.png" alt="image-20231208142600439"></p>
-<p>稿件体系就是一个典型的单写，同步到其他机房。通过 <code>MySQL</code> 的同步来同步其他机房，同时订阅从库的 <code>binlog</code> 来做缓存刷新和预热。</p>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMjAwOTgyMg==">饿了么异地多活技术实现（一）总体介绍<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMjU4Nzk2MA==">饿了么异地多活技术实现（二）API-Router的设计与实现<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMzQzMDg2OQ==">饿了么异地多活技术实现（三）GZS&amp;DAL<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zNDk1ODU5Ng==">饿了么异地多活技术实现（四）- 实时双向复制工具（DRC）<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cDovL2FmZ2hsLmdpdGh1Yi5pby8yMDE4LzAyLzExL2Rpc3RyaWJ1dGVkLXN5c3RlbS1tdWx0aS1kYXRhY2VudGVyLTEuaHRtbA==">分布式系统 - 关于异地多活的一点笔记 - overview<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvUlFpdXJUaV9wTGttSWdfUFNwWnR2QQ==">OPPO互联网业务多活架构演进和实践<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvTENuNzFqM2hnbTVJajV0SFllOHVvQQ==">OPPO异地多活实践——缓存篇<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDczNDAzOA==">Scaling Memcache in Facebook 笔记（一）<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDc2MTA3MQ==">Scaling Memcache in Facebook 笔记（二）<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDgyNzE4Mw==">Scaling Memcache in Facebook 笔记（三）<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZGF2aWR3YW5nNDU2L2FydGljbGVzLzgxOTI4NjAuaHRtbA==">阿里异地多活与同城双活的架构演进<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvdHk1R2x0TzlNNjQ4T1hTV2dMZV9TZw==">多中心容灾实践：如何实现真正的异地多活？<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzU3NzE1">异地多活设计辣么难？其实是你想多了！<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvV0s4TjR4RnhDb1V2U3BYT3dDVklYdw==">历时三年，苏宁如何建设多数据中心多活的实践项目？<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3Mvb29QTFYwMzlCQUdCc2lEWmFnV05Idw==">异地多活数据流基础设施DRC 双11支持571亿交易额背后的武器<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvVlBrUWhKTGxfVUx3a2xQMXNxRjc5Zw==">阿里异地多活与同城双活的架构演进<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvdHk1R2x0TzlNNjQ4T1hTV2dMZV9TZw==">多中心容灾实践：如何实现真正的异地多活？<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3M/X19iaXo9TXpreU5USTVOVFExTlE9PSZtaWQ9MjI0NzUwMDg4NCZpZHg9MSZzbj0xNjZlMTRhZThlNTgzNDU4OTM0Y2NmNTY5OWM0ZjcyMyZzb3VyY2U9NDEjd2VjaGF0X3JlZGlyZWN0">一线大厂都在用的异地多活的 5 种解决方案！<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC80MjE1MDY2Ng==">异地多活技术方案的原则，技巧，步骤<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTI0MjI4MjkvYXJ0aWNsZS9kZXRhaWxzLzgzNzE4Mjk2">全球异地多活架构设计(一): Why and How<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTI0MjI4MjkvYXJ0aWNsZS9kZXRhaWxzLzgzOTMyODI5">全球异地多活架构设计(二): 数据层的支持<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20va2luZzAxMDEvcC8xMTkwODMwNS5odG1s">从微信朋友圈的评论可见性，谈因果一致性在分布式系统中的应用<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvamQ5T3MxT0F5Q1haOHJYdzhaSVFtZw==">异地多活的单元化设计<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xNDQxNDU1">谈谈异地多活架构<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvaF9LV3d6UHpzenJkR3E1a2NDdWRSQQ==">30 | 异地多活设计4步走<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3M/X19iaXo9TXpJM01EQTJPVEUwTnc9PSZtaWQ9MjI0NzQ4MzcyNiZpZHg9MSZzbj1hMDg2MzExZjgyZjI0Y2E3MDQyODZkZmRlOTdkMjNmOSZjaGtzbT1lYWQ3ZmRiYWRkYTA3NGFjOTBkNTYwM2VlMDA1ZmZkNjA2NjBlODRjZjBjZjc5NTk4MWM0Y2UyMmVjNjIyYWFlZWZmMTAxZTFiNjZmJnNjZW5lPTIxI3dlY2hhdF9yZWRpcmVjdA==">互联网异地多活方案发展历史<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xMDQyMDgxP2Zyb209YXJ0aWNsZS5kZXRhaWwuMTQ0MTQ1NQ==">荔枝FM架构师刘耀华：异地多活IDC机房架构<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="稿件多活"><a href="#稿件多活" class="headerlink" title="稿件多活"></a>稿件多活</h1><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231208142600439.png" alt="image-20231208142600439"></p>
+<p class="fireman-p-indent" >稿件体系就是一个典型的单写，同步到其他机房。通过 <code>MySQL</code> 的同步来同步其他机房，同时订阅从库的 <code>binlog</code> 来做缓存刷新和预热。</p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMjAwOTgyMg==">饿了么异地多活技术实现（一）总体介绍<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMjU4Nzk2MA==">饿了么异地多活技术实现（二）API-Router的设计与实现<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zMzQzMDg2OQ==">饿了么异地多活技术实现（三）GZS&amp;DAL<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zNDk1ODU5Ng==">饿了么异地多活技术实现（四）- 实时双向复制工具（DRC）<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cDovL2FmZ2hsLmdpdGh1Yi5pby8yMDE4LzAyLzExL2Rpc3RyaWJ1dGVkLXN5c3RlbS1tdWx0aS1kYXRhY2VudGVyLTEuaHRtbA==">分布式系统 - 关于异地多活的一点笔记 - overview<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvUlFpdXJUaV9wTGttSWdfUFNwWnR2QQ==">OPPO互联网业务多活架构演进和实践<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvTENuNzFqM2hnbTVJajV0SFllOHVvQQ==">OPPO异地多活实践——缓存篇<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDczNDAzOA==">Scaling Memcache in Facebook 笔记（一）<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDc2MTA3MQ==">Scaling Memcache in Facebook 笔记（二）<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yMDgyNzE4Mw==">Scaling Memcache in Facebook 笔记（三）<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZGF2aWR3YW5nNDU2L2FydGljbGVzLzgxOTI4NjAuaHRtbA==">阿里异地多活与同城双活的架构演进<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvdHk1R2x0TzlNNjQ4T1hTV2dMZV9TZw==">多中心容灾实践：如何实现真正的异地多活？<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kZXZlbG9wZXIuYWxpeXVuLmNvbS9hcnRpY2xlLzU3NzE1">异地多活设计辣么难？其实是你想多了！<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvV0s4TjR4RnhDb1V2U3BYT3dDVklYdw==">历时三年，苏宁如何建设多数据中心多活的实践项目？<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3Mvb29QTFYwMzlCQUdCc2lEWmFnV05Idw==">异地多活数据流基础设施DRC 双11支持571亿交易额背后的武器<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvVlBrUWhKTGxfVUx3a2xQMXNxRjc5Zw==">阿里异地多活与同城双活的架构演进<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvdHk1R2x0TzlNNjQ4T1hTV2dMZV9TZw==">多中心容灾实践：如何实现真正的异地多活？<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3M/X19iaXo9TXpreU5USTVOVFExTlE9PSZtaWQ9MjI0NzUwMDg4NCZpZHg9MSZzbj0xNjZlMTRhZThlNTgzNDU4OTM0Y2NmNTY5OWM0ZjcyMyZzb3VyY2U9NDEjd2VjaGF0X3JlZGlyZWN0">一线大厂都在用的异地多活的 5 种解决方案！<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC80MjE1MDY2Ng==">异地多活技术方案的原则，技巧，步骤<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTI0MjI4MjkvYXJ0aWNsZS9kZXRhaWxzLzgzNzE4Mjk2">全球异地多活架构设计(一): Why and How<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTI0MjI4MjkvYXJ0aWNsZS9kZXRhaWxzLzgzOTMyODI5">全球异地多活架构设计(二): 数据层的支持<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20va2luZzAxMDEvcC8xMTkwODMwNS5odG1s">从微信朋友圈的评论可见性，谈因果一致性在分布式系统中的应用<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvamQ5T3MxT0F5Q1haOHJYdzhaSVFtZw==">异地多活的单元化设计<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xNDQxNDU1">谈谈异地多活架构<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3MvaF9LV3d6UHpzenJkR3E1a2NDdWRSQQ==">30 | 异地多活设计4步走<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tcC53ZWl4aW4ucXEuY29tL3M/X19iaXo9TXpJM01EQTJPVEUwTnc9PSZtaWQ9MjI0NzQ4MzcyNiZpZHg9MSZzbj1hMDg2MzExZjgyZjI0Y2E3MDQyODZkZmRlOTdkMjNmOSZjaGtzbT1lYWQ3ZmRiYWRkYTA3NGFjOTBkNTYwM2VlMDA1ZmZkNjA2NjBlODRjZjBjZjc5NTk4MWM0Y2UyMmVjNjIyYWFlZWZmMTAxZTFiNjZmJnNjZW5lPTIxI3dlY2hhdF9yZWRpcmVjdA==">互联网异地多活方案发展历史<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xMDQyMDgxP2Zyb209YXJ0aWNsZS5kZXRhaWwuMTQ0MTQ1NQ==">荔枝FM架构师刘耀华：异地多活IDC机房架构<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

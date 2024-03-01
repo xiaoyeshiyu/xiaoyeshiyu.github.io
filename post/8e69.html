@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -63,7 +63,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -274,8 +281,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>密码的使用涉及到两个方面，一是传输，二是存储，这两个场景，都需要使用加密后的密码进行传输。</p>
-<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>密码传输的方式有两种，明文和加密：</p>
+    <div class="post-body" itemprop="articleBody"><p class="fireman-p-indent" >密码的使用涉及到两个方面，一是传输，二是存储，这两个场景，都需要使用加密后的密码进行传输。</p>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p class="fireman-p-indent" >密码传输的方式有两种，明文和加密：</p>
 <ol>
 <li><p>明文传输</p>
 <p>优势是客户端不需要加密，直接传递到服务端</p>
@@ -286,7 +293,7 @@
 <p>劣势是需要两端都保存密钥，使用和管理都有一定的复杂度</p>
 </li>
 </ol>
-<p>存储方式有很多种，大概可以分为：</p>
+<p class="fireman-p-indent" >存储方式有很多种，大概可以分为：</p>
 <ol>
 <li><p>明文存储</p>
 <p>优势是简单，而且支持密码找回</p>
@@ -305,13 +312,13 @@
 <p>劣势是需要将盐值一并存储，无法找回密码，只能重置</p>
 </li>
 </ol>
-<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>传输过程由于涉及到第三方登录，如果在有证书的前提下，使用https证书进行传输数据的加密。</p>
-<p>并且通过获取服务端的公钥，进行密码加密，将加密后的密码和公钥都传给服务端，让服务端进行解密。单单说传输方式，这种方式是最为安全的。即使被抓包也无法获取密码。</p>
-<p>如果需要对接第三方，客户端不一定能维护密钥，无论是对称加密的密钥还是非对称加密的密钥，不一定能以这种方式传输密码。可能传输明文，也可能传输加密后的密码。在创建用户、更新密码和登录时，可能使用不同的方式加密方式。同时，在服务端进行解密，服务端存储密码时，再以服务端的加密方式进行存储。</p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zNjYwMzI0Nw==">如何加密传输和存储用户密码<i class="fa fa-external-link-alt"></i></span></p>
-<p>传输和存储的加密，可以有效确保密码的安全性。</p>
-<p>对于传输过程，比较好的方案是客户端通过某一种特定的方式传输，最好的方案是盐值加密，在存储密码时，同时存储一串随机字符串。</p>
-<h3 id="md5"><a href="#md5" class="headerlink" title="md5"></a>md5</h3><p><code>md5</code>（Message-Digest Algorithm）特点：</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p class="fireman-p-indent" >传输过程由于涉及到第三方登录，如果在有证书的前提下，使用https证书进行传输数据的加密。</p>
+<p class="fireman-p-indent" >并且通过获取服务端的公钥，进行密码加密，将加密后的密码和公钥都传给服务端，让服务端进行解密。单单说传输方式，这种方式是最为安全的。即使被抓包也无法获取密码。</p>
+<p class="fireman-p-indent" >如果需要对接第三方，客户端不一定能维护密钥，无论是对称加密的密钥还是非对称加密的密钥，不一定能以这种方式传输密码。可能传输明文，也可能传输加密后的密码。在创建用户、更新密码和登录时，可能使用不同的方式加密方式。同时，在服务端进行解密，服务端存储密码时，再以服务端的加密方式进行存储。</p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zNjYwMzI0Nw==">如何加密传输和存储用户密码<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" >传输和存储的加密，可以有效确保密码的安全性。</p>
+<p class="fireman-p-indent" >对于传输过程，比较好的方案是客户端通过某一种特定的方式传输，最好的方案是盐值加密，在存储密码时，同时存储一串随机字符串。</p>
+<h3 id="md5"><a href="#md5" class="headerlink" title="md5"></a>md5</h3><p class="fireman-p-indent" ><code>md5</code>（Message-Digest Algorithm）特点：</p>
 <ul>
 <li>输入任意长度的信息，经过处理，输出为128位的信息（数字指纹）</li>
 <li>不同的输入得到的不同的结果（唯一性）</li>
@@ -319,15 +326,15 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">func genMD5(code string) string &#123;</span><br><span class="line">	h := md5.New()</span><br><span class="line">	_, _ = io.WriteString(h, code)</span><br><span class="line">	return hex.EncodeToString(h.Sum(nil))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>由于相同的输入，可以得到相同的结果，如果结果存储的非常多，可以出现暴力破解的情况。</p>
-<h3 id="盐值加密"><a href="#盐值加密" class="headerlink" title="盐值加密"></a>盐值加密</h3><p>在md5的基础上，增加一串随机字符串，一起加密，让结果无法预测。</p>
-<p>这个随机字符串的生成方式有很多种，可以直接通过uuid生成，或者通过时间戳获取纳秒的位数等，这里使用一个封装好的包</p>
+<p class="fireman-p-indent" >由于相同的输入，可以得到相同的结果，如果结果存储的非常多，可以出现暴力破解的情况。</p>
+<h3 id="盐值加密"><a href="#盐值加密" class="headerlink" title="盐值加密"></a>盐值加密</h3><p class="fireman-p-indent" >在md5的基础上，增加一串随机字符串，一起加密，让结果无法预测。</p>
+<p class="fireman-p-indent" >这个随机字符串的生成方式有很多种，可以直接通过uuid生成，或者通过时间戳获取纳秒的位数等，这里使用一个封装好的包</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/anaskhan96/go-password-encoder</span><br></pre></td></tr></table></figure>
 
-<p>实例</p>
+<p class="fireman-p-indent" >实例</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// Using the default options</span></span><br><span class="line">	salt, encodedPwd := password.Encode(<span class="string">&quot;generic password&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">	check := password.Verify(<span class="string">&quot;generic password&quot;</span>, salt, encodedPwd, <span class="literal">nil</span>)</span><br><span class="line">	fmt.Println(check) <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Using custom options		盐值长度 迭代次数 密码长度 hash函数</span></span><br><span class="line">	options := &amp;password.Options&#123;<span class="number">10</span>, <span class="number">10000</span>, <span class="number">16</span>, sha256.New&#125;</span><br><span class="line">	salt, encodedPwd = password.Encode(<span class="string">&quot;generic password&quot;</span>, options)</span><br><span class="line">	fmt.Println(salt)</span><br><span class="line">	<span class="comment">// niasTEh6l3</span></span><br><span class="line">	fmt.Println(encodedPwd)</span><br><span class="line">	<span class="comment">// 0c4f9de6c789d3ab07d17567937a3a2a</span></span><br><span class="line">	check = password.Verify(<span class="string">&quot;generic password&quot;</span>, salt, encodedPwd, options)</span><br><span class="line">	fmt.Println(check) <span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>优化使用，将加密方式、盐值、加密后密码一并存储</p>
+<p class="fireman-p-indent" >优化使用，将加密方式、盐值、加密后密码一并存储</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">options := &amp;password.Options&#123;<span class="number">10</span>, <span class="number">10000</span>, <span class="number">16</span>, sha256.New&#125;</span><br><span class="line">salt, encodedPwd = password.Encode(<span class="string">&quot;generic password&quot;</span>, options)</span><br><span class="line"></span><br><span class="line">pwd := fmt.Sprintf(<span class="string">&quot;pbkdf2-sha256$%s$%s&quot;</span>, salt, encodedPwd)</span><br><span class="line"><span class="comment">//savePWDtoDB(pwd)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// check passowrd</span></span><br><span class="line">p := strings.Split(pwd, <span class="string">&quot;$&quot;</span>)</span><br><span class="line"><span class="keyword">return</span> password.Verify(<span class="string">&quot;generic password&quot;</span>, p[<span class="number">1</span>], p[<span class="number">2</span>], options)</span><br></pre></td></tr></table></figure>
     </div>
 

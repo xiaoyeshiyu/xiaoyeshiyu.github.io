@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -66,7 +66,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -277,67 +284,67 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><h3 id="安装Linux"><a href="#安装Linux" class="headerlink" title="安装Linux"></a>安装Linux</h3><p>DevStack环境适用于Ubuntu 16.04&#x2F;17.04,Fedore 24&#x2F;25,CentOS&#x2F;RHEL 7,Debian和OpenSUSE。</p>
-<p>下面使用的是CentOS 7.3</p>
+    <div class="post-body" itemprop="articleBody"><h2 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h2><h3 id="安装Linux"><a href="#安装Linux" class="headerlink" title="安装Linux"></a>安装Linux</h3><p class="fireman-p-indent" >DevStack环境适用于Ubuntu 16.04&#x2F;17.04,Fedore 24&#x2F;25,CentOS&#x2F;RHEL 7,Debian和OpenSUSE。</p>
+<p class="fireman-p-indent" >下面使用的是CentOS 7.3</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# cat /etc/redhat-release </span><br><span class="line">CentOS Linux release 7.3.1611 (Core) </span><br><span class="line">[root@Mitaka ~]# uname -a </span><br><span class="line">Linux Mitaka 3.10.0-514.el7.x86_64 #1 SMP Tue Nov 22 16:42:41 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span><br></pre></td></tr></table></figure>
 
-<p>网络状态</p>
+<p class="fireman-p-indent" >网络状态</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# ifconfig </span><br><span class="line">ens160: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 192.168.50.97  netmask 255.255.255.0  broadcast 192.168.50.255</span><br><span class="line">        inet6 fe80::7314:f764:fe81:8e4a  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 00:0c:29:34:45:7b  txqueuelen 1000  (Ethernet)</span><br><span class="line">        RX packets 104399  bytes 151291538 (144.2 MiB)</span><br><span class="line">        RX errors 0  dropped 32  overruns 0  frame 0</span><br><span class="line">        TX packets 55598  bytes 4009855 (3.8 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
 
-<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>安装git</p>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p class="fireman-p-indent" >安装git</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# yum install -y git </span><br></pre></td></tr></table></figure>
 
-<p>关闭selinux、iptables</p>
+<p class="fireman-p-indent" >关闭selinux、iptables</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka keystone]# systemctl stop firewalld </span><br><span class="line">[root@Mitaka keystone]# systemctl disable firewalld</span><br><span class="line">[root@Mitaka keystone]# setenforce 0 </span><br><span class="line">[root@Mitaka keystone]# cat /etc/sysconfig/selinux </span><br><span class="line"></span><br><span class="line">	SELINUX=disabled</span><br></pre></td></tr></table></figure>
 
-<p>使用豆瓣pip源头</p>
+<p class="fireman-p-indent" >使用豆瓣pip源头</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# mkdir -p ~/.pip</span><br><span class="line">[root@Mitaka ~]# cat ~/.pip/pip.conf </span><br><span class="line">[global]</span><br><span class="line">index-url = http://mirrors.aliyun.com/pypi/simple/  </span><br><span class="line">[install] </span><br><span class="line">trusted-host = mirrors.aliyun.com</span><br></pre></td></tr></table></figure>
 
-<p>使用阿里yum源</p>
+<p class="fireman-p-indent" >使用阿里yum源</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# yum install -y wget </span><br><span class="line">[root@Mitaka ~]# wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">[root@Mitaka ~]# yum clean all </span><br><span class="line">[root@Mitaka ~]# yum makecache </span><br><span class="line">[root@Mitaka ~]# yum install epel-release -y</span><br><span class="line">[root@Mitaka ~]# yum install python-pip -y</span><br><span class="line">[root@Mitaka ~]# pip install --upgrade pip</span><br><span class="line">[root@Mitaka ~]# pip install -U os-testr</span><br></pre></td></tr></table></figure>
 
-<h3 id="安装阶段"><a href="#安装阶段" class="headerlink" title="安装阶段"></a>安装阶段</h3><p>创建stack用户</p>
+<h3 id="安装阶段"><a href="#安装阶段" class="headerlink" title="安装阶段"></a>安装阶段</h3><p class="fireman-p-indent" >创建stack用户</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# useradd -s /bin/bash -d /opt/stack -m stack</span><br><span class="line">[root@Mitaka ~]# echo &quot;stack ALL=(ALL) NOPASSWD: ALL&quot; | sudo tee /etc/sudoers.d/stack</span><br></pre></td></tr></table></figure>
 
-<p>下载DevStack</p>
+<p class="fireman-p-indent" >下载DevStack</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# sudo su - stack</span><br><span class="line">[stack@Mitaka ~]$ cd</span><br><span class="line">[stack@Mitaka ~]$ git clone https://git.openstack.org/openstack-dev/devstack</span><br></pre></td></tr></table></figure>
 
 <h3 id="创建local-conf配置文件"><a href="#创建local-conf配置文件" class="headerlink" title="创建local.conf配置文件"></a>创建local.conf配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[stack@Mitaka ~]$ cd devstack/</span><br><span class="line">[stack@Mitaka devstack]$ cat local.conf </span><br><span class="line">[[local|localrc]]</span><br><span class="line">ADMIN_PASSWORD=daemon</span><br><span class="line">DATABASE_PASSWORD=$ADMIN_PASSWORD</span><br><span class="line">RABBIT_PASSWORD=$ADMIN_PASSWORD</span><br><span class="line">SERVICE_PASSWORD=$ADMIN_PASSWORD</span><br></pre></td></tr></table></figure>
 
 <h3 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[stack@Mitaka devstack]$ ./stack.sh </span><br></pre></td></tr></table></figure>
 
-<p>这个过程会持续15-20分钟，这个时间取决于网络下载速度。</p>
-<h2 id="错误总结"><a href="#错误总结" class="headerlink" title="错误总结"></a>错误总结</h2><p>当安装出现问题的时候，首先清除当前环境，然后修改配置文件之后再次执行</p>
+<p class="fireman-p-indent" >这个过程会持续15-20分钟，这个时间取决于网络下载速度。</p>
+<h2 id="错误总结"><a href="#错误总结" class="headerlink" title="错误总结"></a>错误总结</h2><p class="fireman-p-indent" >当安装出现问题的时候，首先清除当前环境，然后修改配置文件之后再次执行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[stack@Mitaka devstack]$ ./unstack.sh </span><br><span class="line">[stack@Mitaka devstack]$ ./stack.sh </span><br></pre></td></tr></table></figure>
 
 <h3 id="出现-generate-subunit"><a href="#出现-generate-subunit" class="headerlink" title="出现 generate-subunit"></a>出现 generate-subunit</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2016-07-27 08:40:04.711 | ./stack.sh:686:git_clone</span><br><span class="line">2016-07-27 08:40:04.711 | /devstack/functions-common:444:git_timed</span><br><span class="line">2016-07-27 08:40:04.711 | /devstack/functions-common:510:die</span><br><span class="line">2016-07-27 08:40:04.713 | [ERROR] /devstack/functions-common:510 git call failed: [git clone git://git.openstack.org/openstack/requirements.git /opt/stack/requirements]</span><br><span class="line">2016-07-27 08:40:05.715 | Error on exit</span><br><span class="line">2016-07-27 08:40:05.716 | ./stack.sh: line 463: generate-subunit: command not found</span><br></pre></td></tr></table></figure>
 
-<p>解决办法：</p>
+<p class="fireman-p-indent" >解决办法：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka ~]# yum install python-pip -y</span><br><span class="line">[root@Mitaka ~]# pip install --upgrade pip</span><br><span class="line">[root@Mitaka ~]# pip install -U os-testr</span><br></pre></td></tr></table></figure>
 
 <h3 id="出现nova-api-did-not-start"><a href="#出现nova-api-did-not-start" class="headerlink" title="出现nova-api did not start"></a>出现nova-api did not start</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ERROR] /opt/stack/devstack/lib/nova:816 nova-api did not start</span><br></pre></td></tr></table></figure>
 
-<p>根据</p>
+<p class="fireman-p-indent" >根据</p>
 <blockquote>
-<p><span class="exturl" data-url="aHR0cDovL29wZW5zdGFjay4xMDkzMS5uNy5uYWJibGUuY29tL2Nhbi10LWluc3RhbGwtZGV2c3RhY2stbm92YS1hcGktZGlkLW5vdC1zdGFydC10ZDE3MjgwLmh0bWw=">http://openstack.10931.n7.nabble.com/can-t-install-devstack-nova-api-did-not-start-td17280.html<i class="fa fa-external-link-alt"></i></span>  </p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cDovL29wZW5zdGFjay4xMDkzMS5uNy5uYWJibGUuY29tL2Nhbi10LWluc3RhbGwtZGV2c3RhY2stbm92YS1hcGktZGlkLW5vdC1zdGFydC10ZDE3MjgwLmh0bWw=">http://openstack.10931.n7.nabble.com/can-t-install-devstack-nova-api-did-not-start-td17280.html<i class="fa fa-external-link-alt"></i></span>  </p>
 </blockquote>
-<p>所描述</p>
-<p><img src="https://cl.ly/3R1U1o191m30/Image%202017-09-01%20at%205.27.37%20PM.png" alt="nova-api did not start"></p>
-<p>解决办法：</p>
+<p class="fireman-p-indent" >所描述</p>
+<p class="fireman-p-indent" ><img src="https://cl.ly/3R1U1o191m30/Image%202017-09-01%20at%205.27.37%20PM.png" alt="nova-api did not start"></p>
+<p class="fireman-p-indent" >解决办法：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Mitaka nova]# pip install oslo.config</span><br></pre></td></tr></table></figure>
 
 <h3 id="出现keystone-not-start"><a href="#出现keystone-not-start" class="headerlink" title="出现keystone not start"></a>出现keystone not start</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ERROR] /opt/stack/devstack/lib/keystone:567 keystone did not start</span><br></pre></td></tr></table></figure>
 
-<p>解决办法：</p>
-<p>在local.conf中添加</p>
+<p class="fireman-p-indent" >解决办法：</p>
+<p class="fireman-p-indent" >在local.conf中添加</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HOST_IP=192.168.50.97</span><br><span class="line">SERVICE_HOST=127.0.0.1</span><br></pre></td></tr></table></figure>
 
 <h3 id="第二个节点出现"><a href="#第二个节点出现" class="headerlink" title="第二个节点出现"></a>第二个节点出现</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">2017-12-08 03:39:15.552 | +functions:wait_for_compute:455            echo &#x27;Didn&#x27;\&#x27;&#x27;t find service registered by hostname after 60 seconds&#x27;</span><br><span class="line">2017-12-08 03:39:15.552 | Didn&#x27;t find service registered by hostname after 60 seconds</span><br><span class="line">2017-12-08 03:39:15.558 | +functions:wait_for_compute:456            openstack --os-cloud devstack-admin --os-region RegionOne compute service list</span><br><span class="line">2017-12-08 03:39:18.400 | +----+------------------+---------+----------+---------+-------+----------------------------+</span><br><span class="line">2017-12-08 03:39:18.400 | | ID | Binary           | Host    | Zone     | Status  | State | Updated At                 |</span><br><span class="line">2017-12-08 03:39:18.400 | +----+------------------+---------+----------+---------+-------+----------------------------+</span><br><span class="line">2017-12-08 03:39:18.400 | |  3 | nova-scheduler   | stack01 | internal | enabled | up    | 2017-12-07T09:25:01.000000 |</span><br><span class="line">2017-12-08 03:39:18.400 | |  5 | nova-consoleauth | stack01 | internal | enabled | up    | 2017-12-07T09:24:59.000000 |</span><br><span class="line">2017-12-08 03:39:18.401 | |  6 | nova-conductor   | stack01 | internal | enabled | up    | 2017-12-07T09:24:57.000000 |</span><br><span class="line">2017-12-08 03:39:18.401 | |  1 | nova-conductor   | stack01 | internal | enabled | up    | 2017-12-07T09:24:57.000000 |</span><br><span class="line">2017-12-08 03:39:18.401 | |  2 | nova-compute     | stack01 | nova     | enabled | up    | 2017-12-07T09:25:05.000000 |</span><br><span class="line">2017-12-08 03:39:18.401 | +----+------------------+---------+----------+---------+-------+----------------------------+</span><br><span class="line">2017-12-08 03:39:18.488 | +functions:wait_for_compute:458            return 124</span><br><span class="line">2017-12-08 03:39:18.496 | +lib/nova:is_nova_ready:1                  exit_trap</span><br><span class="line">2017-12-08 03:39:18.504 | +./stack.sh:exit_trap:493                  local r=124</span><br><span class="line">2017-12-08 03:39:18.512 | ++./stack.sh:exit_trap:494                  jobs -p</span><br><span class="line">2017-12-08 03:39:18.520 | +./stack.sh:exit_trap:494                  jobs=</span><br><span class="line">2017-12-08 03:39:18.528 | +./stack.sh:exit_trap:497                  [[ -n &#x27;&#x27; ]]</span><br><span class="line">2017-12-08 03:39:18.535 | +./stack.sh:exit_trap:503                  &#x27;[&#x27; -f /tmp/tmp.rcd8I7zW4x &#x27;]&#x27;</span><br><span class="line">2017-12-08 03:39:18.541 | +./stack.sh:exit_trap:504                  rm /tmp/tmp.rcd8I7zW4x</span><br><span class="line">2017-12-08 03:39:18.549 | +./stack.sh:exit_trap:508                  kill_spinner</span><br><span class="line">2017-12-08 03:39:18.556 | +./stack.sh:kill_spinner:407               &#x27;[&#x27; &#x27;!&#x27; -z &#x27;&#x27; &#x27;]&#x27;</span><br><span class="line">2017-12-08 03:39:18.563 | +./stack.sh:exit_trap:510                  [[ 124 -ne 0 ]]</span><br><span class="line">2017-12-08 03:39:18.569 | +./stack.sh:exit_trap:511                  echo &#x27;Error on exit&#x27;</span><br><span class="line">2017-12-08 03:39:18.569 | Error on exit</span><br></pre></td></tr></table></figure>
 
-<p>解决办法</p>
-<p>暂无，最新的坑，暂时没有看到有人填。</p>
-<h2 id="安装成功"><a href="#安装成功" class="headerlink" title="安装成功"></a>安装成功</h2><p>安装成功之后，界面会显示</p>
-<p><img src="https://cl.ly/17303l261C2E/Image%202017-09-03%20at%207.44.23%20PM.png" alt="DevStack安装成功图"></p>
+<p class="fireman-p-indent" >解决办法</p>
+<p class="fireman-p-indent" >暂无，最新的坑，暂时没有看到有人填。</p>
+<h2 id="安装成功"><a href="#安装成功" class="headerlink" title="安装成功"></a>安装成功</h2><p class="fireman-p-indent" >安装成功之后，界面会显示</p>
+<p class="fireman-p-indent" ><img src="https://cl.ly/17303l261C2E/Image%202017-09-03%20at%207.44.23%20PM.png" alt="DevStack安装成功图"></p>
 <h2 id="stack-sh中的执行顺序："><a href="#stack-sh中的执行顺序：" class="headerlink" title="stack.sh中的执行顺序："></a>stack.sh中的执行顺序：</h2><ol>
 <li>支持OS类型包括Ubuntu 12.04或以上；Fedora F18或以上</li>
 <li>禁止使用root运行</li>
@@ -361,9 +368,9 @@
 <li>安装images</li>
 <li>启动swift，nova_api，neutron，nova，cinder，ceilometer，heat</li>
 </ol>
-<p>参考资料：</p>
+<p class="fireman-p-indent" >参考资料：</p>
 <blockquote>
-<p><span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhaWhhaWZlaS9hcnRpY2xlL2RldGFpbHMvNDA4OTM4MjM=">http://blog.csdn.net/zhaihaifei/article/details/40893823<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhaWhhaWZlaS9hcnRpY2xlL2RldGFpbHMvNDA4OTM4MjM=">http://blog.csdn.net/zhaihaifei/article/details/40893823<i class="fa fa-external-link-alt"></i></span></p>
 </blockquote>
 
     </div>

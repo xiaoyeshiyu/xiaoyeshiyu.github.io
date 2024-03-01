@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -86,7 +86,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -297,119 +304,119 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h1><p>进程和线程的区别对于理解<code>Goroutine</code>很重要。</p>
-<p>操作系统会为该应用程序创建一个<strong>进程</strong>。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h1><p class="fireman-p-indent" >进程和线程的区别对于理解<code>Goroutine</code>很重要。</p>
+<p class="fireman-p-indent" >操作系统会为该应用程序创建一个<strong>进程</strong>。</p>
 <ul>
 <li>作为一个应用程序，它像一个为所有资源而运行的容器。这些资源包括内存地址空间、文件句柄、设备和线程。</li>
 </ul>
-<p><strong>线程</strong>是操作系统调度的一种执行路径，用于在处理器上执行在函数中编写的代码。</p>
+<p class="fireman-p-indent" ><strong>线程</strong>是操作系统调度的一种执行路径，用于在处理器上执行在函数中编写的代码。</p>
 <ul>
 <li>一个进程从一个线程开始，即主线程，当该线程终止时，进程终止，这是由于主线程是应用程序的原点</li>
 <li>然后，主线程可以依次启动更多的线程，而这些线程可以启动更多的线程</li>
 </ul>
-<p>无论线程属于哪个进程，操作系统都会安排线程在可用处理器上运行。每个操作系统都有自己的算法来做出这些决定。</p>
-<h1 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h1><p><code>Go</code>语言层面支持的<code>go</code>关键字，可以快速的让一个函数创建为<code>goroutine</code>，可以认为<code>main</code>函数就是作为<code>goroutine</code>执行的。</p>
-<p>操作系统调度线程在可用处理器上运行，<code>Go</code>运行时调度<code>goroutines</code>在绑定到单个操作系统线程的逻辑处理器中运行(<code>P</code>)。</p>
-<p>即使使用这个单一的逻辑处理器和操作系统线程，也可以调度数十万<code>goroutine</code>以惊人的效率和性能并发运行。</p>
+<p class="fireman-p-indent" >无论线程属于哪个进程，操作系统都会安排线程在可用处理器上运行。每个操作系统都有自己的算法来做出这些决定。</p>
+<h1 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h1><p class="fireman-p-indent" ><code>Go</code>语言层面支持的<code>go</code>关键字，可以快速的让一个函数创建为<code>goroutine</code>，可以认为<code>main</code>函数就是作为<code>goroutine</code>执行的。</p>
+<p class="fireman-p-indent" >操作系统调度线程在可用处理器上运行，<code>Go</code>运行时调度<code>goroutines</code>在绑定到单个操作系统线程的逻辑处理器中运行(<code>P</code>)。</p>
+<p class="fireman-p-indent" >即使使用这个单一的逻辑处理器和操作系统线程，也可以调度数十万<code>goroutine</code>以惊人的效率和性能并发运行。</p>
 <blockquote>
-<p>Concurrency is not Parallelism.</p>
-<p>并发不是并行。</p>
+<p class="fireman-p-indent" >Concurrency is not Parallelism.</p>
+<p class="fireman-p-indent" >并发不是并行。</p>
 </blockquote>
-<p><strong>并行</strong>是指两个或多个线程，同时在不同的处理器上执行代码。如果将运行时配置为使用多个逻辑处理器（CPU core），则调度程序将在这些逻辑处理器之间分配 <code>goroutine</code>，这将导致 <code>goroutine</code>在不同的操作系统<strong>线程</strong>上运行。</p>
-<p>但是，要获得真正的并行性，需要在具有多个物理处理器的计算机上运行程序。</p>
-<p>否则，<code>goroutine</code>将针对单个物理处理器并发运行，即使 Go 运行时，使用多个逻辑处理器。</p>
-<p>例如：</p>
-<h2 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h2><p>开启 <code>HTTP</code> 服务，通过监听某个接口实现访问。</p>
-<h3 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829150612387.png" alt="image-20230829150612387"></p>
-<p>空 <code>select</code> 语句将永远阻塞。</p>
-<p>通过关键字 <code>go</code>启动一个<code>HTTP</code>服务。</p>
-<p>但是上述代码有一个问题：如果 <code>HTTP</code> 服务异常，协程退出，但是 <code>main</code> 函数不会退出。</p>
-<p>如果你的 <code>goroutine</code> 在从另一个 <code>goroutine</code> 获得结果之前，无法取得进展，那么通常情况下，你自己去做这项工作，比委派它（<code>go func()</code>）更简单。</p>
-<p>者通常消除了将结果从 <code>goroutine</code> 返回到其启动器所需的大量状态跟踪和 <code>chan</code> 操作。</p>
-<h3 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828170224231.png" alt="image-20230828170224231"></p>
-<p>但是实际情况下，<code>main</code>函数不一定只会有一个<code>goroutine</code>需要阻塞，例如 <code>main</code>中需要监听多个端口。</p>
-<h3 id="示例3"><a href="#示例3" class="headerlink" title="示例3"></a>示例3</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828170525246.png" alt="image-20230828170525246"></p>
-<p>在 <code>8080</code> 端口处理通常的 <code>HTTP</code> 请求，<code>8001</code> 端口用于访问 <code>/debug/pprof</code> 端点。</p>
-<p>这种启动方式跟例子1一样，都无法获取 <code>goroutine</code> 状态。</p>
+<p class="fireman-p-indent" ><strong>并行</strong>是指两个或多个线程，同时在不同的处理器上执行代码。如果将运行时配置为使用多个逻辑处理器（CPU core），则调度程序将在这些逻辑处理器之间分配 <code>goroutine</code>，这将导致 <code>goroutine</code>在不同的操作系统<strong>线程</strong>上运行。</p>
+<p class="fireman-p-indent" >但是，要获得真正的并行性，需要在具有多个物理处理器的计算机上运行程序。</p>
+<p class="fireman-p-indent" >否则，<code>goroutine</code>将针对单个物理处理器并发运行，即使 Go 运行时，使用多个逻辑处理器。</p>
+<p class="fireman-p-indent" >例如：</p>
+<h2 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h2><p class="fireman-p-indent" >开启 <code>HTTP</code> 服务，通过监听某个接口实现访问。</p>
+<h3 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829150612387.png" alt="image-20230829150612387"></p>
+<p class="fireman-p-indent" >空 <code>select</code> 语句将永远阻塞。</p>
+<p class="fireman-p-indent" >通过关键字 <code>go</code>启动一个<code>HTTP</code>服务。</p>
+<p class="fireman-p-indent" >但是上述代码有一个问题：如果 <code>HTTP</code> 服务异常，协程退出，但是 <code>main</code> 函数不会退出。</p>
+<p class="fireman-p-indent" >如果你的 <code>goroutine</code> 在从另一个 <code>goroutine</code> 获得结果之前，无法取得进展，那么通常情况下，你自己去做这项工作，比委派它（<code>go func()</code>）更简单。</p>
+<p class="fireman-p-indent" >者通常消除了将结果从 <code>goroutine</code> 返回到其启动器所需的大量状态跟踪和 <code>chan</code> 操作。</p>
+<h3 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828170224231.png" alt="image-20230828170224231"></p>
+<p class="fireman-p-indent" >但是实际情况下，<code>main</code>函数不一定只会有一个<code>goroutine</code>需要阻塞，例如 <code>main</code>中需要监听多个端口。</p>
+<h3 id="示例3"><a href="#示例3" class="headerlink" title="示例3"></a>示例3</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828170525246.png" alt="image-20230828170525246"></p>
+<p class="fireman-p-indent" >在 <code>8080</code> 端口处理通常的 <code>HTTP</code> 请求，<code>8001</code> 端口用于访问 <code>/debug/pprof</code> 端点。</p>
+<p class="fireman-p-indent" >这种启动方式跟例子1一样，都无法获取 <code>goroutine</code> 状态。</p>
 <blockquote>
-<p><strong>Never start a goroutine without knowning when it will stop</strong></p>
+<p class="fireman-p-indent" ><strong>Never start a goroutine without knowning when it will stop</strong></p>
 </blockquote>
-<p>如果不知道 <code>goroutine</code> 什么时候结束，那么就不应该启动这个 <code>goroutine</code>。</p>
-<h3 id="示例4"><a href="#示例4" class="headerlink" title="示例4"></a>示例4</h3><p>将案例3进行优化。通过将 <code>serverApp</code> 和 <code>serveDebug</code> 处理程序分解为各自的函数，将它们与 <code>main.main</code>  解耦，而且遵循上面的建议，并确保 <code>serveApp</code> 和 <code>serveDebug</code> 将它们的并发性留给调用者。</p>
-<p>如果 <code>serveApp</code> 返回，则 <code>main.main</code> 将返回导致程序关闭，只能靠类似 <code>supervisor</code> 进程管理来重新启动。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828171133713.png" alt="image-20230828171133713"></p>
-<p>然而，<code>serveDebug</code> 是在一个单独的 <code>goroutine</code> 中运行的，如果它返回，那么所在的 <code>goroutine</code> 将退出，而程序的其余部分继续运行。由于 <code>/debug</code> 处理程序很久以前就停止工作，所以其他调用者会很不高兴地发现他们无法在需要时从应用程序中获取统计信息。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828171335965.png" alt="image-20230828171335965"></p>
-<p>并且需要注意，这种 <code>busy work</code> 应该是自身执行，而不是在内部实现 <code>go func()</code>，并且阻塞。外部如果调用，除非看代码，不然无法感知到阻塞状态。</p>
-<p><code>ListenAndServer</code> 返回 <code>nil error</code>，最终 <code>main.main</code>无法退出</p>
-<p><code>log.Fatal</code> 调用了 <code>os.Exit</code>，会无条件终止程序；<code>defer</code> 不会被调用。</p>
+<p class="fireman-p-indent" >如果不知道 <code>goroutine</code> 什么时候结束，那么就不应该启动这个 <code>goroutine</code>。</p>
+<h3 id="示例4"><a href="#示例4" class="headerlink" title="示例4"></a>示例4</h3><p class="fireman-p-indent" >将案例3进行优化。通过将 <code>serverApp</code> 和 <code>serveDebug</code> 处理程序分解为各自的函数，将它们与 <code>main.main</code>  解耦，而且遵循上面的建议，并确保 <code>serveApp</code> 和 <code>serveDebug</code> 将它们的并发性留给调用者。</p>
+<p class="fireman-p-indent" >如果 <code>serveApp</code> 返回，则 <code>main.main</code> 将返回导致程序关闭，只能靠类似 <code>supervisor</code> 进程管理来重新启动。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828171133713.png" alt="image-20230828171133713"></p>
+<p class="fireman-p-indent" >然而，<code>serveDebug</code> 是在一个单独的 <code>goroutine</code> 中运行的，如果它返回，那么所在的 <code>goroutine</code> 将退出，而程序的其余部分继续运行。由于 <code>/debug</code> 处理程序很久以前就停止工作，所以其他调用者会很不高兴地发现他们无法在需要时从应用程序中获取统计信息。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828171335965.png" alt="image-20230828171335965"></p>
+<p class="fireman-p-indent" >并且需要注意，这种 <code>busy work</code> 应该是自身执行，而不是在内部实现 <code>go func()</code>，并且阻塞。外部如果调用，除非看代码，不然无法感知到阻塞状态。</p>
+<p class="fireman-p-indent" ><code>ListenAndServer</code> 返回 <code>nil error</code>，最终 <code>main.main</code>无法退出</p>
+<p class="fireman-p-indent" ><code>log.Fatal</code> 调用了 <code>os.Exit</code>，会无条件终止程序；<code>defer</code> 不会被调用。</p>
 <blockquote>
-<p><code>log.Fatal</code> 只能在 <code>main.main</code> 中或者 <code>init</code> 函数中使用。</p>
+<p class="fireman-p-indent" ><code>log.Fatal</code> 只能在 <code>main.main</code> 中或者 <code>init</code> 函数中使用。</p>
 </blockquote>
-<h3 id="示例5"><a href="#示例5" class="headerlink" title="示例5"></a>示例5</h3><p>通过 <code>channel</code> 实现服务状态监控，并且安全退出。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828172015598.png" alt="image-20230828172015598"></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828172019236.png" alt="image-20230828172019236"></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RhNDQwZGlsL2dvLXdvcmtncm91cA==">https://github.com/da440dil/go-workgroup<i class="fa fa-external-link-alt"></i></span></p>
-<h2 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a>案例2</h2><p><strong>把并行交给调用者</strong></p>
-<p>获取大量数据，是否一次性返回。</p>
-<h3 id="示例1-1"><a href="#示例1-1" class="headerlink" title="示例1"></a>示例1</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828173658890.png" alt="image-20230828173658890"></p>
+<h3 id="示例5"><a href="#示例5" class="headerlink" title="示例5"></a>示例5</h3><p class="fireman-p-indent" >通过 <code>channel</code> 实现服务状态监控，并且安全退出。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828172015598.png" alt="image-20230828172015598"></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828172019236.png" alt="image-20230828172019236"></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RhNDQwZGlsL2dvLXdvcmtncm91cA==">https://github.com/da440dil/go-workgroup<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a>案例2</h2><p class="fireman-p-indent" ><strong>把并行交给调用者</strong></p>
+<p class="fireman-p-indent" >获取大量数据，是否一次性返回。</p>
+<h3 id="示例1-1"><a href="#示例1-1" class="headerlink" title="示例1"></a>示例1</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828173658890.png" alt="image-20230828173658890"></p>
 <ul>
 <li>将目录赌气到一个 <code>slice</code> 中，然后返回整个切片，如果出现错误，则返回错误。这是同步调用的，<code>ListDirectory</code> 的调用方会阻塞，直到读取所有目录条目。根据目录大小，这可能需要很长时间，并且可能会分配大量内存来构建目录条目名称的 <code>slice</code>。</li>
 <li><code>ListDirectory</code> 返回一个 <code>chan string</code>，将通过该 <code>chan</code> 传递目录。当通道关闭时，表示不再有目录。（可以通过<code>range</code>知道 <code>channel</code> 是否关闭，或者通过第二个值<code>ok</code>判断<code>channel</code>是否关闭。）由于在 <code>ListDirectory</code> 返回后发生通道的填充， <code>ListDirectory</code> 可能内部启动 <code>goroutine</code> 来填充通道。</li>
 </ul>
-<p><code>ListDirectory chan</code> 版本还有两个问题：</p>
+<p class="fireman-p-indent" ><code>ListDirectory chan</code> 版本还有两个问题：</p>
 <ul>
 <li>通过使用一个关闭的 <code>chan</code> 作为不再需要处理的项目的信号， <code>ListDirectory</code> 无法告诉调用者通过 <code>chan</code> 返回的项目集不完整，因为中途遇到了错误。调用方无法区分空目录于完全从目录读取的错误之间的区别。这两种方法都会导致从 <code>ListDirectory</code> 返回的通道会立即关闭。</li>
 <li>调用者必须继续从通道读取，直到它关闭。（例如已经获取到需要的目录，后面已经不需要，如果不消费完，生产者会堵住，可能导致 <code>chan</code> 泄露。）因为这是调用者直到开始填充通道的 <code>goroutine</code> 已经停止的唯一方法。这对 <code>ListDirectory</code> 的使用是一个严重的限制，调用者必须花时间从通道读取数据，即使它可能收到了它想要的答案。对于大中型目录，它可能在内存使用方面更为高效，但这种方法并不比原始的基于 <code>slice</code> 的方法快。</li>
 </ul>
-<h3 id="示例2-1"><a href="#示例2-1" class="headerlink" title="示例2"></a>示例2</h3><p>使用函数式编程解决这个问题</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828175244989.png" alt="image-20230828175244989"></p>
-<p><code>filepath.WalkDir</code>也是类似的模型。如果函数启动 <code>goroutine</code> ，则必须向调用方提供显示停止该 <code>goroutine</code> 的方法。通常，将异步执行函数的决定权交给该函数的调用方更容易。</p>
-<p><code>go1.19.6/src/path/filepath/path.go</code></p>
+<h3 id="示例2-1"><a href="#示例2-1" class="headerlink" title="示例2"></a>示例2</h3><p class="fireman-p-indent" >使用函数式编程解决这个问题</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828175244989.png" alt="image-20230828175244989"></p>
+<p class="fireman-p-indent" ><code>filepath.WalkDir</code>也是类似的模型。如果函数启动 <code>goroutine</code> ，则必须向调用方提供显示停止该 <code>goroutine</code> 的方法。通常，将异步执行函数的决定权交给该函数的调用方更容易。</p>
+<p class="fireman-p-indent" ><code>go1.19.6/src/path/filepath/path.go</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WalkDir</span><span class="params">(root <span class="type">string</span>, fn fs.WalkDirFunc)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">	info, err := os.Lstat(root)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		err = fn(root, <span class="literal">nil</span>, err)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		err = walkDir(root, &amp;statDirEntry&#123;info&#125;, fn)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> err == SkipDir &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// walkDir recursively descends path, calling walkDirFn.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">walkDir</span><span class="params">(path <span class="type">string</span>, d fs.DirEntry, walkDirFn fs.WalkDirFunc)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> err := walkDirFn(path, d, <span class="literal">nil</span>); err != <span class="literal">nil</span> || !d.IsDir() &#123;</span><br><span class="line">		<span class="keyword">if</span> err == SkipDir &amp;&amp; d.IsDir() &#123;</span><br><span class="line">			<span class="comment">// Successfully skipped directory.</span></span><br><span class="line">			err = <span class="literal">nil</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	dirs, err := readDir(path)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// Second call, to report ReadDir error.</span></span><br><span class="line">		err = walkDirFn(path, d, err)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> err == SkipDir &amp;&amp; d.IsDir() &#123;</span><br><span class="line">				err = <span class="literal">nil</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> err</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, d1 := <span class="keyword">range</span> dirs &#123;</span><br><span class="line">		path1 := Join(path, d1.Name())</span><br><span class="line">		<span class="keyword">if</span> err := walkDir(path1, d1, walkDirFn); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> err == SkipDir &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> err</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><code>/go1.19.6/src/os/os_test.go</code></p>
+<p class="fireman-p-indent" ><code>/go1.19.6/src/os/os_test.go</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> err := filepath.WalkDir(<span class="string">&quot;./testdata/dirfs&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(path <span class="type">string</span>, d fs.DirEntry, err <span class="type">error</span>)</span></span> <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		t.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	info, err := d.Info()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		t.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	stat, err := Stat(path) <span class="comment">// This uses GetFileInformationByHandle internally.</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		t.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> stat.ModTime() == info.ModTime() &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> err := Chtimes(path, stat.ModTime(), stat.ModTime()); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		t.Log(err) <span class="comment">// We only log, not die, in case the test directory is not writable.</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;); err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Fatal(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="案例3"><a href="#案例3" class="headerlink" title="案例3"></a>案例3</h2><p>在启用 <code>goroutine</code> 时，一定要注意生命周期，避免 <code>goroutine</code> 泄露。</p>
-<h3 id="示例1-2"><a href="#示例1-2" class="headerlink" title="示例1"></a>示例1</h3><p>在下面的例子中，<code>goroutine</code> 泄露可以在 <code>code review</code> 快速识别出来。不幸的是，生产代码中的 <code>goroutine</code> 泄露通常很难找到。</p>
-<p>比如下面的代码：</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828180042842.png" alt="image-20230828180042842"></p>
-<p>由于 <code>ch</code> 是一个局部变量，不会有其他的调用者往 <code>ch</code> 中发送数据，因此 <code>go func()</code> 中的内容永远不会执行到，这会产生 <code>channel</code> 泄漏。</p>
-<h3 id="示例2-2"><a href="#示例2-2" class="headerlink" title="示例2"></a>示例2</h3><p> 协程的执行需要注意是否能控制结束，例如</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829113046960.png" alt="image-20230829113046960"></p>
-<p><code>search</code> 函数是一个模拟实现，模拟长时间运行的操作，例如数据库大数据量查询或者 <code>rpc</code> 调用。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829113130956.png" alt="image-20230829113130956"></p>
-<p><code>process</code> 函数接受调用者参数，调用 <code>search</code> ，对于某些应用程序，顺序调用产生的延迟可能是不可接受的。</p>
-<p>这里需要注意，例如这个请求是在 <code>goroutine</code> 中，由于无法确定 <code>search</code> 函数的耗时，也无法获取到执行状态，可能会造成 <code>goroutine</code> 泄漏。</p>
-<p>这里就可以通过 <code>context</code> 实现超时控制。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829113425414.png" alt="image-20230829113425414"></p>
-<h2 id="案例4"><a href="#案例4" class="headerlink" title="案例4"></a>案例4</h2><p>由于处理<code>goroutine</code> ，导致一些未完成的工作。</p>
-<h3 id="示例1-3"><a href="#示例1-3" class="headerlink" title="示例1"></a>示例1</h3><p>例如使用服务端埋点来跟踪记录一些事件，或者使用日志等服务</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829113649326.png" alt="image-20230829113649326"></p>
-<p>由于这类埋点属于旁路逻辑，通常会使用 <code>goroutine</code> 实现</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829114602870.png" alt="image-20230829114602870"></p>
-<p>这种写法会有一个问题，无法保证创建的 <code>goroutine</code> 声明周期管理，会导致常见问题，在服务关闭的时候，有一些事件、日志会丢失。</p>
-<h3 id="示例2-3"><a href="#示例2-3" class="headerlink" title="示例2"></a>示例2</h3><p>使用 <code>sync.WaitGroup</code> 来追踪每一个创建的 <code>goroutine</code></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829114800553.png" alt="image-20230829114800553"></p>
-<p>调用一次，增加一个 <code>wg</code></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829114751937.png" alt="image-20230829114751937"></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829114841448-20230829143207507.png" alt="image-20230829114841448"></p>
-<p>在退出时，使用 <code>waitgroup</code> ，保证所有的 <code>goroutine</code> 全部退出。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829115103053.png" alt="image-20230829115103053"></p>
-<p>使用时，将 <code>wg.Wait()</code> 操作托管到其他 <code>goroutine</code> ，<code>owner goroutine</code> 使用 <code>context</code> 处理超时。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829115226578.png" alt="image-20230829115226578"></p>
-<p>但是，在一个高并发情况下，这样开启 <code>goroutine</code> 的成本是比较大的。</p>
-<h3 id="示例3-1"><a href="#示例3-1" class="headerlink" title="示例3"></a>示例3</h3><p>通过 <code>channel</code> 的生产和消费，避免大量 <code>goroutine</code> ，同时通过 <code>channel</code> 跨协程通信，管控生命周期。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829115653745.png" alt="image-20230829115653745"></p>
-<p>生产消息，往 <code>channel</code> 中丢数据。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829115750647.png" alt="image-20230829115750647"></p>
-<p>消费消息使用 <code>goroutine</code> 开启消费协程。</p>
-<p>通过 <code>shutdown</code> ，既可以超时控制，也可以自身控制。</p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTgvMTEvZ29yb3V0aW5lLWxlYWtzLXRoZS1mb3Jnb3R0ZW4tc2VuZGVyLmh0bWw=">Goroutine Leaks - The Forgotten Sender<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMDQvY29uY3VycmVuY3ktdHJhcC0yLWluY29tcGxldGUtd29yay5odG1s">Concurrency Trap #2: Incomplete Work<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTQvMDEvY29uY3VycmVuY3ktZ29yb3V0aW5lcy1hbmQtZ29tYXhwcm9jcy5odG1s">Concurrency, Goroutines and GOMAXPROCS<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvcHJhY3RpY2FsLWdvL3ByZXNlbnRhdGlvbnMvcWNvbi1jaGluYS5odG1sI19jb25jdXJyZW5jeQ==">Concurrency<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="案例3"><a href="#案例3" class="headerlink" title="案例3"></a>案例3</h2><p class="fireman-p-indent" >在启用 <code>goroutine</code> 时，一定要注意生命周期，避免 <code>goroutine</code> 泄露。</p>
+<h3 id="示例1-2"><a href="#示例1-2" class="headerlink" title="示例1"></a>示例1</h3><p class="fireman-p-indent" >在下面的例子中，<code>goroutine</code> 泄露可以在 <code>code review</code> 快速识别出来。不幸的是，生产代码中的 <code>goroutine</code> 泄露通常很难找到。</p>
+<p class="fireman-p-indent" >比如下面的代码：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230828180042842.png" alt="image-20230828180042842"></p>
+<p class="fireman-p-indent" >由于 <code>ch</code> 是一个局部变量，不会有其他的调用者往 <code>ch</code> 中发送数据，因此 <code>go func()</code> 中的内容永远不会执行到，这会产生 <code>channel</code> 泄漏。</p>
+<h3 id="示例2-2"><a href="#示例2-2" class="headerlink" title="示例2"></a>示例2</h3><p class="fireman-p-indent" > 协程的执行需要注意是否能控制结束，例如</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829113046960.png" alt="image-20230829113046960"></p>
+<p class="fireman-p-indent" ><code>search</code> 函数是一个模拟实现，模拟长时间运行的操作，例如数据库大数据量查询或者 <code>rpc</code> 调用。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829113130956.png" alt="image-20230829113130956"></p>
+<p class="fireman-p-indent" ><code>process</code> 函数接受调用者参数，调用 <code>search</code> ，对于某些应用程序，顺序调用产生的延迟可能是不可接受的。</p>
+<p class="fireman-p-indent" >这里需要注意，例如这个请求是在 <code>goroutine</code> 中，由于无法确定 <code>search</code> 函数的耗时，也无法获取到执行状态，可能会造成 <code>goroutine</code> 泄漏。</p>
+<p class="fireman-p-indent" >这里就可以通过 <code>context</code> 实现超时控制。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829113425414.png" alt="image-20230829113425414"></p>
+<h2 id="案例4"><a href="#案例4" class="headerlink" title="案例4"></a>案例4</h2><p class="fireman-p-indent" >由于处理<code>goroutine</code> ，导致一些未完成的工作。</p>
+<h3 id="示例1-3"><a href="#示例1-3" class="headerlink" title="示例1"></a>示例1</h3><p class="fireman-p-indent" >例如使用服务端埋点来跟踪记录一些事件，或者使用日志等服务</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829113649326.png" alt="image-20230829113649326"></p>
+<p class="fireman-p-indent" >由于这类埋点属于旁路逻辑，通常会使用 <code>goroutine</code> 实现</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829114602870.png" alt="image-20230829114602870"></p>
+<p class="fireman-p-indent" >这种写法会有一个问题，无法保证创建的 <code>goroutine</code> 声明周期管理，会导致常见问题，在服务关闭的时候，有一些事件、日志会丢失。</p>
+<h3 id="示例2-3"><a href="#示例2-3" class="headerlink" title="示例2"></a>示例2</h3><p class="fireman-p-indent" >使用 <code>sync.WaitGroup</code> 来追踪每一个创建的 <code>goroutine</code></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829114800553.png" alt="image-20230829114800553"></p>
+<p class="fireman-p-indent" >调用一次，增加一个 <code>wg</code></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829114751937.png" alt="image-20230829114751937"></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829114841448-20230829143207507.png" alt="image-20230829114841448"></p>
+<p class="fireman-p-indent" >在退出时，使用 <code>waitgroup</code> ，保证所有的 <code>goroutine</code> 全部退出。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829115103053.png" alt="image-20230829115103053"></p>
+<p class="fireman-p-indent" >使用时，将 <code>wg.Wait()</code> 操作托管到其他 <code>goroutine</code> ，<code>owner goroutine</code> 使用 <code>context</code> 处理超时。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829115226578.png" alt="image-20230829115226578"></p>
+<p class="fireman-p-indent" >但是，在一个高并发情况下，这样开启 <code>goroutine</code> 的成本是比较大的。</p>
+<h3 id="示例3-1"><a href="#示例3-1" class="headerlink" title="示例3"></a>示例3</h3><p class="fireman-p-indent" >通过 <code>channel</code> 的生产和消费，避免大量 <code>goroutine</code> ，同时通过 <code>channel</code> 跨协程通信，管控生命周期。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829115653745.png" alt="image-20230829115653745"></p>
+<p class="fireman-p-indent" >生产消息，往 <code>channel</code> 中丢数据。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829115750647.png" alt="image-20230829115750647"></p>
+<p class="fireman-p-indent" >消费消息使用 <code>goroutine</code> 开启消费协程。</p>
+<p class="fireman-p-indent" >通过 <code>shutdown</code> ，既可以超时控制，也可以自身控制。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTgvMTEvZ29yb3V0aW5lLWxlYWtzLXRoZS1mb3Jnb3R0ZW4tc2VuZGVyLmh0bWw=">Goroutine Leaks - The Forgotten Sender<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTkvMDQvY29uY3VycmVuY3ktdHJhcC0yLWluY29tcGxldGUtd29yay5odG1s">Concurrency Trap #2: Incomplete Work<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuYXJkYW5sYWJzLmNvbS9ibG9nLzIwMTQvMDEvY29uY3VycmVuY3ktZ29yb3V0aW5lcy1hbmQtZ29tYXhwcm9jcy5odG1s">Concurrency, Goroutines and GOMAXPROCS<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvcHJhY3RpY2FsLWdvL3ByZXNlbnRhdGlvbnMvcWNvbi1jaGluYS5odG1sI19jb25jdXJyZW5jeQ==">Concurrency<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

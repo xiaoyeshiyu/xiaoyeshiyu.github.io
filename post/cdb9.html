@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -92,7 +92,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -180,7 +187,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">系统架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84-VS-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.1.</span> <span class="nav-text">传统分层架构 VS 微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%94%B9%E9%80%A0"><span class="nav-number">1.2.</span> <span class="nav-text">微服务改造</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%B4%E9%80%9A%E8%AE%AF"><span class="nav-number">1.3.</span> <span class="nav-text">微服务间通讯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E5%AF%B9%E7%82%B9"><span class="nav-number">1.3.1.</span> <span class="nav-text">点对点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-%E7%BD%91%E5%85%B3"><span class="nav-number">1.3.2.</span> <span class="nav-text">API 网关</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%90%86%E8%A7%A3-Docker"><span class="nav-number">2.</span> <span class="nav-text">理解 Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%92%8C%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%80%81%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.</span> <span class="nav-text">虚拟机和容器运行态的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.1.</span> <span class="nav-text">性能对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">Docker 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E8%AF%86%E5%AE%B9%E5%99%A8"><span class="nav-number">2.3.</span> <span class="nav-text">初识容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E6%A0%87%E5%87%86"><span class="nav-number">2.4.</span> <span class="nav-text">容器标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="nav-number">2.5.</span> <span class="nav-text">容器主要特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Namespace"><span class="nav-number">2.6.</span> <span class="nav-text">Namespace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E5%86%85%E6%A0%B8%E4%BB%A3%E7%A0%81%E4%B8%AD-Namespace-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.6.1.</span> <span class="nav-text">Linux 内核代码中 Namespace 的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E5%AF%B9-Namespace-%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95"><span class="nav-number">2.6.2.</span> <span class="nav-text">Linux 对 Namespace 操作方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E6%80%A7"><span class="nav-number">2.6.3.</span> <span class="nav-text">隔离性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pid-namespace"><span class="nav-number">2.6.3.1.</span> <span class="nav-text">Pid namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#net-namespace"><span class="nav-number">2.6.3.2.</span> <span class="nav-text">net namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ipc-namespace"><span class="nav-number">2.6.3.3.</span> <span class="nav-text">ipc namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mnt-namespace"><span class="nav-number">2.6.3.4.</span> <span class="nav-text">mnt namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uts-namespace"><span class="nav-number">2.6.3.5.</span> <span class="nav-text">uts namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#user-namespace"><span class="nav-number">2.6.3.6.</span> <span class="nav-text">user namespace</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#namespace-%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">2.6.4.</span> <span class="nav-text">namespace 常用操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cgroups"><span class="nav-number">2.7.</span> <span class="nav-text">Cgroups</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E5%86%85%E6%A0%B8%E4%BB%A3%E7%A0%81%E4%B8%AD-Cgroup-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.7.1.</span> <span class="nav-text">Linux 内核代码中 Cgroup 的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%85%8D%E9%A2%9D-x2F-%E5%8F%AF%E5%BA%A6%E9%87%8F-Control-Groups-cgroups"><span class="nav-number">2.7.2.</span> <span class="nav-text">可配额&#x2F;可度量 - Control Groups(cgroups)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU-%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.7.3.</span> <span class="nav-text">CPU 子系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">2.7.3.1.</span> <span class="nav-text">Linux 调度器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CFS-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">2.7.3.2.</span> <span class="nav-text">CFS 调度器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vruntime-%E7%BA%A2%E9%BB%91%E6%A0%91"><span class="nav-number">2.7.3.3.</span> <span class="nav-text">vruntime 红黑树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CFS-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="nav-number">2.7.3.4.</span> <span class="nav-text">CFS 进程调度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpuacct-%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.7.4.</span> <span class="nav-text">cpuacct 子系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory-%E5%86%85%E5%AD%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.7.5.</span> <span class="nav-text">Memory 内存子系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cgroup-driver"><span class="nav-number">2.7.6.</span> <span class="nav-text">Cgroup  driver</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.8.</span> <span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F"><span class="nav-number">2.8.1.</span> <span class="nav-text">容器镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.8.2.</span> <span class="nav-text">Docker 的文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-%E5%90%AF%E5%8A%A8"><span class="nav-number">2.8.3.</span> <span class="nav-text">Docker 启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E6%93%8D%E4%BD%9C"><span class="nav-number">2.8.4.</span> <span class="nav-text">写操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8"><span class="nav-number">2.8.5.</span> <span class="nav-text">容器存储驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5-OverlayFS-%E4%B8%BA%E4%BE%8B"><span class="nav-number">2.8.6.</span> <span class="nav-text">以 OverlayFS 为例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OverlayFS-%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-number">2.8.7.</span> <span class="nav-text">OverlayFS 使用案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OCI-%E5%AE%B9%E5%99%A8%E6%A0%87%E5%87%86"><span class="nav-number">2.9.</span> <span class="nav-text">OCI 容器标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-%E5%BC%95%E6%93%8E%E6%9E%B6%E6%9E%84"><span class="nav-number">2.10.</span> <span class="nav-text">Docker 引擎架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C"><span class="nav-number">2.11.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Null-%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.11.1.</span> <span class="nav-text">Null 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E6%A8%A1%E5%BC%8F-Bridge-%E5%92%8C-NAT"><span class="nav-number">2.11.2.</span> <span class="nav-text">默认模式 - Bridge 和 NAT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Underlay"><span class="nav-number">2.11.3.</span> <span class="nav-text">Underlay</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-Libnetwork-Overlay"><span class="nav-number">2.11.4.</span> <span class="nav-text">Docker Libnetwork Overlay</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#VXLAN"><span class="nav-number">2.11.4.1.</span> <span class="nav-text">VXLAN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Overlay-network-sample-Flannel"><span class="nav-number">2.11.5.</span> <span class="nav-text">Overlay network sample - Flannel</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-docker-%E9%95%9C%E5%83%8F"><span class="nav-number">2.12.</span> <span class="nav-text">创建 docker 镜像</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dockerfile-%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.</span> <span class="nav-text">Dockerfile 的最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%88Build-Context%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">构建上下文（Build Context）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E6%9E%84%E5%BB%BA%E6%97%A5%E5%BF%97"><span class="nav-number">3.2.</span> <span class="nav-text">镜像构建日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Build-Cache"><span class="nav-number">3.2.1.</span> <span class="nav-text">Build Cache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%AE%B5%E6%9E%84%E5%BB%BA%EF%BC%88Multi-stage-build%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">多段构建（Multi-stage build）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">3.4.</span> <span class="nav-text">Dockerfile 常用指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.4.1.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F"><span class="nav-number">3.4.2.</span> <span class="nav-text">多进程的容器镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-%E9%95%9C%E5%83%8F%E7%AE%A1%E7%90%86"><span class="nav-number">3.4.3.</span> <span class="nav-text">Docker 镜像管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-Docker-%E9%95%9C%E5%83%8F%E7%9A%84%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-number">3.4.4.</span> <span class="nav-text">基于 Docker 镜像的版本管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-tag-%E4%B8%8E-github-%E7%9A%84%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%90%88%E5%8A%9B"><span class="nav-number">3.4.5.</span> <span class="nav-text">Docker tag 与 github 的版本管理合力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93"><span class="nav-number">3.4.6.</span> <span class="nav-text">镜像仓库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-%E4%BC%98%E5%8A%BF"><span class="nav-number">4.</span> <span class="nav-text">Docker 优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">系统架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84-VS-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.1.</span> <span class="nav-text">传统分层架构 VS 微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%94%B9%E9%80%A0"><span class="nav-number">1.2.</span> <span class="nav-text">微服务改造</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%97%B4%E9%80%9A%E8%AE%AF"><span class="nav-number">1.3.</span> <span class="nav-text">微服务间通讯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E5%AF%B9%E7%82%B9"><span class="nav-number">1.3.1.</span> <span class="nav-text">点对点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-%E7%BD%91%E5%85%B3"><span class="nav-number">1.3.2.</span> <span class="nav-text">API 网关</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%90%86%E8%A7%A3-Docker"><span class="nav-number">2.</span> <span class="nav-text">理解 Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%92%8C%E5%AE%B9%E5%99%A8%E8%BF%90%E8%A1%8C%E6%80%81%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.</span> <span class="nav-text">虚拟机和容器运行态的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="nav-number">2.1.1.</span> <span class="nav-text">性能对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">Docker 操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E8%AF%86%E5%AE%B9%E5%99%A8"><span class="nav-number">2.3.</span> <span class="nav-text">初识容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E6%A0%87%E5%87%86"><span class="nav-number">2.4.</span> <span class="nav-text">容器标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="nav-number">2.5.</span> <span class="nav-text">容器主要特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Namespace"><span class="nav-number">2.6.</span> <span class="nav-text">Namespace</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E5%86%85%E6%A0%B8%E4%BB%A3%E7%A0%81%E4%B8%AD-Namespace-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.6.1.</span> <span class="nav-text">Linux 内核代码中 Namespace 的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E5%AF%B9-Namespace-%E6%93%8D%E4%BD%9C%E6%96%B9%E6%B3%95"><span class="nav-number">2.6.2.</span> <span class="nav-text">Linux 对 Namespace 操作方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E6%80%A7"><span class="nav-number">2.6.3.</span> <span class="nav-text">隔离性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pid-namespace"><span class="nav-number">2.6.3.1.</span> <span class="nav-text">Pid namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#net-namespace"><span class="nav-number">2.6.3.2.</span> <span class="nav-text">net namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ipc-namespace"><span class="nav-number">2.6.3.3.</span> <span class="nav-text">ipc namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mnt-namespace"><span class="nav-number">2.6.3.4.</span> <span class="nav-text">mnt namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uts-namespace"><span class="nav-number">2.6.3.5.</span> <span class="nav-text">uts namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#user-namespace"><span class="nav-number">2.6.3.6.</span> <span class="nav-text">user namespace</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#namespace-%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">2.6.4.</span> <span class="nav-text">namespace 常用操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cgroups"><span class="nav-number">2.7.</span> <span class="nav-text">Cgroups</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-%E5%86%85%E6%A0%B8%E4%BB%A3%E7%A0%81%E4%B8%AD-Cgroup-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.7.1.</span> <span class="nav-text">Linux 内核代码中 Cgroup 的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%85%8D%E9%A2%9D-%E5%8F%AF%E5%BA%A6%E9%87%8F-Control-Groups-cgroups"><span class="nav-number">2.7.2.</span> <span class="nav-text">可配额&#x2F;可度量 - Control Groups(cgroups)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU-%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.7.3.</span> <span class="nav-text">CPU 子系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">2.7.3.1.</span> <span class="nav-text">Linux 调度器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CFS-%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">2.7.3.2.</span> <span class="nav-text">CFS 调度器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vruntime-%E7%BA%A2%E9%BB%91%E6%A0%91"><span class="nav-number">2.7.3.3.</span> <span class="nav-text">vruntime 红黑树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CFS-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6"><span class="nav-number">2.7.3.4.</span> <span class="nav-text">CFS 进程调度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpuacct-%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.7.4.</span> <span class="nav-text">cpuacct 子系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory-%E5%86%85%E5%AD%98%E5%AD%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.7.5.</span> <span class="nav-text">Memory 内存子系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cgroup-driver"><span class="nav-number">2.7.6.</span> <span class="nav-text">Cgroup  driver</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.8.</span> <span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F"><span class="nav-number">2.8.1.</span> <span class="nav-text">容器镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.8.2.</span> <span class="nav-text">Docker 的文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-%E5%90%AF%E5%8A%A8"><span class="nav-number">2.8.3.</span> <span class="nav-text">Docker 启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E6%93%8D%E4%BD%9C"><span class="nav-number">2.8.4.</span> <span class="nav-text">写操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%AD%98%E5%82%A8%E9%A9%B1%E5%8A%A8"><span class="nav-number">2.8.5.</span> <span class="nav-text">容器存储驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5-OverlayFS-%E4%B8%BA%E4%BE%8B"><span class="nav-number">2.8.6.</span> <span class="nav-text">以 OverlayFS 为例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OverlayFS-%E4%BD%BF%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-number">2.8.7.</span> <span class="nav-text">OverlayFS 使用案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OCI-%E5%AE%B9%E5%99%A8%E6%A0%87%E5%87%86"><span class="nav-number">2.9.</span> <span class="nav-text">OCI 容器标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-%E5%BC%95%E6%93%8E%E6%9E%B6%E6%9E%84"><span class="nav-number">2.10.</span> <span class="nav-text">Docker 引擎架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C"><span class="nav-number">2.11.</span> <span class="nav-text">网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Null-%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.11.1.</span> <span class="nav-text">Null 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E6%A8%A1%E5%BC%8F-Bridge-%E5%92%8C-NAT"><span class="nav-number">2.11.2.</span> <span class="nav-text">默认模式 - Bridge 和 NAT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Underlay"><span class="nav-number">2.11.3.</span> <span class="nav-text">Underlay</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-Libnetwork-Overlay"><span class="nav-number">2.11.4.</span> <span class="nav-text">Docker Libnetwork Overlay</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#VXLAN"><span class="nav-number">2.11.4.1.</span> <span class="nav-text">VXLAN</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Overlay-network-sample-Flannel"><span class="nav-number">2.11.5.</span> <span class="nav-text">Overlay network sample - Flannel</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-docker-%E9%95%9C%E5%83%8F"><span class="nav-number">2.12.</span> <span class="nav-text">创建 docker 镜像</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Dockerfile-%E7%9A%84%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.</span> <span class="nav-text">Dockerfile 的最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E4%B8%8A%E4%B8%8B%E6%96%87%EF%BC%88Build-Context%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">构建上下文（Build Context）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E6%9E%84%E5%BB%BA%E6%97%A5%E5%BF%97"><span class="nav-number">3.2.</span> <span class="nav-text">镜像构建日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Build-Cache"><span class="nav-number">3.2.1.</span> <span class="nav-text">Build Cache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E6%AE%B5%E6%9E%84%E5%BB%BA%EF%BC%88Multi-stage-build%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">多段构建（Multi-stage build）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dockerfile-%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">3.4.</span> <span class="nav-text">Dockerfile 常用指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.4.1.</span> <span class="nav-text">最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F"><span class="nav-number">3.4.2.</span> <span class="nav-text">多进程的容器镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-%E9%95%9C%E5%83%8F%E7%AE%A1%E7%90%86"><span class="nav-number">3.4.3.</span> <span class="nav-text">Docker 镜像管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-Docker-%E9%95%9C%E5%83%8F%E7%9A%84%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-number">3.4.4.</span> <span class="nav-text">基于 Docker 镜像的版本管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-tag-%E4%B8%8E-github-%E7%9A%84%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%90%88%E5%8A%9B"><span class="nav-number">3.4.5.</span> <span class="nav-text">Docker tag 与 github 的版本管理合力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93"><span class="nav-number">3.4.6.</span> <span class="nav-text">镜像仓库</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-%E4%BC%98%E5%8A%BF"><span class="nav-number">4.</span> <span class="nav-text">Docker 优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -303,19 +310,19 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h1><h2 id="传统分层架构-VS-微服务"><a href="#传统分层架构-VS-微服务" class="headerlink" title="传统分层架构 VS 微服务"></a>传统分层架构 VS 微服务</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229161244176.png" alt="image-20231229161244176"></p>
-<p>当业务逻辑简单，需求也比较简单的情况下（例如多年前的it互联网环境），只需要一台或者几台物理服务器即可满足需求，在物理机上部署 UI 服务、业务逻辑服务、存储服务等。</p>
-<p>随着业务复杂度和体量增大，架构开始演进到分层架构（分为前端、后端、DBA），将复杂业务拆分成更小颗粒度的、独立的服务（单个部门负责单个服务）。但是多个服务部署到同一台物理服务器上之后，服务之间的隔离性就无法保证，当服务 A 出现异常，可能导致内存占用过多，影响物理机，结果影响其他服务。</p>
-<p>服务之间相互隔离，再增加一些高可用、负载均衡的能力，也就逐步演进出微服务架构。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229162408338.png" alt="image-20231229162408338"></p>
-<p>单体架构和微服务架构，在不同的系统上各有优缺点。</p>
-<h2 id="微服务改造"><a href="#微服务改造" class="headerlink" title="微服务改造"></a>微服务改造</h2><p>当需要将服务应用（或者一个耦合度高的微服务）改造成一个微服务时，方法和建议：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h1><h2 id="传统分层架构-VS-微服务"><a href="#传统分层架构-VS-微服务" class="headerlink" title="传统分层架构 VS 微服务"></a>传统分层架构 VS 微服务</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229161244176.png" alt="image-20231229161244176"></p>
+<p class="fireman-p-indent" >当业务逻辑简单，需求也比较简单的情况下（例如多年前的it互联网环境），只需要一台或者几台物理服务器即可满足需求，在物理机上部署 UI 服务、业务逻辑服务、存储服务等。</p>
+<p class="fireman-p-indent" >随着业务复杂度和体量增大，架构开始演进到分层架构（分为前端、后端、DBA），将复杂业务拆分成更小颗粒度的、独立的服务（单个部门负责单个服务）。但是多个服务部署到同一台物理服务器上之后，服务之间的隔离性就无法保证，当服务 A 出现异常，可能导致内存占用过多，影响物理机，结果影响其他服务。</p>
+<p class="fireman-p-indent" >服务之间相互隔离，再增加一些高可用、负载均衡的能力，也就逐步演进出微服务架构。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229162408338.png" alt="image-20231229162408338"></p>
+<p class="fireman-p-indent" >单体架构和微服务架构，在不同的系统上各有优缺点。</p>
+<h2 id="微服务改造"><a href="#微服务改造" class="headerlink" title="微服务改造"></a>微服务改造</h2><p class="fireman-p-indent" >当需要将服务应用（或者一个耦合度高的微服务）改造成一个微服务时，方法和建议：</p>
 <ul>
 <li>审视并发现可以分离的业务逻辑业务逻辑</li>
 <li>寻找天生隔离的代码模块，可以借助于静态代码分析工具</li>
 <li>不同并发规模，不同内存需求的模块都可以分离出不同的微服务，此方法可提高资源利用率，节省成本</li>
 </ul>
-<p>一些常用的可微服务化的组件：</p>
+<p class="fireman-p-indent" >一些常用的可微服务化的组件：</p>
 <ul>
 <li>用户和账户管理</li>
 <li>授权和会话管理</li>
@@ -323,27 +330,27 @@
 <li>通知和通讯服务</li>
 <li>照片，多媒体，元数据等</li>
 </ul>
-<p>分解原则：基于 size（规模）、scope（范围） and capabilities（能力）</p>
-<h2 id="微服务间通讯"><a href="#微服务间通讯" class="headerlink" title="微服务间通讯"></a>微服务间通讯</h2><h3 id="点对点"><a href="#点对点" class="headerlink" title="点对点"></a>点对点</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229163517004.png" alt="image-20231229163517004"></p>
+<p class="fireman-p-indent" >分解原则：基于 size（规模）、scope（范围） and capabilities（能力）</p>
+<h2 id="微服务间通讯"><a href="#微服务间通讯" class="headerlink" title="微服务间通讯"></a>微服务间通讯</h2><h3 id="点对点"><a href="#点对点" class="headerlink" title="点对点"></a>点对点</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229163517004.png" alt="image-20231229163517004"></p>
 <ul>
 <li>多用于系统内部多组件之间通讯</li>
 <li>有大量的重复模块如认证授权</li>
 <li>缺少统一规范，如监控，审计等功能</li>
 <li>后期维护成本高，服务和服务的依赖关系错综复杂难以管理</li>
 </ul>
-<h3 id="API-网关"><a href="#API-网关" class="headerlink" title="API 网关"></a>API 网关</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229163628714.png" alt="image-20231229163628714"></p>
+<h3 id="API-网关"><a href="#API-网关" class="headerlink" title="API 网关"></a>API 网关</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229163628714.png" alt="image-20231229163628714"></p>
 <ul>
 <li>基于一个轻量级的 <code>message gateway</code></li>
 <li>新 API 通过注册至 <code>Gateway</code> 实现</li>
 <li>整合实现 <code>Common function</code></li>
 </ul>
-<p>一些内部功能和整合进 API 网关，例如认证、授权、统计。</p>
+<p class="fireman-p-indent" >一些内部功能和整合进 API 网关，例如认证、授权、统计。</p>
 <h1 id="理解-Docker"><a href="#理解-Docker" class="headerlink" title="理解 Docker"></a>理解 Docker</h1><ul>
 <li>基于 <code>Linux</code> 内核的 <code>Cgroup</code>（资源管控，用于限制、控制和隔离进程组的系统资源使用），<code>Namespace</code>（隔离进程，隔离网络栈，隔离文件系统挂载点，隔离进程间通信，隔离主机名和域名，隔离用户和用户组标识符），以及 <code>Union FS</code> 等技术，对进程进行封装隔离，属于操作系统层面的虚拟化技术，由于隔离的进程独立于宿主和其他的隔离的进程，因此也称其为容器。</li>
 <li>最初实现是基于 <code>LXC</code>，从 0.7 以后开始去除 <code>LXC</code>，转而使用自行开发的 <code>Libcontainer</code>，从 1.11 开始，则进一步演进为使用 <code>runC</code> 和 <code>Containerd</code>。</li>
 <li><code>Docker</code> 在容器的基础上，进行了进一步的封装，从文件系统、网络互连到进程隔离等等，极大的简化了容器的创建和维护，使得 <code>Docker</code> 技术比虚拟机技术更为轻便、快捷。</li>
 </ul>
-<p>使用 Docker 的理由：</p>
+<p class="fireman-p-indent" >使用 Docker 的理由：</p>
 <ul>
 <li>更高效地利用系统资源：不需要额外内存使用内核</li>
 <li>更快速的启动时间：不需要启动过程中的硬件自检、加载内核等</li>
@@ -352,18 +359,18 @@
 <li>更轻松地迁移：迁移镜像即可</li>
 <li>更轻松地维护和扩展</li>
 </ul>
-<p>等。</p>
-<h2 id="虚拟机和容器运行态的对比"><a href="#虚拟机和容器运行态的对比" class="headerlink" title="虚拟机和容器运行态的对比"></a>虚拟机和容器运行态的对比</h2><p>虚拟机</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229164755530.png" alt="image-20231229164755530"></p>
-<p>在操作系统上，通过 <code>Hypervisor</code> 提供虚拟化能力，各个应用启动对应操作系统，应用在独立的操作系统中运行。</p>
-<p>这个调用链比较长，而且有两层操作系统。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229173153401.png" alt="image-20231229173153401"></p>
-<p>在 Docker Engine 上，启动应用。</p>
-<p>相比而言，调用链短，而且不需要启动额外的操作系统，节省资源。</p>
-<h3 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229173351025.png" alt="image-20231229173351025"></p>
-<p>一些虚拟机也在做 <code>miniOS</code>，通过瘦身解决启动慢和资源问题，但是依然需要加载额外的操作系统。</p>
-<h2 id="Docker-操作"><a href="#Docker-操作" class="headerlink" title="Docker 操作"></a>Docker 操作</h2><p>官方文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vZW5naW5lLw==">https://docs.docker.com/engine/<i class="fa fa-external-link-alt"></i></span></p>
-<p>一些常用操作：</p>
+<p class="fireman-p-indent" >等。</p>
+<h2 id="虚拟机和容器运行态的对比"><a href="#虚拟机和容器运行态的对比" class="headerlink" title="虚拟机和容器运行态的对比"></a>虚拟机和容器运行态的对比</h2><p class="fireman-p-indent" >虚拟机</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229164755530.png" alt="image-20231229164755530"></p>
+<p class="fireman-p-indent" >在操作系统上，通过 <code>Hypervisor</code> 提供虚拟化能力，各个应用启动对应操作系统，应用在独立的操作系统中运行。</p>
+<p class="fireman-p-indent" >这个调用链比较长，而且有两层操作系统。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229173153401.png" alt="image-20231229173153401"></p>
+<p class="fireman-p-indent" >在 Docker Engine 上，启动应用。</p>
+<p class="fireman-p-indent" >相比而言，调用链短，而且不需要启动额外的操作系统，节省资源。</p>
+<h3 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229173351025.png" alt="image-20231229173351025"></p>
+<p class="fireman-p-indent" >一些虚拟机也在做 <code>miniOS</code>，通过瘦身解决启动慢和资源问题，但是依然需要加载额外的操作系统。</p>
+<h2 id="Docker-操作"><a href="#Docker-操作" class="headerlink" title="Docker 操作"></a>Docker 操作</h2><p class="fireman-p-indent" >官方文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vZW5naW5lLw==">https://docs.docker.com/engine/<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" >一些常用操作：</p>
 <ul>
 <li><p>启动</p>
 <ul>
@@ -372,18 +379,18 @@
 </li>
 </ul>
 </li>
-<li><p>启动已终止容器 </p>
-<p><code>docker start</code></p>
+<li><p class="fireman-p-indent" >启动已终止容器 </p>
+<p class="fireman-p-indent" ><code>docker start</code></p>
 </li>
-<li><p>停止容器 </p>
-<p><code>docker stop</code></p>
+<li><p class="fireman-p-indent" >停止容器 </p>
+<p class="fireman-p-indent" ><code>docker stop</code></p>
 </li>
-<li><p>查看容器进程 </p>
-<p><code>docker ps</code></p>
+<li><p class="fireman-p-indent" >查看容器进程 </p>
+<p class="fireman-p-indent" ><code>docker ps</code></p>
 </li>
-<li><p>查看容器细节:<br> <code>docker inspect &lt;containerid&gt;</code></p>
+<li><p class="fireman-p-indent" >查看容器细节:<br><span class="fireman-span-indent"></span> <code>docker inspect &lt;containerid&gt;</code></p>
 </li>
-<li><p>进入容器;<br> <code>Docker attach</code></p>
+<li><p class="fireman-p-indent" >进入容器;<br><span class="fireman-span-indent"></span> <code>Docker attach</code></p>
 <ul>
 <li><p>通过 <code>nsenter</code></p>
 <p><code>PID=$(docker inspect --format &quot;&#123;&#123; .State.Pid &#125;&#125;&quot; &lt;container&gt;)</code></p>
@@ -391,8 +398,8 @@
 </li>
 </ul>
 </li>
-<li><p>拷贝文件至容器内:</p>
-<p><code>docker cp file1 &lt;containerid&gt;:/file-to-path</code></p>
+<li><p class="fireman-p-indent" >拷贝文件至容器内:</p>
+<p class="fireman-p-indent" ><code>docker cp file1 &lt;containerid&gt;:/file-to-path</code></p>
 </li>
 </ul>
 <h2 id="初识容器"><a href="#初识容器" class="headerlink" title="初识容器"></a>初识容器</h2><ul>
@@ -405,7 +412,7 @@
 <li><p>运行容器</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d xxx/httpserver:v1.0</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="容器标准"><a href="#容器标准" class="headerlink" title="容器标准"></a>容器标准</h2><p>在 <code>Docker</code> 发展过程中，由于一些历史性原因，由谷歌牵头定义的一些规范。</p>
+<h2 id="容器标准"><a href="#容器标准" class="headerlink" title="容器标准"></a>容器标准</h2><p class="fireman-p-indent" >在 <code>Docker</code> 发展过程中，由于一些历史性原因，由谷歌牵头定义的一些规范。</p>
 <ul>
 <li><code>Open Container Initiative</code>（<code>OCI</code>）<ul>
 <li>轻量级开放式管理组织（项目）</li>
@@ -423,14 +430,14 @@
 </ul>
 </li>
 </ul>
-<p>直白来说，就是镜像如何打包，打包的镜像如何解压如何运行。目的是保障打包、部署过程中的效率。</p>
+<p class="fireman-p-indent" >直白来说，就是镜像如何打包，打包的镜像如何解压如何运行。目的是保障打包、部署过程中的效率。</p>
 <h2 id="容器主要特性"><a href="#容器主要特性" class="headerlink" title="容器主要特性"></a>容器主要特性</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229175218442.png" alt="image-20231229175218442" style="zoom:50%;" />
 
-<p>隔离性：通过 <code>namespace</code> 实现</p>
-<p>可配额：通过 <code>cgroup</code> 实现</p>
-<p>便携性： 通过容器镜像</p>
-<p>安全性：通过隔离和配额实现</p>
-<h2 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h2><p>Linux Namespace 是一种 Linux Kernel 提供的资源隔离方案：</p>
+<p class="fireman-p-indent" >隔离性：通过 <code>namespace</code> 实现</p>
+<p class="fireman-p-indent" >可配额：通过 <code>cgroup</code> 实现</p>
+<p class="fireman-p-indent" >便携性： 通过容器镜像</p>
+<p class="fireman-p-indent" >安全性：通过隔离和配额实现</p>
+<h2 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h2><p class="fireman-p-indent" >Linux Namespace 是一种 Linux Kernel 提供的资源隔离方案：</p>
 <ul>
 <li>系统可以为进程分配不同的 <code>Namespace</code>；</li>
 <li>并保证不同的 <code>Namespace</code> 资源独立分配、进程彼此隔离，即不同的 <code>Namespace</code> 下的进程互不干扰。</li>
@@ -446,8 +453,8 @@
 <p>再看一下<code>nsproxy</code>是如何定义的，在<code>include/linux/nsproxy.h</code>文件中，这里一共定义了6个各自的命名空间结构体，在该结构体中定义了5个指向各个类型<code>namespace</code>的指针，由于多个进程可以使用同一个<code>namespace</code>，所以<code>nsproxy</code>可以共享使用，<code>count</code>字段是该结构的引用计数。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * A structure to contain pointers to all per-process</span></span><br><span class="line"><span class="comment"> * namespaces - fs (mount), uts, network, sysvipc, etc.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The pid namespace is an exception -- it&#x27;s accessed using</span></span><br><span class="line"><span class="comment"> * task_active_pid_ns.  The pid namespace here is the</span></span><br><span class="line"><span class="comment"> * namespace that children will use.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * &#x27;count&#x27; is the number of tasks holding a reference.</span></span><br><span class="line"><span class="comment"> * The count for each namespace, then, will be the number</span></span><br><span class="line"><span class="comment"> * of nsproxies pointing to it, not the number of tasks.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The nsproxy is shared by tasks which share all namespaces.</span></span><br><span class="line"><span class="comment"> * As soon as a single namespace is cloned or unshared, the</span></span><br><span class="line"><span class="comment"> * nsproxy is copied.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">nsproxy</span> &#123;</span></span><br><span class="line">    <span class="type">atomic_t</span> count;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">uts_namespace</span> *<span class="title">uts_ns</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ipc_namespace</span> *<span class="title">ipc_ns</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">mnt_namespace</span> *<span class="title">mnt_ns</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">pid_namespace</span> *<span class="title">pid_ns_for_children</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">net</span>          *<span class="title">net_ns</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">cgroup_namespace</span> *<span class="title">cgroup_ns</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h3 id="Linux-对-Namespace-操作方法"><a href="#Linux-对-Namespace-操作方法" class="headerlink" title="Linux 对 Namespace 操作方法"></a>Linux 对 Namespace 操作方法</h3><p>当 Linux 启动时，会通过<code>init</code> 启动 <code>pid</code> 为 1 的进程，并且分配给进程默认的 <code>Namespace</code>。</p>
-<p>当要启动其他进程时，可以通过以下几种方法：</p>
+<h3 id="Linux-对-Namespace-操作方法"><a href="#Linux-对-Namespace-操作方法" class="headerlink" title="Linux 对 Namespace 操作方法"></a>Linux 对 Namespace 操作方法</h3><p class="fireman-p-indent" >当 Linux 启动时，会通过<code>init</code> 启动 <code>pid</code> 为 1 的进程，并且分配给进程默认的 <code>Namespace</code>。</p>
+<p class="fireman-p-indent" >当要启动其他进程时，可以通过以下几种方法：</p>
 <ul>
 <li><p><code>clone</code></p>
 <p>在创建新进程的系统调用时，可以通过 <code>flags</code> 参数指定需要新建的 <code>Namespace</code> 类型：</p>
@@ -461,22 +468,22 @@
 <p>该系统调用可以将调用进程移动到新的 <code>Namespace</code> 下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">unshare</span><span class="params">(<span class="type">int</span> flags)</span></span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><code>Linux</code> 更新后，可能还会新增更多的操作方式。</p>
-<h3 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102105557872.png" alt="image-20240102105557872"></p>
-<p>在 <code>fork</code> 不同的进程后，进程之间可以通过 <code>Namespace</code> 隔离。</p>
-<p>例如 <code>PID</code>，在不同的 <code>Namespace</code> 中看到的 <code>PID</code> 是不同的，但是它们是继承关系；网络也不一样，在不同的 <code>Namespace</code> 中，网卡配置没有任何关联。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102105609178.png" alt="image-20240102105609178"></p>
-<p>一个用户进程，拥有不同类型的 <code>namespace</code>。</p>
+<p class="fireman-p-indent" ><code>Linux</code> 更新后，可能还会新增更多的操作方式。</p>
+<h3 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102105557872.png" alt="image-20240102105557872"></p>
+<p class="fireman-p-indent" >在 <code>fork</code> 不同的进程后，进程之间可以通过 <code>Namespace</code> 隔离。</p>
+<p class="fireman-p-indent" >例如 <code>PID</code>，在不同的 <code>Namespace</code> 中看到的 <code>PID</code> 是不同的，但是它们是继承关系；网络也不一样，在不同的 <code>Namespace</code> 中，网卡配置没有任何关联。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102105609178.png" alt="image-20240102105609178"></p>
+<p class="fireman-p-indent" >一个用户进程，拥有不同类型的 <code>namespace</code>。</p>
 <h4 id="Pid-namespace"><a href="#Pid-namespace" class="headerlink" title="Pid namespace"></a>Pid namespace</h4><ul>
 <li>不同用户的进程就是通过 <code>Pid namespace</code> 隔离开的，且不同 <code>namespace</code> 中可以有相同 <code>Pid</code>。</li>
 <li>有了 <code>Pid namespace</code>，每个 <code>namespace</code> 中的 <code>Pid</code> 能够相互隔离。</li>
 </ul>
-<p>例如在不同的 <code>Namespace</code> 中使用 <code>ps</code> 只获取到本 <code>Namespace</code> 中的进程，方便管理。</p>
+<p class="fireman-p-indent" >例如在不同的 <code>Namespace</code> 中使用 <code>ps</code> 只获取到本 <code>Namespace</code> 中的进程，方便管理。</p>
 <h4 id="net-namespace"><a href="#net-namespace" class="headerlink" title="net namespace"></a>net namespace</h4><ul>
 <li>网络隔离是通过 <code>net namespace</code> 实现的，每个 <code>net namespace</code> 有独立的 <code>network devices</code>，<code>IP addresses</code>，<code>IP routing tables</code>，<code>proc/net</code> 目录</li>
 <li><code>Docker</code> 默认采用 <code>veth</code> 的方式将 <code>container</code> 中的虚拟网卡同 <code>host</code> 上的一个 <code>docker bridge: docker0</code> 连接在一起</li>
 </ul>
-<p>不同的 <code>namespace</code> 有不同的网络配置、路由表</p>
+<p class="fireman-p-indent" >不同的 <code>namespace</code> 有不同的网络配置、路由表</p>
 <h4 id="ipc-namespace"><a href="#ipc-namespace" class="headerlink" title="ipc namespace"></a>ipc namespace</h4><ul>
 <li><code>Container</code> 中进程交互采用 <code>Linux</code> 常见的进程间交互方法（<code>interprocess communication</code> - <code>IPC</code>），包括常见的信号量、消息队列和共享内存</li>
 <li><code>Container</code> 的进程间交互实际上还是 <code>hosst</code> 上具有相同 <code>Pid namespace</code> 中的进程间交互，因此需要在 <code>IPC</code> 资源申请时加入 <code>namespace</code> 信息 - 每个 <code>IPC</code> 资源有一个唯一的 32 位 ID。</li>
@@ -511,7 +518,7 @@
 <p>例如 docker 中没有需要的命令，可以通过获取这个 <code>docker</code> 的进程，然后使用 <code>nsenter</code> 命令，进入到对应 <code>namespace</code> 中操作。</p>
 </li>
 </ul>
-<p>例如创建一个 <code>namespace</code>，并且执行一些操作：</p>
+<p class="fireman-p-indent" >例如创建一个 <code>namespace</code>，并且执行一些操作：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 在新 network namespace 执行 sleep 指令：</span><br><span class="line"># unshare -fn sleep 60</span><br><span class="line"></span><br><span class="line">// 查看进程信息</span><br><span class="line"># ps -ef | grep &quot;sleep 60&quot;</span><br><span class="line">root     1327579 1146983  0 11:52 pts/3    00:00:00 unshare -fn sleep 60</span><br><span class="line">root     1327580 1327579  0 11:52 pts/3    00:00:00 sleep 60</span><br><span class="line">root     1332215 1329013  0 11:53 pts/4    00:00:00 grep --color=auto sleep 60</span><br><span class="line"></span><br><span class="line">// 查看网络 namespace</span><br><span class="line"># lsns -t net | grep unshare</span><br><span class="line">4026543244 net       2 1327579 root  unshare -fn sleep 60</span><br><span class="line"></span><br><span class="line">// 进入该进程所在 namespace 查看网络配置</span><br><span class="line"># nsenter -t 1332760 -n ip a</span><br><span class="line">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN group default qlen 1000</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br></pre></td></tr></table></figure>
 
 <h2 id="Cgroups"><a href="#Cgroups" class="headerlink" title="Cgroups"></a>Cgroups</h2><ul>
@@ -521,7 +528,7 @@
 <li>针对不同类型的资源限制，只要将限制策略在不同的子系统上进行关联即可；</li>
 <li><code>Cgroup</code> 在不同的系统资源管理子系统中以层级树（<code>Hierarchy</code>）的方式来组织管理：每个 <code>Cgroup</code> 都可以包含其他的子 <code>Cgroup</code>，因此子 <code>Cgroup</code> 能使用的资源除了受本 <code>Cgroup</code> 配置的资源参数限制，还受到父 <code>Cgroup</code> 设置的资源限制。</li>
 </ul>
-<p><code>cgroup</code> 管理，例如删除 <code>cgroup</code> 需要安装包</p>
+<p class="fireman-p-indent" ><code>cgroup</code> 管理，例如删除 <code>cgroup</code> 需要安装包</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">yum install libcgroup-tools // centos</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">apt install cgroup-tools 		// ubuntu</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="Linux-内核代码中-Cgroup-的实现"><a href="#Linux-内核代码中-Cgroup-的实现" class="headerlink" title="Linux 内核代码中 Cgroup 的实现"></a>Linux 内核代码中 Cgroup 的实现</h3><ul>
@@ -531,10 +538,10 @@
 <li><p><code>css_set</code> 是 <code>cgroup_subsys_state</code> 对象的集合数据结构</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">css_set</span> &#123;</span> </span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Set of subsystem states, one for each subsystem. This array is * immutable after creation apart from the init_css_set during</span></span><br><span class="line"><span class="comment">	 * subsystem registration (at boot time).</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">cgroup_subsys_state</span> *<span class="title">subsys</span>[<span class="title">CGROUP_SUBSYS_COUNT</span>];</span> </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h3 id="可配额-x2F-可度量-Control-Groups-cgroups"><a href="#可配额-x2F-可度量-Control-Groups-cgroups" class="headerlink" title="可配额&#x2F;可度量 - Control Groups(cgroups)"></a>可配额&#x2F;可度量 - Control Groups(cgroups)</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102154000956.png" alt="image-20240102154000956"></p>
+<h3 id="可配额-可度量-Control-Groups-cgroups"><a href="#可配额-可度量-Control-Groups-cgroups" class="headerlink" title="可配额&#x2F;可度量 - Control Groups(cgroups)"></a>可配额&#x2F;可度量 - Control Groups(cgroups)</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102154000956.png" alt="image-20240102154000956"></p>
 </li>
 </ul>
-<p><code>cgroups</code> 实现了对资源的配额和度量</p>
+<p class="fireman-p-indent" ><code>cgroups</code> 实现了对资源的配额和度量</p>
 <ul>
 <li><code>blkio</code>：这个子系统设置限制了每个块设备的输入输出控制。例如：磁盘，光盘以及 <code>USB</code> 等等。</li>
 <li><code>CPU</code>：这个子系统使用调度程序为 <code>cgroup</code> 任务提供 <code>CPU</code> 的访问。（例如在 <code>Concurrency</code> 过程中，多个进程同时抢占一个 <code>CPU</code>，实际上是将 <code>CPU</code> 分为多个时间片，分配给不同的进程执行。）</li>
@@ -549,28 +556,28 @@
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">pwd</span></span></span><br><span class="line">/sys/fs/cgroup</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">ls</span> -ltrah</span></span><br><span class="line">total 0</span><br><span class="line">drwxr-xr-x  7 root root   0 Nov 26 20:09 ..</span><br><span class="line">dr-xr-xr-x  6 root root   0 Nov 26 20:09 systemd</span><br><span class="line">dr-xr-xr-x  6 root root   0 Nov 26 20:09 pids</span><br><span class="line">lrwxrwxrwx  1 root root  16 Nov 26 20:09 net_prio -&gt; net_cls,net_prio</span><br><span class="line">dr-xr-xr-x  4 root root   0 Nov 26 20:09 net_cls,net_prio</span><br><span class="line">lrwxrwxrwx  1 root root  16 Nov 26 20:09 net_cls -&gt; net_cls,net_prio</span><br><span class="line">dr-xr-xr-x  6 root root   0 Nov 26 20:09 blkio</span><br><span class="line">dr-xr-xr-x  2 root root   0 Nov 26 20:09 rdma</span><br><span class="line">dr-xr-xr-x  2 root root   0 Nov 26 20:09 misc</span><br><span class="line">dr-xr-xr-x  6 root root   0 Nov 26 20:09 memory</span><br><span class="line">dr-xr-xr-x  6 root root   0 Nov 26 20:09 cpu,cpuacct</span><br><span class="line">lrwxrwxrwx  1 root root  11 Nov 26 20:09 cpuacct -&gt; cpu,cpuacct</span><br><span class="line">lrwxrwxrwx  1 root root  11 Nov 26 20:09 cpu -&gt; cpu,cpuacct</span><br><span class="line">dr-xr-xr-x  4 root root   0 Nov 26 20:09 perf_event</span><br><span class="line">dr-xr-xr-x  4 root root   0 Nov 26 20:09 hugetlb</span><br><span class="line">dr-xr-xr-x  4 root root   0 Nov 26 20:09 freezer</span><br><span class="line">dr-xr-xr-x  6 root root   0 Nov 26 20:09 devices</span><br><span class="line">dr-xr-xr-x  4 root root   0 Nov 26 20:09 cpuset</span><br><span class="line">drwxr-xr-x 15 root root 380 Nov 26 20:09 .</span><br></pre></td></tr></table></figure>
 
-<p>在 <code>/sys/fs/cgroup/cpu</code> 目录下创建子目录即可创建一个管理 <code>CPU</code> 的 <code>cgroup</code>，<code>echo &lt;pid&gt; &gt; cgroup.procs</code> 即可将进程添加到 <code>cgropu</code> 进程配置组。</p>
-<h3 id="CPU-子系统"><a href="#CPU-子系统" class="headerlink" title="CPU 子系统"></a>CPU 子系统</h3><p><code>CPU</code> 分配给进程的时间片有两种方式，一种是相对值，一种是绝对值。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102154933393.png" alt="image-20240102154933393"></p>
-<p><code>cpu.shares</code>：可让出的能获得 <code>CPU</code> 使用时间的相对值。（例如上图，<code>CGroupA</code> 的 <code>shares</code> 为 <code>512</code>，实际占用 <code>CPU</code> <code>33%</code> 的时间，如果修改成 <code>1024</code>，则占用 <code>50%</code> 的时间）</p>
+<p class="fireman-p-indent" >在 <code>/sys/fs/cgroup/cpu</code> 目录下创建子目录即可创建一个管理 <code>CPU</code> 的 <code>cgroup</code>，<code>echo &lt;pid&gt; &gt; cgroup.procs</code> 即可将进程添加到 <code>cgropu</code> 进程配置组。</p>
+<h3 id="CPU-子系统"><a href="#CPU-子系统" class="headerlink" title="CPU 子系统"></a>CPU 子系统</h3><p class="fireman-p-indent" ><code>CPU</code> 分配给进程的时间片有两种方式，一种是相对值，一种是绝对值。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102154933393.png" alt="image-20240102154933393"></p>
+<p class="fireman-p-indent" ><code>cpu.shares</code>：可让出的能获得 <code>CPU</code> 使用时间的相对值。（例如上图，<code>CGroupA</code> 的 <code>shares</code> 为 <code>512</code>，实际占用 <code>CPU</code> <code>33%</code> 的时间，如果修改成 <code>1024</code>，则占用 <code>50%</code> 的时间）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> /sys/fs/cgroup/cpu/cpu.shares</span></span><br><span class="line">1024</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102155230255.png" alt="image-20240102155230255"></p>
-<p><code>cpu.cfs_period_us</code>：<code>fs_period_us</code> 用来配置时间周期长度，单位为 <code>us</code>（微秒）。（默认 <code>100000</code>）</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102155230255.png" alt="image-20240102155230255"></p>
+<p class="fireman-p-indent" ><code>cpu.cfs_period_us</code>：<code>fs_period_us</code> 用来配置时间周期长度，单位为 <code>us</code>（微秒）。（默认 <code>100000</code>）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> /sys/fs/cgroup/cpu/cpu.cfs_period_us</span></span><br><span class="line">100000</span><br></pre></td></tr></table></figure>
 
-<p><code>cpu.cfs_quota_us</code>：<code>fs_quota_us</code> 用来配置当前 <code>Cgroup</code> 在 <code>cfs_period_us</code> 时间内最多能使用的 <code>CPU</code> 时间数，单位为 <code>us</code> （微秒）。（如果配置 <code>100000</code>，代表可以拿到 1个 <code>CPU</code>）</p>
+<p class="fireman-p-indent" ><code>cpu.cfs_quota_us</code>：<code>fs_quota_us</code> 用来配置当前 <code>Cgroup</code> 在 <code>cfs_period_us</code> 时间内最多能使用的 <code>CPU</code> 时间数，单位为 <code>us</code> （微秒）。（如果配置 <code>100000</code>，代表可以拿到 1个 <code>CPU</code>）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> /sys/fs/cgroup/cpu/cpu.cfs_quota_us</span></span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
 
-<p><code>cpu.stat</code>：<code>Cgroup</code> 内的进程使用的 <code>CPU</code> 时间统计。</p>
+<p class="fireman-p-indent" ><code>cpu.stat</code>：<code>Cgroup</code> 内的进程使用的 <code>CPU</code> 时间统计。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> /sys/fs/cgroup/cpu/cpu.stat</span></span><br><span class="line">nr_periods 0</span><br><span class="line">nr_throttled 0</span><br><span class="line">throttled_time 0</span><br></pre></td></tr></table></figure>
 
-<p><code>nr_periods</code>：经过 <code>cpu.cfs_period_us</code> 的时间周期数量。</p>
-<p><code>nr_throttled</code>：在经过的周期内，有多少次因为进程在指定的时间周期内用光了配额时间而受到限制。</p>
-<p><code>throttled_time</code>：<code>Cgroup</code> 中的进程被限制使用 <code>CPU</code> 的总用时，单位是 <code>ns</code>（纳秒）。</p>
-<p>在 <code>/sys/fs/cgroup/cpu</code> 创建对应目录，即可创建对应名称的 <code>Cgroup</code>，将需要管理的 <code>PID</code> 写入到目录下的 <code>cgroup.procs</code> 目录下即可管理对应进程。</p>
-<p>通过 <code>echo 10000 &gt; cpu.cfs_quota_us</code> ，即可让对应进程的 CPU 消耗卡在 <code>10%</code> 以内。</p>
-<h4 id="Linux-调度器"><a href="#Linux-调度器" class="headerlink" title="Linux 调度器"></a>Linux 调度器</h4><p>内核默认提供了 5 个调度器，Linux 内核使用 <code>struct sched_class</code> 来对调度器进行抽象：</p>
+<p class="fireman-p-indent" ><code>nr_periods</code>：经过 <code>cpu.cfs_period_us</code> 的时间周期数量。</p>
+<p class="fireman-p-indent" ><code>nr_throttled</code>：在经过的周期内，有多少次因为进程在指定的时间周期内用光了配额时间而受到限制。</p>
+<p class="fireman-p-indent" ><code>throttled_time</code>：<code>Cgroup</code> 中的进程被限制使用 <code>CPU</code> 的总用时，单位是 <code>ns</code>（纳秒）。</p>
+<p class="fireman-p-indent" >在 <code>/sys/fs/cgroup/cpu</code> 创建对应目录，即可创建对应名称的 <code>Cgroup</code>，将需要管理的 <code>PID</code> 写入到目录下的 <code>cgroup.procs</code> 目录下即可管理对应进程。</p>
+<p class="fireman-p-indent" >通过 <code>echo 10000 &gt; cpu.cfs_quota_us</code> ，即可让对应进程的 CPU 消耗卡在 <code>10%</code> 以内。</p>
+<h4 id="Linux-调度器"><a href="#Linux-调度器" class="headerlink" title="Linux 调度器"></a>Linux 调度器</h4><p class="fireman-p-indent" >内核默认提供了 5 个调度器，Linux 内核使用 <code>struct sched_class</code> 来对调度器进行抽象：</p>
 <ul>
 <li><code>Stop</code> 调度器，<code>stop_sched_class</code>：优先级最高的调度类，可以抢占其他所有进程，不能被其他进程抢占；</li>
 <li><code>Deadline</code> 调度器，<code>dl_sched_class</code>：使用红黑树，把进程按照绝对截止期限进行排序，选择最小进程进行调度运行；</li>
@@ -588,13 +595,13 @@
 </li>
 <li>进程按照各自不同的速率在物理时钟节拍内前进，优先级高则权重大，其虚拟时钟比真实时钟跑得慢，但获得比较多的运行时间。</li>
 </ul>
-<h4 id="vruntime-红黑树"><a href="#vruntime-红黑树" class="headerlink" title="vruntime 红黑树"></a><code>vruntime</code> 红黑树</h4><p><code>CFS</code> 调度器没有将进程维护在运行队列中，而是维护了一个以虚拟运行时间为顺序的红黑树。</p>
-<p>红黑树的主要特点：</p>
+<h4 id="vruntime-红黑树"><a href="#vruntime-红黑树" class="headerlink" title="vruntime 红黑树"></a><code>vruntime</code> 红黑树</h4><p class="fireman-p-indent" ><code>CFS</code> 调度器没有将进程维护在运行队列中，而是维护了一个以虚拟运行时间为顺序的红黑树。</p>
+<p class="fireman-p-indent" >红黑树的主要特点：</p>
 <ol>
 <li>自平衡，树上没有一条路径会比其他路径长出两倍。</li>
 <li><code>O(logn)</code> 时间复杂度，能够在树上进行快速高效地插入或删除进程。</li>
 </ol>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102161120245.png" alt="image-20240102161120245"></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102161120245.png" alt="image-20240102161120245"></p>
 <h4 id="CFS-进程调度"><a href="#CFS-进程调度" class="headerlink" title="CFS 进程调度"></a>CFS 进程调度</h4><ul>
 <li>在时钟周期开始时，调度器调用 <code>_schdule()</code> 函数来开始调度的运行。</li>
 <li><code>_schdule()</code> 函数调用 <code>pick_next_task()</code> 让进程调度器从就绪队列中选择一个最合适的进程 <code>next</code>，即红黑树最左边的节点。</li>
@@ -602,8 +609,8 @@
 <li>在时钟周期结束时，调度器调用 <code>entity_tick()</code> 函数来更新进程负载、进程状态以及 <code>vruntime</code>（当前 <code>vruntime</code> + 该时钟周期内运行的时间）。</li>
 <li>最后，将该进程的虚拟时间与就绪队列红黑树中最左边的调度实体的虚拟时间做比较，如果小于左边的时间，则不用触发调度，继续调度当前调度实体。</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102162500743.png" alt="image-20240102162500743"></p>
-<h3 id="cpuacct-子系统"><a href="#cpuacct-子系统" class="headerlink" title="cpuacct 子系统"></a>cpuacct 子系统</h3><p>用于统计 <code>Cgroup</code> 及其子 <code>Cgroup</code> 下进程的 <code>CPU</code> 的使用情况。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102162500743.png" alt="image-20240102162500743"></p>
+<h3 id="cpuacct-子系统"><a href="#cpuacct-子系统" class="headerlink" title="cpuacct 子系统"></a>cpuacct 子系统</h3><p class="fireman-p-indent" >用于统计 <code>Cgroup</code> 及其子 <code>Cgroup</code> 下进程的 <code>CPU</code> 的使用情况。</p>
 <ul>
 <li><p><code>cpuacct.usage</code></p>
 <p>包含该 <code>Cgroup</code> 及其子 <code>Cgroup</code> 下进程使用 <code>CPU</code> 的时间，单位是 <code>ns</code>（纳秒）</p>
@@ -613,7 +620,7 @@
 <p>包含该 <code>Cgroup</code> 及其子 <code>Cgroup</code> 下进程使用的 <code>CPU</code> 时间，以及用户态和内核态的时间。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> /sys/fs/cgroup/cpu/cpuacct.stat</span></span><br><span class="line">user 576051691</span><br><span class="line">system 210990765</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h3 id="Memory-内存子系统"><a href="#Memory-内存子系统" class="headerlink" title="Memory 内存子系统"></a>Memory 内存子系统</h3><p>负责管理 <code>cgroup</code> 中的内存限制。在 <code>/sys/fs/cgroup/memory</code> 目录下创建一个子目录即可创建对应可管理内存的 <code>cgropu</code>，<code>echo &lt;pid&gt; &gt; cgroup.procs</code> 即可将进程添加到 <code>cgropu</code> 进程配置组。</p>
+<h3 id="Memory-内存子系统"><a href="#Memory-内存子系统" class="headerlink" title="Memory 内存子系统"></a>Memory 内存子系统</h3><p class="fireman-p-indent" >负责管理 <code>cgroup</code> 中的内存限制。在 <code>/sys/fs/cgroup/memory</code> 目录下创建一个子目录即可创建对应可管理内存的 <code>cgropu</code>，<code>echo &lt;pid&gt; &gt; cgroup.procs</code> 即可将进程添加到 <code>cgropu</code> 进程配置组。</p>
 <ul>
 <li><p><code>memory.usage_in_bytes</code></p>
 <p><code>cgroup</code> 下进程使用的内存，包含 <code>cgroup</code> 及其子 <code>cgroup</code> 下的进程使用的内存</p>
@@ -632,58 +639,58 @@
 <p>设置是否在 <code>cgroup</code> 中使用 <code>OOM</code>（<code>Out Of Memory</code>）<code>Killer</code>，默认为使用。当属于该 <code>cgroup</code> 的进程使用的内存超过最大的限定值时，会立刻被 <code>OOM Killer</code> 处理。</p>
 </li>
 </ul>
-<h3 id="Cgroup-driver"><a href="#Cgroup-driver" class="headerlink" title="Cgroup  driver"></a>Cgroup  driver</h3><p>在 <code>systemd</code> 作为 <code>init system</code> 的系统中，默认并存着两套 <code>cgroup driver</code>：</p>
-<p><code>systemd</code>：</p>
+<h3 id="Cgroup-driver"><a href="#Cgroup-driver" class="headerlink" title="Cgroup  driver"></a>Cgroup  driver</h3><p class="fireman-p-indent" >在 <code>systemd</code> 作为 <code>init system</code> 的系统中，默认并存着两套 <code>cgroup driver</code>：</p>
+<p class="fireman-p-indent" ><code>systemd</code>：</p>
 <ul>
 <li>当操作系统使用 <code>systemd</code> 作为 <code>init system</code> 时，初始化进程生成一个根 <code>cgroup</code> 目录结构并作为 <code>cgroup</code> 管理器。</li>
 <li><code>systemd</code> 与 <code>cgroup</code> 紧密结合，并且为每个 <code>systemd unit</code> 分配 <code>cgroup</code></li>
 </ul>
-<p><code>cgroupfs</code>：</p>
+<p class="fireman-p-indent" ><code>cgroupfs</code>：</p>
 <ul>
 <li><code>docker</code> 默认用 <code>cgroupfs</code> 作为 <code>cgroup</code> 驱动</li>
 </ul>
-<p>由于 <code>docker</code> 和 <code>kubelet</code> 默认使用  <code>cgroupfs</code>，而 <code>systemd</code> 拉起的服务由 <code>systemd</code> 驱动管，让 <code>cgroup</code> 管理混乱且容易在资源紧张时引发问题。</p>
-<p>因此 <code>kubelet</code> 会默认 <code>--cgroup-driver=systemd</code>，若运行时 <code>cgroup</code> 不一致时，<code>kubelet</code> 会报错。</p>
-<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><p>Union FS</p>
+<p class="fireman-p-indent" >由于 <code>docker</code> 和 <code>kubelet</code> 默认使用  <code>cgroupfs</code>，而 <code>systemd</code> 拉起的服务由 <code>systemd</code> 驱动管，让 <code>cgroup</code> 管理混乱且容易在资源紧张时引发问题。</p>
+<p class="fireman-p-indent" >因此 <code>kubelet</code> 会默认 <code>--cgroup-driver=systemd</code>，若运行时 <code>cgroup</code> 不一致时，<code>kubelet</code> 会报错。</p>
+<h2 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h2><p class="fireman-p-indent" >Union FS</p>
 <ul>
 <li>将不同目录挂载到同一个虚拟文件系统上（<code>unite serveral directories into a single virtual filesystem</code>) 的文件系统</li>
 <li>支持为每一个成员目录（类似 <code>Git Branch</code>）设定 <code>readonly</code>，<code>readwrite</code> 和 <code>whiteout-able</code> 权限</li>
 <li>文件系统分层，对 <code>readonly</code> 权限的 <code>branch</code> 可以逻辑上进行修改（增量地，不影响 <code>readonly</code> 部分的）。</li>
 <li>通常 <code>Union FS</code> 有两个用途，一方面可以将多个 <code>disk</code> 挂到同一个目录下，另一个更常用的就是将一个 <code>readonly</code> 的 <code>branch</code> 和一个 <code>writeable</code> 的 <code>branch</code> 联合在一起。</li>
 </ul>
-<h3 id="容器镜像"><a href="#容器镜像" class="headerlink" title="容器镜像"></a>容器镜像</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103100712447.png" alt="image-20240103100712447"></p>
-<p>例如使用 <code>Dockfile</code>  构建镜像。</p>
-<p>通过每一条命令，创建一层镜像，在底层镜像之上，构建上层镜像。</p>
-<p>好处是在 <code>devops</code> 时，需要启动一个容器，不需要每个节点上下载全部镜像内容，只下载新增部分或者差异部分即可。</p>
-<h3 id="Docker-的文件系统"><a href="#Docker-的文件系统" class="headerlink" title="Docker 的文件系统"></a>Docker 的文件系统</h3><p>典型的 <code>Linux</code> 文件系统组成：</p>
+<h3 id="容器镜像"><a href="#容器镜像" class="headerlink" title="容器镜像"></a>容器镜像</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103100712447.png" alt="image-20240103100712447"></p>
+<p class="fireman-p-indent" >例如使用 <code>Dockfile</code>  构建镜像。</p>
+<p class="fireman-p-indent" >通过每一条命令，创建一层镜像，在底层镜像之上，构建上层镜像。</p>
+<p class="fireman-p-indent" >好处是在 <code>devops</code> 时，需要启动一个容器，不需要每个节点上下载全部镜像内容，只下载新增部分或者差异部分即可。</p>
+<h3 id="Docker-的文件系统"><a href="#Docker-的文件系统" class="headerlink" title="Docker 的文件系统"></a>Docker 的文件系统</h3><p class="fireman-p-indent" >典型的 <code>Linux</code> 文件系统组成：</p>
 <ul>
 <li><p><code>Bootfs</code>（<code>boot file system</code>）</p>
 <ul>
 <li><code>Bootloader</code> - 引导加载 <code>kernel</code></li>
 <li><code>Kernel</code> - 当 <code>kernel</code> 被加载到内存中后 <code>umount bootfs</code></li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103101538997.png" alt="image-20240103101538997"></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103101538997.png" alt="image-20240103101538997"></p>
 </li>
-<li><p><code>rootfs</code>（<code>root file system</code>）</p>
+<li><p class="fireman-p-indent" ><code>rootfs</code>（<code>root file system</code>）</p>
 <ul>
 <li><code>/dev</code>、<code>/proc</code>、<code>/bin</code>、<code>/etc</code> 等标准目录和文件</li>
 <li>对于不同的 <code>linux</code> 发行版，<code>bootfs</code> 基本是一致的，但 <code>rootfs</code> 会有差别。</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103101656721.png" alt="image-20240103101656721"></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103101656721.png" alt="image-20240103101656721"></p>
 </li>
 </ul>
-<h3 id="Docker-启动"><a href="#Docker-启动" class="headerlink" title="Docker 启动"></a>Docker 启动</h3><p><code>Linux</code></p>
+<h3 id="Docker-启动"><a href="#Docker-启动" class="headerlink" title="Docker 启动"></a>Docker 启动</h3><p class="fireman-p-indent" ><code>Linux</code></p>
 <ul>
 <li>在启动后，首先将 <code>rootfs</code> 设置为 <code>readonly</code>，进行一系列检查，然后将其切换为 <code>readwrite</code> 供用户使用。</li>
 </ul>
-<p><code>Docker</code></p>
+<p class="fireman-p-indent" ><code>Docker</code></p>
 <ul>
 <li>初始化时也是将 <code>rootfs</code> 以 <code>readonly</code> 方式加载并检查，然后接下来利用 <code>union mount</code> 的方式，将一个 <code>readwrite</code> 文件系统挂载在 <code>readonly</code> 的 <code>rootfs</code> 之上；</li>
 <li>并且允许再次将下层的 <code>FS</code>（<code>file system</code>）设定为 <code>readonly</code> 并且向上叠加</li>
 <li>这样一组 <code>readonly</code> 和一个 <code>writeable</code> 的结构构成一个 <code>container</code> 的运行时态，每一个 <code>FS</code> 被称作一个 <code>FS</code> 层。</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103102104646.png" alt="image-20240103102104646"></p>
-<h3 id="写操作"><a href="#写操作" class="headerlink" title="写操作"></a>写操作</h3><p>由于镜像具有共享特性，所以对容器可写层的操作需要依赖存储驱动提供的写时复制和用时分配机制，以此来支持对容器可写层的修改，进而提高对存储和内存资源的利用率。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103102104646.png" alt="image-20240103102104646"></p>
+<h3 id="写操作"><a href="#写操作" class="headerlink" title="写操作"></a>写操作</h3><p class="fireman-p-indent" >由于镜像具有共享特性，所以对容器可写层的操作需要依赖存储驱动提供的写时复制和用时分配机制，以此来支持对容器可写层的修改，进而提高对存储和内存资源的利用率。</p>
 <ul>
 <li><p>写时复制</p>
 <ul>
@@ -693,23 +700,23 @@
 <li>不同容器对文件的修改都是相互独立、互不影响。</li>
 </ul>
 </li>
-<li><p>用时分配</p>
-<p>按需分配空间，而非提前分配，即当一个文件被创建出来后，才会分配空间。</p>
+<li><p class="fireman-p-indent" >用时分配</p>
+<p class="fireman-p-indent" >按需分配空间，而非提前分配，即当一个文件被创建出来后，才会分配空间。</p>
 </li>
 </ul>
-<h3 id="容器存储驱动"><a href="#容器存储驱动" class="headerlink" title="容器存储驱动"></a>容器存储驱动</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103102911924.png" alt="image-20240103102911924"></p>
-<p>目前容器主流的存储驱动是 <code>OverlayFS</code></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103103004115.png" alt="image-20240103103004115"></p>
-<h3 id="以-OverlayFS-为例"><a href="#以-OverlayFS-为例" class="headerlink" title="以 OverlayFS 为例"></a>以 OverlayFS 为例</h3><p><code>OverlayFS</code> 也是一种与 <code>AUFS</code> 类似的联合文件系统，同样属于文件级的存储驱动，包含了最初的 <code>Overlay</code> 和更新更稳定的 <code>overlay2</code>.</p>
-<p><code>Overlay</code> 只有两层：<code>upper</code> 层和 <code>lower</code> 层，<code>Lower</code> 层代表镜像层，<code>upper</code> 层代表容器可写层。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103103156311.png" alt="image-20240103103156311"></p>
-<p>例如在 <code>Dockerilfe</code> 中，每一个指令都是从下层往上叠一层，在容器中的文件，要么直接从镜像层获取，要么是从容器层新创建的文件获取。</p>
+<h3 id="容器存储驱动"><a href="#容器存储驱动" class="headerlink" title="容器存储驱动"></a>容器存储驱动</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103102911924.png" alt="image-20240103102911924"></p>
+<p class="fireman-p-indent" >目前容器主流的存储驱动是 <code>OverlayFS</code></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103103004115.png" alt="image-20240103103004115"></p>
+<h3 id="以-OverlayFS-为例"><a href="#以-OverlayFS-为例" class="headerlink" title="以 OverlayFS 为例"></a>以 OverlayFS 为例</h3><p class="fireman-p-indent" ><code>OverlayFS</code> 也是一种与 <code>AUFS</code> 类似的联合文件系统，同样属于文件级的存储驱动，包含了最初的 <code>Overlay</code> 和更新更稳定的 <code>overlay2</code>.</p>
+<p class="fireman-p-indent" ><code>Overlay</code> 只有两层：<code>upper</code> 层和 <code>lower</code> 层，<code>Lower</code> 层代表镜像层，<code>upper</code> 层代表容器可写层。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103103156311.png" alt="image-20240103103156311"></p>
+<p class="fireman-p-indent" >例如在 <code>Dockerilfe</code> 中，每一个指令都是从下层往上叠一层，在容器中的文件，要么直接从镜像层获取，要么是从容器层新创建的文件获取。</p>
 <h3 id="OverlayFS-使用案例"><a href="#OverlayFS-使用案例" class="headerlink" title="OverlayFS 使用案例"></a>OverlayFS 使用案例</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">// 创建四个目录，用于做准备</span><br><span class="line">//      上层   下层  目标目录 临时工作目录</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> upper lower merged work</span></span><br><span class="line">// 构建下层</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;from lower&quot;</span> &gt; lower/in_lower.txt</span></span><br><span class="line">// 构建上层</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;from upper&quot;</span> &gt; upper/in_upper.txt</span></span><br><span class="line">// 上下层同一个文件，内容不同</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;from lower&quot;</span> &gt; lower/in_both.txt</span></span><br><span class="line">// 上下层同一个文件，内容不同</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;from upper&quot;</span> &gt; upper/in_both.txt</span></span><br><span class="line">// 挂载到 merged 目录</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo mount -t overlay overlay -o lowerdir=`<span class="built_in">pwd</span>`/lower,upperdir=`<span class="built_in">pwd</span>`/upper,workdir=`<span class="built_in">pwd</span>`/work `<span class="built_in">pwd</span>`/merged</span></span><br><span class="line">// 查看挂载之后的结果</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> merged/</span></span><br><span class="line">in_lower.txt  in_upper.txt in_both.txt </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> merged/in_both.txt</span></span><br><span class="line">from upper</span><br><span class="line"></span><br><span class="line">// 删除合并之后的 both 文件</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">delete merged/in_both.txt</span> </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> merged/</span></span><br><span class="line">in_lower.txt  in_upper.txt</span><br><span class="line"></span><br><span class="line">// 删除合并之后的下层文件</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">delete merged/in_lower.txt</span> </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> -l upper/</span></span><br><span class="line">总用量 4</span><br><span class="line">c--------- 1 root root 0, 0 1月   4 12:27 in_both.txt</span><br><span class="line">c--------- 1 root root 0, 0 1月   4 12:28 in_lower.txt</span><br><span class="line">-rw-r--r-- 1 root root   11 1月   4 12:26 in_upper.txt</span><br><span class="line"></span><br><span class="line">// 删除合并之后的上层文件</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">delete merged/in_upper.txt</span></span><br><span class="line"></span><br><span class="line">// merged 里面是空的</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> merged/</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> -l upper/   // 删除合并后的上层文件，其实是删除了上层的文件，上层可写，下层是镜像层。</span></span><br><span class="line">总用量 0</span><br><span class="line">c--------- 1 root root 0, 0 1月   4 12:27 in_both.txt   // 上层可以看到下层的文件</span><br><span class="line">c--------- 1 root root 0, 0 1月   4 12:28 in_lower.txt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> upper/in_both.txt</span></span><br><span class="line">cat: upper/in_both.txt: 没有那个设备或地址</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> lower/</span></span><br><span class="line">in_both.txt  in_lower.txt</span><br></pre></td></tr></table></figure>
 
-<p>查看容器详情时，可以直接看到容器的<code>overlayfs</code>信息。</p>
+<p class="fireman-p-indent" >查看容器详情时，可以直接看到容器的<code>overlayfs</code>信息。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker inspect 8a77db202e9b</span></span><br><span class="line">[</span><br><span class="line">	&#123;</span><br><span class="line">		...</span><br><span class="line">		        &quot;GraphDriver&quot;: &#123;</span><br><span class="line">            &quot;Data&quot;: &#123;</span><br><span class="line">                &quot;LowerDir&quot;: &quot;/var/lib/xxx/docker/overlay2/8c88839766cd1d90bebe283a9e2634c8e2fd4f2707375c479287eb5bb7980910-init/diff:/var/lib/xxx/docker/overlay2/53961e498c6657e9372f15861845d3c386642a3cb9ac00f882c49f5d4e01aab5/diff:/var/lib/xxx/docker/overlay2/22b9d9592d3329aeb7427dc015ead91d5830e8d7671182d4106d7fcf4c4ffdaa/diff:/var/lib/xxx/docker/overlay2/687713c2f236e08c11b4893106264e5a2ffe1ff8ff4c578f9941b01673a28df3/diff:/var/lib/xxx/docker/overlay2/52acc6a1047de39d8ddad126bc3f6a10f5d1ca13fec8557115f814e2e65f8a04/diff:/var/lib/xxx/docker/overlay2/f669fa0b144ef5dccce491bdd3ac6257a21463ad704d847dfabcd41437970805/diff:/var/lib/xxx/docker/overlay2/b4bb1ec0613fedf0c8995317a380ef9fbc6a8b7fe503233548ed2d44d3ceebd7/diff&quot;,</span><br><span class="line">                &quot;MergedDir&quot;: &quot;/var/lib/xxx/docker/overlay2/8c88839766cd1d90bebe283a9e2634c8e2fd4f2707375c479287eb5bb7980910/merged&quot;,</span><br><span class="line">                &quot;UpperDir&quot;: &quot;/var/lib/xxx/docker/overlay2/8c88839766cd1d90bebe283a9e2634c8e2fd4f2707375c479287eb5bb7980910/diff&quot;,</span><br><span class="line">                &quot;WorkDir&quot;: &quot;/var/lib/xxx/docker/overlay2/8c88839766cd1d90bebe283a9e2634c8e2fd4f2707375c479287eb5bb7980910/work&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;Name&quot;: &quot;overlay2&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
-<h2 id="OCI-容器标准"><a href="#OCI-容器标准" class="headerlink" title="OCI 容器标准"></a>OCI 容器标准</h2><p><code>Open Container Initiative</code></p>
+<h2 id="OCI-容器标准"><a href="#OCI-容器标准" class="headerlink" title="OCI 容器标准"></a>OCI 容器标准</h2><p class="fireman-p-indent" ><code>Open Container Initiative</code></p>
 <ul>
 <li><code>OCI</code> 组织于  2015 年创建，是一个致力于定义容器镜像标准和运行时标准的开放式组织</li>
 <li><code>OCI</code> 定义了镜像标准（<code>Runtime Specification</code>）、运行时标准（<code>Image Specification</code>）和分发标准（<code>Distribution Specification</code>）<ul>
@@ -719,14 +726,14 @@
 </ul>
 </li>
 </ul>
-<h2 id="Docker-引擎架构"><a href="#Docker-引擎架构" class="headerlink" title="Docker 引擎架构"></a>Docker 引擎架构</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103104613595.png" alt="image-20240103104613595"></p>
-<p>使用 <code>docker container run</code> 运行一个容器时，是使用 <code>containerd</code> 引擎运行。而 <code>docker</code> 早期本身的架构上，主进程是 <code>docker daemon</code>，其他进程是由主进程 <code>fork</code> 出来的，当 <code>docker</code> 需要更新或者重启，需要重启 <code>docker-daemon</code>，就会导致子进程一并重启。 </p>
-<p><code>containerd</code> 引擎，通过 <code>shim</code>进程 <code>fork</code> 出容器子进程 ，当 <code>containerd</code> 主进程重启时，不影响子进程。（<code>shim</code> 的父进程是 <code>systemd</code>，而不是 <code>containerd</code>）</p>
+<h2 id="Docker-引擎架构"><a href="#Docker-引擎架构" class="headerlink" title="Docker 引擎架构"></a>Docker 引擎架构</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103104613595.png" alt="image-20240103104613595"></p>
+<p class="fireman-p-indent" >使用 <code>docker container run</code> 运行一个容器时，是使用 <code>containerd</code> 引擎运行。而 <code>docker</code> 早期本身的架构上，主进程是 <code>docker daemon</code>，其他进程是由主进程 <code>fork</code> 出来的，当 <code>docker</code> 需要更新或者重启，需要重启 <code>docker-daemon</code>，就会导致子进程一并重启。 </p>
+<p class="fireman-p-indent" ><code>containerd</code> 引擎，通过 <code>shim</code>进程 <code>fork</code> 出容器子进程 ，当 <code>containerd</code> 主进程重启时，不影响子进程。（<code>shim</code> 的父进程是 <code>systemd</code>，而不是 <code>containerd</code>）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 查看一个容器的进程</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker inspect efd96d555c73 | grep -i pid</span></span><br><span class="line">            &quot;Pid&quot;: 4917,</span><br><span class="line">            &quot;PidMode&quot;: &quot;&quot;,</span><br><span class="line">            &quot;PidsLimit&quot;: null,</span><br><span class="line"></span><br><span class="line">// 查看这个进程的父进程</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ps -ef | grep 4917</span></span><br><span class="line">systemd+  4917  4823  0  2023 ?        00:30:30 mysqld</span><br><span class="line">root      8750  7207  0 11:00 pts/13   00:00:00 grep --color=auto 4917</span><br><span class="line"></span><br><span class="line">// 查看父进程 4823 的信息</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ps -ef | grep 4823</span></span><br><span class="line">root      4823     1  0  2023 ?        00:03:47 /usr/bin/containerd-shim-runc-v2 -namespace moby -id efd96d555c73ec357acba410e75c602c40ce82b5ca641e3ce23dedaab0311aa4 -address /run/containerd/containerd.sock</span><br><span class="line">systemd+  4917  4823  0  2023 ?        00:30:30 mysqld</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ps -p 1</span></span><br><span class="line">  PID TTY          TIME CMD</span><br><span class="line">    1 ?        01:06:16 systemd</span><br></pre></td></tr></table></figure>
 
-<p>可以看到 <code>4823</code> 进程是 <code>containerd-shim-runc-v2</code>，它的父进程是 <code>PID</code> 为1，也就是 <code>systemd</code>。</p>
-<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p>进程在独立的网络 <code>namespace</code> 中，可以有独立的网卡、网络配置等。</p>
-<p>在 <code>docker</code> 中，提供多种网络模式：</p>
+<p class="fireman-p-indent" >可以看到 <code>4823</code> 进程是 <code>containerd-shim-runc-v2</code>，它的父进程是 <code>PID</code> 为1，也就是 <code>systemd</code>。</p>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><p class="fireman-p-indent" >进程在独立的网络 <code>namespace</code> 中，可以有独立的网卡、网络配置等。</p>
+<p class="fireman-p-indent" >在 <code>docker</code> 中，提供多种网络模式：</p>
 <ul>
 <li><code>Null</code>（–net&#x3D;None）<ul>
 <li>把容器放入独立的网络空间但不做任何网络配置；例如 <code>k8s</code> 中</li>
@@ -746,8 +753,8 @@
 </ul>
 </li>
 </ul>
-<p>当扩展到多个机器上，需要主机之间通信，而且需要容器之间相互隔离和有独立的网络，就无法直接使用主机网络。</p>
-<p>解决方式有两种：</p>
+<p class="fireman-p-indent" >当扩展到多个机器上，需要主机之间通信，而且需要容器之间相互隔离和有独立的网络，就无法直接使用主机网络。</p>
+<p class="fireman-p-indent" >解决方式有两种：</p>
 <ul>
 <li><code>Remote</code>（<code>network with remote drivers</code>）<ul>
 <li><code>Underlay</code>：<ul>
@@ -767,12 +774,12 @@
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">// 创建 network 的 ns 的临时目录</span><br><span class="line">mkdir -p /var/run/netns</span><br><span class="line">find -L /var/run/netns -type l -delete</span><br><span class="line"></span><br><span class="line">// 开启一个容器，例如nginx，获取到 pid</span><br><span class="line">docker run --network=none -d nginx</span><br><span class="line">docker ps | grep nginx </span><br><span class="line">docker inspect &lt;container_id&gt; | grep -i pid </span><br><span class="line"></span><br><span class="line">// 链接出来，操作更方便</span><br><span class="line">ln -s /proc/$pid/ns/net /var/run/netns/$pid </span><br><span class="line"></span><br><span class="line">// 创建一个 veth ，上面两个口，A 口和 B 口</span><br><span class="line">ip link add A type veth peer name B</span><br><span class="line">// 查看当前 docker0 网桥的状态</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">brctl show</span></span><br><span class="line">bridge name	bridge id		STP enabled	interfaces</span><br><span class="line">docker0		8000.0242838bdad8	no</span><br><span class="line"></span><br><span class="line">// br0上插 A 口，并且打开 A 口</span><br><span class="line">brctl addif docker0 A</span><br><span class="line">ip link set A up</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">brctl show docker0</span></span><br><span class="line">bridge name	bridge id		STP enabled	interfaces</span><br><span class="line">docker0		8000.0242838bdad8	no		A</span><br><span class="line"></span><br><span class="line">// 获取主机上的 docker 网络配置</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip a show docker0</span></span><br><span class="line">4: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default</span><br><span class="line">    link/ether 02:42:83:8b:da:d8 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::42:83ff:fe8b:dad8/64 scope link</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 设置 B 口，命名、打开、配置 IP</span><br><span class="line">ip link set B netns $pid</span><br><span class="line">ip netns exec $pid ip link set dev B name eth0 </span><br><span class="line">ip netns exec $pid ip link set eth0 up</span><br><span class="line">ip netns exec $pid ip addr add $SETIP/$SETMASK dev eth0</span><br><span class="line">ip netns exec $pid ip route add default via $GATEWAY</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 例如</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip netns <span class="built_in">exec</span> 4854 ip addr add 172.17.0.100/16 dev eth0</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip netns <span class="built_in">exec</span> 4854 ip route add default via 172.17.0.1</span></span><br><span class="line">// 此时，主机和docker之间就可以通过 veth 通信</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">curl 172.17.0.100</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<h3 id="默认模式-Bridge-和-NAT"><a href="#默认模式-Bridge-和-NAT" class="headerlink" title="默认模式 - Bridge 和 NAT"></a>默认模式 - Bridge 和 NAT</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103115105833.png" alt="image-20240103115105833"></p>
-<p>例如，为主机 <code>eth0</code> 分配IP <code>192.168.0.101</code>；</p>
-<p>启动 <code>docker daemon</code>，查看主机 <code>iptables</code>；</p>
+<h3 id="默认模式-Bridge-和-NAT"><a href="#默认模式-Bridge-和-NAT" class="headerlink" title="默认模式 - Bridge 和 NAT"></a>默认模式 - Bridge 和 NAT</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103115105833.png" alt="image-20240103115105833"></p>
+<p class="fireman-p-indent" >例如，为主机 <code>eth0</code> 分配IP <code>192.168.0.101</code>；</p>
+<p class="fireman-p-indent" >启动 <code>docker daemon</code>，查看主机 <code>iptables</code>；</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POSTROUTING -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
 
-<p>在主机启动容器：</p>
+<p class="fireman-p-indent" >在主机启动容器：</p>
 <ul>
 <li><code>docker run -d --name ssh -p 2333:22 centos-ssh</code></li>
 <li><code>Docker</code> 会以标准模式配置网络：<ul>
@@ -784,8 +791,8 @@
 </ul>
 </li>
 </ul>
-<h3 id="Underlay"><a href="#Underlay" class="headerlink" title="Underlay"></a>Underlay</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170022413.png" alt="image-20240103170022413"></p>
-<p>借助主机网卡，通过虚拟网桥实现交换机功能，让容器直接从外部网络中获取网络信息；</p>
+<h3 id="Underlay"><a href="#Underlay" class="headerlink" title="Underlay"></a>Underlay</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170022413.png" alt="image-20240103170022413"></p>
+<p class="fireman-p-indent" >借助主机网卡，通过虚拟网桥实现交换机功能，让容器直接从外部网络中获取网络信息；</p>
 <ul>
 <li>采用 <code>Linux</code> 网桥设备（<code>sbrctl</code>），通过物理网络连通容器；</li>
 <li>创建新的网桥设备 <code>mydr0</code>；</li>
@@ -799,26 +806,26 @@
 <li><code>Docker overlay</code> 网络驱动原生支持多主机网络；</li>
 <li><code>Libnetwork</code> 是一个内置的基于 <code>VXLAN</code> 的网络驱动；</li>
 </ul>
-<h4 id="VXLAN"><a href="#VXLAN" class="headerlink" title="VXLAN"></a>VXLAN</h4><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170440937.png" alt="image-20240103170440937"></p>
-<p>在每一个主机上都有一个设备，例如 <code>VTEP-1</code>，在处理处理容器网络包时，在外层封装一层源地址和源MAC，通过网络进行转发，经过路由到另外一台主机上之后，通过解压缩获取到对端网络信息以及它的目标网络信息。这种方式封装和解封装数据包会影响性能。</p>
-<h3 id="Overlay-network-sample-Flannel"><a href="#Overlay-network-sample-Flannel" class="headerlink" title="Overlay network sample - Flannel"></a>Overlay network sample - Flannel</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170836063.png" alt="image-20240103170836063"></p>
+<h4 id="VXLAN"><a href="#VXLAN" class="headerlink" title="VXLAN"></a>VXLAN</h4><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170440937.png" alt="image-20240103170440937"></p>
+<p class="fireman-p-indent" >在每一个主机上都有一个设备，例如 <code>VTEP-1</code>，在处理处理容器网络包时，在外层封装一层源地址和源MAC，通过网络进行转发，经过路由到另外一台主机上之后，通过解压缩获取到对端网络信息以及它的目标网络信息。这种方式封装和解封装数据包会影响性能。</p>
+<h3 id="Overlay-network-sample-Flannel"><a href="#Overlay-network-sample-Flannel" class="headerlink" title="Overlay network sample - Flannel"></a>Overlay network sample - Flannel</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170836063.png" alt="image-20240103170836063"></p>
 <ul>
 <li>同一主机内的 <code>Pod</code> 可以使用网桥进行通信；</li>
 <li>不同主机上的 <code>Pod</code> 将通过 <code>flanneld</code> 将其流量封装在 <code>UDP</code> 数据包中。</li>
 </ul>
-<p>需要在每个设备上安装 <code>flannneld</code>，跨主机的包都需要通过 <code>flanneld</code> 封装包。</p>
-<p>Flannel Packet Sample</p>
-<p><code>flanneld</code> 抓包示例：</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103171044864.png" alt="image-20240103171044864"></p>
-<p>可以看到，其实是一个 <code>ICMP</code> 协议的包，外层是 <code>IPV4</code>，但是 <code>IPV4</code> 外层还封装了一层 <code>UDP</code>，然后在 <code>UDP</code> 外层再封装 <code>IPV4</code>。</p>
-<h2 id="创建-docker-镜像"><a href="#创建-docker-镜像" class="headerlink" title="创建 docker 镜像"></a>创建 docker 镜像</h2><p>定义 <code>dockerfile</code></p>
+<p class="fireman-p-indent" >需要在每个设备上安装 <code>flannneld</code>，跨主机的包都需要通过 <code>flanneld</code> 封装包。</p>
+<p class="fireman-p-indent" >Flannel Packet Sample</p>
+<p class="fireman-p-indent" ><code>flanneld</code> 抓包示例：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103171044864.png" alt="image-20240103171044864"></p>
+<p class="fireman-p-indent" >可以看到，其实是一个 <code>ICMP</code> 协议的包，外层是 <code>IPV4</code>，但是 <code>IPV4</code> 外层还封装了一层 <code>UDP</code>，然后在 <code>UDP</code> 外层再封装 <code>IPV4</code>。</p>
+<h2 id="创建-docker-镜像"><a href="#创建-docker-镜像" class="headerlink" title="创建 docker 镜像"></a>创建 docker 镜像</h2><p class="fireman-p-indent" >定义 <code>dockerfile</code></p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu</span><br><span class="line"></span><br><span class="line"><span class="comment"># so apt-get doesn&#x27;t complain</span></span><br><span class="line"><span class="keyword">ENV</span> DEBIAN_FRONTEND=noninteractive</span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> sed -i <span class="string">&#x27;s/^exit 101/exit 0/&#x27;</span> /usr/sbin/policy-rc.d</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> \</span></span><br><span class="line"><span class="language-bash">	apt-get update &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	apt-get install -y ca-certificates &amp;&amp; \ </span></span><br><span class="line">	apt-get install -y curl &amp;&amp; \</span><br><span class="line">	rm -rf /var/lib/apt/lists/*</span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> ./bin/eic eic </span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;/eic&quot;</span>]</span></span><br></pre></td></tr></table></figure>
 
-<p>定义之后 <code>docker build .</code></p>
-<h1 id="Dockerfile-的最佳实践"><a href="#Dockerfile-的最佳实践" class="headerlink" title="Dockerfile 的最佳实践"></a>Dockerfile 的最佳实践</h1><p><code>Docker</code> 遵循 <code>12-Factor</code> 的原则管理和构建应用；</p>
-<p>核心是进程无状态和无共享。</p>
-<p><span class="exturl" data-url="aHR0cHM6Ly8xMmZhY3Rvci5uZXQv">https://12factor.net/<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yODYxMDAzNTc=">https://zhuanlan.zhihu.com/p/286100357<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" >定义之后 <code>docker build .</code></p>
+<h1 id="Dockerfile-的最佳实践"><a href="#Dockerfile-的最佳实践" class="headerlink" title="Dockerfile 的最佳实践"></a>Dockerfile 的最佳实践</h1><p class="fireman-p-indent" ><code>Docker</code> 遵循 <code>12-Factor</code> 的原则管理和构建应用；</p>
+<p class="fireman-p-indent" >核心是进程无状态和无共享。</p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly8xMmZhY3Rvci5uZXQv">https://12factor.net/<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8yODYxMDAzNTc=">https://zhuanlan.zhihu.com/p/286100357<i class="fa fa-external-link-alt"></i></span></p>
 <h2 id="构建上下文（Build-Context）"><a href="#构建上下文（Build-Context）" class="headerlink" title="构建上下文（Build Context）"></a>构建上下文（Build Context）</h2><ul>
 <li><p>当运行 <code>docker build</code> 命令时，当前工作目录被称为构建上下文；</p>
 </li>
@@ -827,7 +834,7 @@
 <li><code>docker build -f ./Dockerfile</code></li>
 </ul>
 </li>
-<li><p>当 <code>docker build</code> 运行时，首先会把构建上下文传输给 <code>docker daemon</code>，把没用的文件包含在构建上下文时，会导致传输时间长，构建需要的资源多，构建出的镜像大等问题。</p>
+<li><p class="fireman-p-indent" >当 <code>docker build</code> 运行时，首先会把构建上下文传输给 <code>docker daemon</code>，把没用的文件包含在构建上下文时，会导致传输时间长，构建需要的资源多，构建出的镜像大等问题。</p>
 <ul>
 <li><p>例如可以尝试在一个包含很多目录的目录下，运行下面的命令，会感受到差异</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -f /xxx/xxx/xxx/Dockerfile</span><br><span class="line">docker build /xxx/xxx/xxx/</span><br></pre></td></tr></table></figure>
@@ -836,22 +843,22 @@
 </li>
 </ul>
 </li>
-<li><p>因此需要确保构建上下文清晰，比如创建一个专门的目录放置 <code>Dockerfile</code>，并在目录中运行 <code>docker build</code></p>
+<li><p class="fireman-p-indent" >因此需要确保构建上下文清晰，比如创建一个专门的目录放置 <code>Dockerfile</code>，并在目录中运行 <code>docker build</code></p>
 </li>
 </ul>
 <h2 id="镜像构建日志"><a href="#镜像构建日志" class="headerlink" title="镜像构建日志"></a>镜像构建日志</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Sending build context to Docker daemon 14.57MB</span><br><span class="line">Step 1/4 : FROM ubuntu </span><br><span class="line">---&gt; cf0f3ca922e0</span><br><span class="line">Step 2/4 : ENV MY_SERVICE_PORT=80</span><br><span class="line">---&gt; Using cache</span><br><span class="line">---&gt; a7d824f74410</span><br><span class="line">Step 3/4 : ADD bin/amd64/httpserver /httpserver</span><br><span class="line">---&gt; Using cache</span><br><span class="line">---&gt; 00bb47fce704</span><br><span class="line">Step 4/4 : ENTRYPOINT /httpserver</span><br><span class="line">---&gt; Using cache</span><br><span class="line">---&gt; f77ee3366d08 </span><br><span class="line">Successfully built f77ee3366d08</span><br></pre></td></tr></table></figure>
 
-<h3 id="Build-Cache"><a href="#Build-Cache" class="headerlink" title="Build Cache"></a>Build Cache</h3><p>构建容器镜像时，<code>Docker</code> 依次读取 <code>Dockerfile</code> 中的指令，并按顺序依次执行构建指令。</p>
-<p><code>Docker</code> 读取指令后，会先判断缓存中是否有可用的已存镜像，只有已存镜像不存在时才会重新构建。</p>
+<h3 id="Build-Cache"><a href="#Build-Cache" class="headerlink" title="Build Cache"></a>Build Cache</h3><p class="fireman-p-indent" >构建容器镜像时，<code>Docker</code> 依次读取 <code>Dockerfile</code> 中的指令，并按顺序依次执行构建指令。</p>
+<p class="fireman-p-indent" ><code>Docker</code> 读取指令后，会先判断缓存中是否有可用的已存镜像，只有已存镜像不存在时才会重新构建。</p>
 <ul>
 <li>通常 <code>Docker</code> 简单判断 <code>Dockerfile</code> 中的指令与镜像</li>
 <li>针对 <code>ADD</code> 和 <code>COPY</code> 指令，<code>Docker</code> 判断该镜像层每一个文件的内容并生成一个 <code>checksum</code>，与现存镜像比较时，<code>Docker</code> 比较的是二者的 <code>checksum</code></li>
 <li>其他指令，比如 <code>RUN apt-get -y update</code>，<code>Docker</code> 简单比较与现存镜像中的指令字串是否一致。</li>
 <li>当某一层 <code>cache</code> 失效以后，后续所有层级的 <code>cache</code> 均一并失效，后续指令都重新构建镜像。</li>
 </ul>
-<p>因此，构建时，应该将变动不频繁的指令放在前面，将变动频繁的指令放在后面，尽量使用缓存，降低镜像拉取和存储的消耗的资源。</p>
-<h2 id="多段构建（Multi-stage-build）"><a href="#多段构建（Multi-stage-build）" class="headerlink" title="多段构建（Multi-stage build）"></a>多段构建（Multi-stage build）</h2><p>比如在构建比较复杂的应用时，需要有很多的依赖包，而只需要更换最后一个执行文件，此时就可以通过多段构建来将准备环境打包到一个基础镜像。</p>
-<p>有效减少镜像层级的方式。</p>
+<p class="fireman-p-indent" >因此，构建时，应该将变动不频繁的指令放在前面，将变动频繁的指令放在后面，尽量使用缓存，降低镜像拉取和存储的消耗的资源。</p>
+<h2 id="多段构建（Multi-stage-build）"><a href="#多段构建（Multi-stage-build）" class="headerlink" title="多段构建（Multi-stage build）"></a>多段构建（Multi-stage build）</h2><p class="fireman-p-indent" >比如在构建比较复杂的应用时，需要有很多的依赖包，而只需要更换最后一个执行文件，此时就可以通过多段构建来将准备环境打包到一个基础镜像。</p>
+<p class="fireman-p-indent" >有效减少镜像层级的方式。</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 基础镜像，下载包</span><br><span class="line"><span class="keyword">FROM</span> golang:<span class="number">1.16</span>-alpine AS build</span><br><span class="line">// 准备环境</span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apk add --no-cache git</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> go get github.com/golang/dep/cmd/dep</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> Gopkg.lock Gopkg.toml /go/src/project/ </span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /go/src/project/</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> dep ensure -vendor-only</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . /go/src/project/</span></span><br><span class="line"></span><br><span class="line">// 基础包中，核心内容就是这一个二进制文件</span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> go build -o /bin/project (只有这个二进制文件是产线需要的，其他都是waste)</span></span><br><span class="line"></span><br><span class="line">// 安装包，将二进制文件拷贝过来即可</span><br><span class="line"><span class="keyword">FROM</span> scratch</span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=build /bin/project /bin/project </span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;/bin/project&quot;</span>]</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;--help&quot;</span>]</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="Dockerfile-常用指令"><a href="#Dockerfile-常用指令" class="headerlink" title="Dockerfile 常用指令"></a>Dockerfile 常用指令</h2><ul>
@@ -880,10 +887,10 @@
 <li>在 <code>docker run -P</code> 时（使用 <code>-p</code> 时可以指定端口和映射端口），<code>docker</code> 会自动映射 <code>expose</code> 的端口到主机大端口，大端口会随机选择，如 <code>0.0.0.0:32768-&gt;80/tcp</code></li>
 </ul>
 </li>
-<li><p><code>ENV</code>：设置环境变量</p>
+<li><p class="fireman-p-indent" ><code>ENV</code>：设置环境变量</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENV</span> &lt;key&gt;=&lt;value&gt;...</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><code>ADD</code>：从源地址（文件，目录或者 <code>URL</code>）复制文件到目标路径</p>
+<li><p class="fireman-p-indent" ><code>ADD</code>：从源地址（文件，目录或者 <code>URL</code>）复制文件到目标路径</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ADD</span><span class="language-bash"> [--<span class="built_in">chown</span>=&lt;user&gt;:&lt;group&gt;] &lt;src&gt;... &lt;dest&gt;</span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> [--<span class="built_in">chown</span>=&lt;user&gt;:&lt;group&gt;] [<span class="string">&quot;&lt;src&gt;&quot;</span>,... <span class="string">&quot;&lt;dest&gt;&quot;</span>] (路径中有空格时使用)</span></span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -900,10 +907,10 @@
 <li>应尽量减少通过 <code>ADD URL</code> 添加 <code>remote</code> 文件，建议使用 <code>curl</code> 或者 <code>wget &amp;&amp; untar</code> （主要是这个命令理解困难，而且可控力度少）</li>
 </ul>
 </li>
-<li><p><code>COPY</code>：从源地址（文件，目录）复制文件到目标路径</p>
+<li><p class="fireman-p-indent" ><code>COPY</code>：从源地址（文件，目录）复制文件到目标路径</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="language-bash"> [--<span class="built_in">chown</span>=&lt;user&gt;:&lt;group&gt;] &lt;src&gt;... &lt;dest&gt;</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> [--<span class="built_in">chown</span>=&lt;user&gt;:&lt;group&gt;] [<span class="string">&quot;&lt;src&gt;&quot;</span>,... <span class="string">&quot;&lt;dest&gt;&quot;</span>] // 路径中有空格时使用</span></span><br></pre></td></tr></table></figure>
 
-<p><code>COPY</code> 的使用与 <code>ADD</code> 类似，但有如下区别：</p>
+<p class="fireman-p-indent" ><code>COPY</code> 的使用与 <code>ADD</code> 类似，但有如下区别：</p>
 <ul>
 <li><p><code>COPY</code> 只支持本地文件的复制，不支持 <code>URL</code></p>
 </li>
@@ -912,9 +919,9 @@
 <li><p><code>COPY</code> 可以用于多阶段编译场景，可以用前一个临时镜像中拷贝文件</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=build /bin/project /bin/project</span></span><br></pre></td></tr></table></figure></li>
 </ul>
-<p><code>COPY</code> 语义上更加直白，复制本地文件时，优先使用 <code>COPY</code>。</p>
+<p class="fireman-p-indent" ><code>COPY</code> 语义上更加直白，复制本地文件时，优先使用 <code>COPY</code>。</p>
 </li>
-<li><p><code>ENTRYPOINT</code>：定义可以执行的容器镜像入口命令</p>
+<li><p class="fireman-p-indent" ><code>ENTRYPOINT</code>：定义可以执行的容器镜像入口命令</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;executable&quot;</span>, <span class="string">&quot;param1&quot;</span>, <span class="string">&quot;param2&quot;</span>] // docker run参数追加模式 </span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> <span class="built_in">command</span> param1 param2 // docker run 参数替换模式</span></span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -924,20 +931,20 @@
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;s3cmd&quot;</span>] </span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;--help&quot;</span>]</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
-<li><p><code>VOLUME</code>：将指定目录定义为外挂存储卷，<code>Dockfile</code> 中在该指令之后所有对同一目录的修改都无效</p>
+<li><p class="fireman-p-indent" ><code>VOLUME</code>：将指定目录定义为外挂存储卷，<code>Dockfile</code> 中在该指令之后所有对同一目录的修改都无效</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">VOLUME</span><span class="language-bash"> [<span class="string">&quot;/data&quot;</span>]</span></span><br></pre></td></tr></table></figure>
 
-<p>等价于 <code>docker run -v /data</code>，可通过 <code>docker inspect</code> 查看主机的 <code>mount point</code>。</p>
-<p>一般用来保护某个目录</p>
+<p class="fireman-p-indent" >等价于 <code>docker run -v /data</code>，可通过 <code>docker inspect</code> 查看主机的 <code>mount point</code>。</p>
+<p class="fireman-p-indent" >一般用来保护某个目录</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/var/lib/docker/volumes/&lt;containerid&gt;/_data</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><code>USER</code>：切换运行镜像的用户和用户组，因安全性要求，越来越多的场景要求容器应用要以 <code>non-root</code> 身份运行</p>
+<li><p class="fireman-p-indent" ><code>USER</code>：切换运行镜像的用户和用户组，因安全性要求，越来越多的场景要求容器应用要以 <code>non-root</code> 身份运行</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">USER</span> &lt;<span class="keyword">user</span>&gt;[:&lt;group&gt;]</span><br></pre></td></tr></table></figure>
 </li>
-<li><p><code>WORKDIR</code>：等价于 <code>cd</code>，切换工作目录 </p>
+<li><p class="fireman-p-indent" ><code>WORKDIR</code>：等价于 <code>cd</code>，切换工作目录 </p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WORKDIR /path/to/workdir</span><br></pre></td></tr></table></figure></li>
 </ul>
-<p>其他非常用指令：</p>
+<p class="fireman-p-indent" >其他非常用指令：</p>
 <ul>
 <li><code>ARG</code>：构建参数，没有指定则使用默认，可以在构建过程中传递；</li>
 <li><code>ONBUILD</code></li>
@@ -962,7 +969,7 @@
 <li>编写 <code>dockerfile</code> 的时候，应该把变更频率低的编译指令优先构建，以便放在镜像底层以有效利用 <code>build cache</code></li>
 <li>复制文件时，每个文件应独立复制，这确保某个文件变更时，只影响该文件对应的缓存。</li>
 </ul>
-<p>目标是：易管理、少漏洞、镜像小、层级少、利用缓存</p>
+<p class="fireman-p-indent" >目标是：易管理、少漏洞、镜像小、层级少、利用缓存</p>
 <h3 id="多进程的容器镜像"><a href="#多进程的容器镜像" class="headerlink" title="多进程的容器镜像"></a>多进程的容器镜像</h3><ul>
 <li>选择适当的 <code>init</code> 进程<ul>
 <li>需要捕获 <code>SIGTERM</code> 信号并完成子进程的优雅终止</li>
@@ -970,7 +977,7 @@
 </ul>
 </li>
 </ul>
-<p>开源项目：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2tyYWxsaW4vdGluaSVFRiVCQyU4QyVFOSU4MCU5QSVFOCVCRiU4Nw==">https://github.com/krallin/tini，通过<i class="fa fa-external-link-alt"></i></span> <code>tini</code> 作为初始化进程管理子进程。</p>
+<p class="fireman-p-indent" >开源项目：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2tyYWxsaW4vdGluaSVFRiVCQyU4QyVFOSU4MCU5QSVFOCVCRiU4Nw==">https://github.com/krallin/tini，通过<i class="fa fa-external-link-alt"></i></span> <code>tini</code> 作为初始化进程管理子进程。</p>
 <h3 id="Docker-镜像管理"><a href="#Docker-镜像管理" class="headerlink" title="Docker 镜像管理"></a>Docker 镜像管理</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// save 可以将镜像保存为 tar 包，load可以将 tar 包解压成镜像</span><br><span class="line">docker save/load </span><br><span class="line">// tag 可以给镜像打标签</span><br><span class="line">docker tag </span><br><span class="line">// push将镜像推送到远端镜像仓，pull从远端镜像仓拉取镜像到本地</span><br><span class="line">docker push/pull</span><br></pre></td></tr></table></figure>
 
 <h3 id="基于-Docker-镜像的版本管理"><a href="#基于-Docker-镜像的版本管理" class="headerlink" title="基于 Docker 镜像的版本管理"></a>基于 Docker 镜像的版本管理</h3><ul>
@@ -984,7 +991,7 @@
 <p><code>v1.0</code>：tag，常用来记录版本信息</p>
 </li>
 </ul>
-<h3 id="Docker-tag-与-github-的版本管理合力"><a href="#Docker-tag-与-github-的版本管理合力" class="headerlink" title="Docker tag 与 github 的版本管理合力"></a>Docker tag 与 github 的版本管理合力</h3><p>以 Kubernetes 为例</p>
+<h3 id="Docker-tag-与-github-的版本管理合力"><a href="#Docker-tag-与-github-的版本管理合力" class="headerlink" title="Docker tag 与 github 的版本管理合力"></a>Docker tag 与 github 的版本管理合力</h3><p class="fireman-p-indent" >以 Kubernetes 为例</p>
 <ul>
 <li>开发分支<ul>
 <li><code>git checkout master</code></li>
@@ -1004,9 +1011,9 @@
 </ul>
 </li>
 </ul>
-<p>当内部使用临时测试镜像时，还可以使用 <code>github</code> 的 <code>git</code> 号和提交次数，作为版本号标记。</p>
-<h3 id="镜像仓库"><a href="#镜像仓库" class="headerlink" title="镜像仓库"></a>镜像仓库</h3><p><code>Docker hub</code>：<span class="exturl" data-url="aHR0cHM6Ly9odWIuZG9ja2VyLmNvbS8=">https://hub.docker.com/<i class="fa fa-external-link-alt"></i></span></p>
-<p>创建私有镜像仓库：<code>docker run -d -p 5000:5000 registry</code></p>
+<p class="fireman-p-indent" >当内部使用临时测试镜像时，还可以使用 <code>github</code> 的 <code>git</code> 号和提交次数，作为版本号标记。</p>
+<h3 id="镜像仓库"><a href="#镜像仓库" class="headerlink" title="镜像仓库"></a>镜像仓库</h3><p class="fireman-p-indent" ><code>Docker hub</code>：<span class="exturl" data-url="aHR0cHM6Ly9odWIuZG9ja2VyLmNvbS8=">https://hub.docker.com/<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" >创建私有镜像仓库：<code>docker run -d -p 5000:5000 registry</code></p>
 <h1 id="Docker-优势"><a href="#Docker-优势" class="headerlink" title="Docker 优势"></a>Docker 优势</h1><ul>
 <li>封装性<ul>
 <li>不需要再启动内核，所以应用扩缩容时可以秒速启动</li>
@@ -1032,11 +1039,11 @@
 </ul>
 </li>
 </ul>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vWGlhb2xpQm95L3AvMTA0MTA2ODYuaHRtbA==">Linux内核CFS调度器<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cDovL3d3dy53b3dvdGVjaC5uZXQvcHJvY2Vzc19tYW5hZ2VtZW50LzQ1MS5odG1s">CFS调度器（5）-带宽控制<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9jaXppeHMuY29tLzIwMTcvMDgvMjkvbGludXgtbmFtZXNwYWNlLw==">docker 容器基础技术：linux namespace 简介<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tb2Vsb3ZlLmluZm8vMjAyMS8xMi8xMC8lRTYlOTAlOUUlRTYlODclODIlRTUlQUUlQjklRTUlOTklQTglRTYlOEElODAlRTYlOUMlQUYlRTclOUElODQlRTUlOUYlQkElRTclOUYlQjMtbmFtZXNwYWNlLSVFNCVCOCU4QS8=">搞懂容器技术的基石： namespace （上）<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9tb2Vsb3ZlLmluZm8vMjAyMS8xMi8xMy8lRTYlOTAlOUUlRTYlODclODIlRTUlQUUlQjklRTUlOTklQTglRTYlOEElODAlRTYlOUMlQUYlRTclOUElODQlRTUlOUYlQkElRTclOUYlQjMtbmFtZXNwYWNlLSVFNCVCOCU4Qi8=">搞懂容器技术的基石： namespace （下）<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vWGlhb2xpQm95L3AvMTA0MTA2ODYuaHRtbA==">Linux内核CFS调度器<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cDovL3d3dy53b3dvdGVjaC5uZXQvcHJvY2Vzc19tYW5hZ2VtZW50LzQ1MS5odG1s">CFS调度器（5）-带宽控制<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jaXppeHMuY29tLzIwMTcvMDgvMjkvbGludXgtbmFtZXNwYWNlLw==">docker 容器基础技术：linux namespace 简介<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tb2Vsb3ZlLmluZm8vMjAyMS8xMi8xMC8lRTYlOTAlOUUlRTYlODclODIlRTUlQUUlQjklRTUlOTklQTglRTYlOEElODAlRTYlOUMlQUYlRTclOUElODQlRTUlOUYlQkElRTclOUYlQjMtbmFtZXNwYWNlLSVFNCVCOCU4QS8=">搞懂容器技术的基石： namespace （上）<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9tb2Vsb3ZlLmluZm8vMjAyMS8xMi8xMy8lRTYlOTAlOUUlRTYlODclODIlRTUlQUUlQjklRTUlOTklQTglRTYlOEElODAlRTYlOUMlQUYlRTclOUElODQlRTUlOUYlQkElRTclOUYlQjMtbmFtZXNwYWNlLSVFNCVCOCU4Qi8=">搞懂容器技术的基石： namespace （下）<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

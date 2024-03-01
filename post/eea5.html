@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -74,7 +74,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -285,9 +292,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="功能模块"><a href="#功能模块" class="headerlink" title="功能模块"></a>功能模块</h1><p>架构设计最重要的就是理解整个产品体系在系统中的定位。搞清楚系统背后的背景，才能做出最佳的设计和抽象。不要做需求的翻译机，先理解业务背后的本质，事情的初衷。</p>
-<p>评论系统，往小里做，就是视频评论系统，往大做就是评论平台，可以接入各种业务形态。</p>
-<p>评论的主要功能：</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="功能模块"><a href="#功能模块" class="headerlink" title="功能模块"></a>功能模块</h1><p class="fireman-p-indent" >架构设计最重要的就是理解整个产品体系在系统中的定位。搞清楚系统背后的背景，才能做出最佳的设计和抽象。不要做需求的翻译机，先理解业务背后的本质，事情的初衷。</p>
+<p class="fireman-p-indent" >评论系统，往小里做，就是视频评论系统，往大做就是评论平台，可以接入各种业务形态。</p>
+<p class="fireman-p-indent" >评论的主要功能：</p>
 <ul>
 <li>发布评论：支持回复楼层、楼中楼。（一般会做两层效果较好，但是设计上可以支持无限嵌套）</li>
 <li>读取评论：按照时间、热度排序</li>
@@ -295,10 +302,10 @@
 <li>管理评论：作者置顶、后台运营管理（搜索、删除、审核等）</li>
 </ul>
 <blockquote>
-<p>在动手设计前，反复思考，真正编码的时间只有5%。</p>
+<p class="fireman-p-indent" >在动手设计前，反复思考，真正编码的时间只有5%。</p>
 </blockquote>
-<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1><p>在做架构设计之前，可以先将大的模块设计出来，并且处理好流量方向。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926094930746.png" alt="image-20230926094930746"></p>
+<h1 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h1><p class="fireman-p-indent" >在做架构设计之前，可以先将大的模块设计出来，并且处理好流量方向。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926094930746.png" alt="image-20230926094930746"></p>
 <ul>
 <li><p>BFF：<code>comment</code></p>
 <p>复杂评论业务的服务编排，比如访问账号服务进行等级判定（糅杂一些业务规则，例如 <code>account-service</code>，<code>filter-service</code>），同时需要在 BFF 面向 移动端&#x2F;WEB 场景来设计 API，这一层抽象把评论的本身的内容列表处理（加载、分页、排序等）进行了隔离，关注在业务平台化逻辑上。这一层专注于处理平台业务逻辑。</p>
@@ -317,11 +324,11 @@
 </li>
 </ul>
 <blockquote>
-<p>架构设计等同于数据设计，梳理清楚数据的走向和逻辑。尽量避免环形依赖、数据双向请求等。</p>
+<p class="fireman-p-indent" >架构设计等同于数据设计，梳理清楚数据的走向和逻辑。尽量避免环形依赖、数据双向请求等。</p>
 </blockquote>
-<h2 id="comment-service"><a href="#comment-service" class="headerlink" title="comment-service"></a>comment-service</h2><p>评论服务，专注在评论数据处理。（将 DDD 思想分隔开，作为独立的服务。Separation of Concerns）</p>
-<p>最开始的时候，是将 <code>comment-service</code> 和 <code>comment</code> 是一层，业务耦合和功能耦合在一起，非常不利于迭代。当然，在设计层面可以考虑目录结构进行拆分，但是从架构层次来说，迭代隔离是更好的。将两个服务拆分开，注重不同的核心点，BFF 关注业务逻辑，<code>comment-service</code>关注数据读写处理。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012102737583.png" alt="image-20231012102737583"></p>
+<h2 id="comment-service"><a href="#comment-service" class="headerlink" title="comment-service"></a>comment-service</h2><p class="fireman-p-indent" >评论服务，专注在评论数据处理。（将 DDD 思想分隔开，作为独立的服务。Separation of Concerns）</p>
+<p class="fireman-p-indent" >最开始的时候，是将 <code>comment-service</code> 和 <code>comment</code> 是一层，业务耦合和功能耦合在一起，非常不利于迭代。当然，在设计层面可以考虑目录结构进行拆分，但是从架构层次来说，迭代隔离是更好的。将两个服务拆分开，注重不同的核心点，BFF 关注业务逻辑，<code>comment-service</code>关注数据读写处理。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012102737583.png" alt="image-20231012102737583"></p>
 <ul>
 <li><p>读的核心逻辑</p>
 <p><code>Cache-Aside</code> 模式，先读取缓存，再读取存储。</p>
@@ -336,14 +343,14 @@
 <p>同样的，处理回源消息也是类似的思路。</p>
 </li>
 </ul>
-<h2 id="comment-admin"><a href="#comment-admin" class="headerlink" title="comment-admin"></a>comment-admin</h2><p>运营后台的读写能力。</p>
-<p><code>MySQL binlog</code> 中的数据被 <code>canal</code> 中间件流式消费，获取到业务的原始 <code>CRUD</code> 操作，需要回放录入到 <code>ES</code> 中，但是 <code>ES</code> 中的数据最终是面向运营体系提供服务能力，需要检索的数据维度比较多，在入 <code>ES</code> 前需要做一个异构的 <code>joiner</code>，把单表变宽预处理好 <code>join</code> 逻辑，然后倒入到 <code>ES</code> 中。</p>
+<h2 id="comment-admin"><a href="#comment-admin" class="headerlink" title="comment-admin"></a>comment-admin</h2><p class="fireman-p-indent" >运营后台的读写能力。</p>
+<p class="fireman-p-indent" ><code>MySQL binlog</code> 中的数据被 <code>canal</code> 中间件流式消费，获取到业务的原始 <code>CRUD</code> 操作，需要回放录入到 <code>ES</code> 中，但是 <code>ES</code> 中的数据最终是面向运营体系提供服务能力，需要检索的数据维度比较多，在入 <code>ES</code> 前需要做一个异构的 <code>joiner</code>，把单表变宽预处理好 <code>join</code> 逻辑，然后倒入到 <code>ES</code> 中。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230926110511188.png" alt="image-20230926110511188" style="zoom:25%;" />
 
-<p>一般来说，运营后台的检索条件都是组合的，使用 <code>ES</code> 的好处是避免依赖 <code>MySQL</code> 来做多条件组合检索，同时 <code>MySQL</code> 毕竟是 <code>OLTP</code> 面向线上联机事务处理的。通过冗余数据的方式，使用其他引擎来实现。</p>
-<p><code>ES</code> 一般会存储检索、展示、<code>primary key</code> 等数据，当操作编辑的时候，找到记录的 <code>primary key</code>，最后交由 <code>comment-admin</code> 进行运营测的 <code>CRUD</code> 操作。</p>
-<p>内部运营体系，基于<code>ES</code>来完成更加有优势。</p>
-<h2 id="comment"><a href="#comment" class="headerlink" title="comment"></a>comment</h2><p><code>comment</code> 作为 <code>BFF</code>，是面向端，面向平台，面向业务组合的服务。所以平台扩展的能力，都在 <code>comment</code> 服务来实现，方便统一和准入平台，以统一的接口形式提供平台化的能力。</p>
+<p class="fireman-p-indent" >一般来说，运营后台的检索条件都是组合的，使用 <code>ES</code> 的好处是避免依赖 <code>MySQL</code> 来做多条件组合检索，同时 <code>MySQL</code> 毕竟是 <code>OLTP</code> 面向线上联机事务处理的。通过冗余数据的方式，使用其他引擎来实现。</p>
+<p class="fireman-p-indent" ><code>ES</code> 一般会存储检索、展示、<code>primary key</code> 等数据，当操作编辑的时候，找到记录的 <code>primary key</code>，最后交由 <code>comment-admin</code> 进行运营测的 <code>CRUD</code> 操作。</p>
+<p class="fireman-p-indent" >内部运营体系，基于<code>ES</code>来完成更加有优势。</p>
+<h2 id="comment"><a href="#comment" class="headerlink" title="comment"></a>comment</h2><p class="fireman-p-indent" ><code>comment</code> 作为 <code>BFF</code>，是面向端，面向平台，面向业务组合的服务。所以平台扩展的能力，都在 <code>comment</code> 服务来实现，方便统一和准入平台，以统一的接口形式提供平台化的能力。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231008175707792.png" alt="image-20231008175707792" style="zoom:50%;" />
 
 <ul>
@@ -351,8 +358,8 @@
 <li>直接向端上提供接口，提供数据的读写接口，甚至可以整合端上，提供统一的端上 SDK</li>
 <li>需要对非核心依赖的 <code>gRPC</code> 服务进行降级，当这些服务不稳定时。</li>
 </ul>
-<h1 id="存储设计"><a href="#存储设计" class="headerlink" title="存储设计"></a>存储设计</h1><p>也就是数据库设计。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927161249867.png" alt="image-20230927161249867"></p>
+<h1 id="存储设计"><a href="#存储设计" class="headerlink" title="存储设计"></a>存储设计</h1><p class="fireman-p-indent" >也就是数据库设计。</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927161249867.png" alt="image-20230927161249867"></p>
 <ul>
 <li><p><code>comment_subject</code>：主题表（例如一个资源、视频、文稿等）</p>
 <ul>
@@ -362,11 +369,11 @@
 <li><code>stat</code> 状态记录这个资源的状态</li>
 <li><code>attrs</code> 属性，记录资源属性，而且通过二进制，代表多个属性</li>
 </ul>
-<p>表都应该带有 <code>create_time</code> 和 <code>update_time</code> ，而且一定要有主键，写入的时候使用顺序写，避免出现页分裂。</p>
-<p>为了避免单表过大，通过 <code>hash</code> 分割表。</p>
-<p>尽量使用软删除，或者手动设置是否隐藏字段。</p>
+<p class="fireman-p-indent" >表都应该带有 <code>create_time</code> 和 <code>update_time</code> ，而且一定要有主键，写入的时候使用顺序写，避免出现页分裂。</p>
+<p class="fireman-p-indent" >为了避免单表过大，通过 <code>hash</code> 分割表。</p>
+<p class="fireman-p-indent" >尽量使用软删除，或者手动设置是否隐藏字段。</p>
 </li>
-<li><p><code>comment_index</code>：索引表</p>
+<li><p class="fireman-p-indent" ><code>comment_index</code>：索引表</p>
 <ul>
 <li>记录评论的索引</li>
 <li>同样记录对应的主题，方便后续查询</li>
@@ -374,51 +381,51 @@
 <li><code>floor</code> 记录评论层级，也需要更新主题表中的楼层数，</li>
 </ul>
 </li>
-<li><p><code>comment_content</code>：评论内容表</p>
-<p>记录核心评论的内容，避免检索的时候内容过多导致效率低。</p>
+<li><p class="fireman-p-indent" ><code>comment_content</code>：评论内容表</p>
+<p class="fireman-p-indent" >记录核心评论的内容，避免检索的时候内容过多导致效率低。</p>
 </li>
 </ul>
-<p>数据写入：事务更新 <code>comment_subject</code>，<code>comment_index</code>，<code>comment_content</code> 三张表。<code>content</code> 属于非强制需要一致性考虑的。可以先写入 <code>content</code>，之后事务更新其他表。即便 <code>content</code> 先成功，后续失败仅仅存在一条 <code>ghost</code> 数据。</p>
-<p>数据读取：基于 <code>obj_id</code> + <code>obj_type</code> 在 <code>comment_index</code> 表找到评论列表， <code>WHERE root = 0 ORDER BY floor</code>。之后根据 <code>comment_index</code> 的 <code>id</code> 字段获取出 <code>comment_content</code> 的评论内容。对于二级的子楼层， <code>WHERE parent/root IN (id...)</code>。</p>
-<p>因为产品形态上只存在二级列表，因此只需要迭代查询两次即可。对于嵌套层次多的，产品上，可以通过二次点击支持。</p>
+<p class="fireman-p-indent" >数据写入：事务更新 <code>comment_subject</code>，<code>comment_index</code>，<code>comment_content</code> 三张表。<code>content</code> 属于非强制需要一致性考虑的。可以先写入 <code>content</code>，之后事务更新其他表。即便 <code>content</code> 先成功，后续失败仅仅存在一条 <code>ghost</code> 数据。</p>
+<p class="fireman-p-indent" >数据读取：基于 <code>obj_id</code> + <code>obj_type</code> 在 <code>comment_index</code> 表找到评论列表， <code>WHERE root = 0 ORDER BY floor</code>。之后根据 <code>comment_index</code> 的 <code>id</code> 字段获取出 <code>comment_content</code> 的评论内容。对于二级的子楼层， <code>WHERE parent/root IN (id...)</code>。</p>
+<p class="fireman-p-indent" >因为产品形态上只存在二级列表，因此只需要迭代查询两次即可。对于嵌套层次多的，产品上，可以通过二次点击支持。</p>
 <blockquote>
-<p>可以看到，上面的存储结构比较简单，而且在这种读多写少的场景，有其他的数据库也支持。例如 ES 也可以，不分表。</p>
-<p> Graph 存储也可以， DGraph、HugeGraph 类似的图存储思路，不分表，内部可以实现数据补全。</p>
+<p class="fireman-p-indent" >可以看到，上面的存储结构比较简单，而且在这种读多写少的场景，有其他的数据库也支持。例如 ES 也可以，不分表。</p>
+<p class="fireman-p-indent" > Graph 存储也可以， DGraph、HugeGraph 类似的图存储思路，不分表，内部可以实现数据补全。</p>
 </blockquote>
-<h2 id="索引内容分离"><a href="#索引内容分离" class="headerlink" title="索引内容分离"></a>索引内容分离</h2><p>用于检索的索引，和评论的具体内容分离成两张表。</p>
-<p><code>comment_index</code>：评论楼层的索引组织表，实际并不包含内容。<code>comment_content</code>：评论内容表，包含评论的具体内容。其中 <code>comment_index</code> 的 <code>id</code> 字段和 <code>comment_content</code> 是 1对1 的关系，这里面包含几种设计思想：</p>
+<h2 id="索引内容分离"><a href="#索引内容分离" class="headerlink" title="索引内容分离"></a>索引内容分离</h2><p class="fireman-p-indent" >用于检索的索引，和评论的具体内容分离成两张表。</p>
+<p class="fireman-p-indent" ><code>comment_index</code>：评论楼层的索引组织表，实际并不包含内容。<code>comment_content</code>：评论内容表，包含评论的具体内容。其中 <code>comment_index</code> 的 <code>id</code> 字段和 <code>comment_content</code> 是 1对1 的关系，这里面包含几种设计思想：</p>
 <ul>
 <li>表都有主键，即 <code>cluster index</code>，是物理组织形式存放的，<code>comment_content</code> 没有 <code>id</code>，是为了减少一次二级索引查找（回表），直接基于主键检索，同时 <code>comment_id</code> 在写入要尽可能的顺序自增。</li>
 <li>索引、内容分离，方便 <code>mysql datapage</code> 缓存更多的 <code>row</code>，如果和 <code>content</code> 耦合，会导致更大的 <code>IO</code>，长远来看 <code>content</code> 信息可以直接使用 <code>KV storage</code>存储。</li>
 </ul>
-<h2 id="缓存设计"><a href="#缓存设计" class="headerlink" title="缓存设计"></a>缓存设计</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927174051328.png" alt="image-20230927174051328"></p>
-<p><code>comment_subject_cache</code>：对应主题的缓存，<code>value</code> 使用 <code>protobuf</code> 序列化的方式存入。现在使用 <code>memcache</code> 来进行缓存，或者使用 <code>redis</code> 这种<code>KV</code>键值对存储都差不多。</p>
-<p><code>comment_index_cache</code>：使用 <code>redis sortedset</code> 进行索引的缓存，索引即数据的组织顺序，而非数据内容。</p>
-<p>参考百度贴吧，他们使用自己研发的拉链存储来组织索引。</p>
-<p>使用<code>mysql</code> 作为主力存储，利用 <code>redis</code> 来做加速完全足够，因为 <code>cache miss</code> 的构建，使用 <code>kafka</code> 的消费者中处理，预加载少量数据，通过增量加载的方式主键预热填充缓存，而 <code>redis sortedset skiplist</code> 的实现，可以做到 <code>O(logN) + O(M)</code> 的时间复杂度，效率很高。</p>
-<p>过期时间可以通过内存大小调整。</p>
-<p><code>sorted set</code> 是要增量追加的，因此必须判定 <code>key</code> 存在，才能 <code>zadd</code></p>
-<p><code>comment_content_cache</code>：对应评论内存数据，使用 <code>protobuf</code> 序列化的方式存入。类似的早期使用 <code>memcache</code> 进行缓存，或者使用 <code>redis</code> 存储。</p>
-<p>增量加载（将数据库中的数据批量放到 <code>redis</code> 中，而且先续约时间，然后再加缓存。） + lazy 加载。（所以没有分页，都是使用懒加载，使用 <code>mget</code> 批量获取。）</p>
-<p>还可以使用预加载，获取第一页时，将第二页的数据加入到缓存中。</p>
-<h1 id="可用性设计"><a href="#可用性设计" class="headerlink" title="可用性设计"></a>可用性设计</h1><h2 id="Singlefilght"><a href="#Singlefilght" class="headerlink" title="Singlefilght"></a>Singlefilght</h2><p>对于热门的主题，如果存在缓存穿透（缓存中没有数据，请求穿透了缓存，直接打到数据库）的情况，会导致大量的同进程、跨进程的数据回源到存储层，可能会引起存储过载的情况，如何只交给同进程内，一个人去做加载存储。</p>
-<p>使用归并回源的思路：</p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L2dvbGFuZy5vcmcveC9zeW5jL3NpbmdsZWZsaWdodA==">singleflight<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="缓存设计"><a href="#缓存设计" class="headerlink" title="缓存设计"></a>缓存设计</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230927174051328.png" alt="image-20230927174051328"></p>
+<p class="fireman-p-indent" ><code>comment_subject_cache</code>：对应主题的缓存，<code>value</code> 使用 <code>protobuf</code> 序列化的方式存入。现在使用 <code>memcache</code> 来进行缓存，或者使用 <code>redis</code> 这种<code>KV</code>键值对存储都差不多。</p>
+<p class="fireman-p-indent" ><code>comment_index_cache</code>：使用 <code>redis sortedset</code> 进行索引的缓存，索引即数据的组织顺序，而非数据内容。</p>
+<p class="fireman-p-indent" >参考百度贴吧，他们使用自己研发的拉链存储来组织索引。</p>
+<p class="fireman-p-indent" >使用<code>mysql</code> 作为主力存储，利用 <code>redis</code> 来做加速完全足够，因为 <code>cache miss</code> 的构建，使用 <code>kafka</code> 的消费者中处理，预加载少量数据，通过增量加载的方式主键预热填充缓存，而 <code>redis sortedset skiplist</code> 的实现，可以做到 <code>O(logN) + O(M)</code> 的时间复杂度，效率很高。</p>
+<p class="fireman-p-indent" >过期时间可以通过内存大小调整。</p>
+<p class="fireman-p-indent" ><code>sorted set</code> 是要增量追加的，因此必须判定 <code>key</code> 存在，才能 <code>zadd</code></p>
+<p class="fireman-p-indent" ><code>comment_content_cache</code>：对应评论内存数据，使用 <code>protobuf</code> 序列化的方式存入。类似的早期使用 <code>memcache</code> 进行缓存，或者使用 <code>redis</code> 存储。</p>
+<p class="fireman-p-indent" >增量加载（将数据库中的数据批量放到 <code>redis</code> 中，而且先续约时间，然后再加缓存。） + lazy 加载。（所以没有分页，都是使用懒加载，使用 <code>mget</code> 批量获取。）</p>
+<p class="fireman-p-indent" >还可以使用预加载，获取第一页时，将第二页的数据加入到缓存中。</p>
+<h1 id="可用性设计"><a href="#可用性设计" class="headerlink" title="可用性设计"></a>可用性设计</h1><h2 id="Singlefilght"><a href="#Singlefilght" class="headerlink" title="Singlefilght"></a>Singlefilght</h2><p class="fireman-p-indent" >对于热门的主题，如果存在缓存穿透（缓存中没有数据，请求穿透了缓存，直接打到数据库）的情况，会导致大量的同进程、跨进程的数据回源到存储层，可能会引起存储过载的情况，如何只交给同进程内，一个人去做加载存储。</p>
+<p class="fireman-p-indent" >使用归并回源的思路：</p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L2dvbGFuZy5vcmcveC9zeW5jL3NpbmdsZWZsaWdodA==">singleflight<i class="fa fa-external-link-alt"></i></span></p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007113032203.png" alt="image-20231007113032203" style="zoom: 50%;" />
 
-<p>同进程只交给一个人去获取 <code>mysql</code> 数据，然后批量返回。同时这个 <code>lease owner</code> 投递一个 <code>kafka</code> 消息，做 <code>index cache</code> 的 <code>recovery</code> 操作。这样可以大大减少 <code>mysql</code> 的压力，以及大量穿透导致的密集写 <code>kafka</code> 的问题。</p>
-<p>更进一步的，后续连续的请求，仍然可能会短时 <code>cache miss</code> ，我们可以在进程内设置了一个 <code>short-lived flag</code>，标记最近有一个人投递了 <code>cache rebuild</code> 的消息，直接 <code>drop</code>。</p>
-<p>可以看到，这里说明的都是单进程下的解决思路。那么在多进程下，能否使用分布式锁来解决。理论上可以，但是实际操作起来，容易将这个简单问题复杂化，不推荐使用分布式锁。（PS：<code>redis</code> 作者不推荐使用 <code>redis</code> 实现分布式锁。）</p>
-<p>多进程下，也是一样的思想，多个进程会发送多个消息到消息队列中，消费端获取消息的时候，通过单飞的思路，同样处理。</p>
-<h2 id="热点"><a href="#热点" class="headerlink" title="热点"></a>热点</h2><p>热点分为写热点和读热点。</p>
-<p>写操作一般会通过MQ削峰，当大量的请求都集中在 <code>MQ</code> 中，不仅仅会影响当前服务，还可能导致下游服务出现异常。这种情况下，可以再进行解耦，增加上游服务的吞吐，将下游服务解耦，不依赖同一个同步逻辑。</p>
-<p>流量热点是因为突然热门的主题，被高频次的访问，因为底层的 <code>cache</code> 设计，一般是按照主题 <code>key</code> 进行一致性 <code>hash</code> 来进行分片，但是热点 <code>key</code> 一定命中某一个节点，这时 <code>remote cache</code> 可能会变成瓶颈。因此做 <code>cache</code> 升级 <code>local cache</code> 是有必要的，一般使用<strong>单进程自适应发现热点</strong>的思路，附加一个短时的 <code>ttl local cache</code>，可以在进程内吞掉大量的读请求。</p>
+<p class="fireman-p-indent" >同进程只交给一个人去获取 <code>mysql</code> 数据，然后批量返回。同时这个 <code>lease owner</code> 投递一个 <code>kafka</code> 消息，做 <code>index cache</code> 的 <code>recovery</code> 操作。这样可以大大减少 <code>mysql</code> 的压力，以及大量穿透导致的密集写 <code>kafka</code> 的问题。</p>
+<p class="fireman-p-indent" >更进一步的，后续连续的请求，仍然可能会短时 <code>cache miss</code> ，我们可以在进程内设置了一个 <code>short-lived flag</code>，标记最近有一个人投递了 <code>cache rebuild</code> 的消息，直接 <code>drop</code>。</p>
+<p class="fireman-p-indent" >可以看到，这里说明的都是单进程下的解决思路。那么在多进程下，能否使用分布式锁来解决。理论上可以，但是实际操作起来，容易将这个简单问题复杂化，不推荐使用分布式锁。（PS：<code>redis</code> 作者不推荐使用 <code>redis</code> 实现分布式锁。）</p>
+<p class="fireman-p-indent" >多进程下，也是一样的思想，多个进程会发送多个消息到消息队列中，消费端获取消息的时候，通过单飞的思路，同样处理。</p>
+<h2 id="热点"><a href="#热点" class="headerlink" title="热点"></a>热点</h2><p class="fireman-p-indent" >热点分为写热点和读热点。</p>
+<p class="fireman-p-indent" >写操作一般会通过MQ削峰，当大量的请求都集中在 <code>MQ</code> 中，不仅仅会影响当前服务，还可能导致下游服务出现异常。这种情况下，可以再进行解耦，增加上游服务的吞吐，将下游服务解耦，不依赖同一个同步逻辑。</p>
+<p class="fireman-p-indent" >流量热点是因为突然热门的主题，被高频次的访问，因为底层的 <code>cache</code> 设计，一般是按照主题 <code>key</code> 进行一致性 <code>hash</code> 来进行分片，但是热点 <code>key</code> 一定命中某一个节点，这时 <code>remote cache</code> 可能会变成瓶颈。因此做 <code>cache</code> 升级 <code>local cache</code> 是有必要的，一般使用<strong>单进程自适应发现热点</strong>的思路，附加一个短时的 <code>ttl local cache</code>，可以在进程内吞掉大量的读请求。</p>
 <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231007174023897.png" alt="image-20231007174023897" style="zoom:25%;" />
 
-<p>在内存中使用 <code>hashmap</code> 统计每个 <code>key</code> 的访问频次，这里可以使用滑动窗口（左角标和右角标一起移动，统计区间内部的数据量）统计，即每个窗口中，维护一个 <code>hashmap</code>，之后统计所有未过去的 <code>bucket</code>，汇总所有 <code>key</code> 的数据。</p>
-<p>之后使用小堆计算 <code>TopK</code> 的数据，自动进行热点识别。</p>
-<h1 id="数据库层级结构设计"><a href="#数据库层级结构设计" class="headerlink" title="数据库层级结构设计"></a>数据库层级结构设计</h1><p>很多时候会碰到需要设计带有层级结构的数据，例如部门和成员、树级结构、评论、聊天等，一般会有要求检索某个节点下的子节点。</p>
-<p>这种情况下，可以有根节点、叶子节点、中间节点。</p>
+<p class="fireman-p-indent" >在内存中使用 <code>hashmap</code> 统计每个 <code>key</code> 的访问频次，这里可以使用滑动窗口（左角标和右角标一起移动，统计区间内部的数据量）统计，即每个窗口中，维护一个 <code>hashmap</code>，之后统计所有未过去的 <code>bucket</code>，汇总所有 <code>key</code> 的数据。</p>
+<p class="fireman-p-indent" >之后使用小堆计算 <code>TopK</code> 的数据，自动进行热点识别。</p>
+<h1 id="数据库层级结构设计"><a href="#数据库层级结构设计" class="headerlink" title="数据库层级结构设计"></a>数据库层级结构设计</h1><p class="fireman-p-indent" >很多时候会碰到需要设计带有层级结构的数据，例如部门和成员、树级结构、评论、聊天等，一般会有要求检索某个节点下的子节点。</p>
+<p class="fireman-p-indent" >这种情况下，可以有根节点、叶子节点、中间节点。</p>
 <ul>
 <li><p>邻接表 Adjacency List </p>
 <p>通过 parent_id 记录层级关系</p>
@@ -429,8 +436,8 @@
 <li>难以查询聚合函数</li>
 </ul>
 </li>
-<li><p>分段式 Path</p>
-<p>通过 <code>/a/b/c</code> 的形式（或者使用 <code>#</code> 分隔符 <code>_</code> ）</p>
+<li><p class="fireman-p-indent" >分段式 Path</p>
+<p class="fireman-p-indent" >通过 <code>/a/b/c</code> 的形式（或者使用 <code>#</code> 分隔符 <code>_</code> ）</p>
 <p>缺点：</p>
 <ul>
 <li>查找主要依赖于 <code>LIKE</code> 查询</li>
@@ -438,24 +445,24 @@
 <li>Path 依赖于应用的字符串处理</li>
 </ul>
 </li>
-<li><p>Nested Set</p>
-<p>记录左节点和右节点。</p>
-<p>nsleft 小于所有子节点的 nsleft</p>
-<p>nlright 大于所有子节点的 nright</p>
-<p>本质上是一个深度优先遍历的顺序</p>
+<li><p class="fireman-p-indent" >Nested Set</p>
+<p class="fireman-p-indent" >记录左节点和右节点。</p>
+<p class="fireman-p-indent" >nsleft 小于所有子节点的 nsleft</p>
+<p class="fireman-p-indent" >nlright 大于所有子节点的 nright</p>
+<p class="fireman-p-indent" >本质上是一个深度优先遍历的顺序</p>
 <p>缺点：</p>
 <ul>
 <li>查找父亲非常困难:c 结点的父亲节 点是祖先节点里面，没有别的祖先节 点作为其子节点的节点</li>
 <li>插入非常困难:需要重新计算节点的 nsleft 和 nsright</li>
 </ul>
 </li>
-<li><p>Closure Table</p>
-<p>用单独的表来存储节点之间的关系</p>
+<li><p class="fireman-p-indent" >Closure Table</p>
+<p class="fireman-p-indent" >用单独的表来存储节点之间的关系</p>
 </li>
 </ul>
-<p>对比</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012113811261.png" alt="image-20231012113811261"></p>
-<p>Resursive Query 直接依赖于数据库特性。</p>
+<p class="fireman-p-indent" >对比</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012113811261.png" alt="image-20231012113811261"></p>
+<p class="fireman-p-indent" >Resursive Query 直接依赖于数据库特性。</p>
 <h1 id="缓存模式-cache-pattern"><a href="#缓存模式-cache-pattern" class="headerlink" title="缓存模式 cache pattern"></a>缓存模式 cache pattern</h1><ul>
 <li><p>cache aside </p>
 <p>把 cache 当成一个普通的数据源</p>
@@ -479,13 +486,13 @@
 </ul>
 </li>
 </ul>
-<p>总结对比：</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012114740809.png" alt="image-20231012114740809"></p>
-<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p><span class="exturl" data-url="aHR0cHM6Ly93d3cudXNlbml4Lm9yZy9zeXN0ZW0vZmlsZXMvY29uZmVyZW5jZS9uc2RpMTMvbnNkaTEzLWZpbmFsMTcwX3VwZGF0ZS5wZGY=">Scaling Memcache at Facebook<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly90ZWNoLmlwYWxmaXNoLmNvbS9ibG9nLzIwMjAvMDQvMDcvZmItbWVtY2FjaGUv">Scaling Memcache at Facebook (2013) 中文<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cDovL3d3dy5yLTUub3JnL2ZpbGVzL2Jvb2tzL2NvbXB1dGVycy9sYW5ndWFnZXMvc3FsL3N0eWxlL0JpbGxfS2Fyd2luLVNRTF9BbnRpcGF0dGVybnMtRU4ucGRm">SQL Antipatterns<i class="fa fa-external-link-alt"></i></span> :Chapter 3: Naive Trees </p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9oYXplbGNhc3QuY29tL2Jsb2cvYS1oaXRjaGhpa2Vycy1ndWlkZS10by1jYWNoaW5nLXBhdHRlcm5zLw==">A Hitchhiker’s Guide to Caching Patterns<i class="fa fa-external-link-alt"></i></span></p>
-<p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0VERFlDSlkvYXJ0aWNsZS9kZXRhaWxzLzExMjk3NTc2Mw==">一文吃透 Go 语言解密之接口 interface<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" >总结对比：</p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231012114740809.png" alt="image-20231012114740809"></p>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cudXNlbml4Lm9yZy9zeXN0ZW0vZmlsZXMvY29uZmVyZW5jZS9uc2RpMTMvbnNkaTEzLWZpbmFsMTcwX3VwZGF0ZS5wZGY=">Scaling Memcache at Facebook<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly90ZWNoLmlwYWxmaXNoLmNvbS9ibG9nLzIwMjAvMDQvMDcvZmItbWVtY2FjaGUv">Scaling Memcache at Facebook (2013) 中文<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cDovL3d3dy5yLTUub3JnL2ZpbGVzL2Jvb2tzL2NvbXB1dGVycy9sYW5ndWFnZXMvc3FsL3N0eWxlL0JpbGxfS2Fyd2luLVNRTF9BbnRpcGF0dGVybnMtRU4ucGRm">SQL Antipatterns<i class="fa fa-external-link-alt"></i></span> :Chapter 3: Naive Trees </p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9oYXplbGNhc3QuY29tL2Jsb2cvYS1oaXRjaGhpa2Vycy1ndWlkZS10by1jYWNoaW5nLXBhdHRlcm5zLw==">A Hitchhiker’s Guide to Caching Patterns<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0VERFlDSlkvYXJ0aWNsZS9kZXRhaWxzLzExMjk3NTc2Mw==">一文吃透 Go 语言解密之接口 interface<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

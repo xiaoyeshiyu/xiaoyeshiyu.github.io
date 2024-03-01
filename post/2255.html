@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -63,7 +63,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -276,29 +283,29 @@
     
     <div class="post-body" itemprop="articleBody"><h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type Regexp struct &#123;&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>创建正则</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p class="fireman-p-indent" >创建正则</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func Compile(expr string) (*Regexp, error) 	// 创建一个正则表达式，如果无法解析，则报错</span><br><span class="line">func MustCompile(str string) *Regexp	// 如果无法解析，则panic</span><br></pre></td></tr></table></figure>
 
-<p>比较函数</p>
+<p class="fireman-p-indent" >比较函数</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func Match(pattern string, b []byte) (matched bool, err error) 						匹配字节切片，返回是否存在</span><br><span class="line">func MatchReader(pattern string, r io.RuneReader) (matched bool, err error)	匹配RuneReader，返回是否存在</span><br><span class="line">func MatchString(pattern string, s string) (matched bool, err error)		匹配字符串，返回是否存在</span><br></pre></td></tr></table></figure>
 
-<p>方法函数</p>
+<p class="fireman-p-indent" >方法函数</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 返回是否存在</span><br><span class="line">func (re *Regexp) Match(b []byte) bool</span><br><span class="line">func (re *Regexp) MatchReader(r io.RuneReader) bool</span><br><span class="line">func (re *Regexp) MatchString(s string) bool</span><br><span class="line">// 查询字符串或者字节切片、RuneReader、字符串，例如字符串</span><br><span class="line">func (re *Regexp) FindAllString(s string, n int) []string</span><br><span class="line">func (re *Regexp) FindAllStringIndex(s string, n int) [][]int</span><br><span class="line">func (re *Regexp) FindAllStringSubmatch(s string, n int) [][]string</span><br><span class="line">func (re *Regexp) FindAllStringSubmatchIndex(s string, n int) [][]int</span><br><span class="line">func (re *Regexp) FindString(s string) string</span><br><span class="line">func (re *Regexp) FindStringIndex(s string) (loc []int)</span><br><span class="line">func (re *Regexp) FindStringSubmatch(s string) []string</span><br><span class="line">func (re *Regexp) FindStringSubmatchIndex(s string) []int</span><br></pre></td></tr></table></figure>
 
-<h3 id="实际使用"><a href="#实际使用" class="headerlink" title="实际使用"></a>实际使用</h3><p>正则表达式的实际使用重点在限定符、特殊字符</p>
+<h3 id="实际使用"><a href="#实际使用" class="headerlink" title="实际使用"></a>实际使用</h3><p class="fireman-p-indent" >正则表达式的实际使用重点在限定符、特殊字符</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 匹配a?z，？只能是0-9</span><br><span class="line">	r1 := regexp.MustCompile(&quot;a[0-9]z&quot;)</span><br><span class="line">	println(r1.MatchString(&quot;a0z&quot;))</span><br><span class="line">		</span><br><span class="line">	// 只能是012</span><br><span class="line">	regexp.MustCompile(&quot;a[^012]z&quot;)</span><br><span class="line">	</span><br><span class="line">	// 匹配除了0-9之外的其他字符</span><br><span class="line">	regexp.MustCompile(&quot;a[^0-9]z&quot;)</span><br><span class="line"></span><br><span class="line">	// 除了\r \n 任何字符</span><br><span class="line">	regexp.MustCompile(&quot;a.z&quot;)</span><br><span class="line">	</span><br><span class="line">	// 匹配空白字符\s是任何字符，包括\r \n,\S匹配非空白符。都不能匹配空，也就是az</span><br><span class="line">	regexp.MustCompile(&quot;a\\Sz&quot;)</span><br><span class="line">	regexp.MustCompile(&quot;a\\sz&quot;)</span><br><span class="line">	</span><br><span class="line">	// 匹配数字字母下划线</span><br><span class="line">	regexp.MustCompile(&quot;a\\wz&quot;)</span><br></pre></td></tr></table></figure>
 
-<p>特殊字符</p>
+<p class="fireman-p-indent" >特殊字符</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">// 以abc结尾</span><br><span class="line">regexp.MustCompile(&quot;abc$&quot;)</span><br><span class="line"></span><br><span class="line">// 以abc开头</span><br><span class="line">regexp.MustCompile(&quot;^abc&quot;)</span><br><span class="line"></span><br><span class="line">// c至少出现一次</span><br><span class="line">regexp.MustCompile(&quot;abc+&quot;)</span><br><span class="line"></span><br><span class="line">// c出现0次或多次</span><br><span class="line">regexp.MustCompile(&quot;abc*&quot;)</span><br><span class="line"></span><br><span class="line">// c出现0次或多次</span><br><span class="line">regexp.MustCompile(&quot;abc?&quot;)</span><br><span class="line">// bc出现0次或多次</span><br><span class="line">regexp.MustCompile(&quot;a(bc)?&quot;)</span><br><span class="line"></span><br><span class="line">// bc至少出现1次</span><br><span class="line">regexp.MustCompile(&quot;a(bc)&#123;1&#125;&quot;)</span><br><span class="line">// 一个或者两个c</span><br><span class="line">regexp.MustCompile(&quot;abc&#123;1,2&#125;z&quot;)</span><br><span class="line">// 至少一个bc</span><br><span class="line">regexp.MustCompile(&quot;a(bc)&#123;1&#125;&quot;)</span><br><span class="line"></span><br><span class="line">// 匹配单词边界，匹配开头或者结尾</span><br><span class="line">regexp.MustCompile(&quot;\\babc&quot;)</span><br><span class="line">regexp.MustCompile(&quot;abc\\b&quot;)</span><br><span class="line"></span><br><span class="line">// 非单词边界匹配，没有abc开头但是包含abc</span><br><span class="line">regexp.MustCompile(&quot;\\Babc&quot;)</span><br><span class="line">// 没有abc结尾但是包含abc</span><br><span class="line">regexp.MustCompile(&quot;abc\\B&quot;)</span><br></pre></td></tr></table></figure>
 
-<p>贪婪模式</p>
+<p class="fireman-p-indent" >贪婪模式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">r1 := regexp.MustCompile(&quot;ab+c&quot;)</span><br><span class="line">r1.FindString(&quot;abbbabcabbbbbc&quot;) // 寻找第一个匹配的字符串，并返回</span><br><span class="line"></span><br><span class="line">regexp.MustCompile(&quot;ab.+c&quot;) // 返回尽可能匹配多的</span><br><span class="line">regexp.MustCompile(&quot;ab.*c&quot;)</span><br></pre></td></tr></table></figure>
 
-<p>非贪婪模式</p>
+<p class="fireman-p-indent" >非贪婪模式</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">regexp.MustCompile(&quot;ab.*?c&quot;) // ?取一个即止</span><br></pre></td></tr></table></figure>
 
-<p>更多正则表达式用法：</p>
-<p><span class="exturl" data-url="aHR0cHM6Ly90b29sLm9zY2hpbmEubmV0L3VwbG9hZHMvYXBpZG9jcy9qcXVlcnkvcmVnZXhwLmh0bWw=">表达式<i class="fa fa-external-link-alt"></i></span></p>
+<p class="fireman-p-indent" >更多正则表达式用法：</p>
+<p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly90b29sLm9zY2hpbmEubmV0L3VwbG9hZHMvYXBpZG9jcy9qcXVlcnkvcmVnZXhwLmh0bWw=">表达式<i class="fa fa-external-link-alt"></i></span></p>
 
     </div>
 

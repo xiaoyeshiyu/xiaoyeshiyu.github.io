@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
 <meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
@@ -69,7 +69,14 @@
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
-<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+<!-- hexo injector head_end start --><style>
+        .fireman-p-indent{
+            text-indent:2em;
+        }
+        .fireman-span-indent{
+            padding-left:2em;
+        }
+    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -280,8 +287,8 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="超时控制"><a href="#超时控制" class="headerlink" title="超时控制"></a>超时控制</h1><p>超时控制，本质就是 <strong>快速失败</strong>（<code>fail fast</code>），因为我们不希望等到断开的实例直到超时。没有什么比挂起的请求和无响应的页面更令人失望。这不仅仅浪费资源，而且还会让用户体验变得更差。</p>
-<p>我们的服务是相互调用的，所以在这些延迟叠加前，应该特别注意防止那些超时的操作。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="超时控制"><a href="#超时控制" class="headerlink" title="超时控制"></a>超时控制</h1><p class="fireman-p-indent" >超时控制，本质就是 <strong>快速失败</strong>（<code>fail fast</code>），因为我们不希望等到断开的实例直到超时。没有什么比挂起的请求和无响应的页面更令人失望。这不仅仅浪费资源，而且还会让用户体验变得更差。</p>
+<p class="fireman-p-indent" >我们的服务是相互调用的，所以在这些延迟叠加前，应该特别注意防止那些超时的操作。</p>
 <ul>
 <li><p>网路传递具有不确定性</p>
 <p>例如网络断开，client 收不到 <code>syn</code> 报文或者 <code>ack</code> 报文，会一直处于等待</p>
@@ -293,10 +300,10 @@
 <li><p>高延迟服务导致 <code>client</code> 浪费资源等待，使用超时传递：进程间传递 + 跨进程传递</p>
 </li>
 </ul>
-<p>超时控制是微服务可用性的第一道关，良好的超时策略，可以尽可能让服务不堆积请求，尽快清空高延迟的请求，释放 <code>Goroutine</code></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020104658528.png" alt="image-20231020104658528"></p>
-<h1 id="依赖超时"><a href="#依赖超时" class="headerlink" title="依赖超时"></a>依赖超时</h1><p>实际业务开发中，我们依赖的微服务的超时策略并不清除，或者随着业务迭代耗时超生了变化，意外的导致依赖者出现了超时。</p>
-<p>例如下游服务的耗时增加，导致上游服务的超时时间不够。</p>
+<p class="fireman-p-indent" >超时控制是微服务可用性的第一道关，良好的超时策略，可以尽可能让服务不堆积请求，尽快清空高延迟的请求，释放 <code>Goroutine</code></p>
+<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020104658528.png" alt="image-20231020104658528"></p>
+<h1 id="依赖超时"><a href="#依赖超时" class="headerlink" title="依赖超时"></a>依赖超时</h1><p class="fireman-p-indent" >实际业务开发中，我们依赖的微服务的超时策略并不清除，或者随着业务迭代耗时超生了变化，意外的导致依赖者出现了超时。</p>
+<p class="fireman-p-indent" >例如下游服务的耗时增加，导致上游服务的超时时间不够。</p>
 <ul>
 <li><p>服务提供者定义好 <code>latency SLO</code>，更新到 <code>gRPC Proto</code> 定义中，服务后续迭代，都应保证 <code>SLO</code></p>
 <p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020105228897.png" alt="image-20231020105228897"></p>
@@ -310,28 +317,28 @@
 <li><p>配置中心公共模板，对于未配置的服务使用公共配置。</p>
 </li>
 </ul>
-<h1 id="超时传递"><a href="#超时传递" class="headerlink" title="超时传递"></a>超时传递</h1><p>超时传递：当上游服务已经超时返回504，但下游服务仍然在执行，会导致浪费资源做无用功。超时传递指的是把当前服务的剩余 <code>Quota</code> 传递到下游服务中，继承超时策略，控制请求级别的全局超时控制。</p>
-<h2 id="进程内超时传递"><a href="#进程内超时传递" class="headerlink" title="进程内超时传递"></a>进程内超时传递</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020105703768.png" alt="image-20231020105703768"></p>
-<p>前提是实现进程内超时控制：</p>
-<p>一个请求在每个阶段（网络请求）开始前，就要检查是否还有足够的剩余来处理请求，以及继承他的超时策略，使用 <code>Go</code> 标准库的 <code>context.WithTimeout</code>。</p>
+<h1 id="超时传递"><a href="#超时传递" class="headerlink" title="超时传递"></a>超时传递</h1><p class="fireman-p-indent" >超时传递：当上游服务已经超时返回504，但下游服务仍然在执行，会导致浪费资源做无用功。超时传递指的是把当前服务的剩余 <code>Quota</code> 传递到下游服务中，继承超时策略，控制请求级别的全局超时控制。</p>
+<h2 id="进程内超时传递"><a href="#进程内超时传递" class="headerlink" title="进程内超时传递"></a>进程内超时传递</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020105703768.png" alt="image-20231020105703768"></p>
+<p class="fireman-p-indent" >前提是实现进程内超时控制：</p>
+<p class="fireman-p-indent" >一个请求在每个阶段（网络请求）开始前，就要检查是否还有足够的剩余来处理请求，以及继承他的超时策略，使用 <code>Go</code> 标准库的 <code>context.WithTimeout</code>。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *asiiConn)</span></span> Get(ctx context.Context, key <span class="type">string</span>) (result *Item, err <span class="type">error</span>) &#123;</span><br><span class="line">	<span class="comment">// 设置超时时间</span></span><br><span class="line">  c.conn.SetWriteDeadline(shrinkDeadline(ctx, c.writeTimeout))</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> _, err = fmt.Fp</span><br><span class="line">  intf(c.rw, <span class="string">&quot;gets %s\r\n&quot;</span>, key); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="进程间超时传递"><a href="#进程间超时传递" class="headerlink" title="进程间超时传递"></a>进程间超时传递</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020110120713.png" alt="image-20231020110120713"></p>
+<h2 id="进程间超时传递"><a href="#进程间超时传递" class="headerlink" title="进程间超时传递"></a>进程间超时传递</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020110120713.png" alt="image-20231020110120713"></p>
 <ol>
 <li>A <code>gRPC</code> 请求 B，1s超时</li>
 <li>B 使用了 <code>300ms</code> 处理请求，再转发请求 C</li>
 <li>C 配置了 <code>600ms</code> 超时，但是实际只用了 <code>500ms</code></li>
 <li>到其他的下游，发现余量不足，取消传递</li>
 </ol>
-<p>在需要强制执行时，下游的服务可以覆盖上游的超时传递和配额。</p>
-<p>在 gRPC 框架中，会依赖  <code>gRPC Metadata Exchage</code> ，基于 HTTP2 的 <code>Headers</code> 传递 <code>grpc-timeout</code> 字段，自动传递到下游，构建带 <code>timeout</code> 的 <code>context</code></p>
-<h2 id="监控观察"><a href="#监控观察" class="headerlink" title="监控观察"></a>监控观察</h2><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020110501385.png" alt="image-20231020110501385"></p>
+<p class="fireman-p-indent" >在需要强制执行时，下游的服务可以覆盖上游的超时传递和配额。</p>
+<p class="fireman-p-indent" >在 gRPC 框架中，会依赖  <code>gRPC Metadata Exchage</code> ，基于 HTTP2 的 <code>Headers</code> 传递 <code>grpc-timeout</code> 字段，自动传递到下游，构建带 <code>timeout</code> 的 <code>context</code></p>
+<h2 id="监控观察"><a href="#监控观察" class="headerlink" title="监控观察"></a>监控观察</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020110501385.png" alt="image-20231020110501385"></p>
 <ul>
 <li>双峰分布：95% 的请求耗时在 100ms 内，5% 的请求可能永远不会完成（长超时）</li>
 <li>对于监控不要只看 mean，可以看看耗时分布统计，比如 95th，99th</li>
 <li>设置合理的超时，拒绝超长请求，或者当 <code>Server</code> 不可用要主动失败</li>
 </ul>
-<p>超时决定着服务线程能否被耗尽。</p>
+<p class="fireman-p-indent" >超时决定着服务线程能否被耗尽。</p>
 <h1 id="Case-Study"><a href="#Case-Study" class="headerlink" title="Case Study"></a>Case Study</h1><ul>
 <li><p>SLB 入口 <code>Nginx</code> 没有配置超时，导致连锁故障</p>
 <p>在 <code>Nginx</code> 中配置 <code>timeout</code></p>
