@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.3.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="云原生具有很多优势，但是在应用上云过程中也有一些挑战，例如如何利用 Kubernetes 的弹性、可扩展性和容错性，提高应用程序的部署效率和稳定性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="将应用迁移至Kubernetes平台">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/16548b32.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="云原生具有很多优势，但是在应用上云过程中也有一些挑战，例如如何利用 Kubernetes 的弹性、可扩展性和容错性，提高应用程序的部署效率和稳定性。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F20-02-29-image-20240222200229367.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F20-08-56-image-20240222200856029.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F20-52-52-image-20240222205252696.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-21-36-image-20240222212136880.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-26-14-image-20240222212614114.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-29-31-image-20240222212931079.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-33-22-image-20240222213322704.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-33-59-image-20240222213359272.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F18-29-53-vpa-architecture.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F18-34-13-image-20240224183413278.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F18-39-02-image-20240224183902815.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-12-37-image-20240224211237342.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-14-46-image-20240224211446393.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-33-53-image-20240224213353008.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-34-00-image-20240224213400847.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-35-35-image-20240224213535240.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-51-16-image-20240224215116687.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-52-53-image-20240224215253142.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-53-45-image-20240224215345126.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-55-53-image-20240224215553455.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-56-57-image-20240224215657145.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-59-32-image-20240224215932181.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-01-48-image-20240224220148618.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-02-11-image-20240224220211470.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-02-29-image-20240224220229743.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-03-26-image-20240224220326925.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-08-48-image-20240224220847896.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-12-03-image-20240224221203458.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-15-20-image-20240224221520311.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-17-59-image-20240224221759457.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-19-16-image-20240224221916685.png">
+<meta property="article:published_time" content="2024-02-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-01T03:37:30.075Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F20-02-29-image-20240222200229367.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/16548b32.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/16548b32.html","path":"post/16548b32.html","title":"将应用迁移至Kubernetes平台"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>将应用迁移至Kubernetes平台 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E6%8E%A5%E5%85%A5%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.</span> <span class="nav-text">应用接入最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%AE%B9%E5%99%A8%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">应用容器化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87"><span class="nav-number">1.1.1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%AE%B9%E5%99%A8%E5%8C%96%E7%9A%84%E6%80%9D%E8%80%83"><span class="nav-number">1.1.2.</span> <span class="nav-text">应用容器化的思考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E9%A2%9D%E5%A4%96%E5%BC%80%E9%94%80%E5%92%8C%E9%A3%8E%E9%99%A9"><span class="nav-number">1.1.3.</span> <span class="nav-text">容器额外开销和风险</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E5%8C%96%E5%BA%94%E7%94%A8%E7%9A%84%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7"><span class="nav-number">1.1.4.</span> <span class="nav-text">容器化应用的资源监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%BC%80%E9%94%80"><span class="nav-number">1.1.5.</span> <span class="nav-text">内存开销</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">1.1.6.</span> <span class="nav-text">CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%96%B9%E6%A1%88"><span class="nav-number">1.1.7.</span> <span class="nav-text">其他方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%BA%94%E7%94%A8%E9%80%A0%E6%88%90%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">1.1.8.</span> <span class="nav-text">对应用造成的影响</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E5%BA%94%E7%94%A8%E8%BF%81%E7%A7%BB%E8%87%B3-Kubernetes"><span class="nav-number">1.2.</span> <span class="nav-text">将应用迁移至 Kubernetes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pod-spec"><span class="nav-number">1.2.1.</span> <span class="nav-text">Pod spec</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Probe-%E8%AF%AF%E7%94%A8%E4%BC%9A%E9%80%A0%E6%88%90%E4%B8%A5%E9%87%8D%E5%90%8E%E6%9E%9C"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">Probe 误用会造成严重后果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%98%B2%E6%AD%A2-PID-%E6%B3%84%E9%9C%B2"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">如何防止 PID 泄露</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Kubernetes-%E4%B8%8A%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">1.2.2.</span> <span class="nav-text">在 Kubernetes 上部署应用的挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pod-%E7%9A%84%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Pod 的数据管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%94%E8%AF%A5%E4%BF%9D%E5%AD%98%E5%9C%A8%E5%93%AA%E9%87%8C"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">我的数据应该保存在哪里</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">应用配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E9%83%A8%E7%BD%B2"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">高可用部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%BA%94%E5%AF%B9%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">如何应对基础架构的影响</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PodDisruptionBudget"><span class="nav-number">1.2.2.6.</span> <span class="nav-text">PodDisruptionBudget</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%9E%B6%E6%9E%84%E4%B8%8E%E5%BA%94%E7%94%A8%E5%9B%A2%E9%98%9F%E7%9A%84%E7%BA%A6%E6%9D%9F"><span class="nav-number">1.2.2.7.</span> <span class="nav-text">基础架构与应用团队的约束</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.3.</span> <span class="nav-text">部署方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E5%B8%83"><span class="nav-number">1.2.4.</span> <span class="nav-text">服务发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E5%B8%83%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">服务发布的挑战</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81%E5%BA%94%E7%94%A8%E7%AE%A1%E7%90%86"><span class="nav-number">1.2.5.</span> <span class="nav-text">无状态应用管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E7%8A%B6%E6%80%81%E5%BA%94%E7%94%A8%E7%AE%A1%E7%90%86"><span class="nav-number">1.2.6.</span> <span class="nav-text">有状态应用管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E7%8A%B6%E6%80%81%E5%BA%94%E7%94%A8-Operator"><span class="nav-number">1.2.7.</span> <span class="nav-text">有状态应用 - Operator</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-CRD"><span class="nav-number">1.2.7.1.</span> <span class="nav-text">如何使用 CRD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E-CRD-%E7%9A%84%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.7.2.</span> <span class="nav-text">基于 CRD 的开发过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.7.3.</span> <span class="nav-text">控制器模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.2.7.4.</span> <span class="nav-text">控制器代码示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-kubebuilder"><span class="nav-number">1.2.7.5.</span> <span class="nav-text">安装 kubebuilder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kubebuilder"><span class="nav-number">1.2.7.6.</span> <span class="nav-text">Kubebuilder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.2.7.7.</span> <span class="nav-text">创建项目</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E7%8A%B6%E6%80%81%E5%BA%94%E7%94%A8%E7%9A%84%E5%A4%8D%E6%9D%82%E6%80%A7%E8%AE%A8%E8%AE%BA"><span class="nav-number">1.3.</span> <span class="nav-text">有状态应用的复杂性讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E7%8A%B6%E6%80%81%E5%BA%94%E7%94%A8%E9%83%A8%E7%BD%B2%E7%A4%BA%E4%BE%8B-MySQL"><span class="nav-number">1.3.1.</span> <span class="nav-text">有状态应用部署示例 - MySQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%BB%86%E8%8A%82"><span class="nav-number">1.3.2.</span> <span class="nav-text">配置细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E9%A1%BA%E5%BA%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">启动顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5"><span class="nav-number">1.3.4.</span> <span class="nav-text">健康检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD"><span class="nav-number">1.3.5.</span> <span class="nav-text">数据备份</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%8F%91%E5%B8%83%E5%92%8C%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB"><span class="nav-number">1.3.6.</span> <span class="nav-text">版本发布和故障转移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%8F%91%E5%B8%83%E5%92%8C%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB-1"><span class="nav-number">1.3.7.</span> <span class="nav-text">版本发布和故障转移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B-Operator-%E7%9A%84%E6%8E%A8%E8%8D%90"><span class="nav-number">1.3.8.</span> <span class="nav-text">一些 Operator 的推荐</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spec-%E7%AE%A1%E7%90%86%E7%A5%9E%E5%99%A8-Helm"><span class="nav-number">2.</span> <span class="nav-text">Spec 管理神器 - Helm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Helm"><span class="nav-number">2.1.</span> <span class="nav-text">什么是 Helm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Helm-%E7%9A%84%E7%BB%84%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">Helm 的组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes-Helm-%E6%9E%B6%E6%9E%84"><span class="nav-number">2.3.</span> <span class="nav-text">Kubernetes Helm 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Helm-%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">2.4.</span> <span class="nav-text">Helm 的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Helm-chart-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.5.</span> <span class="nav-text">Helm chart 的基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E7%94%A8%E5%B7%B2%E5%AD%98%E5%9C%A8%E7%9A%84%E6%88%90%E7%86%9F%E7%9A%84-Helm-release"><span class="nav-number">2.6.</span> <span class="nav-text">复用已存在的成熟的 Helm release</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#metrics-server"><span class="nav-number">3.</span> <span class="nav-text">metrics-server</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Aggregated-APIServer"><span class="nav-number">3.1.</span> <span class="nav-text">Aggregated APIServer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metrics-Server"><span class="nav-number">3.2.</span> <span class="nav-text">Metrics-Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Metrics-server-%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="nav-number">3.3.</span> <span class="nav-text">Metrics-server 的本质</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%89%A9%E5%AE%B9%E7%BC%A9%E5%AE%B9-HPA"><span class="nav-number">4.</span> <span class="nav-text">自动扩容缩容 - HPA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%AA%E5%90%91%E4%BC%B8%E7%BC%A9%E5%92%8C%E7%BA%B5%E5%90%91%E4%BC%B8%E7%BC%A9"><span class="nav-number">4.1.</span> <span class="nav-text">横向伸缩和纵向伸缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E4%BA%91%E5%8E%9F%E7%94%9F%E7%9A%84%E5%BC%B9%E6%80%A7%E8%83%BD%E5%8A%9B"><span class="nav-number">4.2.</span> <span class="nav-text">理解云原生的弹性能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HPA"><span class="nav-number">4.3.</span> <span class="nav-text">HPA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HPA-Spec"><span class="nav-number">4.4.</span> <span class="nav-text">HPA Spec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HPA-%E6%94%AF%E6%8C%81%E7%9A%84%E6%8C%87%E6%A0%87%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.5.</span> <span class="nav-text">HPA 支持的指标类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HPA-%E6%8C%87%E6%A0%87"><span class="nav-number">4.6.</span> <span class="nav-text">HPA 指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E7%BB%86%E8%8A%82"><span class="nav-number">4.7.</span> <span class="nav-text">算法细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%97%B6%E6%89%A9%E7%BC%A9"><span class="nav-number">4.8.</span> <span class="nav-text">滚动升级时扩缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B7%E5%8D%B4-x2F-%E5%BB%B6%E8%BF%9F%E6%94%AF%E6%8C%81"><span class="nav-number">4.9.</span> <span class="nav-text">冷却&#x2F;延迟支持</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E7%BC%A9%E7%AD%96%E7%95%A5"><span class="nav-number">4.10.</span> <span class="nav-text">扩缩策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HPA-%E7%BB%83%E4%B9%A0"><span class="nav-number">4.11.</span> <span class="nav-text">HPA 练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%BA%94%E7%94%A8"><span class="nav-number">4.12.</span> <span class="nav-text">启动应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95-HPA"><span class="nav-number">4.13.</span> <span class="nav-text">测试 HPA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HPA-%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.14.</span> <span class="nav-text">HPA 存在的问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%89%A9%E5%AE%B9%E7%BC%A9%E5%AE%B9-VPA"><span class="nav-number">5.</span> <span class="nav-text">自动扩容缩容 - VPA</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#VPA-%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">5.1.</span> <span class="nav-text">VPA 架构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VPA-%E7%BB%84%E4%BB%B6"><span class="nav-number">5.2.</span> <span class="nav-text">VPA 组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VPA-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">5.3.</span> <span class="nav-text">VPA 工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recommender-%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="nav-number">5.4.</span> <span class="nav-text">Recommender 设计理念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B"><span class="nav-number">5.5.</span> <span class="nav-text">主要流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%8E%E5%8D%8A%E8%A1%B0%E6%8C%87%E6%95%B0%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="nav-number">5.6.</span> <span class="nav-text">滑动窗口与半衰指数直方图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE%E7%BB%9F%E4%B8%80%E5%AF%B9%E5%A4%96%E6%8F%90%E4%BE%9B%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="nav-number">5.7.</span> <span class="nav-text">直方图统一对外提供的接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B4%E6%96%B9%E5%9B%BE%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4"><span class="nav-number">5.8.</span> <span class="nav-text">直方图数据范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8A%E8%A1%B0%E6%9C%9F%E5%92%8C%E6%9D%83%E9%87%8D%E7%B3%BB%E6%95%B0"><span class="nav-number">5.9.</span> <span class="nav-text">半衰期和权重系数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C-VPA"><span class="nav-number">5.10.</span> <span class="nav-text">操作 VPA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VPA-%E6%80%BB%E7%BB%93"><span class="nav-number">5.11.</span> <span class="nav-text">VPA 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E7%A4%BE%E5%8C%BA%E5%9F%BA%E7%A1%80%E5%BC%B9%E6%80%A7%E8%83%BD%E5%8A%9B%E4%B8%8D%E8%B6%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">如何解决社区基础弹性能力不足的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%B9%E6%80%A7%E7%9A%84%E6%84%8F%E4%B9%89"><span class="nav-number">6.1.</span> <span class="nav-text">弹性的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E6%9C%AC%E4%BC%98%E5%8C%96%E7%9A%84%E5%85%B3%E9%94%AE%E8%B7%AF%E5%BE%84"><span class="nav-number">6.2.</span> <span class="nav-text">成本优化的关键路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%90%AF%E9%99%8D%E6%9C%AC%E4%B9%8B%E8%B7%AF"><span class="nav-number">6.3.</span> <span class="nav-text">开启降本之路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E6%80%9D%E6%83%B3-FinOps"><span class="nav-number">6.4.</span> <span class="nav-text">统一思想 - FinOps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%BB%BA%E8%AE%BE-%E4%BA%91%E5%8E%9F%E7%94%9F%E6%88%90%E7%86%9F%E5%BA%A6%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.5.</span> <span class="nav-text">流程建设 - 云原生成熟度模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E4%BE%A7-Workload-%E8%AF%84%E5%88%86"><span class="nav-number">6.6.</span> <span class="nav-text">业务侧 Workload 评分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E4%BE%A7-Workload-%E8%AF%84%E5%88%86-%E8%BE%85%E5%8A%A9%E6%8C%87%E6%A0%87"><span class="nav-number">6.7.</span> <span class="nav-text">业务侧 Workload 评分 - 辅助指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BE%85%E5%8A%A9%E6%8C%87%E6%A0%87"><span class="nav-number">6.8.</span> <span class="nav-text">辅助指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E7%86%9F%E5%BA%A6%E6%8C%87%E6%A0%87%E8%AE%A1%E7%AE%97%E5%85%AC%E5%BC%8F"><span class="nav-number">6.9.</span> <span class="nav-text">成熟度指标计算公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A9%B1%E5%8A%A8%E5%8A%9B"><span class="nav-number">6.10.</span> <span class="nav-text">驱动力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%91%E6%88%90%E7%86%9F%E5%BA%A6%E6%A8%A1%E5%9E%8B%E6%88%90%E6%95%88"><span class="nav-number">6.11.</span> <span class="nav-text">云成熟度模型成效</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Crane-%E5%B7%A5%E5%85%B7%E9%93%BE%E6%89%93%E9%80%9A"><span class="nav-number">7.</span> <span class="nav-text">Crane - 工具链打通</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Crane-%E9%AB%98%E5%B1%82%E6%9E%B6%E6%9E%84"><span class="nav-number">7.1.</span> <span class="nav-text">Crane 高层架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E9%A2%84%E6%B5%8B"><span class="nav-number">7.2.</span> <span class="nav-text">资源预测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BB%B4%E7%9A%84%E6%88%90%E6%9C%AC%E5%B1%95%E7%A4%BA"><span class="nav-number">7.3.</span> <span class="nav-text">多维的成本展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B2%BE%E5%87%86%E7%9A%84%E6%B5%AA%E8%B4%B9%E8%AF%86%E5%88%AB"><span class="nav-number">7.4.</span> <span class="nav-text">精准的浪费识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%84%E4%BC%98%E5%8C%96%E6%89%8B%E6%AE%B5"><span class="nav-number">7.5.</span> <span class="nav-text">常规优化手段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BE%E5%8C%BA%E5%8E%9F%E7%94%9F%E5%BC%B9%E6%80%A7%E8%83%BD%E5%8A%9B%E7%9A%84%E4%B8%8D%E8%B6%B3"><span class="nav-number">7.6.</span> <span class="nav-text">社区原生弹性能力的不足</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AHPA-%E5%9F%BA%E4%BA%8E%E9%A2%84%E6%B5%8B%E7%9A%84%E6%A8%AA%E5%90%91%E4%BC%B8%E7%BC%A9"><span class="nav-number">7.7.</span> <span class="nav-text">AHPA - 基于预测的横向伸缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IVPA-%E5%9F%BA%E4%BA%8E%E6%89%A9%E5%B1%95%E8%B5%84%E6%BA%90%E5%9B%9E%E6%94%B6%E7%9A%84%E5%AE%9E%E6%97%B6%E7%BA%B5%E5%90%91%E4%BC%B8%E7%BC%A9"><span class="nav-number">7.8.</span> <span class="nav-text">IVPA - 基于扩展资源回收的实时纵向伸缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%91%E8%99%9A%E6%8B%9F%E8%8A%82%E7%82%B9%E8%AE%A1%E6%95%B0%E7%9A%84%E9%9B%86%E7%BE%A4%E5%BC%B9%E6%80%A7"><span class="nav-number">7.9.</span> <span class="nav-text">基于分布式云虚拟节点计数的集群弹性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E8%B4%A8%E9%87%8F%E4%BF%9D%E8%AF%81-%E5%AE%89%E5%BF%83%E6%8B%89%E5%8D%87%E8%B5%84%E6%BA%90%E5%88%A9%E7%94%A8%E7%8E%87%E7%9A%84%E7%A7%98%E5%AF%86"><span class="nav-number">7.10.</span> <span class="nav-text">服务质量保证 - 安心拉升资源利用率的秘密</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E9%9A%94%E7%A6%BB-OS-%E9%9A%94%E7%A6%BB-RQSM-%E6%A1%86%E6%9E%B6"><span class="nav-number">7.11.</span> <span class="nav-text">资源隔离 - OS 隔离 - RQSM 框架</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#References"><span class="nav-number">8.</span> <span class="nav-text">References</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">135</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/16548b32.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="将应用迁移至Kubernetes平台 | 小夜时雨">
+      <meta itemprop="description" content="云原生具有很多优势，但是在应用上云过程中也有一些挑战，例如如何利用 Kubernetes 的弹性、可扩展性和容错性，提高应用程序的部署效率和稳定性。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          将应用迁移至Kubernetes平台
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-02-23 00:00:00" itemprop="dateCreated datePublished" datetime="2024-02-23T00:00:00+08:00">2024-02-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-03-01 11:37:30" itemprop="dateModified" datetime="2024-03-01T11:37:30+08:00">2024-03-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/" itemprop="url" rel="index"><span itemprop="name">云原生训练营</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/16548b32.html" class="post-meta-item leancloud_visitors" data-flag-title="将应用迁移至Kubernetes平台" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">云原生具有很多优势，但是在应用上云过程中也有一些挑战，例如如何利用 Kubernetes 的弹性、可扩展性和容错性，提高应用程序的部署效率和稳定性。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="应用接入最佳实践"><a href="#应用接入最佳实践" class="headerlink" title="应用接入最佳实践"></a>应用接入最佳实践</h1><p>应用上云原生的重要一步就是容器化，在容器化过程中可能会猜到一些坑，以及碰到一些挑战。</p>
+<h2 id="应用容器化"><a href="#应用容器化" class="headerlink" title="应用容器化"></a>应用容器化</h2><h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ul>
+<li>稳定性</li>
+<li>可用性</li>
+<li>性能</li>
+<li>安全</li>
+</ul>
+<p>四个目标，缺一不可。</p>
+<p>从多纬度思考高可用的问题：</p>
+<ul>
+<li>单个实例视角<ul>
+<li>资源需求</li>
+<li>配置管理</li>
+<li>数据保存</li>
+<li>日志和指标收集</li>
+</ul>
+</li>
+<li>应用视角<ul>
+<li>冗余部署（高可用）</li>
+<li>部署实例个数</li>
+<li>负载均衡</li>
+<li>健康检查</li>
+<li>服务发现</li>
+<li>监控</li>
+<li>故障转移</li>
+<li>扩缩容</li>
+</ul>
+</li>
+<li>安全视角<ul>
+<li>镜像安全</li>
+<li>应用安全</li>
+<li>数据安全</li>
+<li>通讯安全</li>
+</ul>
+</li>
+</ul>
+<h3 id="应用容器化的思考"><a href="#应用容器化的思考" class="headerlink" title="应用容器化的思考"></a>应用容器化的思考</h3><ul>
+<li>应用本身<ul>
+<li>启动速度（是否适合云原生）</li>
+<li>健康检查</li>
+<li>启动参数</li>
+</ul>
+</li>
+<li>Dockerfile<ul>
+<li>基础镜像的选择<ul>
+<li>基础镜像越小越好（可以在 <code>Pod</code> 里面插一个 <code>debug</code> 的 <code>container</code>，以保障主 <code>container</code> 越小越好）</li>
+</ul>
+</li>
+<li>需要安装 <code>Utility</code><ul>
+<li><code>lib</code> 越少越安全，但是越多越方便，因此需要有取舍</li>
+</ul>
+</li>
+<li>进程数量（一个容器最好一个进程）<ul>
+<li>分清楚主次，由主次关系决定状态的主程序（例如是监控进程是主进程还是应用进程是主进程）</li>
+<li><code>Fork bomb</code> 的危害</li>
+</ul>
+</li>
+<li>代码（应用程序）和配置分离<ul>
+<li>配置如何管理<ul>
+<li>环境变量</li>
+<li>配置文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>分层的控制（层数越多，效率越低）</li>
+<li><code>Entrypoint</code></li>
+</ul>
+</li>
+</ul>
+<p>一个坑：<code>GOMAXPROCS</code> 的设置。<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3ViZXItZ28vYXV0b21heHByb2Nz">https://github.com/uber-go/automaxprocs<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="容器额外开销和风险"><a href="#容器额外开销和风险" class="headerlink" title="容器额外开销和风险"></a>容器额外开销和风险</h3><ul>
+<li><code>Log driver</code>，云原生推荐日志打到标准输出里面（<code>stdout</code>、<code>stderr</code>），<code>k8s</code> 会读取标准输出，转储到本地文件。<ul>
+<li><code>Blocking mode</code>：当应用打出大量的日志情况下，可能出现日志阻塞，进而影响业务进程</li>
+<li><code>Non blocking mode</code>：当应用打出大量的日志情况下，为了不阻塞，会直接丢弃日志</li>
+</ul>
+</li>
+<li>共用 <code>kernel</code> ：<ul>
+<li>系统参数配置共享，比如 <code>es</code> 会设置一些特殊的系统参数</li>
+<li>进程数共享 - <code>Fork bomb</code></li>
+<li><code>fd</code> 数共享</li>
+<li>主机磁盘共享</li>
+</ul>
+</li>
+</ul>
+<h3 id="容器化应用的资源监控"><a href="#容器化应用的资源监控" class="headerlink" title="容器化应用的资源监控"></a>容器化应用的资源监控</h3><p>容器中看到的资源是主机资源</p>
+<ul>
+<li><code>top</code></li>
+<li><code>Java runtime.GetAvailableProcesses()</code>（老版本不对，新版本已经改进）</li>
+<li><code>cat /proc/cpuinfo</code>，Go 和 Java 都依赖这个信息，因此会导致协程数量不正确。<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3ViZXItZ28vYXV0b21heHByb2Nz">https://github.com/uber-go/automaxprocs<i class="fa fa-external-link-alt"></i></span></li>
+<li><code>cat /proc/meminfo</code></li>
+<li><code>df -k</code></li>
+</ul>
+<p>解决方案</p>
+<ul>
+<li><p>查询 <code>/proc/1/cgroup</code> 是否包含 <code>kubepods</code> 关键字（ <code>docker</code> 关键字不可靠）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0::/kubepods-besteffort-pod0bb596ea_ee65_4440_a7d4_abadd882c92e.slice:cri-containerd:0650a2afd5fb6343ed2975c21115482fa016730ca0fa7d922ec419e3fa1768b0</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，使用 <code>containerd</code> 时，没有 <code>docker</code> 关键字</p>
+</li>
+<li><p>包含此关键字，则表明是运行在 Kubernetes 之上</p>
+</li>
+</ul>
+<h3 id="内存开销"><a href="#内存开销" class="headerlink" title="内存开销"></a>内存开销</h3><p>查看容器真实的内存资源</p>
+<ul>
+<li>配额<ul>
+<li><code>cat /sys/fs/cgroup/memory/memory.limit_in_bytes</code></li>
+</ul>
+</li>
+<li>用量<ul>
+<li><code>cat /sys/fs/cgroup/memory/memory.usage_in_bytes</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="CPU"><a href="#CPU" class="headerlink" title="CPU"></a>CPU</h3><p>查看容器真实的 CPU 资源</p>
+<ul>
+<li><p>配额，<code>分配的 CPU 个数 = quota / period</code>，<code>quota = -1</code> 代表 <code>besteffort</code></p>
+<ul>
+<li><code>cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us</code></li>
+<li><code>cat /sys/fs/cgroup/cpu/cpu.cfs_period_us</code></li>
+</ul>
+</li>
+<li><p>用量</p>
+<ul>
+<li><p><code>cat /sys/fs/cgroup/cpuacct/cpuacct.usage_percpu</code>（按 CPU 区分）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> /sys/fs/cgroup/cpuacct/cpuacct.usage_percpu</span><br><span class="line">16687899693 18340627949 17484230028 20110312336 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>cat /sys/fs/cgroup/cpuacct/cpuacct.usage</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cat</span> /sys/fs/cgroup/cpuacct/cpuacct.usage</span><br><span class="line">72673556129</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="其他方案"><a href="#其他方案" class="headerlink" title="其他方案"></a>其他方案</h3><ul>
+<li><code>lxcfs</code>：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2x4Yy9seGNmcw==">https://github.com/lxc/lxcfs<i class="fa fa-external-link-alt"></i></span><ul>
+<li>通过 <code>so</code> 挂载的方式，使容器获得正确的资源信息</li>
+</ul>
+</li>
+<li><code>Kata</code>：<span class="exturl" data-url="aHR0cHM6Ly9rYXRhY29udGFpbmVycy5pby8=">https://katacontainers.io/<i class="fa fa-external-link-alt"></i></span> Kubernetes 调用 kata 的 <code>runtime</code> 而不是容器的 <code>runtime</code><ul>
+<li><code>VM</code> 中跑 <code>container</code>，使用虚拟机隔离容器，默认会给 <code>Kata</code> 分配额外资源</li>
+</ul>
+</li>
+<li><code>Virtlet</code>：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pcmFudGlzL3ZpcnRsZXQ=">https://github.com/Mirantis/virtlet<i class="fa fa-external-link-alt"></i></span><ul>
+<li>直接启动 <code>VM</code>，就与容器无关</li>
+</ul>
+</li>
+</ul>
+<h3 id="对应用造成的影响"><a href="#对应用造成的影响" class="headerlink" title="对应用造成的影响"></a>对应用造成的影响</h3><ul>
+<li><code>Java</code><ul>
+<li><code>Concurrent GC Thread</code></li>
+<li><code>Heap Size</code></li>
+<li>线程数不可控</li>
+</ul>
+</li>
+<li><code>Node.js</code><ul>
+<li>多线程模式启动的 <code>Thread</code> 数量过多，导致 <code>OOM Kill</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="将应用迁移至-Kubernetes"><a href="#将应用迁移至-Kubernetes" class="headerlink" title="将应用迁移至 Kubernetes"></a>将应用迁移至 Kubernetes</h2><h3 id="Pod-spec"><a href="#Pod-spec" class="headerlink" title="Pod spec"></a>Pod spec</h3><ul>
+<li>初始化需求（<code>init container</code>）：容器初始化需求</li>
+<li>主 <code>container</code> 的个数</li>
+<li>权限问题，<code>Privilege</code> 和 <code>SecurityContext</code>（<code>PSP</code>）</li>
+<li>共享哪些 <code>Namespace</code>（<code>PID</code>，<code>IPC</code>，<code>NET</code>，<code>UTS</code>，<code>MNT</code>）</li>
+<li>配置管理</li>
+<li>优雅终止</li>
+<li>健康检查<ul>
+<li><code>Liveness Probe</code></li>
+<li><code>Readiness Probe</code></li>
+</ul>
+</li>
+<li><code>DNS</code> 策略以及对 <code>resolv.conf</code> 的影响</li>
+<li><code>imagePullPolicy Image</code> 拉取策略</li>
+</ul>
+<h4 id="Probe-误用会造成严重后果"><a href="#Probe-误用会造成严重后果" class="headerlink" title="Probe 误用会造成严重后果"></a>Probe 误用会造成严重后果</h4><p>例如：<span class="exturl" data-url="aHR0cHM6Ly9hY2Nlc3MucmVkaGF0LmNvbS9zb2x1dGlvbnMvNjYyNjYxMQ==">https://access.redhat.com/solutions/6626611<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">readinessProbe:</span></span><br><span class="line">   <span class="attr">exec:</span></span><br><span class="line">     <span class="attr">command:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">&quot;/bin/bash&quot;</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">&quot;-c&quot;</span></span><br><span class="line">     <span class="bullet">-</span> <span class="string">&quot;/opt/amq/bin/readinessProbe.sh&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>出现多个僵尸进程</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">1000650+ 4140953   10918  0 Oct20 ?        00:00:00 [curl] &lt;defunct&gt;</span><br><span class="line">1000650+ 4143843   10918  0 Oct20 ?        00:00:00 [es_util] &lt;defunct&gt;</span><br><span class="line">1000650+ 4143849   10918  0 Oct20 ?        00:00:00 [curl] &lt;defunct&gt;</span><br><span class="line">1000850+ 4146897   10154  0 Oct20 ?        00:00:00 [python] &lt;defunct&gt;</span><br><span class="line">1000650+ 4148470   10918  0 Oct20 ?        00:00:00 [es_util] &lt;defunct&gt;</span><br><span class="line">1000650+ 4148471   10918  0 Oct20 ?        00:00:00 [curl] &lt;defunct&gt;</span><br><span class="line">1000820+ 4153368   59774  0 Oct21 ?        00:00:00 [python] &lt;defunct&gt;</span><br><span class="line">1000650+ 4154126   10918  0 Oct20 ?        00:00:00 [curl] &lt;defunct&gt;</span><br><span class="line">1000650+ 4158209   10918  0 Oct20 ?        00:00:00 [curl] &lt;defunct&gt;</span><br><span class="line">1003050+ 4162902  107783  0 Oct20 ?        00:00:00 [<span class="built_in">rm</span>] &lt;defunct&gt;</span><br><span class="line">1000850+ 4163032   17311  0 Oct20 ?        00:00:00 [python] &lt;defunct&gt;</span><br><span class="line">1003050+ 4163818   25741  0 Oct20 ?        00:00:00 [readinessProbe.] &lt;defunct&gt;</span><br><span class="line">1003050+ 4163819   25741  0 Oct20 ?        00:00:00 [readinessProbe.] &lt;defunct&gt;</span><br><span class="line">1003050+ 4163971 1922226  0 Oct20 ?        00:00:00 [python] &lt;defunct&gt;</span><br><span class="line">1003050+ 4166477  107783  0 02:37 ?        00:00:00 [readinessProbe.] &lt;defunct&gt;</span><br><span class="line">1003050+ 4166811 1922226  0 02:37 ?        00:00:00 [readinessProbe.] &lt;defunct&gt;</span><br><span class="line">1003050+ 4166812 1922226  0 02:37 ?        00:00:00 [readinessProbe.] &lt;defunct&gt;</span><br><span class="line">1003050+ 4186036  107783  0 Oct20 ?        00:00:00 [python] &lt;defunct&gt;</span><br><span class="line">1000650+ 4186122   10918  0 Oct20 ?        00:00:00 [es_util] &lt;defunct&gt;</span><br><span class="line">1000650+ 4186123   10918  0 Oct20 ?        00:00:00 [curl] &lt;defunct&gt;</span><br><span class="line">1003050+ 4191856   16117  0 Oct20 ?        00:00:00 [readinessProbe.] &lt;defunct&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这是由于主进程被杀死，但是没有处理子进程的能力，导致子进程成为僵尸进程。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F20-02-29-image-20240222200229367.png" alt="image-20240222200229367"></p>
+<p>后果：可能耗尽节点所有的 PID</p>
+<h4 id="如何防止-PID-泄露"><a href="#如何防止-PID-泄露" class="headerlink" title="如何防止 PID 泄露"></a>如何防止 PID 泄露</h4><ul>
+<li><p>单进程容器</p>
+</li>
+<li><p>合理的处理多进程容器</p>
+<ul>
+<li>容器的初始化进程必须负责清理 <code>fork</code> 出来的所有子进程</li>
+<li>开源方案<ul>
+<li><p><code>Tini</code> <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2tyYWxsaW4vdGluaQ==">https://github.com/krallin/tini<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p>采用 <code>Tini</code> 作为容器的初始化进程（<code>PID=1</code>），容器中僵尸进程的父进程会被置为1</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Add Tini</span></span><br><span class="line"><span class="keyword">ENV</span> TINI_VERSION v0.<span class="number">19.0</span></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> https://github.com/krallin/tini/releases/download/<span class="variable">$&#123;TINI_VERSION&#125;</span>/tini /tini</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">chmod</span> +x /tini</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;/tini&quot;</span>, <span class="string">&quot;--&quot;</span>]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Run your program under Tini</span></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [<span class="string">&quot;/your/program&quot;</span>, <span class="string">&quot;-and&quot;</span>, <span class="string">&quot;-its&quot;</span>, <span class="string">&quot;arguments&quot;</span>]</span></span><br><span class="line"><span class="comment"># or docker run your-image /your/program ...</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>如果不采用特殊初始化进程</p>
+<ul>
+<li>建议采用 <code>HTTPCheck</code> 作为 <code>Probe</code></li>
+<li>为 <code>exec Probe</code> 设置合理的超时时间</li>
+</ul>
+</li>
+</ul>
+<h3 id="在-Kubernetes-上部署应用的挑战"><a href="#在-Kubernetes-上部署应用的挑战" class="headerlink" title="在 Kubernetes 上部署应用的挑战"></a>在 Kubernetes 上部署应用的挑战</h3><p>资源规划:：</p>
+<ul>
+<li>每个实例需要多少计算资源<ul>
+<li><code>CPU/GPU</code></li>
+<li><code>Memory</code></li>
+</ul>
+</li>
+<li>超售需求</li>
+<li>每个实例需要多少存储资源<ul>
+<li>大小</li>
+<li>本地还是网盘</li>
+<li>读写性能</li>
+<li><code>Disk IO</code></li>
+</ul>
+</li>
+<li>网络需求<ul>
+<li>整个应用总体 <code>QPS</code> 和带宽</li>
+</ul>
+</li>
+</ul>
+<h4 id="Pod-的数据管理"><a href="#Pod-的数据管理" class="headerlink" title="Pod 的数据管理"></a>Pod 的数据管理</h4><ul>
+<li><code>Local-ssd</code>：独占的本地磁盘，独占 <code>IO</code>，固定大小，读写性能高</li>
+<li><code>Local-dynamic</code>：基于 <code>LVM</code>，动态分配空间，效率低</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F20-08-56-image-20240222200856029.png" alt="image-20240222200856029"></p>
+<h4 id="我的数据应该保存在哪里"><a href="#我的数据应该保存在哪里" class="headerlink" title="我的数据应该保存在哪里"></a>我的数据应该保存在哪里</h4><table>
+<thead>
+<tr>
+<th>存储卷类型</th>
+<th>是应用进程重启后数据是否存在</th>
+<th>Pod 重新调度后数据是否存在</th>
+<th>容量限制</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>emptydir</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>推荐，进一步了解 emptydir 的 size limit 行为</td>
+</tr>
+<tr>
+<td>hostPath</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>需要额外权限，不建议普通应用使用，多开放给节点管理员</td>
+</tr>
+<tr>
+<td>local ssd&#x2F;dynamic</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes.<br />Quota</td>
+<td>无备份</td>
+</tr>
+<tr>
+<td>网络存储</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes<br />Quota</td>
+<td>依赖与网络存储稳定性</td>
+</tr>
+<tr>
+<td>容器 rootfs</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>不要写数据</td>
+</tr>
+</tbody></table>
+<p>不要短时间内打印过多日志，以防在日志滚动之前节点磁盘就被耗光。</p>
+<h4 id="应用配置"><a href="#应用配置" class="headerlink" title="应用配置"></a>应用配置</h4><p>传入方式</p>
+<ul>
+<li><code>Environment Variables</code></li>
+<li><code>Volume Mount</code></li>
+</ul>
+<p>数据来源</p>
+<ul>
+<li><code>Configmap</code></li>
+<li><code>Secret</code></li>
+<li><code>Downward API</code></li>
+</ul>
+<h4 id="高可用部署"><a href="#高可用部署" class="headerlink" title="高可用部署"></a>高可用部署</h4><ul>
+<li>需要多少实例？</li>
+<li>如何控制失败域，部署在几个地区，AZ，集群？</li>
+<li>如何进行精细的流量控制？</li>
+<li>如何做按地域的顺序更新？</li>
+<li>如何回滚？</li>
+</ul>
+<h4 id="如何应对基础架构的影响"><a href="#如何应对基础架构的影响" class="headerlink" title="如何应对基础架构的影响"></a>如何应对基础架构的影响</h4><table>
+<thead>
+<tr>
+<th>系统管理员</th>
+<th>应用</th>
+<th>类型</th>
+<th>影响</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自主中断</td>
+<td>自主中断</td>
+<td>kubelet 升级</td>
+<td>大部分情况容器不会受影响</td>
+<td></td>
+</tr>
+<tr>
+<td>自主中断</td>
+<td>非自主中断</td>
+<td>kubelet 升级</td>
+<td>某些版本更新会重建 container<br />Pods 会在秒级重建，业务恢复速度依赖应用启动速度</td>
+<td>多实例部署<br />故障域控制，跨节点跨机架部署</td>
+</tr>
+<tr>
+<td>自主中断</td>
+<td>非自主中断</td>
+<td>kubelet 或者运行时无响应</td>
+<td>如果是短时无响应，应用不应该受影响<br />如果是长时间无响应，需要驱逐 Pod</td>
+<td>故障域控制，跨节点跨机架部署<br />合理的健康探针<br />设置合理的 toleration seconds</td>
+</tr>
+<tr>
+<td>自主中断</td>
+<td>非自主中断</td>
+<td>节点替换</td>
+<td>节点会被 dran 掉，节点会被删除<br />Pod 会被驱逐</td>
+<td>故障域控制，跨节点跨机架部署<br />使用 PDB 与基础架构约定驱逐策略<br />使用 preStop 备份关键数据</td>
+</tr>
+<tr>
+<td>自主中断</td>
+<td>非自主中断</td>
+<td>节点重启</td>
+<td>Pod 会失效数分钟</td>
+<td>故障域控制，跨节点跨机架部署<br />设置合理的 toleration seconds</td>
+</tr>
+<tr>
+<td>非自主中断</td>
+<td>非自主中断</td>
+<td>节点 Crash</td>
+<td>Pod 会在 15 分钟后被驱逐<br />Pod 会失效 15 分钟以上</td>
+<td>故障域控制，跨节点跨机架部署</td>
+</tr>
+</tbody></table>
+<h4 id="PodDisruptionBudget"><a href="#PodDisruptionBudget" class="headerlink" title="PodDisruptionBudget"></a>PodDisruptionBudget</h4><p>Pod 能够被打算的预算值。</p>
+<p><code>PDB</code> 是为了自主中断时保障应用的高可用。</p>
+<p>在使用 <code>PDB</code> 时，你需要弄清楚你的应用类型以及你想要的应对措施：</p>
+<ul>
+<li>无状态应用<ul>
+<li>目标：至少有 <code>60%</code> 的副本 <code>Available</code></li>
+<li>方案：创建 <code>PDB Object</code>，指定 <code>minAvailable</code> 为 <code>60%</code>，或者 <code>maxUnavailable</code> 为 <code>40%</code></li>
+</ul>
+</li>
+<li>单实例的有状态应用<ul>
+<li>目标：终止这个实例之前必须提前通知客户并取得同意</li>
+<li>方案：创建 <code>PDB Object</code>，并设置 <code>maxUnavailable</code> 为 <code>0</code></li>
+</ul>
+</li>
+<li>多实例的有状态应用：<ul>
+<li>目标：最少可用的实例数不能少于某个数 <code>N</code>，例如 <code>etcd</code></li>
+<li>方案：设置 <code>maxUnavailable = 1</code> 或者 <code>minAvailable = N</code>，分别允许每次只删除一个实例和每次删除 <code>expected_replicas - minAvailable</code> 个实例</li>
+</ul>
+</li>
+</ul>
+<h4 id="基础架构与应用团队的约束"><a href="#基础架构与应用团队的约束" class="headerlink" title="基础架构与应用团队的约束"></a>基础架构与应用团队的约束</h4><p>基础架构团队：在移除一个节点时，应遵循如下流程</p>
+<ul>
+<li><p>将 <code>node</code> 设置为不可调度</p>
+<p><code>kubectl cordon &lt;node name&gt;</code></p>
+</li>
+<li><p>执行 <code>node drain</code> 排空节点，将其上运行的 <code>Pod</code> 平滑迁移至其他节点</p>
+<p><code>kubectl drain &lt;node name&gt;</code></p>
+</li>
+</ul>
+<p>应用开发人员：针对敏感应用，可定义 <code>PDB</code> 来确保应用不会被意外中断</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">policy/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PodDisruptionBudget</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-deployment</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">minAvailable:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">nginx</span>   <span class="comment"># 通过 label 绑定应用</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h3><ul>
+<li>实例个数</li>
+<li>更新策略<ul>
+<li><code>MaxSurge</code></li>
+<li><code>MaxUnavailable</code>（需要考虑 <code>ResourceQuota</code> 的限制）</li>
+</ul>
+</li>
+<li>深入理解 <code>PodTemplateHash</code> 导致的应用的易变性</li>
+</ul>
+<h3 id="服务发布"><a href="#服务发布" class="headerlink" title="服务发布"></a>服务发布</h3><p>需要把服务发布至集群内部或者外部，服务的不同类型：</p>
+<ul>
+<li><code>ClusterIP</code>（<code>Headless</code>）</li>
+<li><code>NodePort</code></li>
+<li><code>LoadBalancer</code></li>
+<li><code>ExternalName</code></li>
+</ul>
+<p>证书管理和七层负载均衡的需求</p>
+<p>需要 <code>gRPC</code> 负载均衡如何做，使用 <code>SVC</code> 无法满足。</p>
+<p><code>DNS</code> 需求</p>
+<p>与上下游服务的关系</p>
+<h4 id="服务发布的挑战"><a href="#服务发布的挑战" class="headerlink" title="服务发布的挑战"></a>服务发布的挑战</h4><ul>
+<li><code>kube-dns</code><ul>
+<li>DNS TTL 问题</li>
+</ul>
+</li>
+<li><code>Service</code><ul>
+<li><code>ClusterIP</code> 只能对内</li>
+<li><code>kube-proxy</code> 支持的 <code>iptables/ipvs</code> 规模有限</li>
+<li><code>IPVS</code> 的性能和生产化问题</li>
+<li><code>kube-proxy</code> 的 <code>drift</code> 问题</li>
+<li>频繁的 <code>Pod</code> 变动（<code>spec change</code>，<code>failover</code>，<code>crashLoop</code>）导致 <code>LB</code> 频繁变更</li>
+<li>对外发布的 <code>Service</code> 需要与企业 <code>ELB</code> 即成</li>
+<li>不支持 <code>gRPC</code></li>
+<li>不支持自定义 <code>DNS</code> 和高级路由功能</li>
+</ul>
+</li>
+<li><code>Ingress</code><ul>
+<li><code>Spec</code> 要 <code>depracate</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="无状态应用管理"><a href="#无状态应用管理" class="headerlink" title="无状态应用管理"></a>无状态应用管理</h3><ul>
+<li><p><code>Replicaset</code> 副本集</p>
+<ul>
+<li><p>用什么 <code>Pod</code> 模板创建多少个实例？</p>
+<p><code>replicas: 2</code></p>
+</li>
+</ul>
+</li>
+<li><p><code>Deployment</code></p>
+<ul>
+<li><p>描述的是部署过程</p>
+<ul>
+<li><p>版本管理</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">deployment.kubernetes.io/revision:</span> <span class="string">&quot;1&quot;</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">revisionHistoryLimit:</span> <span class="number">10</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>滚动升级策略</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">    <span class="attr">rollingUpdate:</span></span><br><span class="line">      <span class="attr">maxSurge:</span> <span class="number">25</span><span class="string">%</span></span><br><span class="line">      <span class="attr">maxUnavailable:</span> <span class="number">25</span><span class="string">%</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="有状态应用管理"><a href="#有状态应用管理" class="headerlink" title="有状态应用管理"></a>有状态应用管理</h3><p><code>Statefulset</code></p>
+<p>与 <code>deployment</code> 相比，多了 <code>Volume claim template</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">volumeClaimTemplates:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">metadata:</span></span><br><span class="line">    <span class="attr">creationTimestamp:</span> <span class="literal">null</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">xxx-data</span></span><br><span class="line">  <span class="attr">spec:</span></span><br><span class="line">    <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">    <span class="attr">resources:</span></span><br><span class="line">      <span class="attr">requests:</span></span><br><span class="line">        <span class="attr">storage:</span> <span class="string">5Gi</span></span><br><span class="line">    <span class="attr">storageClassName:</span> <span class="string">local-path</span></span><br><span class="line">    <span class="attr">volumeMode:</span> <span class="string">Filesystem</span></span><br></pre></td></tr></table></figure>
+
+<p>随着业务的发展，单个服务的 <code>sts</code> 已经无法满足需求，例如 <code>MySQL</code> 集群化，需要实现数据同步，这个时候就需要 <code>Operator</code>。</p>
+<h3 id="有状态应用-Operator"><a href="#有状态应用-Operator" class="headerlink" title="有状态应用 - Operator"></a>有状态应用 - Operator</h3><p>创建 <code>Operator</code> 的关键是 <code>CRD</code>（自定义资源）的设计。</p>
+<ul>
+<li><p>Kubernetes 对象是可扩展的，扩展的方式有</p>
+<ul>
+<li><p>基于原生对象</p>
+<ul>
+<li>生成 <code>types</code> 对象，并通过 <code>client-go</code> 生成相应的 <code>clients</code>, <code>lister</code>, <code>informer</code></li>
+<li>实现对象的 <code>registry backend</code>，即定义对象任何存储进 <code>etcd</code></li>
+<li>注册对象的 <code>schema</code> 至 <code>apiserver</code></li>
+<li>创建该对象的 <code>apiserver</code> 声明，注册该对象所对应的 <code>api handler</code></li>
+</ul>
+<p>基于原生对象往往需要通过 <code>aggregation apiserver</code> 把不同对象组合起来。</p>
+</li>
+<li><p>基于 <code>CRD</code></p>
+<ul>
+<li>在不同应用业务环境下，对于平台可能有一些特殊的需求，这些需求可以抽象为 Kubernetes 的扩展资源，而 Kubernetes 的 <code>CRD</code>（<code>CustomResourceDefinition</code>）为这样的需求提供了轻量级的机制，保证新的资源的快速注册和使用</li>
+<li>在更老的版本中，<code>TPR</code>（<code>ThirdPartyResource</code>）是与 <code>CRD</code> 类似的概念，但是在 <code>1.9</code> 以上的版本中被弃用，而 <code>CRD</code> 则进入的 <code>beta</code> 状态</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="如何使用-CRD"><a href="#如何使用-CRD" class="headerlink" title="如何使用 CRD"></a>如何使用 CRD</h4><p>用户向 Kubernetes <code>API</code> 服务注册一个带有特定 <code>schema</code> 的资源，并定义相关 <code>API</code></p>
+<ul>
+<li>注册一系列该资源的实例</li>
+<li>在 Kubernetes 的其他资源对象中引用这个新注册资源的对象实例</li>
+<li>用户自定义的 <code>controller</code> 例程需要对这个引用进行释义和实施，让新的资源对象达到预期的状态</li>
+</ul>
+<h4 id="基于-CRD-的开发过程"><a href="#基于-CRD-的开发过程" class="headerlink" title="基于 CRD 的开发过程"></a>基于 CRD 的开发过程</h4><p>借助 Kubernetes <code>RBAC</code> 和 <code>authentication</code> 机制来保证该扩展资源的 <code>security</code>、<code>access control</code>、<code>authentication</code> 和 <code>multitenancy</code>。</p>
+<p>将扩展资源的数据存储到 Kubernetes 的 <code>etcd</code> 集群。</p>
+<p>借助 Kubernetes 提供的 <code>controller</code> 模式开发框架，实现新的 <code>controller</code>，并借助 <code>APIServer</code> 监听 <code>etcd</code> 集群关于该资源的状态并定义状态变化的处理逻辑。</p>
+<p>该功能可以让开发人员扩展添加新功能，更新现有的功能，并且可以自动执行一些管理任务，这些自定义的控制器就像 Kubernetes 原生的组件一样，<code>Operator</code> 直接使用 Kubernetes <code>API</code> 进行开发，也就是说他们可以根据这些控制器内部编写的自定义规则来监控集群、更改 <code>Pods/Services</code>、对正在运行的应用进行扩缩容。</p>
+<h4 id="控制器模式"><a href="#控制器模式" class="headerlink" title="控制器模式"></a>控制器模式</h4><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F20-52-52-image-20240222205252696.png" alt="image-20240222205252696"></p>
+<h4 id="控制器代码示例"><a href="#控制器代码示例" class="headerlink" title="控制器代码示例"></a>控制器代码示例</h4><p><code>k8s</code> 源码 <code>pkg/controller/daemon/daemon_controller.go</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">daemonSetInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs&#123;</span></span><br><span class="line">	<span class="attr">AddFunc:</span> <span class="string">func(obj</span> <span class="string">interface&#123;&#125;)</span> &#123;</span><br><span class="line">		<span class="string">dsc.addDaemonset(logger</span>, <span class="string">obj)</span></span><br><span class="line">	&#125;<span class="string">,</span></span><br><span class="line">	<span class="attr">UpdateFunc:</span> <span class="string">func(oldObj,</span> <span class="string">newObj</span> <span class="string">interface&#123;&#125;)</span> &#123;</span><br><span class="line">		<span class="string">dsc.updateDaemonset(logger</span>, <span class="string">oldObj</span>, <span class="string">newObj)</span></span><br><span class="line">	&#125;<span class="string">,</span></span><br><span class="line">	<span class="attr">DeleteFunc:</span> <span class="string">func(obj</span> <span class="string">interface&#123;&#125;)</span> &#123;</span><br><span class="line">		<span class="string">dsc.deleteDaemonset(logger</span>, <span class="string">obj)</span></span><br><span class="line">	&#125;<span class="string">,</span></span><br><span class="line"><span class="string">&#125;)</span></span><br></pre></td></tr></table></figure>
+
+<p>主要逻辑是消费者从队列中获取数据之后的处理。</p>
+<h4 id="安装-kubebuilder"><a href="#安装-kubebuilder" class="headerlink" title="安装 kubebuilder"></a>安装 kubebuilder</h4><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVybmV0ZXMtc2lncy9rdWJlYnVpbGRlcg==">https://github.com/kubernetes-sigs/kubebuilder<i class="fa fa-external-link-alt"></i></span></p>
+<p>下载至本地</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVybmV0ZXMtc2lncy9rdWJlYnVpbGRlci9yZWxlYXNlcw==">https://github.com/kubernetes-sigs/kubebuilder/releases<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># download kubebuilder and install locally.</span></span><br><span class="line">curl -L -o kubebuilder <span class="string">&quot;https://go.kubebuilder.io/dl/latest/<span class="subst">$(go env GOOS)</span>/<span class="subst">$(go env GOARCH)</span>&quot;</span></span><br><span class="line"><span class="built_in">chmod</span> +x kubebuilder &amp;&amp; <span class="built_in">mv</span> kubebuilder /usr/local/bin/</span><br></pre></td></tr></table></figure>
+
+<h4 id="Kubebuilder"><a href="#Kubebuilder" class="headerlink" title="Kubebuilder"></a>Kubebuilder</h4><p>辅助生成 CRD</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9ib29rLmt1YmVidWlsZGVyLmlvL3F1aWNrLXN0YXJ0Lmh0bWw=">https://book.kubebuilder.io/quick-start.html<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/projects/guestbook</span><br><span class="line"><span class="built_in">cd</span> ~/projects/guestbook</span><br><span class="line">kubebuilder init --domain my.domain --repo my.domain/guestbook</span><br><span class="line">	</span><br><span class="line">kubebuilder create api --group webapp --version v1 --kind Guestbook</span><br></pre></td></tr></table></figure>
+
+<p>修改 <code>Spec</code>，增加一个 <code>Image</code> 字段</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GuestbookSpec defines the desired state of Guestbook</span></span><br><span class="line"><span class="keyword">type</span> GuestbookSpec <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster</span></span><br><span class="line">	<span class="comment">// Important: Run &quot;make&quot; to regenerate code after modifying this file</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Foo is an example field of Guestbook. Edit guestbook_types.go to remove/update</span></span><br><span class="line">	Image <span class="type">string</span> <span class="string">`json:&quot;image,omitempty&quot;`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>生成 CRD 的 <code>yaml</code> 文件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make manifests</span><br></pre></td></tr></table></figure>
+
+<p>修改消费者代码，监听到 Guestbook 对象时的操作逻辑</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *GuestbookReconciler)</span></span> Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, <span class="type">error</span>) &#123;</span><br><span class="line">	_ = log.FromContext(ctx)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 消费处理逻辑</span></span><br><span class="line">	<span class="keyword">var</span> guestbook webappv1.Guestbook</span><br><span class="line">	<span class="comment">// 获取 guestbook 对象</span></span><br><span class="line">	err := r.Client.Get(ctx, req.NamespacedName, &amp;guestbook)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> ctrl.Result&#123;&#125;, err</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 如果获取到了</span></span><br><span class="line">	<span class="keyword">if</span> guestbook.Spec.Image != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 获取所有的 node</span></span><br><span class="line">		<span class="keyword">var</span> nodeList v1.NodeList</span><br><span class="line">		err = r.Client.List(ctx, &amp;nodeList)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> ctrl.Result&#123;&#125;, err</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 在每一个 Node 上创建一个 Pod；类似于 daemonset 的逻辑</span></span><br><span class="line">		<span class="keyword">for</span> _, node := <span class="keyword">range</span> nodeList.Items &#123;</span><br><span class="line">			pod := v1.Pod&#123;</span><br><span class="line">				TypeMeta: metav1.TypeMeta&#123;</span><br><span class="line">					APIVersion: <span class="string">&quot;v1&quot;</span>,</span><br><span class="line">					Kind:       <span class="string">&quot;Pod&quot;</span>,</span><br><span class="line">				&#125;,</span><br><span class="line">				ObjectMeta: metav1.ObjectMeta&#123;</span><br><span class="line">					GenerateName: fmt.Sprintf(<span class="string">&quot;%s-&quot;</span>, node.Name),</span><br><span class="line">				&#125;,</span><br><span class="line">				Spec: v1.PodSpec&#123;</span><br><span class="line">					Containers: []v1.Container&#123;</span><br><span class="line">						&#123;</span><br><span class="line">							Image: guestbook.Spec.Image,</span><br><span class="line">							Name:  <span class="string">&quot;guestbook&quot;</span>,</span><br><span class="line">						&#125;,</span><br><span class="line">					&#125;,</span><br><span class="line">				&#125;,</span><br><span class="line">				Status: v1.PodStatus&#123;&#125;,</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			err = r.Client.Create(ctx, &amp;pod)</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">				<span class="keyword">return</span> ctrl.Result&#123;&#125;, err</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> ctrl.Result&#123;&#125;, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>声明 CRD</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p>部署 <code>controller</code> 到 <code>k8s</code> 集群上</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make deploy</span><br></pre></td></tr></table></figure>
+
+<p>或者本地运行消费者，进行调试</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run</span><br></pre></td></tr></table></figure>
+
+<p>查看每个节点是否都生成一个 <code>Pod</code></p>
+<h4 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h4><p>运行下面的命令创建项目</p>
+<p><code>kubebuilder init --domain=example.com</code></p>
+<p>该命令生成如下文件：</p>
+<ul>
+<li><code>go.mod</code>：依赖管理</li>
+<li><code>Makefile</code>：编译文件</li>
+<li><code>PROJECT</code>：<code>kubebuilder</code> 为生成新组建的元数据配置</li>
+</ul>
+<h2 id="有状态应用的复杂性讨论"><a href="#有状态应用的复杂性讨论" class="headerlink" title="有状态应用的复杂性讨论"></a>有状态应用的复杂性讨论</h2><h3 id="有状态应用部署示例-MySQL"><a href="#有状态应用部署示例-MySQL" class="headerlink" title="有状态应用部署示例 - MySQL"></a>有状态应用部署示例 - MySQL</h3><ol>
+<li><p>高可用部署</p>
+<ul>
+<li>构建 <code>Galera cluster</code>，提供多活高可用 MySQL 集群（性能就不高，但是可用性强，多地同时都是 <code>master</code>，就近读写）</li>
+<li>多实例跨集群&#x2F;跨机架&#x2F;跨主机&#x2F;跨地域</li>
+<li>一般高可用的方案，都离不开分布式下的理论因素，例如基于 <code>paxos</code> 协议实现数据同步</li>
+<li>如果不管数据一致性，当数据出现冲突时，则需要选择一种方案或者人工介入</li>
+</ul>
+</li>
+<li><p>持久化存储</p>
+<ul>
+<li>需要为每个 Pod 创建 PVC 并 <code>mount</code></li>
+<li>读写性能保证</li>
+<li><code>local dynamic</code> 作为数据盘，<code>cephfs</code> 作为备份盘</li>
+</ul>
+</li>
+<li><p>有状态应用的复杂配置</p>
+<p>todo</p>
+<ul>
+<li>与无状态应用不一样，MySQL 需要复杂配置以完成 galara 集群的构建 <code>/etc/mysql/conf.d/galera.cnf</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="配置细节"><a href="#配置细节" class="headerlink" title="配置细节"></a>配置细节</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Configuration the First Node(Primary Component)</span></span><br><span class="line">[<span class="string">mysqld</span>]</span><br><span class="line"><span class="string">binlog_format=ROW</span></span><br><span class="line"><span class="string">default-storage-engine=innodb</span></span><br><span class="line"><span class="string">innodb_autoinc_lock_mode=2</span></span><br><span class="line"><span class="string">bind-address=0.0.0.0</span></span><br><span class="line"><span class="comment"># Galera Provider Configuration</span></span><br><span class="line"><span class="string">wsrep_on=ON</span></span><br><span class="line"><span class="string">wsrep_provider=/usr/lib/galera/libgalera_smm.so</span></span><br><span class="line"><span class="comment"># Galera Cluster Configuration</span></span><br><span class="line"><span class="string">wsrep_cluster_name=&quot;test_cluster&quot;</span></span><br><span class="line"><span class="string">wsrep_cluster_address=&quot;gcomm://First_Node_IP,Second_Node_IP,Third_Node_IP&quot;</span></span><br><span class="line"><span class="comment"># Galera Synchronization Configuration</span></span><br><span class="line"><span class="string">wsrep_sst_method=rsync</span></span><br><span class="line"><span class="comment"># Configuration on all Galera Nodes</span></span><br><span class="line"><span class="string">wsrep_node_address=&quot;This_Node_IP&quot;</span></span><br><span class="line"><span class="string">wsrep_node_name=&quot;This_Node_Name&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="启动顺序"><a href="#启动顺序" class="headerlink" title="启动顺序"></a>启动顺序</h3><ul>
+<li>在 <code>Primary Component</code> 节点上运行<ul>
+<li><code>mysqld_bootstrap</code></li>
+</ul>
+</li>
+<li>在其他节点上运行<ul>
+<li><code>systemctl start mysql</code></li>
+</ul>
+</li>
+<li>发生了什么<ul>
+<li>当节点第一次启动时，会自动生成 UUID 以代表当前节点身份</li>
+<li>启动后，<code>galera</code> 会在数据目录生成 <code>gvwstate.dat</code> 文件，该文件内容记录 <code>Primary Component</code> 的 <code>UUID</code> 以及连接到当前 <code>Primary Component</code> 的节点的 <code>UUID</code></li>
+<li>如果 <code>Primary Component</code> 出现故障，则剩余节点会重新选择新的 <code>Primary Component</code></li>
+<li>若该文件已经存在，则无需额外执行 <code>bootstrap</code> 命令启动 <code>Primary Component</code>，可依次规则编写 <code>Operator</code> 在多个节点构建此文件</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">my_uuid: d3124bc8-1605-11e4-aa3d-ab44303c044a </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">vwbeg</span> </span><br><span class="line">view_id: 3 0dae1307-1606-11e4-aa94-5255b1455aa0 12 </span><br><span class="line">bootstrap: 0</span><br><span class="line">member: 0dae1307-1606-11e4-aa94-5255b1455aa0 1 </span><br><span class="line">member: 47bbe2e2-1606-11e4-8593-2a6d8335bc79 1 </span><br><span class="line">member: d3124bc8-1605-11e4-aa3d-ab44303c044a 1 </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">vwend</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h3><p>MySQL 提供健康检查 <code>API</code></p>
+<ul>
+<li>检查集群成员是否能接受查询请求<ul>
+<li><code>SHOW GLOBAL STATUS LIKE &#39;wsrep_ready&#39;;</code></li>
+</ul>
+</li>
+<li>检查节点是否与其他节点网络互通<ul>
+<li><code>SHOW GLOBAL STATUS LIKE &#39;wsrep_connected&#39;;</code></li>
+</ul>
+</li>
+<li>检查节点自场次查询结束后接收到的查询请求数量，如果结果为非 0，意味着写请求不能立即处理<ul>
+<li><code>SHOW STATUS LIKE &#39;wsrep_local_recv_queue_avg&#39;;</code></li>
+</ul>
+</li>
+</ul>
+<p>健康检查应该影响 Pod 的 <code>readiness probe</code>，在进行版本升级时，确保大多数集群节点状态一致。</p>
+<h3 id="数据备份"><a href="#数据备份" class="headerlink" title="数据备份"></a>数据备份</h3><p>推荐为 MySQL 创建不同类型的 <code>volume</code></p>
+<ul>
+<li><code>Local volume</code> 用来做数据盘</li>
+<li><code>Network volume</code> 用来做数据备份</li>
+</ul>
+<p>创建 <code>cronjob</code>，每天将数据备份至 <code>backup</code> 目录</p>
+<ul>
+<li>备份文件为</li>
+</ul>
+<p>一键恢复能力</p>
+<ul>
+<li>导入备份目录的 <code>sql file</code></li>
+</ul>
+<h3 id="版本发布和故障转移"><a href="#版本发布和故障转移" class="headerlink" title="版本发布和故障转移"></a>版本发布和故障转移</h3><p>针对配置了 <code>Local disk</code> 的 <code>Pod</code>，当发生因版本变更而引发的 Pod 重建时，新 Pod 在进行调度时，调度器会查询 Pod 挂载的 <code>volume</code> 所在节点，并将新 Pod 优先调度至该节点，此场景不涉及到数据恢复。</p>
+<p>其开销与 MySQL 进程重启相差不大。</p>
+<h3 id="版本发布和故障转移-1"><a href="#版本发布和故障转移-1" class="headerlink" title="版本发布和故障转移"></a>版本发布和故障转移</h3><p>如果节点出现故障，如硬件故障，Kubernetes 的 <code>Evict Manager</code> 会将该 Pod 从故障节点驱逐，<code>Operator</code> 应确保新 Pod 会被重新构建。而新 Pod 会被调度至新节点，此场景等价于替换 MySQL 中的少数节点。</p>
+<ul>
+<li><code>galera</code> 集群中的少数 MySQL 节点替换，不涉及到数据迁移，<code>galera</code> 会确保新节点的数据同步</li>
+</ul>
+<p>若整个 MySQL 集群需要做数据恢复，则应该从 <code>backup</code> 目录对应的网络 <code>volume</code> 恢复数据。此时可选择：</p>
+<ul>
+<li>只恢复单一节点数据：配置简单</li>
+<li>恢复所有节点数据：恢复速度快</li>
+</ul>
+<p>与基础架构的 <code>Contract</code></p>
+<ul>
+<li><code>PodDisruptionBudget</code></li>
+</ul>
+<h3 id="一些-Operator-的推荐"><a href="#一些-Operator-的推荐" class="headerlink" title="一些 Operator 的推荐"></a>一些 Operator 的推荐</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZXJhdG9yLWZyYW1ld29yay9hd2Vzb21lLW9wZXJhdG9ycz90YWI9cmVhZG1lLW92LWZpbGU=">https://github.com/operator-framework/awesome-operators?tab=readme-ov-file<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9vcGVyYXRvcmh1Yi5pby8=">https://operatorhub.io/<i class="fa fa-external-link-alt"></i></span></p>
+<h1 id="Spec-管理神器-Helm"><a href="#Spec-管理神器-Helm" class="headerlink" title="Spec 管理神器 - Helm"></a>Spec 管理神器 - Helm</h1><p>官方文档自带中文：<span class="exturl" data-url="aHR0cHM6Ly9oZWxtLnNoL3poL2RvY3Mv">https://helm.sh/zh/docs/<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="什么是-Helm"><a href="#什么是-Helm" class="headerlink" title="什么是 Helm"></a>什么是 Helm</h2><p>Helm 特性</p>
+<ul>
+<li>Helm chart 是创建一个应用实例的必要的配置组，也就是一堆 Spec</li>
+<li>配置信息被归类为模板（<code>Template</code>）和值（<code>Value</code>），这些信息经过渲染生成最终的对象</li>
+<li>所有配置可以被打包进一个可以发布的对象中</li>
+<li>一个 <code>release</code> 就是一个有特定配置的 <code>chart</code> 的实例</li>
+</ul>
+<h2 id="Helm-的组件"><a href="#Helm-的组件" class="headerlink" title="Helm 的组件"></a>Helm 的组件</h2><p>Helm client</p>
+<ul>
+<li>本地 <code>chart</code> 开发</li>
+<li>管理 <code>repository</code></li>
+<li>管理 <code>release</code></li>
+<li>与 <code>helm library</code> 交互<ul>
+<li>发送需要安装的 <code>chart</code></li>
+<li>请求升级或者卸载存在的 <code>release</code></li>
+</ul>
+</li>
+</ul>
+<p>Helm library</p>
+<ul>
+<li>负责与 APIServer 交互，并提供以下功能<ul>
+<li>基于 <code>chart</code> 和 <code>configuration</code> 创建一个 <code>release</code></li>
+<li>把 chart 安装进 Kubernetes，并提供相应的 <code>release</code> 对象</li>
+<li>升级和卸载</li>
+<li>Helm 采用 Kubernetes 存储所有配置信息，无需自己的数据库</li>
+</ul>
+</li>
+</ul>
+<h2 id="Kubernetes-Helm-架构"><a href="#Kubernetes-Helm-架构" class="headerlink" title="Kubernetes Helm 架构"></a>Kubernetes Helm 架构</h2><p>Helm 的目标</p>
+<p>从头创建 <code>chart</code></p>
+<p>把 <code>chart</code> 打包成压缩文件（<code>tgz</code>）</p>
+<p>与 <code>chart</code> 的存储仓库交互（<code>chart repository</code>）</p>
+<p>Kubernetes 集群中的 <code>chart</code> 安装与卸载</p>
+<p>管理用 Helm 安装的 <code>release</code> 的生命周期</p>
+<h2 id="Helm-的安装"><a href="#Helm-的安装" class="headerlink" title="Helm 的安装"></a>Helm 的安装</h2><p>下载：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2hlbG0vaGVsbS9yZWxlYXNlcw==">https://github.com/helm/helm/releases<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf helm-v3.0.0-linux-amd64.tar.gz</span><br><span class="line"><span class="built_in">mv</span> linux-amd64/helm /usr/local/bin/helm</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-21-36-image-20240222212136880.png" alt="image-20240222212136880"></p>
+<h2 id="Helm-chart-的基本使用"><a href="#Helm-chart-的基本使用" class="headerlink" title="Helm chart 的基本使用"></a>Helm chart 的基本使用</h2><p>创建一个 chart</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">helm create myapp</span><br><span class="line">myapp/</span><br><span class="line">	Chart.yaml 	<span class="comment"># 包含了 chart 信息的 YAML 文件</span></span><br><span class="line">	values.yaml <span class="comment"># chart 默认的配置值</span></span><br><span class="line">	charts/			<span class="comment"># 包含 chart 依赖的其他 chart</span></span><br><span class="line">	templates/	<span class="comment"># 模板目录，当和 values 结合时，可生成有效的 Kubernetes manifest 文件</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="复用已存在的成熟的-Helm-release"><a href="#复用已存在的成熟的-Helm-release" class="headerlink" title="复用已存在的成熟的 Helm release"></a>复用已存在的成熟的 Helm release</h2><ul>
+<li><p>针对 Helm release repo 的操作</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">helm repo add grafana https://grafana.github.io/helm-charts</span><br><span class="line">helm repo update</span><br><span class="line">helm repo list </span><br><span class="line">helm search repo grafana</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从 remote repo 安装 Helm chart</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">helm upgrade --install loki grafana/loki-stack</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>拉取 chart</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">helm pull grafana/loki-stack</span><br><span class="line">helm upgrade --install loki ./loki-stack</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="metrics-server"><a href="#metrics-server" class="headerlink" title="metrics-server"></a>metrics-server</h1><h2 id="Aggregated-APIServer"><a href="#Aggregated-APIServer" class="headerlink" title="Aggregated APIServer"></a>Aggregated APIServer</h2><p>在 <code>apiserver</code> 中设定一些 <code>apiserver</code> 不由 <code>kubelet</code> 管理，集成到 <code>Aggregated APIServer</code> 里面。</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-26-14-image-20240222212614114.png" alt="image-20240222212614114"></p>
+<h2 id="Metrics-Server"><a href="#Metrics-Server" class="headerlink" title="Metrics-Server"></a>Metrics-Server</h2><p><code>metrics-server</code> 是 Kubernetes 监控体系中的核心组件之一，它负责从 <code>kubelet</code> 收集资源指标，然后对这些指标监控数据进行聚合（依赖 <code>cube-aggregator</code>），并在 Kubernetes APIServer 中通过 Metrics API（<code>/apis/metrics.k8s.io/</code>）公开暴露它们，但是 <code>metrics-server</code> 只存储最新的指标数据（<code>CPU/Memory</code>）。</p>
+<p> <code>kube-apiserver</code> 要能访问到 <code>metrics-server</code>；</p>
+<p>需要 <code>kube-apiserver</code> 启用聚合层；</p>
+<p>组件要有认证配置并且绑定到 <code>metrics-server</code>；</p>
+<p><code>Pod/Node</code> 指标需要由 Summary API 通过 <code>kubelet</code> 公开。</p>
+<p>请求响应流程：</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-29-31-image-20240222212931079.png" alt="image-20240222212931079"></p>
+<h2 id="Metrics-server-的本质"><a href="#Metrics-server-的本质" class="headerlink" title="Metrics-server 的本质"></a>Metrics-server 的本质</h2><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVybmV0ZXMtc2lncy9tZXRyaWNzLXNlcnZlcg==">https://github.com/kubernetes-sigs/metrics-server<i class="fa fa-external-link-alt"></i></span></p>
+<p>安装：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml</span><br></pre></td></tr></table></figure>
+
+<p>踩坑：</p>
+<p>修改 <code>deployment</code> 的内容</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改镜像地址，避免镜像拉不下来</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-server:v0.7.0</span></span><br><span class="line"><span class="comment"># 修改启动参数，避免 pod 出现信息无法收集的问题</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">args:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">--cert-dir=/tmp</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">--secure-port=10250</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">--kubelet-insecure-tls</span> <span class="comment"># 新增</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">--kubelet-use-node-status-port</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">--metric-resolution=15s</span></span><br></pre></td></tr></table></figure>
+
+<p>将质保数据转换成 metrics.k8s.io 的 api 调用返回值</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># kubectl top node</span></span><br><span class="line">NAME      CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%</span><br><span class="line">master    188m         4%     1424Mi          37%</span><br><span class="line">slave01   104m         2%     2024Mi          53%</span><br><span class="line">slave02   78m          1%     738Mi           19%</span><br><span class="line"></span><br><span class="line"><span class="comment"># kubectl top pod</span></span><br><span class="line">NAME                              CPU(cores)   MEMORY(bytes)</span><br><span class="line">coredns-857d9ff4c9-5k642          2m           14Mi</span><br><span class="line">coredns-857d9ff4c9-p5pv4          2m           15Mi</span><br><span class="line">etcd-master                       32m          96Mi</span><br><span class="line">kube-apiserver-master             64m          402Mi</span><br><span class="line">kube-controller-manager-master    21m          56Mi</span><br><span class="line">kube-proxy-bppc4                  29m          27Mi</span><br><span class="line">kube-proxy-jntbm                  15m          24Mi</span><br><span class="line">kube-proxy-nf4tw                  29m          24Mi</span><br><span class="line">kube-scheduler-master             4m           19Mi</span><br><span class="line">metrics-server-5fbbf4b6cd-cntcx   4m           21Mi</span><br><span class="line"></span><br><span class="line"><span class="comment"># kubectl get --raw &quot;/api/v1/nodes/master/proxy/metrics/resource&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="自动扩容缩容-HPA"><a href="#自动扩容缩容-HPA" class="headerlink" title="自动扩容缩容 - HPA"></a>自动扩容缩容 - HPA</h1><h2 id="横向伸缩和纵向伸缩"><a href="#横向伸缩和纵向伸缩" class="headerlink" title="横向伸缩和纵向伸缩"></a>横向伸缩和纵向伸缩</h2><ul>
+<li>应用扩容是指在应用接收到的并发请求已经处于其处理请求极限边界的情形下，扩展处理能力而确保应用高可用的技术手段</li>
+<li><code>Horizontal Scaling</code><ul>
+<li>所谓横向伸缩是指通过增加应用实例数量分担负载的方式来提升应用整体处理能力的方式，例如增加副本数。</li>
+</ul>
+</li>
+<li><code>Vertical Scaling</code><ul>
+<li>所谓纵向伸缩是指通过增加单个应用实例资源以提升单个实例处理能力，进而提升应用整体处理能力的方式，例如增加 CPU&#x2F;内存。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-33-22-image-20240222213322704.png" alt="image-20240222213322704"></p>
+<h2 id="理解云原生的弹性能力"><a href="#理解云原生的弹性能力" class="headerlink" title="理解云原生的弹性能力"></a>理解云原生的弹性能力</h2><p>Kubernetes 提供了横向扩展和纵向扩展的能力：</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F22%2F21-33-59-image-20240222213359272.png" alt="image-20240222213359272"></p>
+<p>比如横向：超过 60% 的 CPU 使用率，资源从 <code>metrics</code> 收集。</p>
+<h2 id="HPA"><a href="#HPA" class="headerlink" title="HPA"></a>HPA</h2><ul>
+<li>HPA（<code>Horizontal Pod Autoscaler</code>）是 Kubernetes 的一种资源对象，能够根据某些指标对在 <code>statefulSet</code>、<code>replicaSet</code>、<code>deployment</code> 等集合中的 Pod 数量进行横向动态伸缩，使运行在上面的服务对指标的变化有一定的自适应能力。</li>
+<li>因节点计算资源固定，当 Pod 调度完成并运行以后，动态调整计算资源变得较为困难，因为横向扩展具有更大优势，HPA 时扩展应用能力的第一选择。</li>
+<li>多个冲突的 HPA 同时创建到同一个应用的时候会有无法预期的行为，因此需要小心维护 HPA 规则。</li>
+<li>HPA 依赖于 <code>Metrics-Server</code></li>
+</ul>
+<h2 id="HPA-Spec"><a href="#HPA-Spec" class="headerlink" title="HPA Spec"></a>HPA Spec</h2><p><code>v1</code> 版本示例，只支持 CPU 和内存，没有扩展性，已经不满足需求</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">autoscaling/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">HorizontalPodAutoscaler</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">maxReplicas:</span> <span class="number">10</span></span><br><span class="line">  <span class="attr">minReplicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">scaleTargetRef:</span></span><br><span class="line">    <span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line">  <span class="attr">targetCPUUtilizationPercentage:</span> <span class="number">50</span></span><br></pre></td></tr></table></figure>
+
+<p><code>v2</code> 版本示例，支持一些扩展能力，例如 QPS 等</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">autoscaling/v2beta2</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">HorizontalPodAutoscaler</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="comment"># HPA 的伸缩对象描述，HPA 会动态修改该对象的 Pod 数量</span></span><br><span class="line">  <span class="attr">scaleTargetRef:</span></span><br><span class="line">    <span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line">  <span class="comment"># HPA 的最小 Pod 数量和最大 Pod 数量</span></span><br><span class="line">  <span class="attr">minReplicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">maxReplicas:</span> <span class="number">10</span></span><br><span class="line">  <span class="comment"># 监控的指标数组，支持多种类型的指标共存</span></span><br><span class="line">  <span class="attr">metrics:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">Resource</span></span><br><span class="line">      <span class="attr">resource:</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">cpu</span></span><br><span class="line">        <span class="attr">target:</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">Utilization</span></span><br><span class="line">          <span class="attr">averageUtilization:</span> <span class="number">50</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="HPA-支持的指标类型"><a href="#HPA-支持的指标类型" class="headerlink" title="HPA 支持的指标类型"></a>HPA 支持的指标类型</h2><p>对于按 Pod 统计的资源指标（如 <code>CPU</code>），控制器从资源指标 API 中获取每一个 <code>HorizontalPodAutoscaler</code> 指定的 Pod 的度量值，如果设置了目标使用率，控制器获取每个 Pod 中的容器资源使用情况，并计算资源使用率。如果设置了 target 值，将直接使用原始数据（不再计算百分比）。</p>
+<p>如果 Pod 使用自定义指示，控制器机制与资源指标类似，区别在于自定义指标只使用原始值，而不是使用率。</p>
+<p>如果 Pod 使用对象指标和外部指标（每个指标描述一个对象信息）。这个指标将直接根据目标设定值相比较，并生成一个上面提到的扩缩比例。在 autoscaling&#x2F;v2beta2 版本 API 中，这个指标也可以根据 Pod 数量平分后再计算。</p>
+<h2 id="HPA-指标"><a href="#HPA-指标" class="headerlink" title="HPA 指标"></a>HPA 指标</h2><p>Resource 是 Kubernetes 默认支持的资源类型，CPU、内存等</p>
+<p>Pod 类型这种类型默认不收集，需要定义指标。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Resource 类型的指标</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">type:</span> <span class="string">Resource</span></span><br><span class="line">  <span class="attr">resource:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">cpu</span></span><br><span class="line">    <span class="comment"># Utilization 类型的目标值，Resource 类型的指标只支持 Utilization 和 AverageValue 类型的目标值</span></span><br><span class="line">    <span class="attr">target:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">Utilization</span></span><br><span class="line">      <span class="attr">averageUtilization:</span> <span class="number">50</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Pods 类型的指标</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">Pods</span></span><br><span class="line"><span class="attr">pods:</span></span><br><span class="line">  <span class="attr">metric:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">packets-per-second</span></span><br><span class="line">  <span class="attr">target:</span></span><br><span class="line">    <span class="comment"># AverageValue 类型的目标值，Pods 指标类型下只支持 AverageValue 类型的目标值</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">AverageValue</span></span><br><span class="line">    <span class="attr">averageValue:</span> <span class="string">1k</span></span><br></pre></td></tr></table></figure>
+
+<p>对象类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">type: Object</span><br><span class="line">object:</span><br><span class="line">  metric:</span><br><span class="line">    name: requests-per-second</span><br><span class="line">  describedObject:</span><br><span class="line">    apiVersion: networking.k8s.io/v1</span><br><span class="line">    kind: Ingress</span><br><span class="line">    name: main-route</span><br><span class="line">  target:</span><br><span class="line">    type: Value</span><br><span class="line">    value: 2k</span><br></pre></td></tr></table></figure>
+
+<h2 id="算法细节"><a href="#算法细节" class="headerlink" title="算法细节"></a>算法细节</h2><p><span class="exturl" data-url="aHR0cHM6Ly9rdWJlcm5ldGVzLmlvL3poLWNuL2RvY3MvdGFza3MvcnVuLWFwcGxpY2F0aW9uL2hvcml6b250YWwtcG9kLWF1dG9zY2FsZS8=">https://kubernetes.io/zh-cn/docs/tasks/run-application/horizontal-pod-autoscale/<i class="fa fa-external-link-alt"></i></span></p>
+<p>HPA 算法非常简单</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">期望副本数 = ceil[当前副本数 * （当前指标 / 期望指标）]</span><br></pre></td></tr></table></figure>
+
+<p>当前度量值为 <code>200m</code>，目标设定值为 <code>100m</code>，那么由于 <code>200.0/100.0 == 2.0</code>，副本数量将会翻倍。</p>
+<p>如果当前指标为 <code>20m</code>，副本数量将会减半，因为 <code>50.0/100.0 == 0.5</code>。</p>
+<p>如果计算出的扩缩比例接近 <code>1.0</code>（根据 <code>–horizontal-pod-autoscaler-tolerance</code> 参数全局配置的容忍值，默认为 <code>0.1</code>），将会放弃本次扩缩。</p>
+<p>扩容时比较激进，缩容时比较保守。</p>
+<h2 id="滚动升级时扩缩"><a href="#滚动升级时扩缩" class="headerlink" title="滚动升级时扩缩"></a>滚动升级时扩缩</h2><p>当你为一个 <code>Deployment</code> 配置自动扩缩时，你要为每个 <code>Deployment</code> 绑定一个 <code>HorizontalPodAutoscaler</code>.</p>
+<p><code>HorizontalPodAutoscaler</code> 管理 <code>Deployment</code> 的 <code>replicas</code> 字段。</p>
+<p><code>Deployment Controller</code> 负责设置下层 <code>ReplicaSet</code> 的 <code>replicas</code> 字段，以便确保在上线及后续过程副本个数合适。</p>
+<p>想一想：为什么 <code>deploymentSpec</code> 中的 <code>replicas</code> 字段的类型为 <code>*int</code>，而不是 <code>int</code> ，这是出于零值的考量，使用指针，可以区别没有填写或是填写零值，避免在升级过程中造成影响。</p>
+<h2 id="冷却-x2F-延迟支持"><a href="#冷却-x2F-延迟支持" class="headerlink" title="冷却&#x2F;延迟支持"></a>冷却&#x2F;延迟支持</h2><p>当使用 <code>HorizontalPodAutoscaler</code> 管理一组副本扩缩时，有可能因为指标动态的变化造成副本数量频繁的变化，有时这被称为抖动（<code>Thrashing</code>）。例如在 Pod 启动的时候，对内存占用较高，避免这个时候计算资源使用率产生影响。</p>
+<p><code>–horizontal-pod-autoscaler-downscale-stabilization</code>：设置缩容冷却时间窗口长度。</p>
+<p>水平 Pod 扩缩器能够记住过去建议的负载规模，并仅对此时间窗口内的最大规模执行操作。</p>
+<p>默认值是 <code>5</code> 分钟（<code>5m0s</code>）。</p>
+<h2 id="扩缩策略"><a href="#扩缩策略" class="headerlink" title="扩缩策略"></a>扩缩策略</h2><p>在 Spec 字段的 <code>behavior</code> 部分可以指定一个或多个扩缩策略。当指定多个策略时，默认选择允许更改最多的策略。下面的例子展示了缩容时的行为：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">behavior:</span></span><br><span class="line">  <span class="comment"># 缩容策略</span></span><br><span class="line">  <span class="attr">scaleDown:</span></span><br><span class="line">    <span class="attr">stabilizationWindowSeconds:</span> <span class="number">300</span></span><br><span class="line">    <span class="attr">policies:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">Percent</span></span><br><span class="line">      <span class="attr">value:</span> <span class="number">100</span></span><br><span class="line">      <span class="attr">periodSeconds:</span> <span class="number">15</span></span><br><span class="line">  <span class="comment"># 扩容策略</span></span><br><span class="line">  <span class="attr">scaleUp:</span></span><br><span class="line">    <span class="attr">stabilizationWindowSeconds:</span> <span class="number">0</span></span><br><span class="line">    <span class="attr">policies:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">Percent</span></span><br><span class="line">      <span class="attr">value:</span> <span class="number">100</span></span><br><span class="line">      <span class="attr">periodSeconds:</span> <span class="number">15</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">Pods</span></span><br><span class="line">      <span class="attr">value:</span> <span class="number">4</span></span><br><span class="line">      <span class="attr">periodSeconds:</span> <span class="number">15</span></span><br><span class="line">    <span class="attr">selectPolicy:</span> <span class="string">Max</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="HPA-练习"><a href="#HPA-练习" class="headerlink" title="HPA 练习"></a>HPA 练习</h2><p>安装 metrics-server（本质上是一个 aggregate Server）</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9rdWJlcm5ldGVzLmlvL3poLWNuL2RvY3MvdGFza3MvcnVuLWFwcGxpY2F0aW9uL2hvcml6b250YWwtcG9kLWF1dG9zY2FsZS13YWxrdGhyb3VnaC8=">https://kubernetes.io/zh-cn/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/<i class="fa fa-external-link-alt"></i></span></p>
+<p><code>php-apache.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">php-apache</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">php-apache</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">registry.k8s.io/hpa-example</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">        <span class="attr">resources:</span></span><br><span class="line">          <span class="attr">limits:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">500m</span></span><br><span class="line">          <span class="attr">requests:</span></span><br><span class="line">            <span class="attr">cpu:</span> <span class="string">200m</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">run:</span> <span class="string">php-apache</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">run:</span> <span class="string">php-apache</span></span><br></pre></td></tr></table></figure>
+
+<p><code>hpa.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">autoscaling/v2</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">HorizontalPodAutoscaler</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">scaleTargetRef:</span></span><br><span class="line">    <span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">php-apache</span></span><br><span class="line">  <span class="attr">minReplicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">maxReplicas:</span> <span class="number">10</span></span><br><span class="line">  <span class="attr">metrics:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">Resource</span></span><br><span class="line">      <span class="attr">resource:</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">cpu</span></span><br><span class="line">        <span class="attr">target:</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">Utilization</span></span><br><span class="line">          <span class="attr">averageUtilization:</span> <span class="number">50</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="启动应用"><a href="#启动应用" class="headerlink" title="启动应用"></a>启动应用</h2><ul>
+<li><p>创建 <code>php-server</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f https://k8s.io/examples/application/php-apache.yaml</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置 HPA 规则</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=10</span><br></pre></td></tr></table></figure>
+
+<p>或者使用 <code>yaml</code> 文件定义</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f hpa.yaml</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看 HPA Spec</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">maxReplicas:</span> <span class="number">10</span></span><br><span class="line">  <span class="attr">metrics:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">resource:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">cpu</span></span><br><span class="line">      <span class="attr">target:</span></span><br><span class="line">        <span class="attr">averageUtilization:</span> <span class="number">50</span></span><br><span class="line">        <span class="attr">type:</span> <span class="string">Utilization</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">Resource</span></span><br><span class="line">  <span class="attr">minReplicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">scaleTargetRef:</span></span><br><span class="line">    <span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">php-apache</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="测试-HPA"><a href="#测试-HPA" class="headerlink" title="测试 HPA"></a>测试 HPA</h2><ul>
+<li><p>为服务器加压</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在单独的终端中运行它</span></span><br><span class="line"><span class="comment"># 以便负载生成继续，你可以继续执行其余步骤</span></span><br><span class="line">kubectl run -i --<span class="built_in">tty</span> load-generator --<span class="built_in">rm</span> --image=busybox:1.28 --restart=Never -- /bin/sh -c <span class="string">&quot;while sleep 0.01; do wget -q -O- http://php-apache; done&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 准备好后按 Ctrl+C 结束观察</span></span><br><span class="line">kubectl get hpa php-apache --watch</span><br></pre></td></tr></table></figure>
+
+<p>一分钟时间左右之后，通过以下命令，我们可以看到 CPU 负载升高了；例如：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NAME         REFERENCE                     TARGET      MINPODS   MAXPODS   REPLICAS   AGE</span><br><span class="line">php-apache   Deployment/php-apache/scale   305% / 50%  1         10        1          3m</span><br></pre></td></tr></table></figure></li>
+<li><p>观测 <code>top pod</code>，可以发现当 <code>pod</code> <code>cpu</code> 利用率大于 <code>500m</code> 的时候，会创建更多 <code>pod</code> 出来分担压力</p>
+</li>
+<li><p>停止 <code>load-generator</code> 以后，等待一段时间，<code>pod</code> 数量会降为一个</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NAME         REFERENCE                     TARGET       MINPODS   MAXPODS   REPLICAS   AGE</span><br><span class="line">php-apache   Deployment/php-apache/scale   0% / 50%     1         10        1          11m</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="HPA-存在的问题"><a href="#HPA-存在的问题" class="headerlink" title="HPA 存在的问题"></a>HPA 存在的问题</h2><p>基于指标的弹性由滞后效应，因为弹性控制器操作的链路过长。应用使用出现阈值 -&gt; <code>cAdvisor</code> 采集 -&gt; 上报到 <code>kubelet</code> -&gt; <code>metrics</code> 采集。这几个链路走下来可能已经过了一两分钟。</p>
+<p>从应用负载超出阈值到 <code>HPA</code> 完成扩容之间的时间差包括：</p>
+<ul>
+<li>应用指标数据已经超出阈值；</li>
+<li><code>HPA</code> 定期执行指标收集滞后效应；</li>
+<li><code>HPA</code> 控制 <code>Deployment</code> 进行扩容的时间；</li>
+<li><code>Pod</code> 调度，运行时启动挂载存储和网络的时间；</li>
+<li>应用启动到服务就绪的时间。</li>
+</ul>
+<p>很可能在突发流量出现时，还没完成弹性扩容，既有的服务实例已经被流量击垮。</p>
+<h1 id="自动扩容缩容-VPA"><a href="#自动扩容缩容-VPA" class="headerlink" title="自动扩容缩容 - VPA"></a>自动扩容缩容 - VPA</h1><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2t1YmVybmV0ZXMvYXV0b3NjYWxlcg==">https://github.com/kubernetes/autoscaler<i class="fa fa-external-link-alt"></i></span></p>
+<p>VPA 全称 <code>Vertical Pod Autoscaler</code>，即垂直 Pod 自动扩缩容，它根据容器资源使用率自动设置 <code>CPU</code> 和内存的 <code>request</code>，从而允许在节点上进行适当的调度，以便为每个 Pod 提供适当的资源。它既可以缩小过度请求资源的容器，也可以根据其使用情况随时提升资源不足的容量。</p>
+<p>使用 VPA 的意义：</p>
+<ul>
+<li>Pod 资源用其所需，提升集群节点使用效率；</li>
+<li>不必运行基准测试任务来确定 CPU 和内存请求的合适值；</li>
+<li>VPA 可以随时调整 CPU 的内存请求，无需人为操作，因此可以减少维护时间</li>
+</ul>
+<p>注意：</p>
+<p>VPA 目前还没有生产就绪，在使用之前需要了解资源调节对应用的影响。</p>
+<h2 id="VPA-架构图"><a href="#VPA-架构图" class="headerlink" title="VPA 架构图"></a>VPA 架构图</h2><p>todo：</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F18-29-53-vpa-architecture.png" alt="../../../img/kubernetes/vpa/vpa-architecture.png"></p>
+<h2 id="VPA-组件"><a href="#VPA-组件" class="headerlink" title="VPA 组件"></a>VPA 组件</h2><ul>
+<li>VPA 引入了一种新型的 API 资源：<code>VerticalPodAutoscaler</code></li>
+<li><strong>VPA <code>Recommender</code></strong> 监视所有 Pod，不断为它们计算新的推荐资源，并将推荐值存储在 VPA 对象中。它使用来自 <code>Metrics-Server</code> 的集群中所有 Pod 的利用率和 OOM 事件。</li>
+<li>所有 Pod 创建请求都通过 VPA <code>Admission Controller</code></li>
+<li><strong>VPA <code>Updater</code></strong> 时负责 Pod 实时更新的组件。如果 Pod 在 <code>Auto</code> 模式下使用 <code>VPA</code>，则 <code>Updater</code> 可以决定使用推荐器资源对其进行更新</li>
+<li><strong><code>History Storage</code></strong> 是一个存储组件（如 <code>Prometheus</code>），它使用来自 <code>API Server</code> 的利用率信息和 OOM（与推荐器相同的数据）并将其持久存储</li>
+<li>VPA 更新模式：<ul>
+<li><code>Off</code>：Updater 不工作</li>
+<li><code>Auto</code>：Updater 会工作，</li>
+</ul>
+</li>
+</ul>
+<h2 id="VPA-工作原理"><a href="#VPA-工作原理" class="headerlink" title="VPA 工作原理"></a>VPA 工作原理</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F18-34-13-image-20240224183413278.png" alt="image-20240224183413278"></p>
+<p><code>Recommender</code> 通过读取 <code>Prometheus</code> 获取 Pod 资源使用情况，从 <code>Metrics</code> 中读取当前指标，给出建议，通过 <code>Admission Updater</code> 删除 Pod，然后创建 Pod 时经过 <code>Admission Plugin</code> 变形，修改 <code>Resource</code>，重建 Pod。</p>
+<h2 id="Recommender-设计理念"><a href="#Recommender-设计理念" class="headerlink" title="Recommender 设计理念"></a>Recommender 设计理念</h2><p>推荐模型（<code>MVP</code>）假设内存和 <code>CPU</code> 利用率时独立的随机变量，其分布等于过去 <code>N</code> 天观察到的变量（推荐值为 <code>N=8</code> 以捕获每周峰值，以一周为一个周期）。</p>
+<ul>
+<li>对于 <code>CPU</code>，目标时将容器使用率超过请求的高百分比（例如 <code>95%</code>）时的时间部分保持在某个阈值（例如 <code>1%</code> 的时间）以下。在此模型中，CPU 使用率 被定义在短时间间隔内测量的平均值。测量间隔越短，针对尖峰、延迟敏感的工作负载的建议质量就越高。最小合理分辨率为 <code>1/min</code>，推荐为 <code>1/sec</code></li>
+<li>对于内存，目标是将特定窗口内容器使用率超过请求的概率保持在某个阈值以下（例如，<code>24</code> 小时内低于 <code>1%</code>）。窗口必须很长（<code>≥ 24</code>小时）以确保由 <code>OOM</code> 引起的驱逐不会明显影响（a）服务应用程序的可用性（b）批处理计算的进度（更高级的模型可以允许用户指定 SLO 来控制它）</li>
+</ul>
+<h2 id="主要流程"><a href="#主要流程" class="headerlink" title="主要流程"></a>主要流程</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F18-39-02-image-20240224183902815.png" alt="image-20240224183902815"></p>
+<p>Checkpoints：将采集到的数据做统计和分布，用于后续算法推荐。</p>
+<h2 id="滑动窗口与半衰指数直方图"><a href="#滑动窗口与半衰指数直方图" class="headerlink" title="滑动窗口与半衰指数直方图"></a>滑动窗口与半衰指数直方图</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-12-37-image-20240224211237342.png" alt="image-20240224211237342"></p>
+<p><code>Recommender</code> 的资源推荐算法主要受 <code>Google AutoPilot moving window</code> （滑动窗口和半衰期，时间节点越近权重越高）推荐器的启发，假设 <code>CPU</code> 和 <code>Memory</code> 消耗时独立的随机变量，其分布等于过去 <code>N</code> 天观察到的变量分布（推荐值为 <code>N = 8</code> 以捕获每周业务容器峰值）。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9yZXNlYXJjaC5nb29nbGUvcHVicy9hdXRvcGlsb3Qtd29ya2xvYWQtYXV0b3NjYWxpbmctYXQtZ29vZ2xlLXNjYWxlLw==">https://research.google/pubs/autopilot-workload-autoscaling-at-google-scale/<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kbC5hY20ub3JnL2RvaS9wZGYvMTAuMTE0NS8zMzQyMTk1LjMzODc1MjQ=">https://dl.acm.org/doi/pdf/10.1145/3342195.3387524<i class="fa fa-external-link-alt"></i></span></p>
+<p><code>Recommender</code> 组件获取资源消耗实时数据，存到相应资源对象 <code>CheckPoint</code> 中。<code>CheckPoint CRD</code> 资源本质上是一个直方图。</p>
+<h2 id="直方图统一对外提供的接口"><a href="#直方图统一对外提供的接口" class="headerlink" title="直方图统一对外提供的接口"></a>直方图统一对外提供的接口</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-14-46-image-20240224211446393.png" alt="image-20240224211446393"></p>
+<h2 id="直方图数据范围"><a href="#直方图数据范围" class="headerlink" title="直方图数据范围"></a>直方图数据范围</h2><table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>minBucket</th>
+<th>maxBucket</th>
+<th>rate</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cpu</td>
+<td>0.01 cores</td>
+<td>1000 cores</td>
+<td>5%</td>
+</tr>
+<tr>
+<td>memory</td>
+<td>10 MB</td>
+<td>1 TB</td>
+<td>5%</td>
+</tr>
+</tbody></table>
+<p>从第1个桶（<code>cpu：0 ~ 0.01 core</code>）开始，到最后一个桶。</p>
+<h2 id="半衰期和权重系数"><a href="#半衰期和权重系数" class="headerlink" title="半衰期和权重系数"></a>半衰期和权重系数</h2><ul>
+<li>为每个样本数据权重乘上指数 <code>2^((sampleTime - referenceTimestamp) / halfLife)</code>，以保证较新的样本被赋予更高的权重，而较老的样本随时间推移权重逐步衰减。</li>
+<li>默认情况下，每 <code>24h</code> 为一个半衰期，即每经过 <code>24h</code>，直方图中所有样本的权重（重要性）衰减为原来的一半。</li>
+<li>当指数过大时，<code>referenceTimestamp</code> 就需要向前调整，以避免浮点乘法计算时向上溢出。<ul>
+<li><code>CPU</code> 使用量样本对应的权重是基于容器 <code>CPU request</code> 值确定的。当 <code>CPU request</code> 增加时，对应的权重也随之增加。</li>
+<li>而 <code>Memory</code> 使用量样本对应的权重固定为 <code>1.0</code>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="操作-VPA"><a href="#操作-VPA" class="headerlink" title="操作 VPA"></a>操作 VPA</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/kubernetes/autoscaler.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> vertical-pod-autoscaler</span><br><span class="line">./hack/vpa-up.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This config creates a deployment with two pods, each requesting 100 millicores</span></span><br><span class="line"><span class="comment"># and trying to utilize slightly above 500 millicores (repeatedly using CPU for</span></span><br><span class="line"><span class="comment"># 0.5s and sleeping 0.5s).</span></span><br><span class="line"><span class="comment"># It also creates a corresponding Vertical Pod Autoscaler that adjusts the</span></span><br><span class="line"><span class="comment"># requests.</span></span><br><span class="line"><span class="comment"># Note that the update mode is left unset, so it defaults to &quot;Auto&quot; mode.</span></span><br><span class="line">---</span><br><span class="line">apiVersion: <span class="string">&quot;autoscaling.k8s.io/v1&quot;</span></span><br><span class="line">kind: VerticalPodAutoscaler</span><br><span class="line">metadata:</span><br><span class="line">  name: hamster-vpa</span><br><span class="line">spec:</span><br><span class="line">  <span class="comment"># recommenders field can be unset when using the default recommender.</span></span><br><span class="line">  <span class="comment"># When using an alternative recommender, the alternative recommender&#x27;s name</span></span><br><span class="line">  <span class="comment"># can be specified as the following in a list.</span></span><br><span class="line">  <span class="comment"># recommenders:</span></span><br><span class="line">  <span class="comment">#   - name: &#x27;alternative&#x27;</span></span><br><span class="line">  targetRef:</span><br><span class="line">    apiVersion: <span class="string">&quot;apps/v1&quot;</span></span><br><span class="line">    kind: Deployment</span><br><span class="line">    name: hamster</span><br><span class="line">  resourcePolicy:</span><br><span class="line">    containerPolicies:</span><br><span class="line">      - containerName: <span class="string">&#x27;*&#x27;</span></span><br><span class="line">        minAllowed:</span><br><span class="line">          cpu: 100m</span><br><span class="line">          memory: 50Mi</span><br><span class="line">        maxAllowed:</span><br><span class="line">          cpu: 1</span><br><span class="line">          memory: 500Mi</span><br><span class="line">        controlledResources: [<span class="string">&quot;cpu&quot;</span>, <span class="string">&quot;memory&quot;</span>]</span><br><span class="line">---</span><br><span class="line">apiVersion: apps/v1</span><br><span class="line">kind: Deployment</span><br><span class="line">metadata:</span><br><span class="line">  name: hamster</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    matchLabels:</span><br><span class="line">      app: hamster</span><br><span class="line">  replicas: 2</span><br><span class="line">  template:</span><br><span class="line">    metadata:</span><br><span class="line">      labels:</span><br><span class="line">        app: hamster</span><br><span class="line">    spec:</span><br><span class="line">      securityContext:</span><br><span class="line">        runAsNonRoot: <span class="literal">true</span></span><br><span class="line">        runAsUser: 65534 <span class="comment"># nobody</span></span><br><span class="line">      containers:</span><br><span class="line">        - name: hamster</span><br><span class="line">          image: k8s.gcr.io/ubuntu-slim:0.1</span><br><span class="line">          resources:</span><br><span class="line">            requests:</span><br><span class="line">              cpu: 100m</span><br><span class="line">              memory: 50Mi</span><br><span class="line">          <span class="built_in">command</span>: [<span class="string">&quot;/bin/sh&quot;</span>]</span><br><span class="line">          args:</span><br><span class="line">            - <span class="string">&quot;-c&quot;</span></span><br><span class="line">            - <span class="string">&quot;while true; do timeout 0.5s yes &gt;/dev/null; sleep 0.5s; done&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>Get all pods-&gt;</p>
+</li>
+<li><p>Get live pods-&gt;</p>
+</li>
+<li><p>Get pods managed by vpa &amp;&amp; evictable -&gt;</p>
+</li>
+<li><p>Add to updater queue-&gt;</p>
+</li>
+<li><p>If <code>(within recommend range &amp;&amp; no oom) || (oom but resourcediff==0)</code> -&gt; no update</p>
+<p>else pods enqueue with priority-&gt;</p>
+</li>
+<li><p>Sort by priority -&gt;</p>
+</li>
+<li><p>Kill with ratelimit configured in command line parameter</p>
+</li>
+</ol>
+<h2 id="VPA-总结"><a href="#VPA-总结" class="headerlink" title="VPA 总结"></a>VPA 总结</h2><p>VPA 的成熟度还不足</p>
+<ul>
+<li>更新正在运行的 <code>Pod</code> 资源配置时 VPA 的一项实验性功能，会导致 <code>Pod</code> 的重建和重启，而且有可能会<strong>被调度到其他的节点上</strong>。（目前社区在讨论可以动态修改 Pod Spec，但是目前没有落地）</li>
+<li>VPA 不会驱逐没有在副本控制器管理下的 Pod。目前对于这类 Pod，<code>Auto</code> 模式等同于 <code>Initial</code> 模式。</li>
+<li>目前 VPA 不能和监控 CPU 和内存度量的 <code>Horizontal Pod Autoscaler(HPA)</code> 同时运行，除非 HPA 只监控其他定制化的或者外部的资源度量。</li>
+<li>VPA 使用 <code>admission webhook</code> 作为其准入控制器。如果集群中有其他的 <code>admission webhook</code>，需要确保它们不会与 VPA 发生冲突。准入控制器的执行顺序定义在 <code>APIServer</code> 的配置参数中。</li>
+<li>VPA 会处理出现的绝大多数 <code>OOM（Out Of Memory）</code>的事件，但不保证所有的场景下都有效。</li>
+<li>VPA 的性能还没有在大型集群中测试过。</li>
+<li>VPA 对 Pod 资源 <code>requests</code> 的修改制可能超过实际的资源上限，例如节点资源上限、空闲资源或资源配额，从而造成 Pod 处于 <code>Pending</code> 状态无法被调度。同时使用集群自动伸缩（<code>ClusterAutoscaler</code>）可以一定程度上解决这个问题。</li>
+<li>多个 VPA 同时匹配同一个 Pod 会造成未定义的行为。</li>
+</ul>
+<h1 id="如何解决社区基础弹性能力不足的问题"><a href="#如何解决社区基础弹性能力不足的问题" class="headerlink" title="如何解决社区基础弹性能力不足的问题"></a>如何解决社区基础弹性能力不足的问题</h1><h2 id="弹性的意义"><a href="#弹性的意义" class="headerlink" title="弹性的意义"></a>弹性的意义</h2><table>
+<thead>
+<tr>
+<th>目标</th>
+<th>方法</th>
+<th>流程</th>
+<th>工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>增效</td>
+<td>研发效能</td>
+<td>DevOps</td>
+<td>Continuous Integration &amp; Continuous Deployment</td>
+</tr>
+<tr>
+<td>将本</td>
+<td>资源效能</td>
+<td>FinOps</td>
+<td>Cloud Resource Analytics and Economics</td>
+</tr>
+</tbody></table>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZmlub3BzLm9yZy9pbnRyb2R1Y3Rpb24vd2hhdC1pcy1maW5vcHMv">https://www.finops.org/introduction/what-is-finops/<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvY3JhbmUvY3JhbmU=">https://github.com/gocrane/crane<i class="fa fa-external-link-alt"></i></span></p>
+<h2 id="成本优化的关键路径"><a href="#成本优化的关键路径" class="headerlink" title="成本优化的关键路径"></a>成本优化的关键路径</h2><p>核心时理解成本：</p>
+<ul>
+<li><p>成本时业务稳定性跟资源利用率的矛盾</p>
+<p>大多数稳定性都是由冗余换来的</p>
+</li>
+<li><p>成本时业务投入跟技术投入的矛盾</p>
+<p>就一个人力，投入业务还是投入优化</p>
+</li>
+<li><p>成本还是企业内不同组织&#x2F;角色的矛盾</p>
+<p>业务团队 vs 资源团队</p>
+</li>
+<li><p>云业务的去中心化部署和运维为成本管理带来挑战</p>
+<p>可以通过技术手段和组织手段减少矛盾</p>
+</li>
+</ul>
+<h2 id="开启降本之路"><a href="#开启降本之路" class="headerlink" title="开启降本之路"></a>开启降本之路</h2><ul>
+<li>天时 - 云原生技术的日趋成熟</li>
+<li>地利 - 统一上云</li>
+<li>人和 - 思想统一</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>思想统一</th>
+<th>流程驱动</th>
+<th>工具链支撑</th>
+<th>成本优化</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FinOps</td>
+<td>云原生成熟度模型</td>
+<td>弹性<br />服务定级<br />质量保证</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="统一思想-FinOps"><a href="#统一思想-FinOps" class="headerlink" title="统一思想 - FinOps"></a>统一思想 - FinOps</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-33-53-image-20240224213353008.png" alt="image-20240224213353008"></p>
+<p>报表-建议-实施操作</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-34-00-image-20240224213400847.png" alt="image-20240224213400847"></p>
+<ul>
+<li>FinOps 基金会隶属于 Linux 基金会，致力推进企业的云资产管理</li>
+<li>FinOps 核心是确保企业在云中花费的每一分钱都获得最大价值</li>
+</ul>
+<h2 id="流程建设-云原生成熟度模型"><a href="#流程建设-云原生成熟度模型" class="headerlink" title="流程建设 - 云原生成熟度模型"></a>流程建设 - 云原生成熟度模型</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-35-35-image-20240224213535240.png" alt="image-20240224213535240"></p>
+<h2 id="业务侧-Workload-评分"><a href="#业务侧-Workload-评分" class="headerlink" title="业务侧 Workload 评分"></a>业务侧 Workload 评分</h2><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Workload 利用率得分</td>
+<td>以每天 Workload 的利用率（used &#x2F; request 总量）峰值作为打分基础<br />1. 利用率大于等于 50% 得 100 分<br />2. 利用率小于 50%：分数 &#x3D; 利用率 * 100 &#x2F; 50<br />注：峰值不去毛刺</td>
+</tr>
+<tr>
+<td>Workload 弹性得分</td>
+<td>* Workload 每天 Pod 数计算：按 10 分钟聚合每个 Workload 的 Pod 个数<br />* Pod 信息按分钟上报，每天 1440 个点，取 10 分钟聚合数据作为 Pod  数据来规避偶尔的上报丢失情况<br />* 如某天 Pod 数目发生变化，且满足（max - min） &gt; max * 5% 且（max - min）&gt;1，则本日弹性计数为 1，否则为 0<br />1. 若 30 天内总计弹性计数 &lt; 2，则弹性得分记为 0<br />2. 如果 30 天内弹性计数 &#x3D; 2，则弹性得分记为 60，滞后弹性计数每 +1，弹性得分 +5，满分 100<br />3. 利用率得分 90 分以上，弹性免考核，弹性得分直接记为 100<br />4. Pod 树小于 3 个的，默认弹性设置为 60 分</td>
+</tr>
+<tr>
+<td>Workload 总和得分</td>
+<td>单  Workload 总和得分 &#x3D; （利用率得分 * 70% + HPA 得分 * 30%） * 该 Workload 的 request）&#x2F; 该业务所有 Workload 总 request</td>
+</tr>
+<tr>
+<td>业务总和得分</td>
+<td>Sum（单 Workload 综合得分）</td>
+</tr>
+</tbody></table>
+<h2 id="业务侧-Workload-评分-辅助指标"><a href="#业务侧-Workload-评分-辅助指标" class="headerlink" title="业务侧 Workload 评分 - 辅助指标"></a>业务侧 Workload 评分 - 辅助指标</h2><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Pod 伸缩比</td>
+<td>该指标会计算各 Workload 的 limit 配置与 request 配置的比例</td>
+<td>建议业务根据实际使用情况，适当降低 request 配置、提升 limit 配置。从而提升 Pod 的伸缩比</td>
+</tr>
+<tr>
+<td>大核心占比</td>
+<td>统计 Request 配置大于 16 核的 Pod 核心数占比</td>
+<td>建议业务降低 Request 的配置，提升 Workload 的资源利用率及可调度性</td>
+</tr>
+<tr>
+<td>容器平均核心</td>
+<td>统计 Pod Request 配置平均核心数</td>
+<td>建议业务降低 Request 的配置，提升 Workload 的资源利用率及可调度性</td>
+</tr>
+<tr>
+<td>CPU：Memory</td>
+<td>统计 CPU 与 Memory 的比值（Memory 单位为 GB）</td>
+<td>建议业务降低 CPU 与 Memory 配比，提示资源利用效率</td>
+</tr>
+<tr>
+<td>CPU：Memory 过高的占比</td>
+<td>统计 CPU 与 Memory 的比值Memory 单位为 GB）<br />超过 1:4 的 Pod CPU 占比</td>
+<td>建议业务降低 CPU 与 Memory 配比，提示资源利用效率</td>
+</tr>
+</tbody></table>
+<p>平台集群评分</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>集群利用率得分</td>
+<td>以每天集群的率用率峰值作为打分基础<br />1. 利用率大于等于 50% 得 100 分；<br />2. 利用率小于 50%：分数 &#x3D; 利用率 * 100 &#x2F; 50<br />注：峰值不去毛刺</td>
+</tr>
+<tr>
+<td>集群 CA 得分<br />CA（Cluster Autoscaler）</td>
+<td>1. 集群在云梯侧开启了 CA 功能可得 60 分<br />上述得分规则未考虑集群的规模及实际利用率情况，在执行过程中发现了业务频繁刷分的现象</td>
+</tr>
+</tbody></table>
+<p>集群 CAB 得分规则补充，降低刷分行为对排行榜的影响：</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-51-16-image-20240224215116687.png" alt="image-20240224215116687"></p>
+<h2 id="辅助指标"><a href="#辅助指标" class="headerlink" title="辅助指标"></a>辅助指标</h2><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>超卖率</td>
+<td>集群可分配核心数 &#x2F; 集群机器总核心数</td>
+</tr>
+<tr>
+<td>装箱率</td>
+<td>集群所有 Workload Request CPU 总核心数 &#x2F; 集群机器总核心数</td>
+</tr>
+</tbody></table>
+<h2 id="成熟度指标计算公式"><a href="#成熟度指标计算公式" class="headerlink" title="成熟度指标计算公式"></a>成熟度指标计算公式</h2><p>总成熟度得分 &#x3D; 业务侧得分 * 50% + 平台侧得分 * 50%</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-52-53-image-20240224215253142.png" alt="image-20240224215253142"></p>
+<h2 id="驱动力"><a href="#驱动力" class="headerlink" title="驱动力"></a>驱动力</h2><p>计数交流层面</p>
+<p>业务上云经验研讨</p>
+<p>外部云原生技术推广福利</p>
+<p>团队及个人荣誉层面</p>
+<p>资源优惠层面</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-53-45-image-20240224215345126.png" alt="image-20240224215345126"></p>
+<h2 id="云成熟度模型成效"><a href="#云成熟度模型成效" class="headerlink" title="云成熟度模型成效"></a>云成熟度模型成效</h2><p>涌现了一大批先进个人和团队</p>
+<p>推动了云原生最佳实践的广泛认可和研讨</p>
+<p>最佳实践对外输出，提升行业知名度</p>
+<p>资源利用率极大提升</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-55-53-image-20240224215553455.png" alt="image-20240224215553455"></p>
+<h1 id="Crane-工具链打通"><a href="#Crane-工具链打通" class="headerlink" title="Crane - 工具链打通"></a>Crane - 工具链打通</h1><p><code>Cloud Resource Analytics and Economics</code></p>
+<p>云财务管理的一站式解决方案</p>
+<p>开源项目：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvY3JhbmU=">https://github.com/gocrane<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvY3JhbmUvY3JhbmUvYmxvYi9tYWluL1JFQURNRV96aC5tZA==">https://github.com/gocrane/crane/blob/main/README_zh.md<i class="fa fa-external-link-alt"></i></span></p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-56-57-image-20240224215657145.png" alt="image-20240224215657145"></p>
+<ul>
+<li>多维的成本展示</li>
+<li>精确的浪费识别</li>
+<li>基于云原生成熟度模型的评估体系</li>
+<li>可靠的弹性</li>
+<li>分级业务的质量保证</li>
+<li>智能弹性和成本优化</li>
+</ul>
+<h2 id="Crane-高层架构"><a href="#Crane-高层架构" class="headerlink" title="Crane 高层架构"></a>Crane 高层架构</h2><p>Predictor 驱动整个生态系统</p>
+<ul>
+<li>成本趋势展示</li>
+<li>基于预测的资源回收与再分配</li>
+<li>基于预测的智能弹性</li>
+</ul>
+<p>基线能力</p>
+<ul>
+<li>基于业务优先级的主动回避</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F21-59-32-image-20240224215932181.png" alt="image-20240224215932181"></p>
+<h2 id="资源预测"><a href="#资源预测" class="headerlink" title="资源预测"></a>资源预测</h2><p>多数据源支持：例如 <code>Prometheus</code> </p>
+<p>可扩展的资源质保</p>
+<p>可自定义的算法</p>
+<p>基于声明式 API 的预测</p>
+<ul>
+<li><code>TimeSeriesPrediction</code> 对象定义资源预测规则<ul>
+<li>预测结果按 <code>PodGroup</code> 汇聚，作为弹性能力的输入</li>
+<li>预测结果按 <code>Node</code> 汇聚，作为节点资源回收器的输入</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-01-48-image-20240224220148618.png" alt="image-20240224220148618"></p>
+<h2 id="多维的成本展示"><a href="#多维的成本展示" class="headerlink" title="多维的成本展示"></a>多维的成本展示</h2><p>基于预测结果的资源用量趋势分析：</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-02-11-image-20240224220211470.png" alt="image-20240224220211470"></p>
+<p>基于 FinOps 理念的成本展示</p>
+<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-02-29-image-20240224220229743.png" alt="image-20240224220229743"></p>
+<h2 id="精准的浪费识别"><a href="#精准的浪费识别" class="headerlink" title="精准的浪费识别"></a>精准的浪费识别</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-03-26-image-20240224220326925.png" alt="image-20240224220326925"></p>
+<p>闲置资源识别</p>
+<p>资源浪费识别和基于预测结果的 Request 推荐</p>
+<p>云原生成熟度模型的产品化支持</p>
+<h2 id="常规优化手段"><a href="#常规优化手段" class="headerlink" title="常规优化手段"></a>常规优化手段</h2><ul>
+<li>弹性<ul>
+<li>按作业负载动态调节实例副本数或单实例的资源上<ul>
+<li>负载高峰扩容以保证业务服务等级</li>
+<li>负载低谷缩容以回收资源减少浪费</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>混部<ul>
+<li>在负载低谷运行离线作业以提升总体资源利用率</li>
+<li>TKE-Scheduler 专为离线场景优化：gang-scheduling、all-or-nothing，10x 性能提升</li>
+</ul>
+</li>
+</ul>
+<h2 id="社区原生弹性能力的不足"><a href="#社区原生弹性能力的不足" class="headerlink" title="社区原生弹性能力的不足"></a>社区原生弹性能力的不足</h2><p>HPA</p>
+<ul>
+<li>业务指标驱动，指标的滞后导致业务突发流量时来不及弹性</li>
+</ul>
+<p>VPA</p>
+<ul>
+<li>资源需求时 Pod 对象中的不可变属性，VPA 纵向调整资源后，Pod 需要重建，而实现场景中，Pod 重建时大量业务不可接受的。</li>
+</ul>
+<p>CA</p>
+<ul>
+<li>当集群资源不足时，CA 可按照既定规则扩容集群节点，但这对基础架构层面的空闲资源和可靠性都有极高的要求</li>
+</ul>
+<h2 id="AHPA-基于预测的横向伸缩"><a href="#AHPA-基于预测的横向伸缩" class="headerlink" title="AHPA - 基于预测的横向伸缩"></a>AHPA - 基于预测的横向伸缩</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-08-48-image-20240224220847896.png" alt="image-20240224220847896"></p>
+<ul>
+<li>引入 <code>AdvancedHorizontalPodAutoscaler</code> 对象，该对象关联 <code>TimeSeriesPrediction</code> 和 HPA</li>
+<li><code>Metric-Adapter</code> 通过 <code>External Metric Provider</code> 方式注册到 <code>k8s</code> 集群中，并将 <code>TimeSeriesPrediction.Status</code> 中的预测结果转化为 <code>External Metrics</code></li>
+<li><code>HPA-Controller </code>通过 <code>External Metric API</code> 从 <code>Metric-Adapter</code> 获取应用的预测指标，该指标驱动 HPA 行为</li>
+</ul>
+<h2 id="IVPA-基于扩展资源回收的实时纵向伸缩"><a href="#IVPA-基于扩展资源回收的实时纵向伸缩" class="headerlink" title="IVPA - 基于扩展资源回收的实时纵向伸缩"></a>IVPA - 基于扩展资源回收的实时纵向伸缩</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-12-03-image-20240224221203458.png" alt="image-20240224221203458"></p>
+<p><code>Craned</code> 中的 <code>NodeResourceController</code> 控制器基于预测结果将空闲资源更新至节点 <code>extend-resource</code>。</p>
+<p>引入 <code>SchedulingPolicy</code> 对象，为特定 <code>ProrityClass</code> 定义资源转化策略。</p>
+<p>基于 <code>Mutating Webhook</code>，将特定 <code>PriorityClass</code> 的 Pod 中的资源请求转化为 <code>extend-resource</code>，实现回收资源再利用。</p>
+<p>资源回收再利用可以被认为时广义的实时动态 VPA 能力（<code>InstanceVerticalPodAutoscaler</code>）</p>
+<h2 id="基于分布式云虚拟节点计数的集群弹性"><a href="#基于分布式云虚拟节点计数的集群弹性" class="headerlink" title="基于分布式云虚拟节点计数的集群弹性"></a>基于分布式云虚拟节点计数的集群弹性</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-15-20-image-20240224221520311.png" alt="image-20240224221520311"></p>
+<p>支持在标准 k8s 集群添加虚拟节点，虚拟节点打通弹性容器（EKS）的资源池，可将 Pod 调度为无服务器的弹性容器：</p>
+<ul>
+<li>集群资源不足时，自动把 Pod 扩容到虚拟节点上；集群资源充足时，会优先缩容虚拟节点上的 Pod</li>
+<li>每分钟支持快速扩容超过 <code>1000 Pod</code></li>
+<li>虚拟节点上的 Pod 与集群内所有资源（<code>Service</code>、Pod）网络互通</li>
+<li>虚拟节点上的 Pod 兼容 Kubernetes 集群原生 <code>Service</code> 机制</li>
+</ul>
+<h2 id="服务质量保证-安心拉升资源利用率的秘密"><a href="#服务质量保证-安心拉升资源利用率的秘密" class="headerlink" title="服务质量保证 - 安心拉升资源利用率的秘密"></a>服务质量保证 - 安心拉升资源利用率的秘密</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-17-59-image-20240224221759457.png" alt="image-20240224221759457"></p>
+<p>配合 <code>PriorityClass</code> 为业务 定级。</p>
+<p>针对节点水位和业务 <code>SLO</code> 进行多纬度异常指标检测。</p>
+<p>当检测指标出现异常时，按预定义优先级进行主动回避，确保高优任务 <code>SLO</code>。</p>
+<h2 id="资源隔离-OS-隔离-RQSM-框架"><a href="#资源隔离-OS-隔离-RQSM-框架" class="headerlink" title="资源隔离 - OS 隔离 - RQSM 框架"></a>资源隔离 - OS 隔离 - RQSM 框架</h2><p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-19-16-image-20240224221916685.png" alt="image-20240224221916685"></p>
+<p>支持开源 <code>kernel</code> 隔离&#x2F; <code>QoS</code></p>
+<ul>
+<li>CPU: <code>cgroup cpuset/cpu</code></li>
+<li>HT: <code>thread silbings</code></li>
+<li>Memory: <code>cgroup memory limit</code>、<code>reclaim</code></li>
+<li>BLK: <code>cgroup DIO read/write</code>、<code>Buffered IO read</code>、<code>weight</code>、<code>xfs/ext4 dis quota</code></li>
+<li>Network: <code>tc egress</code>、优先级流控 <code>TC HTB qdisc</code></li>
+</ul>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p><span class="exturl" data-url="aHR0cHM6Ly9qdWVqaW4uY24vcG9zdC82ODQ3OTAyMjE2NTExMzU2OTM2">lxcfs 是什么？ lxcfs 实现对容器资源视图隔离的最佳实践<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvY3JhbmUvY3JhbmUvYmxvYi9tYWluL1JFQURNRV96aC5tZA==">crane<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly93d3cuZmlub3BzLm9yZy9pbnRyb2R1Y3Rpb24vd2hhdC1pcy1maW5vcHMv">What is FinOps?<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/3045b31e.html" rel="prev" title="Kubernetes 生产化运维">
+                  <i class="fa fa-angle-left"></i> Kubernetes 生产化运维
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+  </div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

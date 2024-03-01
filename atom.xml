@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-02-22T09:47:37.667Z</updated>
+  <updated>2024-03-01T03:37:30.075Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>将应用迁移至Kubernetes平台</title>
+    <link href="https://www.xiaoyeshiyu.com/post/16548b32.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/16548b32.html</id>
+    <published>2024-02-22T16:00:00.000Z</published>
+    <updated>2024-03-01T03:37:30.075Z</updated>
+    
+    
+    <summary type="html">云原生具有很多优势，但是在应用上云过程中也有一些挑战，例如如何利用 Kubernetes 的弹性、可扩展性和容错性，提高应用程序的部署效率和稳定性。</summary>
+    
+    
+    
+    <category term="云原生训练营" scheme="https://www.xiaoyeshiyu.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>Kubernetes 生产化运维</title>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">在当今的分布式系统中，高性能和可扩展性是至关重要的。而分布式缓存作为一种关键的技术手段，能够显著提升系统的性能和可扩展性。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>架构设计之历史记录设计</title>
-    <link href="https://www.xiaoyeshiyu.com/post/f986.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/f986.html</id>
-    <published>2023-10-29T16:00:00.000Z</published>
-    <updated>2023-11-02T07:02:57.744Z</updated>
-    
-    
-    <summary type="html">历史记录是现代应用程序中常见的功能之一，它记录了用户在应用程序中的活动和操作。一个良好设计的历史记录系统可以提供方便的回放、导航和个性化推荐等功能，为用户提供更好的体验。</summary>
     
     
     
