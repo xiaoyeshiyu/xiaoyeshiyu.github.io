@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Kubernetes 控制平面的核心引擎之一，API Server 扮演着整个系统的关键角色。作为 Kubernetes 集群的掌控中心，API Server 负责接收、处理和管理集群中的所有资源对象，从而实现集群的协同工作和资源编排。">
 <meta property="og:type" content="article">
@@ -83,7 +86,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -300,7 +303,7 @@
 <li>提供其他模块之间的数据交互和通信的枢纽（其他模块通过 <code>API Server</code> 查询或修改数据，只有 <code>API Server</code> 才直接操作 <code>etcd</code>）</li>
 </ul>
 <h2 id="访问控制概览"><a href="#访问控制概览" class="headerlink" title="访问控制概览"></a>访问控制概览</h2><p class="fireman-p-indent" >Kubernetes API 的每个请求都会经过多阶段的访问控制之后才会被接受，这包括认证、授权以及准入控制（<code>Admission Control</code>）等。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240116130419930.png" alt="image-20240116130419930"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240116130419930.png" alt="image-20240116130419930"></p>
 <ol>
 <li>通过不同的 <code>HTTP handler</code> 来处理不同的请求</li>
 <li>进行认证和鉴权</li>
@@ -310,7 +313,7 @@
 <li>流量允许传到 <code>etcd</code></li>
 </ol>
 <h2 id="访问控制细节"><a href="#访问控制细节" class="headerlink" title="访问控制细节"></a>访问控制细节</h2><p class="fireman-p-indent" >代码走读逻辑复盘：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240116130437048.png" alt="image-20240116130437048"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240116130437048.png" alt="image-20240116130437048"></p>
 <h1 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h1><p class="fireman-p-indent" >开启 TLS 时，所有的请求都需要首先认证。</p>
 <p class="fireman-p-indent" >Kubernetes 支持多种认证机制，并支持同时开启多个认证插件（只要有一个认证通过即可）。如果认证成功，则用户的 <code>username</code> 会传入授权模块做进一步授权验证；而对于认证失败的请求则返回 <code>HTTP 401</code>。</p>
 <h3 id="认证插件"><a href="#认证插件" class="headerlink" title="认证插件"></a>认证插件</h3><ul>
@@ -448,9 +451,9 @@
 </ul>
 <h2 id="RBAC-vs-ABAC"><a href="#RBAC-vs-ABAC" class="headerlink" title="RBAC vs ABAC"></a>RBAC vs ABAC</h2><p class="fireman-p-indent" >ABAC（<code>Attribute Based Access Control</code>）本来是不错的概念，但是在 Kubernetes 中的实现比较难于管理和理解，而且需要对 Master 所在节点的 SSH 和文件系统权限，要使得对授权的变更成功生效，还需要重新启动 API Server。</p>
 <p class="fireman-p-indent" >而 RBAC 的授权策略可以利用 <code>kubectl</code> 或者 Kubernetes API 直接进行配置。RBAC 可以授权给用户，让用户有权进行授权管理，这样就可以无需接触节点，直接进行授权管理。RBAC 在 Kubernetes 中被映射为 API 资源和操作。</p>
-<h3 id="RBAC-老图"><a href="#RBAC-老图" class="headerlink" title="RBAC 老图"></a>RBAC 老图</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117145603076.png" alt="image-20240117145603076"></p>
+<h3 id="RBAC-老图"><a href="#RBAC-老图" class="headerlink" title="RBAC 老图"></a>RBAC 老图</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117145603076.png" alt="image-20240117145603076"></p>
 <p class="fireman-p-indent" >权限可以操作对象，多个权限可以绑定为一个角色，角色可以绑定给用户。</p>
-<h3 id="RBAC-新解"><a href="#RBAC-新解" class="headerlink" title="RBAC 新解"></a>RBAC 新解</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117145823918.png" alt="image-20240117145823918"></p>
+<h3 id="RBAC-新解"><a href="#RBAC-新解" class="headerlink" title="RBAC 新解"></a>RBAC 新解</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117145823918.png" alt="image-20240117145823918"></p>
 <p class="fireman-p-indent" >Kubernetes 将权限分为全局的和 Namespace 内的，通过将权限绑定到不同的 <code>Bindings</code> 上划分为角色。</p>
 <h2 id="Role-与-ClusterRole"><a href="#Role-与-ClusterRole" class="headerlink" title="Role 与  ClusterRole"></a>Role 与  ClusterRole</h2><p class="fireman-p-indent" ><code>Role</code>（角色）是一系列权限的集合，例如一个角色可以包含读取 Pod 的权限和列出 Pod 的权限。Role 只能用来给某个特定 Namespace 中的资源做鉴权，对多 Namespace 和集群级的资源或者是非资源类的 API（如 <code>/heathz</code>）使用 <code>ClusterRole</code>。</p>
 <p class="fireman-p-indent" >Role 示例</p>
@@ -460,7 +463,7 @@
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span> </span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">	<span class="comment"># &quot;namespace&quot; omitted since ClusterRoles are not namespaced</span></span><br><span class="line">	<span class="attr">name:</span> <span class="string">secret-reader</span> </span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">	<span class="attr">resources:</span> [<span class="string">&quot;secrets&quot;</span>]</span><br><span class="line">	<span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;list&quot;</span>]</span><br></pre></td></tr></table></figure>
 
 <h2 id="binding"><a href="#binding" class="headerlink" title="binding"></a>binding</h2><p class="fireman-p-indent" >将用户和角色绑定起来</p>
-<p class="fireman-p-indent" ><img src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117150609156.png" alt="image-20240117150609156"></p>
+<p class="fireman-p-indent" ><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117150609156.png" alt="image-20240117150609156"></p>
 <p class="fireman-p-indent" >RoleBinding 示例</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This role binding allows &quot;dave&quot; to read secrets in the &quot;development&quot; namespace.</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">RoleBinding</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">read-secrets</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">development</span> <span class="comment"># This only grants permissions within the &quot;development&quot; namespace.</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">User</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">dave</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">secret-reader</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br></pre></td></tr></table></figure>
 
@@ -471,7 +474,7 @@
 <li>当与外部认证系统对接时，用户信息（<code>UserInfo</code>）可包含 <code>Group</code> 信息，授权可针对用户群组</li>
 <li>当对 <code>ServiceAccount</code> 授权时，<code>Group</code> 代表某个 Namespace 下的所有 <code>ServiceAccount</code></li>
 </ul>
-<p class="fireman-p-indent" ><img src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117152456469.png" alt="image-20240117152456469"></p>
+<p class="fireman-p-indent" ><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117152456469.png" alt="image-20240117152456469"></p>
 <h3 id="针对群组授权"><a href="#针对群组授权" class="headerlink" title="针对群组授权"></a>针对群组授权</h3><p class="fireman-p-indent" >将 <code>secret-reader</code> 这个 <code>clusterRole</code> 授权给 <code>manager</code> 这个群组</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span> </span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">	<span class="attr">name:</span> <span class="string">read-secrets-global</span> </span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">Group</span></span><br><span class="line">	<span class="attr">name:</span> <span class="string">manager</span> <span class="comment"># &#x27;name&#x27; 是区分大小写的</span></span><br><span class="line">	<span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span> </span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">	<span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line">	<span class="attr">name:</span> <span class="string">secret-reader</span></span><br><span class="line">	<span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br></pre></td></tr></table></figure>
 
@@ -591,7 +594,7 @@
 <li>MutatingWebhookConfigurat：变形插件，支持对准入对象的修改</li>
 <li>ValidatingWebhookConfiguration：校验插件，只能对准入对象合法性进行校验，不能修改</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117164936287.png" alt="image-20240117164936287"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117164936287.png" alt="image-20240117164936287"></p>
 <p class="fireman-p-indent" >当在 <code>API Server</code> 上启用 <code>--admission-control</code>，会将 <code>AdmissionReview</code> 转发到对应 <code>Admission Controller</code> 上，返回的准入控制结果如果经过变形或者校验插件，直接更新到对象的 <code>annotation</code> 上，例如 <code>Pod</code>。</p>
 <h3 id="准入控制案例"><a href="#准入控制案例" class="headerlink" title="准入控制案例"></a>准入控制案例</h3><p class="fireman-p-indent" >为资源增加自定义属性</p>
 <ul>
@@ -607,18 +610,18 @@
 <h1 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h1><h2 id="计数器固定窗口算法"><a href="#计数器固定窗口算法" class="headerlink" title="计数器固定窗口算法"></a>计数器固定窗口算法</h2><p class="fireman-p-indent" >原理就是对一段固定时间窗口内的请求进行计数，如果请求超过了阈值，则舍弃该请求；</p>
 <p class="fireman-p-indent" >如果没有达到设定的阈值，则接受该请求，且计数 +1.</p>
 <p class="fireman-p-indent" >当时间窗口结束时，重置计数器为 0.</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117172551578.png" alt="image-20240117172551578"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117172551578.png" alt="image-20240117172551578"></p>
 <p class="fireman-p-indent" >这个算法不精确，在某个时间节点流量非常大，第二个窗口也非常大，起不到限流效果。</p>
 <h2 id="计数器滑动窗口算法"><a href="#计数器滑动窗口算法" class="headerlink" title="计数器滑动窗口算法"></a>计数器滑动窗口算法</h2><p class="fireman-p-indent" >在固定窗口的基础上，将一个计时窗口分成了若干个小窗口，然后每个小窗口维护一个独立的计数器。</p>
 <p class="fireman-p-indent" >当请求的时间大于当前窗口的最大时间时，则将计时窗口向前平移一个小窗口。</p>
 <p class="fireman-p-indent" >平移时，将第一个小窗口的数据丢弃，然后将第二个小窗口设置为第一个小窗口，同时在最后面新增一个小窗口，将新的请求放在新增的小窗口中。</p>
 <p class="fireman-p-indent" >同时要保证整个窗口中所有小窗口的请求数目之后不能超过设定的阈值。</p>
-<p class="fireman-p-indent" ><img src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117172909954.png" alt="image-20240117172909954"></p>
+<p class="fireman-p-indent" ><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117172909954.png" alt="image-20240117172909954"></p>
 <p class="fireman-p-indent" >这个算法不准确，一样会出现两个窗口峰值</p>
 <h2 id="漏斗算法"><a href="#漏斗算法" class="headerlink" title="漏斗算法"></a>漏斗算法</h2><p class="fireman-p-indent" >漏斗算法的原理也很容易理解。请求来了之后，会首先进到漏斗里，然后漏斗以恒定的速率将请求流出进行处理，从而起到平滑流量的作用。</p>
 <p class="fireman-p-indent" >当请求的流量过大时，漏斗达到最大容量时会溢出，此时请求被丢弃。</p>
 <p class="fireman-p-indent" >在系统看来，请求永远是以平滑的传输速率过来，从而起到了保护系统的作用。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117173135949.png" alt="image-20240117173135949"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117173135949.png" alt="image-20240117173135949"></p>
 <h2 id="令牌桶算法"><a href="#令牌桶算法" class="headerlink" title="令牌桶算法"></a>令牌桶算法</h2><p class="fireman-p-indent" >令牌桶算法时对漏斗算法的一种改进，出了能够起到限流的作用外，还允许一定程度的流量突发。</p>
 <p class="fireman-p-indent" >在令牌桶算法中，存在一个令牌桶，算法中存在一种机制以恒定的速率向令牌桶中放入令牌。</p>
 <p class="fireman-p-indent" >令牌桶也有一定的容量，如果满了令牌就无法放进去了。</p>
@@ -627,7 +630,7 @@
 <li>如果拿到了令牌，则该请求会被处理，并消耗拿到的令牌；</li>
 <li>如果令牌桶为空，则该请求会被丢弃。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117173434981.png" alt="image-20240117173434981"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117173434981.png" alt="image-20240117173434981"></p>
 <h2 id="APIServer-中的限流"><a href="#APIServer-中的限流" class="headerlink" title="APIServer 中的限流"></a>APIServer 中的限流</h2><p class="fireman-p-indent" >max-requests-inflight：在给定时间内的最大 <code>non-mutating</code> 请求数</p>
 <p class="fireman-p-indent" >max-mutating-requests-inflight：在给定时间内的最大 <code>mutating</code> 请求数，调整 <code>apiserver</code> 的流控 <code>qos</code></p>
 <table>
@@ -685,7 +688,7 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117174933551.png" alt="image-20240117174933551"></p>
+<p class="fireman-p-indent" ><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117174933551.png" alt="image-20240117174933551"></p>
 <p class="fireman-p-indent" >不同的等级划分为不同的 Flow，当某个请求阻塞，不影响其他的 Flow。</p>
 <ul>
 <li>APF 的实现依赖两个非常重要的资源 FlowSchema, PriorityLevelConfiguration</li>
@@ -1036,7 +1039,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -1044,7 +1052,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -1054,6 +1064,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/bad7.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

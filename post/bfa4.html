@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Redis学习笔记之基础篇包含Redis介绍、配置文件介绍、命令、底层数据结构、主从、哨兵、集群、分布式锁的知识点。">
 <meta property="og:type" content="article">
@@ -105,7 +108,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -329,9 +332,9 @@
 <h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p class="fireman-p-indent" ><code>Redis</code>是<code>key-value</code>的数据结构，每条数据都是一个键值对。</p>
 <p class="fireman-p-indent" >键是字符串，值可以是字符串<code>string</code>、哈希<code>hash</code>、列表<code>list</code>、集合<code>set</code>、有序集合<code>zset</code>等数据结构。</p>
 <p class="fireman-p-indent" >需要注意，键不能重复，重复会覆盖。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220618175053011.png" alt="image-20220618175053011"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220618175053011.png" alt="image-20220618175053011"></p>
 <p class="fireman-p-indent" >内部编码</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220618182945035.png" alt="image-20220618182945035"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220618182945035.png" alt="image-20220618182945035"></p>
 <h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><p class="fireman-p-indent" >速度快（基于内存、C语言编写、单线程处理请求、<code>I/O</code>多路复用）</p>
 <p class="fireman-p-indent" >支持持久化，将内存中的数据异步保存在磁盘中，重启的时候可以再次加载进行使用</p>
 <p class="fireman-p-indent" >不仅支持<code>key-value</code>类型的数据，还提供<code>string</code>，<code>list</code>，<code>set</code>，<code>zset</code>，<code>hash</code>（基础数据结构）等数据结构的存储</p>
@@ -367,11 +370,11 @@
 </ul>
 <h2 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h2><p class="fireman-p-indent" ><code>Redis</code>处理客户端提交的请求架构，也就是<code>I/O</code>模型，不同的<code>Redis</code>版本模型不同。</p>
 <h3 id="单线程模型"><a href="#单线程模型" class="headerlink" title="单线程模型"></a>单线程模型</h3><p class="fireman-p-indent" >Redis 3.0及其之前版本，<code>Redis</code>的<code>I/O</code>模型采用的是纯粹的单线程模型。所有客户端的请求全部由一个线程处理。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221129111151880.png" alt="image-20221129111151880"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221129111151880.png" alt="image-20221129111151880"></p>
 <h3 id="混合线程模型"><a href="#混合线程模型" class="headerlink" title="混合线程模型"></a>混合线程模型</h3><p class="fireman-p-indent" >Redis 4.0版本开始，引入多线程元素。对于一些比较耗时但又不影响对客户端的响应的操作，就交由后台其他线程来处理，例如持久化、对AOF的<code>rewrite</code>、对失效连接的清理等。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221129111339182.png" alt="image-20221129111339182"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221129111339182.png" alt="image-20221129111339182"></p>
 <h3 id="多线程模型"><a href="#多线程模型" class="headerlink" title="多线程模型"></a>多线程模型</h3><p class="fireman-p-indent" >Redis 6.0版本开始，才是真正的多线程模型。因为对于客户端请求的处理采用的是多线程模型，多线程仅用于接受、解析客户端的请求，而对于具体任务的处理，仍然是由主线程处理。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221129111357815.png" alt="image-20221129111357815"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221129111357815.png" alt="image-20221129111357815"></p>
 <h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><h4 id="单线程模型-1"><a href="#单线程模型-1" class="headerlink" title="单线程模型"></a>单线程模型</h4><ul>
 <li>优点：可维护性高，性能高，不存在并发读写情况，也就不存在线程切换导致的开销、锁问题</li>
 <li>缺点：只是用一个处理器，会形成处理器浪费</li>
@@ -447,7 +450,7 @@
 <p class="fireman-p-indent" >随机返回一个<code>key</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; RANDOMKEY // 通常用来判断当前库是否为空</span><br><span class="line">&quot;a&quot;</span><br></pre></td></tr></table></figure>
 
-<h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220619001226972.png" alt="image-20220619001226972"></p>
+<h3 id="string"><a href="#string" class="headerlink" title="string"></a>string</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220619001226972.png" alt="image-20220619001226972"></p>
 <p class="fireman-p-indent" ><code>SDS</code>: <code>simple dynamic string</code> </p>
 <ol>
 <li>二进制安全的数据结构</li>
@@ -509,7 +512,7 @@
 <li><p>分布式锁</p>
  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SETNX product:10001 true // 返回1代表获取锁成功</span><br><span class="line">SETNX product:10001 false // 返回0代表获取锁失败</span><br><span class="line"></span><br><span class="line">SET porduct:10001 true ex 10 nx // 防止程序意外停止导致死锁</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h3 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220619001312970.png" alt="image-20220619001312970"></p>
+<h3 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220619001312970.png" alt="image-20220619001312970"></p>
 <p class="fireman-p-indent" >哈希<code>hash</code>可以设置一个<code>key</code>多个属性，可以理解为一个<code>map</code>，<code>map</code>中有<code>kv</code>（称作<code>field</code>和<code>value</code>）（其实是一个小的<code>Redis</code>）</p>
 <p class="fireman-p-indent" >数据以<code>hashtab</code>的形式存储，<code>dict[4]</code>为<code>key</code>的长度，<code>key</code>被<code>hash</code>之后，与长度取模获得位置，如果出现溢出（取模之后结果一直）则放到已存在的<code>value</code>之前，通过链表的形式指向下一个。如果溢出过多，<code>dict</code>会扩容，按照1倍扩容，在<code>hash</code>被访问或者定时，会将<code>key</code>移动到新的<code>hash</code>中，移动之后删除老的<code>hash</code>中的<code>map</code>。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">172.16.211.68:49153&gt; HSET xu height 70 // 时间复杂度o(1)</span><br><span class="line">(integer) 1</span><br><span class="line">172.16.211.68:49153&gt; HSET xu weight 75 // 增加新的属性</span><br><span class="line">(integer) 1</span><br><span class="line">172.16.211.68:49153&gt; HSET xu age 28</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure>
@@ -581,7 +584,7 @@
 <p class="fireman-p-indent" >使用场景：</p>
 <p class="fireman-p-indent" >​	购物车：用户<code>id</code>是<code>key</code>，商品<code>id</code>为<code>field</code>，商品数量为<code>value</code></p>
 <h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><p class="fireman-p-indent" >列表，或者说双向，一次性可以存储多个数据，里面元素类型是string，数据结构是一个有序队列，内容可以重复，可以从左右弹出插入</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220619001249287.png" alt="image-20220619001249287"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220619001249287.png" alt="image-20220619001249287"></p>
 <p class="fireman-p-indent" >从左侧插入数据</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">172.16.211.68:49153&gt; LPUSH a1 a b c d e f // 时间复杂度o(1~n)</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379&gt; LPUSH lan Javascript Ruby Python Java Go</span><br><span class="line">(integer) 5</span><br></pre></td></tr></table></figure>
 
@@ -666,7 +669,7 @@
 <li>标签，给用户加标签、给标签加用户（可以用一个事务实现） SADD</li>
 <li>共同关注的好友、兴趣-交集    SADD  SINTER</li>
 </ol>
-<h3 id="zset"><a href="#zset" class="headerlink" title="zset"></a>zset</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220619010228180.png" alt="image-20220619010228180"></p>
+<h3 id="zset"><a href="#zset" class="headerlink" title="zset"></a>zset</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/06/image-20220619010228180.png" alt="image-20220619010228180"></p>
 <p class="fireman-p-indent" ><code>sroted set</code>，有序集合；元素为<code>string</code>；元素具有唯一性，不重复；每个元素关联一个<code>double</code>类型的<code>score</code>，表示权重，通过权重将元素从小到大排序。</p>
 <p class="fireman-p-indent" >添加</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">172.16.211.68:49153&gt; ZADD z1 4 a 5 b 6 c 7 d //  score可以重复 member不能重复   时间复杂度o(logN)</span><br><span class="line">(integer) 4</span><br></pre></td></tr></table></figure>
@@ -732,7 +735,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; TYPE country									// 此时 country 的type 是string，但是数据结构是embstr</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; OBJECT encoding country</span><br><span class="line">&quot;embstr&quot;</span><br><span class="line">127.0.0.1:6379&gt; SET age 10</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; TYPE age											// 此时 age 的type 是string，但是数据结构是int</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; OBJECT encoding age</span><br><span class="line">&quot;int&quot;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >实际<code>SDS</code>结构</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130115421746.png" alt="image-20221130115421746"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130115421746.png" alt="image-20221130115421746"></p>
 <p class="fireman-p-indent" >可以看到，<code>buf</code>一共占6个字节，<code>len</code>的个数不包含<code>\0</code>。</p>
 <p class="fireman-p-indent" ><code>SDS</code>采用<strong>空间预分配策略</strong>与<strong>惰性空间释放策略</strong>来避免内存再分配问题。</p>
 <p class="fireman-p-indent" >空间预分配策略：每次SDS进行空间扩展时，程序不但为其分配所需的空间，还会为其分配额外的未使用空间，以减少内存分配次数。</p>
@@ -791,7 +794,7 @@
 </li>
 </ul>
 <p class="fireman-p-indent" >通过三个字段的长度，当数据小时，占用内存小，体现出压缩的功能。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130153255870.png" alt="image-20221130153255870"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130153255870.png" alt="image-20221130153255870"></p>
 <h4 id="listPack"><a href="#listPack" class="headerlink" title="listPack"></a><code>listPack</code></h4><p class="fireman-p-indent" >为了优化<code>ziplist</code>中，为了逆序遍历，每一个<code>entry</code>记录了前一个<code>entry</code>的长度，这样会导致当修改或者插入元素时，要级联更新，更新后面元素信息，高并发下会降低性能。因此，在<code>7.0</code>版本中，将所有的<code>ziplist</code>更换了<code>listPack</code>，并且为了兼容性，保留了<code>ziplist</code>的相关属性。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; OBJECT encoding l21				// list 是quicklist</span><br><span class="line">&quot;quicklist&quot;</span><br><span class="line">127.0.0.1:6379&gt; ZADD z21 1 a 1 b 1 c			</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; OBJECT encoding z21				// zset 是listpack</span><br><span class="line">&quot;listpack&quot;</span><br><span class="line">127.0.0.1:6379&gt; HSET h21 a 1 b 2 c 3</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379&gt; OBJECT encoding h21				// hash 是listpack</span><br><span class="line">&quot;listpack&quot;</span><br></pre></td></tr></table></figure>
 
@@ -822,17 +825,17 @@
 <li><p class="fireman-p-indent" ><code>end</code>：与<code>ziplist</code>一样，都是标识队列结束标记，1字节。</p>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130214802781.png" alt="image-20221130214802781"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130214802781.png" alt="image-20221130214802781"></p>
 <h4 id="跳跃列表-skiplist"><a href="#跳跃列表-skiplist" class="headerlink" title="跳跃列表 skiplist"></a>跳跃列表 <code>skiplist</code></h4><p class="fireman-p-indent" >简称跳表，是一种随机化的数据结构，基于并联的链表，实现简单，查找效率较高。</p>
 <p class="fireman-p-indent" >简单来说，跳表也是链表的一种，只不过是在链表的基础上增加了跳跃功能，在查找元素时，能够提供更高的效率。</p>
 <p class="fireman-p-indent" >普通链表，插入数据时，需要一个一个比较，然后再插入</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130215349492.png" alt="image-20221130215349492"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130215349492.png" alt="image-20221130215349492"></p>
 <p class="fireman-p-indent" >让偶数节点垫高相连，这个时候再进行比较，先通过高层链表，然后再查询底层链表，减少比较次数</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130215418744.png" alt="image-20221130215418744"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130215418744.png" alt="image-20221130215418744"></p>
 <p class="fireman-p-indent" >再让3的倍数的节点增加高度，则又可以加快比较效率</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130215544037.png" alt="image-20221130215544037"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130215544037.png" alt="image-20221130215544037"></p>
 <p class="fireman-p-indent" >好处是减少查询次数，增加效率。坏处是如果增加、删除节点，会影响后续的节点指针。解决方案就是通过随机层级。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130215937914.png" alt="image-20221130215937914"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130215937914.png" alt="image-20221130215937914"></p>
 <h4 id="快速列表quicklist"><a href="#快速列表quicklist" class="headerlink" title="快速列表quicklist"></a>快速列表<code>quicklist</code></h4><p class="fireman-p-indent" >是一个双向无循环链表，每一个节点都是一个<code>ziplist</code>。</p>
 <p class="fireman-p-indent" >从Redis 3.2版本开始，对于<code>List</code>的底层实现，使用<code>quicklist</code>替代<code>ziplist</code>和<code>linkedlist</code>。<code>quicklist</code>是两者的集合和改进。</p>
 <p class="fireman-p-indent" ><code>linkedlist</code>：是一个双向链表，优点是增加、删除节点方便，缺点是需要存放上、下一个节点的指针，节点多了会出现内存碎片问题。</p>
@@ -840,7 +843,7 @@
 <p class="fireman-p-indent" ><code>quicklist</code>则是将<code>linkedlist</code>按段切分，每一段使用<code>ziplist</code>来紧凑存储若干真正的数据元素，多个<code>ziplist</code>之间使用双向指针串联起来。每个<code>ziplist</code>中最多存放的数据个数，通过 <code>list-max-ziplist-size</code>指定</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; CONFIG GET list-max-ziplist-size</span><br><span class="line">1) &quot;list-max-ziplist-size&quot;</span><br><span class="line">2) &quot;-2&quot;													// -2 代表 8Kb，在Redis配置文件中可以看到配置的描述，代表整个ziplist大小不超过8Kb</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130221621371.png" alt="image-20221130221621371"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/11/image-20221130221621371.png" alt="image-20221130221621371"></p>
 <p class="fireman-p-indent" >查询过程，则是通过与<code>head</code>中的<code>zllen</code>进行比较，获取具体的<code>ziplist</code>节点，然后再在<code>ziplist</code>中遍历。</p>
 <p class="fireman-p-indent" >插入过程：</p>
 <ul>
@@ -900,7 +903,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SETBIT b1 0 1</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379&gt; SETBIT b1 4 1</span><br><span class="line">(integer) 0</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >通过<code>RDM</code>可以看到从左到右，第0位和第4位是1，其他都是0，一共占用8位，1Byte。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221207231119497.png" alt="image-20221207231119497" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221207231119497.png" alt="image-20221207231119497" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >使用场景：数据量非常大时很适合，数据量小的时候不适合，对于<code>set</code>和<code>bitmap</code>，可通过内存占用大小判断哪个更加合适。</p>
 <ul>
@@ -1199,8 +1202,8 @@
 <p class="fireman-p-indent" >加载时，首先通过<code>check_sum</code>进行文件完整性校验，将rdb文件中除<code>EOF</code>和<code>check_sum</code>之外的数据除以<code>check_sum</code>，如果余数不是0，则代表数据损坏，但是如果数据是0，也不一定代表数据没有损坏。</p>
 </li>
 </ol>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221201171150343.png" alt="image-20221201171150343"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221201171201363.png" alt="image-20221201171201363"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221201171150343.png" alt="image-20221201171150343"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221201171201363.png" alt="image-20221201171201363"></p>
 <h3 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h3><p class="fireman-p-indent" ><code>Append Only File</code>，解决RDB的问题：IO耗时、耗性能（数据解压缩、校验）、不可控、丢失数据可能性（只能恢复到<code>save</code>的时间节点，AOF可以将丢失数据的时间降低到1s）。</p>
 <p class="fireman-p-indent" >通过日志文件记录实时写操作到一个AOF文件中，恢复数据时通过AOF文件，将这些写操作重新执行一次；（如果RDB和AOF都开启，则使用AOF）</p>
 <p class="fireman-p-indent" >AOF会重写<code>rewrite</code>，例如一个<code>key</code>被<code>set</code>多次，重写后只记录一次，减少硬盘占用，加速恢复速度；</p>
@@ -1271,7 +1274,7 @@
 
 <p class="fireman-p-indent" >如果是在中间删除一些数据，就不一定能恢复数据。</p>
 <p class="fireman-p-indent" >AOF持久化过程：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221201205229290.png" alt="image-20221201205229290"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221201205229290.png" alt="image-20221201205229290"></p>
 <h4 id="RDB和AOF对比"><a href="#RDB和AOF对比" class="headerlink" title="RDB和AOF对比"></a>RDB和AOF对比</h4><p class="fireman-p-indent" >RDB优势：</p>
 <ul>
 <li>RDB文件较小</li>
@@ -1330,7 +1333,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SLAVEOF 127.0.0.1 6379</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
 
 <h3 id="分级管理"><a href="#分级管理" class="headerlink" title="分级管理"></a>分级管理</h3><p class="fireman-p-indent" >Redis主从集群中的Slave较多时，数据同步过程会对Master形成较大的性能压力，此时可以对这些Slave进行分级管理。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221201213641449.png" alt="image-20221201213641449"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221201213641449.png" alt="image-20221201213641449"></p>
 <pre><code>6379（master）
         |					
 6380（slave0）
@@ -1417,7 +1420,7 @@
 <li><code>CONTINUE</code>：告知Slave可以按照它提交的<code>repl_offset</code>后面的位置开始续传</li>
 <li><code>ERR</code>：告知Slave当前Master版本低于Redis 2.8，不支持<code>psync</code>，需要全量复制</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221202112802010.png" alt="image-20221202112802010"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221202112802010.png" alt="image-20221202112802010"></p>
 <p class="fireman-p-indent" ><code>psync</code>存在的问题</p>
 <ol>
 <li>同步过程中，如果Slave重启，Slave内存中保存的<code>master_replid</code>和<code>repl_offset</code>都会消失，重启之后，需要全量复制</li>
@@ -1596,7 +1599,7 @@
 </ul>
 <h2 id="Raft算法"><a href="#Raft算法" class="headerlink" title="Raft算法"></a>Raft算法</h2><p class="fireman-p-indent" >Raft算法是一种通过对<strong>日志复制管理</strong>来达到集群<strong>一致性的算法</strong>。这个日志复制管理发生在集群节点中的Leader与Follower之间。Raft通过选举出的Leader节点负责管理日志复制过程，以实现各个节点间数据的一致性。</p>
 <p class="fireman-p-indent" >动态演示：<span class="exturl" data-url="aHR0cHM6Ly90aGVzZWNyZXRsaXZlc29mZGF0YS5jb20vcmFmdC8=">https://thesecretlivesofdata.com/raft/<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221204220723110.png" alt="image-20221204220723110"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221204220723110.png" alt="image-20221204220723110"></p>
 <p class="fireman-p-indent" >Raft算法中，有三种角色：</p>
 <ul>
 <li>Leader：唯一负责处理客户端写请求的节点；也可以处理客户端读请求；同时负责日志复制工作</li>
@@ -1629,7 +1632,7 @@
 <h3 id="数据同步"><a href="#数据同步" class="headerlink" title="数据同步"></a>数据同步</h3><p class="fireman-p-indent" >Leader选举出来后，会通过<strong>日志复制管理</strong>实现集群中各节点数据的同步。</p>
 <h4 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h4><p class="fireman-p-indent" >Raft算法一致性的实现，是基于<strong>日志复制状态机</strong>。</p>
 <p class="fireman-p-indent" >状态机的最大特征：不同Server中的状态机若当前状态相同，然后接受到了相同的输入，则一定会得到相同的输出。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205115325538.png" alt="image-20221205115325538"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205115325538.png" alt="image-20221205115325538"></p>
 <p class="fireman-p-indent" >数据写入、修改过程：</p>
 <ol>
 <li>Leader收到client写、修改操作请求<code>data</code></li>
@@ -1644,21 +1647,21 @@
 </ol>
 <p class="fireman-p-indent" >也就是说，Raft不是强一致性，而是最终一致性，在CAP理论中，是AP。</p>
 <h4 id="脑裂"><a href="#脑裂" class="headerlink" title="脑裂"></a>脑裂</h4><p class="fireman-p-indent" >Raft集群存在脑裂问题，在多机房部署情况下，容易出现网络连接问题，形成多个分区。而形成多个分区的，就容易产生脑裂，从而导致数据不一致。例如使用三机房部署，</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205143146926.png" alt="image-20221205143146926" style="zoom: 50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205143146926.png" alt="image-20221205143146926" style="zoom: 50%;" />
 
 <p class="fireman-p-indent" >此时A机房到B机房的网络断开，B会进行Leader选举，而且<code>term+1</code>，此时C会将选票投给B，此时B会成为新Leader，与C组成一个集群。A也存在Leader，但是不能处理写请求。（写请求需要超过半数同意）此时出现脑裂。</p>
 <p class="fireman-p-indent" >处理方案是给Leader增加自动下课功能，当无法处理写请求，则自动降级为Follower。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205144659279.png" alt="image-20221205144659279" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205144659279.png" alt="image-20221205144659279" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >此时A机房到B机房、C机房的网络断开，B或者C会进行Leader选举，而且term+1，两个里面会有一个Leader，并且可以正常对外提供服务。但此时A机房也有Leader，只能提供读请求，出现脑裂。</p>
 <p class="fireman-p-indent" >处理方案也是自动降级。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205145912647.png" alt="image-20221205145912647" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205145912647.png" alt="image-20221205145912647" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >此时B机房到A机房、C机房的网络断开，B会进行Leader选举，变成Candidate状态，此状态下，无法提供读、写服务。A和C的集群可以正常工作。没有出现脑裂</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205150052485.png" alt="image-20221205150052485" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205150052485.png" alt="image-20221205150052485" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >此时B机房到C机房断开，不会对集群造成任何影响，也不会形成脑裂。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205150128661.png" alt="image-20221205150128661" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205150128661.png" alt="image-20221205150128661" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >此时A到B、B到C、C到A全部断开，B机房和C机房会进行选举，一直处于Candidate状态，无法处理读、写请求，而A机房由于写入请求处理无法过半，无法处理写请求，只能处理读请求。此时没有出现脑裂。</p>
 <h3 id="Leader宕机处理"><a href="#Leader宕机处理" class="headerlink" title="Leader宕机处理"></a>Leader宕机处理</h3><p class="fireman-p-indent" >Leader宕机之后，集群的处理方式会根据状态有所不同</p>
@@ -1685,7 +1688,7 @@
 </ul>
 <h2 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h2><p class="fireman-p-indent" >相比主从集群来讲，写入请求只有Master可以处理。为了进一步提升性能，Redis也支持分布式系统，官方成为Redis Cluster，Redis集群。是Redis 3.0开始推出的分布式解决方案，可以很好的解决不同Redis节点存放不同数据，并将用户请求方便的路由到不同的Redis。</p>
 <h3 id="数据分区算法"><a href="#数据分区算法" class="headerlink" title="数据分区算法"></a>数据分区算法</h3><p class="fireman-p-indent" >分布式数据库系统会根据不同的数据分区算法，将数据分散存储到不同的数据库服务器节点上，每个节点管理着整个数据集合中的一个子集。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205154538323.png" alt="image-20221205154538323"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205154538323.png" alt="image-20221205154538323"></p>
 <ul>
 <li>数据写入，通过分区算法，将数据子集写入到不同的数据服务器节点</li>
 <li>数据读取，通过路由器，从不同的服务器节点读取到不同的数据</li>
@@ -1710,7 +1713,7 @@
 </li>
 <li><p class="fireman-p-indent" >虚拟槽分区</p>
 <p class="fireman-p-indent" >首先虚拟出一个固定数量的整数集合，该集合中每个整数称为一个<code>slot</code>槽。这个槽的数量一般是远远大于节点数量的值，然后在将所有<code>slot</code>槽平均映射到各个节点上。Redis集群就是使用这种方式，Redis会虚拟出<code>16384</code>个槽，范围为<code>[0,16383]</code>，假设有3个节点，槽和节点的对应关系如下：</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205160314180.png" alt="image-20221205160314180" style="zoom:50%;" /></li>
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221205160314180.png" alt="image-20221205160314180" style="zoom:50%;" /></li>
 </ul>
 <p class="fireman-p-indent" >而数据只与槽有关系，与节点没有直接关系。通过数据<code>hash(key)</code>与槽取模，确定存储槽位。</p>
 <p class="fireman-p-indent" >优势是解耦数据与节点，客户端不维护节点，只需维护与<code>slot</code>槽的关系。</p>
@@ -1833,7 +1836,7 @@
 <h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><p class="fireman-p-indent" ><code>golang</code>选择<code>go-Redis</code></p>
 <p class="fireman-p-indent" >因为<code>go-Redis</code>原生支持连接哨兵及集群模式的Redis，并且是类型安全的。</p>
 <p class="fireman-p-indent" >官方文档：<span class="exturl" data-url="aHR0cHM6Ly9yZWRpcy51cHRyYWNlLmRldi8=">redis.uptrace.dev<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221206104524627.png" alt="image-20221206104524627"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221206104524627.png" alt="image-20221206104524627"></p>
 <p class="fireman-p-indent" >这里Redis版本是7.0，客户端使用v9版本</p>
 <p class="fireman-p-indent" >普通模式，单主或者主从模式，连接MasterIP和端口</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/go-redis/redis/v9&quot;</span></span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rdb := redis.NewClient(&amp;redis.Options&#123;</span><br><span class="line">		Addr:     <span class="string">&quot;172.16.211.68:49153&quot;</span>,</span><br><span class="line">		Password: <span class="string">&quot;Redispw&quot;</span>,</span><br><span class="line">		DB:       <span class="number">0</span>,</span><br><span class="line">		<span class="comment">// 连接池的个数，需要根据业务来确定，平均执行时间*业务需要的QPS，相乘就是maxTotal，也不能超过Redis默认连接数。go-Redis默认使用连接池，优化系统消耗</span></span><br><span class="line">		<span class="comment">// 172.16.211.68:49153&gt; CONFIG GET maxclients</span></span><br><span class="line">    <span class="comment">// 1) &quot;maxclients&quot;</span></span><br><span class="line">    <span class="comment">// 2) &quot;10000&quot;</span></span><br><span class="line">    <span class="comment">// maxIdle 等于maxTotal</span></span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	res, err := rdb.WithContext(rdb.Context()).Ping().Result()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	log.Println(res)</span><br><span class="line"></span><br><span class="line">	num, err := rdb.Set(<span class="string">&quot;string21&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="number">0</span>).Result()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	log.Println(num)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -2003,7 +2006,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -2011,7 +2019,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -2021,6 +2031,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/bfa4.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

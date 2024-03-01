@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="内存模型指的是一组规则和保证，用于定义并管理多个 Goroutine 之间的内存访问和同步行为。内存模型确保 Goroutine 之间的内存操作具有一致性和可预测性，以避免出现竞态条件、数据竞争和其他并发相关的问题。">
 <meta property="og:type" content="article">
@@ -79,7 +82,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -308,32 +311,32 @@
 
 <p class="fireman-p-indent" >ps: 这个可能是为了执行效率和性能优化考虑。</p>
 <p class="fireman-p-indent" >例如，一个 <code>goroutine</code> 执行 <code>a = 1; b = 2;</code>，另一个 <code>goroutine</code> 可能看到 b 在 a 之前更新。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829152552074.png" alt="image-20230829152552074"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230829152552074.png" alt="image-20230829152552074"></p>
 <p class="fireman-p-indent" >这个结果，可能会看到 （0，1） 或者 （1，1），也可能会打印（0，0），也就是产生内存重排。</p>
 <p class="fireman-p-indent" >用户写下的代码，先要编译成汇编代码，也就是各种指令，包括读写内存的指令。CPU的设计者们，为了榨干CPU的性能，无所不用其极，各种手段都用上，例如<strong>流水线</strong>、<strong>分支预测</strong>等等。</p>
 <p class="fireman-p-indent" >其中，为了提高读写内存的效率，会对读写指令进行重新排列，这就是所谓的内存重排，英文为 <code>MemoryReordering</code> 。</p>
 <p class="fireman-p-indent" >除了上面的 CPU 重排，其实还有编译器重排。比如</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104619131.png" alt="image-20230920104619131" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104619131.png" alt="image-20230920104619131" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >同一个变量相同赋值、并且打印多次，编译器会通过分支预测，将代码重排成下面这样：</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104633559.png" alt="image-20230920104633559" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104633559.png" alt="image-20230920104633559" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >但是，如果这时有另外一个线程同时执行</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104705888.png" alt="image-20230920104705888" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920104705888.png" alt="image-20230920104705888" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >在多核场景下，没有办法轻易地判断两段程序是否是“等价”的。</p>
 <h2 id="内存重排"><a href="#内存重排" class="headerlink" title="内存重排"></a>内存重排</h2><p class="fireman-p-indent" >Memory Reordering</p>
 <p class="fireman-p-indent" >现代CPU为了“抚平”内核、内存、硬盘之间的速度差异，通过各种策略，例如多级缓存（CPU的三级缓存）。</p>
 <p class="fireman-p-indent" >例如下图，为了让 （2） 不必等待 （1） 的执行“效果”可见之后才能执行，我们可以把 （1） 的效果保存到 store buffer：</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920105809868.png" alt="image-20230920105809868" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920105809868.png" alt="image-20230920105809868" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >为了让 （2） 不必等待 （1） 的执行“效果”可见之后才能执行，我们可以把 （1） 的效果保存到 store buffer：</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920105930277.png" alt="image-20230920105930277" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920105930277.png" alt="image-20230920105930277" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >store buffer 对单线程是完美的。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920110044900.png" alt="image-20230920110044900"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920110044900.png" alt="image-20230920110044900"></p>
 <p class="fireman-p-indent" >但是在多线程上，先执行（1）和（3），将他们直接写入 store buffer，接着执行（2）和（4）。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920110150587.png" alt="image-20230920110150587"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230920110150587.png" alt="image-20230920110150587"></p>
 <p class="fireman-p-indent" >这个时候，（2）看了 store buffer 中的内容，没有发现B的值，于是从Memory读出了0，（4）同样从Memory读出了0，最后，打印出（0，0）</p>
 <p class="fireman-p-indent" >因此，对于多线程的程序，所有的CPU都会提供“锁”支持，称之为 barrier（内存屏障），或者fence。它要求：barrier 指令要求所有对内存的操作都必须要<strong>扩散</strong>到memory之后才能继续执行其他对 memory 的操作（也就是修改A的值之后，需要往内存中刷新）。因此，我们可以用高级点的 atomic compare-and-swap，或者直接用更高级的锁，通常是标准库提供。（锁、原子操作，基本上都是利用这套机制）</p>
 <h2 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h2><p class="fireman-p-indent" >Memory model</p>
@@ -439,7 +442,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -447,7 +455,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -457,6 +467,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/84a9.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

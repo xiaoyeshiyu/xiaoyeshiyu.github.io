@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="微服务架构中的过载保护和限流是确保系统可用性的关键策略之一。当微服务面临突发的高负载或异常情况时，合理的过载保护和限流机制可以防止系统崩溃，并保持对关键服务的稳定响应。本文将深入探讨微服务可用性设计中的过载保护和限流策略。我们将介绍过载保护和限流的概念和原理，讨论不同的实现方法和工具，以及如何根据业务需求和系统特点选择适合的策略。">
 <meta property="og:type" content="article">
@@ -90,7 +93,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -303,7 +306,7 @@
     
     <div class="post-body" itemprop="articleBody"><h1 id="过载保护"><a href="#过载保护" class="headerlink" title="过载保护"></a>过载保护</h1><p class="fireman-p-indent" >微服务在保证自己存活之后，再可以通过策略保护自己。例如过载保护和限流。</p>
 <h2 id="一些常见的算法"><a href="#一些常见的算法" class="headerlink" title="一些常见的算法"></a>一些常见的算法</h2><h3 id="令牌桶算法"><a href="#令牌桶算法" class="headerlink" title="令牌桶算法"></a>令牌桶算法</h3><p class="fireman-p-indent" >是一个存放固定容量令牌的桶，按照固定速率往桶里添加令牌。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020152144016.png" alt="image-20231020152144016"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020152144016.png" alt="image-20231020152144016"></p>
 <p class="fireman-p-indent" >令牌桶算法的描述如下：</p>
 <ul>
 <li>假设限制 <code>10r/s</code>，则按照 <code>100ms</code> 的固定速率往桶中添加令牌，每 <code>100ms</code> 往桶中添加 <code>1</code> 个令牌。</li>
@@ -321,7 +324,7 @@
 <ul>
 <li>阈值难设定，需要大量的测试</li>
 </ul>
-<h3 id="漏桶算法"><a href="#漏桶算法" class="headerlink" title="漏桶算法"></a>漏桶算法</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020152555832.png" alt="image-20231020152555832"></p>
+<h3 id="漏桶算法"><a href="#漏桶算法" class="headerlink" title="漏桶算法"></a>漏桶算法</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020152555832.png" alt="image-20231020152555832"></p>
 <p class="fireman-p-indent" >作为计算工具（<code>The Leaky Bucket Algorithm as a Meter</code>）时，可以用于<strong>流量整形</strong>（<code>Traffic Shaping</code>）和<strong>流量控制</strong>（<code>Traffic Policing</code>），漏桶算法的描述如下：</p>
 <ul>
 <li>一个固定容量的漏桶，按照常量固定速率流出水滴</li>
@@ -346,14 +349,14 @@
 <li>在系统稳定的前提下，保持系统的吞吐量</li>
 </ul>
 <p class="fireman-p-indent" >常见做法：利特尔法则</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020153503010.png" alt="image-20231020153503010"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020153503010.png" alt="image-20231020153503010"></p>
 <ul>
 <li><p>CPU、内存作为信号量进行节流</p>
 </li>
 <li><p>队列管理：队列长度、LIFO</p>
 </li>
 <li><p>可控延迟算法：<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvQ29EZWw=">CoDel<i class="fa fa-external-link-alt"></i></span></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020172159846.png" alt="image-20231020172159846"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020172159846.png" alt="image-20231020172159846"></p>
 <blockquote>
 <p>CoDel背后的理论基于对<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvJUU3JUI3JUE5JUU4JUExJTlEJUU1JTk5JUE4">缓冲区<i class="fa fa-external-link-alt"></i></span>影响下<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvJUU1JTg4JTg2JUU3JUJCJTg0JUU0JUJBJUE0JUU2JThEJUEy">分组交换网络<i class="fa fa-external-link-alt"></i></span>中<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvJUU1JTg4JTg2JUU3JUJCJTg0JUU0JUJBJUE0JUU2JThEJUEy">数据<i class="fa fa-external-link-alt"></i></span>包行为的观察。 这些观察中的一些与排队的基本性质和<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvJUU3JUJDJTkzJUU1JTg2JUIyJUU4JTg2JUE4JUU4JTgzJTgw">缓冲膨胀<i class="fa fa-external-link-alt"></i></span>的原因有关，另一些与队列管理算法的弱点有关。 CoDel的开发旨在解决<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvJUU3JUJDJTkzJUU1JTg2JUIyJUU4JTg2JUE4JUU4JTgzJTgw">缓冲膨胀<i class="fa fa-external-link-alt"></i></span>问题。 [<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvQ29EZWwjY2l0ZV9ub3RlLTE=">1]<i class="fa fa-external-link-alt"></i></span></p>
 <h3 id="缓冲膨胀-编辑"><a href="#缓冲膨胀-编辑" class="headerlink" title="缓冲膨胀[编辑]"></a>缓冲膨胀[<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3cvaW5kZXgucGhwP3RpdGxlPUNvRGVsJmFjdGlvbj1lZGl0JnNlY3Rpb249Mg==">编辑<i class="fa fa-external-link-alt"></i></span>]</h3><p>数据包在快速网络和慢速网络之间的网络链路传输时速度会变慢，尤其是在<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvJUU0JUJDJUEwJUU4JUJFJTkzJUU2JThFJUE3JUU1JTg4JUI2JUU1JThEJThGJUU4JUFFJUFF">TCP<i class="fa fa-external-link-alt"></i></span>会话开始时，突然出现数据包激增并且较慢的网络可能无法快速接受该突发时足够。<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvJUU3JUJDJTkzJUU1JTg2JUIyJUU1JThDJUJB">缓冲区<i class="fa fa-external-link-alt"></i></span>的存在是为了缓解这个问题，它给了快速网络一个存储数据包的地方，让慢速网络以自己的速度读取数据包。 [<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvQ29EZWwjY2l0ZV9ub3RlLUNvRGVsX0FDTVEtMg==">2]<i class="fa fa-external-link-alt"></i></span> 。换句话说，缓冲区的作用就像减震器一样，将突发到达信号转换为平稳平稳的信号。但是，缓冲区的容量有限。理想的缓冲区大小可以处理突发的通信，并使突发的速度与较慢网络的速度相匹配。理想情况下，冲击吸收情况的特征是在传输突发期间缓冲器中的分组的暂时延迟，之后延迟迅速消失，并且网络在提供和处理分组方面达到平衡。 [<span class="exturl" data-url="aHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvQ29EZWwjY2l0ZV9ub3RlLUNvRGVsX0FDTVEtMg==">2]<i class="fa fa-external-link-alt"></i></span></p>
@@ -365,12 +368,12 @@
 <h3 id="计算峰值时的吞吐"><a href="#计算峰值时的吞吐" class="headerlink" title="计算峰值时的吞吐"></a>计算峰值时的吞吐</h3><p class="fireman-p-indent" >如何计算接近峰值时的系统吞吐？</p>
 <ul>
 <li><p>CPU：使用一个独立的线程采样，每隔 <code>500ms</code> 触发一次。在计算均值时，使用了简单滑动平均去除峰值的影响。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020173613858.png" alt="image-20231020173613858"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020173613858.png" alt="image-20231020173613858"></p>
 </li>
 <li><p><code>Inflight</code>：当前服务中正在进行的请求的数量。</p>
 </li>
 <li><p><code>Pass&amp;RT</code>：最近5s，<code>pass</code> 为每 <code>100ms</code> 采样窗口内成功请求的数量，<code>rt</code> 为单个采样窗口中平均响应时间。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020173802226.png" alt="image-20231020173802226"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020173802226.png" alt="image-20231020173802226"></p>
 <p>蓝色：表示CPU的利用率，CPU 浮动大</p>
 <p>橙色：使用过去的样本 + 当前样本的浮点数相乘，作为一个简单的滑动窗口统计算法</p>
 <p>绿色：也是一种滑动窗口统计算法</p>
@@ -383,7 +386,7 @@
 <li>限流效果生效后，CPU 会在临界值 （800）附近抖动，如果不使用冷却时间，那么一个短时间的 CPU 下降就可能导致大量请求被放行，严重时会打满 CPU </li>
 <li>在冷却时间后，重新判断阈值（ CPU &gt; 800 ），是否持续进入过载保护。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020174456107.png" alt="image-20231020174456107"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020174456107.png" alt="image-20231020174456107"></p>
 <p class="fireman-p-indent" >蓝色代表收到的请求，绿色代表处理的请求。</p>
 <p class="fireman-p-indent" >不使用冷却时间的时候，在区间内瞬间处理大量请求，导致CPU被直接打满，再次触发过载保护。</p>
 <p class="fireman-p-indent" >过载保护是当自己临近过载的时候主动卸载一些流量，剩下一些流量就需要哦通过限流控制。</p>
@@ -404,10 +407,10 @@
 <li>按照优先级丢弃</li>
 <li>拒绝请求也需要成本，比如返回状态码</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023102703540.png" alt="image-20231023102703540"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023102703540.png" alt="image-20231023102703540"></p>
 <p class="fireman-p-indent" >限流前后，CPU 利用率的变化可以非常直观的看到。</p>
 <h2 id="分布式限流"><a href="#分布式限流" class="headerlink" title="分布式限流"></a>分布式限流</h2><p class="fireman-p-indent" >分布式限流，是为了控制某个应用全局的流量，而非针对单个节点维度。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023104126622.png" alt="image-20231023104126622"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023104126622.png" alt="image-20231023104126622"></p>
 <ul>
 <li>单个大流量的接口，一般会使用 <code>redis</code> ，虽然简单方便，但是容易产生问题<ul>
 <li>容易产生热点</li>
@@ -416,7 +419,7 @@
 </li>
 </ul>
 <p class="fireman-p-indent" >可以优化一下：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023104409857.png" alt="image-20231023104409857"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023104409857.png" alt="image-20231023104409857"></p>
 <ul>
 <li>从获取单个 <code>quota</code> 升级成批量 <code>quota</code>。<ul>
 <li><code>quota</code>：表示速率，获取后使用令牌桶算法来限制。</li>
@@ -429,7 +432,7 @@
 <p class="fireman-p-indent" >初次使用默认值，一旦有过去历史窗口的数据，可以基于历史窗口数据进行<code>quota</code>请求。</p>
 <p class="fireman-p-indent" >如果经常面临给一组用户划分稀有资源的问题，他们都享有等价的权利来获取资源，但是其中一些用户实际上只需要比其他用户少的资源，此时应该如何优化？</p>
 <p class="fireman-p-indent" >一种在实际中广泛使用的分享技术称作 <strong>最大最小公平分享</strong>（Max-Min Fairness）。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023104950469.png" alt="image-20231023104950469"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023104950469.png" alt="image-20231023104950469"></p>
 <p class="fireman-p-indent" >直观上，公平分享分配给每个用户想要的可以满足的最小需求，然后将没有使用的资源均匀的分配给需要<code>大资源</code>的用户。</p>
 <p class="fireman-p-indent" >最大最小公平分配算法的形式化定义如下：</p>
 <ul>
@@ -437,7 +440,7 @@
 <li>不存在用户得到的资源超过自己的需求：将A多出来的 0.5，分配给其他节点</li>
 <li>未得到满足的用户等价的分享资源：将剩余的 8 份资源，分给 B、C、D 三个节点</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023105425203.png" alt="image-20231023105425203"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023105425203.png" alt="image-20231023105425203"></p>
 <h2 id="重要性"><a href="#重要性" class="headerlink" title="重要性"></a>重要性</h2><p class="fireman-p-indent" >每个接口配置阈值，运营用作繁重，最简单的是配置服务级别 <code>quota</code>，更细粒度的，可以根据不同重要性设定 <code>quota</code>，也就是引入 <strong>重要性</strong>（<code>criticality</code>）的概念：</p>
 <ul>
 <li>最重要 <code>CRITICAL_PLUS</code>，为最终的要求预留的类型，拒绝这些请求会造成非常严重的用户可见的问题。</li>
@@ -454,7 +457,7 @@
 <h2 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h2><p class="fireman-p-indent" >除了服务端做限流，也可以在客户端主动的、善意的做限流，也就是客户端侧的限流，<code>client side throttling</code>。</p>
 <p class="fireman-p-indent" >断路器（<code>Circuit Breakers</code>）：为了限制操作的持续时间，我们可以使用超时，超时可以防止挂起操作并保证系统可以响应。因为我们处于高度动态的环境中，几乎不可能确定在每种情况下都能正常工作的准确的时间限制。</p>
 <p class="fireman-p-indent" >熔断器以现实世界的电子元件命名，因为它们的行为都是相同的。断路器在分布式系统中非常有用，因为重复的故障可能会导致雪球效应，并使整个系统崩溃。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023112006005.png" alt="image-20231023112006005"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023112006005.png" alt="image-20231023112006005"></p>
 <ul>
 <li><p>服务依赖的资源出现大量错误</p>
 </li>
@@ -471,24 +474,24 @@
 <p class="fireman-p-indent" ><code>request</code>：总请求数</p>
 <p class="fireman-p-indent" ><code>accepts</code>：成功请求数量</p>
 <p class="fireman-p-indent" ><code>K</code>：值愈小，算法越激进</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023115259719.png" alt="image-20231023115259719"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023115259719.png" alt="image-20231023115259719"></p>
 <p class="fireman-p-indent" >结果的值表示一个概率，请求时生成一个随机值，随机值大于，则放行，小于则继续拒绝。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023114117991.png" alt="image-20231023114117991"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023114117991.png" alt="image-20231023114117991"></p>
 <p class="fireman-p-indent" >实际请求和放行的请求，是比较契合的。</p>
 <h2 id="Gutter"><a href="#Gutter" class="headerlink" title="Gutter"></a>Gutter</h2><p class="fireman-p-indent" >在某种大流量的场景，如果全局依赖 <code>kafka</code> 集群，但是如果出现集群级别的故障，影响范围会非常大。</p>
 <p class="fireman-p-indent" >如果再搭建一套集群，就需要一倍的资源。这个时候使用 <code>Gutter</code> （渠道）的思想就可以很好的解决。<code>Gutter</code> 的思路是将小部分流量转移到另外一套集群，只需要 <code>10%</code> 的资源的集群。</p>
 <p class="fireman-p-indent" >先写入 <code>kafka A</code>，当触发熔断，再将数据写入 <code>kafka B</code>，当熔断恢复，再切换回 <code>kafka A</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023113959504.png" alt="image-20231023113959504"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023113959504.png" alt="image-20231023113959504"></p>
 <p class="fireman-p-indent" >基于熔断的 <code>gutter kafka</code>，用于接管自动修复系统运行过程中的负载，这样只需要付出 <code>10%</code> 的资源就能解决部分系统可用性问题。</p>
 <p class="fireman-p-indent" >我们经常使用 <code>failover</code> 的思路，但是完整的 <code>failover</code> 需要翻倍的机器资源，平常不接受流量时，资源浪费。高负载情况下接管流量又不一定完整能接住。所以这里核心利用熔断的思路，是把抛弃的流量转移到 <code>gutter</code> 集群，如果 <code>gutter</code> 也接受不住的流量，重新回抛到主集群，最大力度来接受。</p>
 <h2 id="客户端流控"><a href="#客户端流控" class="headerlink" title="客户端流控"></a>客户端流控</h2><p class="fireman-p-indent" ><code>positive feedback</code>：用户总是积极重试，访问一个不可达的服务。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023115337979.png" alt="image-20231023115337979"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023115345068.png" alt="image-20231023115345068"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023115337979.png" alt="image-20231023115337979"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023115345068.png" alt="image-20231023115345068"></p>
 <ul>
 <li>客户端需要限制请求频次，<code>retry backoff</code> 做一定的请求退让</li>
 <li>可以通过接口级别的 <code>error_details</code>，挂载到每个 API 返回的响应里</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023115348831.png" alt="image-20231023115348831"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231023115348831.png" alt="image-20231023115348831"></p>
 <p class="fireman-p-indent" >请求失败退让，失败次数越多，重试间隔越长。</p>
 <h2 id="Case-Study"><a href="#Case-Study" class="headerlink" title="Case Study"></a>Case Study</h2><ul>
 <li><p>二层缓存穿透，大量回源导致的核心服务故障，出现雪崩</p>
@@ -591,7 +594,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -599,7 +607,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -609,6 +619,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/7175.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

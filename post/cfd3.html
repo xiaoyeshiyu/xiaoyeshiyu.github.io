@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="这篇文章将深入探讨微服务架构中的可观察性，着重于日志记录作为关键的监控和调试工具。">
 <meta property="og:type" content="article">
@@ -86,7 +89,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -297,7 +300,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="可观测性三角"><a href="#可观测性三角" class="headerlink" title="可观测性三角"></a>可观测性三角</h1><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/03.png" alt="Venn diagram with gradient"></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="可观测性三角"><a href="#可观测性三角" class="headerlink" title="可观测性三角"></a>可观测性三角</h1><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/03.png" alt="Venn diagram with gradient"></p>
 <ul>
 <li><code>Metrics</code>：度量数据，这些数据应该是可以用来做分析的，例如均值，99线等。对于一个请求来说，可以度量的东西很多：</li>
 <li><code>Tracing</code>：强大的是请求级别，即一个请求发生了什么；</li>
@@ -338,10 +341,10 @@
 <li>把 <code>error</code> 抛给调用者，在顶部打印日志；</li>
 </ul>
 <p class="fireman-p-indent" >如果选择通过日志记录来处理错误，那么根据定义，<em>它不再是一个错误 - 您已经处理了它</em>。记录错误的行为会处理错误，因此不再适合将其记录为错误。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152007930.png" alt="image-20231130152007930" style="zoom: 50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152007930.png" alt="image-20231130152007930" style="zoom: 50%;" />
 
 <p class="fireman-p-indent" >要么打印，要么往上抛。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152012928.png" alt="image-20231130152012928" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130152012928.png" alt="image-20231130152012928" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >这里降级了，就属于正常状态。</p>
 <blockquote>
@@ -371,7 +374,7 @@
 <p class="fireman-p-indent" >当我们使用 <code>kit</code> 时</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> foo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/pkg/log&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">	logger log.Logger </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130155603276.png" alt="image-20231130155603276" style="zoom: 50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130155603276.png" alt="image-20231130155603276" style="zoom: 50%;" />
 
 <p class="fireman-p-indent" >解耦需要打日志的类型与日志的实际类型之间的绑定。</p>
 <h1 id="日志选型"><a href="#日志选型" class="headerlink" title="日志选型"></a>日志选型</h1><p class="fireman-p-indent" >一个完整的集中式日志系统，需要包含以下几个主要特点：</p>
@@ -382,17 +385,17 @@
 <li>分析 - 可以支持 UI 分析；</li>
 <li>警告 - 能够提供错误报告，监控机制；</li>
 </ul>
-<h2 id="ELK-stack"><a href="#ELK-stack" class="headerlink" title="ELK stack"></a>ELK stack</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130160401517.png" alt="image-20231130160401517" style="zoom: 25%;" />
+<h2 id="ELK-stack"><a href="#ELK-stack" class="headerlink" title="ELK stack"></a>ELK stack</h2><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130160401517.png" alt="image-20231130160401517" style="zoom: 25%;" />
 
 <p class="fireman-p-indent" >开源界鼎鼎大名 <code>ELK stack</code>，分别表示：<code>ElasticSearch</code>，<code>Logstash</code>，<code>Kibana</code>，它们都是开源软件。新增一个 <code>FileBeat</code>，它是一个轻量级的日志收集处理工具（<code>Agent</code>），<code>FileBeat</code> 占用资源少，适合于在各个服务器上收集日志后传输给 <code>Logstash</code>，官方也推荐此工具。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175503236.png" alt="image-20231130175503236"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175503236.png" alt="image-20231130175503236"></p>
 <p class="fireman-p-indent" >此架构由 <code>Logstash</code> 分布于各个节点上（以 <code>Logstash Agent</code> 的形式）搜集相关日志、数据，并经过分析、过滤后发送给远端服务器上的 <code>Elasticsearch</code> 进行存储。</p>
 <p class="fireman-p-indent" ><code>Elasticsearch</code> 将数据以分片的形式压缩存储并提供多种 API 供用户查询，操作。用户亦可以更直观的通过配置 <code>Kibana Web</code> 方便的对日志查询，并根据数据生成报表。</p>
 <p class="fireman-p-indent" >因为 <code>logstatsh</code> 属于 <code>server</code> 角色，必然出现流量集中式的热点问题，因此我们不建议使用这种部署方式，同时因为还需要做大量的 <code>match</code> 操作（格式化日志），消耗的 CPU 也很多，不利于 <code>scale out</code>。</p>
 <h2 id="引入消息队列"><a href="#引入消息队列" class="headerlink" title="引入消息队列"></a>引入消息队列</h2><p class="fireman-p-indent" >为了解决<code>Logstash Agent</code> 的热点和维护性问题，可以将 <code>logstash Agent</code> 退化到本地微服务中</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175623920.png" alt="image-20231130175623920"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130175623920.png" alt="image-20231130175623920"></p>
 <p class="fireman-p-indent" >此种架构引入了消息队列机制，位于各个节点上的 <code>Logstath Agent</code> 先将数据、日志传递给<code>Kafka</code>，并将队列中消息或数据间接传递给 <code>Logstash</code>，<code>Logstash</code> 过滤、分析后将数据传递给 <code>Elasticsearch</code> 存储。最后由 <code>Kibana</code> 将日志和数据呈现给用户。因为引入了 <code>Kafka</code>，所以即使远端 <code>Logstash server</code>因故障停止运行，数据将会先被存储下来，从而避免数据丢失。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201173021618.png" alt="image-20231201173021618"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201173021618.png" alt="image-20231201173021618"></p>
 <p class="fireman-p-indent" >更进一步的：</p>
 <p class="fireman-p-indent" >将收集端 <code>logstash</code> 替换为 <code>beats</code>，更灵活，消耗资源更少，扩展性更强。替代 <code>JRuby</code> 语言，使用 <code>beats</code> 外挂服务或者 <code>sidercar</code>。</p>
 <h1 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h1><p class="fireman-p-indent" >基于上面的日志选型，设计一个符合高并发大容量的日志系统。</p>
@@ -410,7 +413,7 @@
 <li><code>app_id</code>：应用<code>id</code>，用于标示日志来源；也就是服务发现的 <code>app_id</code></li>
 <li><code>instance_id</code>：实例<code>id</code>，用于区分同一应用不同实例，即 <code>hostname</code>；</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174102166.png" alt="image-20231201174102166"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174102166.png" alt="image-20231201174102166"></p>
 <h2 id="设计与实现"><a href="#设计与实现" class="headerlink" title="设计与实现"></a>设计与实现</h2><p class="fireman-p-indent" >日志从产生到可检索，经历几个阶段：</p>
 <ul>
 <li>生产 &amp; 采集</li>
@@ -433,8 +436,8 @@
 <li>日志系统提供各种语言 <code>SDK</code></li>
 <li>直接读取本地日志文件</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174418357.png" alt="image-20231201174418357"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174911511.png" alt="image-20231201174911511"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174418357.png" alt="image-20231201174418357"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201174911511.png" alt="image-20231201174911511"></p>
 <h3 id="传输"><a href="#传输" class="headerlink" title="传输"></a>传输</h3><p class="fireman-p-indent" >基于 <code>Flume</code> + <code>Kafka</code> 统一传输平台</p>
 <p class="fireman-p-indent" >基于 <code>LogID</code> 做日志分流：</p>
 <ol>
@@ -444,9 +447,9 @@
 </ol>
 <p class="fireman-p-indent" >大流量的环境下，可以使用 <code>Flink</code> + <code>Kafka</code> 来实现。</p>
 <p class="fireman-p-indent" >也可以通过 <code>gateway</code> 来将日志路由到不同的 <code>Kafka</code> 集群中。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175010120.png" alt="image-20231201175010120"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175010120.png" alt="image-20231201175010120"></p>
 <h3 id="切分"><a href="#切分" class="headerlink" title="切分"></a>切分</h3><p class="fireman-p-indent" >从 <code>kafka</code> 消费日志，解析日志，写入 <code>elasticsearch</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175208534.png" alt="image-20231201175208534"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175208534.png" alt="image-20231201175208534"></p>
 <p class="fireman-p-indent" >消费端：</p>
 <p class="fireman-p-indent" ><code>bili-index</code>：B站自研，<code>golang</code> 开发，逻辑简单，性能高，可定制化方便。（后续也会替换成 <code>flink</code>）</p>
 <ul>
@@ -460,7 +463,7 @@
 <ul>
 <li>日志分级、高可用</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175638694.png" alt="image-20231201175638694"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201175638694.png" alt="image-20231201175638694"></p>
 <p class="fireman-p-indent" >单数据集群内：</p>
 <p class="fireman-p-indent" ><code>master node</code> + <code>data node(hot/stale)</code> + <code>client node</code></p>
 <ul>
@@ -483,7 +486,7 @@
 </ul>
 <h2 id="容器日志采集"><a href="#容器日志采集" class="headerlink" title="容器日志采集"></a>容器日志采集</h2><p class="fireman-p-indent" >容器内应用日志采集：</p>
 <p class="fireman-p-indent" >基于 <code>overlay2</code>，直接从物理机上查找对应日志文件（容器日志映射到物理机目录）。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201180255277.png" alt="image-20231201180255277"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231201180255277.png" alt="image-20231201180255277"></p>
 <h1 id="观测内容"><a href="#观测内容" class="headerlink" title="观测内容"></a>观测内容</h1><p class="fireman-p-indent" >在服务上线后，应该观测的内容：</p>
 <ul>
 <li>错误率：特别是系统级别，还有业务层面的报错，下游服务返回的一些校验之类的错误</li>
@@ -595,7 +598,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -603,7 +611,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -613,6 +623,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/cfd3.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

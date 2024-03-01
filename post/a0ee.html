@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="RPC和REST协议的区别，这些协议都是建立在TCP基础上的可靠传输协议。">
 <meta property="og:type" content="article">
@@ -75,7 +78,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -312,14 +315,14 @@
 </ul>
 <p class="fireman-p-indent" >选择RPC或者REST需要根据服务工程化来决定，微服务下，服务之间通过RPC访问可以不用对外暴露接口，统一由RPC Gateway做反向代理转发。</p>
 <h2 id="RPC-1"><a href="#RPC-1" class="headerlink" title="RPC"></a>RPC</h2><p class="fireman-p-indent" ><code>Remote Procedure Call</code>：远程过程调用。可以将远端的函数、方法当做本地的函数或方法使用，通过<code>Protobuf</code>实现跨语言通信。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/v2-b2e222999c280f36d79cd4dcc062ab24_1440w.jpg" alt="img"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/v2-b2e222999c280f36d79cd4dcc062ab24_1440w.jpg" alt="img"></p>
 <p class="fireman-p-indent" >RPC中解决的问题：</p>
 <ol>
 <li>Call的id映射（需要确定调用的远程函数具体是哪个函数）（在HTTP协议上，通过path代表Call ID）</li>
 <li>序列化和反序列化（如何传输数据，使用rpc默认的序列化协议还是<code>json</code>还是<code>protobuf</code>）（在HTTP协议上，通过header头指定的序列化协议）</li>
 <li>网络传输（通过<code>tcp</code>还是<code>http</code>传输数据，确保数据传输以及传输格式）（HTTP1协议默认短链接，过程中要经历三次握手和四次挥手）（gRPC框架基于http2.0，使用长连接流式传输，无论是网络连接还是序列化反序列化，性能更高）</li>
 </ol>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/45366c44f775abfd0ac3b43bccc1abc3_r-20220920205634844.jpg" alt="preview"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/45366c44f775abfd0ac3b43bccc1abc3_r-20220920205634844.jpg" alt="preview"></p>
 <p class="fireman-p-indent" >RPC通信的四个部分：</p>
 <ol>
 <li>服务端</li>
@@ -373,7 +376,7 @@
 <h2 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a>gRPC</h2><p class="fireman-p-indent" >为了解决RPC协议中，对客户端存根和服务端存根的封装，而且可以实现跨语言，则需要通过一种框架实现，RPC框架中，使用的最为广泛的，就是gRPC框架。</p>
 <p class="fireman-p-indent" ><code>gRPC</code>是基于<code>ProtoBuf</code>开发的跨语言的开源<code>RPC</code>框架。</p>
 <p class="fireman-p-indent" >客户端和服务端通信，中间经过网络，需要确定网络协议（<code>tcp</code>、<code>udp</code>），确定服务端地址（域名、ip和端口），服务路径（<code>url</code>）服务参数（<code>body</code>，<code>query</code>，<code>path</code>），数据类型（<code>string</code>，<code>int</code>），数据编码（<code>json</code>、<code>xml</code>），安全性（<code>ssl</code>加密，<code>token</code>），错误处理（<code>error</code> <code>response</code>）。使用<code>HTTP</code>通信可以满足上述所有条件，使用<code>gRPC</code>协议可以满足。<code>gRPC</code>使用<code>HTTP/2</code>协议，数据传输使用二进制，流式传输streaming，多路复用一个<code>TCP</code>连接。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/landing-2.svg" alt="Concept Diagram"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/landing-2.svg" alt="Concept Diagram"></p>
 <p class="fireman-p-indent" >定义服务方法、请求参数、返回参数</p>
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">GetUserRequest</span> &#123; 		<span class="comment">// 输入参数</span></span><br><span class="line">  <span class="type">int64</span> id = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">GetUserResponse</span> &#123;		<span class="comment">// 返回参数</span></span><br><span class="line">  <span class="type">int64</span> id = <span class="number">1</span>;</span><br><span class="line">  Book book = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">service </span><span class="title class_">UserService</span> &#123;			<span class="comment">// 方法、功能</span></span><br><span class="line">  <span class="function"><span class="keyword">rpc</span> GetUser (GetUserRequest) <span class="keyword">returns</span> (GetUserResponse)</span>;		</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -393,7 +396,7 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dial, err := grpc.Dial(<span class="string">&quot;localhost:8081&quot;</span>, grpc.WithInsecure()) <span class="comment">// grpc调用端口，设置为不安全传输，练习环境，不加密</span></span><br><span class="line">userclient := userpb.NewUserServiceClient(dial)	 <span class="comment">// 调用服务</span></span><br><span class="line">user, err := userclient.GetUser(context.Background(), &amp;userpb.GetUserRequest&#123;Id: <span class="number">1</span>&#125;) <span class="comment">// 传输数据</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="GRPC-GATEWAY"><a href="#GRPC-GATEWAY" class="headerlink" title="GRPC GATEWAY"></a>GRPC GATEWAY</h2><p class="fireman-p-indent" >为了对外兼容gRPC请求和HTTP请求，而且不需要写两份代码，维护两份逻辑，可以通过gRPC-gatewag实现一种代理功能，在gRPC协议外层代理一层HTTP协议。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220706224053892.png" alt="image-20220706224053892"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220706224053892.png" alt="image-20220706224053892"></p>
 <p class="fireman-p-indent" >通过grpc-gateway反向代理，服务器内部通信使用grpc，外部访问通过http</p>
 <p class="fireman-p-indent" >user.yaml</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">type:</span> <span class="string">google.api.Service</span></span><br><span class="line"><span class="attr">config_version:</span> <span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="attr">http:</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">selector:</span> <span class="string">gostudy.UserService.GetUser</span></span><br><span class="line">      <span class="attr">get:</span> <span class="string">/user/&#123;id&#125;</span></span><br></pre></td></tr></table></figure>
@@ -499,7 +502,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -507,7 +515,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -517,6 +527,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/a0ee.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

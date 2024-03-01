@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="ElasticSearch是最为常用的检索数据库，是一种NoSQL，一般用于做不常更新、常检索的场景，例如用于存储日志或者用于商品检索。本文介绍一些常用的es操作步骤和使用golang操作es的方式。">
 <meta property="og:type" content="article">
@@ -78,7 +81,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -318,7 +321,7 @@
 <p class="fireman-p-indent" ><strong>这种先建立索引，再对索引进行搜索的过程就叫全文检索(Full-text Search)。</strong></p>
 <p class="fireman-p-indent" >虽然创建索引的过程也是非常耗时的，但是索引一旦创建就可以多次使用，全文检索主要处理的是查询，所以耗时间创建索引是值得的。（在少些多读的场景下非常具有优势）</p>
 <h3 id="Lucene"><a href="#Lucene" class="headerlink" title="Lucene"></a>Lucene</h3><p class="fireman-p-indent" >提到全文检索，不得不提到的一个技术就是Lucene，Lucene是apache下的一个开放源代码的全文检索引擎工具包。提供了完整的查询引擎和索引引擎，部分文本分析引擎。我们所熟知的全文检索引擎Solr和ES都是基于Lucene的。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620.jpeg" alt="img"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620.jpeg" alt="img"></p>
 <ol>
 <li><p>绿色表示索引过程，对要搜索的原始内容进行索引构建一个索引库，索引过程包括：</p>
 <p>确定原始内容即要搜索的内容-&gt;采集文档-&gt;创建文档-&gt;分析文档-&gt;索引文档</p>
@@ -329,7 +332,7 @@
 </ol>
 <h4 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h4><p class="fireman-p-indent" >也就是对文档索引的过程，将用户要搜索的文档内容进行索引，索引存储在索引库（index）中。</p>
 <p class="fireman-p-indent" >比如刚才的这些文档：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620-20221010155820753.jpeg" alt="img"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620-20221010155820753.jpeg" alt="img"></p>
 <p class="fireman-p-indent" >我们要分析其中所有的单词，将单词、文档名建立映射关系。</p>
 <p class="fireman-p-indent" >（对于单词的切分包括了对原始文档提取单词、去除停用词等过程，这个过程被称为分词）</p>
 <p class="fireman-p-indent" >我们分析其中的一篇文档<code>Lucene.txt</code>：</p>
@@ -346,17 +349,17 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java flink kakfa</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >这样我们就建立了映射关系，<code>lucene</code>、<code>java</code>、<code>full</code>、<code>search</code>在<code>Lucene.txt</code>中，而<code>flink</code>不在<code>Lucene.txt</code>中，但是在<code>flink.txt</code>中。<code>java</code>即在<code>Lucene.txt</code>中，也在<code>flink.txt</code>中。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620-20221010160043483.jpeg" alt="img"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620-20221010160043483.jpeg" alt="img"></p>
 <p class="fireman-p-indent" >那当我们查找<code>lucene</code>这个词，就在<code>Lucene.txt</code>中，但是查找<code>java</code>时可以获悉其在这两个文件中。</p>
 <p class="fireman-p-indent" >创建索引是对语汇单元索引，通过词语找文档，这种索引的结构就叫做叫<strong>倒排索引结构</strong>。</p>
 <p class="fireman-p-indent" >传统方法是根据文件找到该文件的内容，在文件内容中匹配搜索关键字，这种方法是顺序扫描方法，数据量大、搜索慢。</p>
 <p class="fireman-p-indent" ><strong>倒排索引结构</strong>是根据内容（词语）找文档，如下图：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620-20221010160108412.jpeg" alt="img"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620-20221010160108412.jpeg" alt="img"></p>
 <p class="fireman-p-indent" ><strong>倒排索引结构也叫反向索引结构，包括索引和文档两部分，索引即词汇表，它的规模较小，而文档集合较大。</strong></p>
 <p class="fireman-p-indent" >有倒排索引，对应肯定，有正向索引。 正向索引其实就是顺序扫描所有文件，这样本身效率是极低的。</p>
 <h4 id="查询索引"><a href="#查询索引" class="headerlink" title="查询索引"></a>查询索引</h4><p class="fireman-p-indent" >查询索引也是搜索的过程。搜索就是用户输入关键字，从索引（index）中进行搜索的过程。根据关键字搜索索引，根据索引找到对应的文档，从而找到要搜索的内容（这里指磁盘上的文件）。</p>
 <p class="fireman-p-indent" >我们这里就是通过查询索引表，找到文档所在的位置，就完成了查询，但其他的场景可以灵活的把查询出来的结果展示出去，比如我们的百度搜索时，为我们展示的是相关网页。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620-20221010160204974.jpeg" alt="img"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/1620-20221010160204974.jpeg" alt="img"></p>
 <h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><p class="fireman-p-indent" ><code>Elasticsearch</code> 是一个<strong>分布式</strong>、<strong>可扩展</strong>、<strong>实时</strong>的<strong>搜索</strong>与<strong>数据分析</strong>引擎。 它能从项目一开始就赋予你的数据以搜索、分析和探索的能力，这是通常没有预料到的。 它存在还因为原始数据如果只是躺在磁盘里面根本就毫无用处。</p>
 <p class="fireman-p-indent" >Elasticsearch 是一个开源的搜索引擎，建立在一个全文搜索引擎库 <span class="exturl" data-url="aHR0cHM6Ly9sdWNlbmUuYXBhY2hlLm9yZy9jb3JlLw==">Apache Lucene™<i class="fa fa-external-link-alt"></i></span> 基础之上。 Lucene 可以说是当下最先进、高性能、全功能的搜索引擎库—无论是开源还是私有。</p>
 <p class="fireman-p-indent" >但是 Lucene 仅仅只是一个库。为了充分发挥其功能，你需要使用 Java 并将 Lucene 直接集成到应用程序中。 更糟糕的是，您可能需要获得信息检索学位才能了解其工作原理。Lucene <em>非常</em> 复杂。</p>
@@ -419,7 +422,7 @@
 <p class="fireman-p-indent" >需要注意，<code>kibana</code>的版本需要与<code>es</code>版本一致，另外，需要指向能够访问到<code>es</code>的<code>hosts</code>，这里使用<code>docker</code>，则使用主机。（不能使用容器的<code>IP</code>，这是因为容器<code>IP</code>不固定）</p>
 <p class="fireman-p-indent" >服务正常之后，可以通过<code>http://127.0.0.1:5601</code>打开页面，点击首页的<code>Try sample data</code>添加简单数据用于学习。</p>
 <p class="fireman-p-indent" >点击<code>Dev Tools</code>进行操作。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221010172947826.png" alt="image-20221010172947826"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221010172947826.png" alt="image-20221010172947826"></p>
 <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p class="fireman-p-indent" >在<code>es 7</code>版本之前</p>
 <p class="fireman-p-indent" ><code>index</code>：相当于<code>mysql</code>中的<code>database</code>，</p>
 <p class="fireman-p-indent" ><code>type</code>：相当于<code>mysql</code>中的<code>table</code></p>
@@ -805,7 +808,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -813,7 +821,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -823,6 +833,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/714.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

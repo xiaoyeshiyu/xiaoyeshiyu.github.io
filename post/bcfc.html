@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在做分享功能时，会通过分享的内容生成一个唯一的分享id，访问这个分享的时候，会通过分享id定位到资源。实际上通过HTTP请求打开这个分享时，通常是用GET请求，将分享id放到path中实现，而分享id可能会很长，导致这个链接显示上不好看。常用的解决方案是将这个地址转换成一个只有几位字母或者数字的短地址。">
 <meta property="og:type" content="article">
@@ -75,7 +78,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -287,14 +290,14 @@
     
     
     <div class="post-body" itemprop="articleBody"><p class="fireman-p-indent" >​	这个过程的核心逻辑是链接到短链接的一一对应，通过链接能够查询到这个唯一的短链接，通过短链接可以查询到唯一对应的链接。链接变短的方法可以通过<code>hash</code>实现，解决<code>hash</code>冲突可以通过一个全局自增<code>id</code>实现，通过链接加自增<code>id</code>之后的<code>hash</code>是唯一的。通过这个唯一值映链接的关系，通过<code>hash</code>值生成唯一短链接，将短链接和链接建议关系。其中自增<code>id</code>需要注意线程安全，可以通过<code>redis</code>实现，短链接到<code>hash</code>值以及链接的映射关系可以通过数据库或者<code>redis</code>存储实现。</p>
-<h3 id="主体之间的关系"><a href="#主体之间的关系" class="headerlink" title="主体之间的关系"></a>主体之间的关系</h3><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726165806465.png" alt="image-20220726165806465" style="zoom:50%;" />
+<h3 id="主体之间的关系"><a href="#主体之间的关系" class="headerlink" title="主体之间的关系"></a>主体之间的关系</h3><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726165806465.png" alt="image-20220726165806465" style="zoom:50%;" />
 
 <ul>
 <li>分享的<code>URL</code>通过<code>hash</code>函数，获得唯一的<code>hash</code>值，通过唯一的hash值与短链接建立连接关系</li>
 <li>短链接的地址需要单独维护，要实现唯一性，可以通过<code>redis</code>实现自增<code>id</code>实现</li>
 <li><code>hash</code>函数可能出现<code>hash</code>冲突，可以通过多个<code>hash</code>函数组合成一个长<code>hash</code>值，也可通过增加<code>hash</code>函数的位数避免</li>
 </ul>
-<h3 id="数据库存储信息"><a href="#数据库存储信息" class="headerlink" title="数据库存储信息"></a>数据库存储信息</h3><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726170046997.png" alt="image-20220726170046997" style="zoom:50%;" />
+<h3 id="数据库存储信息"><a href="#数据库存储信息" class="headerlink" title="数据库存储信息"></a>数据库存储信息</h3><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726170046997.png" alt="image-20220726170046997" style="zoom:50%;" />
 
 <ul>
 <li>通过hash值可以获取到短链接</li>
@@ -303,7 +306,7 @@
 </ul>
 <p class="fireman-p-indent" >在实现上可以考虑实际请求的性能要求和技术栈，在短链接唯一性上推荐用<code>redis</code>高性能<code>NoSQL</code>，其他的几个服务也可以使用这种键值对存储服务。</p>
 <h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p class="fireman-p-indent" >创建短链接的过程</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726171559125.png" alt="image-20220726171559125" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726171559125.png" alt="image-20220726171559125" style="zoom:50%;" />
 
 <ul>
 <li>创建长连接，通过hash函数获取hash值，如果hash值已经存在，则直接返回对应短链接信息。</li>
@@ -317,7 +320,7 @@
 </ul>
 <p class="fireman-p-indent" >数据存储方式，都可以通过<code>k-v</code>存储，如果使用<code>redis</code>，通过<code>string</code>即可。</p>
 <p class="fireman-p-indent" >访问分享的过程</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726171837296.png" alt="image-20220726171837296" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726171837296.png" alt="image-20220726171837296" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >通过访问的短链接，查询是否有短链接到URL的关系，如果没有则返回404，如果存在，则返回HTTP code 307以及URL，临时跳转到URL。</p>
 <h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p class="fireman-p-indent" >创建短链接</p>
@@ -408,7 +411,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -416,7 +424,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -426,6 +436,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/bcfc.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

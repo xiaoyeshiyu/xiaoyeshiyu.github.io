@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="通道是 Go 语言中用于协程之间通信的重要机制。通过阻塞和同步的方式，通道实现了安全的数据传递和协程之间的同步操作。通道的实现依赖于调度器和锁机制，通过队列和阻塞机制实现数据的传递。通道在并发编程中具有广泛的应用场景，可以提高程序的可靠性和性能。">
 <meta property="og:type" content="article">
@@ -107,7 +110,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -367,19 +370,19 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> hchan <span class="keyword">struct</span> &#123;</span><br><span class="line">	qcount   <span class="type">uint</span>           <span class="comment">// total data in the queue</span></span><br><span class="line">	dataqsiz <span class="type">uint</span>           <span class="comment">// size of the circular queue</span></span><br><span class="line">	buf      unsafe.Pointer <span class="comment">// points to an array of dataqsiz elements  环形队列</span></span><br><span class="line">	elemsize <span class="type">uint16</span></span><br><span class="line">	closed   <span class="type">uint32</span></span><br><span class="line">	elemtype *_type <span class="comment">// element type</span></span><br><span class="line">	sendx    <span class="type">uint</span>   <span class="comment">// send index      			发送时的下标</span></span><br><span class="line">	recvx    <span class="type">uint</span>   <span class="comment">// receive index   			接受时的下标</span></span><br><span class="line">	recvq    waitq  <span class="comment">// list of recv waiters</span></span><br><span class="line">	sendq    waitq  <span class="comment">// list of send waiters</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// lock protects all fields in hchan, as well as several</span></span><br><span class="line">	<span class="comment">// fields in sudogs blocked on this channel.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// Do not change another G&#x27;s status while holding this lock</span></span><br><span class="line">	<span class="comment">// (in particular, do not ready a G), as this can deadlock</span></span><br><span class="line">	<span class="comment">// with stack shrinking.</span></span><br><span class="line">  <span class="comment">// 锁保护了hchan中的所有字段，以及在该通道上被阻塞的几个 sudogs 中的一些字段。</span></span><br><span class="line">  <span class="comment">// 在持有此锁时，请不要更改另一个G的状态（特别是不要准备一个G），因为这可能会与堆栈收缩发生死锁。</span></span><br><span class="line">	lock mutex								<span class="comment">// 互斥锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >空 <code>chan</code>，<code>sendx = 0</code>，<code>revex = 0</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103520748.png" alt="image-20231225103520748"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103520748.png" alt="image-20231225103520748"></p>
 <p class="fireman-p-indent" >一个入队，<code>sendx = 1</code>，<code>revex = 0</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103853807.png" alt="image-20231225103853807"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103853807.png" alt="image-20231225103853807"></p>
 <p class="fireman-p-indent" >再入两个，满队，<code>sendx = 0</code>，<code>revex = 0</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103929168.png" alt="image-20231225103929168"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225103929168.png" alt="image-20231225103929168"></p>
 <p class="fireman-p-indent" >出队一个，<code>sendx = 0</code>，<code>revex = 1</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104154814.png" alt="image-20231225104154814"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104154814.png" alt="image-20231225104154814"></p>
 <h2 id="allocates-memory"><a href="#allocates-memory" class="headerlink" title="allocates memory"></a>allocates memory</h2><p class="fireman-p-indent" >内存分配</p>
 <p class="fireman-p-indent" >allocates an hchan struct on the heap.</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104435846.png" alt="image-20231225104435846" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104435846.png" alt="image-20231225104435846" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >初始化 <code>channel</code> 的时候（也就是 <code>hchan</code>），内存分配在堆上。同时返回一个 <code>hchan</code> 的指针。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104627325.png" alt="image-20231225104627325" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225104627325.png" alt="image-20231225104627325" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >这也就是为什么可以在两个函数之间传递 <code>channels</code>，而不需要传递 <code>channels</code> 的指针。</p>
 <h1 id="sends-and-receives"><a href="#sends-and-receives" class="headerlink" title="sends and receives"></a>sends and receives</h1><p class="fireman-p-indent" >goroutine scheduling </p>
@@ -394,31 +397,31 @@
 <p class="fireman-p-indent" >实际情况：</p>
 <p class="fireman-p-indent" >在 G1 侧：<code>ch &lt;- task0</code></p>
 <p class="fireman-p-indent" >将 <code>task0</code> 发送到 <code>ch</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105049154.png" alt="image-20231225105049154" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105049154.png" alt="image-20231225105049154" style="zoom:25%;" />
 
 <ol>
 <li><p>acquire：拿锁</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105142340.png" alt="image-20231225105142340" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105142340.png" alt="image-20231225105142340" style="zoom:25%;" />
 </li>
 <li><p>enqueue：将 <code>task0</code> 的结构体拷贝一份，放到 <code>cha</code> 中（如果 <code>task0</code> 是指针，则拷贝的是8个字节，如果是结构体，则拷贝整个结构体。）</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105248461.png" alt="image-20231225105248461" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105248461.png" alt="image-20231225105248461" style="zoom:25%;" />
 </li>
 <li><p>释放锁</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105622677.png" alt="image-20231225105622677" style="zoom:25%;" /></li>
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105622677.png" alt="image-20231225105622677" style="zoom:25%;" /></li>
 </ol>
 <p class="fireman-p-indent" >在 G2 侧：<code>t := &lt;- ch</code></p>
 <p class="fireman-p-indent" >从 <code>ch</code> 中获取任务</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105908552.png" alt="image-20231225105908552" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105908552.png" alt="image-20231225105908552" style="zoom:25%;" />
 
 <ol>
 <li><p>获取锁</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105930500.png" alt="image-20231225105930500" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225105930500.png" alt="image-20231225105930500" style="zoom:25%;" />
 </li>
 <li><p>出队，将 <code>task0</code> 的拷贝从队列中取出来，重新赋值给 <code>t</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225110023956.png" alt="image-20231225110023956" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225110023956.png" alt="image-20231225110023956" style="zoom:25%;" />
 </li>
 <li><p>释放锁</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225110153190.png" alt="image-20231225110153190" style="zoom:25%;" /></li>
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225110153190.png" alt="image-20231225110153190" style="zoom:25%;" /></li>
 </ol>
 <p class="fireman-p-indent" >no shared memory ( except hchan )</p>
 <p class="fireman-p-indent" >可以看到，整个过程没有共享内存（除了 <code>hchan</code> 之外），而是使用 <code>copies</code> 拷贝对象。</p>
@@ -431,15 +434,15 @@
 <li><p>发送两个任务到 <code>ch</code></p>
 <p><code>ch &lt;- task1</code></p>
 <p><code>ch &lt;- task2</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225111111576.png" alt="image-20231225111111576" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225111111576.png" alt="image-20231225111111576" style="zoom:25%;" />
 </li>
 <li><p>再发送一个任务到 <code>ch</code></p>
 <p><code>ch &lt;- task3</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225111230442.png" alt="image-20231225111230442" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225111230442.png" alt="image-20231225111230442" style="zoom:25%;" />
 </li>
 <li><p>当 <code>ch</code> 满了，再发送一个任务到 <code>ch</code></p>
 <p><code>ch &lt;- task4</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225111307480.png" alt="image-20231225111307480" style="zoom:25%;" /></li>
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225111307480.png" alt="image-20231225111307480" style="zoom:25%;" /></li>
 </ul>
 <p class="fireman-p-indent" >此时 <code>chanel is full</code>，队列已满。</p>
 <p class="fireman-p-indent" >G1 执行阻塞，在队列接受后恢复。（通过 <code>GMP</code> 调度模型，当 G1 在阻塞之后，P 会切换到 <code>g0</code> 到 M 上执行，G1 的状态变为 <code>gopark</code>，从而避免其他 <code>goroutine</code> 无法被调度执行。）</p>
@@ -447,7 +450,7 @@
 <h3 id="the-runtime-scheduler"><a href="#the-runtime-scheduler" class="headerlink" title="the runtime scheduler"></a>the runtime scheduler</h3><p class="fireman-p-indent" >运行时调度</p>
 <p class="fireman-p-indent" ><code>goroutine</code> 是<strong>用户空间的线程</strong>，也就是说，创建和管理都是通过 Go runtime（<code>g0</code>），并不是 OS，相比 OS 的线程，Go runtime 的线程更加轻量。 </p>
 <p class="fireman-p-indent" >runtime 调度会将 goroutines 调度到 OS 的线程上。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225112558323.png" alt="image-20231225112558323"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225112558323.png" alt="image-20231225112558323"></p>
 <p class="fireman-p-indent" >Go 的 <code>M:N</code> 调度模型可以用三个结构体来表示</p>
 <p class="fireman-p-indent" >M：OS thread，操作系统线程</p>
 <p class="fireman-p-indent" >G：goroutine</p>
@@ -456,22 +459,22 @@
 <li>负责调度</li>
 <li>为了运行 G，M 一定会持有一个 P</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225112929699.png" alt="image-20231225112929699"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225112929699.png" alt="image-20231225112929699"></p>
 <h3 id="pausing-goroutines"><a href="#pausing-goroutines" class="headerlink" title="pausing goroutines"></a>pausing goroutines</h3><p class="fireman-p-indent" >阻塞 goroutines</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113211310.png" alt="image-20231225113211310" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113211310.png" alt="image-20231225113211310" style="zoom:25%;" />
 
 <p><code>ch &lt;- task4</code></p>
 <p class="fireman-p-indent" >往满 <code>channel</code> 中发送时，这个 G 进入阻塞状态，G 进入 <code>gopark</code>，G1 改为 <code>waiting</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113223575.png" alt="image-20231225113223575" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113223575.png" alt="image-20231225113223575" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >取消 G1 和 M 之间的关联关系</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113256978.png" alt="image-20231225113256978"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113256978.png" alt="image-20231225113256978"></p>
 <p class="fireman-p-indent" >从 P 中调度一个可运行的 G到 M 上执行，让 M 不处于阻塞状态。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113351332.png" alt="image-20231225113351332"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113351332.png" alt="image-20231225113351332"></p>
 <p class="fireman-p-indent" >这种处理方式，G1 根据需要被阻塞，但操作系统线程没有被阻塞。</p>
 <p class="fireman-p-indent" >当有一个消息从 <code>channel</code> 中被取出，<code>ch</code> 没有满时，G1 不再被阻塞，从阻塞状态中恢复回来。</p>
 <h3 id="resuming-goroutines"><a href="#resuming-goroutines" class="headerlink" title="resuming goroutines"></a>resuming goroutines</h3><p class="fireman-p-indent" ><code>hchan</code> 结构体中存储等待的 <code>senders</code> 和 <code>receivers</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113950734.png" alt="image-20231225113950734"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225113950734.png" alt="image-20231225113950734"></p>
 <p class="fireman-p-indent" ><code>go/src/runtime/chan.go</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> hchan <span class="keyword">struct</span> &#123;</span><br><span class="line">	qcount   <span class="type">uint</span>           <span class="comment">// total data in the queue</span></span><br><span class="line">	dataqsiz <span class="type">uint</span>           <span class="comment">// size of the circular queue</span></span><br><span class="line">	buf      unsafe.Pointer <span class="comment">// points to an array of dataqsiz elements</span></span><br><span class="line">	elemsize <span class="type">uint16</span></span><br><span class="line">	closed   <span class="type">uint32</span></span><br><span class="line">	elemtype *_type <span class="comment">// element type</span></span><br><span class="line">	sendx    <span class="type">uint</span>   <span class="comment">// send index</span></span><br><span class="line">	recvx    <span class="type">uint</span>   <span class="comment">// receive index</span></span><br><span class="line">	recvq    waitq  <span class="comment">// list of recv waiters  接受者的等待列表 </span></span><br><span class="line">	sendq    waitq  <span class="comment">// list of send waiters  发送者的等待列表</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// lock protects all fields in hchan, as well as several</span></span><br><span class="line">	<span class="comment">// fields in sudogs blocked on this channel.</span></span><br><span class="line">	<span class="comment">//</span></span><br><span class="line">	<span class="comment">// Do not change another G&#x27;s status while holding this lock</span></span><br><span class="line">	<span class="comment">// (in particular, do not ready a G), as this can deadlock</span></span><br><span class="line">	<span class="comment">// with stack shrinking.</span></span><br><span class="line">	lock mutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> waitq <span class="keyword">struct</span> &#123;  <span class="comment">// 等待列表中</span></span><br><span class="line">	first *sudog       <span class="comment">// 候补 g 的链表</span></span><br><span class="line">	last  *sudog</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -479,38 +482,38 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sudog represents a g in a wait list, such as for sending/receiving</span></span><br><span class="line"><span class="comment">// on a channel.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// sudog is necessary because the g ↔ synchronization object relation</span></span><br><span class="line"><span class="comment">// is many-to-many. A g can be on many wait lists, so there may be</span></span><br><span class="line"><span class="comment">// many sudogs for one g; and many gs may be waiting on the same</span></span><br><span class="line"><span class="comment">// synchronization object, so there may be many sudogs for one object.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// sudogs are allocated from a special pool. Use acquireSudog and</span></span><br><span class="line"><span class="comment">// releaseSudog to allocate and free them.</span></span><br><span class="line"><span class="keyword">type</span> sudog <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">// The following fields are protected by the hchan.lock of the</span></span><br><span class="line">	<span class="comment">// channel this sudog is blocking on. shrinkstack depends on</span></span><br><span class="line">	<span class="comment">// this for sudogs involved in channel ops.</span></span><br><span class="line"></span><br><span class="line">	g *g            <span class="comment">// 阻塞的 G</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// isSelect indicates g is participating in a select, so</span></span><br><span class="line">	<span class="comment">// g.selectDone must be CAS&#x27;d to win the wake-up race.</span></span><br><span class="line">	isSelect <span class="type">bool</span></span><br><span class="line">	next     *sudog</span><br><span class="line">	prev     *sudog</span><br><span class="line">	elem     unsafe.Pointer <span class="comment">// data element (may point to stack)   阻塞时，往 channel 中发送的数据的指针</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// The following fields are never accessed concurrently.</span></span><br><span class="line">	<span class="comment">// For channels, waitlink is only accessed by g.</span></span><br><span class="line">	<span class="comment">// For semaphores, all fields (including the ones above)</span></span><br><span class="line">	<span class="comment">// are only accessed when holding a semaRoot lock.</span></span><br><span class="line"></span><br><span class="line">	acquiretime <span class="type">int64</span></span><br><span class="line">	releasetime <span class="type">int64</span></span><br><span class="line">	ticket      <span class="type">uint32</span></span><br><span class="line">	parent      *sudog <span class="comment">// semaRoot binary tree</span></span><br><span class="line">	waitlink    *sudog <span class="comment">// g.waiting list or semaRoot</span></span><br><span class="line">	waittail    *sudog <span class="comment">// semaRoot</span></span><br><span class="line">	c           *hchan <span class="comment">// channel</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >G1 阻塞时，会创建一个 <code>sudog</code>，并且将自己存储进去</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114044216.png" alt="image-20231225114044216" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114044216.png" alt="image-20231225114044216" style="zoom:25%;" />
 
-<p class="fireman-p-indent" >并且将这个 <code>sudog</code> 放到 <code>sendq</code>  中。<code>receiver</code> 通过 <code>sendq</code> 来唤醒 G1。而且是在执行调度之前就将 G 唤醒（也就是先唤醒 G ，然后 G 等待被 M 调度）<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114151682.png" alt="image-20231225114151682"></p>
+<p class="fireman-p-indent" >并且将这个 <code>sudog</code> 放到 <code>sendq</code>  中。<code>receiver</code> 通过 <code>sendq</code> 来唤醒 G1。而且是在执行调度之前就将 G 唤醒（也就是先唤醒 G ，然后 G 等待被 M 调度）<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114151682.png" alt="image-20231225114151682"></p>
 <p class="fireman-p-indent" >G2 开始执行</p>
 <p class="fireman-p-indent" ><code>t := &lt;- ch</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114411502.png" alt="image-20231225114411502"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114411502.png" alt="image-20231225114411502"></p>
 <p class="fireman-p-indent" >将 <code>task1</code> 从 <code>ch</code> 中取出来</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114658029.png" alt="image-20231225114658029"> </p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114658029.png" alt="image-20231225114658029"> </p>
 <p class="fireman-p-indent" >取走之后，从 <code>sendq</code> 中获取链表中的 <code>first sodug</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114825515.png" alt="image-20231225114825515"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114825515.png" alt="image-20231225114825515"></p>
 <p class="fireman-p-indent" >将 <code>sudog</code> 中的 <code>elem</code> 中的 <code>task4</code> 放到 <code>ch</code> 中</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114918534.png" alt="image-20231225114918534"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225114918534.png" alt="image-20231225114918534"></p>
 <p class="fireman-p-indent" >将 G1 的状态从 <code>gopark</code> 改为 <code>goready</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115132024.png" alt="image-20231225115132024"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115132024.png" alt="image-20231225115132024"></p>
 <p class="fireman-p-indent" >并且将 G1 调度到本地队列，依据亲缘性原则，将 G1 放到 <code>gonext</code> 中</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115205734.png" alt="image-20231225115205734"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115205734.png" alt="image-20231225115205734"></p>
 <p class="fireman-p-indent" >sends and receives when the receiver comes first.</p>
 <p class="fireman-p-indent" >发送和接受，是接收首先发生。</p>
 <h2 id="receives"><a href="#receives" class="headerlink" title="receives"></a>receives</h2><p class="fireman-p-indent" >当接收者阻塞</p>
 <p class="fireman-p-indent" ><code>t := &lt;- ch</code></p>
 <p class="fireman-p-indent" >从一个空 <code>channel</code> 中接收数据</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115424467.png" alt="image-20231225115424467"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115424467.png" alt="image-20231225115424467"></p>
 <p class="fireman-p-indent" >此时，会将 G2 暂停，同样，将 G2 状态改为 <code>gopark</code>，将 <code>G2</code> 放到 <code>sudog</code> 中，加入到 <code>ch</code> 的 <code>recvq</code> 中。</p>
 <p class="fireman-p-indent" ><strong>并且将 t 的指针存储到 elem 中</strong>（这是很有意思的点）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115604787.png" alt="image-20231225115604787"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115604787.png" alt="image-20231225115604787"></p>
 <p class="fireman-p-indent" >在 G1 中，当 <code>task</code> 被放到 <code>ch</code> 中时：</p>
 <p class="fireman-p-indent" >本应该将 <code>task</code> 放到 <code>buf</code> 中，然后修改 G2 状态到 <code>goready</code>。</p>
 <p class="fireman-p-indent" >但是这里有一个 <code>smarter</code> 的方法：</p>
 <p class="fireman-p-indent" >在 <code>elem</code> 中存储了 <code>t</code> 的指针，G1 将 <code>task</code> 直接存储到 <code>t</code> 上。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115938753.png" alt="image-20231225115938753"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225115938753.png" alt="image-20231225115938753"></p>
 <p class="fireman-p-indent" >而 <code>t</code> 其实是一个局部变量，也就是 <code>t</code> 是存储在栈上的。也就是说，G1 直接操作了 G2 的栈。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225153720777.png" alt="image-20231225153720777"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231225153720777.png" alt="image-20231225153720777"></p>
 <p class="fireman-p-indent" >正常情况下，如果一个线程操作另外一个线程的栈，会直接报错，或者引起数据不一致。但是在 Go 中，可以通过保证 <code>happens before</code> 来确保数据一致性。</p>
 <p class="fireman-p-indent" >这种情况，只会发生在 <code>runtime</code> 中。</p>
 <p class="fireman-p-indent" >在恢复时，G2不需要获取通道锁并操作缓冲区。同时，也只会有很少的内存拷贝。</p>
@@ -652,7 +655,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -660,7 +668,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -670,6 +680,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/52fe.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在微服务场景中，解耦能力是非常重要的，常用的解决方案是通过消息队列。具有回查机制和高并发能力的RocketMQ在实现分布式事务功能上有很大的优势。">
 <meta property="og:type" content="article">
@@ -83,7 +86,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -300,7 +303,7 @@
 <li>流量削峰</li>
 <li>数据分发</li>
 </ol>
-<h3 id="消息队列对比"><a href="#消息队列对比" class="headerlink" title="消息队列对比"></a>消息队列对比</h3><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l5MzM5NDUyNjg5,size_16,color_FFFFFF,t_70.png" alt="img" style="zoom:150%;" />
+<h3 id="消息队列对比"><a href="#消息队列对比" class="headerlink" title="消息队列对比"></a>消息队列对比</h3><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3l5MzM5NDUyNjg5,size_16,color_FFFFFF,t_70.png" alt="img" style="zoom:150%;" />
 
 <h2 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a>RocketMQ</h2><p class="fireman-p-indent" >RocketMQ是一个纯Java、分布式、队列模型的开源消息中间件，前身是MetaQ，是阿里参考Kafka特点研发的一个队列模型的消息中间件，后开源给apache基金会成为了apache的顶级开源项目，具有高性能、高可靠、高实时、分布式特点。</p>
 <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p class="fireman-p-indent" >因为RocketMQ的安装的东西有三个部分：<strong>namesrv、broker、rocketmq-dashboard</strong> ，用Docker-compose安装起来比较方便。</p>
@@ -312,26 +315,26 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/apache/rocketmq.git</span><br><span class="line">// 启动NameServer</span><br><span class="line">docker run -it -d --net=host apache/rocketmq ./mqnamesrv</span><br><span class="line">// 启动Broker</span><br><span class="line">docker run -it -d --net=host --mount source=/tmp/store,target=/home/rocketmq/store apache/rocketmq ./mqbroker -n localhost:9876</span><br><span class="line">// 通过自建镜像或者下载的镜像启动dashboard</span><br><span class="line">docker run -d -it --name rocketmq-dashboard -p 6765:8080 192.168.51.16:9443/dev/rocketmq-dashboard:1.0.0-centos</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >通过<code>centos</code>服务器<code>6765</code>端口访问管理页面。在<code>OPS</code>中改为<code>Name Server</code>的<code>9876</code>端口，点击<code>Cluster</code>，可以正常看到<code>Broker</code>节点，并且界面不报错，则说明页面访问正常。（例如通过<code>docker</code>启动，网络是<code>host</code>，则填写本机的的<code>9876</code>端口。）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221014092057756.png" alt="image-20221014092057756"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221014092057756.png" alt="image-20221014092057756"></p>
 <h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><p class="fireman-p-indent" >新建节点</p>
 <p class="fireman-p-indent" >点击 <code>Topic - ADD</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221150174.png" alt="image-20221013221150174" style="zoom: 25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221150174.png" alt="image-20221013221150174" style="zoom: 25%;" />
 
 <h4 id="发送消息"><a href="#发送消息" class="headerlink" title="发送消息"></a>发送消息</h4><p class="fireman-p-indent" >点击 SEND MESSAGE</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221244114.png" alt="image-20221013221244114"></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221314797.png" alt="image-20221013221314797" style="zoom:25%;" />
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221244114.png" alt="image-20221013221244114"></p>
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013221314797.png" alt="image-20221013221314797" style="zoom:25%;" />
 
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013232752302.png" alt="image-20221013232752302" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013232752302.png" alt="image-20221013232752302" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >ps：如果出现报错，需要查看<code>dashbord</code>的<code>log</code>，原因可能是网络不通，亦或是Broker节点磁盘超过<code>85%</code>。</p>
 <h4 id="获取消息"><a href="#获取消息" class="headerlink" title="获取消息"></a>获取消息</h4><p class="fireman-p-indent" >点击<code>Message-topic</code>，选择对应<code>Topoc：hello_mq</code>，选择时间范围（需要包括发送消息的时间）</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013233303997.png" alt="image-20221013233303997" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013233303997.png" alt="image-20221013233303997" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >可以看到刚刚发送的消息，以及消息详情</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013233325429.png" alt="image-20221013233325429" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221013233325429.png" alt="image-20221013233325429" style="zoom:25%;" />
 
 <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p class="fireman-p-indent" ><code>RocketMQ</code>是一个分布式的消息队列。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/Rmq-structure.png" alt="Rmq-structure.png"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/Rmq-structure.png" alt="Rmq-structure.png"></p>
 <ul>
 <li><code>Producer</code>：生产者，消息的发送者，可以做成一个集群</li>
 <li><code>Name Server</code>：类似注册中心，不负责数据和业务逻辑，同步Broker节点的数据信息</li>
@@ -406,7 +409,7 @@
 <li>相同消息组的消息按照先后顺序被存储在同一个队列。（通过<code>hash</code>之后<code>shard</code>，可以确保同一类型消息被发送到同一个<code>Group</code>中）</li>
 <li>不同消息组的消息可以混合在同一个队列中，且不保证连续。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/fifomessagegroup-aad0a1b7e64089075db956c0eca0cbf4.png" alt="顺序存储逻辑"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/fifomessagegroup-aad0a1b7e64089075db956c0eca0cbf4.png" alt="顺序存储逻辑"></p>
 <p class="fireman-p-indent" >如上图所示，消息组1和消息组4的消息混合存储在队列1中， Apache RocketMQ 保证消息组1中的消息G1-M1、G1-M2、G1-M3是按发送顺序存储，且消息组4的消息G4-M1、G4-M2也是按顺序存储，但消息组1和消息组4中的消息不涉及顺序关系。</p>
 <ul>
 <li><p><strong>消费顺序性</strong> ：</p>
@@ -478,7 +481,7 @@
 <li>半事务消息：暂不能投递的消息，生产者已经成功地将消息发送到了消息队列RocketMQ版服务端，但是消息队列RocketMQ版服务端未收到生产者对该消息的二次确认，此时该消息被标记成“暂不能投递”状态，处于该种状态下的消息即半事务消息。</li>
 <li>消息回查：由于网络闪断、生产者应用重启等原因，导致某条事务消息的二次确认丢失，消息队列RocketMQ版服务端通过扫描发现某条消息长期处于“半事务消息”时，需要主动向消息生产者询问该消息的最终状态（Commit或是Rollback），该询问过程即消息回查。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/p365949.png" alt="事务消息"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/p365949.png" alt="事务消息"></p>
 <p class="fireman-p-indent" >事务消息发送步骤如下：</p>
 <ol>
 <li>生产者将半事务消息发送至消息队列<code>RocketMQ</code>版服务端。</li>
@@ -538,7 +541,7 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(pc *pushConsumer)</span></span> Shutdown() <span class="type">error</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> err <span class="type">error</span></span><br><span class="line">	pc.closeOnce.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="built_in">close</span>(pc.done)</span><br><span class="line"></span><br><span class="line">		pc.client.UnregisterConsumer(pc.consumerGroup)</span><br><span class="line">		err = pc.defaultConsumer.shutdown()</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *rmqClient)</span></span> UnregisterConsumer(group <span class="type">string</span>) &#123;</span><br><span class="line">  <span class="comment">// shutdown方法，是在syncMap中删除对象</span></span><br><span class="line">	c.consumerMap.Delete(group)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" ><code>Shutdown</code>方法在<code>syncMap</code>中删除对象，因此，某一个生产者或者消费者<code>Shutdown</code>，则会断开该进程中所有与<code>RocketMQ</code>的连接。</p>
-<h3 id="通过RocketMQ分布式事务的案例"><a href="#通过RocketMQ分布式事务的案例" class="headerlink" title="通过RocketMQ分布式事务的案例"></a>通过RocketMQ分布式事务的案例</h3><p class="fireman-p-indent" ><img src="/../../../../../Library/Application%20Support/typora-user-images/image-20221014233157476.png" alt="image-20221014233157476"></p>
+<h3 id="通过RocketMQ分布式事务的案例"><a href="#通过RocketMQ分布式事务的案例" class="headerlink" title="通过RocketMQ分布式事务的案例"></a>通过RocketMQ分布式事务的案例</h3><p class="fireman-p-indent" ><img data-src="/../../../../../Library/Application%20Support/typora-user-images/image-20221014233157476.png" alt="image-20221014233157476"></p>
 <p class="fireman-p-indent" >例如在购物场景中，下单功能：</p>
 <ol>
 <li>查询库存状态</li>
@@ -641,7 +644,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -649,7 +657,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -659,6 +669,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/db4a.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

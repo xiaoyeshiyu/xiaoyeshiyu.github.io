@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在当今的分布式系统中，高性能和可扩展性是至关重要的。而分布式缓存作为一种关键的技术手段，能够显著提升系统的性能和可扩展性。">
 <meta property="og:type" content="article">
@@ -90,7 +93,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -304,7 +307,7 @@
     <div class="post-body" itemprop="articleBody"><h1 id="缓存选型"><a href="#缓存选型" class="headerlink" title="缓存选型"></a>缓存选型</h1><h2 id="Memcache"><a href="#Memcache" class="headerlink" title="Memcache"></a>Memcache</h2><p class="fireman-p-indent" ><code>Memcache</code> 提供简单的 <code>kv</code> <code>cache</code> 存储，<code>value</code> 大小不超过 <code>1MB</code>。一般将 <code>Memcache</code> 作为大文本或者简单的 <code>kv</code> 结构使用。</p>
 <p class="fireman-p-indent" ><code>Memcache</code> 使用了 <code>slab</code> 的方式做内存管理（可以理解为分块，一开始申请一个非常大的联系内存块，然后逐步分为比较小的块），存在一定的浪费，如果大量接近的 <code>item</code>，建议调整 <code>Memcache</code> 参数来优化每一个 <code>slab</code> 增长的 <code>ratio</code>（增长因子），可以通过设置 <code>slab_automove</code> &amp; <code>slab_reassign</code> 开启 <code>Memcache</code> 的动态&#x2F;手动 <code>move slab</code>，防止某些 <code>slab</code> 热点导致内存足够的情况下引发 <code>LRU</code>。（例如大量的小数据占用大量的小 <code>slab</code> ，放入大数据的时候虽然显示有内存，但是实际上没有连续的内存空间，此时会导致内存回收）</p>
 <p class="fireman-p-indent" >大部分情况下，简单 <code>KV</code> 推荐使用 <code>Memcache</code>，吞吐和响应都足够好。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102164553767.png" alt="image-20231102164553767"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102164553767.png" alt="image-20231102164553767"></p>
 <p class="fireman-p-indent" >每个 <code>slab</code> 包含若干个大小为 <code>1M</code> 的内存页，这些内存又被分割成多个 <code>chunk</code>，每个 <code>chunk</code> 存储一个 <code>item</code>：</p>
 <p class="fireman-p-indent" >在 <code>Memcache</code> 启动初始化时，每个 <code>slab</code> 都预分配一个 <code>1M</code> 的内存页，由 <code>slabs_preallocate</code> 完成（也可将相应代码注释掉关闭预分配功能）。</p>
 <p class="fireman-p-indent" ><code>chunk</code> 的增长因子由 <code>-f</code> 指定，默认 <code>1.25</code>，起始大小为 48 字节。</p>
@@ -313,7 +316,7 @@
 <p class="fireman-p-indent" >比较常见的方式是使用 <code>Redis</code> 作为数据索引，比如评论的列表 ID，播放历史的列表 ID 集合，关系链列表ID。</p>
 <p class="fireman-p-indent" ><code>Redis</code> 因为没有使用内存池，所以是存在一定的内存碎片的，一般会使用 <code>jemalloc</code> 来优化内存分配，需要编译时候使用 <code>jemalloc</code> 库代替 <code>glib</code> 的 <code>malloc</code> 使用。</p>
 <h2 id="Redis-vs-Memcache"><a href="#Redis-vs-Memcache" class="headerlink" title="Redis vs Memcache"></a>Redis vs Memcache</h2><p class="fireman-p-indent" ><code>Redis</code> 和 <code>Memcache</code> 最大的区别其实是 <code>redis</code> 单线程（新版本多线程，一个线程负责IO读写，多个线程负责同时处理网络请求），<code>memcache</code>多线程，所以 <code>QPS</code> 可能两者差异不大，但是吞吐会有很大的差别，比如大数据 <code>value</code> 返回的时候，<code>redis</code> 的<code>qps</code> 会抖动下降的很厉害，因为单线程工作，其他查询进不来。（比如执行 <code>keys *</code> 等命令时）</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102165500067.png" alt="image-20231102165500067" style="zoom:33%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102165500067.png" alt="image-20231102165500067" style="zoom:33%;" />
 
 <p class="fireman-p-indent" >所以建议纯 <code>kv</code> 都走 <code>memcache</code>，比如关系链服务，可以使用 <code>hashs</code> 存储双向关系，也会使用 <code>memcache</code> 挡一层来避免 <code>hgetall</code> 导致吞吐下降的问题。（例如使用<code>redis</code>的<code>hash</code>，一次性全部取出来会影响<code>redis</code>，这时可以将数据通过<code>protobuf</code>序列化之后存储到<code>memcache</code>，当然，更新时也需要双删双改。）</p>
 <p class="fireman-p-indent" >在很多系统中可以看到多次使用 <code>memcache</code> + <code>redis</code> 双缓存设计。</p>
@@ -324,21 +327,21 @@
 <li>不支持自动伸缩，不支持 <code>aotorebalance</code> ，增删节点需要重启才能生效</li>
 <li>运维不友好，没有控制面板</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102170156374.png" alt="image-20231102170156374"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102170156374.png" alt="image-20231102170156374"></p>
 <p class="fireman-p-indent" >业界开源的其他代理工具：</p>
 <ul>
 <li><code>codis</code>：只支持 <code>redis</code> 协议，且需要使用 <code>patch</code> 版本的 <code>redis</code></li>
 <li><code>mcrouter</code>：只支持 <code>memcache</code> 协议，<code>C</code> 开发，与运维集成开发难度高；</li>
 </ul>
 <p class="fireman-p-indent" >从集中式访问缓存到 <code>Sidecar</code> 访问缓存：</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102171200960.png" alt="image-20231102171200960" style="zoom: 25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102171200960.png" alt="image-20231102171200960" style="zoom: 25%;" />
 
 <ul>
 <li>微服务强调去中心化，使用 <code>Overload</code> 这种 <code>Sidecar</code> 访问存储</li>
 <li><code>LVS</code> 运维困难，容易流量热点，随下游扩容儿扩容，链接不均衡等问题，去掉 <code>LVS</code> 这样的四层负载均衡</li>
 <li><code>Sidecar</code> 伴生容器随 <code>App</code> 容器启动而启动，配置简化；</li>
 </ul>
-<h2 id="一致性-Hash"><a href="#一致性-Hash" class="headerlink" title="一致性 Hash"></a>一致性 Hash</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102171625187.png" alt="image-20231102171625187" style="zoom:50%;" />
+<h2 id="一致性-Hash"><a href="#一致性-Hash" class="headerlink" title="一致性 Hash"></a>一致性 Hash</h2><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102171625187.png" alt="image-20231102171625187" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >一致性 <code>hash</code> 是将数据按照特征值映射到一个首尾相连的 <code>hash</code> 环上，同时也将节点（按照 <code>IP</code> 地址或者机器名 <code>hash</code>）映射到这个环上。</p>
 <p class="fireman-p-indent" >对于数据，从数据在环上的位置开始，顺时针找到第一个节点即为数据的存储点。</p>
@@ -350,12 +353,12 @@
 <li>负载（<code>Load</code>）：哈希算法应能够尽量降低缓冲的负载</li>
 <li>平滑性（<code>Smoothness</code>）：缓存服务器的数目平滑改变和缓存对象的平滑改变是一致的</li>
 </ul>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102172244986.png" alt="image-20231102172244986" style="zoom: 25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102172244986.png" alt="image-20231102172244986" style="zoom: 25%;" />
 
 <p class="fireman-p-indent" >一致性哈希算法在服务节点太少时，容易因为节点分布不均匀而造成数据倾斜问题。</p>
 <p class="fireman-p-indent" >此时必然造成大量数据集中到 <code>Node A</code> 上，而只有极少量会定位到 <code>Node B</code>上。为了解决这种数据倾斜问题，一致性哈希算法引入了虚拟节点机制，即对每一个服务节点计算多个哈希，每个计算结果位置都放置一个此服务节点，称为虚拟节点。</p>
 <p class="fireman-p-indent" >具体做法可以在服务器 IP 或主机名的后面增加编号来实现。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102172454663.png" alt="image-20231102172454663" style="zoom: 25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102172454663.png" alt="image-20231102172454663" style="zoom: 25%;" />
 
 <p class="fireman-p-indent" >例如上面的情况，可以为每台服务器计算三个虚拟节点，于是可以分别计算。</p>
 <p class="fireman-p-indent" ><code>Node A#1</code>、<code>Node A#2</code>、<code>Node A#3</code>，<code>Node B#1</code>、<code>Node B#1</code>、<code>Node B#1</code> 的哈希值，于是形成六个虚拟节点。</p>
@@ -363,25 +366,25 @@
 <p class="fireman-p-indent" >参考微信红包的写合并优化：<span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vY2hpbmFuZXR3aW5kL2FydGljbGVzLzk0NjA4MjAuaHRtbA==">微信红包系统架构的设计和优化分享<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >在网关层，使用一致性 <code>hash</code>，对红包 ID 进行分片，命中到某一个逻辑服务器处理，在进程内做写操作的合并，减少存储层的单行锁争用。</p>
 <p class="fireman-p-indent" >如果红包的范围扩大，用户量非常多，避免造成一个服务器出现热点，还可以使用有界负载一致性hash：<span class="exturl" data-url="aHR0cHM6Ly9jbG91ZC50ZW5jZW50LmNvbS9kZXZlbG9wZXIvYXJ0aWNsZS8xMDU3NTky">学界 | 谷歌推出有界负载的一致性哈希算法，解决服务器负载均衡问题<i class="fa fa-external-link-alt"></i></span></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102173213419.png" alt="image-20231102173213419" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102173213419.png" alt="image-20231102173213419" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >即严格控制每个服务器的最大负载，在节点过载时，请求漂到下一个节点。</p>
 <h2 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h2><p class="fireman-p-indent" >数据分片的 <code>hash</code> 方式也是这个思路，即按照数据的某一特征（<code>Key</code>）来计算哈希值，并将哈希值与系统中的节点建立映射关系，从而将哈希值不同的数据分布到不同的节点上。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102174131075.png" alt="image-20231102174131075" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102174131075.png" alt="image-20231102174131075" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >按照hash方式做数据分片，映射关系非常简单；需要管理的元数据也非常之少，只需要记录节点的数据以及 <code>hash</code> 方式就行了。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102174138140.png" alt="image-20231102174138140" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102174138140.png" alt="image-20231102174138140" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >当加入或者删除一个节点的时候，大量的数据需要移动。比如在这里增加一个节点 <code>N3</code>，因此 <code>hash</code> 方式变为了 <code>mod 4</code>。</p>
 <p class="fireman-p-indent" >均衡问题：原始数据的特征值分布不均匀，导致大量的数据集中到一个物理节点上；第二，对于可修改的记录数据，单条记录的数据变大。</p>
 <p class="fireman-p-indent" >高级玩法是抽象 <code>slot</code>，基于 <code>Hash</code> 的 <code>Slot Sharding</code>，例如 <code>Redis-Cluster</code>。</p>
-<h2 id="Slot"><a href="#Slot" class="headerlink" title="Slot"></a>Slot</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102175257852.png" alt="image-20231102175257852"></p>
+<h2 id="Slot"><a href="#Slot" class="headerlink" title="Slot"></a>Slot</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102175257852.png" alt="image-20231102175257852"></p>
 <p class="fireman-p-indent" ><code>redis-cluster</code> 把 16384 槽按照节点数量进行平均分配，由节点进行管理。</p>
 <p class="fireman-p-indent" >对每个 <code>key</code> 按照 <code>CRC16</code> 规则进行 <code>hash</code> 运算，把 <code>hash</code> 结果对16384 进行取余，把余数发送给 <code>redis</code> 节点。</p>
 <p class="fireman-p-indent" >需要注意的是：<code>Redis Cluster</code> 的节点之间会共享消息，每个节点都会知道是哪个节点负责哪个范围内的数据槽。</p>
 <p class="fireman-p-indent" >好处是扩容和锁容的时候，数据迁移很方便。</p>
 <h1 id="缓存模式"><a href="#缓存模式" class="headerlink" title="缓存模式"></a>缓存模式</h1><h2 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h2><p class="fireman-p-indent" ><code>Storage</code> 和 <code>Cache</code> 同步更新容易出现数据不一致。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102175848824.png" alt="image-20231102175848824" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231102175848824.png" alt="image-20231102175848824" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >模拟 <code>MySQL Slave</code>做数据复制，再把消息投递到 <code>Kafka</code>，保证至少一次消费：</p>
 <ol>
@@ -391,10 +394,10 @@
 </ol>
 <p class="fireman-p-indent" >保证时效性和一致性。</p>
 <p class="fireman-p-indent" ><code>Cache Aside</code> 模型中，读缓存 <code>Miss</code> 的回填操作，和修改数据同步更新缓存，包括消息队列的异步补偿缓存，都无法满足 <code>Happens Before</code>，会存在相互覆盖的情况。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103110946794.png" alt="image-20231103110946794" style="zoom:33%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103110946794.png" alt="image-20231103110946794" style="zoom:33%;" />
 
 <p class="fireman-p-indent" >可能出现这种情况，<code>A</code> 操作读取的时候，<code>cache</code> 中没有，因此读取的 <code>DB</code>，读取到的 <code>v1</code>，<code>B</code>操作 <code>DB</code> 更新对象，需要更新 <code>Cache</code> 成 <code>v2</code>，而且订阅 <code>binlog</code> 的时候，可能收到删除操作，可能出现<code>binlog</code> 先消费，导致更新<code>cache</code>，由于无法保证谁先谁后（<code>Happens Before</code>），因此会出现缓存和DB数据不一致的情况。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103111541074.png" alt="image-20231103111541074" style="zoom:33%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103111541074.png" alt="image-20231103111541074" style="zoom:33%;" />
 
 <p class="fireman-p-indent" >读&#x2F;写同时操作：</p>
 <ol>
@@ -406,7 +409,7 @@
 </ol>
 <p class="fireman-p-indent" >这种交互下，由于4和5操作步骤是设置缓存，导致写入的值互相覆盖；并且操作的顺序性不确定，从而导致 <code>cache</code> 存在脏缓存的情况。</p>
 <p class="fireman-p-indent" >可以优化成下面这样：</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103111748480.png" alt="image-20231103111748480" style="zoom:33%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103111748480.png" alt="image-20231103111748480" style="zoom:33%;" />
 
 <p class="fireman-p-indent" >读&#x2F;写同时操作：</p>
 <ol>
@@ -418,7 +421,7 @@
 </ol>
 <p class="fireman-p-indent" >写操作使用 <code>SET</code> 操作命令，覆盖写缓存；读操作，使用 <code>ADD</code> 操作回写 <code>MISS</code> 数据，从而保证写操作的最新数据不会被读操作的回写数据覆盖。</p>
 <h2 id="多级缓存"><a href="#多级缓存" class="headerlink" title="多级缓存"></a>多级缓存</h2><p class="fireman-p-indent" >微服务拆分细粒度原子业务下的整合服务（聚合服务），用于提供粗粒度的接口，以及二级缓存加速，减少扇出的 <code>RPC</code> 网络请求，减少延迟。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103112453336.png" alt="image-20231103112453336" style="zoom:33%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103112453336.png" alt="image-20231103112453336" style="zoom:33%;" />
 
 <p class="fireman-p-indent" >例如一些服务需要由很多下游服务的结果拼凑，很容易出现扇出大量读请求。这个时候就可以使用多级缓存，减少读取请求。</p>
 <p class="fireman-p-indent" >最重要是保证多级缓存的一致性：</p>
@@ -436,7 +439,7 @@
 <li><p>基础库框架支持热点发现，自动短时的 <code>short-live cache</code></p>
 </li>
 <li><p>多 <code>Cluster</code> 支持，一个服务有多个 <code>cluster</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103113121092.png" alt="image-20231103113121092" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103113121092.png" alt="image-20231103113121092" style="zoom:25%;" />
 </li>
 <li><p>多 <code>Key</code> 设计：使用多副本，减少节点热点的问题</p>
 <ul>
@@ -447,7 +450,7 @@
 <p class="fireman-p-indent" >建立多个 <code>Cluster</code>，和微服务、存储等一起组成一个 <code>Region</code>。</p>
 <p class="fireman-p-indent" >这样相当于是用空间换时间：</p>
 <p class="fireman-p-indent" >同一个 <code>key</code> 在每一个 <code>fontend cluster</code> 都可能有一个 <code>copy</code>，这样会带来 <code>consistency</code> 的问题，但是这样能够降低 <code>latency</code> 和提高 <code>avaliability</code>。利用 <code>MySQL Binlog</code>消息 <code>anycast</code> 到不同集群的某个节点清理或者更新缓存；</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103113347143.png" alt="image-20231103113347143" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231103113347143.png" alt="image-20231103113347143" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >当业务频繁更新的时候，<code>cache</code> 频繁过期，会导致命中率低，<code>stale sets</code></p>
 <p class="fireman-p-indent" >如果应用程序层可以忍受稍微过期一点的数据，针对这点可以进一步降低系统负载。当一个 <code>key</code> 被删除的时候（<code>delete</code> 请求或者 <code>cache</code> 爆棚清理空间了），它被放到一个临时的数据结构里，会再续上比较短的一段时间（避免大热 <code>key</code> 被删掉之后，立马有大量的请求穿透缓存，可以先设置删除 <code>flag</code> 做软删，新的<code>cache</code>没有构建时，先用过期数据）。当有请求进来的时候会返回这个数据并标记为 <code>Stale</code>。对于大部分应用场景而言，<code>Stale Value</code> 是可以忍受的。（需要改 <code>memcache</code>、<code>Redis</code> 源码，或者基础库支持）</p>
@@ -482,7 +485,7 @@
 <li><p>序列化使用 <code>protobuf</code>，尽可能减少 <code>size</code></p>
 </li>
 <li><p>工具化胶水代码，直接生成</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106150535964.png" alt="image-20231106150535964"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106150535964.png" alt="image-20231106150535964"></p>
 </li>
 </ul>
 <h2 id="memcache-小技巧"><a href="#memcache-小技巧" class="headerlink" title="memcache 小技巧"></a><code>memcache</code> 小技巧</h2><ul>
@@ -594,7 +597,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -602,7 +610,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -612,6 +622,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/8bda.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

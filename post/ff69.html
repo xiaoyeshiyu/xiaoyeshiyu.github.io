@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="微服务当前大热，几乎所有的厂商都希望把服务微服务化，减少服务之间耦合，加快开发、迭代速度。学习微服务设计是必不可免的一件事。">
 <meta property="og:type" content="article">
@@ -91,7 +94,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -350,7 +353,7 @@
 </ul>
 <p class="fireman-p-indent" >将一个大型服务拆分成很多微服务，增加了复杂性，因此需要自动化部署、负载均衡、链路跟踪、服务发现、服务治理。但是可以实现动态扩容和熔断、降级。</p>
 <h3 id="微服务划分"><a href="#微服务划分" class="headerlink" title="微服务划分"></a>微服务划分</h3><p class="fireman-p-indent" >​	微服务架构通过业务拆分实现服务组件化，通过组件组合快速开发系统，业务单一的服务组件又可以独立部署，使得整个系统变得清晰灵活。基于领域驱动的思想，服务原子性，可独立部署，独立测试。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220824113204908.png" alt="image-20220824113204908" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/08/image-20220824113204908.png" alt="image-20220824113204908" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >​	同时，采用去中心化的方式，避免出现局部负载过高，出现瓶颈的情况。</p>
 <p class="fireman-p-indent" >​	划分界限：</p>
@@ -366,14 +369,14 @@
 </ul>
 <p class="fireman-p-indent" >本质上等同于多个微服务，组成（compose）完成一耳光完整的用户场景（usecase）。例如一个网站服务，需要提供用户服务、文件服务、内容服务等，可能加上一个组装服务，提供给上层业务。</p>
 <h3 id="按业务组织服务"><a href="#按业务组织服务" class="headerlink" title="按业务组织服务"></a>按业务组织服务</h3><p class="fireman-p-indent" >按照业务能力组织服务的意思是服务提供的能力和业务功能对应。比如：订单服务和数据访问服务，前者反应了真实的订单相关业务，后者是一种技术抽象服务，不反应真实的业务。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163210074.png" alt="image-20230716163210074" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163210074.png" alt="image-20230716163210074" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >按微服务架构理念来划分服务时，是不应该存在数据访问服务这样一个服务的。通过业务场景划分微服务职责。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163221784.png" alt="image-20230716163221784" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163221784.png" alt="image-20230716163221784" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >传统应用设计架构的分层结构反映了不同角色的沟通结构，所以按照微服务的方式构建应用，也需要对应调整团队的服务架构。每个服务背后的小团队的组织是夸功能的，包含实现业务所需的全面的技能。</p>
 <h3 id="去中心化"><a href="#去中心化" class="headerlink" title="去中心化"></a>去中心化</h3><p class="fireman-p-indent" >每个服务面临的业务场景不同，针对性的选择合适的技术解决方案。但是也需要避开多样化，结合团队实际情况来取舍，比如维护成本。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163838451.png" alt="image-20230716163838451" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716163838451.png" alt="image-20230716163838451" style="zoom:50%;" />
 
 <ul>
 <li>数据去中心化：每个微服务有自己的数据存储层，独享数据存储设置，缓存、数据库等，有利于服务的独立性，隔离相关干扰。</li>
@@ -381,7 +384,7 @@
 <li>技术去中心化：收敛语言</li>
 </ul>
 <h3 id="基础设施自动化，自动化测试"><a href="#基础设施自动化，自动化测试" class="headerlink" title="基础设施自动化，自动化测试"></a>基础设施自动化，自动化测试</h3><p class="fireman-p-indent" >服务划分之后，单一进程的传统应用被拆分为一系列的多进程服务，意味着开发、调试、测试、监控和部署的复杂度都会相应增大，而且服务独立后，可以单独部署和测试，就需要引入自动化测试，自动化部署，可以通过<code>gitlab</code>自带<code>ci</code>和<code>web hook</code>实现，或者通过<code>jenkins</code>实现。</p>
-<img src="https://img2018.cnblogs.com/common/874963/202002/874963-20200203190921731-1402877301.png" alt="img" style="zoom: 25%;" />
+<img data-src="https://img2018.cnblogs.com/common/874963/202002/874963-20200203190921731-1402877301.png" alt="img" style="zoom: 25%;" />
 
 <ul>
 <li>CI&#x2F;CD：Gitlab+GitLab hooks + k8s</li>
@@ -412,7 +415,7 @@
 <li>统一逻辑无法收敛，比如安全认证、限流</li>
 </ul>
 <h3 id="接口层"><a href="#接口层" class="headerlink" title="接口层"></a>接口层</h3><p class="fireman-p-indent" >在微服务最外一层的网关服务，主要负责转发。相比nginx，需要能够处理集群环境下节点切换的问题，同时，可以在流量入口增加链路追踪、熔断、鉴权、负载均衡等功能。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716170606057.png" alt="image-20230716170606057" style="zoom: 50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716170606057.png" alt="image-20230716170606057" style="zoom: 50%;" />
 
 <p class="fireman-p-indent" >通过增加一个app-interface用于统一的协议出口，在服务内部进行大量的dataset join（BFF层），按照业务场景来设计粗粒度的API，给后续服务的演进带来很多优势：</p>
 <ul>
@@ -429,7 +432,7 @@
 <li>很多跨横切面逻辑，比如安全认证，日志兼容，限流熔断等。随着时间推移，代码变的越来越复杂</li>
 </ul>
 <p class="fireman-p-indent" >通过引入API Gateway，把业务集成度高的BFF层和通用功能服务层API Gateway进行了分层处理。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716170623829.png" alt="image-20230716170623829" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230716170623829.png" alt="image-20230716170623829" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >新架构中，网管承担了重要的角色，解耦拆分和后续升级迁移的利器。在网关的配合下，单块BFF实现了解耦拆分，各业务线团队可以独立开发和交付各自的微服务，研发效率大大提升。另外，把跨横切面逻辑从BFF剥离到网关上去以后，BFF的开发人员可以更加关注业务逻辑交付，实现架构上的关注分离。</p>
 <p class="fireman-p-indent" >在BFF层在粗粒度获取微服务的信息，进行数据组装之余，还可以使用Node.js来做服务端渲染。</p>
@@ -487,15 +490,15 @@
 <li>标准化状态码：客户端通常以有限的方式响应API调用返回的错误</li>
 </ul>
 <p class="fireman-p-indent" >RPC和HTTP区别在哪？</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230726112845540.png" alt="image-20230726112845540"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230726112845540.png" alt="image-20230726112845540"></p>
 <p class="fireman-p-indent" >微服务的区别不在于RPC还是HTTP，而是在于服务拆分，是一种架构，可以通过RPC也可以通过HTTP实现。</p>
 <p class="fireman-p-indent" >RPC可以基于TCP实现，也可以基于HTTP实现。</p>
 <h2 id="Health-Check"><a href="#Health-Check" class="headerlink" title="Health Check"></a>Health Check</h2><p class="fireman-p-indent" >gRPC有一个标准的健康检测协议，在gRPC的所有语言实现中都提供了生成代码和用于设置运行状态的功能。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724202032845.png" alt="image-20230724202032845"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724202032845.png" alt="image-20230724202032845"></p>
 <p class="fireman-p-indent" >主动健康检查Health Check，可以在服务提供者服务不稳定时，被消费者感知，临时从负载均衡中摘除，减少错误请求。</p>
 <p class="fireman-p-indent" >当服务提供者重新稳定后，health check成功，重新加入到消费者的负载均衡，恢复请求。</p>
 <p class="fireman-p-indent" >health check，同样也被用于外挂方式的容器健康检测，或者流量检测（k8s liveness &amp; readiness）</p>
-<h3 id="平滑发布"><a href="#平滑发布" class="headerlink" title="平滑发布"></a>平滑发布</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724202230795.png" alt="image-20230724202230795"></p>
+<h3 id="平滑发布"><a href="#平滑发布" class="headerlink" title="平滑发布"></a>平滑发布</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724202230795.png" alt="image-20230724202230795"></p>
 <p class="fireman-p-indent" >对比以前暂停服务需要几个小时，平滑发布在应用上线之后，服务提供者在心跳接口正常之后，k8s将服务注册到注册中心，也就是通过服务外挂实现注册。</p>
 <p class="fireman-p-indent" >对于平滑发布，也有相同的平滑下线。（graceful shutdown）</p>
 <ol>
@@ -507,9 +510,9 @@
 <p class="fireman-p-indent" >第二阶段：域名解析DNS</p>
 <p class="fireman-p-indent" >第三阶段：分布式协调-注册中心阶段（必须：定位信息；其他非必须：分组、集群、权重、版本）</p>
 <p class="fireman-p-indent" >第四阶段：元数据服务</p>
-<h3 id="客户端发现模式"><a href="#客户端发现模式" class="headerlink" title="客户端发现模式"></a>客户端发现模式</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203137168.png" alt="image-20230724203137168"></p>
+<h3 id="客户端发现模式"><a href="#客户端发现模式" class="headerlink" title="客户端发现模式"></a>客户端发现模式</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203137168.png" alt="image-20230724203137168"></p>
 <p class="fireman-p-indent" >一个服务实例被启动时，它的网络地址会被写到注册表上；当服务实例终止时，再从注册表中删除；这个服务实例的注册表通过心跳机制动态刷新；客户端使用一个负载均衡算法，去选择一个可用的服务实例，来响应这个请求。</p>
-<h3 id="服务端发现模式"><a href="#服务端发现模式" class="headerlink" title="服务端发现模式"></a>服务端发现模式</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203344875.png" alt="image-20230724203344875"></p>
+<h3 id="服务端发现模式"><a href="#服务端发现模式" class="headerlink" title="服务端发现模式"></a>服务端发现模式</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203344875.png" alt="image-20230724203344875"></p>
 <p class="fireman-p-indent" >客户端通过负载均衡器向一个服务发送请求，这个负载均衡器会查询服务注册表，并将请求路由到可用的服务实例上。</p>
 <p class="fireman-p-indent" >服务实例在服务注册表上被注册和注销（Consul Template + Nginx ，Kubernetes + etcd）</p>
 <h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><p class="fireman-p-indent" >客户端发现：</p>
@@ -517,8 +520,8 @@
 <p class="fireman-p-indent" >服务端发现：</p>
 <p class="fireman-p-indent" >Consumer 无需关注服务发现具体细节，只需要知道服务的DNS域名即可，支持异构语言开发，需要基础设施支撑，多了一次网络跳转，可能有性能损失。</p>
 <p class="fireman-p-indent" >微服务的核心是去中心化，使用客户端发现模式。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203723122.png" alt="image-20230724203723122"></p>
-<h3 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724210724963.png" alt="image-20230724210724963"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724203723122.png" alt="image-20230724203723122"></p>
+<h3 id="选型"><a href="#选型" class="headerlink" title="选型"></a>选型</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724210724963.png" alt="image-20230724210724963"></p>
 <p class="fireman-p-indent" >当使用CP系统时，微服务非常多，当一个服务上线、下线，会出现大量的广播，导致服务无法访问。</p>
 <ul>
 <li>分布式协调服务（要求任何时刻对ZooKeeper的访问请求能得到一致的数据，从而牺牲可用性）</li>
@@ -531,7 +534,7 @@
 <li>注销的事件延迟</li>
 </ul>
 <p class="fireman-p-indent" >目前最推荐的使用Nacos。</p>
-<h3 id="服务发现概念"><a href="#服务发现概念" class="headerlink" title="服务发现概念"></a>服务发现概念</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724211144480.png" alt="image-20230724211144480"></p>
+<h3 id="服务发现概念"><a href="#服务发现概念" class="headerlink" title="服务发现概念"></a>服务发现概念</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724211144480.png" alt="image-20230724211144480"></p>
 <ul>
 <li><p>通过Family（appid）和Addr（IP:Port）定位实例，除此之外还可以附加更多的元数据：权重、染色标签、集群等</p>
 <p>appid：使用三段式命名，business.service.xxx（业务、服务、子服务名称）</p>
@@ -560,14 +563,14 @@
 <li>从单一集群故障带来的影响面角度考虑冗余多套集群</li>
 <li>单个机房内的机房故障导致的问题</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724213509856.png" alt="image-20230724213509856"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724213509856.png" alt="image-20230724213509856"></p>
 <p class="fireman-p-indent" >利用PASS平台，给某个appid服务建立多套集群（物理上相当于两套资源，逻辑上维护cluster的概念），对于不同集群服务启动后，从环境变量里可以获取当下服务的cluster，在服务发现注册的时候，带入这些元信息。不同集群可以隔离使用不同的缓存资源等。</p>
 <ul>
 <li>多套冗余集群对应多套独占的缓存，带来更好的性能和冗余能力</li>
 <li>尽量避免业务隔离使用或者sharding带来cache hit影响，按照业务划分集群资源。</li>
 </ul>
 <p class="fireman-p-indent" >业务隔离集群带来的问题是cache hit ratio下降，不同业务形态数据正交，可以选择退而求其次，整个集群全部连接。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724213931250.png" alt="image-20230724213931250" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724213931250.png" alt="image-20230724213931250" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >这种方式也会带来问题，所有的服务都依赖这个服务，会导致这个服务由于响应ping从而有过高的CPU消耗。</p>
 <p class="fireman-p-indent" >统一为一套逻辑集群（虽然物理上是多套资源），gRPC客户端默认忽略服务发现中cluster信息，按照全部节点，全部连接。</p>
@@ -584,7 +587,7 @@
 </ul>
 <h1 id="多租户"><a href="#多租户" class="headerlink" title="多租户"></a>多租户</h1><p class="fireman-p-indent" >在一个服务架构里面，允许多系统共存是利用微服务稳定性以及模块化最有效的方式之一，这种方式一般被称为多租户（multi-tenancy）。租户可以是测试、金丝雀发布、影子系统（shadow systems），甚至是服务层或者产品线，使用租户能够保证代码的隔离型并且能够基于流量租户做路由决策。</p>
 <p class="fireman-p-indent" >对于传输中的数据（data-in-flight），例如，消息队列中的请求或者消息，以及静态数据（data-at-rest），例如存储或者持久化缓存。租户都能够保证隔离性和公平性，以及基于租户的路由机会。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724215445427.png" alt="image-20230724215445427" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724215445427.png" alt="image-20230724215445427" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >例如，对服务B做出改变，需要确保它仍能和服务A、C、D正常交互。在微服务架构中，需要做这些集成测试场景，也就是测试和该系统中其他服务的交互。通常来说，微服务架构有两种基本的集成测试方式：并行测试和生产环境测试。而实际情况中，这种测试方式会有诸多限制。</p>
 <ul>
@@ -593,7 +596,7 @@
 <li>难以做负载测试，仿真线上真实流量情况</li>
 </ul>
 <p class="fireman-p-indent" >使用染色发布的测试方法，把待测试的服务B在一个隔离的沙盒环境中启动，并且在沙盒环境下可以访问集成环境（UAT）C和D。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220227998.png" alt="image-20230724220227998" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220227998.png" alt="image-20230724220227998" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >将测试流量路由到B，同时保持生产流量而不处理生产流量。另外要确保集成流量不要被测试流量影响。生产中的测试提出了两个基本要求，他们也构成了多租户体系结构的基础。</p>
 <ul>
@@ -603,7 +606,7 @@
 <p class="fireman-p-indent" >灰度测试成本代价很大，影响1&#x2F;N的用户。其中N为节点数量。</p>
 <p class="fireman-p-indent" >给入站请求绑定上下文（如http header），in-process使用context传递，跨服务使用metadata传递（如：opentracing baggage item），在这个架构中每一个基础组件都能够理解租户信息，并且能够基于租户路由隔离流量，同时在平台中允许对运行不同的微服务有更多的控制，比如指标和日志。在微服务架构中典型的基础组件是乳汁、指标、存储、消息队列、缓存以及配置。基于消息隔离数据需要分别处理基础组件。</p>
 <p class="fireman-p-indent" >多租户是在架构层级的概念，而不是代码逻辑层级，更多的是使用中间件处理，比如将租户信息或者测试信息等，作为metadata存储到context中。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220753448.png" alt="image-20230724220753448"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/07/image-20230724220753448.png" alt="image-20230724220753448"></p>
 <p class="fireman-p-indent" >多租户架构本质上描述为：</p>
 <p class="fireman-p-indent" >跨服务传递请求携带上下文（context），数据隔离的流量路由方案。</p>
 <p class="fireman-p-indent" >利用服务发现注册租户信息，注册成特定的租户。</p>
@@ -704,7 +707,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -712,7 +720,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -722,6 +732,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/ff69.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

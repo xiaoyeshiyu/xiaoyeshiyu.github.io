@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="生产化集群的核心是监控和自动化扩展，从集群的高可用性、安全性和保障资源使用率上高效管理集群环境。">
 <meta property="og:type" content="article">
@@ -95,7 +98,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -447,7 +450,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="操作系统构建流程"><a href="#操作系统构建流程" class="headerlink" title="操作系统构建流程"></a>操作系统构建流程</h2><p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-09-01-image-20240131170900968.png" alt="image-20240131170900968"></p>
+<h2 id="操作系统构建流程"><a href="#操作系统构建流程" class="headerlink" title="操作系统构建流程"></a>操作系统构建流程</h2><p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-09-01-image-20240131170900968.png" alt="image-20240131170900968"></p>
 <ul>
 <li>将 <code>rpm</code> 源拉取快照</li>
 <li>通过 <code>rpm-ostree</code> 将 <code>rpm</code> 源构建出 <code>ostree</code> 包，提供 <code>ostree</code> 服务</li>
@@ -486,7 +489,7 @@
 <li><p>导入 <code>ostree repo</code>，指定 <code>ostree</code> 源</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ostree remote add atomic http://ostree.svr/ostree</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-40-07-image-20240131174007070.png" alt="image-20240131174007070"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-40-07-image-20240131174007070.png" alt="image-20240131174007070"></p>
 </li>
 <li><p>拉取 <code>ostree</code>，将构建好的 <code>ostree</code> 拉到本地</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ostree pull atomic centos-atomic-host/8/x86_64/standard</span><br></pre></td></tr></table></figure>
@@ -533,7 +536,7 @@
 </li>
 </ul>
 <h1 id="节点资源管理"><a href="#节点资源管理" class="headerlink" title="节点资源管理"></a>节点资源管理</h1><h2 id="NUMA-Node"><a href="#NUMA-Node" class="headerlink" title="NUMA Node"></a>NUMA Node</h2><p class="fireman-p-indent" ><code>Non-Uniform Memory Access</code> （不对等内存访问）是一种内存访问方式，是为多处理器计算机设计的内存架构</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-47-41-image-20240131174741687.png" alt="image-20240131174741687"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F01%2F31%2F17-47-41-image-20240131174741687.png" alt="image-20240131174741687"></p>
 <p class="fireman-p-indent" >CPU 通过 FSB 总线与内存交互，但是 <code>Core2</code> 访问内存是通过 <code>QPI</code> + <code>FSB</code> ，相对而言性能是较低的。一些性能调优会通过判断进程正在运行的 <code>Core</code> 做就近迁移，避免内存远程访问。</p>
 <h2 id="节点资源管理-1"><a href="#节点资源管理-1" class="headerlink" title="节点资源管理"></a>节点资源管理</h2><ul>
 <li>状态汇报</li>
@@ -737,7 +740,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cd /sys/fs/cgroup/cpu/kubepods.slice/</span></span><br><span class="line">root@master:/sys/fs/cgroup/cpu/kubepods.slice<span class="comment"># ls -ltrah</span></span><br><span class="line">total 0</span><br><span class="line">dr-xr-xr-x 5 root root 0 Feb  2 02:06 ..</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 cpu.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cpu.shares</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cpu.cfs_quota_us</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cpu.cfs_period_us</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 cpuacct.usage_percpu</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 cpuacct.usage_all</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cpuacct.usage</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 cpuacct.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cgroup.clone_children</span><br><span class="line">drwxr-xr-x 4 root root 0 Feb  2 02:07 .</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cgroup.procs</span><br><span class="line">drwxr-xr-x 6 root root 0 Feb  2 02:07 kubepods-burstable.slice  		<span class="comment"># 不同的 class 放入不同的目录</span></span><br><span class="line">drwxr-xr-x 6 root root 0 Feb  2 02:07 kubepods-besteffort.slice</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:30 tasks</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:30 notify_on_release</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:30 cpu.uclamp.min</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:30 cpu.uclamp.max</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:30 cpuacct.usage_user</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:30 cpuacct.usage_sys</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:30 cpuacct.usage_percpu_user</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:30 cpuacct.usage_percpu_sys</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" ><code>Guaranteed</code> 则是一个单独的目录。</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F11-31-04-image-20240202113103913.png" alt="image-20240202113103913"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F11-31-04-image-20240202113103913.png" alt="image-20240202113103913"></p>
 <h2 id="CPU-CGroup-配置"><a href="#CPU-CGroup-配置" class="headerlink" title="CPU CGroup 配置"></a>CPU CGroup 配置</h2><table>
 <thead>
 <tr>
@@ -824,7 +827,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ls -ltra /sys/fs/cgroup/memory/kubepods.slice/</span></span><br><span class="line">total 0</span><br><span class="line">dr-xr-xr-x 5 root root 0 Feb  2 02:06 ..</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.use_hierarchy</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.usage_in_bytes</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.soft_limit_in_bytes</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.numa_stat</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.max_usage_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.limit_in_bytes</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.usage_in_bytes</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.tcp.usage_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.tcp.max_usage_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.tcp.limit_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.tcp.failcnt</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.max_usage_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.limit_in_bytes</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.kmem.failcnt</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 memory.failcnt</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 02:07 cgroup.clone_children</span><br><span class="line">drwxr-xr-x 4 root root 0 Feb  2 02:07 .</span><br><span class="line">drwxr-xr-x 6 root root 0 Feb  2 02:07 kubepods-burstable.slice</span><br><span class="line">drwxr-xr-x 6 root root 0 Feb  2 02:07 kubepods-besteffort.slice</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 tasks</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 notify_on_release</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 memory.swappiness</span><br><span class="line">---------- 1 root root 0 Feb  2 03:31 memory.pressure_level</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 memory.oom_control</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 memory.move_charge_at_immigrate</span><br><span class="line">-r--r--r-- 1 root root 0 Feb  2 03:31 memory.kmem.slabinfo</span><br><span class="line">--w------- 1 root root 0 Feb  2 03:31 memory.force_empty</span><br><span class="line">-rw-r--r-- 1 root root 0 Feb  2 03:31 cgroup.procs</span><br><span class="line">--w--w--w- 1 root root 0 Feb  2 03:31 cgroup.event_control</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" ><code>Guaranteed</code> 则是一个单独的目录。</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F11-37-28-image-20240202113728218.png" alt="image-20240202113728218"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F11-37-28-image-20240202113728218.png" alt="image-20240202113728218"></p>
 <h2 id="内存-CGroup-配置"><a href="#内存-CGroup-配置" class="headerlink" title="内存 CGroup 配置"></a>内存 CGroup 配置</h2><table>
 <thead>
 <tr>
@@ -1107,7 +1110,7 @@
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;kind&quot;</span> <span class="string">:</span> <span class="string">&quot;Policy&quot;</span>,</span><br><span class="line">  <span class="string">&quot;apiVersion&quot;</span> <span class="string">:</span> <span class="string">&quot;v1&quot;</span>,</span><br><span class="line">  <span class="string">&quot;predicates&quot;</span> <span class="string">:</span> [</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;PodFitsHostPorts&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;PodFitsResources&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;NoDiskConflict&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;MatchNodeSelector&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;HostName&quot;</span>&#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;priorities&quot;</span> <span class="string">:</span> [</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;LeastRequestedPriority&quot;</span>, <span class="string">&quot;weight&quot;</span> <span class="string">:</span> <span class="number">1</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;BalancedResourceAllocation&quot;</span>, <span class="string">&quot;weight&quot;</span> <span class="string">:</span> <span class="number">1</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;ServiceSpreadingPriority&quot;</span>, <span class="string">&quot;weight&quot;</span> <span class="string">:</span> <span class="number">1</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;name&quot;</span> <span class="string">:</span> <span class="string">&quot;EqualPriority&quot;</span>, <span class="string">&quot;weight&quot;</span> <span class="string">:</span> <span class="number">1</span>&#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;extenders&quot;</span> <span class="string">:</span> [&#123;</span><br><span class="line">    <span class="attr">&quot;urlPrefix&quot;:</span> <span class="string">&quot;http://localhost:8880&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;filterVerb&quot;:</span> <span class="string">&quot;predicates&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;prioritizeVerb&quot;:</span> <span class="string">&quot;priorities&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;preemptVerb&quot;:</span> <span class="string">&quot;preemption&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;bindVerb&quot;:</span> <span class="string">&quot;bind&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;weight&quot;:</span> <span class="number">1</span>,</span><br><span class="line">    <span class="attr">&quot;enableHttps&quot;:</span> <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;nodeCacheCapable&quot;:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">&quot;managedResources&quot;:</span> [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;name&quot;:</span> <span class="string">&quot;expample.com/foo&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;ignoredByScheduler&quot;:</span> <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">   &#125;],</span><br><span class="line">  <span class="string">&quot;hardPodAffinitySymmetricWeight&quot;</span> <span class="string">:</span> <span class="number">10</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="构建和管理高可用资源"><a href="#构建和管理高可用资源" class="headerlink" title="构建和管理高可用资源"></a>构建和管理高可用资源</h1><p class="fireman-p-indent" >在多节点、集群环境下管理 Kubernetes 生产系统。</p>
-<h2 id="Kubernetes-高可用层级"><a href="#Kubernetes-高可用层级" class="headerlink" title="Kubernetes 高可用层级"></a>Kubernetes 高可用层级</h2><p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F04%2F15-59-30-image-20240202161353373.png" alt="image-20240202161353373"></p>
+<h2 id="Kubernetes-高可用层级"><a href="#Kubernetes-高可用层级" class="headerlink" title="Kubernetes 高可用层级"></a>Kubernetes 高可用层级</h2><p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F04%2F15-59-30-image-20240202161353373.png" alt="image-20240202161353373"></p>
 <ul>
 <li>基础架构管理：提供计算资源的管理平台，在数据中心中安装部署服务器，作为计算节点、网络节点、存储节点，对应的，还需要管理操作系统，以及一些安全相关的策略，例如 <code>iptables</code>、<code>firewalld</code>、<code>selinux</code> ，以及容器运行时，一般选择 <code>containerd</code></li>
 <li>Kubernetes 本身管理：包括集群管理，每一个物理节点管理等</li>
@@ -1197,7 +1200,7 @@
 <li>应尽可能地将控制平面和数据平面解耦，确保控制平面组件出现故障时，将业务影响降到最低</li>
 <li>Kubernetes 还有一些核心插件，是以普通的 Pod 形式加载运行的，可能会被调度到任意工作节点，与普通应用竞争资源。这些插件是否正常运行也决定了集群的可用性</li>
 </ul>
-<h3 id="高可用集群"><a href="#高可用集群" class="headerlink" title="高可用集群"></a>高可用集群</h3><p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-37-49-image-20240202163749074.png" alt="image-20240202163749074"></p>
+<h3 id="高可用集群"><a href="#高可用集群" class="headerlink" title="高可用集群"></a>高可用集群</h3><p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-37-49-image-20240202163749074.png" alt="image-20240202163749074"></p>
 <p class="fireman-p-indent" >多节点选择专门的 <code>master</code> ，避免控制面流量被数据流量影响。</p>
 <h2 id="集群安装方法比较"><a href="#集群安装方法比较" class="headerlink" title="集群安装方法比较"></a>集群安装方法比较</h2><table>
 <thead>
@@ -1235,7 +1238,7 @@
 </tbody></table>
 <p class="fireman-p-indent" >综合来看，在商业化能力不够的情况下，安装大型集群推荐使用 <code>kubespray</code> 的方式。</p>
 <p class="fireman-p-indent" >目前社区推广的事 <code>KOPS</code> 的方式，但是需要与云环境定制开发。</p>
-<h3 id="用-Kubespray-搭建高可用集群"><a href="#用-Kubespray-搭建高可用集群" class="headerlink" title="用 Kubespray 搭建高可用集群"></a>用 Kubespray 搭建高可用集群</h3><p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-42-33-image-20240202164233706.png" alt="image-20240202164233706"></p>
+<h3 id="用-Kubespray-搭建高可用集群"><a href="#用-Kubespray-搭建高可用集群" class="headerlink" title="用 Kubespray 搭建高可用集群"></a>用 Kubespray 搭建高可用集群</h3><p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-42-33-image-20240202164233706.png" alt="image-20240202164233706"></p>
 <p class="fireman-p-indent" >通过 <code>ansible</code> 和 <code>kubadm</code> 实现自动化安装。</p>
 <h2 id="基于声明式-API-管理集群"><a href="#基于声明式-API-管理集群" class="headerlink" title="基于声明式 API 管理集群"></a>基于声明式 API 管理集群</h2><p class="fireman-p-indent" >集群管理不仅仅包括集群搭建，还有更多功能需要支持</p>
 <ul>
@@ -1245,7 +1248,7 @@
 <li>操作系统升级</li>
 </ul>
 <p class="fireman-p-indent" >云原生场景中集群应该按照我们的期望的状态运行，这意味着我们应该将集群管理建立在声明式 API 的基础之上。</p>
-<h3 id="Kubernetes-Cluster-API"><a href="#Kubernetes-Cluster-API" class="headerlink" title="Kubernetes Cluster API"></a>Kubernetes Cluster API</h3><p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-46-09-image-20240202164609254.png" alt="image-20240202164609254"></p>
+<h3 id="Kubernetes-Cluster-API"><a href="#Kubernetes-Cluster-API" class="headerlink" title="Kubernetes Cluster API"></a>Kubernetes Cluster API</h3><p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-46-09-image-20240202164609254.png" alt="image-20240202164609254"></p>
 <h3 id="参与角色"><a href="#参与角色" class="headerlink" title="参与角色"></a>参与角色</h3><ul>
 <li><p>管理集群</p>
 <ul>
@@ -1303,13 +1306,13 @@
 </li>
 </ul>
 <h3 id="用-cluster-API-管理集群"><a href="#用-cluster-API-管理集群" class="headerlink" title="用 cluster API 管理集群"></a>用 cluster API 管理集群</h3><p class="fireman-p-indent" >使用 <code>kind</code> 部署 Kubernetes on Docker</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-55-29-image-20240202165529854.png" alt="image-20240202165529854"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-55-29-image-20240202165529854.png" alt="image-20240202165529854"></p>
 <h3 id="KubeadmControlPlane"><a href="#KubeadmControlPlane" class="headerlink" title="KubeadmControlPlane"></a>KubeadmControlPlane</h3><p class="fireman-p-indent" >一些配置</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-55-52-image-20240202165552807.png" alt="image-20240202165552807"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-55-52-image-20240202165552807.png" alt="image-20240202165552807"></p>
 <h3 id="MachineDeployment"><a href="#MachineDeployment" class="headerlink" title="MachineDeployment"></a>MachineDeployment</h3><p class="fireman-p-indent" >一些配置</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-56-09-image-20240202165609461.png" alt="image-20240202165609461"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-56-09-image-20240202165609461.png" alt="image-20240202165609461"></p>
 <h3 id="MachineHealthCheck"><a href="#MachineHealthCheck" class="headerlink" title="MachineHealthCheck"></a>MachineHealthCheck</h3><p class="fireman-p-indent" >一些配置</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-56-30-image-20240202165630401.png" alt="image-20240202165630401"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F16-56-30-image-20240202165630401.png" alt="image-20240202165630401"></p>
 <h3 id="日常运营中的节点问题归类"><a href="#日常运营中的节点问题归类" class="headerlink" title="日常运营中的节点问题归类"></a>日常运营中的节点问题归类</h3><p class="fireman-p-indent" >可自动修复的问题</p>
 <ul>
 <li>计算节点 <code>down</code><ul>
@@ -1350,7 +1353,7 @@
 <li>重装不行就重修（<code>breakfix</code>）</li>
 </ul>
 <p class="fireman-p-indent" >探活失败示例：</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-01-10-image-20240202170110444.png" alt="image-20240202170110444"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-01-10-image-20240202170110444.png" alt="image-20240202170110444"></p>
 <h1 id="Cluster-Autoscaler"><a href="#Cluster-Autoscaler" class="headerlink" title="Cluster Autoscaler"></a>Cluster Autoscaler</h1><p class="fireman-p-indent" >每一个厂商都有自己的一套 <code>cluster aotoscaler</code> 方法，但是原理都差不多。</p>
 <h2 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h2><ul>
 <li>扩容：<ul>
@@ -1363,12 +1366,12 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-02-19-image-20240202170219230.png" alt="image-20240202170219230"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-02-19-image-20240202170219230.png" alt="image-20240202170219230"></p>
 <h2 id="Cluster-Autoscaler-架构"><a href="#Cluster-Autoscaler-架构" class="headerlink" title="Cluster Autoscaler 架构"></a>Cluster Autoscaler 架构</h2><p class="fireman-p-indent" ><code>Autoscaler</code>：核心模块，负责整体扩缩容功能</p>
 <p class="fireman-p-indent" ><code>Estimator</code>：负责评估计算扩容节点，数量以及是否支持扩容</p>
 <p class="fireman-p-indent" ><code>Simulator</code>：负责模拟调度，计算缩容节点，资源以及调度之后是否可以运行</p>
 <p class="fireman-p-indent" ><code>Cloud-Provider</code>：与云交互进行节点的增删操作，每个支持 <code>CA</code> 的主流厂商都实现自己的 <code>plugin</code> 实现动态缩放</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-04-09-image-20240202170409037.png" alt="image-20240202170409037"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-04-09-image-20240202170409037.png" alt="image-20240202170409037"></p>
 <h2 id="Cluster-Autoscaler-的扩展机制"><a href="#Cluster-Autoscaler-的扩展机制" class="headerlink" title="Cluster  Autoscaler 的扩展机制"></a>Cluster  Autoscaler 的扩展机制</h2><p class="fireman-p-indent" >为了自动创建和初始化 <code>Node</code>，<code>Cluster Autoscaler</code> 要求 <code>Node</code> 必须属于某个 <code>Node Group</code>，比如：</p>
 <ul>
 <li><code>GCE/GKE</code> 中的 <code>Managed instance groups</code>（MIG）</li>
@@ -1387,19 +1390,19 @@
 <p class="fireman-p-indent" ><code>Cluster API</code> 与  <code>Cluster Autoscaler</code> 的整合</p>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jbHVzdGVyLWFwaS5zaWdzLms4cy5pby90YXNrcy9hdXRvbWF0ZWQtbWFjaGluZS1tYW5hZ2VtZW50L2F1dG9zY2FsaW5n">https://cluster-api.sigs.k8s.io/tasks/automated-machine-management/autoscaling<i class="fa fa-external-link-alt"></i></span></p>
 <h1 id="集群管理实践案例分享"><a href="#集群管理实践案例分享" class="headerlink" title="集群管理实践案例分享"></a>集群管理实践案例分享</h1><p class="fireman-p-indent" ><code>cluster API</code> 出现之前，一些厂商都有自己的管理方式。</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-10-31-image-20240202171031379.png" alt="image-20240202171031379"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-10-31-image-20240202171031379.png" alt="image-20240202171031379"></p>
 <p class="fireman-p-indent" >设备模型通过不同的区域、数据中心、机架。机器上架之后，注册到集群中。</p>
 <p class="fireman-p-indent" >设备通过集群模型进行抽象资源化，通过划分到不同的节点池，用于后续扩容缩容使用。</p>
 <p class="fireman-p-indent" >如果是虚拟化 <code>Openstack</code> 则通过 <code>api</code> 启动 <code>node</code>，是物理机则使用 <code>kickstart</code> ，使用 <code>OSImage</code> 定义操作系统</p>
 <h2 id="声明式集群配置"><a href="#声明式集群配置" class="headerlink" title="声明式集群配置"></a>声明式集群配置</h2><p class="fireman-p-indent" >通过 <code>yaml</code> 文件声明节点信息，<code>salt</code> 安装</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-10-46-image-20240202171046625.png" alt="image-20240202171046625"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-10-46-image-20240202171046625.png" alt="image-20240202171046625"></p>
 <h2 id="声明式扩容"><a href="#声明式扩容" class="headerlink" title="声明式扩容"></a>声明式扩容</h2><p class="fireman-p-indent" >定义 <code>NodePool</code> 定义资源副本数，通过 <code>NodePool Controller</code> 创建 <code>ComputeNode</code> 描述节点信息，<code>Provision Controller</code> 与 <code>provider</code> 交互创建虚拟机，安装 Kubernetes 。</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-11-09-image-20240202171108988.png" alt="image-20240202171108988"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-11-09-image-20240202171108988.png" alt="image-20240202171108988"></p>
 <h2 id="声明式持续发布"><a href="#声明式持续发布" class="headerlink" title="声明式持续发布"></a>声明式持续发布</h2><p class="fireman-p-indent" >操作系统或者 Kubernetes 组件更新时，通过 <code>ClusterDeployment</code> 的方式一个一个节点更新节点（直接更换，而不是升级）。好处是方便，坏处是缓慢。</p>
 <p class="fireman-p-indent" >可以优化成只有操作系统更新时才更换节点，Kubernetes 更新时只更新部署。</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-11-31-image-20240202171131474.png" alt="image-20240202171131474"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-11-31-image-20240202171131474.png" alt="image-20240202171131474"></p>
 <h2 id="自定义插件-声明式集群管理对象"><a href="#自定义插件-声明式集群管理对象" class="headerlink" title="自定义插件 - 声明式集群管理对象"></a>自定义插件 - 声明式集群管理对象</h2><p class="fireman-p-indent" >也就是 <code>Kubernetes on Kubernetes</code></p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F07%2F19-06-02-image-20240207190602635.png" alt="image-20240207190602635"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F07%2F19-06-02-image-20240207190602635.png" alt="image-20240207190602635"></p>
 <h1 id="多租户集群管理"><a href="#多租户集群管理" class="headerlink" title="多租户集群管理"></a>多租户集群管理</h1><p class="fireman-p-indent" >多租户集群，核心还是基于 <code>Cluster API</code></p>
 <h2 id="租户"><a href="#租户" class="headerlink" title="租户"></a>租户</h2><ul>
 <li>租户是指一组拥有访问特定软件资源权限的用户集合，在多租户环境中，它还包括共享的应用、服务、数据和各项配置等</li>
@@ -1431,7 +1434,7 @@
 </li>
 </ul>
 <h2 id="租户隔离手段"><a href="#租户隔离手段" class="headerlink" title="租户隔离手段"></a>租户隔离手段</h2><p class="fireman-p-indent" >基于 Namespace 实现隔离</p>
-<p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-20-22-image-20240202172022775.png" alt="image-20240202172022775"></p>
+<p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-20-22-image-20240202172022775.png" alt="image-20240202172022775"></p>
 <ul>
 <li><code>Namespace</code>：<code>Namespace</code> 属于且仅属于一个租户</li>
 <li>权限定义：定义内容包括命名空间中的 <code>Role</code> 与 <code>RoleBinding</code>。这些资源表示目前租户在归属于自己的命名空间中定义了什么权限、授权给了哪些租户的成员</li>
@@ -1439,7 +1442,7 @@
 <li>网络策略：基础设施层面为保障租户网络的隔离机制提供了一系列默认策略，以及租户自己定制的用户租户应用彼此访问的策略</li>
 <li><code>Pod</code>、<code>Service</code>、<code>PersistentVolumeClaim</code> 等命名空间资源：这些定义表示租户的应用落地到 Kubernetes 中的实体</li>
 </ul>
-<h2 id="权限隔离"><a href="#权限隔离" class="headerlink" title="权限隔离"></a>权限隔离</h2><p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-24-24-image-20240202172424091.png" alt="image-20240202172424091"></p>
+<h2 id="权限隔离"><a href="#权限隔离" class="headerlink" title="权限隔离"></a>权限隔离</h2><p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-24-24-image-20240202172424091.png" alt="image-20240202172424091"></p>
 <ul>
 <li>基于 <code>Namespace</code> 的权限隔离<ul>
 <li>创建一个 <code>namespace-admin ClusterRole</code>，拥有所有对象的所有权限</li>
@@ -1452,7 +1455,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Quota-管理"><a href="#Quota-管理" class="headerlink" title="Quota 管理"></a>Quota 管理</h2><p class="fireman-p-indent" ><img src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-26-56-image-20240202172656160.png" alt="image-20240202172656160"></p>
+<h2 id="Quota-管理"><a href="#Quota-管理" class="headerlink" title="Quota 管理"></a>Quota 管理</h2><p class="fireman-p-indent" ><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F02%2F02%2F17-26-56-image-20240202172656160.png" alt="image-20240202172656160"></p>
 <ul>
 <li><p>开启 <code>ResourceQuota</code> 准入插件</p>
 </li>
@@ -1543,7 +1546,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -1551,7 +1559,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -1561,6 +1571,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/93ebed81.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

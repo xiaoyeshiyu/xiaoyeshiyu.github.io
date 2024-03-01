@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Docker 是如何实现轻量级、可移植和隔离化的容器化解决方案，从容器镜像到容器运行时，再到容器编排，介绍 Docker 技术栈的各个组成部分，并探讨它们是如何相互配合以提供高效、可靠的应用程序部署和管理环境的。">
 <meta property="og:type" content="article">
@@ -99,7 +102,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -310,11 +313,11 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h1><h2 id="传统分层架构-VS-微服务"><a href="#传统分层架构-VS-微服务" class="headerlink" title="传统分层架构 VS 微服务"></a>传统分层架构 VS 微服务</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229161244176.png" alt="image-20231229161244176"></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h1><h2 id="传统分层架构-VS-微服务"><a href="#传统分层架构-VS-微服务" class="headerlink" title="传统分层架构 VS 微服务"></a>传统分层架构 VS 微服务</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229161244176.png" alt="image-20231229161244176"></p>
 <p class="fireman-p-indent" >当业务逻辑简单，需求也比较简单的情况下（例如多年前的it互联网环境），只需要一台或者几台物理服务器即可满足需求，在物理机上部署 UI 服务、业务逻辑服务、存储服务等。</p>
 <p class="fireman-p-indent" >随着业务复杂度和体量增大，架构开始演进到分层架构（分为前端、后端、DBA），将复杂业务拆分成更小颗粒度的、独立的服务（单个部门负责单个服务）。但是多个服务部署到同一台物理服务器上之后，服务之间的隔离性就无法保证，当服务 A 出现异常，可能导致内存占用过多，影响物理机，结果影响其他服务。</p>
 <p class="fireman-p-indent" >服务之间相互隔离，再增加一些高可用、负载均衡的能力，也就逐步演进出微服务架构。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229162408338.png" alt="image-20231229162408338"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229162408338.png" alt="image-20231229162408338"></p>
 <p class="fireman-p-indent" >单体架构和微服务架构，在不同的系统上各有优缺点。</p>
 <h2 id="微服务改造"><a href="#微服务改造" class="headerlink" title="微服务改造"></a>微服务改造</h2><p class="fireman-p-indent" >当需要将服务应用（或者一个耦合度高的微服务）改造成一个微服务时，方法和建议：</p>
 <ul>
@@ -331,14 +334,14 @@
 <li>照片，多媒体，元数据等</li>
 </ul>
 <p class="fireman-p-indent" >分解原则：基于 size（规模）、scope（范围） and capabilities（能力）</p>
-<h2 id="微服务间通讯"><a href="#微服务间通讯" class="headerlink" title="微服务间通讯"></a>微服务间通讯</h2><h3 id="点对点"><a href="#点对点" class="headerlink" title="点对点"></a>点对点</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229163517004.png" alt="image-20231229163517004"></p>
+<h2 id="微服务间通讯"><a href="#微服务间通讯" class="headerlink" title="微服务间通讯"></a>微服务间通讯</h2><h3 id="点对点"><a href="#点对点" class="headerlink" title="点对点"></a>点对点</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229163517004.png" alt="image-20231229163517004"></p>
 <ul>
 <li>多用于系统内部多组件之间通讯</li>
 <li>有大量的重复模块如认证授权</li>
 <li>缺少统一规范，如监控，审计等功能</li>
 <li>后期维护成本高，服务和服务的依赖关系错综复杂难以管理</li>
 </ul>
-<h3 id="API-网关"><a href="#API-网关" class="headerlink" title="API 网关"></a>API 网关</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229163628714.png" alt="image-20231229163628714"></p>
+<h3 id="API-网关"><a href="#API-网关" class="headerlink" title="API 网关"></a>API 网关</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229163628714.png" alt="image-20231229163628714"></p>
 <ul>
 <li>基于一个轻量级的 <code>message gateway</code></li>
 <li>新 API 通过注册至 <code>Gateway</code> 实现</li>
@@ -361,13 +364,13 @@
 </ul>
 <p class="fireman-p-indent" >等。</p>
 <h2 id="虚拟机和容器运行态的对比"><a href="#虚拟机和容器运行态的对比" class="headerlink" title="虚拟机和容器运行态的对比"></a>虚拟机和容器运行态的对比</h2><p class="fireman-p-indent" >虚拟机</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229164755530.png" alt="image-20231229164755530"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229164755530.png" alt="image-20231229164755530"></p>
 <p class="fireman-p-indent" >在操作系统上，通过 <code>Hypervisor</code> 提供虚拟化能力，各个应用启动对应操作系统，应用在独立的操作系统中运行。</p>
 <p class="fireman-p-indent" >这个调用链比较长，而且有两层操作系统。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229173153401.png" alt="image-20231229173153401"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229173153401.png" alt="image-20231229173153401"></p>
 <p class="fireman-p-indent" >在 Docker Engine 上，启动应用。</p>
 <p class="fireman-p-indent" >相比而言，调用链短，而且不需要启动额外的操作系统，节省资源。</p>
-<h3 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229173351025.png" alt="image-20231229173351025"></p>
+<h3 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229173351025.png" alt="image-20231229173351025"></p>
 <p class="fireman-p-indent" >一些虚拟机也在做 <code>miniOS</code>，通过瘦身解决启动慢和资源问题，但是依然需要加载额外的操作系统。</p>
 <h2 id="Docker-操作"><a href="#Docker-操作" class="headerlink" title="Docker 操作"></a>Docker 操作</h2><p class="fireman-p-indent" >官方文档：<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmRvY2tlci5jb20vZW5naW5lLw==">https://docs.docker.com/engine/<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >一些常用操作：</p>
@@ -431,7 +434,7 @@
 </li>
 </ul>
 <p class="fireman-p-indent" >直白来说，就是镜像如何打包，打包的镜像如何解压如何运行。目的是保障打包、部署过程中的效率。</p>
-<h2 id="容器主要特性"><a href="#容器主要特性" class="headerlink" title="容器主要特性"></a>容器主要特性</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229175218442.png" alt="image-20231229175218442" style="zoom:50%;" />
+<h2 id="容器主要特性"><a href="#容器主要特性" class="headerlink" title="容器主要特性"></a>容器主要特性</h2><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229175218442.png" alt="image-20231229175218442" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >隔离性：通过 <code>namespace</code> 实现</p>
 <p class="fireman-p-indent" >可配额：通过 <code>cgroup</code> 实现</p>
@@ -469,10 +472,10 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">unshare</span><span class="params">(<span class="type">int</span> flags)</span></span><br></pre></td></tr></table></figure></li>
 </ul>
 <p class="fireman-p-indent" ><code>Linux</code> 更新后，可能还会新增更多的操作方式。</p>
-<h3 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102105557872.png" alt="image-20240102105557872"></p>
+<h3 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102105557872.png" alt="image-20240102105557872"></p>
 <p class="fireman-p-indent" >在 <code>fork</code> 不同的进程后，进程之间可以通过 <code>Namespace</code> 隔离。</p>
 <p class="fireman-p-indent" >例如 <code>PID</code>，在不同的 <code>Namespace</code> 中看到的 <code>PID</code> 是不同的，但是它们是继承关系；网络也不一样，在不同的 <code>Namespace</code> 中，网卡配置没有任何关联。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102105609178.png" alt="image-20240102105609178"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102105609178.png" alt="image-20240102105609178"></p>
 <p class="fireman-p-indent" >一个用户进程，拥有不同类型的 <code>namespace</code>。</p>
 <h4 id="Pid-namespace"><a href="#Pid-namespace" class="headerlink" title="Pid namespace"></a>Pid namespace</h4><ul>
 <li>不同用户的进程就是通过 <code>Pid namespace</code> 隔离开的，且不同 <code>namespace</code> 中可以有相同 <code>Pid</code>。</li>
@@ -538,7 +541,7 @@
 <li><p><code>css_set</code> 是 <code>cgroup_subsys_state</code> 对象的集合数据结构</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">css_set</span> &#123;</span> </span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">	 * Set of subsystem states, one for each subsystem. This array is * immutable after creation apart from the init_css_set during</span></span><br><span class="line"><span class="comment">	 * subsystem registration (at boot time).</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">cgroup_subsys_state</span> *<span class="title">subsys</span>[<span class="title">CGROUP_SUBSYS_COUNT</span>];</span> </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h3 id="可配额-可度量-Control-Groups-cgroups"><a href="#可配额-可度量-Control-Groups-cgroups" class="headerlink" title="可配额&#x2F;可度量 - Control Groups(cgroups)"></a>可配额&#x2F;可度量 - Control Groups(cgroups)</h3><p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102154000956.png" alt="image-20240102154000956"></p>
+<h3 id="可配额-可度量-Control-Groups-cgroups"><a href="#可配额-可度量-Control-Groups-cgroups" class="headerlink" title="可配额&#x2F;可度量 - Control Groups(cgroups)"></a>可配额&#x2F;可度量 - Control Groups(cgroups)</h3><p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102154000956.png" alt="image-20240102154000956"></p>
 </li>
 </ul>
 <p class="fireman-p-indent" ><code>cgroups</code> 实现了对资源的配额和度量</p>
@@ -558,11 +561,11 @@
 
 <p class="fireman-p-indent" >在 <code>/sys/fs/cgroup/cpu</code> 目录下创建子目录即可创建一个管理 <code>CPU</code> 的 <code>cgroup</code>，<code>echo &lt;pid&gt; &gt; cgroup.procs</code> 即可将进程添加到 <code>cgropu</code> 进程配置组。</p>
 <h3 id="CPU-子系统"><a href="#CPU-子系统" class="headerlink" title="CPU 子系统"></a>CPU 子系统</h3><p class="fireman-p-indent" ><code>CPU</code> 分配给进程的时间片有两种方式，一种是相对值，一种是绝对值。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102154933393.png" alt="image-20240102154933393"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102154933393.png" alt="image-20240102154933393"></p>
 <p class="fireman-p-indent" ><code>cpu.shares</code>：可让出的能获得 <code>CPU</code> 使用时间的相对值。（例如上图，<code>CGroupA</code> 的 <code>shares</code> 为 <code>512</code>，实际占用 <code>CPU</code> <code>33%</code> 的时间，如果修改成 <code>1024</code>，则占用 <code>50%</code> 的时间）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> /sys/fs/cgroup/cpu/cpu.shares</span></span><br><span class="line">1024</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102155230255.png" alt="image-20240102155230255"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102155230255.png" alt="image-20240102155230255"></p>
 <p class="fireman-p-indent" ><code>cpu.cfs_period_us</code>：<code>fs_period_us</code> 用来配置时间周期长度，单位为 <code>us</code>（微秒）。（默认 <code>100000</code>）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> /sys/fs/cgroup/cpu/cpu.cfs_period_us</span></span><br><span class="line">100000</span><br></pre></td></tr></table></figure>
 
@@ -601,7 +604,7 @@
 <li>自平衡，树上没有一条路径会比其他路径长出两倍。</li>
 <li><code>O(logn)</code> 时间复杂度，能够在树上进行快速高效地插入或删除进程。</li>
 </ol>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102161120245.png" alt="image-20240102161120245"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102161120245.png" alt="image-20240102161120245"></p>
 <h4 id="CFS-进程调度"><a href="#CFS-进程调度" class="headerlink" title="CFS 进程调度"></a>CFS 进程调度</h4><ul>
 <li>在时钟周期开始时，调度器调用 <code>_schdule()</code> 函数来开始调度的运行。</li>
 <li><code>_schdule()</code> 函数调用 <code>pick_next_task()</code> 让进程调度器从就绪队列中选择一个最合适的进程 <code>next</code>，即红黑树最左边的节点。</li>
@@ -609,7 +612,7 @@
 <li>在时钟周期结束时，调度器调用 <code>entity_tick()</code> 函数来更新进程负载、进程状态以及 <code>vruntime</code>（当前 <code>vruntime</code> + 该时钟周期内运行的时间）。</li>
 <li>最后，将该进程的虚拟时间与就绪队列红黑树中最左边的调度实体的虚拟时间做比较，如果小于左边的时间，则不用触发调度，继续调度当前调度实体。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102162500743.png" alt="image-20240102162500743"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240102162500743.png" alt="image-20240102162500743"></p>
 <h3 id="cpuacct-子系统"><a href="#cpuacct-子系统" class="headerlink" title="cpuacct 子系统"></a>cpuacct 子系统</h3><p class="fireman-p-indent" >用于统计 <code>Cgroup</code> 及其子 <code>Cgroup</code> 下进程的 <code>CPU</code> 的使用情况。</p>
 <ul>
 <li><p><code>cpuacct.usage</code></p>
@@ -658,7 +661,7 @@
 <li>文件系统分层，对 <code>readonly</code> 权限的 <code>branch</code> 可以逻辑上进行修改（增量地，不影响 <code>readonly</code> 部分的）。</li>
 <li>通常 <code>Union FS</code> 有两个用途，一方面可以将多个 <code>disk</code> 挂到同一个目录下，另一个更常用的就是将一个 <code>readonly</code> 的 <code>branch</code> 和一个 <code>writeable</code> 的 <code>branch</code> 联合在一起。</li>
 </ul>
-<h3 id="容器镜像"><a href="#容器镜像" class="headerlink" title="容器镜像"></a>容器镜像</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103100712447.png" alt="image-20240103100712447"></p>
+<h3 id="容器镜像"><a href="#容器镜像" class="headerlink" title="容器镜像"></a>容器镜像</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103100712447.png" alt="image-20240103100712447"></p>
 <p class="fireman-p-indent" >例如使用 <code>Dockfile</code>  构建镜像。</p>
 <p class="fireman-p-indent" >通过每一条命令，创建一层镜像，在底层镜像之上，构建上层镜像。</p>
 <p class="fireman-p-indent" >好处是在 <code>devops</code> 时，需要启动一个容器，不需要每个节点上下载全部镜像内容，只下载新增部分或者差异部分即可。</p>
@@ -669,14 +672,14 @@
 <li><code>Bootloader</code> - 引导加载 <code>kernel</code></li>
 <li><code>Kernel</code> - 当 <code>kernel</code> 被加载到内存中后 <code>umount bootfs</code></li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103101538997.png" alt="image-20240103101538997"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103101538997.png" alt="image-20240103101538997"></p>
 </li>
 <li><p class="fireman-p-indent" ><code>rootfs</code>（<code>root file system</code>）</p>
 <ul>
 <li><code>/dev</code>、<code>/proc</code>、<code>/bin</code>、<code>/etc</code> 等标准目录和文件</li>
 <li>对于不同的 <code>linux</code> 发行版，<code>bootfs</code> 基本是一致的，但 <code>rootfs</code> 会有差别。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103101656721.png" alt="image-20240103101656721"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103101656721.png" alt="image-20240103101656721"></p>
 </li>
 </ul>
 <h3 id="Docker-启动"><a href="#Docker-启动" class="headerlink" title="Docker 启动"></a>Docker 启动</h3><p class="fireman-p-indent" ><code>Linux</code></p>
@@ -689,7 +692,7 @@
 <li>并且允许再次将下层的 <code>FS</code>（<code>file system</code>）设定为 <code>readonly</code> 并且向上叠加</li>
 <li>这样一组 <code>readonly</code> 和一个 <code>writeable</code> 的结构构成一个 <code>container</code> 的运行时态，每一个 <code>FS</code> 被称作一个 <code>FS</code> 层。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103102104646.png" alt="image-20240103102104646"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103102104646.png" alt="image-20240103102104646"></p>
 <h3 id="写操作"><a href="#写操作" class="headerlink" title="写操作"></a>写操作</h3><p class="fireman-p-indent" >由于镜像具有共享特性，所以对容器可写层的操作需要依赖存储驱动提供的写时复制和用时分配机制，以此来支持对容器可写层的修改，进而提高对存储和内存资源的利用率。</p>
 <ul>
 <li><p>写时复制</p>
@@ -704,12 +707,12 @@
 <p class="fireman-p-indent" >按需分配空间，而非提前分配，即当一个文件被创建出来后，才会分配空间。</p>
 </li>
 </ul>
-<h3 id="容器存储驱动"><a href="#容器存储驱动" class="headerlink" title="容器存储驱动"></a>容器存储驱动</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103102911924.png" alt="image-20240103102911924"></p>
+<h3 id="容器存储驱动"><a href="#容器存储驱动" class="headerlink" title="容器存储驱动"></a>容器存储驱动</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103102911924.png" alt="image-20240103102911924"></p>
 <p class="fireman-p-indent" >目前容器主流的存储驱动是 <code>OverlayFS</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103103004115.png" alt="image-20240103103004115"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103103004115.png" alt="image-20240103103004115"></p>
 <h3 id="以-OverlayFS-为例"><a href="#以-OverlayFS-为例" class="headerlink" title="以 OverlayFS 为例"></a>以 OverlayFS 为例</h3><p class="fireman-p-indent" ><code>OverlayFS</code> 也是一种与 <code>AUFS</code> 类似的联合文件系统，同样属于文件级的存储驱动，包含了最初的 <code>Overlay</code> 和更新更稳定的 <code>overlay2</code>.</p>
 <p class="fireman-p-indent" ><code>Overlay</code> 只有两层：<code>upper</code> 层和 <code>lower</code> 层，<code>Lower</code> 层代表镜像层，<code>upper</code> 层代表容器可写层。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103103156311.png" alt="image-20240103103156311"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103103156311.png" alt="image-20240103103156311"></p>
 <p class="fireman-p-indent" >例如在 <code>Dockerilfe</code> 中，每一个指令都是从下层往上叠一层，在容器中的文件，要么直接从镜像层获取，要么是从容器层新创建的文件获取。</p>
 <h3 id="OverlayFS-使用案例"><a href="#OverlayFS-使用案例" class="headerlink" title="OverlayFS 使用案例"></a>OverlayFS 使用案例</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">// 创建四个目录，用于做准备</span><br><span class="line">//      上层   下层  目标目录 临时工作目录</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> upper lower merged work</span></span><br><span class="line">// 构建下层</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;from lower&quot;</span> &gt; lower/in_lower.txt</span></span><br><span class="line">// 构建上层</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;from upper&quot;</span> &gt; upper/in_upper.txt</span></span><br><span class="line">// 上下层同一个文件，内容不同</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;from lower&quot;</span> &gt; lower/in_both.txt</span></span><br><span class="line">// 上下层同一个文件，内容不同</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;from upper&quot;</span> &gt; upper/in_both.txt</span></span><br><span class="line">// 挂载到 merged 目录</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo mount -t overlay overlay -o lowerdir=`<span class="built_in">pwd</span>`/lower,upperdir=`<span class="built_in">pwd</span>`/upper,workdir=`<span class="built_in">pwd</span>`/work `<span class="built_in">pwd</span>`/merged</span></span><br><span class="line">// 查看挂载之后的结果</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> merged/</span></span><br><span class="line">in_lower.txt  in_upper.txt in_both.txt </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> merged/in_both.txt</span></span><br><span class="line">from upper</span><br><span class="line"></span><br><span class="line">// 删除合并之后的 both 文件</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">delete merged/in_both.txt</span> </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> merged/</span></span><br><span class="line">in_lower.txt  in_upper.txt</span><br><span class="line"></span><br><span class="line">// 删除合并之后的下层文件</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">delete merged/in_lower.txt</span> </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> -l upper/</span></span><br><span class="line">总用量 4</span><br><span class="line">c--------- 1 root root 0, 0 1月   4 12:27 in_both.txt</span><br><span class="line">c--------- 1 root root 0, 0 1月   4 12:28 in_lower.txt</span><br><span class="line">-rw-r--r-- 1 root root   11 1月   4 12:26 in_upper.txt</span><br><span class="line"></span><br><span class="line">// 删除合并之后的上层文件</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">delete merged/in_upper.txt</span></span><br><span class="line"></span><br><span class="line">// merged 里面是空的</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> merged/</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> -l upper/   // 删除合并后的上层文件，其实是删除了上层的文件，上层可写，下层是镜像层。</span></span><br><span class="line">总用量 0</span><br><span class="line">c--------- 1 root root 0, 0 1月   4 12:27 in_both.txt   // 上层可以看到下层的文件</span><br><span class="line">c--------- 1 root root 0, 0 1月   4 12:28 in_lower.txt</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> upper/in_both.txt</span></span><br><span class="line">cat: upper/in_both.txt: 没有那个设备或地址</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> lower/</span></span><br><span class="line">in_both.txt  in_lower.txt</span><br></pre></td></tr></table></figure>
 
@@ -726,7 +729,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="Docker-引擎架构"><a href="#Docker-引擎架构" class="headerlink" title="Docker 引擎架构"></a>Docker 引擎架构</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103104613595.png" alt="image-20240103104613595"></p>
+<h2 id="Docker-引擎架构"><a href="#Docker-引擎架构" class="headerlink" title="Docker 引擎架构"></a>Docker 引擎架构</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103104613595.png" alt="image-20240103104613595"></p>
 <p class="fireman-p-indent" >使用 <code>docker container run</code> 运行一个容器时，是使用 <code>containerd</code> 引擎运行。而 <code>docker</code> 早期本身的架构上，主进程是 <code>docker daemon</code>，其他进程是由主进程 <code>fork</code> 出来的，当 <code>docker</code> 需要更新或者重启，需要重启 <code>docker-daemon</code>，就会导致子进程一并重启。 </p>
 <p class="fireman-p-indent" ><code>containerd</code> 引擎，通过 <code>shim</code>进程 <code>fork</code> 出容器子进程 ，当 <code>containerd</code> 主进程重启时，不影响子进程。（<code>shim</code> 的父进程是 <code>systemd</code>，而不是 <code>containerd</code>）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 查看一个容器的进程</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">docker inspect efd96d555c73 | grep -i pid</span></span><br><span class="line">            &quot;Pid&quot;: 4917,</span><br><span class="line">            &quot;PidMode&quot;: &quot;&quot;,</span><br><span class="line">            &quot;PidsLimit&quot;: null,</span><br><span class="line"></span><br><span class="line">// 查看这个进程的父进程</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ps -ef | grep 4917</span></span><br><span class="line">systemd+  4917  4823  0  2023 ?        00:30:30 mysqld</span><br><span class="line">root      8750  7207  0 11:00 pts/13   00:00:00 grep --color=auto 4917</span><br><span class="line"></span><br><span class="line">// 查看父进程 4823 的信息</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ps -ef | grep 4823</span></span><br><span class="line">root      4823     1  0  2023 ?        00:03:47 /usr/bin/containerd-shim-runc-v2 -namespace moby -id efd96d555c73ec357acba410e75c602c40ce82b5ca641e3ce23dedaab0311aa4 -address /run/containerd/containerd.sock</span><br><span class="line">systemd+  4917  4823  0  2023 ?        00:30:30 mysqld</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ps -p 1</span></span><br><span class="line">  PID TTY          TIME CMD</span><br><span class="line">    1 ?        01:06:16 systemd</span><br></pre></td></tr></table></figure>
@@ -774,7 +777,7 @@
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">// 创建 network 的 ns 的临时目录</span><br><span class="line">mkdir -p /var/run/netns</span><br><span class="line">find -L /var/run/netns -type l -delete</span><br><span class="line"></span><br><span class="line">// 开启一个容器，例如nginx，获取到 pid</span><br><span class="line">docker run --network=none -d nginx</span><br><span class="line">docker ps | grep nginx </span><br><span class="line">docker inspect &lt;container_id&gt; | grep -i pid </span><br><span class="line"></span><br><span class="line">// 链接出来，操作更方便</span><br><span class="line">ln -s /proc/$pid/ns/net /var/run/netns/$pid </span><br><span class="line"></span><br><span class="line">// 创建一个 veth ，上面两个口，A 口和 B 口</span><br><span class="line">ip link add A type veth peer name B</span><br><span class="line">// 查看当前 docker0 网桥的状态</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">brctl show</span></span><br><span class="line">bridge name	bridge id		STP enabled	interfaces</span><br><span class="line">docker0		8000.0242838bdad8	no</span><br><span class="line"></span><br><span class="line">// br0上插 A 口，并且打开 A 口</span><br><span class="line">brctl addif docker0 A</span><br><span class="line">ip link set A up</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">brctl show docker0</span></span><br><span class="line">bridge name	bridge id		STP enabled	interfaces</span><br><span class="line">docker0		8000.0242838bdad8	no		A</span><br><span class="line"></span><br><span class="line">// 获取主机上的 docker 网络配置</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip a show docker0</span></span><br><span class="line">4: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default</span><br><span class="line">    link/ether 02:42:83:8b:da:d8 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 fe80::42:83ff:fe8b:dad8/64 scope link</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 设置 B 口，命名、打开、配置 IP</span><br><span class="line">ip link set B netns $pid</span><br><span class="line">ip netns exec $pid ip link set dev B name eth0 </span><br><span class="line">ip netns exec $pid ip link set eth0 up</span><br><span class="line">ip netns exec $pid ip addr add $SETIP/$SETMASK dev eth0</span><br><span class="line">ip netns exec $pid ip route add default via $GATEWAY</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 例如</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip netns <span class="built_in">exec</span> 4854 ip addr add 172.17.0.100/16 dev eth0</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ip netns <span class="built_in">exec</span> 4854 ip route add default via 172.17.0.1</span></span><br><span class="line">// 此时，主机和docker之间就可以通过 veth 通信</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">curl 172.17.0.100</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<h3 id="默认模式-Bridge-和-NAT"><a href="#默认模式-Bridge-和-NAT" class="headerlink" title="默认模式 - Bridge 和 NAT"></a>默认模式 - Bridge 和 NAT</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103115105833.png" alt="image-20240103115105833"></p>
+<h3 id="默认模式-Bridge-和-NAT"><a href="#默认模式-Bridge-和-NAT" class="headerlink" title="默认模式 - Bridge 和 NAT"></a>默认模式 - Bridge 和 NAT</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103115105833.png" alt="image-20240103115105833"></p>
 <p class="fireman-p-indent" >例如，为主机 <code>eth0</code> 分配IP <code>192.168.0.101</code>；</p>
 <p class="fireman-p-indent" >启动 <code>docker daemon</code>，查看主机 <code>iptables</code>；</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POSTROUTING -A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
@@ -791,7 +794,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="Underlay"><a href="#Underlay" class="headerlink" title="Underlay"></a>Underlay</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170022413.png" alt="image-20240103170022413"></p>
+<h3 id="Underlay"><a href="#Underlay" class="headerlink" title="Underlay"></a>Underlay</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170022413.png" alt="image-20240103170022413"></p>
 <p class="fireman-p-indent" >借助主机网卡，通过虚拟网桥实现交换机功能，让容器直接从外部网络中获取网络信息；</p>
 <ul>
 <li>采用 <code>Linux</code> 网桥设备（<code>sbrctl</code>），通过物理网络连通容器；</li>
@@ -806,9 +809,9 @@
 <li><code>Docker overlay</code> 网络驱动原生支持多主机网络；</li>
 <li><code>Libnetwork</code> 是一个内置的基于 <code>VXLAN</code> 的网络驱动；</li>
 </ul>
-<h4 id="VXLAN"><a href="#VXLAN" class="headerlink" title="VXLAN"></a>VXLAN</h4><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170440937.png" alt="image-20240103170440937"></p>
+<h4 id="VXLAN"><a href="#VXLAN" class="headerlink" title="VXLAN"></a>VXLAN</h4><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170440937.png" alt="image-20240103170440937"></p>
 <p class="fireman-p-indent" >在每一个主机上都有一个设备，例如 <code>VTEP-1</code>，在处理处理容器网络包时，在外层封装一层源地址和源MAC，通过网络进行转发，经过路由到另外一台主机上之后，通过解压缩获取到对端网络信息以及它的目标网络信息。这种方式封装和解封装数据包会影响性能。</p>
-<h3 id="Overlay-network-sample-Flannel"><a href="#Overlay-network-sample-Flannel" class="headerlink" title="Overlay network sample - Flannel"></a>Overlay network sample - Flannel</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170836063.png" alt="image-20240103170836063"></p>
+<h3 id="Overlay-network-sample-Flannel"><a href="#Overlay-network-sample-Flannel" class="headerlink" title="Overlay network sample - Flannel"></a>Overlay network sample - Flannel</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103170836063.png" alt="image-20240103170836063"></p>
 <ul>
 <li>同一主机内的 <code>Pod</code> 可以使用网桥进行通信；</li>
 <li>不同主机上的 <code>Pod</code> 将通过 <code>flanneld</code> 将其流量封装在 <code>UDP</code> 数据包中。</li>
@@ -816,7 +819,7 @@
 <p class="fireman-p-indent" >需要在每个设备上安装 <code>flannneld</code>，跨主机的包都需要通过 <code>flanneld</code> 封装包。</p>
 <p class="fireman-p-indent" >Flannel Packet Sample</p>
 <p class="fireman-p-indent" ><code>flanneld</code> 抓包示例：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103171044864.png" alt="image-20240103171044864"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240103171044864.png" alt="image-20240103171044864"></p>
 <p class="fireman-p-indent" >可以看到，其实是一个 <code>ICMP</code> 协议的包，外层是 <code>IPV4</code>，但是 <code>IPV4</code> 外层还封装了一层 <code>UDP</code>，然后在 <code>UDP</code> 外层再封装 <code>IPV4</code>。</p>
 <h2 id="创建-docker-镜像"><a href="#创建-docker-镜像" class="headerlink" title="创建 docker 镜像"></a>创建 docker 镜像</h2><p class="fireman-p-indent" >定义 <code>dockerfile</code></p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> ubuntu</span><br><span class="line"></span><br><span class="line"><span class="comment"># so apt-get doesn&#x27;t complain</span></span><br><span class="line"><span class="keyword">ENV</span> DEBIAN_FRONTEND=noninteractive</span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> sed -i <span class="string">&#x27;s/^exit 101/exit 0/&#x27;</span> /usr/sbin/policy-rc.d</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> \</span></span><br><span class="line"><span class="language-bash">	apt-get update &amp;&amp; \</span></span><br><span class="line"><span class="language-bash">	apt-get install -y ca-certificates &amp;&amp; \ </span></span><br><span class="line">	apt-get install -y curl &amp;&amp; \</span><br><span class="line">	rm -rf /var/lib/apt/lists/*</span><br><span class="line"></span><br><span class="line"><span class="keyword">ADD</span><span class="language-bash"> ./bin/eic eic </span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;/eic&quot;</span>]</span></span><br></pre></td></tr></table></figure>
@@ -1120,7 +1123,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -1128,7 +1136,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -1138,6 +1148,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/cdb9.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

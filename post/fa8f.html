@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。">
 <meta property="og:type" content="article">
@@ -85,7 +88,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -300,7 +303,7 @@
 <p class="fireman-p-indent" >支付宝账户表：<code>A(id, user_id, amount)</code></p>
 <p class="fireman-p-indent" >余额宝账户表：<code>B(id, user_id, amount)</code></p>
 <p class="fireman-p-indent" >用户的 <code>user_id = 1</code>，从支付宝转账1万块到余额宝分为两个步骤：</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160013634.png" alt="image-20231106160013634" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160013634.png" alt="image-20231106160013634" style="zoom:25%;" />
 
 <ol>
 <li><p>支付宝表扣除 1万：</p>
@@ -313,7 +316,7 @@
 <p class="fireman-p-indent" >要保证数据一致性，则需要开启事务。</p>
 <p class="fireman-p-indent" >单个数据库，可以保证 <code>ACID</code> 使用数据库事务。</p>
 <p class="fireman-p-indent" >随着系统变大，进行了微服务架构的改造，因为每个微服务独占了一个数据库实例，从 <code>user_id = 1</code>，发起的转账动作，跨越了两个微服务：<code>pay</code> 和 <code>balance</code> 服务。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160148107.png" alt="image-20231106160148107" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160148107.png" alt="image-20231106160148107" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >需要保证，跨多个服务的步骤数据一致性：</p>
 <ol>
@@ -325,7 +328,7 @@
 <h2 id="事务消息"><a href="#事务消息" class="headerlink" title="事务消息"></a>事务消息</h2><p class="fireman-p-indent" >例如北京很有名的姚记炒肝，点了炒肝并付了钱后，他们并不会直接把你的炒肝给你，往往是给你一张小票，然后让你拿小票到出货区排队去取。</p>
 <p class="fireman-p-indent" >这是将付钱和取货两个动作分开。其中一个很重要的原因是为了使他们接待能力增强（并发量更高）。</p>
 <p class="fireman-p-indent" >只要这张小票在，用户最终是能拿到炒肝的。同理转账服务也是如此。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160601768.png" alt="image-20231106160601768" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106160601768.png" alt="image-20231106160601768" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >当支付宝账户扣除 1万后，我们只要生成一个凭证（消息）即可，这个凭证（消息）上写着<strong>让余额宝账户增加1万</strong>，只要这个凭证（消息）能可靠保存，最终是可以拿着这个凭证（消息）让余额宝账户增加1万的，即我们能依靠这个凭证（消息）完成最终一致性。</p>
 <p class="fireman-p-indent" >问题的关键就是可靠的保存消息凭证。</p>
@@ -338,11 +341,11 @@
 </ul>
 <p class="fireman-p-indent" >事务消息一旦被可靠的持久化，整个分布式事务，变为了最终一致性，消息的消费才能保障最终业务数据的完整性，所以要尽最大努力，把消息送达到下游的业务消费方，称为：<code>Best Effort</code>。只有消息被消费，整个交易才能算是完整完结。</p>
 <p class="fireman-p-indent" >大多数事务消息都是利用二阶段提交来实现，例如 <code>RabbitMQ</code> 的事务消息机制是二阶段提交 + 事务回查。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129174140873.png" alt="image-20231129174140873"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129174140873.png" alt="image-20231129174140873"></p>
 <h2 id="Best-Effort"><a href="#Best-Effort" class="headerlink" title="Best Effort"></a>Best Effort</h2><p class="fireman-p-indent" >尽最大努力交付，主要用于在这样一种场景：不同的服务平台之间的事务性保证。</p>
 <p class="fireman-p-indent" >比如在电商购物，使用支付宝支付；又比如玩网游的时候，通过 <code>App Store</code> 充值。</p>
 <p class="fireman-p-indent" >拿购物为例，电商平台与支付平台是相互独立的，隶属于不同的公司，即使是同一个公司也很可能是独立的部门。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161230211.png" alt="image-20231106161230211" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161230211.png" alt="image-20231106161230211" style="zoom:25%;" />
 
 <blockquote>
 <p class="fireman-p-indent" >做过支付宝交易接口的同学都知道，我们一般会在支付宝的回调页面和接口里，解密参数，然后调用系统中更新交易状态相关的服务，将订单更新为付款成功。</p>
@@ -350,12 +353,12 @@
 </blockquote>
 <p class="fireman-p-indent" >需要注意，回调接口需要处理幂等，当交付平台重复回调接口，发送请求成功信息时，可以避免出现产生多次交易成功的情况。</p>
 <h2 id="Transactional-outbox"><a href="#Transactional-outbox" class="headerlink" title="Transactional outbox"></a>Transactional outbox</h2><p class="fireman-p-indent" ><code>Transactional outbox</code>（事务型收件箱），支付宝在完成扣款的同时，同时记录消息数据，这个消息数据与业务数据保存在同一数据库实例里（消息记录表表名为 <code>msg</code>）</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161546297.png" alt="image-20231106161546297" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161546297.png" alt="image-20231106161546297" style="zoom:25%;" />
 
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BEGIN</span> TRANSACTION</span><br><span class="line">    <span class="keyword">UPDATE</span> A <span class="keyword">SET</span> amount <span class="operator">=</span> amount <span class="operator">-</span> <span class="number">10000</span> <span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">INSERT</span> <span class="keyword">INTO</span> msg(user_id, amount, status) <span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="number">10000</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">END</span> TRANSACTION</span><br><span class="line"><span class="keyword">COMMIT</span>;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >上述事务能保证只要支付宝账户里被扣了钱，消息一定能保存下来。当上述事务提交成功后，我们想办法将此消息通知余额宝，余额宝处理成功后发送回复成功消息，支付宝收到回复后删除该条消息数据。余额宝处理成功之后回调，修改消息状态。当然，除了在交易的时候调用余额宝的接口，还需要定期轮询消息表，以防一些消息漏掉没有发送给余额宝。</p>
-<h2 id="Polling-publisher"><a href="#Polling-publisher" class="headerlink" title="Polling publisher"></a>Polling publisher</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161855224.png" alt="image-20231106161855224" style="zoom:25%;" />
+<h2 id="Polling-publisher"><a href="#Polling-publisher" class="headerlink" title="Polling publisher"></a>Polling publisher</h2><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106161855224.png" alt="image-20231106161855224" style="zoom:25%;" />
 
 <p class="fireman-p-indent" ><code>Polling publisher</code>，我们定时的轮询 <code>msg</code> 表，把 <code>status = 1</code> 的消息统统拿出来消费，可以按照自增 <code>id</code> 排序，保证顺序消费。在这里我们独立了一个 <code>pay_task</code> 服务，把拖出来的消息 <code>publish</code> 给我们消息队列，<code>balance</code> 服务自己来消费队列，或者直接 <code>rpc</code> 发送给 <code>balance</code> 服务。同步调用成功之后，再修改数据库 <code>status</code>。</p>
 <p class="fireman-p-indent" >实际我们第一个版本的 <code>archive-service</code> 在使用 <code>CQRS</code> 时，就用的这个模型，<code>Pull</code> 的模型，从延迟来说不够好，<code>Pull</code> 太猛对 <code>Database</code> 有一定的压力，<code>Pull</code> 频次低了，延迟比较高。</p>
@@ -364,7 +367,7 @@
 <li>定时操作，也就是会有延迟</li>
 <li>如果要减少延迟，那么频次会很高，数据库查询压力大</li>
 </ol>
-<h2 id="Transaction-log-tailing"><a href="#Transaction-log-tailing" class="headerlink" title="Transaction log tailing"></a>Transaction log tailing</h2><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162256025.png" alt="image-20231106162256025" style="zoom:25%;" />
+<h2 id="Transaction-log-tailing"><a href="#Transaction-log-tailing" class="headerlink" title="Transaction log tailing"></a>Transaction log tailing</h2><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162256025.png" alt="image-20231106162256025" style="zoom:25%;" />
 
 <p class="fireman-p-indent" ><code>Transaction log tailing</code>，上述保存消息的方式使得消息数据和业务数据紧耦合在一起，从架构上看不够优雅，而且容易诱发其他问题。</p>
 <p class="fireman-p-indent" >有一些业务场景，可以直接使用主表被 <code>canal</code> 订阅使用，有一些业务场景自带这类 <code>message</code> 表，比如订单或者交易流水，可以直接使用这类流水表作为 <code>message</code> 表使用。这样就不需要轮询查询数据库，甚至订阅订单表和流水表的话，可以不需要 <code>msg</code> 表。（一般这种用法叫作 <code>CDC</code>，<code>Change Data Capture</code>，用于捕获和跟踪数据库中发生的数据变更。）</p>
@@ -373,7 +376,7 @@
 <h2 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h2><p class="fireman-p-indent" >还有一个很严重的问题就是消息重复投递，如果相同的消息被重复投递两次（或者获取消息消费了两次），那么我们余额宝账户将会增加 2万而不是 1万了。</p>
 <p class="fireman-p-indent" >为什么相同的消息会被重复投递？比如余额宝处理完消息 <code>msg</code> 后，发送了处理成功的消息给支付宝，正常情况下支付宝应该要删除消息 <code>msg</code>，但如果支付宝这时候悲剧的挂了，重启后一看消息 <code>msg</code> 还在，就会继续发送消息 <code>msg</code>。</p>
 <p class="fireman-p-indent" >消息队列一般都有两种模式：至少一次消费（<code>ack</code>）；至多一次消费。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162535314.png" alt="image-20231106162535314"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106162535314.png" alt="image-20231106162535314"></p>
 <ul>
 <li><p>全局唯一 <code>ID</code> + 去重表</p>
 <p>在余额宝这边增加消息应用状态表 <code>msg_apply</code>，通俗来说就是个账本，用于记录消息的消费情况，每次来一个消息，在真正执行之前，先去消息应用状态表中查询一遍，如果找到说明是重复消息，丢弃即可，如果没找到才执行，同时插入到消息应用状态表（同一事务）</p>
@@ -381,7 +384,7 @@
 <li><p>版本号</p>
 </li>
 </ul>
-<h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110105746399.png" alt="image-20231110105746399"></p>
+<h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231110105746399.png" alt="image-20231110105746399"></p>
 <p class="fireman-p-indent" >两阶段提交协议（<code>Two Phase Commitment Protocol</code>）中，涉及到两种角色。</p>
 <ul>
 <li>一个事务协调者（<code>coordinator</code>）：负责协调多个参与者进行业务投票及提交（回滚）</li>
@@ -393,19 +396,19 @@
 <li>提交阶段（<code>commit phase</code>）：收到参与者的通知后，协调者再向参与者发出通知，根据反馈情况决定各参与者是否要提交还是回滚；</li>
 </ol>
 <p class="fireman-p-indent" >差不多的还有三阶段提交</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129173207159.png" alt="image-20231129173207159"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129173207159.png" alt="image-20231129173207159"></p>
 <h2 id="2PC-Message-Queue"><a href="#2PC-Message-Queue" class="headerlink" title="2PC Message Queue"></a>2PC Message Queue</h2><p class="fireman-p-indent" >二阶段提交消息队列</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163109776.png" alt="image-20231106163109776"  />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163109776.png" alt="image-20231106163109776"  />
 
 <h2 id="Seata-2PC"><a href="#Seata-2PC" class="headerlink" title="Seata 2PC"></a>Seata 2PC</h2><p class="fireman-p-indent" ><code>Seata</code> 实现 <code>2PC</code> 与传统 <code>2PC</code> 的差别</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163145422.png" alt="image-20231106163145422" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163145422.png" alt="image-20231106163145422" style="zoom:25%;" />
 
 <ul>
 <li>架构层次方面：传统 <code>2PC</code> 方案的 <code>RM</code> 实际上是在数据库层，<code>RM</code> 本质上就是数据库自身，通过 <code>XA</code> 协议实现，而 <code>Seata</code> 的 <code>RM</code> 是以 <code>jar</code> 包的形式作为中间件层部署在应用程序这一侧的。</li>
 <li>两阶段提交方面：传统 <code>2PC</code> 无论第二阶段的决议是 <code>commit</code> 还是 <code>rollback</code>，事务性资源的锁都要保持到 <code>Phase2</code> 完成才释放。而 <code>Seata</code> 的做法是在 <code>Phase1</code> 就将本地事务提交，这样就可以省去 <code>Phase2</code> 持锁的时间，整体提高效率。</li>
 </ul>
 <h2 id="TCC"><a href="#TCC" class="headerlink" title="TCC"></a>TCC</h2><p class="fireman-p-indent" ><code>TCC</code> 是 <code>Try</code>、<code>Confirm</code>、<code>Cancel</code> 三个词语的缩写，<code>TCC</code> 要求每个分支事务实现三个操作：预处理 <code>Try</code>、确认<code>Confirm</code>、撤销 <code>Cancel</code>。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163801454.png" alt="image-20231106163801454" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231106163801454.png" alt="image-20231106163801454" style="zoom:25%;" />
 
 <p class="fireman-p-indent" ><code>Try</code> 操作做业务检查及资源预留，<code>Confirm</code> 做业务确认操作，<code>Cancel</code> 实现一个与 <code>Try</code> 相反的操作即回滚操作。</p>
 <p class="fireman-p-indent" ><code>TM</code> 首先发起所有的分支事务 <code>Try</code> 操作，任何一个分支事务的 <code>Try</code> 操作执行失败，<code>TM</code> 将会发起所有分支事务的 <code>Cancel</code> 操作，若 <code>Try</code> 操作全部成功，<code>TM</code> 将会发起所有分支事务的 <code>Confirm</code> 操作，其中 <code>Confirm/Cancel</code> 操作若执行失败，<code>TM</code> 会进行重试。</p>
@@ -504,7 +507,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -512,7 +520,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -522,6 +532,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/fa8f.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

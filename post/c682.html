@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="这篇文章将探讨微服务架构中关键的可观察性工具之一——链路追踪。我们将深入研究链路追踪的概念，重点介绍它在微服务环境中的作用和优势。">
 <meta property="og:type" content="article">
@@ -92,7 +95,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -313,10 +316,10 @@
 </ul>
 <h2 id="Dapper"><a href="#Dapper" class="headerlink" title="Dapper"></a>Dapper</h2><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9iaWdidWxseS5naXRodWIuaW8vRGFwcGVyLXRyYW5zbGF0aW9uLw==">Dapper，大规模分布式系统的跟踪系统<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >参考 <code>Google Dapper</code> 论文实现，为每个请求都生成一个全局唯一的 <code>traceid</code>（<code>cityhash + uuid</code> 算法生成），端到端（跨进程通过 <code>grpc </code>中的 <code>metadata</code> 传递，同进程使用 <code>ctx</code> 传递）传到上下游所有节点，每一层生成一个 <code>spanid</code>，通过 <code>traceid</code> 将不同系统孤立的调用日志和异常信息串联一起，通过 <code>spanid</code> 和 <code>level</code> 表达节点的父子关系。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113116946.png" alt="image-20231205113116946" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113116946.png" alt="image-20231205113116946" style="zoom:50%;" />
 
 <p class="fireman-p-indent" >进程内传递和进程间传递：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/2q6FmR7hgIzuUGx.png" alt="Image 6 of 7"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/2q6FmR7hgIzuUGx.png" alt="Image 6 of 7"></p>
 <p class="fireman-p-indent" >进程内：使用 <code>context</code> 传递</p>
 <p class="fireman-p-indent" >进程间：例如 <code>gRPC</code>，可以放在 <code>metadata</code>里面；如果是 <code>http</code>，可以放在 <code>header</code> 里面（发起 HTTP</p>
 <p class="fireman-p-indent" >调用需要手动设置好头部。接下来，如果要将请求染色 A 的服务上，可以用七层负载均衡，也可以自己手动筛选服务器，比如说 <code>a.yourcompany.com</code>，或者用路径来区分。），一些基于 <code>tcp</code> 的 <code>socket</code> 通信，这种自定义实现方式，也需要自己实现。（例如 <code>google</code>的<code>rpc</code>协议约定放在 <code>attachment</code>里面）</p>
@@ -330,7 +333,7 @@
 <li><code>Annotation</code>：调用单元中的挂载信息，例如 <code>ip</code>、<code>user</code> 之类的标签</li>
 </ul>
 <h2 id="调用链"><a href="#调用链" class="headerlink" title="调用链"></a>调用链</h2><p class="fireman-p-indent" >在跟踪树结构中，树节点是整个架构的基本单元，而每一个节点又是对 <code>span</code> 的引用。虽然 <code>span</code> 在日志文件中知识简单的代表 <code>span</code> 的开始和结束时间，他们在整个树形结构中却是相对独立的。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113257114.png" alt="image-20231205113257114"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113257114.png" alt="image-20231205113257114"></p>
 <p class="fireman-p-indent" >核心概念：</p>
 <ul>
 <li><code>TraceID</code>：一个完整的请求的<code>id</code></li>
@@ -342,14 +345,14 @@
 <li>追踪信息包含时间戳、事件、方法名（<code>Family</code> + <code>Title</code>）、注释（<code>TAG/Comment</code>）</li>
 <li>客户端和服务器上的时间戳来自不同的主机，因此必须考虑到时间偏差，<code>RPC</code> 客户端发送一个请求之后，服务端才能接收到，对于响应也是一样的（服务器先响应，然后客户端才能接收到这个响应）。这样一来，服务器端的 <code>RPC</code> 就有一个时间戳的上限和下限。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205174815073.png" alt="image-20231205174815073"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205174815073.png" alt="image-20231205174815073"></p>
 <h1 id="植入点"><a href="#植入点" class="headerlink" title="植入点"></a>植入点</h1><p class="fireman-p-indent" ><code>Dapper</code> 可以对应用开发者近乎零侵入的成本对分布式控制路径进行跟踪，几乎完全依赖于少量通用组件库的改造。如下：</p>
 <p class="fireman-p-indent" >当一个线程在处理跟踪控制路径的过程中，<code>Dapper</code> 把这次跟踪的上下文在 <code>ThreadLocal</code> 中进行存储，在 <code>Go</code> 语言中，约定每个方法首参数为 <code>context</code>（上下文）</p>
 <p class="fireman-p-indent" >例如 <code>gin</code> 的 <code>middware</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113838814.png" alt="image-20231205113838814"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113838814.png" alt="image-20231205113838814"></p>
 <p class="fireman-p-indent" >其实很多的中间件都有实现，在请求开始时创建一个 <code>trace</code> 或者 <code>span</code></p>
 <p class="fireman-p-indent" >覆盖通用的中间件 &amp; 通讯框架、不限于：<code>redis</code>、<code>memcache</code>、<code>rpc</code>、<code>http</code>、<code>database</code>、<code>queue</code>。</p>
-<h1 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h1><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113851775.png" alt="image-20231205113851775"></p>
+<h1 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h1><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205113851775.png" alt="image-20231205113851775"></p>
 <ol>
 <li>容器服务的日志经过 <code>log agent</code>通过 <code>unix sock</code> 将日志采集到消息队列（或者写入磁盘之后监控文件变化）</li>
 <li>消费者存储到 <code>es</code> 和 <code>hbase</code>，提供多种存储和检索手段，<code>es</code> 中通过维度检索，<code>hbase</code>中 <code>rawkey</code> 作为 <code>traceid</code></li>
@@ -385,15 +388,15 @@
 </li>
 </ul>
 <h1 id="API"><a href="#API" class="headerlink" title="API"></a>API</h1><h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><p class="fireman-p-indent" >按照 <code>Family</code>（服务名）、<code>Title</code>（接口）、时间、调用者等维度进行搜索（例如直接查询耗时比较长的请求）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115007139.png" alt="image-20231205115007139"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115007139.png" alt="image-20231205115007139"></p>
 <h2 id="详情"><a href="#详情" class="headerlink" title="详情"></a>详情</h2><p class="fireman-p-indent" >根据单个<code>traceid</code>，查看整个链路信息，包含 <code>span</code>、<code>level</code>统计，<code>span</code>详情，依赖的服务、组件信息等；</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115109399.png" alt="image-20231205115109399"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115109399.png" alt="image-20231205115109399"></p>
 <h2 id="全局依赖图"><a href="#全局依赖图" class="headerlink" title="全局依赖图"></a>全局依赖图</h2><p class="fireman-p-indent" >由于服务之间的依赖是动态改变的，所以不可能仅从配置信息上推断出所有这些服务之间的依赖关系，能够推算出服务各自之间的依赖，以及服务和其他软件组件之间的依赖。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115207728.png" alt="image-20231205115207728"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115207728.png" alt="image-20231205115207728"></p>
 <h2 id="依赖搜索"><a href="#依赖搜索" class="headerlink" title="依赖搜索"></a>依赖搜索</h2><p class="fireman-p-indent" >搜索单个服务的依赖情况，方便我们做<strong>异地多活</strong>时候来全局考虑资源的部署情况，以及区分服务是否属于多活范畴，也可以方便我们经常性的梳理依赖服务和层级来优化我们的整体架构可用性。（还可以将服务之间的链路宽度通过请求量等比放大，作为服务扩展的依据）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115322370.png" alt="image-20231205115322370"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115322370.png" alt="image-20231205115322370"></p>
 <h2 id="推断环依赖"><a href="#推断环依赖" class="headerlink" title="推断环依赖"></a>推断环依赖</h2><p class="fireman-p-indent" >一个复杂的业务架构，很难避免全部是层级关系的调用，但是我们要尽可能保证一点：调用栈永远向下，即：不产生环依赖。（产生环调用的时候，不好处理服务升级的顺序。）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115413025.png" alt="image-20231205115413025"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205115413025.png" alt="image-20231205115413025"></p>
 <h1 id="经验-优化"><a href="#经验-优化" class="headerlink" title="经验&amp;优化"></a>经验&amp;优化</h1><h2 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h2><ol>
 <li>不必要的串行调用：分析能否改成并行调用，优化性能</li>
 <li>缓存读放大；例如 <code>for</code> 循环取 <code>cache</code></li>
@@ -428,7 +431,7 @@
 <ul>
 <li><code>Prometheus</code> + <code>Granfana</code></li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172015791.png" alt="image-20231205172015791"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172015791.png" alt="image-20231205172015791"></p>
 <h2 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h2><p class="fireman-p-indent" >涉及到 <code>net</code>、<code>cache</code>、<code>db</code>、<code>rpc</code> 等资源类型的基础库，首先监控维度 4 个黄金指标：</p>
 <ul>
 <li>延迟（耗时，需要区分正常还是异常）</li>
@@ -436,7 +439,7 @@
 <li>错误（覆盖错误码或者 <code>HTTP Status Code</code>）</li>
 <li>饱和度（服务容量有多<strong>满</strong>）</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172251344.png" alt="image-20231205172251344"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172251344.png" alt="image-20231205172251344"></p>
 <p class="fireman-p-indent" >系统层面：</p>
 <ul>
 <li><code>CPU</code>，<code>Memory</code>，<code>IO</code>，<code>Network</code>，<code>TCP/IP</code> 状态等，<code>FD</code>（等其他），<code>Kernel</code>：<code>Context Switch </code></li>
@@ -447,8 +450,8 @@
 <li>使用服务发现找到节点信息，以及提供快捷的方式快速可以 <code>WEB</code> 化查看进程的 <code>Profiling</code> 信息（火焰图等）；</li>
 <li><code>watchdog</code>，使用内存、<code>CPU</code> 等信号量触发自动采集；</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172423414.png" alt="image-20231205172423414"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172427832.png" alt="image-20231205172427832"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172423414.png" alt="image-20231205172423414"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231205172427832.png" alt="image-20231205172427832"></p>
 <h1 id="opentracing-基本用法"><a href="#opentracing-基本用法" class="headerlink" title="opentracing 基本用法"></a><code>opentracing</code> 基本用法</h1><ul>
 <li><code>opentracing</code> 定义了一套 <code>API</code>，很多 <code>tracing</code> 框架都支持这套 <code>API</code></li>
 <li><code>go get github.com/opentracing/opentracing-go@latest</code> 引入依赖</li>
@@ -489,8 +492,8 @@
 <h2 id="配合-zipkin-或者-jeager"><a href="#配合-zipkin-或者-jeager" class="headerlink" title="配合 zipkin 或者 jeager"></a>配合 <code>zipkin</code> 或者 <code>jeager</code></h2><p class="fireman-p-indent" >可以自己搭建一个 <code>zipkin</code> 或者 <code>jeager</code> 本地服务器作为 <code>tracing</code> 的采集服务器，收集采集信息。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 9411:9411 openzipkin/zipkin</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/dependency-graph.png" alt="Dependency graph screenshot"></p>
-<h1 id="prometheus"><a href="#prometheus" class="headerlink" title="prometheus"></a><code>prometheus</code></h1><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/architecture.png" alt="Prometheus architecture"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/dependency-graph.png" alt="Dependency graph screenshot"></p>
+<h1 id="prometheus"><a href="#prometheus" class="headerlink" title="prometheus"></a><code>prometheus</code></h1><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/architecture.png" alt="Prometheus architecture"></p>
 <p class="fireman-p-indent" ><code>promtheus</code> 是拖的模式，由服务端主动从客户端拖数据。避免客户端上的请求非常多，碎片信息多，导致请求大爆服务端。</p>
 <h2 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h2><ul>
 <li><code>prometheus</code> 自身分为客户端和服务端。服务端也就是采集到的数据存储的地方，客户端就是使用 <code>prometheus</code> 的地方。</li>
@@ -502,7 +505,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="配合-Grafana"><a href="#配合-Grafana" class="headerlink" title="配合 Grafana"></a>配合 <code>Grafana</code></h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/grafana_prometheus.png" alt="Grafana screenshot"></p>
+<h2 id="配合-Grafana"><a href="#配合-Grafana" class="headerlink" title="配合 Grafana"></a>配合 <code>Grafana</code></h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/grafana_prometheus.png" alt="Grafana screenshot"></p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewPrometheusService</span><span class="params">()</span></span> (*Service, <span class="type">error</span>) &#123;</span><br><span class="line">	cli := prometheus.NewHistogramVec(prometheus.HistogramOpts&#123;</span><br><span class="line">		Namespace: <span class="string">&quot;pushgateway&quot;</span>,</span><br><span class="line">    Subsystem: <span class="string">&quot;network&quot;</span>,</span><br><span class="line">		Name:      <span class="string">&quot;cmd_duration_seconds&quot;</span>,</span><br><span class="line">		Help:      <span class="string">&quot;CLI application execution in seconds&quot;</span>,</span><br><span class="line">		Buckets:   prometheus.DefBuckets,</span><br><span class="line">	&#125;, []<span class="type">string</span>&#123;<span class="string">&quot;name&quot;</span>&#125;)</span><br><span class="line">	http := prometheus.NewHistogramVec(prometheus.HistogramOpts&#123;</span><br><span class="line">		Namespace: <span class="string">&quot;http&quot;</span>,</span><br><span class="line">    Subsystem: <span class="string">&quot;network&quot;</span>,</span><br><span class="line">		Name:      <span class="string">&quot;request_duration_seconds&quot;</span>,</span><br><span class="line">		Help:      <span class="string">&quot;The latency of the HTTP requests.&quot;</span>,</span><br><span class="line">		Buckets:   prometheus.DefBuckets,</span><br><span class="line">	&#125;, []<span class="type">string</span>&#123;<span class="string">&quot;handler&quot;</span>, <span class="string">&quot;method&quot;</span>, <span class="string">&quot;code&quot;</span>&#125;)</span><br><span class="line"></span><br><span class="line">	s := &amp;Service&#123;</span><br><span class="line">		pHistogram:           cli,</span><br><span class="line">		httpRequestHistogram: http,</span><br><span class="line">	&#125;</span><br><span class="line">	err := prometheus.Register(s.pHistogram)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &amp;&amp; err.Error() != <span class="string">&quot;duplicate metrics collector registration attempted&quot;</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	err = prometheus.Register(s.httpRequestHistogram)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &amp;&amp; err.Error() != <span class="string">&quot;duplicate metrics collector registration attempted&quot;</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >需要引入 <code>github.com/prometheus/client_golang/prometheus</code></p>
@@ -538,7 +541,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">    -p 9090:9090 \</span><br><span class="line">    -v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml \</span><br><span class="line">    prom/prometheus</span><br></pre></td></tr></table></figure>
 
 <h2 id="查询语言-PromQL"><a href="#查询语言-PromQL" class="headerlink" title="查询语言 PromQL"></a>查询语言 PromQL</h2><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9wcm9tZXRoZXVzLmlvL2RvY3MvcHJvbWV0aGV1cy9sYXRlc3QvcXVlcnlpbmcvYmFzaWNzLw==">QUERYING PROMETHEUS<i class="fa fa-external-link-alt"></i></span></p>
-<h1 id="观测"><a href="#观测" class="headerlink" title="观测"></a>观测</h1><h2 id="HTTP-服务端观测"><a href="#HTTP-服务端观测" class="headerlink" title="HTTP 服务端观测"></a>HTTP 服务端观测</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206172436479.png" alt="image-20231206172436479"></p>
+<h1 id="观测"><a href="#观测" class="headerlink" title="观测"></a>观测</h1><h2 id="HTTP-服务端观测"><a href="#HTTP-服务端观测" class="headerlink" title="HTTP 服务端观测"></a>HTTP 服务端观测</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206172436479.png" alt="image-20231206172436479"></p>
 <ul>
 <li><code>HTTP</code> 方法、状态、协议：<code>GET</code>，<code>POST</code>、<code>200</code> 、<code>HTTPS</code></li>
 <li><code>HTTP</code> 路由：不是记录路径，路径可能带参数，所以应该记录命中的路由。注意一些非法请求可能完全不能命中任何路由</li>
@@ -547,7 +550,7 @@
 <li>业务ID：如果可以从 <code>HTTP Header</code> 里面解析出来用户ID，或者订单ID，也可以记录下来，后面查找、分析都很有用</li>
 <li>响应时间</li>
 </ul>
-<h2 id="HTTP-客户端观测"><a href="#HTTP-客户端观测" class="headerlink" title="HTTP 客户端观测"></a>HTTP 客户端观测</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206173700490.png" alt="image-20231206173700490"></p>
+<h2 id="HTTP-客户端观测"><a href="#HTTP-客户端观测" class="headerlink" title="HTTP 客户端观测"></a>HTTP 客户端观测</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206173700490.png" alt="image-20231206173700490"></p>
 <ul>
 <li><code>HTTP</code> 方法、状态、协议：<code>GET</code>，<code>POST</code>、<code>200</code> 、<code>HTTPS</code></li>
 <li><code>HTTP</code> 路由：如果要做聚合分析，那么应该记录可能命中的路由，否则直接记录整个路径（不含参数）</li>
@@ -556,7 +559,7 @@
 <li>业务ID：如果可以从 <code>HTTP Header</code> 里面解析出来用户ID，或者订单ID，也可以记录下来，后面查找、分析都很有用</li>
 <li>响应时间</li>
 </ul>
-<h2 id="RPC-观测"><a href="#RPC-观测" class="headerlink" title="RPC 观测"></a>RPC 观测</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206173831463.png" alt="image-20231206173831463"></p>
+<h2 id="RPC-观测"><a href="#RPC-观测" class="headerlink" title="RPC 观测"></a>RPC 观测</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231206173831463.png" alt="image-20231206173831463"></p>
 <ul>
 <li>服务标志符：用于标记唯一服务的</li>
 <li>目标主机名、IP 和端口：如果能够拿到目标主机的主机名、IP和端口都可以记录下来</li>
@@ -646,7 +649,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -654,7 +662,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -664,6 +674,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/c682.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

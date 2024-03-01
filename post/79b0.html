@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="数据结构和算法是程序员的基础，而且是一个很重要的基础。">
 <meta property="og:type" content="article">
@@ -152,7 +155,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -424,7 +427,7 @@
 
 <p class="fireman-p-indent" >时间复杂度是 <code>O(k^n)</code></p>
 <p class="fireman-p-indent" >时间复杂度是衡量一段代码效率的重要指标</p>
-<p class="fireman-p-indent" ><img src="/../../../../../Library/Application%20Support/typora-user-images/image-20221212180817930.png" alt="image-20221212180817930"></p>
+<p class="fireman-p-indent" ><img data-src="/../../../../../Library/Application%20Support/typora-user-images/image-20221212180817930.png" alt="image-20221212180817930"></p>
 <p class="fireman-p-indent" >可以看到，不同的时间复杂度，在n增大时，所需要的时间增大服务不一样，其中最快的是 <code>O(1)</code>，但是实际上几乎不会是这种，其次是 <code>O(log(n))</code>。</p>
 <p class="fireman-p-indent" >使用到 <code>O(1)</code>的情况，例如求和</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sum</span><span class="params">(n <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	s := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= n; i++ &#123;</span><br><span class="line">		s += i</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -434,7 +437,7 @@
 
 <p class="fireman-p-indent" >时间复杂度是 <code>O(1)</code></p>
 <h3 id="主定理"><a href="#主定理" class="headerlink" title="主定理"></a>主定理</h3><p class="fireman-p-indent" >一些常用的搜索算法，可以通过主定理直接得到时间复杂度</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221211233041574.png" alt="image-20221211233041574"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221211233041574.png" alt="image-20221211233041574"></p>
 <p class="fireman-p-indent" >通过主定理，可以得到：</p>
 <ul>
 <li>二叉树遍历-前序、中序、后序的时间复杂度都是 <code>O(n)</code>，因为要遍历每一个结点，n代表二叉树中的每一个结点</li>
@@ -442,8 +445,8 @@
 <li>搜索算法，DFS、BFS时间复杂度都是 <code>O(n)</code>，n代表搜索空间里面的结点总数</li>
 <li>二分查找法的时间复杂度是 <code>O(log(n))</code></li>
 </ul>
-<h3 id="不同数据结构检索时的时间复杂度"><a href="#不同数据结构检索时的时间复杂度" class="headerlink" title="不同数据结构检索时的时间复杂度"></a>不同数据结构检索时的时间复杂度</h3><p class="fireman-p-indent" ><img src="/../../../../../Library/Application%20Support/typora-user-images/image-20221212180917113.png" alt="image-20221212180917113"></p>
-<h3 id="不同数组排序算法的时间复杂度"><a href="#不同数组排序算法的时间复杂度" class="headerlink" title="不同数组排序算法的时间复杂度"></a>不同数组排序算法的时间复杂度</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212180958673.png" alt="image-20221212180958673"></p>
+<h3 id="不同数据结构检索时的时间复杂度"><a href="#不同数据结构检索时的时间复杂度" class="headerlink" title="不同数据结构检索时的时间复杂度"></a>不同数据结构检索时的时间复杂度</h3><p class="fireman-p-indent" ><img data-src="/../../../../../Library/Application%20Support/typora-user-images/image-20221212180917113.png" alt="image-20221212180917113"></p>
+<h3 id="不同数组排序算法的时间复杂度"><a href="#不同数组排序算法的时间复杂度" class="headerlink" title="不同数组排序算法的时间复杂度"></a>不同数组排序算法的时间复杂度</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212180958673.png" alt="image-20221212180958673"></p>
 <p class="fireman-p-indent" >汇总：<span class="exturl" data-url="aHR0cDovL3d3dy5yZWRidWJibGUuY29tL3Blb3BsZS9pbW1vcnRhbGxvb20vd29ya3MvMjI5Mjk0MDgtb2ZmaWNpYWwtYmlnLW8tY2hlYXQtc2hlZXQtcG9zdGVyP3A9cG9zdGVyJmZpbmlzaD1zZW1pX2dsb3NzJnNpemU9bGFyZ2U=">http://www.redbubble.com/people/immortalloom/works/22929408-official-big-o-cheat-sheet-poster?p=poster&amp;finish=semi_gloss&amp;size=large<i class="fa fa-external-link-alt"></i></span></p>
 <h1 id="数据结构-1"><a href="#数据结构-1" class="headerlink" title="数据结构"></a>数据结构</h1><h2 id="一维"><a href="#一维" class="headerlink" title="一维"></a>一维</h2><h3 id="数组-array"><a href="#数组-array" class="headerlink" title="数组 array"></a>数组 array</h3><p class="fireman-p-indent" >在<code>golang</code>中定义数组</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a [<span class="number">3</span>]<span class="type">string</span></span><br><span class="line">b := [<span class="number">2</span>]<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br></pre></td></tr></table></figure>
@@ -454,10 +457,10 @@
 <p class="fireman-p-indent" >因此，访问第一个元素和访问中间的某一个元素的时间复杂度，是一样的，都是 <code>O(1)</code>。</p>
 <p class="fireman-p-indent" >数组的特点是访问快，但是插入、删除慢</p>
 <p class="fireman-p-indent" >例如要在<code>index=3</code>的位置插入一个元素，需要将后续的<code>E\F\G</code>都往后挪动（前提是数组有空余位置）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212110147658.png" alt="image-20221212110147658"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212110147658.png" alt="image-20221212110147658"></p>
 <p class="fireman-p-indent" >此时的时间复杂度取决于位置值，是 <code>O(n)</code></p>
 <p class="fireman-p-indent" >删除操作也是一样的，先将 <code>index=3</code>的值取出来，然后将 <code>EFG</code>的值往前挪动</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212110340885.png" alt="image-20221212110340885"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212110340885.png" alt="image-20221212110340885"></p>
 <p class="fireman-p-indent" >此时的时间复杂度取决于位置值，也是 <code>O(n)</code></p>
 <p class="fireman-p-indent" >当然，在<code>golang</code>中，数组的长度是无法扩展的，因此通常是在切片中操作。在切片中，如果长度不足，首先会扩容，将老数组中的内容拷贝到新数组中。</p>
 <h3 id="链表-Linked-List"><a href="#链表-Linked-List" class="headerlink" title="链表 Linked List"></a>链表 Linked List</h3><p class="fireman-p-indent" >链表通过指针指向下一个结点，这种数据结构可以弥补数组中数据插入和数据删除导致的性能问题。</p>
@@ -466,7 +469,7 @@
 <li><p>单链表：指针指向下一个结点的地址，尾结点的指针指向<code>none</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> LinkedList <span class="keyword">struct</span> &#123;</span><br><span class="line">  value <span class="type">int</span></span><br><span class="line">  next  *LinkedList</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>  <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212111147012.png" alt="image-20221212111147012"></p>
+<p>  <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212111147012.png" alt="image-20221212111147012"></p>
 </li>
 <li><p>双链表：一个指针指向下一个结点的地址，另外一个指针指向上一个结点的地址，尾结点的<code>next</code>指向<code>none</code>，头结点的<code>pre</code>指向<code>none</code></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> LinkedList <span class="keyword">struct</span> &#123;</span><br><span class="line">  value     <span class="type">int</span></span><br><span class="line">  pre, next *LinkedList</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -493,12 +496,12 @@
 <li>将前一个<code>node</code>的指针改成指向新的<code>node</code></li>
 <li>将新的<code>node</code>的指针，指向记录的指针</li>
 </ol>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212112708607.png" alt="image-20221212112708607"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212112708607.png" alt="image-20221212112708607"></p>
 <p class="fireman-p-indent" >这个操作是常数操作，事件复杂度是 <code>O(1)</code></p>
 </li>
 <li><p class="fireman-p-indent" >删除结点</p>
 <p class="fireman-p-indent" >将前<code>node</code>的<code>next</code>指向被删结点的<code>next</code>即可</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212114134808.png" alt="image-20221212114134808"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212114134808.png" alt="image-20221212114134808"></p>
 </li>
 </ul>
 <p class="fireman-p-indent" >	</p>
@@ -514,7 +517,7 @@
 <h3 id="跳表-Skip-List"><a href="#跳表-Skip-List" class="headerlink" title="跳表 Skip List"></a>跳表 Skip List</h3><p class="fireman-p-indent" >跳表可以解决链表中查询操作慢的问题</p>
 <p class="fireman-p-indent" >针对链表中查询慢的情况，通过升维，或者说以空间换时间的概念，给<code>node</code>添加多个<code>next</code></p>
 <p class="fireman-p-indent" >在跳表中，增加索引的概念，通过多层索引，实现一次性跨越多个元素，增加查找效率</p>
-<h4 id="时间复杂度-1"><a href="#时间复杂度-1" class="headerlink" title="时间复杂度"></a>时间复杂度</h4><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212114840010.png" alt="image-20221212114840010"></p>
+<h4 id="时间复杂度-1"><a href="#时间复杂度-1" class="headerlink" title="时间复杂度"></a>时间复杂度</h4><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212114840010.png" alt="image-20221212114840010"></p>
 <p class="fireman-p-indent" >第一级索引的个数是 <code>n/2</code>，第二级索引个数是 <code>n/4</code>，以此类推，第k级别索引结点的个数就是 <code>n/(2^k)</code></p>
 <p class="fireman-p-indent" >那么，当最高级的索引有2个结点，索引层级是<code>h</code>,那么</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n/(2^n) = 2</span><br></pre></td></tr></table></figure>
@@ -523,9 +526,9 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">h = log2(n) - 1</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >也就是说，在跳表中查询数据的时间复杂度是 <code>O(log(n))</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212115133160.png" alt="image-20221212115133160"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212115133160.png" alt="image-20221212115133160"></p>
 <p class="fireman-p-indent" >当跳表在增加、删除结点之后，有些结点的指针可能指向为<code>none</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212115255293.png" alt="image-20221212115255293"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212115255293.png" alt="image-20221212115255293"></p>
 <p class="fireman-p-indent" >因此，跳表的维护成本相对而言是比较高的。</p>
 <h4 id="空间复杂度"><a href="#空间复杂度" class="headerlink" title="空间复杂度"></a>空间复杂度</h4><p class="fireman-p-indent" >假设原始链表大小为n，每2个结点抽1个，每层索引的结点数</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n/2,n/4,...,8,4,2</span><br></pre></td></tr></table></figure>
@@ -603,7 +606,7 @@
 </li>
 </ul>
 <h3 id="栈-stack"><a href="#栈-stack" class="headerlink" title="栈 stack"></a>栈 stack</h3><p class="fireman-p-indent" >类似于一个容器，先进后出（FIFO），添加、删除皆为 <code>O(1)</code>，查询是 <code>O(n)</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212171916859.png" alt="image-20221212171916859"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212171916859.png" alt="image-20221212171916859"></p>
 <p class="fireman-p-indent" >基于数组实现</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List holds the elements in a slice</span></span><br><span class="line"><span class="keyword">type</span> List <span class="keyword">struct</span> &#123;</span><br><span class="line">	elements []<span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	size     <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Stack holds elements in an array-list</span></span><br><span class="line"><span class="keyword">type</span> Stack <span class="keyword">struct</span> &#123;</span><br><span class="line">	list *List</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -614,7 +617,7 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Stack interface that all stacks implement</span></span><br><span class="line"><span class="keyword">type</span> Stack <span class="keyword">interface</span> &#123;</span><br><span class="line">	Push(value <span class="keyword">interface</span>&#123;&#125;)									<span class="comment">// 推入一个元素</span></span><br><span class="line">	Pop() (value <span class="keyword">interface</span>&#123;&#125;, ok <span class="type">bool</span>)			<span class="comment">// 吐出一个元素</span></span><br><span class="line">	Peek() (value <span class="keyword">interface</span>&#123;&#125;, ok <span class="type">bool</span>)			<span class="comment">// 获取长度</span></span><br><span class="line"></span><br><span class="line">	containers.Container</span><br><span class="line">	<span class="comment">// Empty() bool</span></span><br><span class="line">	<span class="comment">// Size() int</span></span><br><span class="line">	<span class="comment">// Clear()</span></span><br><span class="line">	<span class="comment">// Values() []interface&#123;&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="队列-queue"><a href="#队列-queue" class="headerlink" title="队列 queue"></a>队列 queue</h3><p class="fireman-p-indent" >先进先出，添加、删除皆为 <code>O(1)</code>，查询是 <code>O(n)</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212171745511.png" alt="image-20221212171745511"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212171745511.png" alt="image-20221212171745511"></p>
 <p class="fireman-p-indent" >基于数组实现</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List holds the elements in a slice</span></span><br><span class="line"><span class="keyword">type</span> List <span class="keyword">struct</span> &#123;</span><br><span class="line">	elements []<span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	size     <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Queue holds elements in an array-list</span></span><br><span class="line"><span class="keyword">type</span> Queue <span class="keyword">struct</span> &#123;</span><br><span class="line">	list *List</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -625,9 +628,9 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// List holds the elements, where each element points to the next element</span></span><br><span class="line"><span class="keyword">type</span> List <span class="keyword">struct</span> &#123;</span><br><span class="line">	first *element</span><br><span class="line">	last  *element</span><br><span class="line">	size  <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> element <span class="keyword">struct</span> &#123;</span><br><span class="line">	value <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">	next  *element</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Queue holds elements in a singly-linked-list</span></span><br><span class="line"><span class="keyword">type</span> Queue <span class="keyword">struct</span> &#123;</span><br><span class="line">	list *List</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="双端队列-deque：double-end-queue"><a href="#双端队列-deque：double-end-queue" class="headerlink" title="双端队列 deque：double end queue"></a>双端队列 deque：double end queue</h3><p class="fireman-p-indent" >可以看做是栈和队列的结合，可以从头插入或者删除，也可以从尾部插入或者删除，添加、删除皆为 <code>O(1)</code>，查询是 <code>O(n)</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212172050483.png" alt="image-20221212172050483"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221212172050483.png" alt="image-20221212172050483"></p>
 <p class="fireman-p-indent" >基于数组实现</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/deque.png" alt="双端队列图"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/deque.png" alt="双端队列图"></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Deque represents a single instance of the deque data structure. A Deque</span></span><br><span class="line"><span class="comment">// instance contains items of the type specified by the type argument.</span></span><br><span class="line"><span class="keyword">type</span> Deque[T any] <span class="keyword">struct</span> &#123;</span><br><span class="line">	buf    []T</span><br><span class="line">	head   <span class="type">int</span></span><br><span class="line">	tail   <span class="type">int</span></span><br><span class="line">	count  <span class="type">int</span></span><br><span class="line">	minCap <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >支持的方法</p>
@@ -672,13 +675,13 @@
 <p class="fireman-p-indent" >通过把关键码值映射到表中一个为止来访问记录，以加快查找的速度</p>
 <p class="fireman-p-indent" >这个映射函数叫做<strong>散列函数</strong>（Hash Function，也叫做哈希函数），存放记录的数组叫做哈希表（或散列表）</p>
 <p class="fireman-p-indent" >例如，<code>lies</code>通过hash函数处理，总数为429，对20取模，则将这个值放到位置值为9上</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213170420074.png" alt="image-20221213170420074"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213170420074.png" alt="image-20221213170420074"></p>
 <p class="fireman-p-indent" >Hash Collisions 哈希碰撞</p>
 <p class="fireman-p-indent" >对于不同的数据，经过相同的哈希函数处理之后，得到相同的下标，这种情况就是哈希碰撞。</p>
 <p class="fireman-p-indent" >一般的处理方式是放一个链表，但是当碰撞过多，查找效率会从 <code>O(1)</code>退化到 <code>O(n)</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213170522848.png" alt="image-20221213170522848"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213170522848.png" alt="image-20221213170522848"></p>
 <p class="fireman-p-indent" >Hash表的完整结构</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213170820506.png" alt="image-20221213170820506"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213170820506.png" alt="image-20221213170820506"></p>
 <p class="fireman-p-indent" >Set，集合：不重复元素的集合，相比哈希表，没有值，只有键。</p>
 <p class="fireman-p-indent" >映射：从查找的资料看，很少单独说映射，可以理解为映射也是hash map的一种，只是相比hash map的线程不安全，映射是线程安全的。（有的资料说是通过锁实现线程安全）</p>
 <h3 id="典型题目-2"><a href="#典型题目-2" class="headerlink" title="典型题目"></a>典型题目</h3><ul>
@@ -696,15 +699,15 @@
 <h2 id="二维"><a href="#二维" class="headerlink" title="二维"></a>二维</h2><h3 id="树-Tree"><a href="#树-Tree" class="headerlink" title="树 Tree"></a>树 Tree</h3><p class="fireman-p-indent" >相比一维的链表或者跳表，是为了解决检索问题，通过升维的思想加快检索。</p>
 <p class="fireman-p-indent" >利用这种升维的思想，一个节点可以同时指向多个节点，这样就形成了树形结构。</p>
 <p class="fireman-p-indent" >注意：树没有环。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213174159016.png" alt="image-20221213174159016"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213174159016.png" alt="image-20221213174159016"></p>
 <h3 id="二叉树-Binary-Tree"><a href="#二叉树-Binary-Tree" class="headerlink" title="二叉树 Binary Tree"></a>二叉树 Binary Tree</h3><p class="fireman-p-indent" >在实际开发过程中，用到的最多树形结构就是二叉树，二叉树也就是说每个节点最多只有两个子节点，分别是左子结点和右子节点。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213174748681.png" alt="image-20221213174748681"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213174748681.png" alt="image-20221213174748681"></p>
 <p class="fireman-p-indent" >二叉树的遍历方式可以分为三种，都是基于递归，当没有子节点时结束递归，根据递归的顺序可以分为这三种：</p>
 <p class="fireman-p-indent" >前序（Pre-order）：根-左-右</p>
 <p class="fireman-p-indent" >中序（In-order）：左-根-右</p>
 <p class="fireman-p-indent" >后序（Post-order）：左-右-根</p>
 <h3 id="图-Graph"><a href="#图-Graph" class="headerlink" title="图 Graph"></a>图 Graph</h3><p class="fireman-p-indent" >图也是一种树形结构，但是相比树而言，图有环形结构</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213174957329.png" alt="image-20221213174957329"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213174957329.png" alt="image-20221213174957329"></p>
 <p class="fireman-p-indent" >因此，可以这样理解，链表就是特殊化的树，树就是特殊化的图。</p>
 <h3 id="二叉搜索树-Binary-Search-Tree"><a href="#二叉搜索树-Binary-Search-Tree" class="headerlink" title="二叉搜索树 Binary Search Tree"></a>二叉搜索树 Binary Search Tree</h3><p class="fireman-p-indent" >二叉搜索树（Binary Search Tree），也称二叉查找树，有序二叉树（Ordered Binary Tree），排序二叉树（Sorted Binary Tree），是指一颗空树或者具有下列性质的二叉树：</p>
 <ul>
@@ -712,7 +715,7 @@
 <li>右子树上<strong>所有节点</strong>的值，均大于它的根节点的值；</li>
 <li>以此类推；左、右子树也分别为二叉搜索树。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213181228162.png" alt="image-20221213181228162"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213181228162.png" alt="image-20221213181228162"></p>
 <p class="fireman-p-indent" >使用<strong>中序遍历</strong>时，就是<strong>升序排列</strong>。</p>
 <p class="fireman-p-indent" >查询、插入操作，都是 <code>O(log(n))</code></p>
 <h3 id="典型题目-3"><a href="#典型题目-3" class="headerlink" title="典型题目"></a>典型题目</h3><ul>
@@ -748,11 +751,11 @@
 <li><p>通过旋转操作来进行平衡（四种）</p>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215165518116.png" alt="image-20221215165518116"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215165518116.png" alt="image-20221215165518116"></p>
 <p class="fireman-p-indent" >为了维持平衡因子，在加入元素时</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215165636052.png" alt="image-20221215165636052" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215165636052.png" alt="image-20221215165636052" style="zoom:25%;" />
 
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215165649621.png" alt="image-20221215165649621" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215165649621.png" alt="image-20221215165649621" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >通过四种旋转操作，维持平衡因子。</p>
 <ol>
@@ -762,31 +765,31 @@
 <li>右左旋</li>
 </ol>
 <p class="fireman-p-indent" >右右子树：左旋</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215174927132.png" alt="image-20221215174927132"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215174927132.png" alt="image-20221215174927132"></p>
 <p class="fireman-p-indent" >左左子树：右旋</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215174943002.png" alt="image-20221215174943002"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215174943002.png" alt="image-20221215174943002"></p>
 <p class="fireman-p-indent" >左右子树：左右旋</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215175041845.png" alt="image-20221215175041845"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215175049825.png" alt="image-20221215175049825"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215175041845.png" alt="image-20221215175041845"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215175049825.png" alt="image-20221215175049825"></p>
 <p class="fireman-p-indent" >右左子树：右左旋</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215175128743.png" alt="image-20221215175128743"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215175154914.png" alt="image-20221215175154914"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215175128743.png" alt="image-20221215175128743"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215175154914.png" alt="image-20221215175154914"></p>
 <p class="fireman-p-indent" >总结之后：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/Tree_Rebalancing.gif" alt="Tree_Rebalancing"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/Tree_Rebalancing.gif" alt="Tree_Rebalancing"></p>
 <p class="fireman-p-indent" >带有子树的旋转</p>
 <p class="fireman-p-indent" >增加15	</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203032328.png" alt="image-20221215203032328" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203032328.png" alt="image-20221215203032328" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >加到末尾</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203103195.png" alt="image-20221215203103195" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203103195.png" alt="image-20221215203103195" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >先右旋</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203243856.png" alt="image-20221215203243856" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203243856.png" alt="image-20221215203243856" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >然后左旋</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203223503.png" alt="image-20221215203223503" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203223503.png" alt="image-20221215203223503" style="zoom:25%;" />
 
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203309163.png" alt="image-20221215203309163" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203309163.png" alt="image-20221215203309163" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >AVL是一个平衡二叉搜索树。（深度差距很小）</p>
 <p class="fireman-p-indent" >每个节点需要存放 <code>balcen factor = &#123;-1,0,1&#125;</code>，因此不足的是需要存储额外信息、且调整次数频繁。</p>
@@ -800,8 +803,8 @@
 <li>不能有相邻的两个红色节点</li>
 <li>从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203746054.png" alt="image-20221215203746054"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203806433.png" alt="image-20221215203806433"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203746054.png" alt="image-20221215203746054"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215203806433.png" alt="image-20221215203806433"></p>
 <p class="fireman-p-indent" >关键性质：</p>
 <p class="fireman-p-indent" >从根到叶子的最长的可能路径不多于最短的可能路径的两倍长。</p>
 <p class="fireman-p-indent" >AVL树和红黑树对比</p>
@@ -812,15 +815,15 @@
 <li>AVL树会运用在数据库上，会有更好的查询效率，而红黑树运用在一些语言的库中，例如<code>map</code>、映射这些数据结构中</li>
 </ul>
 <h3 id="布隆过滤器-Bloom-Filter"><a href="#布隆过滤器-Bloom-Filter" class="headerlink" title="布隆过滤器 Bloom Filter"></a>布隆过滤器 Bloom Filter</h3><p class="fireman-p-indent" >在过滤重复数据的场景中，会经常使用<code>HashTable</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216093933925.png" alt="image-20221216093933925"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216093933925.png" alt="image-20221216093933925"></p>
 <p class="fireman-p-indent" >但是，在HashTable中会存储数据的<code>key</code>和<code>value</code>，相比而言，存储<code>value</code>的意义不大，并且在大数据量下，Hash冲突也会影响数据性能。因此，在这种场景下，更加适合布隆过滤器。</p>
 <p class="fireman-p-indent" >布隆过滤器由一个很长的二进制向量和一系列随机映射函数。布隆过滤器可以用于检索一个元素是否在一个集合中。</p>
 <p class="fireman-p-indent" >优点是空间效率和查询时间都远远超过一般的算法。</p>
 <p class="fireman-p-indent" >缺点是有一定的误识别率和删除困难。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216094301929.png" alt="image-20221216094301929"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216094301929.png" alt="image-20221216094301929"></p>
 <p class="fireman-p-indent" >图中，将x、y、z通过三个hash函数，得到对应的二进制位，添加到布隆过滤器中。判断w的时候，会通过hash函数判断对应二进制位是否都为1</p>
 <p class="fireman-p-indent" >存在误差的情况</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216094513742.png" alt="image-20221216094513742"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216094513742.png" alt="image-20221216094513742"></p>
 <p class="fireman-p-indent" >例如元素B，布隆过滤器查询到两个位都为1，此时会误判B已存在于布隆过滤器中。</p>
 <p class="fireman-p-indent" >因此，布隆过滤器一般用于缓存中，真正判断一个数据是否已存在，需要更准确的系统，例如数据库。</p>
 <p class="fireman-p-indent" >Golang实现</p>
@@ -832,7 +835,7 @@
 <p class="fireman-p-indent" >一般缓存会以<code>HashTable+Double ListedList</code>实现</p>
 <p class="fireman-p-indent" >具有 <code>O(1)</code>的查询效率</p>
 <p class="fireman-p-indent" >同时具有 <code>O(1)</code>的修改、更新效率</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216101833319.png" alt="image-20221216101833319"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216101833319.png" alt="image-20221216101833319"></p>
 <h4 id="替换算法"><a href="#替换算法" class="headerlink" title="替换算法"></a>替换算法</h4><p class="fireman-p-indent" >LRU：least recently used</p>
 <p class="fireman-p-indent" >LFU：least frequently used</p>
 <p class="fireman-p-indent" >更多替换算法：<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQ2FjaGVfcmVwbGFjZW1lbnRfcG9saWNpZXM=">https://en.wikipedia.org/wiki/Cache_replacement_policies<i class="fa fa-external-link-alt"></i></span></p>
@@ -846,7 +849,7 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(factorial(<span class="number">6</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">factorial</span><span class="params">(n <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> n &gt; <span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> n * factorial(n<span class="number">-1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> n</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >实际过程</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213204352351.png" alt="image-20221213204352351"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213204352351.png" alt="image-20221213204352351"></p>
 <p class="fireman-p-indent" >递归代码的结构：</p>
 <ol>
 <li>终止条件</li>
@@ -901,7 +904,7 @@
 </li>
 </ul>
 <h2 id="分治-Divide-Conquer"><a href="#分治-Divide-Conquer" class="headerlink" title="分治 Divide &amp; Conquer"></a>分治 Divide &amp; Conquer</h2><p class="fireman-p-indent" >分治是从递归的思想分化而来，递归是将大问题分解为重复的小的子问题。而分治是将大问题分解为小问题，寻找小问题的重复性，最终将子问题组合，从而解决大问题。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213211610933.png" alt="image-20221213211610933"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221213211610933.png" alt="image-20221213211610933"></p>
 <p class="fireman-p-indent" >分治代码模板（与递归差不多）：</p>
 <ol>
 <li>终止条件，也就是子问题没有了</li>
@@ -942,15 +945,15 @@
 </li>
 </ul>
 <h2 id="深度优先搜索-DFS"><a href="#深度优先搜索-DFS" class="headerlink" title="深度优先搜索 DFS"></a>深度优先搜索 DFS</h2><p class="fireman-p-indent" >在树或者图结构中，需要遍历所有节点、并且每个节点仅访问一次的情况下，可以使用深度优先或者广度优先处理。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214103122667.png" alt="image-20221214103122667"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214103122667.png" alt="image-20221214103122667"></p>
 <p class="fireman-p-indent" >DFS实例代码</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(node *Node)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> _,ok := visited[node];ok &#123;</span><br><span class="line">		<span class="comment">// already visited </span></span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	visited[node] = <span class="literal">true</span> </span><br><span class="line"></span><br><span class="line">  <span class="comment">// process current node </span></span><br><span class="line">  <span class="comment">// logic </span></span><br><span class="line">  <span class="comment">// 如果是一个多叉树，则需要便利所有的多叉树</span></span><br><span class="line">	dfs(node.Left)</span><br><span class="line">	dfs(node.Right)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >遍历顺序：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214103531661.png" alt="image-20221214103531661"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214103531661.png" alt="image-20221214103531661"></p>
 <p class="fireman-p-indent" >先从左节点（或者右节点）往下遍历，便利到最底层，最底层没有数据之后，再访问另外一边。</p>
 <p class="fireman-p-indent" >图中的遍历顺序也是一样的</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214105138027.png" alt="image-20221214105138027"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214105138027.png" alt="image-20221214105138027"></p>
 <p class="fireman-p-indent" >图中使用递归，则需要判断当前节点是否被遍历过</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(node *Node)</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> _,ok := visited[node];ok &#123;</span><br><span class="line">		<span class="comment">// already visited </span></span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// process </span></span><br><span class="line">	visited[node] = <span class="literal">true</span> </span><br><span class="line"></span><br><span class="line">	<span class="comment">// next level </span></span><br><span class="line">	<span class="keyword">for</span> _,nextNode:= <span class="keyword">range</span> node.Children &#123;</span><br><span class="line">		<span class="keyword">if</span> _,ok := visited[nextNode];!ok &#123;</span><br><span class="line">			dfs(nextNode)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -958,9 +961,9 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">dfs</span><span class="params">(root *Node)</span></span> []*Node &#123;</span><br><span class="line">	<span class="keyword">if</span> root == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span> </span><br><span class="line">	&#125;</span><br><span class="line">	visited := <span class="built_in">make</span>(<span class="keyword">map</span>[*Node]<span class="type">bool</span>)</span><br><span class="line">	stack := NewStack(*Node)</span><br><span class="line">	stack.Push(root)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> stack.Len != <span class="number">0</span> &#123;</span><br><span class="line">		node = stack.Pop()</span><br><span class="line">		visited[node]=<span class="literal">true</span> </span><br><span class="line"></span><br><span class="line">		process(node)</span><br><span class="line"></span><br><span class="line">		nodes := generate_related_nodes(node)</span><br><span class="line">		stack.push(nodes)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="广度优先搜索-BFS"><a href="#广度优先搜索-BFS" class="headerlink" title="广度优先搜索 BFS"></a>广度优先搜索 BFS</h2><p class="fireman-p-indent" >广度优先遍历就需要使用队列</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214105946104.png" alt="image-20221214105946104"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214105946104.png" alt="image-20221214105946104"></p>
 <p class="fireman-p-indent" >广度优先相比深度优先的顺序：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214110048812.png" alt="image-20221214110048812"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214110048812.png" alt="image-20221214110048812"></p>
 <p class="fireman-p-indent" >使用队列迭代：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">bfs</span><span class="params">(start *Node)</span></span> &#123;</span><br><span class="line">	queue := NewQueue(*Node)</span><br><span class="line">  <span class="comment">// 将start入队</span></span><br><span class="line">	queue.Push(start)</span><br><span class="line"></span><br><span class="line">	visited[start]=<span class="literal">true</span> </span><br><span class="line">	<span class="keyword">for</span> <span class="built_in">len</span>(queue) != <span class="number">0</span> &#123;</span><br><span class="line">    <span class="comment">// 从队列中取出，队列，先入先出</span></span><br><span class="line">		node := queue.Pop()</span><br><span class="line"></span><br><span class="line">		process(node)</span><br><span class="line"></span><br><span class="line">		nodes := generate_related_nodes(node)</span><br><span class="line">    <span class="comment">// 将子node放到队列中</span></span><br><span class="line">		queue.Push(nodes)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -1039,8 +1042,8 @@
 <p class="fireman-p-indent" >Golang代码模板</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">BinarySearch</span><span class="params">(array []<span class="type">int</span>, target <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	left, right := <span class="number">0</span>, <span class="built_in">len</span>(array)<span class="number">-1</span></span><br><span class="line">	<span class="keyword">for</span> left &lt;= right &#123;</span><br><span class="line">		mid := (left + right) / <span class="number">2</span></span><br><span class="line">		<span class="keyword">if</span> array[mid] == target &#123;</span><br><span class="line">			<span class="keyword">return</span> left</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> array[mid] &gt; target &#123;</span><br><span class="line">			right = mid - <span class="number">1</span>				<span class="comment">// 注意，这里要 -1 ，防止最终找不到</span></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			left = mid + <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214135650823.png" alt="image-20221214135650823"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214135808104.png" alt="image-20221214135808104"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214135650823.png" alt="image-20221214135650823"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214135808104.png" alt="image-20221214135808104"></p>
 <h3 id="典型题目-9"><a href="#典型题目-9" class="headerlink" title="典型题目"></a>典型题目</h3><ul>
 <li><p>x的平方根：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9zcXJ0eC8=">https://leetcode.cn/problems/sqrtx/<i class="fa fa-external-link-alt"></i></span></p>
 <p>解法1：使用二分法，这里的二分法需要注意，<code>end</code>为<code>x/2+1</code>，条件是<code>start&lt;=end</code>，返回的是<code>start-1</code></p>
@@ -1063,23 +1066,23 @@
 <h2 id="动态规划-Dynamic-Programming"><a href="#动态规划-Dynamic-Programming" class="headerlink" title="动态规划 Dynamic Programming"></a>动态规划 Dynamic Programming</h2><p class="fireman-p-indent" >又叫做<strong>动态递推</strong>，将一个复杂的问题，以递归的方式将它分解为简单的子问题。相比分治，分治中每一个子问题中有一个最优解，然后得到全局最优解，但是动态规划中，不需要保存这些值。动态规划和递归或者分治没有根本上的区别（关键看有无最优的子结构），共性是<strong>找到重复子问题</strong>。</p>
 <p class="fireman-p-indent" >差异性是最优子结构、中途可以淘汰次优解。</p>
 <p class="fireman-p-indent" >例如：斐波那契数列</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214143305811.png" alt="image-20221214143305811"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214143305811.png" alt="image-20221214143305811"></p>
 <p class="fireman-p-indent" >时间复杂度是 <code>O(n^2)</code>，每一个节点，都要将下面的节点计算一次，每一个下面的节点，又要将它下面的节点计算一次。</p>
 <p class="fireman-p-indent" >优化方法是做一个缓存，将已经计算过的数字，缓存起来。将时间复杂度降低到 <code>O(n)</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214143544513.png" alt="image-20221214143544513"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214143544513.png" alt="image-20221214143544513"></p>
 <p class="fireman-p-indent" >有例如走格子问题：</p>
 <p>不同路径：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy91bmlxdWUtcGF0aHMv">https://leetcode.cn/problems/unique-paths/<i class="fa fa-external-link-alt"></i></span></p>
 <p>不同路径II：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy91bmlxdWUtcGF0aHMtaWkv">https://leetcode.cn/problems/unique-paths-ii/<i class="fa fa-external-link-alt"></i></span></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214145242758.png" alt="image-20221214145242758" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214145242758.png" alt="image-20221214145242758" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >从start到end的做法，其实是从A走到end的做法+从B到end的做法，这种分治的思想。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214145426297.png" alt="image-20221214145426297" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214145426297.png" alt="image-20221214145426297" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >还可以使用递推的思想，从结尾的地方，向上递推，每个格子的做法为相邻两个格子走法的和，</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214145854501.png" alt="image-20221214145854501" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214145854501.png" alt="image-20221214145854501" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >边界和墙都无法走向该格子，有相邻的右边格子和下边格子才能走到对应格子，最终可以得到地图上每一个格子到end的走法</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214150158043.png" alt="image-20221214150158043" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221214150158043.png" alt="image-20221214150158043" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >动态规划关键点：</p>
 <ol>
@@ -1209,7 +1212,7 @@
 </ul>
 <h2 id="字典树-Trie"><a href="#字典树-Trie" class="headerlink" title="字典树 Trie"></a>字典树 Trie</h2><p class="fireman-p-indent" >字典树，又称单词查找树或键树，是一种树形结构。典型应用是用于统计和排序大量的字符串（但不仅限于字符串），所以经常被搜索引擎系统用于文本词频统计。</p>
 <p class="fireman-p-indent" >优点是：最大限度地减少无谓的字符串比较，查询效率比哈希表高。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215100815784.png" alt="image-20221215100815784"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215100815784.png" alt="image-20221215100815784"></p>
 <p class="fireman-p-indent" >基本性质：</p>
 <ol>
 <li>节点本身不存完整单词；</li>
@@ -1217,9 +1220,9 @@
 <li>每个节点的所有子节点路径代表的字符都不相同</li>
 </ol>
 <p class="fireman-p-indent" >节点存储额外信息</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215102021321.png" alt="image-20221215102021321"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215102021321.png" alt="image-20221215102021321"></p>
 <p class="fireman-p-indent" >节点的内部实现</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215102034053.png" alt="image-20221215102034053"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215102034053.png" alt="image-20221215102034053"></p>
 <p class="fireman-p-indent" >核心思想</p>
 <p class="fireman-p-indent" >Trie树的核心思想是空间换时间。</p>
 <p class="fireman-p-indent" >利用字符串的公共前缀来降低查询时间的开销以达到提高效率的目的。</p>
@@ -1245,11 +1248,11 @@
 <li><code>find(x)</code>：找到元素x所在的集合的代表，该操作也可以用于判断两个元素是否位于同一个集合，只要将它们各自的代表比较一下就可以了。</li>
 </ul>
 <p class="fireman-p-indent" >初始化过程：将每个元素指向自身</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215112656150.png" alt="image-20221215112656150"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215112656150.png" alt="image-20221215112656150"></p>
 <p class="fireman-p-indent" >合并过程：将两个结合的代表结合成一个（可以对比选择小的或者大的元素）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215112720564.png" alt="image-20221215112720564"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215112720564.png" alt="image-20221215112720564"></p>
 <p class="fireman-p-indent" >路径压缩</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215112740618.png" alt="image-20221215112740618"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215112740618.png" alt="image-20221215112740618"></p>
 <p class="fireman-p-indent" >实现并查集</p>
 <h3 id="典型问题"><a href="#典型问题" class="headerlink" title="典型问题"></a>典型问题</h3><ul>
 <li><p>省份数量：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9udW1iZXItb2YtcHJvdmluY2VzLw==">https://leetcode.cn/problems/number-of-provinces/<i class="fa fa-external-link-alt"></i></span></p>
@@ -1280,7 +1283,7 @@
 </li>
 </ol>
 <h3 id="高级搜索-1"><a href="#高级搜索-1" class="headerlink" title="高级搜索"></a>高级搜索</h3><p class="fireman-p-indent" >剪枝：将状态树中已经处理过的节点减掉。例如<code>fibonacci</code>问题中，将节点缓存起来，然后再计算的时候，就不需要重复计算这个节点。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215114752354.png" alt="image-20221215114752354"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215114752354.png" alt="image-20221215114752354"></p>
 <h3 id="回溯法"><a href="#回溯法" class="headerlink" title="回溯法"></a>回溯法</h3><p class="fireman-p-indent" >回溯也就是分治+试错，然后回溯。回溯需要注意：1、满足条件，何时返回true。2、递归结束时，回溯之前，需要将状态还原。</p>
 <h4 id="典型题目-12"><a href="#典型题目-12" class="headerlink" title="典型题目"></a>典型题目</h4><ul>
 <li><p>爬楼梯：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9jbGltYmluZy1zdGFpcnMv">https://leetcode.cn/problems/climbing-stairs/<i class="fa fa-external-link-alt"></i></span></p>
@@ -1303,10 +1306,10 @@
 </li>
 </ul>
 <h3 id="双向BFS"><a href="#双向BFS" class="headerlink" title="双向BFS"></a>双向BFS</h3><p class="fireman-p-indent" >例如一个双向连接图，寻找A-L的路</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215141621887.png" alt="image-20221215141621887"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215141621887.png" alt="image-20221215141621887"></p>
 <p class="fireman-p-indent" >如果是BFS，那么就是先分层，然后扩散</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215141701546.png" alt="image-20221215141701546"><br><span class="fireman-span-indent"></span>双向BFS，就是从A扩散，从L扩散，同时扩散，相遇的时候就是最短的</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215141748310.png" alt="image-20221215141748310"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215141701546.png" alt="image-20221215141701546"><br><span class="fireman-span-indent"></span>双向BFS，就是从A扩散，从L扩散，同时扩散，相遇的时候就是最短的</p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221215141748310.png" alt="image-20221215141748310"></p>
 <h4 id="典型题目-13"><a href="#典型题目-13" class="headerlink" title="典型题目"></a>典型题目</h4><ul>
 <li><p>单词接龙：<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy93b3JkLWxhZGRlci8=">https://leetcode.cn/problems/word-ladder/<i class="fa fa-external-link-alt"></i></span></p>
 <p>解法1：BFS，多次搜索</p>
@@ -1436,43 +1439,43 @@
 </li>
 </ol>
 <p class="fireman-p-indent" >排序算法分类：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216102928839.png" alt="image-20221216102928839"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216102928839.png" alt="image-20221216102928839"></p>
 <p class="fireman-p-indent" >排序算法的时间复杂度</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216102957766.png" alt="image-20221216102957766"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/image-20221216102957766.png" alt="image-20221216102957766"></p>
 <p class="fireman-p-indent" >其中，比较重要的是三种 <code>O(nlog(n))</code>的时间复杂度：堆排序、快速排序、归并排序。</p>
 <p class="fireman-p-indent" >排序过程图：<span class="exturl" data-url="aHR0cHM6Ly93d3cuY3MudXNmY2EuZWR1L35nYWxsZXMvdmlzdWFsaXphdGlvbi9BbGdvcml0aG1zLmh0bWw=">https://www.cs.usfca.edu/~galles/visualization/Algorithms.html<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >【简单明了】9种经典排序算法可视化动画：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL2F2MjUxMzYyNzIv">https://www.bilibili.com/video/av25136272/<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >6分钟看完15种排序算法动画展示：<span class="exturl" data-url="aHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tL3ZpZGVvL2F2NjM4NTEzMzYv">https://www.bilibili.com/video/av63851336/<i class="fa fa-external-link-alt"></i></span></p>
 <h3 id="初级排序-O-n-2"><a href="#初级排序-O-n-2" class="headerlink" title="初级排序 O(n^2)"></a>初级排序 <code>O(n^2)</code></h3><ul>
 <li><p>选择排序 Selection Sort</p>
-<p> <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015224719590-1433219824.gif" alt="img"></p>
+<p> <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015224719590-1433219824.gif" alt="img"></p>
 <p> 每次找最小值，然后放到待排序数组的起始位置：第1次循环从0开始，找到最小的数字，与位置0互换，第二次循环，从1开始，找到最小的数字，与位置1互换，依次类推</p>
  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">selectSort</span><span class="params">(s []<span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(s); i++ &#123;</span><br><span class="line">		<span class="keyword">for</span> j := i + <span class="number">1</span>; j &lt; <span class="built_in">len</span>(s); j++ &#123;</span><br><span class="line">			<span class="keyword">if</span> s[j] &lt; s[i] &#123;</span><br><span class="line">				s[i], s[j] = s[j], s[i]</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>插入排序 Insertion Sort</p>
-<p> <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015225645277-1151100000.gif" alt="img"></p>
+<p> <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015225645277-1151100000.gif" alt="img"></p>
 <p> 从前到后逐步构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入：第一次循环，从位置1开始，与位置0排序，第二次循环，从位置2开始，与位置1、位置0比较，查询其中，以此类推</p>
  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">insertSort</span><span class="params">(s []<span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="built_in">len</span>(s); i++ &#123;</span><br><span class="line">		tmp := s[i]</span><br><span class="line">		j := i</span><br><span class="line">		<span class="keyword">for</span> ; j &gt;= <span class="number">0</span>; j-- &#123;</span><br><span class="line">			<span class="keyword">if</span> tmp &gt; s[j] &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">copy</span>(s[j+<span class="number">2</span>:i+<span class="number">1</span>], s[j+<span class="number">1</span>:i])</span><br><span class="line">		s[j+<span class="number">1</span>] = tmp</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>希尔排序 Shell Sort</p>
-<p> <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20180331170017421-364506073.gif" alt="img"></p>
+<p> <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20180331170017421-364506073.gif" alt="img"></p>
 <p> 是简单插入排序的改进版，与插入排序不同之处在于，会优先比较距离远的元素。希尔排序又叫做缩小增量排序</p>
 <p> 先将队列个数除以2，作为增量因子，间隔增量因子的数进行选择排序；第二遍将增量因子除以2，再次进行插入排序，依次类推，都进行插入排序，直到增量因子等于1</p>
  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">shellSort</span><span class="params">(s []<span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="built_in">len</span>(s) / <span class="number">2</span>; i &gt; <span class="number">0</span>; i = i / <span class="number">2</span> &#123;</span><br><span class="line">		<span class="comment">// 切割每一个分段</span></span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; i; j++ &#123;</span><br><span class="line">			<span class="comment">// golang 使用插入排序不友好，改成使用选择排序，将每一个间隔进行排序</span></span><br><span class="line">			<span class="keyword">for</span> m := j; m &lt; <span class="built_in">len</span>(s); m += i &#123;</span><br><span class="line">				<span class="keyword">for</span> n := m + i; n &lt; <span class="built_in">len</span>(s); n += i &#123;</span><br><span class="line">					<span class="keyword">if</span> s[m] &gt; s[n] &#123;</span><br><span class="line">						s[m], s[n] = s[n], s[m]</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>冒泡排序 Bubble Sort</p>
-<p> <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015223238449-2146169197.gif" alt="img"></p>
+<p> <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015223238449-2146169197.gif" alt="img"></p>
 <p> 嵌套循环，每次查看相邻的元素如果逆序，则交换：每次选择相邻两个数字排序，将数字大的放在后面，第一次循环之后，最大元素放在最后；下次再从0开始。</p>
  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   </span><br></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="高级排序-O-nlog-n"><a href="#高级排序-O-nlog-n" class="headerlink" title="高级排序 O(nlog(n))"></a>高级排序 <code>O(nlog(n))</code></h3><ul>
 <li><p>快速排序 Quick Sort</p>
-<p> <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015230936371-1413523412.gif" alt="img"></p>
+<p> <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015230936371-1413523412.gif" alt="img"></p>
 <p> 数组取标杆 pivot，将小元素放pivot左边，大元素放右边，然后依次对右边和右边的子数组继续快排；以达到整个序列有序。：</p>
  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   </span><br></pre></td></tr></table></figure>
 </li>
 <li><p>归并排序 Merge Sort 分治</p>
-<p> <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015230557043-37375010.gif" alt="img"></p>
+<p> <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015230557043-37375010.gif" alt="img"></p>
 <p> 可以看作是快排的逆向操作</p>
 <ol>
 <li>把长度为n的输入序列分成两个长度为n&#x2F;2的子序列</li>
@@ -1482,7 +1485,7 @@
  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   </span><br></pre></td></tr></table></figure>
 </li>
 <li><p class="fireman-p-indent" >堆排序 Heap Sort</p>
-<p class="fireman-p-indent" > <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015231308699-356134237.gif" alt="img"></p>
+<p class="fireman-p-indent" > <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015231308699-356134237.gif" alt="img"></p>
 <p class="fireman-p-indent" > 堆插入 <code>O(log(n))</code>，取最大&#x2F;小值 <code>O(1)</code></p>
 <ol>
 <li>数组元素依次建立小顶堆</li>
@@ -1492,15 +1495,15 @@
 </ul>
 <h3 id="特殊排序-O-n"><a href="#特殊排序-O-n" class="headerlink" title="特殊排序 O(n)"></a>特殊排序 <code>O(n)</code></h3><ul>
 <li><p>计数排序 Counting Sort</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015231740840-6968181.gif" alt="img"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015231740840-6968181.gif" alt="img"></p>
 <p>要求输入的数据必须时有确定范围的整数，将输入的数据值转化为键存储在额外开辟的数组空间中；然后依次把计数大于1的填充回原数组</p>
 </li>
 <li><p>桶排序 Bucket Sort</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015232107090-1920702011.png" alt="img"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015232107090-1920702011.png" alt="img"></p>
 <p>原理：假设输入数据服从均匀分布，将数据分到有限数量的桶里，每个桶再分别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排）</p>
 </li>
 <li><p>基数排序 Radix Sort</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015232453668-1397662527.gif" alt="img"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/12/849589-20171015232453668-1397662527.gif" alt="img"></p>
 <p>按照低位先排序，然后收集；再按照高位排序，然后再收集；依次类推，直到最高位。有时候有些属性是有优先级顺序的，先按低优先级排序，再按高优先级排序。</p>
 </li>
 </ul>
@@ -1883,7 +1886,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -1891,7 +1899,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -1901,6 +1911,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/79b0.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

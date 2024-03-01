@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="网络编程中绕不过去的IO模型，从同步阻塞、同步非阻塞到IO多路复用，不同的IO模型有不同的特点。Redis、Nginx的高性能就是建立在IO多路复用的基础上。">
 <meta property="og:type" content="article">
@@ -82,7 +85,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -324,27 +327,27 @@
 <ul>
 <li><code>select</code> 接收三个文件描述符集合：可读、可写和异常文件描述符集合，作为它监听的对象（遍历的对象）</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180207820.png" alt="image-20231129180207820"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180207820.png" alt="image-20231129180207820"></p>
 <ul>
 <li>文件描述符集合是一个 <code>bitset</code>，每一个比特位表达垓文件描述符的状态，默认容量是 1024</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180419103.png" alt="image-20231129180419103"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180419103.png" alt="image-20231129180419103"></p>
 <ul>
 <li>发起 <code>select</code> 调用，则需要传入我们希望 <code>select</code> 监听的文件描述符集合，<code>select</code> 遍历这些文件描述符，根据文件描述符去找驱动，驱动会回答这些问题</li>
 </ul>
-<p class="fireman-p-indent" ><img src="/../../../../../../Library/Application%20Support/typora-user-images/image-20231129180528779.png" alt="image-20231129180528779"></p>
+<p class="fireman-p-indent" ><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20231129180528779.png" alt="image-20231129180528779"></p>
 <ul>
 <li>如果没有数据，并且设置了超时，那么会进入等待队列（如果设置了超时机制，超时后，则会进入到等待队列，等待队列也是驱动维护。）</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180605253.png" alt="image-20231129180605253"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180605253.png" alt="image-20231129180605253"></p>
 <ul>
 <li>如果超时之前等待了，驱动会唤醒内核线程。（当数据到达，网卡收到数据，硬件会通过中断提醒驱动，驱动检查等待队列之后获取就绪的文件描述符）</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180636106.png" alt="image-20231129180636106"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129180636106.png" alt="image-20231129180636106"></p>
 <ul>
 <li>定时的时钟中断会通过操作系统通知内核检测，如果发生超时，那么驱动会将文件描述符从等待队列中拿出来；</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129181203644.png" alt="image-20231129181203644"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129181203644.png" alt="image-20231129181203644"></p>
 <p class="fireman-p-indent" >用户使用方法：</p>
 <ol>
 <li>准备需要 <code>select</code> 的文件描述符集合 <code>fd_arr</code></li>
@@ -352,7 +355,7 @@
 <li>检查每一个比特位，确认有没有就绪的文件描述符</li>
 <li>处理就绪的文件描述符</li>
 </ol>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129181421090.png" alt="image-20231129181421090"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231129181421090.png" alt="image-20231129181421090"></p>
 <p class="fireman-p-indent" >解决同步非阻塞中频繁系统调用的问题</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取就绪事件</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">select</span> <span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> nfds, <span class="comment">// 三个监听集合的文件描述符最大值+1，缩小系统监听的范围</span></span></span><br><span class="line"><span class="params">	fd_set *readfds, <span class="comment">// 要监听的可读文件描述符集合</span></span></span><br><span class="line"><span class="params">	fd_set *writefds, <span class="comment">// 要监听的可写文件描述符集合</span></span></span><br><span class="line"><span class="params">	fd_set *exceptfds, <span class="comment">// 要监听的异常文件描述符集合</span></span></span><br><span class="line"><span class="params">	<span class="keyword">struct</span> timeval *timeout, <span class="comment">// 本次调用的超时时间</span></span></span><br><span class="line"><span class="params">)</span>; <span class="keyword">return</span> <span class="comment">// 大于0：已就绪的文件描述符；等于0：超时：小于：出错</span></span><br></pre></td></tr></table></figure>
 
@@ -375,13 +378,13 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个epoll</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">epoll_create</span><span class="params">(</span></span><br><span class="line"><span class="params">	<span class="type">int</span> size <span class="comment">// epoll要监听的文件描述符数量</span></span></span><br><span class="line"><span class="params">)</span> </span><br><span class="line"><span class="keyword">return</span> <span class="type">int</span> epoll的文件描述符	</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >核心在于三个方法 <code>epoll_create</code>，<code>epoll_ctl</code>，<code>epoll_wait</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113026557.png" alt="image-20231130113026557"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113026557.png" alt="image-20231130113026557"></p>
 <p class="fireman-p-indent" >一个 <code>epoll</code> 对象主要有两个结构，一个是用红黑树来存储被监控文件描述符，一个就是就绪队列，存储就绪文件描述符。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113104801.png" alt="image-20231130113104801"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113104801.png" alt="image-20231130113104801"></p>
 <p class="fireman-p-indent" ><code>epoll</code> 会监听系统<strong>中断</strong>，而后将文件描述符挪动到就绪队列。（这也是 <code>epoll</code> 比 <code>select</code> 高效的主要原因，次要原因是文件描述符的处理。）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113139478.png" alt="image-20231130113139478"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113139478.png" alt="image-20231130113139478"></p>
 <p class="fireman-p-indent" >用户查询的时候，直接返回就绪队列。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113206991.png" alt="image-20231130113206991"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/11/image-20231130113206991.png" alt="image-20231130113206991"></p>
 <p class="fireman-p-indent" >用户使用代码：</p>
 <ol>
 <li>创建 <code>epoll</code></li>
@@ -484,7 +487,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -492,7 +500,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -502,6 +512,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/4c17.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

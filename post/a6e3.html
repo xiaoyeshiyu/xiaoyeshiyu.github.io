@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="微服务下，内部网络以gRPC协议相互通信，但是前后端分离下，或者支持多端能力下，会通过http协议的形式暴露给外部。此时多个微服务下，需要对网关进行一致管理，则需要引入API网关。">
 <meta property="og:type" content="article">
@@ -83,7 +86,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -322,7 +325,7 @@
 <li>负载均衡，支持多种负载均衡规则，兼容 Spring Cloud Ribbon</li>
 <li>参数分流，支持参数取模、名单分流、权重分流等</li>
 </ul>
-<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016221436014.png" alt="image-20221016221436014"></p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016221436014.png" alt="image-20221016221436014"></p>
 <p class="fireman-p-indent" >这里使用<code>Kong</code>作为演示</p>
 <h2 id="Kong"><a href="#Kong" class="headerlink" title="Kong"></a>Kong</h2><p class="fireman-p-indent" >Kong是一个云原生，快速，可扩展和分布式微服务抽象层（也称为API网关，API中间件或某些情况下的Service Mesh）。作为2015年的开源项目，其核心价值在于高性能和可扩展性。</p>
 <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p class="fireman-p-indent" >这里使用<code>postgres</code>作为后端存储，为了后续网络通信方便，使用新创建的网桥网络</p>
@@ -352,7 +355,7 @@
 
 <p class="fireman-p-indent" >通过 <code>http://ip地址:1337/register</code>打开首次登录注册页面，注册之后，登录</p>
 <p class="fireman-p-indent" >通过 <code>8001</code>端口配置</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016234427472.png" alt="image-20221016234427472" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221016234427472.png" alt="image-20221016234427472" style="zoom:25%;" />
 
 <h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
 <li><p>Service 服务</p>
@@ -377,14 +380,14 @@
 </ul>
 <h3 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h3><p class="fireman-p-indent" ><strong>新增service</strong></p>
 <p class="fireman-p-indent" >点击 service-add service</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017153931587.png" alt="image-20221017153931587" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017153931587.png" alt="image-20221017153931587" style="zoom:25%;" />
 
 <p class="fireman-p-indent" ><code>Url：http://192.168.41.68:8080</code>代表转发到的<code>Url</code></p>
 <p class="fireman-p-indent" ><code>upstream</code>可进行健康检查和负载均衡，在结合<code>consul</code>后，可以更好的实时变更后端服务状态。</p>
 <p class="fireman-p-indent" >设置<code>dns_resolver</code>为<code>consul</code>的地址，将<code>Url</code>改为<code>consul</code>的域名。</p>
 <p class="fireman-p-indent" ><strong>新增route</strong></p>
 <p class="fireman-p-indent" >在新增的service中，点击名称-routes-add route即可</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017154050865.png" alt="image-20221017154050865" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017154050865.png" alt="image-20221017154050865" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >需要注意，点击<code>path</code>后，需要通过回车，将该路径加入到<code>Paths</code>中</p>
 <p class="fireman-p-indent" >通过<code>Kong</code>的<code>8000</code>端口，以及对应服务的<code>path</code>，访问测试接口</p>
@@ -395,30 +398,30 @@
 <p class="fireman-p-indent" ><strong>配置jwt的插件</strong></p>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3FpYW55dWdhbmcva29uZy1kb2NzLWNuL2Jsb2IvbWFzdGVyL0hVQi9qd3QubWQ=">JWT 插件<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >在<code>Consumers</code>中创建一个<code>consumer</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017160415996.png" alt="image-20221017160415996" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017160415996.png" alt="image-20221017160415996" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >为这个<code>consumer</code>添加<code>jwt</code></p>
 <p class="fireman-p-indent" >点击<code>credentials</code>，点击<code>JWT</code>，点击<code>Create JWT</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017160806361.png" alt="image-20221017160806361" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017160806361.png" alt="image-20221017160806361" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >添加全局<code>JWT</code>，点击plugins-add global plugins-jwt</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017162104367.png" alt="image-20221017162104367" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017162104367.png" alt="image-20221017162104367" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >设置<code>header</code>，与后端服务保持一致，通过回车添加。</p>
 <p class="fireman-p-indent" >在jwt.io中生成jwt</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161300242.png" alt="image-20221017161300242" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161300242.png" alt="image-20221017161300242" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >需要注意，在<code>payload</code>中添加<code>iss</code>，与创建全局<code>jwt</code>时默认的 <code>key claim name</code> 保持一致</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161411417.png" alt="image-20221017161411417" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161411417.png" alt="image-20221017161411417" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >拷贝<code>consumer</code>中创建<code>jwt</code>时生成的<code>secret</code>作为生成jwt的<code>secret</code></p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161539422.png" alt="image-20221017161539422" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161539422.png" alt="image-20221017161539422" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >当没有配置jwt时发送请求</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161803314.png" alt="image-20221017161803314" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017161803314.png" alt="image-20221017161803314" style="zoom:25%;" />
 
 <p class="fireman-p-indent" >在<code>header</code>中配置<code>x-token: Bearer</code> 配置之后</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017162146227.png" alt="image-20221017162146227" style="zoom:25%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/10/image-20221017162146227.png" alt="image-20221017162146227" style="zoom:25%;" />
 
 
 
@@ -503,7 +506,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -511,7 +519,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -521,6 +531,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/a6e3.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="介绍了降级、重试和负载均衡这三个策略，旨在提高微服务系统的可用性和稳定性。本文可以了解如何通过降级技术优雅地处理高负载和故障，确保核心功能的正常运行。通过不同的重试策略，以在网络不稳定或服务故障的情况下增加请求的成功率。介绍负载均衡的概念和不同的负载均衡算法，在微服务架构中合理分配请求，实现高可用性和性能优化。">
 <meta property="og:type" content="article">
@@ -77,7 +80,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -301,7 +304,7 @@
 <li>应该足够简单</li>
 </ul>
 <h2 id="本质"><a href="#本质" class="headerlink" title="本质"></a>本质</h2><p class="fireman-p-indent" >降级本质为：提供有损服务。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024101743601.png" alt="image-20231024101743601"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024101743601.png" alt="image-20231024101743601"></p>
 <ul>
 <li>UI 模块化，非核心模块降级：比如标签、评论等不重要的模块<ul>
 <li>BFF 层聚合 API，模块降级</li>
@@ -329,7 +332,7 @@
 <li><code>client</code> 侧记录重试次数直方图，传递到 <code>server</code>，进行分布判定，交由 <code>server</code> 判定拒绝：<code>server</code> 可以知道全局请求失败情况，进行判断是否重试</li>
 <li>只应该在失败的这层进行重试，当重试仍然失败，全局约定错误码，<strong>过载，无须重试</strong>，避免级联重试：重试失败之后，返回约定全局错误码，上游获得失败之后，不会重试，如果返回的不是全局错误码，说明下游没有重试，上游可以开始重试。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024105156133.png" alt="image-20231024105156133"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024105156133.png" alt="image-20231024105156133"></p>
 <h2 id="Case-Study-1"><a href="#Case-Study-1" class="headerlink" title="Case Study"></a>Case Study</h2><ul>
 <li><p>Nginx upstream retry 过大，导致服务雪崩：可以约定最大值</p>
 </li>
@@ -349,7 +352,7 @@
 <li><p class="fireman-p-indent" >多层级重试传递，放大流量引起雪崩：约定全局错误码，避免多层级重试</p>
 </li>
 </ul>
-<h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024114742593.png" alt="image-20231024114742593"></p>
+<h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024114742593.png" alt="image-20231024114742593"></p>
 <p class="fireman-p-indent" >负载均衡是数据中心内部的负载均衡。（负载均衡的本质是挑选一个最优的节点）</p>
 <p class="fireman-p-indent" >在理想情况下，某个服务的负载会完全均匀地分发给所有的后端任务。在任何时刻，最忙的和最不忙的节点永远消耗同样数量的 CPU 。</p>
 <p class="fireman-p-indent" >目标：</p>
@@ -359,7 +362,7 @@
 <li>Scale-out，增加同质节点扩容</li>
 <li>减少错误，提高可用性</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024115106656.png" alt="image-20231024115106656"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024115106656.png" alt="image-20231024115106656"></p>
 <p class="fireman-p-indent" >在实际情况中，<code>backend</code> 之间的 <code>load</code> 差异比较大：</p>
 <ul>
 <li>每个请求的处理成本不同</li>
@@ -374,7 +377,7 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024115320016.png" alt="image-20231024115320016"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024115320016.png" alt="image-20231024115320016"></p>
 <p class="fireman-p-indent" >参考 <code>JSQ</code>（最闲轮询）负载均衡算法带来的问题，缺乏的是服务端全局视图，因此目标是需要综合考虑：负载 + 可用性。</p>
 <p class="fireman-p-indent" >参考<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWVjcy5oYXJ2YXJkLmVkdS9+bWljaGFlbG0vcG9zdHNjcmlwdHMvbXl0aGVzaXMucGRm">The Power of Two Choices in Randomized Load Balancing<i class="fa fa-external-link-alt"></i></span>的思路，使用 <code>the choice-of-2</code> 算法，随机选取两个节点进行打分，选择更优的节点：</p>
 <ul>
@@ -385,7 +388,7 @@
 <p class="fireman-p-indent" >指标计算结合 <code>moving average</code>，使用时间衰减，计算 <code>vt = v(t-1) * β + at * (1-β)  </code>。（上一个时间节点的值，乘以<code>β</code> ，加上本次时间节点的值，乘以 <code>1-β</code> ）</p>
 <p class="fireman-p-indent" ><code>β</code> 为若干次幂的倒数，即：<code>Math.Exp((-span) / 600ms)</code></p>
 <p class="fireman-p-indent" >最终的状态，所有 <code>backend</code> 节点的负载趋于一样。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024145149959.png" alt="image-20231024145149959"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231024145149959.png" alt="image-20231024145149959"></p>
 <h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><ul>
 <li>轮询<ul>
 <li>有一些前提<ul>
@@ -572,7 +575,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -580,7 +588,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -590,6 +600,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/a2b0.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

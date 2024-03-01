@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="go语言相比其他语言，其特性就在于goroutine，本篇记录go实现goroutine的原理。">
 <meta property="og:type" content="article">
@@ -91,7 +94,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -303,7 +306,7 @@
     
     
     <div class="post-body" itemprop="articleBody"><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p class="fireman-p-indent" ><code>goroutine</code>是一个与其他<code>goroutines</code>并行运行在同一地址空间的Go函数或方法。一个程序由一个或更多个<code>goroutine</code>组成。它与线程、协程、进程等不同，是一个<code>goroutine</code>。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215543926.png" alt="image-20220913215543926"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215543926.png" alt="image-20220913215543926"></p>
 <p class="fireman-p-indent" >goroutines在同一个用户地址空间里并行独立执行functions，channels则用于goroutines间的通信和同步访问控制。</p>
 <h3 id="goroutine和线程thread的区别"><a href="#goroutine和线程thread的区别" class="headerlink" title="goroutine和线程thread的区别"></a>goroutine和线程thread的区别</h3><ul>
 <li><p>内存占用</p>
@@ -324,7 +327,7 @@
 </li>
 </ul>
 <h3 id="M：N模型"><a href="#M：N模型" class="headerlink" title="M：N模型"></a>M：N模型</h3><p class="fireman-p-indent" >Go创建M个线程（CPU执行调度的单元，内核的task_struct），之后创建的N个goroutine都会依附在这M个线程上执行，即M:N模型。它们可以同时运行，与线程类似，相比之下非常轻量。因此，程序运行时，goroutines的个数远大于线程的个数。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215646923.png" alt="image-20220913215646923"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215646923.png" alt="image-20220913215646923"></p>
 <p class="fireman-p-indent" >同一时刻，一个线程只能跑一个goroutine，当goroutine发生阻塞，go会把当前goroutine调度走，让其他的goroutine来继续执行，而不是让线程阻塞休眠。</p>
 <h2 id="GMP调度模型"><a href="#GMP调度模型" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h2><p class="fireman-p-indent" >G：goroutine的缩写，每次<code>go func()</code>都代表一个G，无限制</p>
 <p class="fireman-p-indent" >源码包中<code>runtime/runtime2.go</code>的 <code>type g struct &#123;&#125;</code>中，包含当前goroutine的状态、堆栈、上下文。</p>
@@ -334,7 +337,7 @@
 <p class="fireman-p-indent" >P：逻辑<code>process</code>，是线程M的执行的上下文</p>
 <p class="fireman-p-indent" >P的最大作用是拥有各种G对象队列、链表、cache和状态</p>
 <h3 id="早期调度模型，GM调度器"><a href="#早期调度模型，GM调度器" class="headerlink" title="早期调度模型，GM调度器"></a>早期调度模型，GM调度器</h3><p class="fireman-p-indent" >Go 1.2前的调度器实现，限制了Go并发程序的伸缩性。每个goroutine对应于runtime中的一个抽象结构：G，而thread作为物理CPU的存在而被抽象为一个结构M（Machine）。当goroutine调用一个阻塞的系统调用，运行这个goroutine的线程就会被阻塞，这是至少应该再创建、唤醒一个线程来运行其他没有被阻塞的goroutine。线程这里可以创建不止一个，可以按需不断创建，而活跃的线程的最大个数存储在变量GOMAXPROCS中。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215706672.png" alt="image-20220913215706672"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215706672.png" alt="image-20220913215706672"></p>
 <p class="fireman-p-indent" >问题：</p>
 <ul>
 <li><p>单一的全局互斥锁，和集中状态存储</p>
@@ -353,14 +356,14 @@
 <h3 id="GMP调度模型-1"><a href="#GMP调度模型-1" class="headerlink" title="GMP调度模型"></a>GMP调度模型</h3><p class="fireman-p-indent" >P：Process，抽象概念，并不是真正的物理CPU。</p>
 <p class="fireman-p-indent" >源码包中<code>runtime/runtime2.go</code>的 <code>type p struct &#123;&#125;</code>中。</p>
 <p class="fireman-p-indent" >代表M所需的上下文环境，也是处理用户级代码逻辑的处理器。负责衔接M和G的调度上下文，将等待执行的G与M对接。当P有任务时，需要创建或者唤醒一个M来执行它队列里的任务。所以P&#x2F;M需要绑定，构成一个执行单元。P决定并行任务的数量，可通过runtime.GOMAXPROCS来设定。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215826739.png" alt="image-20220913215826739"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215826739.png" alt="image-20220913215826739"></p>
 <p class="fireman-p-indent" >mcache&#x2F;stackalloc 从M移到了P，而G队列也被分成两类，保留全局G队列，同时每个P都会有一个本地G队列。</p>
 <p class="fireman-p-indent" >local queue：</p>
 <p class="fireman-p-indent" >因为P的存在，runtime并不需要做一个集中式的goroutine调度，每一个M都会在P的local queue、global queue或其他P队列中找G执行，减少全局锁对性能的影响。</p>
 <p class="fireman-p-indent" >当然，P的本地G队列还是可能出现并发访问的场景（也就是work-stealing，当一个P处于饥饿状态，此时可能出现多个P并发访问一个G），为了避免加锁，P的本地队列是一个LockFree的队列，窃取G时使用CAS原子操作来完成。 </p>
 <h3 id="Work-stealing"><a href="#Work-stealing" class="headerlink" title="Work-stealing"></a>Work-stealing</h3><p class="fireman-p-indent" >工作窃取。</p>
 <p class="fireman-p-indent" >当一个P执行完本地所有的G之后，并且全局队列为空的时候，会随机挑选一个P，从它的G队列中窃取一半的G（P从local queue中的头部拿任务，从其他的P的local queue尾部抢任务）。如果global queue有，则会从global queue中获取（当前个数&#x2F;GOMAXPROCS）个G 。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215927512.png" alt="image-20220913215927512"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913215927512.png" alt="image-20220913215927512"></p>
 <p class="fireman-p-indent" >图中，P0的local queue空闲，此时会从P1的local queue中窃取一半的G</p>
 <p class="fireman-p-indent" >为了保证公平性，从随机位置P开始，便利的顺序也是一个小于GOMAXPROCS的的，互为质数的步长。</p>
 <p class="fireman-p-indent" > P的调度算法中，还会每个N轮调度之后，就去全局队列拿一个G。（保证global中的G会被调度）。</p>
@@ -374,7 +377,7 @@
 <p class="fireman-p-indent" >新建G时，P的本地队列放不下去，已满256个的时候，会放半数G到全局队列中。从syscall阻塞的系统调用返回时，找不到空闲P也会放到全局队列。</p>
 <h3 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h3><p class="fireman-p-indent" >syscall：系统调用，例如os.Open()函数。</p>
 <p class="fireman-p-indent" >G调用syscall后，M会与P解绑，然后M和G进入阻塞（G等待syscall返回，M等待G响应），而P此时的状态就是syscall，表明这个P的G正在syscall中，这时的P是不能被调度给别的M的。如果在短时间内阻塞的M就唤醒了，那么M会优先来重新获取这个P，能获取到就继续绑回去，这样有利于数据的局部性。（减少上下文切换）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220051401.png" alt="image-20220913220051401"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220051401.png" alt="image-20220913220051401"></p>
 <p class="fireman-p-indent" >例如图中，G执行os.Open()，进入syscall，此时如果时间较长，sysmon线程会将p3和M解绑，由其他的M调度P3，保障P3其他的G可以正常执行。</p>
 <p class="fireman-p-indent" >注意：系统监视器system monitor，称为sysmon，会定时扫描。 执行syscall时，如果某个P的G执行超过一个sysmon tick（10ms），就会把他设为idle，重新调度给需要的M，强制解绑。 也就是说，如果短时间内M没有唤醒（超过sysmon），由于P上有其他的G，因此P会进入idle list，等待被调度（需要M处理P上其他的G）。 </p>
 <p class="fireman-p-indent" >在 p struc中，维护一个idle P的链表。将P推送给需要的M使用。</p>
@@ -424,12 +427,12 @@
 <li>向长时间运行的G任务发出抢占调度；</li>
 <li>收回因syscall长时间阻塞的P；</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220309784.png" alt="image-20220913220309784"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220309784.png" alt="image-20220913220309784"></p>
 <p class="fireman-p-indent" >例如图中，由于G7运行时间超过10ms，此时sysmon进程会将G7调度到全局queue中。</p>
 <p class="fireman-p-indent" >抢占调度：当P在M上执行时间超过10ms，sysmon调用preemptone将G标记为stackPreempt（栈扩容）。Go在检查栈是否溢出的地方判断是否有栈扩容，此时M会保存当前G的上下文，重新进入调度逻辑。（例如1.14以及之前的版本中，for一个死循环，GOMAXPROCS为1，此时会出现死循环）</p>
 <h3 id="Network-Poller"><a href="#Network-Poller" class="headerlink" title="Network Poller"></a>Network Poller</h3><p class="fireman-p-indent" >Go所有的IO都是阻塞的。然后通过goroutine和channel来处理并发，因此所有的IO逻辑都是直来直去。</p>
 <p class="fireman-p-indent" >G发起网络IO操作也不会导致M被阻塞（仅阻塞G），从而不会导致大量M被创建出来，将异步IO转换为阻塞IO的部分称为netpoller。打开或接受连接都被设置为非阻塞模式。如果试图对其进行IO操作，并且文件描述符数据还没有准备好G会进入gopark函数，将当前正在执行的G状态保存起来，然后切换到新的堆栈上执行新的G。netpoller等待epoll返回时，会通过sysmon触发或者其他条件，最终处理网络IO。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220431976.png" alt="image-20220913220431976"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220431976.png" alt="image-20220913220431976"></p>
 <p class="fireman-p-indent" >netpoller被调度的三种情况：</p>
 <ul>
 <li>sysmon</li>
@@ -438,14 +441,14 @@
 </ul>
 <h3 id="Scheduler-Affinity"><a href="#Scheduler-Affinity" class="headerlink" title="Scheduler Affinity"></a>Scheduler Affinity</h3><p class="fireman-p-indent" >调度优先级</p>
 <p class="fireman-p-indent" >在GM调度器时代，chan 操作导致的切换代价。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220551854.png" alt="image-20220913220551854" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220551854.png" alt="image-20220913220551854" style="zoom:50%;" />
 
 <ul>
 <li><p>G7正在等待channel消息，阻塞在chan，一旦收到消息，这个goroutine就会被推到全局队列（可被调度）</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220618390.png" alt="image-20220913220618390" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220618390.png" alt="image-20220913220618390" style="zoom:50%;" />
 </li>
 <li><p>M空闲之后，从全局queue中，将GX调度到M上运行，而G8阻塞在chan</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220804224.png" alt="image-20220913220804224" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220804224.png" alt="image-20220913220804224" style="zoom:50%;" />
 </li>
 <li><p>G8从chan中获取消息，被调度到全局queue中，此时M调度G7运行。</p>
 </li>
@@ -454,7 +457,7 @@
 <p class="fireman-p-indent" >GMP模式</p>
 <p class="fireman-p-indent" > 在chan来回通信的goroutine会导致频繁block，也就是会在local queue中频繁重新排队。然而，由于本地队里是IFIO实现，如果另一个goroutine占用线程，unblock goroutine不能保证尽快运行。而且可能会被其他的P窃取。</p>
 <p class="fireman-p-indent" >针对这种情况，在Go 1.5版本引入了runnext字段，可以高优先级执行unblock G。当G从chan阻塞中恢复，P会优先调度这个G。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220949059.png" alt="image-20220913220949059" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913220949059.png" alt="image-20220913220949059" style="zoom:50%;" />
 
 <h3 id="goroutine生命周期"><a href="#goroutine生命周期" class="headerlink" title="goroutine生命周期"></a>goroutine生命周期</h3><p class="fireman-p-indent" >从一个主函数启动开始</p>
 <ul>
@@ -463,12 +466,12 @@
 <li><p>创建p，绑定m0和p0，首先会创建GOMAXPROCS个P，存储在sched的空闲链表里面 pidle</p>
 </li>
 <li><p>新建任务g到p0本地队列，m0的g0会创建一个指向runtime.main()的g，并放到p0的本地队列</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221007188.png" alt="image-20220913221007188" style="zoom:50%;" /></li>
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221007188.png" alt="image-20220913221007188" style="zoom:50%;" /></li>
 </ul>
 <p class="fireman-p-indent" >runtime.main()：启动sysmon线程；启动GC协程，执行init函数，执行main.main函数</p>
 <p class="fireman-p-indent" > 执行main.main函数之后，会创建很多的goroutine，新的goroutine将唤醒P以更好地分发工作。这个P将创建一个与之关联的M绑定到一个OS thread。</p>
 <p class="fireman-p-indent" >有空闲的P但是没有spinning状态的M时，需要唤醒一个空闲的M或者新建一个。当线程首次创建时，会执行一个特殊的G，也就是g0，负责调度和管理G。 </p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221053647.png" alt="image-20220913221053647" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221053647.png" alt="image-20220913221053647" style="zoom:50%;" />
 
 <h3 id="g0"><a href="#g0" class="headerlink" title="g0"></a>g0</h3><p class="fireman-p-indent" >主要用于执行go.scheduler函数，用于调度G。</p>
 <p class="fireman-p-indent" >g0基于两种端点将G调度到线程上：</p>
@@ -484,16 +487,16 @@
 <li><p>GC收集、比如STW、扫描G的堆栈和标记、清除操作</p>
 </li>
 <li><p>栈扩容，当需要的时候，由g0进行扩栈操作</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221140478.png" alt="image-20220913221140478" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221140478.png" alt="image-20220913221140478" style="zoom:50%;" />
 
 <p>当G7处于waiting状态</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221155964.png" alt="image-20220913221155964" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221155964.png" alt="image-20220913221155964" style="zoom:50%;" />
 
 <p>g0负责将本地queue中的G2调度到M上执行，将G7防止parked goroutine队列中。</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221423488.png" alt="image-20220913221423488" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221423488.png" alt="image-20220913221423488" style="zoom:50%;" />
 
 <p>G2处于完成</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221444808.png" alt="image-20220913221444808" style="zoom:50%;" />
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221444808.png" alt="image-20220913221444808" style="zoom:50%;" />
 
 <p>G7恢复运行，G0优先将G7调度到本地队列的前端。</p>
 </li>
@@ -503,7 +506,7 @@
 <li><p>goroutine在停止运行前执行的指令，程序当前要运行的指令是记录在程序计数器PC中的，G稍后将在同一指令处恢复运行</p>
 </li>
 <li><p>G的堆栈，以便再次运行时还原局部变量</p>
-<img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221554930.png" alt="image-20220913221554930" style="zoom:50%;" /></li>
+<img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221554930.png" alt="image-20220913221554930" style="zoom:50%;" /></li>
 </ul>
 <p class="fireman-p-indent" >切换之前，堆栈将被保存，以便在G再次运行时进行恢复。</p>
 <ul>
@@ -514,7 +517,7 @@
 <h3 id="goroutine-recycle"><a href="#goroutine-recycle" class="headerlink" title="goroutine recycle"></a>goroutine recycle</h3><p class="fireman-p-indent" >G很容易创建，容易到可能运行和销毁都会造成浪费，因此每一个P都维护了一个freelist G。当G处理完，则放回freelist local queue。重新生成G的时候可以直接复用。</p>
 <p class="fireman-p-indent" >当local queue长度超过64个，此时会将一般的free G推送到全局的free list中。</p>
 <p class="fireman-p-indent" >Global list包含两个队列，一个包含已分配栈的G，一个包含释放过堆栈的G。由于堆栈是动态增长的，因此可能会有一个大栈，因此Go不会保留这些栈，在GC的时候会清除，清除之后，就是没有分配堆栈的G。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221620268.png" alt="image-20220913221620268"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220913221620268.png" alt="image-20220913221620268"></p>
 
     </div>
 
@@ -591,7 +594,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -599,7 +607,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -609,6 +619,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/8477.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

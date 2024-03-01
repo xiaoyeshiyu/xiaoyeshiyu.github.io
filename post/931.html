@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在日常工作过程中，可能会使用到远程办公的场景，或者在外需要使用家用设备的场景。办公场景下，往往可以通过VPN实现局域网接入，但是可能网络效果不怎么好；家用场景下，使用专用VPN设备或者使用固定公网都有些奢侈，甚至公网映射也比较麻烦。这种情况下可以通过内网穿透技术。">
 <meta property="og:type" content="article">
@@ -79,7 +82,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -409,9 +412,9 @@
 </ol>
 <p class="fireman-p-indent" >总的来说，<code>WireGuard</code>是一种简单、高效和安全的<code>VPN</code>协议，适用于构建虚拟私人网络。它已经得到了广泛的采用，并且在网络安全领域受到了积极的评价。</p>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cud2lyZWd1YXJkLmNvbS8=">https://www.wireguard.com/<i class="fa fa-external-link-alt"></i></span></p>
-<h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/wireguard-configuration.png" alt="WireGuardでVPNサーバーを構築してスマホやPCから接続する手順 | virtualiment"></p>
+<h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/wireguard-configuration.png" alt="WireGuardでVPNサーバーを構築してスマホやPCから接続する手順 | virtualiment"></p>
 <p class="fireman-p-indent" >原理直白点说，就是通过服务端，将客户端1、客户端2使用channel连接成一个局域网，实现客户端1和客户端2之间P2P。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/Site-to-site-ipsec-example.jpeg" alt="WireGuard - RouterOS - MikroTik Documentation"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/Site-to-site-ipsec-example.jpeg" alt="WireGuard - RouterOS - MikroTik Documentation"></p>
 <p class="fireman-p-indent" >也可以在两台网关设备之间，通过P2P打通通道，实现两个内部局域网通过网关互联。一般家中有软路由担任网关的角色。</p>
 <h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p class="fireman-p-indent" >对应平台有不同的安装方式，推荐查看官网：<span class="exturl" data-url="aHR0cHM6Ly93d3cud2lyZWd1YXJkLmNvbS9pbnN0YWxsLw==">https://www.wireguard.com/install/<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >例如Centos 7 ，最简单的使用 RPM 安装</p>
@@ -422,7 +425,7 @@
 <p class="fireman-p-indent" >官网还有视频，真的很详细。</p>
 </blockquote>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly93d3cud2lyZWd1YXJkLmNvbS9xdWlja3N0YXJ0Lw==">https://www.wireguard.com/quickstart/<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230824161159104.png" alt="image-20230824161159104"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230824161159104.png" alt="image-20230824161159104"></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p class="fireman-p-indent" ><code>WireGuard</code>也是一个非常简单的P2P工具，支持多平台，相比 <code>frp</code> 安装稍微有些复杂。</p>
 <p class="fireman-p-indent" ><code>frp</code>和 <code>WireGuard</code>虽然都可以实现VPN，都有内网穿透的能力，但是实际上，在P2P上都不够好用，毕竟公网服务器增加带宽之后的价格很贵。</p>
 <h2 id="ZeroTier"><a href="#ZeroTier" class="headerlink" title="ZeroTier"></a>ZeroTier</h2><p class="fireman-p-indent" ><code>ZeroTier</code>是一种虚拟网络技术，它提供了一种简单、安全和高效的方式来创建和管理全球范围内的虚拟私有网络（<code>VPN</code>）。<code>ZeroTier</code>的主要优点包括以下几个方面：</p>
@@ -440,7 +443,7 @@
 </ol>
 <p class="fireman-p-indent" >总的来说，<code>ZeroTier</code>提供了一种简单、安全和高效的方式来创建全球范围内的虚拟私有网络。它的简单易用性、全球覆盖、安全性、低延迟和跨平台支持等优点使得<code>ZeroTier</code>成为一个受欢迎的虚拟网络解决方案。</p>
 <p class="fireman-p-indent" >相比较<code>WireGuard</code>而言，<code>ZeroTier</code>在使用上差别不大，但是<code>ZeroTier</code>有个优势，可以通过<code>Moon</code>节点优化网络，<strong>某些情况下可以让两个节点直接通过P2P通信</strong>。</p>
-<h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/ZeroTier_ilustracija_2.png" alt="ZeroTier - RouterOS - MikroTik Documentation"></p>
+<h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/ZeroTier_ilustracija_2.png" alt="ZeroTier - RouterOS - MikroTik Documentation"></p>
 <p class="fireman-p-indent" >ZeroTier由以下几个组成部分构成，每个部分都扮演着特定的角色：</p>
 <ol>
 <li><p><strong>ZeroTier Central</strong>: ZeroTier Central是ZeroTier的中央服务器，负责协调和管理ZeroTier网络。它维护了网络拓扑信息、设备身份验证和访问控制规则等。当设备加入ZeroTier网络时，它们会向ZeroTier Central注册，并获取网络配置信息。</p>
@@ -540,15 +543,15 @@
 <p class="fireman-p-indent" >从日志里面可以看到默认<code>HPPT</code>端口是<code>3000</code>，在云主机页面将<code>3000</code>端口开放防火墙，然后进入管理页面</p>
 <p class="fireman-p-indent" >默认用户名 <code>admin</code>，默认密码 <code>password</code>，登录之后，会默认 <code>Set password</code></p>
 <p class="fireman-p-indent" >点击<code>Add network</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825103746719.png" alt="image-20230825103746719"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825103746719.png" alt="image-20230825103746719"></p>
 <p class="fireman-p-indent" >点击 <code>Easy setup</code>，设置局域网内部IP</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825103837954.png" alt="image-20230825103837954"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825103837954.png" alt="image-20230825103837954"></p>
 <p class="fireman-p-indent" >直接随机生成内部网络配置，其实就是一个局域网。</p>
 <blockquote>
 <p class="fireman-p-indent" >踩坑：zerotier-one-1.12.0 版本有BUG，生成网络地址会出现BUG，会出现”Error resolving detail for network”之类的报错，使用次版本1.10.6即可。包可以在脚本中寻找对应链接，例如Centos 7地址：<span class="exturl" data-url="aHR0cDovL2Rvd25sb2FkLnplcm90aWVyLmNvbS9yZWRoYXQvZWwvNy8lRTMlODAlODIlRTUlQkIlQkElRTglQUUlQUUlRTUlODUlODglRTglQjclOTElRTUlQUUlOEMlRTUlQUUlODklRTglQTMlODUlRTglODQlOUElRTYlOUMlQUMlRUYlQkMlOEMlRTclODQlQjYlRTUlOTAlOEUlRTUlOEQlQjglRTglQkQlQkQlNjB6ZXJvdGllci1vbmUtMS4xMi4wLTEuZWw4Lng4Nl82NC5ycG0lNjAlRUYlQkMlOEMlRTclODQlQjYlRTUlOTAlOEUlRTYlODklOEIlRTUlOEElQTglRTUlQUUlODklRTglQTMlODU=">http://download.zerotier.com/redhat/el/7/。建议先跑完安装脚本，然后卸载`zerotier-one-1.12.0-1.el8.x86_64.rpm`，然后手动安装<i class="fa fa-external-link-alt"></i></span> <code>zerotier-one-1.10.6-1.el7.x86_64.rpm</code>，保持安装脚本的一致性。</p>
 </blockquote>
 <p class="fireman-p-indent" >网络正常的情况如下</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825205928495.png" alt="image-20230825205928495"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825205928495.png" alt="image-20230825205928495"></p>
 <h4 id="客户端加入网络"><a href="#客户端加入网络" class="headerlink" title="客户端加入网络"></a>客户端加入网络</h4><p class="fireman-p-indent" >通过网络id，在客户端上加入到网络中</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zerotier-cli join ebxxx0ef</span><br></pre></td></tr></table></figure>
 
@@ -559,7 +562,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">~ ifconfig</span><br><span class="line"></span><br><span class="line">feth4155: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&gt; metric 5000 mtu 2800</span><br><span class="line">	ether ee:03:0d:8e:7d:1e</span><br><span class="line">	peer: feth9155</span><br><span class="line">	media: autoselect</span><br><span class="line">	status: active</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >页面上点击授权</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825210308076.png" alt="image-20230825210308076"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/08/image-20230825210308076.png" alt="image-20230825210308076"></p>
 <p class="fireman-p-indent" >再查看状态</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">~ ifconfig</span><br><span class="line">feth4155: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&gt; metric 5000 mtu 2800</span><br><span class="line">	ether ee:03:0d:8e:7d:1e</span><br><span class="line">	inet 10.140.174.83 netmask 0xffffff00 broadcast 10.140.174.255</span><br><span class="line">	peer: feth9155</span><br><span class="line">	media: autoselect</span><br><span class="line">	status: active</span><br><span class="line">~ zerotier-cli listnetworks</span><br><span class="line">200 listnetworks &lt;nwid&gt; &lt;name&gt; &lt;mac&gt; &lt;status&gt; &lt;type&gt; &lt;dev&gt; &lt;ZT assigned ips&gt;</span><br><span class="line">200 listnetworks ebcxxxxcef zero ee:03:0d:8e:7d:1e OK PRIVATE feth4155 10.140.174.83/24</span><br></pre></td></tr></table></figure>
 
@@ -650,8 +653,8 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/post/6058.html" rel="prev" title="使用protobuf validate自定义报错内容">
-                  <i class="fa fa-angle-left"></i> 使用protobuf validate自定义报错内容
+                <a href="/post/4a89.html" rel="prev" title="s3实现视频分片预览">
+                  <i class="fa fa-angle-left"></i> s3实现视频分片预览
                 </a>
             </div>
             <div class="post-nav-item">
@@ -710,7 +713,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -718,7 +726,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -728,6 +738,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/931.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

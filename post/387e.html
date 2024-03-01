@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="分布式键值存储系统 etcd 在 Kubernetes 架构中的关键作用。">
 <meta property="og:type" content="article">
@@ -89,7 +92,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -342,7 +345,7 @@
 </ul>
 </li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111145201033.png" alt="image-20240111145201033"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111145201033.png" alt="image-20240111145201033"></p>
 <h2 id="消息发布与订阅"><a href="#消息发布与订阅" class="headerlink" title="消息发布与订阅"></a>消息发布与订阅</h2><ul>
 <li>在分布式系统中，最适用的一种组件间通信方式就是消息发布与订阅；</li>
 <li>即构建一个配置共享中心，数据提供者在这个配置中心发布消息，而消息使用者则订阅他们关心的主题，一旦主题有消息发布，就会实时通知订阅者；</li>
@@ -350,7 +353,7 @@
 <li>应用中用到的一些配置信息放到 <code>etcd</code> 上进行集中管理；</li>
 <li>应用在启动的时候主动从 <code>etcd</code> 获取一次配置信息，同时，在 <code>etcd</code> 节点上注册一个 <code>Watcher</code> 并等待，以后每次配置有更新的时候，<code>etcd</code> 都会实时通知订阅者，以此达到获取最新配置信息的目的。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111145603647.png" alt="image-20240111145603647"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111145603647.png" alt="image-20240111145603647"></p>
 <h2 id="Etcd-的安装"><a href="#Etcd-的安装" class="headerlink" title="Etcd 的安装"></a>Etcd 的安装</h2><p class="fireman-p-indent" >下载安装包，参考 <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V0Y2QtaW8vZXRjZC9yZWxlYXNlcw==">https://github.com/etcd-io/etcd/releases<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ETCD_VER=v3.4.29</span><br><span class="line"></span><br><span class="line"># choose either URL</span><br><span class="line">GOOGLE_URL=https://storage.googleapis.com/etcd</span><br><span class="line">GITHUB_URL=https://github.com/etcd-io/etcd/releases/download</span><br><span class="line">DOWNLOAD_URL=$&#123;GOOGLE_URL&#125;</span><br><span class="line"></span><br><span class="line">rm -f /tmp/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz</span><br><span class="line">rm -rf /tmp/etcd-download-test &amp;&amp; mkdir -p /tmp/etcd-download-test</span><br><span class="line"></span><br><span class="line">curl -L $&#123;DOWNLOAD_URL&#125;/$&#123;ETCD_VER&#125;/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz -o /tmp/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz</span><br><span class="line">tar xzvf /tmp/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz -C /tmp/etcd-download-test --strip-components=1</span><br><span class="line">rm -f /tmp/etcd-$&#123;ETCD_VER&#125;-linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">/tmp/etcd-download-test/etcd --version</span><br><span class="line">/tmp/etcd-download-test/etcdctl version</span><br></pre></td></tr></table></figure>
 
@@ -408,7 +411,7 @@
 </ul>
 <p class="fireman-p-indent" >这样的话，<code>key</code> 的设置是有前提的，需要知道这个 <code>key</code> 当前的具体情况才可以对其设置</p>
 <h1 id="Raft-协议"><a href="#Raft-协议" class="headerlink" title="Raft 协议"></a>Raft 协议</h1><h2 id="Raft-协议概览"><a href="#Raft-协议概览" class="headerlink" title="Raft 协议概览"></a>Raft 协议概览</h2><p class="fireman-p-indent" ><code>Raft</code> 协议基于 <code>quorum</code> 机制，即大多数同意原则，任何的变更都需要超过半数的成员确认。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111151519295.png" alt="image-20240111151519295"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111151519295.png" alt="image-20240111151519295"></p>
 <p class="fireman-p-indent" >请求发送到服务器端，服务器中的一致性模块进行一致性协商，一致性模块将请求发送到另外两个服务器，并且将本次请求写入到本地的日志模块（临时存储）中，其他服务器接收到之后，记录到本地日志模块，记录完成之后，返回给第一个节点，当超过半数返回，则更新状态机（可以理解为持久化组件）。</p>
 <h2 id="理解-Raft-协议"><a href="#理解-Raft-协议" class="headerlink" title="理解 Raft 协议"></a>理解 Raft 协议</h2><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly90aGVzZWNyZXRsaXZlc29mZGF0YS5jb20vcmFmdC8=">https://thesecretlivesofdata.com/raft/<i class="fa fa-external-link-alt"></i></span></p>
 <h2 id="learner"><a href="#learner" class="headerlink" title="learner"></a>learner</h2><p class="fireman-p-indent" ><code>Raft</code> 4.2.1 引入的新角色</p>
@@ -417,7 +420,7 @@
 <p class="fireman-p-indent" >进而导致 <code>follower</code> 重新发起投票。</p>
 <p class="fireman-p-indent" >进而可能引发 <code>etcd</code> 集群不可用。</p>
 <p class="fireman-p-indent" ><code>Learner</code> 角色只接收数据而不参与投票，因此增加 <code>learner</code> 节点时，集群的 <code>quorum</code> 不变。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111152850124.png" alt="image-20240111152850124"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111152850124.png" alt="image-20240111152850124"></p>
 <h2 id="etcd-基于-Raft-的一致性"><a href="#etcd-基于-Raft-的一致性" class="headerlink" title="etcd 基于 Raft 的一致性"></a>etcd 基于 Raft 的一致性</h2><p class="fireman-p-indent" >选举方法：</p>
 <ul>
 <li>初始启动时，节点处于 <code>follower</code> 状态并设定一个 <code>election timeout</code>，如果在这一时间周期内没有收到来自 <code>leader</code> 的 <code>heartbeat</code>，节点将会发起选择：将自己切换为 <code>candidate</code> 之后，向集群中其他 <code>candidate</code> 节点（满足1:自己没有 <code>leader</code>，2:自己没有投票，才会投票）发送请求，询问其是否选举自己成为 <code>leader</code>。</li>
@@ -446,7 +449,7 @@
 <li><code>follower</code> 节点不可用：<code>follower</code> 节点不可用的情况相对容易解决。因为集群中的日志内容始终是从 <code>leader</code> 节点同步的，只要这一节点再次加入集群时重新从 <code>leader</code> 节点出复制日志即可；</li>
 <li>多个 <code>candidate</code>：冲突后 <code>candidate</code> 将随机选择一个等待间隔（<code>150ms</code> ~ <code>300ms</code>）再次发起投票，得到集群半数以上 <code>follower</code> 接受的 <code>candidate</code> 将会成为 <code>leader</code></li>
 </ol>
-<h2 id="wal-日志"><a href="#wal-日志" class="headerlink" title="wal 日志"></a>wal 日志</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111160127124.png" alt="image-20240111160127124"></p>
+<h2 id="wal-日志"><a href="#wal-日志" class="headerlink" title="wal 日志"></a>wal 日志</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111160127124.png" alt="image-20240111160127124"></p>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9jaHJvbWl1bS5nb29nbGVzb3VyY2UuY29tL2V4dGVybmFsL2dpdGh1Yi5jb20vY29yZW9zL2V0Y2QvKy9IRUFEL3JhZnQvcmFmdHBiL3JhZnQucHJvdG8=">https://chromium.googlesource.com/external/github.com/coreos/etcd/+/HEAD/raft/raftpb/raft.proto<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" ><code>wal</code> 日志是二进制的，解析出来以后是以上数据结构 <code>LogEntry</code>。</p>
 <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">Entry</span> &#123;</span><br><span class="line">	<span class="keyword">option</span> (versionpb.etcd_version_msg) = <span class="string">&quot;3.0&quot;</span>;</span><br><span class="line">	<span class="keyword">optional</span> <span class="type">uint64</span>     Term  = <span class="number">2</span> [(gogoproto.nullable) = <span class="literal">false</span>]; <span class="comment">// must be 64-bit aligned for atomic operations</span></span><br><span class="line">	<span class="keyword">optional</span> <span class="type">uint64</span>     Index = <span class="number">3</span> [(gogoproto.nullable) = <span class="literal">false</span>]; <span class="comment">// must be 64-bit aligned for atomic operations</span></span><br><span class="line">	<span class="keyword">optional</span> EntryType  Type  = <span class="number">1</span> [(gogoproto.nullable) = <span class="literal">false</span>];</span><br><span class="line">	<span class="keyword">optional</span> <span class="type">bytes</span>      Data  = <span class="number">4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -471,7 +474,7 @@
 </ul>
 <p class="fireman-p-indent" ><code>etcd</code> 源码下有个 <code>tools/etcd-dump-logs</code>，可以将 <code>wal</code> 日志 <code>dump</code> 成文本查看，可以协助分析 <code>Raft</code> 协议。</p>
 <p class="fireman-p-indent" ><code>Raft</code> 协议本身不关心应用数据，也就是 <code>data</code> 中的部分，一致性都通过同步 <code>wal</code> 日志来实现，每个节点将从主节点收到的 <code>data apply</code> 到本地的存储，<code>Raft</code> 只关心日志的同步状态，如果本地存储实现的有 <code>bug</code>，比如没有正确的将 <code>data apply</code> 到本地，也可能会导致数据不一致。</p>
-<h1 id="etcd-使用"><a href="#etcd-使用" class="headerlink" title="etcd 使用"></a>etcd 使用</h1><h2 id="etcd-v3-存储，Watch-以及过期机制"><a href="#etcd-v3-存储，Watch-以及过期机制" class="headerlink" title="etcd v3 存储，Watch 以及过期机制"></a>etcd v3 存储，Watch 以及过期机制</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111162008166.png" alt="image-20240111162008166"></p>
+<h1 id="etcd-使用"><a href="#etcd-使用" class="headerlink" title="etcd 使用"></a>etcd 使用</h1><h2 id="etcd-v3-存储，Watch-以及过期机制"><a href="#etcd-v3-存储，Watch-以及过期机制" class="headerlink" title="etcd v3 存储，Watch 以及过期机制"></a>etcd v3 存储，Watch 以及过期机制</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240111162008166.png" alt="image-20240111162008166"></p>
 <h3 id="存储机制"><a href="#存储机制" class="headerlink" title="存储机制"></a>存储机制</h3><p class="fireman-p-indent" ><code>etcd v3 store</code> 分为两部分，一部分是内存中的索引，<code>kvindex</code>，是基于 <code>Google</code> 开源的一个 <code>Golang</code> 的 <code>btree</code> 实现的。</p>
 <p class="fireman-p-indent" >另一部分是后端存储。按照它的设计，<code>backend</code> 可以对接多种存储，当前使用的 <code>boltdb</code>。<code>boltdb</code> 是一个单机的支持事务的 <code>kv</code> 存储，<code>etcd</code> 的事务是基于 <code>boltdb</code> 的事务实现的。</p>
 <p class="fireman-p-indent" ><code>etcd</code> 在 <code>boltdb</code> 中存储的 <code>key</code> 是 <code>reversion</code>，<code>value</code> 是 <code>etcd</code> 自己的 <code>key-value</code> 组合，也就是说 <code>etcd</code> 会在 <code>boltdb</code> 中把每个版本都保存下，从而实现了多版本机制。（一个数据存储多份，也就是多份版本。）</p>
@@ -480,7 +483,7 @@
 
 <p class="fireman-p-indent" ><code>etcd</code> 提供了命令和设置选项来控制 <code>compact</code>，同时支持 <code>put</code> 操作的参数来精确控制某个 <code>key</code> 的历史版本数。</p>
 <p class="fireman-p-indent" >内存 <code>kvindex</code> 保存的就是 <code>key</code> 和 <code>reversion</code> 之前的映射关系，用来加速查询。</p>
-<h3 id="etcd-写入数据的流程"><a href="#etcd-写入数据的流程" class="headerlink" title="etcd 写入数据的流程"></a>etcd 写入数据的流程</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112175505965.png" alt="image-20240112175505965"></p>
+<h3 id="etcd-写入数据的流程"><a href="#etcd-写入数据的流程" class="headerlink" title="etcd 写入数据的流程"></a>etcd 写入数据的流程</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112175505965.png" alt="image-20240112175505965"></p>
 <ol>
 <li>客户端写入数据</li>
 <li><code>leader</code> 在预检查中做一系列的检测（配额、限速、鉴权、包大小例如 <code>1.5M</code> 等）</li>
@@ -498,7 +501,7 @@
 <li>在 <code>BoltDB</code> 里面使用 <code>BTree</code> 存储，存储的 <code>key</code> 是版本信息，<code>value</code> 是 <code>key</code>-<code>value</code> 的键值对，创建版本、修改版本、当前版本</li>
 </ol>
 <p class="fireman-p-indent" >也就是说，在 <code>MVCC</code> 模块中，要读取某个数据的某个版本，先从 <code>treeIndex</code> 中找到 <code>key</code> 对应数据，获取数据版本信息，在从 <code>BoltDB</code> 中通过 <code>key</code> 查对应版本，在 <code>value</code> 中获取值。</p>
-<h3 id="etcd-数据一致性"><a href="#etcd-数据一致性" class="headerlink" title="etcd 数据一致性"></a>etcd 数据一致性</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112181201356.png" alt="image-20240112181201356"></p>
+<h3 id="etcd-数据一致性"><a href="#etcd-数据一致性" class="headerlink" title="etcd 数据一致性"></a>etcd 数据一致性</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112181201356.png" alt="image-20240112181201356"></p>
 <ol>
 <li>集群中有三个 <code>node</code>，<code>Leader</code> 是 <code>A</code>，<code>Follower</code> 是 <code>B</code>、<code>C</code></li>
 <li>日志数据顺序写入，使用 <code>Index</code> 单调递增</li>
@@ -595,7 +598,7 @@
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9iaXRuYW1pLmNvbS9zdGFjay9ldGNkL2hlbG0=">https://bitnami.com/stack/etcd/helm<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2JpdG5hbWkvY2hhcnRzL3RyZWUvbWFpbi9iaXRuYW1pL2V0Y2Q=">https://github.com/bitnami/charts/tree/main/bitnami/etcd<i class="fa fa-external-link-alt"></i></span></p>
 <h3 id="Etcd-Operator"><a href="#Etcd-Operator" class="headerlink" title="Etcd-Operator"></a>Etcd-Operator</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2NvcmVvcy9ldGNkLW9wZXJhdG9y">https://github.com/coreos/etcd-operator<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112141506850.png" alt="image-20240112141506850"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112141506850.png" alt="image-20240112141506850"></p>
 <h3 id="基于-Bitnami-安装-etcd-高可用集群"><a href="#基于-Bitnami-安装-etcd-高可用集群" class="headerlink" title="基于 Bitnami 安装 etcd 高可用集群"></a>基于 Bitnami 安装 <code>etcd</code> 高可用集群</h3><p class="fireman-p-indent" >安装 <code>heml</code></p>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2hlbG0vaGVsbS9yZWxlYXNlcw==">https://github.com/helm/helm/releases<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >通过 <code>helm</code> 安装 <code>etcd</code></p>
@@ -612,16 +615,16 @@
 <p class="fireman-p-indent" >早期 <code>API server</code> 对 <code>etcd</code> 做简单的 <code>Ping</code> <code>check</code>，现在已经改为真实的 <code>etcd api call</code>。</p>
 <h2 id="Kubernetes-对象在etcd-中的存储路径"><a href="#Kubernetes-对象在etcd-中的存储路径" class="headerlink" title="Kubernetes 对象在etcd 中的存储路径"></a>Kubernetes 对象在etcd 中的存储路径</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ks exec -it etcd -cadminsh</span><br><span class="line">ETCDCTL_API=3</span><br><span class="line">alias ectl =&#x27;etcdctl--endpoints https://127.0.0.1:2379 \</span><br><span class="line">	--cacert /etc/kubernetes/pki/etcd/ca.crt\</span><br><span class="line">	--cert /etc/kubernetes/pki/etcd/ server.crt\</span><br><span class="line">	--key /etc/kubernetes/pki/etcd/server.key&#x27;</span><br><span class="line">ectl get --prefix --keys-only \</span><br><span class="line">	/registry/namespaces/calico-apiserver \</span><br><span class="line">	/registry/networkpolicies/calico-apiserver/allow-apiserver \</span><br><span class="line">	/registry/operator.tigera.io/tigerastatuses/apiserver \</span><br><span class="line">	/registry/pods/calico-apiserver/calico-apiserver-77dffffcdf-g2tcx \</span><br><span class="line">	/registry/pods/default/toolbox-68f79dd5f8-4664n</span><br></pre></td></tr></table></figure>
 
-<h2 id="etcd-在集群中所处的位置"><a href="#etcd-在集群中所处的位置" class="headerlink" title="etcd 在集群中所处的位置"></a>etcd 在集群中所处的位置</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142212166.png" alt="image-20240112142212166"></p>
+<h2 id="etcd-在集群中所处的位置"><a href="#etcd-在集群中所处的位置" class="headerlink" title="etcd 在集群中所处的位置"></a>etcd 在集群中所处的位置</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142212166.png" alt="image-20240112142212166"></p>
 <p><code>API server</code> 启动脚本中指定 <code>etcd servers</code> 集群</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/bin/kube-apiserver \</span><br><span class="line">	--etcd_servers=https://localhost:4001 \</span><br><span class="line">	--etcd-cafile=/etc/ssl/kubernetes/ca.crt--storage-backend=etcd3 \</span><br><span class="line">	--etcd-servers-overrides=/events#https://localhost:4002</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >将变动频繁的（例如 <code>events</code>）的数据使用  <code>overrides</code> 指定到另外一个 <code>etcd</code> 集群。</p>
-<h2 id="etcd-集群"><a href="#etcd-集群" class="headerlink" title="etcd 集群"></a>etcd 集群</h2><h3 id="堆叠式-etcd-集群的高可用拓扑"><a href="#堆叠式-etcd-集群的高可用拓扑" class="headerlink" title="堆叠式 etcd 集群的高可用拓扑"></a>堆叠式 <code>etcd</code> 集群的高可用拓扑</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142419159.png" alt="image-20240112142419159"></p>
+<h2 id="etcd-集群"><a href="#etcd-集群" class="headerlink" title="etcd 集群"></a>etcd 集群</h2><h3 id="堆叠式-etcd-集群的高可用拓扑"><a href="#堆叠式-etcd-集群的高可用拓扑" class="headerlink" title="堆叠式 etcd 集群的高可用拓扑"></a>堆叠式 <code>etcd</code> 集群的高可用拓扑</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142419159.png" alt="image-20240112142419159"></p>
 <p class="fireman-p-indent" >这种拓扑将相同节点上的控制平面和 <code>etcd</code> 成员耦合在一起。</p>
 <p class="fireman-p-indent" >优点在于建立起来非常容易，并且对副本的管理也更容易。但是，堆叠式存在耦合失败的风险。</p>
 <p class="fireman-p-indent" >如果一个节点发生故障，则 <code>etcd</code> 成员和控制平面实例都会丢失，并且集群冗余也会收到损害。可以通过添加更多控制平面节点来减轻这种风险。因此为实现集群高可用应该至少运行三个堆叠的 <code>Master</code> 节点。</p>
-<h3 id="外部-etcd-集群的高可用拓扑"><a href="#外部-etcd-集群的高可用拓扑" class="headerlink" title="外部 etcd 集群的高可用拓扑"></a>外部 <code>etcd</code> 集群的高可用拓扑</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142636405.png" alt="image-20240112142636405"></p>
+<h3 id="外部-etcd-集群的高可用拓扑"><a href="#外部-etcd-集群的高可用拓扑" class="headerlink" title="外部 etcd 集群的高可用拓扑"></a>外部 <code>etcd</code> 集群的高可用拓扑</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112142636405.png" alt="image-20240112142636405"></p>
 <p class="fireman-p-indent" >该拓扑将控制平面和 <code>etcd</code> 成员解耦。如果丢失一个 <code>Master</code> 节点，对 <code>etcd</code> 成员的影响较小，并且不会像堆叠式拓扑那样对集群冗余产生太大影响。</p>
 <p class="fireman-p-indent" >但是，此拓扑所需的主机数量是堆叠式拓扑的两倍。具有此拓扑的集群至少需要三个主机用于控制平面节点，三个主机用于 <code>etcd</code> 集群。</p>
 <h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><p class="fireman-p-indent" >多少个 <code>peer</code> 最合适？</p>
@@ -674,7 +677,7 @@
 <ul>
 <li><p>与集群规模相关，思考：为什么每个 <code>member</code> 的 <code>DB size</code> 不一致？</p>
 <p>包含的碎片大小不一样，<code>defrag</code> 和 <code>snap</code>。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112143519067.png" alt="image-20240112143519067"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112143519067.png" alt="image-20240112143519067"></p>
 </li>
 </ul>
 </li>
@@ -793,12 +796,12 @@
 </ul>
 <p class="fireman-p-indent" >根据集群对 <code>etcd</code> 备份粒度的要求，可适当调节备份的周期。在生产环境中实测，拍摄快照通常会影响集群当时的性能，因此不建议频繁创建快照。但是备份周期太长，就可能导致大量数据的丢失。</p>
 <p class="fireman-p-indent" >这里可以使用增量备份的方式。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112151247242.png" alt="image-20240112151247242"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112151247242.png" alt="image-20240112151247242"></p>
 <p class="fireman-p-indent" >备份程序每 <code>30</code> 分钟触发一次快照的拍摄。</p>
 <p class="fireman-p-indent" >紧接着它从快照结束的版本（<code>Revision</code>）开始，监听 <code>etcd</code> 集群的事件，并每 <code>10</code> 秒钟将事件保存到文件中，并将快照和事件文件上传到网络存储设备中。</p>
 <p class="fireman-p-indent" >30分钟的快照周期对集群性能影响甚微。当大灾难来临时，也至多丢失 <code>10s</code> 的数据。</p>
 <p class="fireman-p-indent" >至于数据修复，首先把数据从网络设备存储中下载下来，然后从快照中恢复大块数据，并在此基础上依次应用存储的所有事件。这样就可以将集群数据恢复到灾难发生前。</p>
-<h2 id="增强版-backup-方案"><a href="#增强版-backup-方案" class="headerlink" title="增强版 backup 方案"></a>增强版 backup 方案</h2><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112151539027.png" alt="image-20240112151539027"></p>
+<h2 id="增强版-backup-方案"><a href="#增强版-backup-方案" class="headerlink" title="增强版 backup 方案"></a>增强版 backup 方案</h2><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112151539027.png" alt="image-20240112151539027"></p>
 <h2 id="etcd-数据加密"><a href="#etcd-数据加密" class="headerlink" title="etcd 数据加密"></a>etcd 数据加密</h2><p><span class="exturl" data-url="aHR0cHM6Ly9rdWJlcm5ldGVzLmlvL2RvY3MvdGFza3MvYWRtaW5pc3Rlci1jbHVzdGVyL2VuY3J5cHQtZGF0YS8=">https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apiserver.config.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">EncryptionConfiguration</span></span><br><span class="line"><span class="attr">resources:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">resources:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">secrets</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">configmaps</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">pandas.awesome.bears.example</span></span><br><span class="line">    <span class="attr">providers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">aescbc:</span></span><br><span class="line">          <span class="attr">keys:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">key1</span></span><br><span class="line">              <span class="comment"># See the following text for more details about the secret value</span></span><br><span class="line">              <span class="attr">secret:</span> <span class="string">&lt;BASE</span> <span class="number">64</span> <span class="string">ENCODED</span> <span class="string">SECRET&gt;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">identity:</span> &#123;&#125; <span class="comment"># this fallback allows reading unencrypted secrets;</span></span><br><span class="line">                     <span class="comment"># for example, during initial migration</span></span><br></pre></td></tr></table></figure>
 
@@ -833,7 +836,7 @@
 <li><p><code>List</code> 对象时，如果不加 <code>resourceVersion</code>，意味着需要 <code>Most Recent</code> 数据，请求会击穿 <code>APIServer</code> 缓存，直接发送至 <code>etcd</code></p>
 </li>
 <li><p><code>APIServer</code> 通过 <code>Label</code> 过滤对象查询时，过滤动作是在 <code>APIServer</code> 端，<code>APIServer</code> 需要向 <code>etcd</code> 发起全量查询请求</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152340147.png" alt="image-20240112152340147"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152340147.png" alt="image-20240112152340147"></p>
 </li>
 </ul>
 </li>
@@ -847,13 +850,13 @@
 </ul>
 <h2 id="少数-etcd-成员-Down"><a href="#少数-etcd-成员-Down" class="headerlink" title="少数 etcd 成员 Down"></a>少数 etcd 成员 Down</h2><p class="fireman-p-indent" >老版本可能出现少数 <code>etcd</code> 异常，但是上层 <code>apiserver</code> 正常，可能会导致两个节点上的 <code>pod</code> 出现异常。</p>
 <p class="fireman-p-indent" >解决方法是健康检查，<code>apiserver</code> 检测 <code>etcd</code> 异常之后，自杀，让<code>apiserver</code>调用其他节点上的 <code>etcd</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152444763.png" alt="image-20240112152444763"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152444763.png" alt="image-20240112152444763"></p>
 <h2 id="Master-节点出现网络分区"><a href="#Master-节点出现网络分区" class="headerlink" title="Master 节点出现网络分区"></a>Master 节点出现网络分区</h2><p class="fireman-p-indent" >网络分区出现：</p>
 <ul>
 <li><code>Group#1</code>: <code>master-1</code>、<code>master-2</code></li>
 <li><code>Group#2</code>: <code>master-3</code>、<code>master-4</code>、<code>master-5</code></li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152601108.png" alt="image-20240112152601108"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240112152601108.png" alt="image-20240112152601108"></p>
 <h1 id="references"><a href="#references" class="headerlink" title="references"></a>references</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NodW5taWFvMzAzMi9hcnRpY2xlL2RldGFpbHMvMTI1NTcxNjUx">ETCD如何处理读写请求<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2V0Y2QtaW8vZXRjZA==">etcd-io&#x2F;etcd<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9ldGNkLmlvL2RvY3MvdjMuNS8=">v3.5 docs<i class="fa fa-external-link-alt"></i></span></p>
@@ -935,7 +938,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -943,7 +951,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -953,6 +963,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/387e.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

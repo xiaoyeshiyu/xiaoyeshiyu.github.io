@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Go语言的sync包是Go标准库中提供的用于同步和并发编程的包。它提供了一些关键的同步原语，用于协调并发操作，以确保数据的正确性和一致性。">
 <meta property="og:type" content="article">
@@ -101,7 +104,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -350,7 +353,7 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Routine</span><span class="params">(id <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> count := <span class="number">0</span>; count &lt; <span class="number">2</span>; count++ &#123;</span><br><span class="line">		value := Counter</span><br><span class="line">		time.Sleep(time.Nanosecond)</span><br><span class="line">		Counter++</span><br><span class="line">		Counter = value</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Wait.Done()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >正常的过程应该是两个 <code>goroutine</code> 有先后顺序</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905213914872.png" alt="image-20230905213914872"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230905213914872.png" alt="image-20230905213914872"></p>
 <p class="fireman-p-indent" >此时，应该使用 Go 同步语义：<code>Mutex</code></p>
 <h2 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a>案例2</h2><p class="fireman-p-indent" >这里修改 Ben 将<code>id</code>去掉，将 Ben 和 Jerry 的内存布局设置成一样。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> IceCreamMaker <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="comment">// Hello greets a customer</span></span><br><span class="line">	Hello()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Ben <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Ben)</span></span> Hello() &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Ben says, \&quot;Hello my name is %s\&quot;\n&quot;</span>, b.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Jerry <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(j *Jerry)</span></span> Hello() &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Jerry says, \&quot;Hello my name is %s\&quot;\n&quot;</span>, j.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> ben = &amp;Ben&#123;name: <span class="string">&quot;Ben&quot;</span>&#125;</span><br><span class="line">	<span class="keyword">var</span> jerry = &amp;Jerry&#123;<span class="string">&quot;Jerry&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> maker IceCreamMaker = ben</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> loop0, loop1 <span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line"></span><br><span class="line">	loop0 = <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		maker = ben</span><br><span class="line">		<span class="keyword">go</span> loop1()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	loop1 = <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		maker = jerry</span><br><span class="line">		<span class="keyword">go</span> loop0()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> loop0()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		maker.Hello()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -362,14 +365,14 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Ben says, &quot;Hello my name is Ben&quot;</span><br><span class="line">Ben says, &quot;Hello my name is Ben&quot;</span><br><span class="line">Jerry says, &quot;Hello my name is Jerry&quot;</span><br><span class="line">Ben says, &quot;Hello my name is Ben&quot;</span><br><span class="line">Jerry says, &quot;Hello my name is Jerry&quot;</span><br><span class="line">Ben says, &quot;Hello my name is Ben&quot;</span><br><span class="line">Jerry says, &quot;Hello my name is Jerry&quot;</span><br><span class="line">Jerry says, &quot;Hello my name is Jerry&quot;</span><br><span class="line">Jerry says, &quot;Hello my name is Jerry&quot;</span><br></pre></td></tr></table></figure>
 
 <p class="fireman-p-indent" >但是对于 Golang 来说，interface 是有两部分。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907202817211.png" alt="image-20230907202817211"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907202817211.png" alt="image-20230907202817211"></p>
 <p class="fireman-p-indent" >Type 指向实现了接口的 <code>struct</code> ，Data 指向了实际的值（也就是一个是类型，一个是值）。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907203020266.png" alt="image-20230907203020266"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907203020266.png" alt="image-20230907203020266"></p>
 <p class="fireman-p-indent" >Data 作为通过 interface 中任何方法调用的接受方传递。</p>
 <p class="fireman-p-indent" >对于语句 <code>var maker IceCreamMaker = ben</code>，编译器将生成执行以下操作的代码</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907203016068.png" alt="image-20230907203016068"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907203016068.png" alt="image-20230907203016068"></p>
 <p class="fireman-p-indent" >当 <code>loop1()</code> 执行 <code>maker = jerry</code> 语句时，必须更新接口值的两个字段。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907203116581.png" alt="image-20230907203116581"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907203116581.png" alt="image-20230907203116581"></p>
 <p class="fireman-p-indent" >很有可能在实际执行的过程中，会出现 Type 和 Data 指向的是不同的字段。</p>
 <p class="fireman-p-indent" ><code>Go memory model</code> 提到过：表示下如单个<code>machine word</code>将是原子的，但 <code>interface</code> 内部是两个<code> machine word</code> 的值。另一个 <code>goroutine</code> 可能在更改接口值时观察到它的内容。</p>
 <p class="fireman-p-indent" >在这个例子中， Ben 和 Jerry 内存结构布局是相同的，因此它们在某种意义上是兼容的。如果它们的内存布局不同，会发生什么混乱。（比如。Ben 字段的 id ）</p>
@@ -419,11 +422,11 @@
 
 <p class="fireman-p-indent" >因为涉及到更多的 goroutine 之间的上下文切换 pack blocking goroutine，以及唤醒 goroutine。</p>
 <p class="fireman-p-indent" ><code>env GOMAXPROCS=4 go test  -trace trace.out -bench .</code></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164340426.png" alt="image-20230919164340426"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164728429.png" alt="image-20230919164728429"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164753278.png" alt="image-20230919164753278"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164815930.png" alt="image-20230919164815930"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164834917.png" alt="image-20230919164834917"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164340426.png" alt="image-20230919164340426"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164728429.png" alt="image-20230919164728429"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164753278.png" alt="image-20230919164753278"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164815930.png" alt="image-20230919164815930"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230919164834917.png" alt="image-20230919164834917"></p>
 <h2 id="COW"><a href="#COW" class="headerlink" title="COW"></a>COW</h2><p class="fireman-p-indent" >Copy-On-Write （写时复制）思路在微服务降级或者 local cache 场景中经常使用。写时复制指的是，写入操作时复制全量老数据到一个新的对象中，携带上本次新写的数据，之后利用原子替换（ atomic.Value)，更新调用者的变量。来完成无锁访问共享数据。</p>
 <p class="fireman-p-indent" >例如定期（每10s加载一次最新数据），使用原子操作 <code>store</code> 数据，使用的时候，从 <code>atomic</code> 中读取出来。</p>
 <p class="fireman-p-indent" >但是需要注意，可能会出现读取出来的数据是 <code>v1</code> 的。</p>
@@ -442,37 +445,37 @@
 </ul>
 <p class="fireman-p-indent" >都是100ms 的周期，但是由于 goroutine 1 不断的请求锁，可预期它会频繁的持续锁的状态。</p>
 <p class="fireman-p-indent" >基于 Go 1.8 循环 10次，下面是锁的请求占用分布：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907210740712.png" alt="image-20230907210740712"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907210740712.png" alt="image-20230907210740712"></p>
 <p class="fireman-p-indent" >Mutex 被 g1 获取了 700 多万次，而 g2 只获取了 10 次。这是非常不公平的。（占用时间长，而且还获得锁的概率高）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212340729.png" alt="image-20230907212340729"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212340729.png" alt="image-20230907212340729"></p>
 <p class="fireman-p-indent" >首先，goroutine1 将获得锁，并休眠 100ms。当 goroutine2 试图获取锁是，它将被添加到锁的队列中- FIFO顺序（先进先出），goroutine 将进入等待状态（Parking）。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212013181.png" alt="image-20230907212013181"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212013181.png" alt="image-20230907212013181"></p>
 <p class="fireman-p-indent" >然后，当 goroutine1 完成它的工作时，它将释放锁。此版本将通知队列，唤醒 goroutine2 ，goroutine2 将被通知队列唤醒 goroutine2 。goroutine2 将被标记为可运行的，并且正在等待 Go 调度程序在线程上运行。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212406035.png" alt="image-20230907212406035"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212406035.png" alt="image-20230907212406035"></p>
 <p class="fireman-p-indent" >然而，当 goroutine2 等待运行时，goroutine1 将再次请求锁。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212238826.png" alt="image-20230907212238826"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212238826.png" alt="image-20230907212238826"></p>
 <p class="fireman-p-indent" >goroutine2 尝试去获取锁，结果发现锁又被人持有了，它自己继续进入到等待模式。</p>
 <p class="fireman-p-indent" >这是由于新请求锁的 goroutine 具有优势（g1）：它正在 CPU 上执行，缩放锁之后，立马竞争，再次获得锁。</p>
-<h3 id="Mutex锁的实现"><a href="#Mutex锁的实现" class="headerlink" title="Mutex锁的实现"></a>Mutex锁的实现</h3><p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212616874.png" alt="image-20230907212616874"></p>
+<h3 id="Mutex锁的实现"><a href="#Mutex锁的实现" class="headerlink" title="Mutex锁的实现"></a>Mutex锁的实现</h3><p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212616874.png" alt="image-20230907212616874"></p>
 <ul>
 <li>Barging：这种模式时为了提高吞吐量，当锁被释放时，它会唤醒第一个等待者，然后把锁给第一个等待者或者给第一个请求锁的人。</li>
 </ul>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212622562.png" alt="image-20230907212622562"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212622562.png" alt="image-20230907212622562"></p>
 <ul>
 <li>Handsoff：当锁释放时，锁会一直持有直到第一个等待者准备好获取锁。它降低了吞吐量，因为锁被持有，即使另一个 goroutine 准备获取它。降低吞吐，提高公平。</li>
 </ul>
 <p class="fireman-p-indent" >一个互斥锁的 handsoff 会完美地平衡两个 goroutine 之间的锁分配，但是会降低性能，因为它会迫使第一个 goroutine 等待锁。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212754288.png" alt="image-20230907212754288"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907212754288.png" alt="image-20230907212754288"></p>
 <ul>
 <li>Spining：自旋，在等待队列为空或者应用程序重度使用锁时效果不错。Parking（ goroutine 进入等待队列 ） 和 Unparking（goroutine 从等待队列中被唤醒） goroutine 有不低的性能成本开销，相比自旋来说要慢得多。</li>
 </ul>
 <p class="fireman-p-indent" >Go 1.8使用了 Barging 和 Spining 的结合实现。当试图获取已经被持有的锁时，如果本地队列为空，并且 P 的数量大于1， goroutine 将自旋几次（用一个 P 旋转会阻塞程序）。自旋后，goroutine park。在程序高频使用锁的情况下，它充当了一个快速路径。</p>
 <p class="fireman-p-indent" >Go 1.9 通过增加一个新的饥饿模式来解决先前的公平和开销问题。该模式将会在释放时出发 handsoff。所有等待锁超过 1ms 的goroutine（也被成为有界等待）将被诊断为饥饿。当被标记为饥饿状态时，unlock 方法会 handsoff 把锁直接仍给第一个等待者。</p>
 <p class="fireman-p-indent" >在饥饿模式下，自旋也被停用，因为传入的 goroutine 将没有机会获取为下一个等待者保留的锁。（这样让等待的 goroutine 一定会拿到锁。）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907213716753.png" alt="image-20230907213716753"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907213716753.png" alt="image-20230907213716753"></p>
 <p class="fireman-p-indent" >这是由于锁在自旋的过程中，为了保证公平，一段时间没有拿到锁（1ms），会进入<strong>饥饿态</strong>，进而加大获得锁的概率。</p>
 <h2 id="errgroup"><a href="#errgroup" class="headerlink" title="errgroup"></a>errgroup</h2><p class="fireman-p-indent" >把一个复杂的任务，尤其时依赖多个微服务 rpc 需要聚合数据的任务，分解为依赖和并行，依赖的意思为：需要上游 a 的数据才能访问下游 b 的数据进行组合。但是并行的意思为：分解为多个小任务并行执行，最终等全部执行完毕。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907214605570.png" alt="image-20230907214605570"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907214605570.png" alt="image-20230907214605570"></p>
 <p class="fireman-p-indent" >可以使用<span class="exturl" data-url="aHR0cHM6Ly9wa2cuZ28uZGV2L2dvbGFuZy5vcmcveC9zeW5jL2Vycmdyb3Vw">errgroup<i class="fa fa-external-link-alt"></i></span></p>
 <p class="fireman-p-indent" >核心原理：利用 sync.Waitgroup 管理，并行执行的 goroutine </p>
 <p class="fireman-p-indent" >优势：</p>
@@ -491,12 +494,12 @@
 <li>使用 context，而且还在作用域之外使用</li>
 </ul>
 <h2 id="Pool"><a href="#Pool" class="headerlink" title="Pool"></a>Pool</h2><p class="fireman-p-indent" >sync.Pool 的场景时用来保存和复用临时对象，以减少内存分配，降低 GC 压力 （Request-Driven 特别合适）。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907225501216.png" alt="image-20230907225501216"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907225501216.png" alt="image-20230907225501216"></p>
 <p class="fireman-p-indent" >Get 返回 Pool 中的任意一个对象。如果 Pool 为空，则调用 New 函数返回一个新创建的对象。</p>
 <p class="fireman-p-indent" >放进 Pool 中的对象，会在说不准什么时候被回收到。所以如果事先 Put 进去 100个对象，下次 Get 的时候可能 Pool 是空的。这个特性的一个好处就在于不用担心 Pool 会一直增长，因为 Go 已经帮你在 Pool 中做了回收机制。</p>
 <p class="fireman-p-indent" >因此 sync.Pool 里面只能方能被任意回收的对象，例如内存，套接字，文件DF之类的，而不能放连接池，例如连接池放进去，被GC，则会出现内存泄露。</p>
 <p class="fireman-p-indent" >这个清理过程时在每次垃圾回收之前做的。之前每次 GC 时都会清空 pool，而在 1.13 版本中引入 victim cache ，会将 pool 内数据拷贝一份，避免 GC 将其清空，即使没有引用的内容也可以保留最多两轮 GC。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907225817922.png" alt="image-20230907225817922"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230907225817922.png" alt="image-20230907225817922"></p>
 <p class="fireman-p-indent" >Pool 内部使用环， ring buffer （定长 FIFO）+ 双向链表的方式，头部只能写入，尾部可以并发读取的形式。生成的时候，如果 ring 中存在对象，则直接从尾部读取，如果没有则生成。 写入的时候从头部写入。</p>
 <h1 id="踩坑和技巧"><a href="#踩坑和技巧" class="headerlink" title="踩坑和技巧"></a>踩坑和技巧</h1><h2 id="sync-XXX"><a href="#sync-XXX" class="headerlink" title="sync.XXX"></a>sync.XXX</h2><p class="fireman-p-indent" >不要在参数里面传递sync.XXX</p>
 <p class="fireman-p-indent" >要么是调用者自己决定，例如方法</p>
@@ -571,32 +574,32 @@
 </li>
 </ul>
 <h2 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h2><p class="fireman-p-indent" >在多核CPU上，由于CPU有本地缓存，导致其他CPU要通过读屏障和写屏障获取到最新数据</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230924223247722.png" alt="image-20230924223247722"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230924223247722.png" alt="image-20230924223247722"></p>
 <p class="fireman-p-indent" >这个架构其实与本地存储非常像</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230924223313202.png" alt="image-20230924223313202"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230924223313202.png" alt="image-20230924223313202"></p>
 <ol>
 <li>如果只是修改本地缓存，别的实例肯定感知不到</li>
 <li>如果修改了班底缓存，还写回去了数据库，别的实例也不一定能看到，因为它们自身缓存还没过期</li>
 <li>写回去数据库之后，还要通知别的实例让缓存过期，重新加载</li>
 </ol>
 <h2 id="理解锁"><a href="#理解锁" class="headerlink" title="理解锁"></a>理解锁</h2><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9zZWdtZW50ZmF1bHQuY29tL2EvMTE5MDAwMDAzOTg1NTY5Nw==">这可能是最容易理解的 Go Mutex 源码剖析<i class="fa fa-external-link-alt"></i></span></p>
-<p class="fireman-p-indent" ><img src="https://segmentfault.com/img/remote/1460000039855706" alt="互相加锁解锁"></p>
+<p class="fireman-p-indent" ><img data-src="https://segmentfault.com/img/remote/1460000039855706" alt="互相加锁解锁"></p>
 <h2 id="一些面试题"><a href="#一些面试题" class="headerlink" title="一些面试题"></a>一些面试题</h2><ul>
 <li><p>进程、线程和协程的不同</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230924223924892.png" alt="image-20230924223924892"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230924223924892.png" alt="image-20230924223924892"></p>
 </li>
 <li><p>为什么引入协程</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231018112824649.png" alt="image-20231018112824649"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231018112824649.png" alt="image-20231018112824649"></p>
 </li>
 <li><p>goroutine 泄露的典型场景</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231018112846040.png" alt="image-20231018112846040"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231018112846040.png" alt="image-20231018112846040"></p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0VERFlDSlkvYXJ0aWNsZS9kZXRhaWxzLzExNTUzNTIzNw==">跟读者聊 Goroutine 泄露的 N 种方法，真刺激！<i class="fa fa-external-link-alt"></i></span></p>
 </li>
 <li><p>怎么避免 goroutine 泄露</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231018112912780.png" alt="image-20231018112912780"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231018112912780.png" alt="image-20231018112912780"></p>
 </li>
 <li><p>mutex 加锁</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230924225652184.png" alt="image-20230924225652184"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/09/image-20230924225652184.png" alt="image-20230924225652184"></p>
 </li>
 </ul>
 <h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><p class="fireman-p-indent" ><span class="exturl" data-url="aHR0cHM6Ly9kYXZlLmNoZW5leS5uZXQvMjAxOC8wMS8wNi9pZi1hbGlnbmVkLW1lbW9yeS13cml0ZXMtYXJlLWF0b21pYy13aHktZG8td2UtbmVlZC10aGUtc3luYy1hdG9taWMtcGFja2FnZQ==">If aligned memory writes are atomic, why do we need the sync&#x2F;atomic package?<i class="fa fa-external-link-alt"></i></span></p>
@@ -684,7 +687,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -692,7 +700,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -702,6 +712,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/2f5e.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 

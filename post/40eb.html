@@ -21,8 +21,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在当今的软件开发中，微服务架构已经成为一种流行的设计模式。然而，随着系统规模的增长和复杂性的提高，确保微服务的可用性变得越来越重要。本文将探讨微服务可用性设计中的一个关键概念：隔离。通过合理的隔离策略，我们可以有效地降低故障的传播范围，提高整体系统的稳定性和可靠性。">
 <meta property="og:type" content="article">
@@ -83,7 +86,7 @@
         .fireman-span-indent{
             padding-left:2em;
         }
-    </style ><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+    </style ><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
@@ -319,7 +322,7 @@
 <p class="fireman-p-indent" >“缓存行伪共享”（cacheline false sharing）是指在多线程编程中，当多个线程同时访问位于同一缓存行（cacheline）中的不同变量时，由于缓存一致性协议的机制，可能导致额外的性能开销。尽管这些变量彼此之间没有直接的依赖关系，但由于它们位于同一缓存行中，当一个线程修改其中一个变量时，会导致整个缓存行无效，从而使其他线程需要重新从主内存中读取自己所需的变量。</p>
 <p class="fireman-p-indent" >这种现象会降低程序的性能，因为频繁的缓存行无效和内存访问会导致额外的延迟。为了减少缓存行伪共享的影响，可以采取措施，如通过调整变量的布局，使得不同的变量位于不同的缓存行，或者使用填充字节（padding）来确保变量之间有足够的间隔，避免它们位于同一缓存行中。这样可以减少缓存行无效的次数，提高程序的性能。</p>
 </blockquote>
-<p class="fireman-p-indent" > <img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019174246865.png" alt="image-20231019174246865"></p>
+<p class="fireman-p-indent" > <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019174246865.png" alt="image-20231019174246865"></p>
 <p class="fireman-p-indent" >比如 <code>CND</code> 场景中，将静态资源和动态资源 <code>API</code> 分离，也是体现了隔离的思路：</p>
 <ul>
 <li>降低应用服务器负载，静态文件访问负载全部通过 <code>CDN</code></li>
@@ -328,7 +331,7 @@
 <li>静态 <code>CDN</code> 带宽加速，延迟低</li>
 </ul>
 <p class="fireman-p-indent" >又例如稿件表：</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019174926957.png" alt="image-20231019174926957"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019174926957.png" alt="image-20231019174926957"></p>
 <ul>
 <li><p><code>archive</code>：稿件表，存储稿件的名称、作者、分类、tag、状态等信息，表示稿件的基本信息。</p>
 <p>在一个投稿流程中，一旦稿件创建改动的频率比较低</p>
@@ -345,13 +348,13 @@
 </ul>
 <h1 id="轻重隔离"><a href="#轻重隔离" class="headerlink" title="轻重隔离"></a>轻重隔离</h1><p class="fireman-p-indent" >核心是根据资源的重要性，将重要资源和不重要资源隔离开来，同时重要资源之间也相互隔离，以保证一些资源崩溃的时候，另外一些资源不会受到影响。资源一般就是服务和数据。而判断是否需要隔离的标准则很多，可以是业务的业务价值，服务 QPS，数据的价值，数据被访问 QPS 等，由此引申出来了核心隔离、快慢隔离、热点隔离。</p>
 <h2 id="核心隔离"><a href="#核心隔离" class="headerlink" title="核心隔离"></a>核心隔离</h2><p class="fireman-p-indent" >业务按照 Level 进行资源池划分（L0&#x2F;L1&#x2F;L2）</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019175646633.png" alt="image-20231019175646633"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019175646633.png" alt="image-20231019175646633"></p>
 <ul>
 <li>核心&#x2F;非核心的故障域的差异隔离（机器资源、依赖资源）</li>
 <li>多集群，通过冗余资源来提升吞吐和容灾能力</li>
 </ul>
 <h2 id="快慢隔离"><a href="#快慢隔离" class="headerlink" title="快慢隔离"></a>快慢隔离</h2><p class="fireman-p-indent" >如果将服务的吞吐想象为一个池，当突然洪流进来时（大量的请求，或者小请求但是请求吃很多资源），池子需要一定时间才能排放完（处理某一个请求，导致其他请求无法处理），这时候其他支流在池子里待的时间取决于前面的排放能力，耗时就会增高，对小请求产生影响。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019180436302.png" alt="image-20231019180436302"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231019180436302.png" alt="image-20231019180436302"></p>
 <p class="fireman-p-indent" >日志传输体系的架构设计中，整个流都会投放到一个 <code>kafka topic</code> 中（早期设计目的：更好的顺序 IO )，流内会区分不同的 <code>logid</code>，<code>logid</code> 会有不同的 <code>sink</code> 端，他们之前会出现差速，比如 <code>HDFS</code> 抖动吞吐下降， <code>ES</code> 正常水位，全局数据就会整体反压。</p>
 <ul>
 <li>按照各种维度隔离：<code>sink</code>、部门、业务、<code>logid</code>、重要性（S&#x2F;A&#x2F;B&#x2F;C）</li>
@@ -361,10 +364,10 @@
 <p class="fireman-p-indent" >很多时候我们希望统计某个热点数据中访问频次最高的 <code>Top K</code> 数据，并对其访问进行缓存。比如：</p>
 <ul>
 <li><p>小表广播（被动预热）：从 <code>remotecache</code> 提升为 <code>localcache</code>，<code>app</code> 定时更新，甚至可以让运营平台支持广播刷新 <code>localcache</code>。使用 <code>atomic.Value</code></p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020100002346.png" alt="image-20231020100002346"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020100002346.png" alt="image-20231020100002346"></p>
 </li>
 <li><p>主动预热：比如直播房间页高在线情况下 <code>bypass</code> 旁路监控主动防御。</p>
-<p><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020100026520.png" alt="image-20231020100026520"></p>
+<p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020100026520.png" alt="image-20231020100026520"></p>
 </li>
 </ul>
 <h1 id="物理隔离"><a href="#物理隔离" class="headerlink" title="物理隔离"></a>物理隔离</h1><p class="fireman-p-indent" >比较多的是指进程隔离、线程隔离和集群隔离。</p>
@@ -373,19 +376,19 @@
 <p class="fireman-p-indent" >目前来说，大规模采用 <code>docker</code> 之类的容器技术应该算是最为典型的。</p>
 <h2 id="线程隔离"><a href="#线程隔离" class="headerlink" title="线程隔离"></a>线程隔离</h2><p class="fireman-p-indent" >主要通过线程池进行隔离，也是实现服务隔离的基础。把业务进行分类并交给不同的线程池进行处理，当某个线程池处理一种业务请求发生问题时，不会将故障扩散和影响到其他线程池，保证服务可用。</p>
 <p class="fireman-p-indent" >例如 <code>Tomcat</code> 的线程池，需要同时处理用户服务、推荐服务、积分服务。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020100533281.png" alt="image-20231020100533281"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020100533281.png" alt="image-20231020100533281"></p>
 <p class="fireman-p-indent" >当推荐服务无可用线程导致调用失败，有效的线程隔离可以不影响用户服务和积分服务。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020101208490.png" alt="image-20231020101208490"></p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020101213671.png" alt="image-20231020101213671"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020101208490.png" alt="image-20231020101208490"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020101213671.png" alt="image-20231020101213671"></p>
 <p class="fireman-p-indent" >对于 Go 来说，所有 <code>IO</code> 都是 <code>Nonblocking</code>，且托管给了 <code>Runtime</code>，只会阻塞 <code>Goroutine</code>，不阻塞 <code>M</code>，所以只需要考虑 <code>Goroutine</code> 总量的控制，不需要线程模型语言的线程隔离。</p>
 <p class="fireman-p-indent" >在 <code>Java</code> 中，除了线程池隔离，也有基于信号量的做法。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020101447494.png" alt="image-20231020101447494"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020101447494.png" alt="image-20231020101447494"></p>
 <p class="fireman-p-indent" >当信号量达到 <code>maxConcurrentRequests</code> 后，再请求会触发 <code>fallback</code>。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020101605562.png" alt="image-20231020101605562"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020101605562.png" alt="image-20231020101605562"></p>
 <p class="fireman-p-indent" >而线程池则是当线程池达到 <code>maxSize</code> 后，再请求会触发 <code>fallback</code> 接口进行熔断。</p>
 <h2 id="进程隔离"><a href="#进程隔离" class="headerlink" title="进程隔离"></a>进程隔离</h2><p class="fireman-p-indent" >容器化（<code>docker</code>），容器编排引擎（<code>k8s</code>)。比如早期在 <code>KVM</code> 上部署服务，到 <code>Docker Swarm</code>；再到 <code>Kubernetes</code>，去全部托管在线应用；迁移到弹性公有云；离线<code>Yarn</code> 和在线 <code>k8s</code> 做离线混部（错峰使用），之后计划弹性公有云配合自建 <code>IDC</code> 做到离线的混合云架构。</p>
 <h2 id="集群隔离"><a href="#集群隔离" class="headerlink" title="集群隔离"></a>集群隔离</h2><p class="fireman-p-indent" >例如 <code>gRPC</code>，可以使用多集群方案，在 <code>metadata</code> 中通过租户实现隔离，以及多集群方案，逻辑上虽然是一个应用，但是物理上部署多套应用，通过 <code>cluster</code> 区分。</p>
-<p class="fireman-p-indent" ><img src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020095613623.png" alt="账号多活"></p>
+<p class="fireman-p-indent" ><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231020095613623.png" alt="账号多活"></p>
 <p class="fireman-p-indent" >多活减少完毕后，应用可以划分为：<code>region.zone.cluster.appid</code></p>
 <h2 id="Case-Stduy"><a href="#Case-Stduy" class="headerlink" title="Case Stduy"></a>Case Stduy</h2><ul>
 <li><p>早期转码集群被超大视频攻击，导致转码大量延迟；</p>
@@ -487,7 +490,12 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
@@ -495,7 +503,9 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
+  <script src="/js/third-party/pace.js"></script>
 
 
   
@@ -505,6 +515,9 @@
   <script src="/js/third-party/statistics/lean-analytics.js"></script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/40eb.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
 <script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
 <script src="/js/third-party/comments/disqus.js"></script>
 
