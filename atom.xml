@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-03-01T03:58:16.415Z</updated>
+  <updated>2024-03-08T01:26:38.195Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>基于 Istio 的⾼级流量管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/a0155a17.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/a0155a17.html</id>
+    <published>2024-02-29T16:00:00.000Z</published>
+    <updated>2024-03-08T01:26:38.195Z</updated>
+    
+    
+    <summary type="html">通过 Istio 的强大功能，可以实现流量控制、智能路由和负载均衡等高级数据管理功能，并且构建稳健的微服务架构，优化流量控制策略以提高性能和可靠性。</summary>
+    
+    
+    
+    <category term="云原生训练营" scheme="https://www.xiaoyeshiyu.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>将应用迁移至Kubernetes平台</title>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">在现代分布式系统中，数据一致性是至关重要的。而分布式事务作为一种关键的技术手段，能够确保在分布式环境下的数据操作的一致性。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>分布式缓存</title>
-    <link href="https://www.xiaoyeshiyu.com/post/8bda.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/8bda.html</id>
-    <published>2023-11-01T16:00:00.000Z</published>
-    <updated>2023-11-09T06:21:52.982Z</updated>
-    
-    
-    <summary type="html">在当今的分布式系统中，高性能和可扩展性是至关重要的。而分布式缓存作为一种关键的技术手段，能够显著提升系统的性能和可扩展性。</summary>
     
     
     
