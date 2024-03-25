@@ -66,7 +66,7 @@
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-17-59-image-20240224221759457.png">
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F22-19-16-image-20240224221916685.png">
 <meta property="article:published_time" content="2024-02-22T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-03-01T03:58:16.415Z">
+<meta property="article:modified_time" content="2024-03-08T03:12:01.749Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -201,13 +201,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">136</span>
+          <span class="site-state-item-count">137</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -280,7 +280,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-03-01 11:58:16" itemprop="dateModified" datetime="2024-03-01T11:58:16+08:00">2024-03-01</time>
+      <time title="Modified: 2024-03-08 11:12:01" itemprop="dateModified" datetime="2024-03-08T11:12:01+08:00">2024-03-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -846,9 +846,8 @@
 </ul>
 </li>
 <li><p>有状态应用的复杂配置</p>
-<p>todo</p>
 <ul>
-<li>与无状态应用不一样，MySQL 需要复杂配置以完成 galara 集群的构建 <code>/etc/mysql/conf.d/galera.cnf</code></li>
+<li>与无状态应用不一样，MySQL 需要复杂配置以完成 <code>galara</code> 集群的构建 <code>/etc/mysql/conf.d/galera.cnf</code></li>
 </ul>
 </li>
 </ol>
@@ -1105,8 +1104,7 @@
 </ul>
 <p>注意：</p>
 <p>VPA 目前还没有生产就绪，在使用之前需要了解资源调节对应用的影响。</p>
-<h2 id="VPA-架构图"><a href="#VPA-架构图" class="headerlink" title="VPA 架构图"></a>VPA 架构图</h2><p>todo：</p>
-<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F18-29-53-vpa-architecture.png" alt="../../../img/kubernetes/vpa/vpa-architecture.png"></p>
+<h2 id="VPA-架构图"><a href="#VPA-架构图" class="headerlink" title="VPA 架构图"></a>VPA 架构图</h2><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F02%2F24%2F18-29-53-vpa-architecture.png" alt="../../../img/kubernetes/vpa/vpa-architecture.png"></p>
 <h2 id="VPA-组件"><a href="#VPA-组件" class="headerlink" title="VPA 组件"></a>VPA 组件</h2><ul>
 <li>VPA 引入了一种新型的 API 资源：<code>VerticalPodAutoscaler</code></li>
 <li><strong>VPA <code>Recommender</code></strong> 监视所有 Pod，不断为它们计算新的推荐资源，并将推荐值存储在 VPA 对象中。它使用来自 <code>Metrics-Server</code> 的集群中所有 Pod 的利用率和 OOM 事件。</li>
