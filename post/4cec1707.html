@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.1.1">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="S_5aoPFd3QQihrUOLiKdVR0Mj4fj6n6qJojwyjj9cAY">
+  <meta name="msvalidate.01" content="9032A67FCF787F07CB04374E59E518A9">
+  <meta name="baidu-site-verification" content="code-Onlniop0d6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.css" integrity="sha256-6cQIC71/iBIYXFK+0RHAvwmjwWzkWd+r7v/BX3/vZDc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Nginx 使用的比较多的是它的负载均衡和反向代理能力，作为网关或者 LB。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx负载均衡和反向代理">
+<meta property="og:url" content="https://www.xiaoyeshiyu.com/post/4cec1707.html">
+<meta property="og:site_name" content="小夜时雨">
+<meta property="og:description" content="Nginx 使用的比较多的是它的负载均衡和反向代理能力，作为网关或者 LB。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-30-38-image-20240323183038173.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-32-26-image-20240323183226774.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-35-13-image-20240323183513511.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-59-55-image-20240323185955285.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F19-52-31-image-20240323195231676.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F19-52-42-image-20240323195242671.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F19-53-42-image-20240323195342578.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F19-54-24-image-20240323195424185.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F00-14-46-image-20240324001446617.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F11-38-20-image-20240324113820069.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F11-46-09-image-20240324114609246.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F12-24-16-image-20240324122416413.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F12-27-21-image-20240324122721081.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F12-30-23-image-20240324123023310.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-01-03-image-20240324130103836.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-09-12-image-20240324130911904.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-09-21-image-20240324130921799.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-09-54-image-20240324130954075.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-16-48-image-20240324131648320.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-17-48-image-20240324131748222.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-19-29-image-20240324131929612.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-19-53-image-20240324131953402.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-26-14-image-20240324132614452.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-27-48-image-20240324132748591.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-30-53-image-20240324133053594.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-31-12-image-20240324133112463.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-39-34-image-20240324133934729.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-39-50-image-20240324133950165.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F14-01-24-image-20240324140124381.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F14-16-07-image-20240324141607692.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F14-19-00-image-20240324141900121.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-20-37-image-20240324162037530.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-21-04-image-20240324162104669.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-22-00-image-20240324162200214.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-29-40-image-20240324162940560.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-33-00-image-20240324163300008.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-34-57-image-20240324163457533.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-39-09-image-20240324163909591.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-45-13-image-20240324164513109.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-46-07-image-20240324164607377.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-48-00-image-20240324164800445.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-48-21-image-20240324164820997.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-48-42-image-20240324164842013.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-48-55-image-20240324164855206.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-49-05-image-20240324164905322.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-49-26-image-20240324164926174.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-53-08-image-20240324165308234.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-58-34-image-20240324165834631.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-59-09-image-20240324165909743.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-59-24-image-20240324165924570.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-59-40-image-20240324165940695.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-04-23-image-20240324170423433.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-09-12-image-20240324170912031.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-14-05-image-20240324171405584.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-15-50-image-20240324171550885.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-16-21-image-20240324171621202.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-16-57-image-20240324171657442.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-17-21-image-20240324171721779.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-18-06-image-20240324171806253.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-18-39-image-20240324171839166.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-18-45-image-20240324171845663.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-19-10-image-20240324171910919.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-21-03-image-20240324172102999.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-29-02-image-20240324172902140.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-29-18-image-20240324172918894.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-51-30-image-20240325005130744.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-54-40-image-20240325005440455.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-54-49-image-20240325005449092.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-55-01-image-20240325005500919.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-55-32-image-20240325005532502.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-59-32-image-20240325005932891.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F01-01-08-image-20240325010108730.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-15-49-image-20240325101549689.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-17-19-image-20240325101719100.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-17-33-image-20240325101733785.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-17-48-image-20240325101748110.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-18-14-image-20240325101814193.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-18-25-image-20240325101825236.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-19-00-image-20240325101900749.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-20-25-image-20240325102025867.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-26-18-image-20240325102618341.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-32-41-image-20240325103241309.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-19-00-image-20240325111900834.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-20-37-image-20240325112037414.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-32-15-image-20240325113215179.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-47-36-image-20240325114736275.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-48-56-image-20240325114856854.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-50-06-image-20240325115006285.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-50-24-image-20240325115024477.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-54-17-image-20240325115417485.png">
+<meta property="article:published_time" content="2024-03-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-25T03:55:34.983Z">
+<meta property="article:author" content="Mitaka xu">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-30-38-image-20240323183038173.png">
+
+
+<link rel="canonical" href="https://www.xiaoyeshiyu.com/post/4cec1707.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://www.xiaoyeshiyu.com/post/4cec1707.html","path":"post/4cec1707.html","title":"Nginx负载均衡和反向代理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nginx负载均衡和反向代理 | 小夜时雨</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBVJ11TVHH"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-MBVJ11TVHH","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?573725610fbc6ff9b42032bd13615370"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start --><script src="https://cdn.jsdelivr.net/gh/BP-Devteam/sitescansense/s3module.min.js"></script><!-- hexo injector head_end end --><link rel="alternate" href="/atom.xml" title="小夜时雨" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">小夜时雨</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">君子敬其在己者，而不慕其在天者，是以日进也。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a></li><li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">1.</span> <span class="nav-text">负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nginx-%E5%9C%A8-AKF-%E6%89%A9%E5%B1%95%E7%AB%8B%E6%96%B9%E4%BD%93%E4%B8%8A%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">Nginx 在 AKF 扩展立方体上的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%A4%9A%E7%A7%8D%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">支持多种协议的反向代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E7%BC%93%E5%AD%98"><span class="nav-number">1.3.</span> <span class="nav-text">反向代理与缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E4%B8%8A%E6%B8%B8%E6%9C%8D%E5%8A%A1%E5%9C%B0%E5%9D%80%E7%9A%84-upstream-%E4%B8%8E-server-%E6%8C%87%E4%BB%A4"><span class="nav-number">1.4.</span> <span class="nav-text">指定上游服务地址的 upstream 与 server 指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E6%9D%83-Round-Robin-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95"><span class="nav-number">1.5.</span> <span class="nav-text">加权 Round-Robin 负载均衡算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%B8%8A%E6%B8%B8%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8-keepalive-%E9%95%BF%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.6.</span> <span class="nav-text">对上游服务使用 keepalive 长连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E4%B8%8A%E6%B8%B8%E6%9C%8D%E5%8A%A1%E5%9F%9F%E5%90%8D%E8%A7%A3%E6%9E%90"><span class="nav-number">1.7.</span> <span class="nav-text">指定上游服务域名解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AE%A2%E6%88%B7%E7%AB%AF-IP-%E5%9C%B0%E5%9D%80%E7%9A%84-Hash-%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-number">1.8.</span> <span class="nav-text">基于客户端 IP 地址的 Hash 算法实现负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hash-%E7%AE%97%E6%B3%95%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.9.</span> <span class="nav-text">hash 算法的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7-hash-%E7%AE%97%E6%B3%95"><span class="nav-number">1.10.</span> <span class="nav-text">一致性 hash 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E9%80%89%E6%8B%A9%E8%BF%9E%E6%8E%A5%E6%9C%80%E5%B0%91%E7%9A%84%E4%B8%8A%E6%B8%B8%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.11.</span> <span class="nav-text">优先选择连接最少的上游服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E4%BD%BF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5%E5%AF%B9%E6%89%80%E6%9C%89-worker-%E8%BF%9B%E7%A8%8B%E7%94%9F%E6%95%88"><span class="nav-number">1.11.1.</span> <span class="nav-text">使用共享内存使负载均衡策略对所有  worker 进程生效</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#upstream-%E6%A8%A1%E5%9D%97%E9%97%B4%E7%9A%84%E9%A1%BA%E5%BA%8F"><span class="nav-number">1.12.</span> <span class="nav-text">upstream 模块间的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#upstream-%E6%A8%A1%E5%9D%97%E6%8F%90%E4%BE%9B%E7%9A%84%E5%8F%98%E9%87%8F%EF%BC%88%E4%B8%8D%E5%90%AB-cache%EF%BC%89"><span class="nav-number">1.13.</span> <span class="nav-text">upstream 模块提供的变量（不含 cache）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">反向代理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proxy-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.2.</span> <span class="nav-text">Proxy 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E6%8C%87%E4%BB%A4%E4%BF%AE%E6%94%B9%E5%8F%91%E5%BE%80%E4%B8%8A%E6%B8%B8%E7%9A%84%E8%AF%B7%E6%B1%82"><span class="nav-number">2.3.</span> <span class="nav-text">根据指令修改发往上游的请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E8%AF%B7%E6%B1%82%E8%A1%8C"><span class="nav-number">2.3.1.</span> <span class="nav-text">生成请求行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%8C%85%E4%BD%93"><span class="nav-number">2.3.2.</span> <span class="nav-text">生成包体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nginx-%E6%8E%A5%E6%94%B6%E8%AF%B7%E6%B1%82%E5%8C%85%E4%BD%93%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">2.4.</span> <span class="nav-text">Nginx 接收请求包体的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8C%85%E4%BD%93%E7%9A%84%E6%8E%A5%E6%94%B6"><span class="nav-number">2.4.1.</span> <span class="nav-text">客户端包体的接收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E4%B8%8A%E6%B8%B8%E6%9C%8D%E5%8A%A1%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5"><span class="nav-number">2.5.</span> <span class="nav-text">向上游服务建立连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E6%94%B6%E4%B8%8A%E6%B8%B8%E7%9A%84%E5%93%8D%E5%BA%94"><span class="nav-number">2.6.</span> <span class="nav-text">接收上游的响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%84%E7%90%86%E4%B8%8A%E6%B8%B8%E7%9A%84%E5%93%8D%E5%BA%94%E5%A4%B4%E9%83%A8"><span class="nav-number">2.7.</span> <span class="nav-text">处理上游的响应头部</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E6%B8%B8%E5%87%BA%E7%8E%B0%E5%A4%B1%E8%B4%A5%E6%97%B6%E7%9A%84%E5%AE%B9%E9%94%99%E6%96%B9%E6%A1%88"><span class="nav-number">2.8.</span> <span class="nav-text">上游出现失败时的容错方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%B8%8A%E6%B8%B8%E6%9C%8D%E5%8A%A1%E4%BD%BF%E7%94%A8-SSL"><span class="nav-number">2.9.</span> <span class="nav-text">对上游服务使用 SSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E4%B8%8E-Nginx-%E7%BC%93%E5%AD%98"><span class="nav-number">2.10.</span> <span class="nav-text">浏览器缓存与 Nginx 缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98"><span class="nav-number">2.10.1.</span> <span class="nav-text">浏览器缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#not-modified-%E8%BF%87%E6%BB%A4%E6%A8%A1%E5%9D%97"><span class="nav-number">2.10.2.</span> <span class="nav-text">not_modified 过滤模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx-%E7%BC%93%E5%AD%98"><span class="nav-number">2.10.3.</span> <span class="nav-text">Nginx 缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%B7%E6%B1%82%E7%9A%84%E7%BC%93%E5%AD%98%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">2.10.4.</span> <span class="nav-text">对客户端请求的缓存处理流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E6%94%B6%E4%B8%8A%E6%B8%B8%E5%93%8D%E5%BA%94%E7%9A%84%E7%BC%93%E5%AD%98%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">2.10.5.</span> <span class="nav-text">接收上游响应的缓存处理流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%8F%E8%BD%BB%E7%BC%93%E5%AD%98%E5%A4%B1%E6%95%88%E6%97%B6%E4%B8%8A%E6%B8%B8%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%8E%8B%E5%8A%9B"><span class="nav-number">2.10.6.</span> <span class="nav-text">减轻缓存失效时上游服务的压力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8A%E6%97%B6%E6%B8%85%E9%99%A4%E7%BC%93%E5%AD%98"><span class="nav-number">2.10.7.</span> <span class="nav-text">及时清除缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">2.11.</span> <span class="nav-text">其他协议的反向代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memcached-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">2.12.</span> <span class="nav-text">memcached 反向代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websocket-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">2.13.</span> <span class="nav-text">websocket 反向代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E5%88%86%E7%89%87%E6%8F%90%E5%8D%87%E7%BC%93%E5%AD%98%E6%95%88%E7%8E%87"><span class="nav-number">2.14.</span> <span class="nav-text">用分片提升缓存效率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87-open-file-cache-%E6%8F%90%E5%8D%87%E6%80%A7%E8%83%BD"><span class="nav-number">2.15.</span> <span class="nav-text">通过 open file cache 提升性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP2-%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.16.</span> <span class="nav-text">HTTP2 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">2.16.1.</span> <span class="nav-text">核心概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE%E5%88%86%E5%B1%82"><span class="nav-number">2.16.2.</span> <span class="nav-text">协议分层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-number">2.16.3.</span> <span class="nav-text">多路复用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">2.16.4.</span> <span class="nav-text">数据流优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E5%A4%B4%E5%8E%8B%E7%BC%A9"><span class="nav-number">2.16.5.</span> <span class="nav-text">标头压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frame-%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.16.6.</span> <span class="nav-text">Frame 格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8E%A8%E9%80%81-PUSH"><span class="nav-number">2.16.7.</span> <span class="nav-text">服务器推送 PUSH</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http2"><span class="nav-number">2.17.</span> <span class="nav-text">http2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx-%E6%8E%A8%E9%80%81%E8%B5%84%E6%BA%90"><span class="nav-number">2.17.1.</span> <span class="nav-text">Nginx 推送资源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#grpc-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">2.18.</span> <span class="nav-text">grpc 反向代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.19.</span> <span class="nav-text">stream 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stream-%E6%A8%A1%E5%9D%97%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82%E7%9A%84-7-%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="nav-number">2.19.1.</span> <span class="nav-text">stream 模块处理请求的 7 个阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82%E7%9B%B8%E5%85%B3%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">2.19.2.</span> <span class="nav-text">传输层相关的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx-%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F"><span class="nav-number">2.19.3.</span> <span class="nav-text">Nginx 系统变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#content-%E9%98%B6%E6%AE%B5"><span class="nav-number">2.19.4.</span> <span class="nav-text">content 阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proxy-protocol-%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.19.5.</span> <span class="nav-text">proxy_protocol 协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stream-%E5%A4%84%E7%90%86-proxy-protocol-%E6%B5%81%E7%A8%8B"><span class="nav-number">2.19.6.</span> <span class="nav-text">stream 处理 proxy_protocol 流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#post-accept-%E9%98%B6%E6%AE%B5"><span class="nav-number">2.19.7.</span> <span class="nav-text">post_accept 阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#preaccess-%E9%98%B6%E6%AE%B5%E7%9A%84-limit-conn-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.19.8.</span> <span class="nav-text">preaccess 阶段的 limit_conn 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#access-%E9%98%B6%E6%AE%B5%E7%9A%84-access-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.19.9.</span> <span class="nav-text">access 阶段的 access 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#log-%E9%98%B6%E6%AE%B5%E7%9A%84-stream-log-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.19.10.</span> <span class="nav-text">log 阶段的 stream_log 模块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-%E6%A8%A1%E5%9D%97-TLS-SSL-%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">2.20.</span> <span class="nav-text">stream 模块 TLS&#x2F;SSL 应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stream-%E4%B8%AD%E7%9A%84-ssl"><span class="nav-number">2.20.1.</span> <span class="nav-text">stream 中的 ssl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%AF%B9%E6%AF%94-HTTP-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.20.2.</span> <span class="nav-text">指令对比 HTTP 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssl-%E6%A8%A1%E5%9D%97%E6%8F%90%E4%BE%9B%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">2.20.3.</span> <span class="nav-text">ssl 模块提供的变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ssl-preread-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.21.</span> <span class="nav-text">ssl_preread 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#preread-%E9%98%B6%E6%AE%B5%EF%BC%9Assl-preread-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.21.1.</span> <span class="nav-text">preread 阶段：ssl_preread 模块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86-stream-proxy-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.22.</span> <span class="nav-text">反向代理 stream_proxy 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#proxy-%E6%A8%A1%E5%9D%97%E5%AF%B9%E4%B8%8A%E4%B8%8B%E6%B8%B8%E7%9A%84%E9%99%90%E9%80%9F%E6%8C%87%E4%BB%A4"><span class="nav-number">2.22.1.</span> <span class="nav-text">proxy 模块对上下游的限速指令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%8C%87%E4%BB%A4"><span class="nav-number">2.23.</span> <span class="nav-text">stream 反向代理指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">2.24.</span> <span class="nav-text">UDP 反向代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%8F%E4%BC%A0-IP-%E5%9C%B0%E5%9D%80"><span class="nav-number">2.25.</span> <span class="nav-text">透传 IP 地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%BA%90-IP-%E5%92%8C%E8%B7%AF%E7%94%B1"><span class="nav-number">2.25.1.</span> <span class="nav-text">修改源 IP 和路由</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mitaka xu"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Mitaka xu</p>
+  <div class="site-description" itemprop="description">Golang开发博客</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">138</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;xiaoyeshiyu"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/4cec1707.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Mitaka xu">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小夜时雨">
+      <meta itemprop="description" content="Golang开发博客">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Nginx负载均衡和反向代理 | 小夜时雨">
+      <meta itemprop="description" content="Nginx 使用的比较多的是它的负载均衡和反向代理能力，作为网关或者 LB。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nginx负载均衡和反向代理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-03-23 00:00:00" itemprop="dateCreated datePublished" datetime="2024-03-23T00:00:00+08:00">2024-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-03-25 11:55:34" itemprop="dateModified" datetime="2024-03-25T11:55:34+08:00">2024-03-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Nginx/" itemprop="url" rel="index"><span itemprop="name">Nginx</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/post/4cec1707.html" class="post-meta-item leancloud_visitors" data-flag-title="Nginx负载均衡和反向代理" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+            <div class="post-description">Nginx 使用的比较多的是它的负载均衡和反向代理能力，作为网关或者 LB。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-30-38-image-20240323183038173.png" alt="image-20240323183038173"></p>
+<p>负载均衡：Nginx 的负载均衡是保障服务可用性的重要手段。当服务异常或者处于扩容中无法提供服务时，可以让请求绕过这些节点。</p>
+<h2 id="Nginx-在-AKF-扩展立方体上的应用"><a href="#Nginx-在-AKF-扩展立方体上的应用" class="headerlink" title="Nginx 在 AKF 扩展立方体上的应用"></a>Nginx 在 AKF 扩展立方体上的应用</h2><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-32-26-image-20240323183226774.png" alt="image-20240323183226774"></p>
+<ul>
+<li>X：基于 Round-Robin 或者 <code>least-connected</code> 算法分发请求</li>
+<li>Y：基于 URL 对功能进行分发</li>
+<li>X：将用户 IP 地址或者其他信息映射到某个特定的服务或者集群</li>
+</ul>
+<h2 id="支持多种协议的反向代理"><a href="#支持多种协议的反向代理" class="headerlink" title="支持多种协议的反向代理"></a>支持多种协议的反向代理</h2><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-35-13-image-20240323183513511.png" alt="image-20240323183513511"></p>
+<ul>
+<li>四层代理：依靠 IP地址实现，通过 <code>stream</code> 模块支持，将下游发过来的 TCP、UDP 请求转发出去</li>
+<li>七层代理：依靠业务信息，例如 Header、Method、URI 之类的，可以将 HTTP 请求作为 <code>memcached</code>、<code>scgi</code> 等协议的请求转发到上游</li>
+</ul>
+<h2 id="反向代理与缓存"><a href="#反向代理与缓存" class="headerlink" title="反向代理与缓存"></a>反向代理与缓存</h2><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F18-59-55-image-20240323185955285.png" alt="image-20240323185955285"></p>
+<p>缓存可以分为两类：</p>
+<ul>
+<li>时间缓存：将上游应用服务器的响应缓存在 Nginx 服务器的磁盘上，当下次同样的请求到达 Nginx 时，则直接返回磁盘上的内容。</li>
+<li>空间缓存：当 Nginx 访问上游服务器时，可以预取一些内容缓存到 Nginx 磁盘</li>
+</ul>
+<h2 id="指定上游服务地址的-upstream-与-server-指令"><a href="#指定上游服务地址的-upstream-与-server-指令" class="headerlink" title="指定上游服务地址的 upstream 与 server 指令"></a>指定上游服务地址的 upstream 与 server 指令</h2><p>Nginx 中将负责与上游服务交互的模块统称为 <code>upstream</code> 模块，包括 <code>stream</code>、<code>http_upstream</code>。并且提供 <code>rb</code> 负载均衡算法。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Vwc3RyZWFtX21vZHVsZS5odG1sI3Vwc3RyZWFt">https://nginx.org/en/docs/http/ngx_http_upstream_module.html#upstream<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># name 会交由后面的反向代理使用</span></span><br><span class="line"><span class="comment"># &#123;&#125; 包含一个应用服务集群，会包含很多 server</span></span><br><span class="line">Syntax:	<span class="section">upstream</span> name &#123; ... &#125;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="attribute">http</span></span><br><span class="line"></span><br><span class="line">Syntax:	server address [parameters];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br></pre></td></tr></table></figure>
+
+<p>功能：指定一组上游服务器地址，其中，地址可以是域名、IP 地址或者 <code>unix socket</code> 地址。可以在域名或者 IP 地址后加端口，如果不加端口，那么默认使用 80 端口。</p>
+<p>通用参数：</p>
+<ul>
+<li><code>backup</code>：指定当前 <code>server</code> 为备份服务，仅当非备份 <code>server</code> 不可用时，请求才会转发到该 <code>server</code></li>
+<li><code>down</code>：标识某台服务已经下线，不在服务（主要方便管理和维护）</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">upstream</span> backend &#123;</span><br><span class="line">    <span class="attribute">server</span> backend1.example.com weight=<span class="number">5</span>;</span><br><span class="line">    <span class="attribute">server</span> <span class="number">127.0.0.1:8080</span>       max_fails=<span class="number">3</span> fail_timeout=<span class="number">30s</span>;</span><br><span class="line">    <span class="attribute">server</span> unix:/tmp/backend3;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">server</span> backup1.example.com  backup;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="加权-Round-Robin-负载均衡算法"><a href="#加权-Round-Robin-负载均衡算法" class="headerlink" title="加权 Round-Robin 负载均衡算法"></a>加权 Round-Robin 负载均衡算法</h2><p>功能：在加权轮询的方式询问 <code>server</code> 指令指定的上游服务。默认集成在 Nginx 的 <code>upstream</code> 框架中。</p>
+<p>指令：</p>
+<ul>
+<li><code>weight</code>：服务访问的权重，默认是 1</li>
+<li><code>max_conns</code>：<code>server</code> 的最大并发连接数，仅作用于单 <code>worker</code> 进程。默认是 0，表示没有限制</li>
+<li><code>max_fails</code>：在 <code>fail_timeout</code> 时间段内，最大的失败次数。当达到最大失败时，会在 <code>fail_timeout</code> 秒内这台 <code>server</code> 不允许再次被选择</li>
+<li><code>fail_timeout</code>：单位为秒，默认 10 秒，具有两个功能：<ul>
+<li>指定一段时间内，也是 <code>fail_timeout</code>，最大的失败次数 <code>max_fails</code></li>
+<li>到达 <code>max_fails</code> 后，该 <code>server</code> 不能访问的时间</li>
+</ul>
+</li>
+</ul>
+<h2 id="对上游服务使用-keepalive-长连接"><a href="#对上游服务使用-keepalive-长连接" class="headerlink" title="对上游服务使用 keepalive 长连接"></a>对上游服务使用 keepalive 长连接</h2><p>功能：通过复用连接，降低 Nginx 与上游服务器建立、关闭连接的消耗，提升吞吐量的同时，降低时延（上游服务器数量有限，效果更好）</p>
+<p>对上游连接的 <code>http</code> 头部增加设定：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>; <span class="comment"># http 1.0 协议不支持，为了防止用户发来的是 1.0 版本协议，设置覆盖 1.1</span></span><br><span class="line"><span class="attribute">proxy_set_header</span> Connection <span class="string">&quot;&quot;</span>; <span class="comment"># 为了防止用户请求header 中 Connection 是 close，而不是 keep-alive，设置覆盖</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置 Nginx 到上游配置的服务器，每个工作进程最多保持多少个空闲的连接用于 keepalive 请求</span></span><br><span class="line">Syntax:	<span class="attribute">keepalive</span> connections; </span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">1</span>.<span class="number">4</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一条 TCP 连接上最多跑多少个请求</span></span><br><span class="line">Syntax:	keepalive_requests number;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">keepalive_requests</span> <span class="number">1000</span>;</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">15</span>.<span class="number">3</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个 TCP 连接在处理完请求后，最多 60s 没有请求就关闭 TCP 连接</span></span><br><span class="line">Syntax:	keepalive_timeout timeout;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">keepalive_timeout</span> <span class="number">60s</span>;</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">15</span>.<span class="number">3</span>.</span><br></pre></td></tr></table></figure>
+
+<h2 id="指定上游服务域名解析"><a href="#指定上游服务域名解析" class="headerlink" title="指定上游服务域名解析"></a>指定上游服务域名解析</h2><p><code>resolver</code> 指令，解析上游服务域名，以及域名解析超时时间</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">resolver</span> address ... [valid=time] [ipv4=<span class="literal">on</span>|<span class="literal">off</span>] [ipv6=<span class="literal">on</span>|<span class="literal">off</span>] [status_zone=zone];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">17</span>.<span class="number">5</span>.</span><br><span class="line"></span><br><span class="line">Syntax:	resolver_timeout time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">resolver_timeout</span> <span class="number">30s</span>;</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">17</span>.<span class="number">5</span>.</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于客户端-IP-地址的-Hash-算法实现负载均衡"><a href="#基于客户端-IP-地址的-Hash-算法实现负载均衡" class="headerlink" title="基于客户端 IP 地址的 Hash 算法实现负载均衡"></a>基于客户端 IP 地址的 Hash 算法实现负载均衡</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Vwc3RyZWFtX21vZHVsZS5odG1sI2lwX2hhc2g=">https://nginx.org/en/docs/http/ngx_http_upstream_module.html#ip_hash<i class="fa fa-external-link-alt"></i></span></p>
+<p><code>ip_hash</code> 功能：以客户端的 IP 地址（<code>remote-addr</code>）作为 hash 算法的关键字，映射到特定的上游服务器中。</p>
+<ul>
+<li>对 IPv4 地址使用前 3 个字节作为关键字，对 IPv6 则使用完整地址（16个字节）</li>
+<li>可以使用 <code>round-robin</code> 算法的参数</li>
+<li>可以基于 <code>realip</code> 模块修改用于执行算法的 IP 地址</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	ip_hash;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br></pre></td></tr></table></figure>
+
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Vwc3RyZWFtX21vZHVsZS5odG1sI2hhc2g=">https://nginx.org/en/docs/http/ngx_http_upstream_module.html#hash<i class="fa fa-external-link-alt"></i></span></p>
+<p><code>hash</code> 功能：通过指定关键字作为 <code>hash key</code>，基于 <code>hash</code> 算法映射到特定的上游服务器中。</p>
+<ul>
+<li>关键字可以含有变量、字符串</li>
+<li>可以使用 <code>round-robin</code> 算法的参数</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">hash</span> key [consistent];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">2</span>.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">upstream</span> backend &#123;</span><br><span class="line">    ip_hash;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">server</span> backend1.example.com;</span><br><span class="line">    <span class="attribute">server</span> backend2.example.com;</span><br><span class="line">    <span class="attribute">server</span> backend3.example.com down;</span><br><span class="line">    <span class="attribute">server</span> backend4.example.com;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="hash-算法的问题"><a href="#hash-算法的问题" class="headerlink" title="hash 算法的问题"></a>hash 算法的问题</h2><p>当上游服务器异常、扩容、缩容时，hash 算法会引发大量路由变更，可能导致缓存大范围失效。</p>
+<img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F19-52-31-image-20240323195231676.png" alt="image-20240323195231676" style="zoom:25%;" />
+
+<p>缩容后：</p>
+<img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F19-52-42-image-20240323195242671.png" alt="image-20240323195242671" style="zoom:25%;" />
+
+<h2 id="一致性-hash-算法"><a href="#一致性-hash-算法" class="headerlink" title="一致性 hash 算法"></a>一致性 hash 算法</h2><p>在一个环上获取放置节点，当扩容或者缩容，可以将部分流量迁移到其他流量，而不是所有流量。</p>
+<img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F19-53-42-image-20240323195342578.png" alt="image-20240323195342578" style="zoom:25%;" />
+
+<p>扩容后：</p>
+<img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F19-54-24-image-20240323195424185.png" alt="image-20240323195424185" style="zoom:25%;" />
+
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">hash</span> key [consistent];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">2</span>.</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>consistent</code> 开启一致性哈希算法。</p>
+<h2 id="优先选择连接最少的上游服务器"><a href="#优先选择连接最少的上游服务器" class="headerlink" title="优先选择连接最少的上游服务器"></a>优先选择连接最少的上游服务器</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Vwc3RyZWFtX21vZHVsZS5odG1sI2xlYXN0X2Nvbm4=">https://nginx.org/en/docs/http/ngx_http_upstream_module.html#least_conn<i class="fa fa-external-link-alt"></i></span></p>
+<p>从所有上游服务器中，找出当前并发连接数最少的一个，将请求转发到它。</p>
+<ul>
+<li>如果出现多个最少连接服务器的连接数都是一样的，使用 <code>round-robin</code> 算法。</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	least_conn;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in versions <span class="number">1</span>.<span class="number">3</span>.<span class="number">1</span> and <span class="number">1</span>.<span class="number">2</span>.<span class="number">2</span>.</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用共享内存使负载均衡策略对所有-worker-进程生效"><a href="#使用共享内存使负载均衡策略对所有-worker-进程生效" class="headerlink" title="使用共享内存使负载均衡策略对所有  worker 进程生效"></a>使用共享内存使负载均衡策略对所有  worker 进程生效</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Vwc3RyZWFtX21vZHVsZS5odG1sI3pvbmU=">https://nginx.org/en/docs/http/ngx_http_upstream_module.html#zone<i class="fa fa-external-link-alt"></i></span></p>
+<p>分配出共享内存，将其他 <code>upstream</code> 模块定义的负载均衡策略数据、运行时每个上游服务的状态（连接数、权重、失败次数）存放在共享内存上，以对所有 <code>nginx worker</code> 进程生效。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">zone</span> name [size];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">9</span>.<span class="number">0</span>.</span><br></pre></td></tr></table></figure>
+
+<h2 id="upstream-模块间的顺序"><a href="#upstream-模块间的顺序" class="headerlink" title="upstream 模块间的顺序"></a>upstream 模块间的顺序</h2><p>保障功能的正常运行</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ngx_module_t</span> *ngx_modules[] = &#123; </span><br><span class="line">    ......</span><br><span class="line">    &amp;ngx_http_upstream_hash_module, </span><br><span class="line">    &amp;ngx_http_upstream_ip_hash_module, </span><br><span class="line">    &amp;ngx_http_upstream_least_conn_module, </span><br><span class="line">    &amp;ngx_http_upstream_random_module, </span><br><span class="line">    &amp;ngx_http_upstream_keepalive_module, </span><br><span class="line">    &amp;ngx_http_upstream_zone_module, </span><br><span class="line">    ......</span><br><span class="line">&#125;;	</span><br></pre></td></tr></table></figure>
+
+<h2 id="upstream-模块提供的变量（不含-cache）"><a href="#upstream-模块提供的变量（不含-cache）" class="headerlink" title="upstream 模块提供的变量（不含 cache）"></a>upstream 模块提供的变量（不含 cache）</h2><ul>
+<li><code>upstream_addr</code>：上游服务器的 IP 地址，格式为可读的字符串，例如 <code>192.168.1.1:80</code></li>
+<li><code>upstream_connect_time</code>：与上游服务建立连接消耗的时间，单位为 秒，精确到毫秒</li>
+<li><code>upstream_header_time</code>：接收上游服务发回响应中 <code>http</code> 头部所消耗的时间（响应先返回 <code>header</code>），单位为秒，精确到毫秒</li>
+<li><code>upstream_response_time</code>：接收完整的上游服务响应所消耗的时间，单位为秒，精确到毫秒</li>
+<li><code>upstream_http_名称</code>：从上游服务返回的响应头部的值</li>
+<li><code>upstream_bytes_received</code>：从上游服务接收到的响应长度，单位为字节</li>
+<li><code>upstream_response_length</code>：从上游服务返回的响应包体长度，单位为字节</li>
+<li><code>upstream_status</code>：上游服务返回的 HTTP 响应中的状态码。如果未连接上，该变量值为 502</li>
+<li><code>upstream_cookie_名称</code>：从上游服务发回的响应头 Set-Cookie 中取出的 <code>cookie</code> 值</li>
+<li><code>upstream_trailer_名称</code>：从上游服务的响应尾部取到的值</li>
+</ul>
+<h1 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h1><h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F00-14-46-image-20240324001446617.png" alt="image-20240324001446617"></p>
+<ol>
+<li>当缓存未命中，与上游服务器发送请求时，是先生成请求 <code>header</code> 和 <code>body</code>，甚至会读取请求完整的 <code>body</code>（是否读取请求完整的 <code>body</code> 依据 <code>proxy_request_buffering</code> 参数，默认打开，也就是缓存到磁盘上），然后根据负载均衡策略连接上游服务器（避免上游服务器并发不强时产生影响）</li>
+<li>上游服务发回响应是先发送 <code>header</code>，Nginx 先处理响应头部，再决定如何处理 <code>body</code>。如果 <code>proxy_buffering on</code> （默认），则接收完整的响应包体之后，再发送响应包体。</li>
+</ol>
+<h2 id="Proxy-模块"><a href="#Proxy-模块" class="headerlink" title="Proxy 模块"></a>Proxy 模块</h2><p>对上游服务使用 <code>http/https</code> 协议进行反响代理。默认编译进 Nginx</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X3Bhc3M=">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_pass</span> URL;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">location</span>, if in <span class="section">location</span>, limit_except</span><br></pre></td></tr></table></figure>
+
+<p>URL 参数规则</p>
+<ul>
+<li>URL 必须以 <code>http://</code> 或者 <code>https://</code> 开头，接下来是域名、<code>IP</code>、<code>unix socket</code> 地址或者 <code>upstream</code> 的名字（代表一个集群），前两者可以在域名或者 IP 后加端口。最后时可选的 URI</li>
+<li>当 URL 参数中携带 URL 与否，会导致发向上游请求的 URL 不同：<ul>
+<li>不携带 URL，则将客户端请求中的 URL 直接转发给上游<ul>
+<li><code>location</code> 后使用正则表达式、@名字时，应采用这种方式</li>
+</ul>
+</li>
+<li>携带 URL，则对用户请求中的 URL 做如下操作：<ul>
+<li>将 <code>location</code> 参数中匹配上的一段替换为该 URI</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>该 URI 参数中可以携带变量</li>
+<li>更复杂的 URL 替换，可以在 <code>location</code> 内的配置添加 <code>rewrite break</code> 语句</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 例如下面，在端口后面有内容，就是携带 URL，此时请求 /xxx/abc，则会请求到上游的 /uri/abc</span></span><br><span class="line"><span class="comment"># 也就是 /xxx 被替换成 /uri</span></span><br><span class="line"><span class="attribute">proxy_pass</span> http://localhost:8000/uri;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下面这个不带 URL，请求 /xxx/abc，则会请求上游的 /xxx/abc</span></span><br><span class="line"><span class="attribute">proxy_pass</span> http://localhost:8000;</span><br></pre></td></tr></table></figure>
+
+<h2 id="根据指令修改发往上游的请求"><a href="#根据指令修改发往上游的请求" class="headerlink" title="根据指令修改发往上游的请求"></a>根据指令修改发往上游的请求</h2><h3 id="生成请求行"><a href="#生成请求行" class="headerlink" title="生成请求行"></a>生成请求行</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X21ldGhvZA==">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_method<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X2h0dHBfdmVyc2lvbg==">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_http_version<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X3NldF9oZWFkZXI=">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X3Bhc3NfcmVxdWVzdF9oZWFkZXJz">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass_request_headers<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置 method</span></span><br><span class="line">Syntax:	<span class="attribute">proxy_method</span> method;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改 http version</span></span><br><span class="line">Syntax:	proxy_http_version <span class="number">1</span>.<span class="number">0</span> | <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">0</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">1</span>.<span class="number">4</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment"># 若 value 的值为空字符串，则整个 header 都不会向上游发送</span></span><br><span class="line">Syntax:	proxy_set_header field value;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_set_header</span> Host <span class="variable">$proxy_host</span>;</span><br><span class="line"><span class="attribute">proxy_set_header</span> Connection close;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 是否向上游发送 header</span></span><br><span class="line">Syntax:	proxy_pass_request_headers on | off;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_pass_request_headers</span> <span class="literal">on</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="生成包体"><a href="#生成包体" class="headerlink" title="生成包体"></a>生成包体</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X3Bhc3NfcmVxdWVzdF9ib2R5">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass_request_body<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X3NldF9ib2R5">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_body<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 是否将用户请求中的 body 传递给上游</span></span><br><span class="line">Syntax:	<span class="attribute">proxy_pass_request_body</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_pass_request_body</span> <span class="literal">on</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 手动构造发往上游的 body</span></span><br><span class="line">Syntax:	proxy_set_body value;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Nginx-接收请求包体的方式"><a href="#Nginx-接收请求包体的方式" class="headerlink" title="Nginx 接收请求包体的方式"></a>Nginx 接收请求包体的方式</h2><p>收完再转发还是边收边转发。</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X3JlcXVlc3RfYnVmZmVyaW5n">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_request_buffering<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_request_buffering</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_request_buffering</span> <span class="literal">on</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">11</span>.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>启用或禁用客户端请求主体的缓冲。</p>
+<p>当启用缓冲时，整个请求主体从客户端读取后再发送给代理服务器。</p>
+<p>当禁用缓冲时，请求主体在接收到后立即发送给上游服务器。在这种情况下，如果 nginx 已经开始发送请求主体，则无法将请求传递给下一个服务器。当使用 HTTP&#x2F;1.1 分块传输编码来发送原始请求主体时，除非为代理启用了 HTTP&#x2F;1.1，否则不管指令值如何都会对请求主体进行缓冲。</p>
+</blockquote>
+<ul>
+<li><code>on</code>：接收完再转发，将 <code>body</code> 缓存在磁盘中<ul>
+<li>客户端网速慢</li>
+<li>上游服务并发处理能力低</li>
+<li>适应高吞吐量场景（打开之后，非常依赖 Nginx 的高吞吐能力）</li>
+</ul>
+</li>
+<li><code>off</code>：边接收边转发<ul>
+<li>更及时的响应</li>
+<li>降低 Nginx 读写磁盘的消耗</li>
+<li>一旦开始发送内容，<code>proxy_next_upstream</code> 功能失败</li>
+</ul>
+</li>
+</ul>
+<h3 id="客户端包体的接收"><a href="#客户端包体的接收" class="headerlink" title="客户端包体的接收"></a>客户端包体的接收</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2NvcmVfbW9kdWxlLmh0bWwjY2xpZW50X2JvZHlfYnVmZmVyX3NpemU=">https://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_buffer_size<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">client_body_buffer_size</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">client_body_buffer_size</span> <span class="number">8k</span>|<span class="number">16k</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line">Syntax:	client_body_in_single_buffer on | off;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">client_body_in_single_buffer</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>客户端发过来的请求中存在包体时，接收包体所分配的内存</p>
+<ul>
+<li>若接收头部时已经接收完全部包体，则部分配（接收 <code>header</code> 时，可能也接收到了一点包体）</li>
+<li>若剩余待接收包体的长度小于 <code>client_body_buffer_size</code>，则仅分配所需大小</li>
+<li>分配 <code>client_body_buffer_size</code> 大小内存接收包体<ul>
+<li>关闭包体缓存时，该内存上内容及时发送给上游</li>
+<li>打开包体缓存<ul>
+<li>该段大小内存用完时，写入临时文件，释放内存</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>最大包体长度限制</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">client_max_body_size</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">client_max_body_size</span> <span class="number">1m</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>仅对请求头部中含有 <code>Content-Length</code> 有效超出最大长度后，返回 413 错误。</p>
+<p><strong>临时文件路径格式</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置在哪个目录下放置 body，Nginx 启动后，默认会创建这个目录</span></span><br><span class="line"><span class="comment"># 多级子目录解决同目录下文件过多导致响应慢的问题</span></span><br><span class="line">Syntax:	<span class="attribute">client_body_temp_path</span> path [level1 [level2 [level3]]];</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">client_body_temp_path</span> client_body_temp;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 包体是否必须存放在文件中，主要用于定位问题</span></span><br><span class="line"><span class="comment"># on 代表文件不删除</span></span><br><span class="line">Syntax:	client_body_in_file_only on | clean | off;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">client_body_in_file_only</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>读取包体时的超时</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">client_body_timeout</span> time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">client_body_timeout</span> <span class="number">60s</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>读取包体时超时，则返回 408 错误。</p>
+<h2 id="向上游服务建立连接"><a href="#向上游服务建立连接" class="headerlink" title="向上游服务建立连接"></a>向上游服务建立连接</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9wcm94eV9tb2R1bGUuaHRtbCNwcm94eV9jb25uZWN0X3RpbWVvdXQ=">https://nginx.org/en/docs/stream/ngx_stream_proxy_module.html#proxy_connect_timeout<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax: <span class="attribute">proxy_connect_timeout</span> time;</span><br><span class="line">Default: <span class="attribute">proxy_connect_timeout</span> <span class="number">60s</span>;</span><br><span class="line">Context: http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>超时后，会向客户端生成 <code>http</code> 响应，响应码为 502（如果路由失效，不会等待 60s）</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_next_upstream</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_next_upstream</span> <span class="literal">on</span>;</span><br><span class="line">Context:	stream, server</span><br></pre></td></tr></table></figure>
+
+<p>当无法与代理服务器建立连接时，确定客户端连接是否将传递到下一个服务器。</p>
+<p><strong>上游连接启用 TCP keepalive</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_socket_keepalive</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_socket_keepalive</span> <span class="literal">off</span>;</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">15</span>.<span class="number">6</span>.</span><br></pre></td></tr></table></figure>
+
+<p><code>TCP keepalive</code> 是用于 TCP 连接，当没有数据传输时，会通过定时发送探测包，维护 TCP 连接。（由操作系统实现）</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F11-38-20-image-20240324113820069.png" alt="image-20240324113820069"></p>
+<p><strong>上游连接启用 HTTP keepalive</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Vwc3RyZWFtX21vZHVsZS5odG1sI2tlZXBhbGl2ZQ==">https://nginx.org/en/docs/http/ngx_http_upstream_module.html#keepalive<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">keepalive</span> connections;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">1</span>.<span class="number">4</span>.</span><br><span class="line"></span><br><span class="line">Syntax:	keepalive_requests number;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">keepalive_requests</span> <span class="number">1000</span>;</span><br><span class="line">Context:	<span class="section">upstream</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">15</span>.<span class="number">3</span>.</span><br></pre></td></tr></table></figure>
+
+<p>使用了 HTTP 的 <code>keepalive</code>，大多数时候可以覆盖 TCP 的 <code>keepalive</code>。</p>
+<p><strong>修改 TCP 连接中的 local address</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9wcm94eV9tb2R1bGUuaHRtbCNwcm94eV9iaW5k">https://nginx.org/en/docs/stream/ngx_stream_proxy_module.html#proxy_bind<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_bind</span> address [transparent] | <span class="literal">off</span>;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">9</span>.<span class="number">2</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以使用变量：<ul>
+<li><code>proxy_bind $remote_addr;</code></li>
+</ul>
+</li>
+<li>可以使用不属于所在机器的 IP 地址：（需要有 root 权限）<ul>
+<li><code>proxy_bind $remote_addr transparent;</code></li>
+</ul>
+</li>
+</ul>
+<p>使用场景：</p>
+<ol>
+<li>如果到达上游服务器有多个路由，<code>proxy_bind</code> 可以指定 IP，而不使用系统路由</li>
+<li>透传 IP 地址</li>
+</ol>
+<p><code>proxy_bind</code> 其实是在修改 IP 报文中的 <code>Source IP Address</code></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F11-46-09-image-20240324114609246.png" alt="image-20240324114609246"></p>
+<p><strong>当客户端关闭连接时</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X2lnbm9yZV9jbGllbnRfYWJvcnQ=">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_ignore_client_abort<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_ignore_client_abort</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_ignore_client_abort</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>当下游客户端出现失败，关闭客户端到 <code>nginx</code> 的连接，<code>proxy</code> 是否要忽略这个报错，是否一并关闭。</p>
+<p><strong>向上游发送 HTTP 请求</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_send_timeout</span> time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_send_timeout</span> <span class="number">60s</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>Nginx 从接收到客户端请求，到生成请求，将请求发送给上游的超时时间。</p>
+<h2 id="接收上游的响应"><a href="#接收上游的响应" class="headerlink" title="接收上游的响应"></a>接收上游的响应</h2><p><strong>接收上游的 HTTP 响应头部</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X2J1ZmZlcl9zaXpl">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffer_size<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_buffer_size</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_buffer_size</span> <span class="number">4k</span>|<span class="number">8k</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>这个值也限制了 <code>header</code> 的大小，如果 <code>header</code> 中携带 <code>cookie</code>，超过了 <code>proxy_buffer_size</code>，那么 Nginx 无法正常处理这个请求。</p>
+<p>出现这个问题时，Nginx 日志中会出现：<code>error.log: upstream sent too big header</code></p>
+<p><strong>接收上游的 HTTP 包体</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X2J1ZmZlcnM=">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_buffers</span> number size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_buffers</span> <span class="number">8</span> <span class="number">4k</span>|<span class="number">8k</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>当指定大小的内存能存放上游的包体，则不会向磁盘中写入。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_buffering</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_buffering</span> <span class="literal">on</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>启用或禁用来自代理服务器的响应缓冲。</p>
+<ul>
+<li>当启用缓冲时，<code>nginx</code> 尽快从代理服务器接收响应，并将其保存到由 <code>proxy_buffer_size</code> 和 <code>proxy_buffers</code> 指令设置的缓冲区中。如果整个响应无法完全放入内存，则部分内容可以保存到磁盘上的临时文件中。写入临时文件受 <code>proxy_max_temp_file_size</code> 和 <code>proxy_temp_file_write_size</code> 指令控制。</li>
+<li>当禁用缓冲时，响应会同步传递给客户端，即在接收到后立即传递。Nginx 不会尝试从代理服务器读取整个响应。Nginx 一次从服务器接收数据的最大大小由 <code>proxy_buffer_size</code> 指令设置。也可以通过在 <code>X-Accel-Buffering</code> 响应头字段中传递 <code>yes</code> 或 <code>no</code> 来启用或禁用缓冲功能。此功能可通过使用 <code>proxy_ignore_headers</code> 指令进行禁用。</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_max_temp_file_size</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_max_temp_file_size</span> <span class="number">1024m</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line">Syntax:	proxy_temp_file_write_size size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_temp_file_write_size</span> <span class="number">8k</span>|<span class="number">16k</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line">Syntax:	proxy_temp_path path [level1 [level2 [level3]]];</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_temp_path</span> proxy_temp;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>及时转发包体</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_busy_buffers_size</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_busy_buffers_size</span> <span class="number">8k</span>|<span class="number">16k</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>虽然缓存响应，但是也希望更及时向客户端发送响应。此时收到 <code>8k|16k</code>（与机器相关）时，则转发给客户端。</p>
+<p><strong>接收上游时网络速度相关指令</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 两次读取上游响应操作之间的超时时间</span></span><br><span class="line">Syntax:	<span class="attribute">proxy_read_timeout</span> time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_read_timeout</span> <span class="number">60s</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 限速，限制读取上游的响应，默认为0，表示不限速</span></span><br><span class="line">Syntax:	proxy_limit_rate rate;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_limit_rate</span> <span class="number">0</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">7</span>.</span><br></pre></td></tr></table></figure>
+
+<p><strong>上游包体的持久化</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将转发的临时文件做持久化处理</span></span><br><span class="line">Syntax:	<span class="attribute">proxy_store_access</span> users:permissions ...;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_store_access</span> user:rw;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置为 on，则将文件改名存储在 root 目录下</span></span><br><span class="line">Syntax:	proxy_store on | off | string;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_store</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>启用将文件保存到磁盘。<code>on</code> 参数会将文件保存在与指令别名或根路径对应的路径中。<code>off</code> 参数会禁用文件保存功能。此外，可以使用带有变量的字符串来明确设置文件名：</p>
+<h2 id="处理上游的响应头部"><a href="#处理上游的响应头部" class="headerlink" title="处理上游的响应头部"></a>处理上游的响应头部</h2><p><strong>加工响应内容</strong></p>
+<p>当接收到请求，必须经过 HTTP 过滤模块处理，来自上游模块的响应同理。</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F12-24-16-image-20240324122416413.png" alt="image-20240324122416413"></p>
+<p><strong>禁用上游响应头部的功能</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X2lnbm9yZV9oZWFkZXJz">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_ignore_headers<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_ignore_headers</span> field ...;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>功能：某些响应头部可以改变 Nginx 的行为，使用 <code>proxy_ignore_headers</code> 可以禁止它们生效</li>
+<li>可以禁用功能的头部： “X-Accel-Redirect”, “X-Accel-Expires”, “X-Accel-Limit-Rate” (1.1.6), “X-Accel-Buffering” (1.1.6), “X-Accel-Charset” (1.1.6), “Expires”, “Cache-Control”, “Set-Cookie” (0.8.44), and “Vary” (1.7.7).</li>
+</ul>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F12-27-21-image-20240324122721081.png" alt="image-20240324122721081"></p>
+<p><strong>转发上游的响应</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_hide_header</span> field;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>功能：对上游响应中的某些头部，设置不向客户端转发</p>
+<p>默认不转发的响应头部：“Date”, “Server”, “X-Pad”, and “X-Accel-…”</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F12-30-23-image-20240324123023310.png" alt="image-20240324123023310"></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yntax:	<span class="attribute">proxy_pass_header</span> field;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>功能：对于已经被 <code>proxy_hide_header</code> 的头部，设置向客户端转发</p>
+<p><strong>修改返回的 Set-Cookie</strong> 头部</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改 cookie 中的域名</span></span><br><span class="line">Syntax:	<span class="attribute">proxy_cookie_domain</span> <span class="literal">off</span>;</span><br><span class="line"><span class="attribute">proxy_cookie_domain</span> domain replacement;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cookie_domain</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">1</span>.<span class="number">15</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改 cookie 中 url，进行替换</span></span><br><span class="line">Syntax:	proxy_cookie_path off;</span><br><span class="line"><span class="attribute">proxy_cookie_path</span> path replacement;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cookie_path</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">1</span>.<span class="number">15</span>.</span><br></pre></td></tr></table></figure>
+
+<p><strong>返回修改的 Location 头部</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_redirect</span> default;</span><br><span class="line"><span class="attribute">proxy_redirect</span> <span class="literal">off</span>;</span><br><span class="line"><span class="attribute">proxy_redirect</span> <span class="literal">redirect</span> replacement;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_redirect</span> default;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>替换上游返回的头部中的 <code>Location</code> </p>
+<h2 id="上游出现失败时的容错方案"><a href="#上游出现失败时的容错方案" class="headerlink" title="上游出现失败时的容错方案"></a>上游出现失败时的容错方案</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X25leHRfdXBzdHJlYW0=">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream<i class="fa fa-external-link-alt"></i></span></p>
+<p>当第一台上游服务器返回错误给 Nginx 时，Nginx 的一些容错方案</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_next_upstream</span> <span class="literal">error</span> | timeout | invalid_header | http_500 | http_502 | http_503 | http_504 | http_403 | http_404 | http_429 | non_idempotent | <span class="literal">off</span> ...;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_next_upstream</span> <span class="literal">error</span> timeout;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>前提：没有向客户端发送任何内容，如果向客户端发送字节了，代表这个上游已经生效，此时无法选择新的上游服务</p>
+<p>配置：（当上游返回以下情况时）</p>
+<ul>
+<li><code>error</code>：例如一些网络错误</li>
+<li><code>timeout</code>：请求超时</li>
+<li><code>invalid_header</code>：上游返回的 <code>header</code> 不合法</li>
+<li><code>http_</code>：具体的响应码</li>
+<li><code>non_idempotent</code>：通常，使用非幂等方法（<code>POST</code>、<code>LOCK</code>、<code>PATCH</code>）的请求不会被传递到下一个服务器，如果已经向上游服务器发送了请求（1.9.13）；显式启用此选项允许重试这些请求；</li>
+<li><code>off</code>：关闭将请求传递给下一个上游服务器</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 限制请求可以传递到下一个服务器的时间。值为0会关闭此限制。</span></span><br><span class="line">Syntax:	<span class="attribute">proxy_next_upstream_timeout</span> time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_next_upstream_timeout</span> <span class="number">0</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">5</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment"># 限制将请求传递给下一个服务器的尝试次数。值为 0 则关闭此限制。</span></span><br><span class="line">Syntax:	proxy_next_upstream_tries number;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_next_upstream_tries</span> <span class="number">0</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">5</span>.</span><br></pre></td></tr></table></figure>
+
+<p><strong>用 error_page</strong> 拦截上游失败响应</p>
+<p>当上游响应的响应码大于等于 <code>300</code> 时，应将响应返回客户端还是按 <code>error_page</code> 指令处理</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_intercept_errors</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_intercept_errors</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="对上游服务使用-SSL"><a href="#对上游服务使用-SSL" class="headerlink" title="对上游服务使用 SSL"></a>对上游服务使用 SSL</h2><p><strong>双向认证时的指令实例</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-01-03-image-20240324130103836.png" alt="image-20240324130103836"></p>
+<p><strong>对下游使用证书</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3NzbF9tb2R1bGUuaHRtbCNzc2xfY2VydGlmaWNhdGU=">https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">ssl_certificate</span> file;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, <span class="attribute">server</span></span><br><span class="line"></span><br><span class="line">Syntax:	ssl_certificate_key file;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure>
+
+<p><strong>验证下游证书</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">ssl_verify_client</span> <span class="literal">on</span> | <span class="literal">off</span> | optional | optional_no_ca;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">ssl_verify_client</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, <span class="attribute">server</span></span><br><span class="line"></span><br><span class="line">Syntax:	ssl_client_certificate file;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure>
+
+<p><strong>对上游使用证书</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X3NzbF9jZXJ0aWZpY2F0ZQ==">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_ssl_certificate<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_ssl_certificate</span> file;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">8</span>.</span><br><span class="line"></span><br><span class="line">Syntax:	proxy_ssl_certificate_key file;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">8</span>.</span><br></pre></td></tr></table></figure>
+
+<p><strong>验证上游使用证书</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_ssl_trusted_certificate</span> file;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">0</span>.</span><br><span class="line"></span><br><span class="line">Syntax:	proxy_ssl_verify on | off;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_ssl_verify</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">0</span>.</span><br></pre></td></tr></table></figure>
+
+<p><strong>ssl 模块提供的变量</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-09-12-image-20240324130911904.png" alt="image-20240324130911904"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-09-21-image-20240324130921799.png" alt="image-20240324130921799"></p>
+<p><strong>创建证书的示例</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-09-54-image-20240324130954075.png" alt="image-20240324130954075"></p>
+<h2 id="浏览器缓存与-Nginx-缓存"><a href="#浏览器缓存与-Nginx-缓存" class="headerlink" title="浏览器缓存与 Nginx 缓存"></a>浏览器缓存与 Nginx 缓存</h2><p>互联网中，使用缓存可以大大提升访问效率。</p>
+<ul>
+<li>浏览器缓存<ul>
+<li>优点<ul>
+<li>使用有效缓存时，没有网络消耗，速度最快</li>
+<li>即使由网络消耗，但对失效缓存使用 304 响应做到网络流量消耗最小化</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>仅提升一个用户的体验（也就是用浏览器这一个用户的体验）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Nginx 缓存<ul>
+<li>优点<ul>
+<li>提升所有用户的体验（作为入口，可以提升所有访问这个入口的用户的体验）</li>
+<li>相比浏览器缓存，有效降低上游服务的负载</li>
+<li>通过 304 响应减少 Nginx 与上游服务间的流量消耗</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>用户仍然保持网络消耗</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>同时使用浏览器缓存与 Nginx 缓存</li>
+</ul>
+<h3 id="浏览器缓存"><a href="#浏览器缓存" class="headerlink" title="浏览器缓存"></a>浏览器缓存</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-16-48-image-20240324131648320.png" alt="image-20240324131648320"></p>
+<p><strong>Etag 头部</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-17-48-image-20240324131748222.png" alt="image-20240324131748222"></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2NvcmVfbW9kdWxlLmh0bWwjZXRhZw==">https://nginx.org/en/docs/http/ngx_http_core_module.html#etag<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">etag</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">etag</span> <span class="literal">on</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">3</span>.<span class="number">3</span>.</span><br></pre></td></tr></table></figure>
+
+<p>启用或禁用静态资源的“ETag”响应头字段的自动生成。（会使用时间的16进制加上返回的字节数）</p>
+<p>生成规则</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ngx_sprintf(etag-&gt;value.data, <span class="string">&quot;\&quot;%xT-%xO\&quot;&quot;</span>, r-&gt;headers_out.last_modified_time,r-&gt;headers_out.content_length_n)</span><br></pre></td></tr></table></figure>
+
+<p><strong>If-None-Match</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-19-29-image-20240324131929612.png" alt="image-20240324131929612"></p>
+<p><strong>If-Modified-Since 头部</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-19-53-image-20240324131953402.png" alt="image-20240324131953402"></p>
+<h3 id="not-modified-过滤模块"><a href="#not-modified-过滤模块" class="headerlink" title="not_modified 过滤模块"></a>not_modified 过滤模块</h3><p>功能：用户端拥有缓存，但不确认缓存是否过期，于是在请求中传入 <code>If-Modified-Since</code> 或者 <code>If-None-Match</code> 头部，该模块通过将其值与响应中的 <code>Last-Modified</code> 值相比较，决定是通过 200 返回全部内容，还是仅返回 304 Not Modified 头部，表示浏览器仍然使用之前的缓存。</p>
+<p>使用前提：原返回响应码为 200</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2hlYWRlcnNfbW9kdWxlLmh0bWwjZXhwaXJlcw==">https://nginx.org/en/docs/http/ngx_http_headers_module.html#expires<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">expires</span> [modified] time;</span><br><span class="line"><span class="attribute">expires</span> epoch | max | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">expires</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span>, if in <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-26-14-image-20240324132614452.png" alt="image-20240324132614452"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-27-48-image-20240324132748591.png" alt="image-20240324132748591"></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2NvcmVfbW9kdWxlLmh0bWwjaWZfbW9kaWZpZWRfc2luY2U=">https://nginx.org/en/docs/http/ngx_http_core_module.html#if_modified_since<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">if_modified_since</span> <span class="literal">off</span> | exact | before;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">if_modified_since</span> exact;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">0</span>.<span class="number">7</span>.<span class="number">24</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>off</code>：忽略请求中的 <code>if_modified_since</code> 头部</li>
+<li><code>exact</code>：精确匹配 <code>if_modified_since</code> 头部与 <code>last_modified</code> 的值</li>
+<li><code>before</code>：若 <code>if_modified_since</code> 大于等于 <code>last_modified</code> 的值，则返回 304</li>
+</ul>
+<p><strong>If-Match</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-30-53-image-20240324133053594.png" alt="image-20240324133053594"></p>
+<p><strong>If-Unmodified-Since</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-31-12-image-20240324133112463.png" alt="image-20240324133112463"></p>
+<h3 id="Nginx-缓存"><a href="#Nginx-缓存" class="headerlink" title="Nginx 缓存"></a>Nginx 缓存</h3><p><strong>定义存放缓存的载体</strong></p>
+<p>配置上游服务器响应的缓存</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X2NhY2hl">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义共享内存</span></span><br><span class="line">Syntax:	<span class="attribute">proxy_cache</span> zone | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义共享内存，以及磁盘中文件存放位置</span></span><br><span class="line"><span class="comment"># keys_zone 就是上面定义的共享内存</span></span><br><span class="line">Syntax:	proxy_cache_path path [levels=levels] [use_temp_path=on|off] keys_zone=name:size [inactive=time] [max_size=size] [min_free=size] [manager_files=number] [manager_sleep=time] [manager_threshold=time] [loader_files=number] [loader_sleep=time] [loader_threshold=time] [purger=on|off] [purger_files=number] [purger_sleep=time] [purger_threshold=time];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-39-34-image-20240324133934729.png" alt="image-20240324133934729"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F13-39-50-image-20240324133950165.png" alt="image-20240324133950165"></p>
+<p>例如</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">proxy_cache_path</span> /data/nginx/cache keys_zone=cache_zone:<span class="number">10m</span>;</span><br><span class="line"></span><br><span class="line"><span class="attribute">map</span> <span class="variable">$request_method</span> <span class="variable">$purge_method</span> &#123;</span><br><span class="line">    <span class="attribute">PURGE</span>   <span class="number">1</span>;</span><br><span class="line">    <span class="attribute">default</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://backend;</span><br><span class="line">        <span class="attribute">proxy_cache</span> cache_zone;</span><br><span class="line">        <span class="attribute">proxy_cache_key</span> <span class="variable">$uri</span>;</span><br><span class="line">        <span class="attribute">proxy_cache_purge</span> <span class="variable">$purge_method</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>缓存的关键字</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_key</span> string;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_key</span> <span class="variable">$scheme</span><span class="variable">$proxy_host</span><span class="variable">$request_uri</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>缓存什么样的响应</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_valid</span> [code ...] time;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>对不同的响应码缓存不等的时长<ul>
+<li>例如：<code>code 404 5m</code></li>
+</ul>
+</li>
+<li>只标识时间<ul>
+<li>进对以下缓存码缓存<ul>
+<li>200</li>
+<li>301</li>
+<li>203</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>通过响应头部控制缓存时长<ul>
+<li><code>X-Accel-Expires</code>，单位 秒<ul>
+<li>为 0 时标识禁止 Nginx 缓存内容</li>
+<li>通过 @ 设置缓存到一天中的某一时刻</li>
+</ul>
+</li>
+<li>响应头若含有 Set-Cookie 则不缓存</li>
+<li>响应头含有 <code>Vary: *</code> 则不缓存</li>
+</ul>
+</li>
+</ul>
+<p><strong>哪些内容不使用缓存</strong></p>
+<p>参数为真，响应不存入缓存（例如有些数据存放在 cookie 中）</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_no_cache</span> string ...;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>参数为真，不使用缓存内容（即使响应存入缓存，但是不使用）</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_bypass</span> string ...;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>变更 HEAD 方法</strong></p>
+<p>可以将 HEAD 方法变更为 GET 方法</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_convert_head</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_convert_head</span> <span class="literal">on</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">9</span>.<span class="number">7</span>.</span><br></pre></td></tr></table></figure>
+
+<p>启用或禁用将 <code>HEAD</code> 方法转换为 <code>GET</code> 以进行缓存。当禁用转换时，缓存键应配置为包括 <code>$request_method</code>。</p>
+<p><strong>upstream_cache_status 变量</strong></p>
+<p>标识这个缓存的状态</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F14-01-24-image-20240324140124381.png" alt="image-20240324140124381"></p>
+<h3 id="对客户端请求的缓存处理流程"><a href="#对客户端请求的缓存处理流程" class="headerlink" title="对客户端请求的缓存处理流程"></a>对客户端请求的缓存处理流程</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F14-16-07-image-20240324141607692.png" alt="image-20240324141607692"></p>
+<p><strong>proxy_cache_methods</strong></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3Byb3h5X21vZHVsZS5odG1sI3Byb3h5X2NhY2hlX21ldGhvZHM=">https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_methods<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_methods</span> GET | HEAD | POST ...;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_methods</span> GET HEAD;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">0</span>.<span class="number">7</span>.<span class="number">59</span>.</span><br></pre></td></tr></table></figure>
+
+<h3 id="接收上游响应的缓存处理流程"><a href="#接收上游响应的缓存处理流程" class="headerlink" title="接收上游响应的缓存处理流程"></a>接收上游响应的缓存处理流程</h3><p><strong>X-Accel-Expires 头部</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F14-19-00-image-20240324141900121.png" alt="image-20240324141900121"></p>
+<p>从上游服务定义缓存多长时间：</p>
+<ul>
+<li><code>0</code> 表示不缓存当前响应</li>
+<li><code>@</code> 前缀标识缓存到当前的某个时间</li>
+</ul>
+<p><strong>Vary 头部</strong> </p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-20-37-image-20240324162037530.png" alt="image-20240324162037530"></p>
+<p><strong>Set-Cookie 头部</strong></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-21-04-image-20240324162104669.png" alt="image-20240324162104669"></p>
+<p>若 <code>Set-Cookie</code> 头部没有被 <code>proxy_ignore_headers</code> 设置忽略，则不对响应进行缓存。</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-22-00-image-20240324162200214.png" alt="image-20240324162200214"></p>
+<h3 id="减轻缓存失效时上游服务的压力"><a href="#减轻缓存失效时上游服务的压力" class="headerlink" title="减轻缓存失效时上游服务的压力"></a>减轻缓存失效时上游服务的压力</h3><p>当缓存大量失效或者重启服务，会导致缓存穿透</p>
+<p>第一种方式：合并回源请求（也叫单飞、请求收束）</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-29-40-image-20240324162940560.png" alt="image-20240324162940560"></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_lock</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_lock</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">1</span>.<span class="number">12</span>.</span><br></pre></td></tr></table></figure>
+
+<p>同一时间，仅第一个请求发向上游，其他请求等待第一个响应返回或者超时后，使用缓存响应客户端</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_lock_timeout</span> time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_lock_timeout</span> <span class="number">5s</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">1</span>.<span class="number">12</span>.</span><br></pre></td></tr></table></figure>
+
+<p>等嗲第一个请求返回响应的最大时间，到达后直接向上游发送请求，但不缓存响应</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_lock_age</span> time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_lock_age</span> <span class="number">5s</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">7</span>.<span class="number">8</span>.</span><br></pre></td></tr></table></figure>
+
+<p>上一个请求返回响应的超时时间，到达后再放行一个请求发向上游</p>
+<p>第二种方式：使用 stale 陈旧的缓存（也称作降级）</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-33-00-image-20240324163300008.png" alt="image-20240324163300008"></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置为 updating 表示使用旧缓存</span></span><br><span class="line">Syntax:	<span class="attribute">proxy_cache_use_stale</span> <span class="literal">error</span> | timeout | invalid_header | updating | http_500 | http_502 | http_503 | http_504 | http_403 | http_404 | http_429 | <span class="literal">off</span> ...;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_use_stale</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line">Syntax:	proxy_cache_background_update on | off;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_background_update</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">11</span>.<span class="number">10</span>.</span><br></pre></td></tr></table></figure>
+
+<p><code>proxy_cache_use_stale</code> 指令：定义陈旧缓存的用法</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-34-57-image-20240324163457533.png" alt="image-20240324163457533"></p>
+<p>缓存有问题的响应</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_background_update</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_background_update</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">11</span>.<span class="number">10</span>.</span><br></pre></td></tr></table></figure>
+
+<p>当使用 <code>proxy_cache_use_stale</code> 允许使用过期响应时，将同步生成一个子请求，通过访问上游服务更新过期的缓存</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_cache_revalidate</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_cache_revalidate</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">5</span>.<span class="number">7</span>.</span><br></pre></td></tr></table></figure>
+
+<p>更新缓存时，使用 <code>If-Modified-Since</code> 和 <code>If-None-Match</code> 作为请求头部，预期内容未发生变更时，通过 304 来减少传输内容。</p>
+<p>这个过程，跟浏览器和 Nginx 交互的流程一样</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-39-09-image-20240324163909591.png" alt="image-20240324163909591"></p>
+<h3 id="及时清除缓存"><a href="#及时清除缓存" class="headerlink" title="及时清除缓存"></a>及时清除缓存</h3><p>原生缓存会通过定时器决定缓存是否失效，第三方模块提供缓存立即失效的方法</p>
+<p>模块：</p>
+<ul>
+<li>第三方模块：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0ZSaUNLTEUvbmd4X2NhY2hlX3B1cmdl">https://github.com/FRiCKLE/ngx_cache_purge<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>功能：</p>
+<ul>
+<li>接收到指定 HTTP 请求后立刻清除缓存</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">syntax: <span class="attribute">proxy_cache_purge</span> <span class="literal">on</span>|<span class="literal">off</span>|&lt;method&gt; [from all|&lt;ip&gt; [.. &lt;ip&gt;]]</span><br><span class="line">default: <span class="literal">none</span></span><br><span class="line">context: http, server, location</span><br><span class="line"></span><br><span class="line">syntax: proxy_cache_purge zone_name key</span><br><span class="line">default: <span class="literal">none</span></span><br><span class="line">context: location</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他协议的反向代理"><a href="#其他协议的反向代理" class="headerlink" title="其他协议的反向代理"></a>其他协议的反向代理</h2><p>七层反向代理对照：构造请求内容</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-45-13-image-20240324164513109.png" alt="image-20240324164513109"></p>
+<p>建立连接并发送请求</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-46-07-image-20240324164607377.png" alt="image-20240324164607377"></p>
+<p>接收上游响应</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-48-00-image-20240324164800445.png" alt="image-20240324164800445"></p>
+<p>转发响应</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-48-21-image-20240324164820997.png" alt="image-20240324164820997"></p>
+<p>SSL</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-48-42-image-20240324164842013.png" alt="image-20240324164842013"></p>
+<p>缓存类指令</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-48-55-image-20240324164855206.png" alt="image-20240324164855206"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-49-05-image-20240324164905322.png" alt="image-20240324164905322"></p>
+<p>独有配置</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-49-26-image-20240324164926174.png" alt="image-20240324164926174"></p>
+<h2 id="memcached-反向代理"><a href="#memcached-反向代理" class="headerlink" title="memcached 反向代理"></a>memcached 反向代理</h2><p>应用级的反向代理</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX21lbWNhY2hlZF9tb2R1bGUuaHRtbA==">https://nginx.org/en/docs/http/ngx_http_memcached_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>功能：</p>
+<ul>
+<li>将 HTTP 请求转换为 <code>memcached</code> 协议中的 <code>get</code> 请求，转发请求至上游 memcached 服务</li>
+<li><code>get</code> 命令：<code>get &lt;key&gt;*\r\n</code>（协议简单，只能转成 <code>get</code> 请求）</li>
+<li>控制命令：<code>&lt;command name&gt; &lt;key&gt; &lt;flags&gt; &lt;exptime&gt; &lt;bytes&gt; [noreply]\r\n</code></li>
+<li>通过设置 <code>memcached_key</code> 变量构造 <code>key</code> 键</li>
+</ul>
+<p>模块默认编译进 Nginx </p>
+<p>指令：</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-53-08-image-20240324165308234.png" alt="image-20240324165308234"></p>
+<h2 id="websocket-反向代理"><a href="#websocket-反向代理" class="headerlink" title="websocket 反向代理"></a>websocket 反向代理</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL3dlYnNvY2tldC5odG1s">https://nginx.org/en/docs/http/websocket.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>让服务器主动向浏览器推送请求</p>
+<p>例如：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">location</span> /chat/ &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://backend;</span><br><span class="line">    <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Upgrade <span class="variable">$http_upgrade</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span> Connection <span class="string">&quot;upgrade&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>协议升级</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-58-34-image-20240324165834631.png" alt="image-20240324165834631"></p>
+<p><code>websocket</code> 协议帧</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-59-09-image-20240324165909743.png" alt="image-20240324165909743"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-59-24-image-20240324165924570.png" alt="image-20240324165924570"></p>
+<p><code>websocket</code> 协议和扩展</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F16-59-40-image-20240324165940695.png" alt="image-20240324165940695"></p>
+<h2 id="用分片提升缓存效率"><a href="#用分片提升缓存效率" class="headerlink" title="用分片提升缓存效率"></a>用分片提升缓存效率</h2><p>当上游服务器响应的内容很大，可以通过分片提升缓存效率</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3NsaWNlX21vZHVsZS5odG1s">https://nginx.org/en/docs/http/ngx_http_slice_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">slice</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">slice</span> <span class="number">0</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>功能：通过 <code>range</code> 协议将大文件分解为多个小文件，更好的用缓存为客户端的 <code>range</code> 协议服务</p>
+<p>默认没有编译到 Nginx</p>
+<p>运行流程：</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-04-23-image-20240324170423433.png" alt="image-20240324170423433"></p>
+<p>将文件以分块的形式构建多个请求，将多个请求的分片缓存下来。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">location</span> / &#123;</span><br><span class="line">    <span class="attribute">slice</span>             <span class="number">1m</span>;</span><br><span class="line">    <span class="attribute">proxy_cache</span>       cache;</span><br><span class="line">    <span class="attribute">proxy_cache_key</span>   <span class="variable">$uri</span><span class="variable">$is_args</span><span class="variable">$args</span><span class="variable">$slice_range</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span>  Range <span class="variable">$slice_range</span>;</span><br><span class="line">    <span class="attribute">proxy_cache_valid</span> <span class="number">200</span> <span class="number">206</span> <span class="number">1h</span>;</span><br><span class="line">    <span class="attribute">proxy_pass</span>        http://localhost:8000;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="通过-open-file-cache-提升性能"><a href="#通过-open-file-cache-提升性能" class="headerlink" title="通过 open file cache 提升性能"></a>通过 open file cache 提升性能</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2NvcmVfbW9kdWxlLmh0bWwjb3Blbl9maWxlX2NhY2hl">https://nginx.org/en/docs/http/ngx_http_core_module.html#open_file_cache<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">open_file_cache</span> <span class="literal">off</span>;</span><br><span class="line"><span class="attribute">open_file_cache</span> max=N [inactive=time];</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">open_file_cache</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p>缓存哪些元信息</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-09-12-image-20240324170912031.png" alt="image-20240324170912031"></p>
+<p>缓存文件句柄，下次使用时，可以不再重新打开文件。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">open_file_cache_errors</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">open_file_cache_errors</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line">Syntax:	open_file_cache_min_uses number;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">open_file_cache_min_uses</span> <span class="number">1</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line"></span><br><span class="line">Syntax:	open_file_cache_valid time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">open_file_cache_valid</span> <span class="number">60s</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="HTTP2-协议"><a href="#HTTP2-协议" class="headerlink" title="HTTP2 协议"></a>HTTP2 协议</h2><p>主要特性</p>
+<ul>
+<li>传输数据量的大幅减少<ul>
+<li>以二进制方式传输</li>
+<li>标头压缩（主要针对 <code>cookie</code>）</li>
+</ul>
+</li>
+<li>多路复用及相关功能<ul>
+<li>消息优先级</li>
+</ul>
+</li>
+<li>服务器消息推送<ul>
+<li>并行推送</li>
+</ul>
+</li>
+</ul>
+<h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-14-05-image-20240324171405584.png" alt="image-20240324171405584"></p>
+<ul>
+<li>连接 Connection：1个 TCP 连接，包含一个或者多个 Stream</li>
+<li>数据流 Stream：一个双向通讯数据流，包含多条 Message</li>
+<li>消息 Message：对应 HTTP1 中的请求或者响应，包含一条或者多条 Frame</li>
+<li>数据帧 Frame：最小单位，以二进制压缩格式存放 HTTP1 中的内容</li>
+</ul>
+<h3 id="协议分层"><a href="#协议分层" class="headerlink" title="协议分层"></a>协议分层</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-15-50-image-20240324171550885.png" alt="image-20240324171550885"></p>
+<h3 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-16-21-image-20240324171621202.png" alt="image-20240324171621202"></p>
+<p>传输中无序，接收时组装</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-16-57-image-20240324171657442.png" alt="image-20240324171657442"></p>
+<h3 id="数据流优先级"><a href="#数据流优先级" class="headerlink" title="数据流优先级"></a>数据流优先级</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-17-21-image-20240324171721779.png" alt="image-20240324171721779"></p>
+<ul>
+<li>每个数据流有优先级（ 1-256）</li>
+<li>数据流间可以有依赖关系</li>
+</ul>
+<h3 id="标头压缩"><a href="#标头压缩" class="headerlink" title="标头压缩"></a>标头压缩</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-18-06-image-20240324171806253.png" alt="image-20240324171806253"></p>
+<h3 id="Frame-格式"><a href="#Frame-格式" class="headerlink" title="Frame 格式"></a>Frame 格式</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-18-39-image-20240324171839166.png" alt="image-20240324171839166"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-18-45-image-20240324171845663.png" alt="image-20240324171845663"></p>
+<h3 id="服务器推送-PUSH"><a href="#服务器推送-PUSH" class="headerlink" title="服务器推送 PUSH"></a>服务器推送 PUSH</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-19-10-image-20240324171910919.png" alt="image-20240324171910919"></p>
+<h2 id="http2"><a href="#http2" class="headerlink" title="http2"></a>http2</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX3YyX21vZHVsZS5odG1s">https://nginx.org/en/docs/http/ngx_http_v2_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>默认没有编译进 Nginx</p>
+<p>功能：对客户端使用 http2 协议提供基本可能</p>
+<p>前提：开启 TLS&#x2F;SSL 协议</p>
+<p>使用方法：<code>listen 443 ssl http2;</code></p>
+<h3 id="Nginx-推送资源"><a href="#Nginx-推送资源" class="headerlink" title="Nginx 推送资源"></a>Nginx 推送资源</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-21-03-image-20240324172102999.png" alt="image-20240324172102999"></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 例如 如果上游头部添加 Link: style.css，则 Nginx 会将 style.css 文件推送给客户端</span></span><br><span class="line">Syntax:	<span class="attribute">http2_push_preload</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_push_preload</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">13</span>.<span class="number">9</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment"># 由 Nginx 配置，将对应文件推送给客户端，例如 /image.png</span></span><br><span class="line">Syntax:	http2_push uri | off;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_push</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">13</span>.<span class="number">9</span>.</span><br></pre></td></tr></table></figure>
+
+<p>测试 Nginx http2 协议的客户端工具：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25naHR0cDIvbmdodHRwMi9yZWxlYXNlcw==">https://github.com/nghttp2/nghttp2/releases<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>并发请求控制</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 最大并行推送数</span></span><br><span class="line">Syntax:	<span class="attribute">http2_max_concurrent_pushes</span> number;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_max_concurrent_pushes</span> <span class="number">10</span>;</span><br><span class="line">Context:	http, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">13</span>.<span class="number">9</span>.</span><br><span class="line"></span><br><span class="line">Syntax:	http2_max_concurrent_streams number;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_max_concurrent_streams</span> <span class="number">128</span>;</span><br><span class="line">Context:	http, <span class="attribute">server</span></span><br><span class="line"></span><br><span class="line">Syntax:	http2_max_field_size size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_max_field_size</span> <span class="number">4k</span>;</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure>
+
+<p><strong>超时控制</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">http2_recv_timeout</span> time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_recv_timeout</span> <span class="number">30s</span>;</span><br><span class="line">Context:	http, <span class="attribute">server</span></span><br><span class="line"></span><br><span class="line">Syntax:	http2_idle_timeout time;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_idle_timeout</span> <span class="number">3m</span>;</span><br><span class="line">Context:	http, server</span><br></pre></td></tr></table></figure>
+
+<p><strong>连接最大处理请求数</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">http2_max_requests</span> number;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_max_requests</span> <span class="number">1000</span>;</span><br><span class="line">Context:	http, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">11</span>.<span class="number">6</span>.</span><br><span class="line"></span><br><span class="line">Syntax:	http2_chunk_size size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_chunk_size</span> <span class="number">8k</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>设置响应包体的分片大小</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">http2_chunk_size</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_chunk_size</span> <span class="number">8k</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>缓冲区大小设置</strong></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">http2_recv_buffer_size</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_recv_buffer_size</span> <span class="number">256k</span>;</span><br><span class="line">Context:	<span class="attribute">http</span></span><br><span class="line"></span><br><span class="line">Syntax:	http2_max_header_size size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_max_header_size</span> <span class="number">16k</span>;</span><br><span class="line">Context:	http, <span class="attribute">server</span></span><br><span class="line"></span><br><span class="line">Syntax:	http2_body_preread_size size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">http2_body_preread_size</span> <span class="number">64k</span>;</span><br><span class="line">Context:	http, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">11</span>.<span class="number">0</span>.</span><br></pre></td></tr></table></figure>
+
+<h2 id="grpc-反向代理"><a href="#grpc-反向代理" class="headerlink" title="grpc 反向代理"></a>grpc 反向代理</h2><p>协议：<span class="exturl" data-url="aHR0cHM6Ly9ncnBjLmlvLw==">https://grpc.io/<i class="fa fa-external-link-alt"></i></span></p>
+<p>模块：<span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2dycGNfbW9kdWxlLmh0bWw=">https://nginx.org/en/docs/http/ngx_http_grpc_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>默认编译进 Nginx 中，依赖 <code>ngx_http_v2_module</code> 模块</p>
+<p>指令对照表</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-29-02-image-20240324172902140.png" alt="image-20240324172902140"></p>
+<p>对照 SSL 部分</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F24%2F17-29-18-image-20240324172918894.png" alt="image-20240324172918894"></p>
+<h2 id="stream-模块"><a href="#stream-模块" class="headerlink" title="stream 模块"></a>stream 模块</h2><p>四层网络功能，相比七层网络而言，四层简单很多。</p>
+<p>与七层一样，四层也支持代理，四层网络代理是代理 TCP&#x2F;UDP 请求。</p>
+<h3 id="stream-模块处理请求的-7-个阶段"><a href="#stream-模块处理请求的-7-个阶段" class="headerlink" title="stream 模块处理请求的 7 个阶段"></a>stream 模块处理请求的 7 个阶段</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-51-30-image-20240325005130744.png" alt="image-20240325005130744"></p>
+<p>模块：<span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9jb3JlX21vZHVsZS5odG1s">https://nginx.org/en/docs/stream/ngx_stream_core_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="section">stream</span> &#123; ... &#125;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="attribute">main</span></span><br><span class="line"></span><br><span class="line">Syntax:	server &#123; ... &#125;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="attribute">stream</span></span><br><span class="line"></span><br><span class="line">Syntax:	listen address:port [ssl] [udp] [proxy_protocol] [fastopen=number] [backlog=number] [rcvbuf=size] [sndbuf=size] [bind] [ipv6only=<span class="literal">on</span>|<span class="literal">off</span>] [reuseport] [so_keepalive=<span class="literal">on</span>|<span class="literal">off</span>|[keepidle]:[keepintvl]:[keepcnt]];</span><br><span class="line">Default:	—</span><br><span class="line">Context:	server</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，四层反向代理和七层反向代理在配置上的区别是：</p>
+<p>四层反向代理的配置在 <code>main</code> 下的 <code>stream</code> 配置块中；</p>
+<p>七层反向代理的配置在 <code>main</code> 下的 <code>http</code> 配置块中；</p>
+<h3 id="传输层相关的变量"><a href="#传输层相关的变量" class="headerlink" title="传输层相关的变量"></a>传输层相关的变量</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-54-40-image-20240325005440455.png" alt="image-20240325005440455"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-54-49-image-20240325005449092.png" alt="image-20240325005449092"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-55-01-image-20240325005500919.png" alt="image-20240325005500919"></p>
+<h3 id="Nginx-系统变量"><a href="#Nginx-系统变量" class="headerlink" title="Nginx 系统变量"></a>Nginx 系统变量</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-55-32-image-20240325005532502.png" alt="image-20240325005532502"></p>
+<h3 id="content-阶段"><a href="#content-阶段" class="headerlink" title="content 阶段"></a>content 阶段</h3><p><code>return</code> 模块</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">return</span> value;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	server</span><br></pre></td></tr></table></figure>
+
+<h3 id="proxy-protocol-协议"><a href="#proxy-protocol-协议" class="headerlink" title="proxy_protocol 协议"></a>proxy_protocol 协议</h3><p>网络中流量经过网关和防火墙可能会丢失真实的客户端地址，此时需要有额外协议携带真实地址。</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F00-59-32-image-20240325005932891.png" alt="image-20240325005932891"></p>
+<p>v1 协议中，填写的是：<code>源IP 目标IP 源端口 目标端口</code></p>
+<p>读取 <code>proxy_protocol</code> 协议的超时控制</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_protocol_timeout</span> timeout;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_protocol_timeout</span> <span class="number">30s</span>;</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">11</span>.<span class="number">4</span>.</span><br></pre></td></tr></table></figure>
+
+<h3 id="stream-处理-proxy-protocol-流程"><a href="#stream-处理-proxy-protocol-流程" class="headerlink" title="stream 处理 proxy_protocol 流程"></a>stream 处理 proxy_protocol 流程</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F25%2F01-01-08-image-20240325010108730.png" alt="image-20240325010108730"></p>
+<p>首先查看 Nginx 配置中是否携带 <code>listen proxy_protocol</code></p>
+<h3 id="post-accept-阶段"><a href="#post-accept-阶段" class="headerlink" title="post_accept 阶段"></a>post_accept 阶段</h3><p><strong>realip</strong> 模块</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9yZWFsaXBfbW9kdWxlLmh0bWw=">https://nginx.org/en/docs/stream/ngx_stream_realip_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>功能：通过 <code>proxy_protocol</code> 协议获取出客户端真实地址，并写入 <code>remote_addr</code> 及 <code>remote_port</code> 变量。同时使用 <code>realip_remote_addr</code> 和 <code>realip_remote_port</code> 保留 TCP 连接中获得的原始地址</p>
+<p>默认没有编译到 Nginx 中</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">set_real_ip_from</span> address | CIDR | unix:;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	stream, server</span><br></pre></td></tr></table></figure>
+
+<p>设置可行地址，从可行地址中读取对端地址。</p>
+<h3 id="preaccess-阶段的-limit-conn-模块"><a href="#preaccess-阶段的-limit-conn-模块" class="headerlink" title="preaccess 阶段的 limit_conn 模块"></a>preaccess 阶段的 limit_conn 模块</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9saW1pdF9jb25uX21vZHVsZS5odG1s">https://nginx.org/en/docs/stream/ngx_stream_limit_conn_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>功能：限制客户端的并发连接数，使用变量自定义限制依据，基于共享内存所有 <code>worker</code> 进程同时生效。</p>
+<p>默认编译进 Nginx </p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">limit_conn_zone</span> key zone=name:size;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="attribute">stream</span></span><br><span class="line"></span><br><span class="line">Syntax:	limit_conn zone number;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line"></span><br><span class="line">Syntax:	limit_conn_log_level <span class="literal">info</span> | <span class="literal">notice</span> | <span class="literal">warn</span> | <span class="literal">error</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">limit_conn_log_level</span> <span class="literal">error</span>;</span><br><span class="line">Context:	stream, server</span><br></pre></td></tr></table></figure>
+
+<h3 id="access-阶段的-access-模块"><a href="#access-阶段的-access-模块" class="headerlink" title="access 阶段的 access 模块"></a>access 阶段的 access 模块</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9hY2Nlc3NfbW9kdWxlLmh0bWw=">https://nginx.org/en/docs/stream/ngx_stream_access_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>根据客户端地址（<code>realip</code> 模块可以修改地址）决定连接的访问权限。</p>
+<p>默认编译进 Nginx 模块</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">allow</span> address | CIDR | unix: | all;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line"></span><br><span class="line">Syntax:	deny address | CIDR | unix: | all;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	stream, server</span><br></pre></td></tr></table></figure>
+
+<h3 id="log-阶段的-stream-log-模块"><a href="#log-阶段的-stream-log-模块" class="headerlink" title="log 阶段的 stream_log 模块"></a>log 阶段的 stream_log 模块</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9sb2dfbW9kdWxlLmh0bWw=">https://nginx.org/en/docs/stream/ngx_stream_log_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">access_log</span> path format [buffer=size] [gzip[=level]] [flush=time] [if=condition];</span><br><span class="line"><span class="attribute">access_log</span> <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">access_log</span> <span class="literal">off</span>;</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line"></span><br><span class="line">Syntax:	log_format name [escape=default|json|<span class="literal">none</span>] string ...;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	<span class="attribute">stream</span></span><br><span class="line"></span><br><span class="line">Syntax:	open_log_file_cache max=N [inactive=time] [min_uses=N] [valid=time];</span><br><span class="line"><span class="attribute">open_log_file_cache</span> <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">open_log_file_cache</span> <span class="literal">off</span>;</span><br><span class="line">Context:	stream, server</span><br></pre></td></tr></table></figure>
+
+<h2 id="stream-模块-TLS-SSL-应用场景"><a href="#stream-模块-TLS-SSL-应用场景" class="headerlink" title="stream 模块 TLS&#x2F;SSL 应用场景"></a>stream 模块 TLS&#x2F;SSL 应用场景</h2><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-15-49-image-20240325101549689.png" alt="image-20240325101549689"></p>
+<p>绿色代表网络安全的连接。</p>
+<p>Nginx 可以单独为客户端和上游服务提供 TLS&#x2F;SSL 协议，也可以将与客户端之间 TLS&#x2F;SSL 协议连接转换为到上游的裸 TCP 连接。同样的，也可以将与客户端的 TCP 协议转换为到上游服务的 TLS&#x2F;SSL 协议。</p>
+<h3 id="stream-中的-ssl"><a href="#stream-中的-ssl" class="headerlink" title="stream 中的 ssl"></a>stream 中的 ssl</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9zc2xfbW9kdWxlLmh0bWw=">https://nginx.org/en/docs/stream/ngx_stream_ssl_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>使 <code>stream</code> 反向代理对下游支持 TLS&#x2F;SSL 协议。</p>
+<p>默认不编译进 Nginx </p>
+<h3 id="指令对比-HTTP-模块"><a href="#指令对比-HTTP-模块" class="headerlink" title="指令对比 HTTP 模块"></a>指令对比 HTTP 模块</h3><p><code>steam</code> 中的 SSL 与 HTTP 模块中基本一致。</p>
+<p>配置基本参数</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-17-19-image-20240325101719100.png" alt="image-20240325101719100"></p>
+<p>提升性能</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-17-33-image-20240325101733785.png" alt="image-20240325101733785"></p>
+<p>验证客户端证书</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-17-48-image-20240325101748110.png" alt="image-20240325101748110"></p>
+<h3 id="ssl-模块提供的变量"><a href="#ssl-模块提供的变量" class="headerlink" title="ssl 模块提供的变量"></a>ssl 模块提供的变量</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-18-14-image-20240325101814193.png" alt="image-20240325101814193"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-18-25-image-20240325101825236.png" alt="image-20240325101825236"></p>
+<p>可以基于 stream 四层反向代理的 <code>stream_ssl_module</code> 模块解析 TLS 协议</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-19-00-image-20240325101900749.png" alt="image-20240325101900749"></p>
+<h2 id="ssl-preread-模块"><a href="#ssl-preread-模块" class="headerlink" title="ssl_preread 模块"></a>ssl_preread 模块</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9zc2xfcHJlcmVhZF9tb2R1bGUuaHRtbA==">https://nginx.org/en/docs/stream/ngx_stream_ssl_preread_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>解析下游 TLS 证书中信息，以变量方式赋能其他模块。</p>
+<p>提供变量：</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-20-25-image-20240325102025867.png" alt="image-20240325102025867"></p>
+<h3 id="preread-阶段：ssl-preread-模块"><a href="#preread-阶段：ssl-preread-模块" class="headerlink" title="preread 阶段：ssl_preread 模块"></a>preread 阶段：ssl_preread 模块</h3><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9jb3JlX21vZHVsZS5odG1sI3ByZXJlYWRfYnVmZmVyX3NpemU=">https://nginx.org/en/docs/stream/ngx_stream_core_module.html#preread_buffer_size<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">preread_buffer_size</span> size;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">preread_buffer_size</span> <span class="number">16k</span>;</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">11</span>.<span class="number">5</span>.</span><br><span class="line"></span><br><span class="line">Syntax:	preread_timeout timeout;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">preread_timeout</span> <span class="number">30s</span>;</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">11</span>.<span class="number">5</span>.</span><br><span class="line"></span><br><span class="line">Syntax:	ssl_preread <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">ssl_preread</span> <span class="literal">off</span>;</span><br><span class="line">Context:	stream, server</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-26-18-image-20240325102618341.png" alt="image-20240325102618341"></p>
+<p>通过 <code>ssl_preread</code> 模块，可以获取到下游服务请求的域名，通过域名可以对应代理到不同的上游服务。</p>
+<h2 id="反向代理-stream-proxy-模块"><a href="#反向代理-stream-proxy-模块" class="headerlink" title="反向代理 stream_proxy 模块"></a>反向代理 stream_proxy 模块</h2><p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9wcm94eV9tb2R1bGUuaHRtbA==">https://nginx.org/en/docs/stream/ngx_stream_proxy_module.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>功能：</p>
+<ul>
+<li>提供 TCP&#x2F;UDP 协议的反向代理</li>
+<li>支持与上游的连接使用 TLS&#x2F;SSL 协议</li>
+<li>支持与上游的连接使用 <code>proxy protocol</code> 协议</li>
+</ul>
+<h3 id="proxy-模块对上下游的限速指令"><a href="#proxy-模块对上下游的限速指令" class="headerlink" title="proxy 模块对上下游的限速指令"></a>proxy 模块对上下游的限速指令</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F10-32-41-image-20240325103241309.png" alt="image-20240325103241309"></p>
+<p>限制<strong>读取上游服务</strong>数据的速度</p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9wcm94eV9tb2R1bGUuaHRtbCNwcm94eV9kb3dubG9hZF9yYXRl">https://nginx.org/en/docs/stream/ngx_stream_proxy_module.html#proxy_download_rate<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_download_rate</span> rate;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_download_rate</span> <span class="number">0</span>;</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">9</span>.<span class="number">3</span>.</span><br></pre></td></tr></table></figure>
+
+<p>限制<strong>读取客户端</strong>数据的速度</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_upload_rate</span> rate;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_upload_rate</span> <span class="number">0</span>;</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">9</span>.<span class="number">3</span>.</span><br></pre></td></tr></table></figure>
+
+<h2 id="stream-反向代理指令"><a href="#stream-反向代理指令" class="headerlink" title="stream 反向代理指令"></a>stream 反向代理指令</h2><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-19-00-image-20240325111900834.png" alt="image-20240325111900834"></p>
+<p>stream ssl 指令与 http proxy 模块对照</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-20-37-image-20240325112037414.png" alt="image-20240325112037414"></p>
+<h2 id="UDP-反向代理"><a href="#UDP-反向代理" class="headerlink" title="UDP 反向代理"></a>UDP 反向代理</h2><p>在实时视频会议、音频会议的场景中，使用 UDP 的效果更好。</p>
+<p>理论</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-32-15-image-20240325113215179.png" alt="image-20240325113215179"></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9zdHJlYW0vbmd4X3N0cmVhbV9wcm94eV9tb2R1bGUuaHRtbCNwcm94eV9yZXF1ZXN0cw==">https://nginx.org/en/docs/stream/ngx_stream_proxy_module.html#proxy_requests<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_requests</span> number;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">proxy_requests</span> <span class="number">0</span>;</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">15</span>.<span class="number">7</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>指定一次会话 <code>session</code> 中最多从客户端接受到多少报文就结束 <code>session</code><ul>
+<li>仅会话结束才会记录 <code>access</code> 日志</li>
+<li>同一个会话中，Nginx 使用同一端口连接上游服务（也就是上图中的 端口C）</li>
+<li>设置为 0 表示不限制，每次请求都会记录 <code>access</code> 地址</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">proxy_responses</span> number;</span><br><span class="line">Default:	—</span><br><span class="line">Context:	stream, <span class="attribute">server</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">9</span>.<span class="number">13</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>指定对应一个请求报文，上游应返回多少个响应报文（常见的是 1，也就是一个请求一个响应，但是很多时候也不是）<ul>
+<li>与 <code>proxy_timeout</code> 结合使用，控制上游服务是否不可用</li>
+</ul>
+</li>
+</ul>
+<h2 id="透传-IP-地址"><a href="#透传-IP-地址" class="headerlink" title="透传 IP 地址"></a>透传 IP 地址</h2><p>请求通过网络设备后，很多时候可能会丢失原 IP 地址，解决方案有以下几种：</p>
+<ul>
+<li><code>proxy_protocol</code> 协议：数据载荷前端带有源IP地址和端口</li>
+<li>修改 IP 报文：IP 报文头里面有原始 IP 地址<ul>
+<li>步骤：<ul>
+<li>修改 IP 报文中的源地址</li>
+<li>修改路由规则</li>
+</ul>
+</li>
+<li>方案：<ul>
+<li>IP 地址透传，经由 Nginx 转发上游返回的报文给客户端（TCP&#x2F;UDP）</li>
+<li>DSR：上游直接发送报文给客户端（仅 UDP）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="修改源-IP-和路由"><a href="#修改源-IP-和路由" class="headerlink" title="修改源 IP 和路由"></a>修改源 IP 和路由</h3><p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-47-36-image-20240325114736275.png" alt="image-20240325114736275"></p>
+<p>操作：</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-48-56-image-20240325114856854.png" alt="image-20240325114856854"></p>
+<p>DSR 方案</p>
+<p>方案1：修改 TCP 中的源 IP 和源端口，修改路由，返回经由 Nginx 出口</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-50-06-image-20240325115006285.png" alt="image-20240325115006285"></p>
+<p>方案二：修改 TCP 中的源 IP 和源端口，在上游服务进程中，修改源地址为网关，可去掉路由。</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-50-24-image-20240325115024477.png" alt="image-20240325115024477"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F03%2F25%2F11-54-17-image-20240325115417485.png" alt="image-20240325115417485"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Reference/" rel="tag"># 学习笔记</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/post/4b7bcf38.html" rel="prev" title="Nginx架构、阶段、模块">
+                  <i class="fa fa-angle-left"></i> Nginx架构、阶段、模块
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Mitaka xu</span>
+  </div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <span class="exturl github-corner" data-url="aHR0cHM6Ly9naXRodWIuY29tL3hpYW95ZXNoaXl1" title="Follow me on GitHub" aria-label="Follow me on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></span>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.28/fancybox/fancybox.umd.js" integrity="sha256-ytMJGN3toR+a84u7g7NuHm91VIR06Q41kMWDr2pq7Zo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"TVx6Wkfs8VJGOwYPurtjWY2e-9Nh9j0Va","app_key":"c7VvaRnyF8r3DUIPq1x2KJ7Q","server_url":"https://tvx6wkfs.lc-cn-e1-shared.com","security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/2.3.0/quicklink.umd.js" integrity="sha256-yvJQOINiH9fWemHn0vCA5lsHWJaHs6/ZmO+1Ft04SvM=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://www.xiaoyeshiyu.com/post/4cec1707.html"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"xiaoyeshiyu","count":false,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
