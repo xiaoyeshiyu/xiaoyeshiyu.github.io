@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-03-25T03:59:19.569Z</updated>
+  <updated>2024-03-25T12:03:49.810Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx 系统层面性能优化</title>
+    <link href="https://www.xiaoyeshiyu.com/post/31bd10f.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/31bd10f.html</id>
+    <published>2024-03-24T16:00:00.000Z</published>
+    <updated>2024-03-25T12:03:49.810Z</updated>
+    
+    
+    <summary type="html">进一步提高QPS，可以针对使用场景进行优化</summary>
+    
+    
+    
+    <category term="Nginx" scheme="https://www.xiaoyeshiyu.com/categories/Nginx/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
   
   <entry>
     <title>Nginx负载均衡和反向代理</title>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">这篇文章将探讨微服务架构中关键的可观察性工具之一——链路追踪。我们将深入研究链路追踪的概念，重点介绍它在微服务环境中的作用和优势。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>微服务可观察性之日志</title>
-    <link href="https://www.xiaoyeshiyu.com/post/cfd3.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/cfd3.html</id>
-    <published>2023-11-29T16:00:00.000Z</published>
-    <updated>2023-12-06T03:51:43.543Z</updated>
-    
-    
-    <summary type="html">这篇文章将深入探讨微服务架构中的可观察性，着重于日志记录作为关键的监控和调试工具。</summary>
     
     
     
