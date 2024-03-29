@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-03-25T12:03:49.810Z</updated>
+  <updated>2024-03-28T08:46:45.514Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,30 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Elasticsearch 介绍</title>
+    <link href="https://www.xiaoyeshiyu.com/post/ff89bae5.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/ff89bae5.html</id>
+    <published>2024-03-25T16:00:00.000Z</published>
+    <updated>2024-03-28T08:46:45.514Z</updated>
+    
+    
+    <summary type="html">Elasticsearch 是一个开源的分布式搜索与分析引擎，提供了近实时搜索和聚合两大功能。</summary>
+    
+    
+    
+    <category term="Elasticsearch" scheme="https://www.xiaoyeshiyu.com/categories/Elasticsearch/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Nginx 系统层面性能优化</title>
     <link href="https://www.xiaoyeshiyu.com/post/31bd10f.html"/>
     <id>https://www.xiaoyeshiyu.com/post/31bd10f.html</id>
     <published>2024-03-24T16:00:00.000Z</published>
-    <updated>2024-03-25T12:03:49.810Z</updated>
+    <updated>2024-03-26T01:28:34.767Z</updated>
     
     
     <summary type="html">进一步提高QPS，可以针对使用场景进行优化</summary>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">这篇文章将探讨DNS（域名系统）和CDN（内容分发网络）的重要性和功能，介绍一些常见的DNS和CDN优化策略，以提高网站的可用性、安全性和性能。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>微服务可观察性之链路追踪</title>
-    <link href="https://www.xiaoyeshiyu.com/post/c682.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/c682.html</id>
-    <published>2023-12-05T16:00:00.000Z</published>
-    <updated>2023-12-07T02:19:38.552Z</updated>
-    
-    
-    <summary type="html">这篇文章将探讨微服务架构中关键的可观察性工具之一——链路追踪。我们将深入研究链路追踪的概念，重点介绍它在微服务环境中的作用和优势。</summary>
     
     
     
