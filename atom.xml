@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-03-28T08:46:45.514Z</updated>
+  <updated>2024-04-01T02:03:48.191Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,86 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Elasticsearch 利用 ELK 做大数据分析</title>
+    <link href="https://www.xiaoyeshiyu.com/post/36f79291.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/36f79291.html</id>
+    <published>2024-03-30T16:00:00.000Z</published>
+    <updated>2024-04-01T02:03:48.191Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;Logstash-入门及架构介绍&quot;&gt;&lt;a href=&quot;#Logstash-入门及架构介绍&quot; class=&quot;headerlink&quot; title=&quot;Logstash 入门及架构介绍&quot;&gt;&lt;/a&gt;Logstash 入门及架构介绍&lt;/h1&gt;&lt;p&gt;Logstash：ELT</summary>
+        
+      
+    
+    
+    
+    <category term="Elasticsearch" scheme="https://www.xiaoyeshiyu.com/categories/Elasticsearch/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Elasticsearch 集群管理</title>
+    <link href="https://www.xiaoyeshiyu.com/post/944b9f5e.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/944b9f5e.html</id>
+    <published>2024-03-29T16:00:00.000Z</published>
+    <updated>2024-03-31T09:36:35.334Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;集群身份认证与用户鉴权&quot;&gt;&lt;a href=&quot;#集群身份认证与用户鉴权&quot; class=&quot;headerlink&quot; title=&quot;集群身份认证与用户鉴权&quot;&gt;&lt;/a&gt;集群身份认证与用户鉴权&lt;/h1&gt;&lt;p&gt;如果 es</summary>
+        
+      
+    
+    
+    
+    <category term="Elasticsearch" scheme="https://www.xiaoyeshiyu.com/categories/Elasticsearch/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Elasticsearch 搜索、聚合和数据建模</title>
+    <link href="https://www.xiaoyeshiyu.com/post/f969d9e9.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/f969d9e9.html</id>
+    <published>2024-03-27T16:00:00.000Z</published>
+    <updated>2024-04-01T02:03:41.898Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;基于词项和基于全文的检索&quot;&gt;&lt;a href=&quot;#基于词项和基于全文的检索&quot; class=&quot;headerlink&quot; title=&quot;基于词项和基于全文的检索&quot;&gt;&lt;/a&gt;基于词项和基于全文的检索&lt;/h1&gt;&lt;h2 id=&quot;基于-Term-的查询&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Elasticsearch" scheme="https://www.xiaoyeshiyu.com/categories/Elasticsearch/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Elasticsearch 介绍</title>
     <link href="https://www.xiaoyeshiyu.com/post/ff89bae5.html"/>
     <id>https://www.xiaoyeshiyu.com/post/ff89bae5.html</id>
     <published>2024-03-25T16:00:00.000Z</published>
-    <updated>2024-03-28T08:46:45.514Z</updated>
+    <updated>2024-03-29T03:16:32.206Z</updated>
     
     
     <summary type="html">Elasticsearch 是一个开源的分布式搜索与分析引擎，提供了近实时搜索和聚合两大功能。</summary>
@@ -329,63 +404,6 @@
     
     
     <summary type="html">Go runtime 的内存分配是其高效性和并发性的关键组成部分之一。Go 在内存分配方面采用了一些策略和算法，以提供快速的内存分配和高效的垃圾回收。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go runtime之 Goroutine 原理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/c06b.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/c06b.html</id>
-    <published>2023-12-12T16:00:00.000Z</published>
-    <updated>2023-12-22T09:03:26.911Z</updated>
-    
-    
-    <summary type="html">Goroutine 是 Go 编程语言中一种轻量级的并发执行单元，它是 Go runtime 的核心特性之一。Goroutine 允许开发者以一种简单、高效且可扩展的方式编写并发代码。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>多活</title>
-    <link href="https://www.xiaoyeshiyu.com/post/b09f.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/b09f.html</id>
-    <published>2023-12-10T16:00:00.000Z</published>
-    <updated>2023-12-12T08:33:33.122Z</updated>
-    
-    
-    <summary type="html">本文将探讨多活（Multi-Region）架构在现代云计算和分布式系统中的重要性和应用。多活是一种设计原则和技术，通过在服务范围内部署多个数据中心或区域，实现高可用性、弹性和容错能力。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DNS &amp; CND</title>
-    <link href="https://www.xiaoyeshiyu.com/post/9a24.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/9a24.html</id>
-    <published>2023-12-06T16:00:00.000Z</published>
-    <updated>2023-12-12T08:31:38.476Z</updated>
-    
-    
-    <summary type="html">这篇文章将探讨DNS（域名系统）和CDN（内容分发网络）的重要性和功能，介绍一些常见的DNS和CDN优化策略，以提高网站的可用性、安全性和性能。</summary>
     
     
     
