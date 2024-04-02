@@ -27,12 +27,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="集群身份认证与用户鉴权如果 es 安全功能没有打开，很容易引起数据泄露。  Elasticsearch 在默认安装后，不提供任何形式的安全防护（老版本） 错误的配置信息导致公网可以访问 ES 集群  在 elasticsearch.yml 文件中， server.host 被错误的配置为 0.0.0.0    数据安全性的基本需求  身份认证  鉴定用户是否合法   用户鉴权  指定那个用户可以访">
+    <meta name="description" content="Elasticsearch 一般会以集群的方式部署在生产环境中，有更好的性能和更高的可用性。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elasticsearch 集群管理">
 <meta property="og:url" content="https://www.xiaoyeshiyu.com/post/944b9f5e.html">
 <meta property="og:site_name" content="小夜时雨">
-<meta property="og:description" content="集群身份认证与用户鉴权如果 es 安全功能没有打开，很容易引起数据泄露。  Elasticsearch 在默认安装后，不提供任何形式的安全防护（老版本） 错误的配置信息导致公网可以访问 ES 集群  在 elasticsearch.yml 文件中， server.host 被错误的配置为 0.0.0.0    数据安全性的基本需求  身份认证  鉴定用户是否合法   用户鉴权  指定那个用户可以访">
+<meta property="og:description" content="Elasticsearch 一般会以集群的方式部署在生产环境中，有更好的性能和更高的可用性。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F30%2F14-13-49-image-20240330141349407.png">
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F30%2F14-24-20-image-20240330142420734.png">
@@ -120,7 +120,7 @@
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F31%2F13-20-04-image-20240331132004883.png">
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F31%2F13-28-53-image-20240331132853388.png">
 <meta property="article:published_time" content="2024-03-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-03-31T09:36:35.334Z">
+<meta property="article:modified_time" content="2024-04-01T03:26:53.159Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -255,13 +255,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">143</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -312,7 +312,7 @@
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="Elasticsearch 集群管理 | 小夜时雨">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="Elasticsearch 一般会以集群的方式部署在生产环境中，有更好的性能和更高的可用性。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -334,7 +334,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-03-31 17:36:35" itemprop="dateModified" datetime="2024-03-31T17:36:35+08:00">2024-03-31</time>
+      <time title="Modified: 2024-04-01 11:26:53" itemprop="dateModified" datetime="2024-04-01T11:26:53+08:00">2024-04-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -356,6 +356,7 @@
     </span>
 </div>
 
+            <div class="post-description">Elasticsearch 一般会以集群的方式部署在生产环境中，有更好的性能和更高的可用性。</div>
         </div>
       </header>
 

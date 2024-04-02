@@ -27,12 +27,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Logstash 入门及架构介绍Logstash：ELT 工具 &#x2F; 数据搜集处理引擎。支持 200 多个插件  Logstash ConceptsLogstash 的概念：  Pipeline 包含了 input-filter-output 三个阶段的处理流程 插件生命周期管理 队列管理   Logstash Event 数据在内部流转时的具体表现形式。数据在 input 阶段被转换为">
+    <meta name="description" content="ELK 的优势是可以基于大量的 ES 数据实现大数据分析，以视图和报表的形式展示出来。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elasticsearch 利用 ELK 做大数据分析">
 <meta property="og:url" content="https://www.xiaoyeshiyu.com/post/36f79291.html">
 <meta property="og:site_name" content="小夜时雨">
-<meta property="og:description" content="Logstash 入门及架构介绍Logstash：ELT 工具 &#x2F; 数据搜集处理引擎。支持 200 多个插件  Logstash ConceptsLogstash 的概念：  Pipeline 包含了 input-filter-output 三个阶段的处理流程 插件生命周期管理 队列管理   Logstash Event 数据在内部流转时的具体表现形式。数据在 input 阶段被转换为">
+<meta property="og:description" content="ELK 的优势是可以基于大量的 ES 数据实现大数据分析，以视图和报表的形式展示出来。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F31%2F11-34-12-image-20240331113412571.png">
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F31%2F11-35-53-image-20240331113553411.png">
@@ -76,7 +76,7 @@
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F31%2F12-57-43-image-20240331125743691.png">
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F31%2F13-01-30-image-20240331130129973.png">
 <meta property="article:published_time" content="2024-03-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-04-01T02:03:48.191Z">
+<meta property="article:modified_time" content="2024-04-01T03:25:18.358Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -211,13 +211,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">143</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -268,7 +268,7 @@
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
       <meta itemprop="name" content="Elasticsearch 利用 ELK 做大数据分析 | 小夜时雨">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="ELK 的优势是可以基于大量的 ES 数据实现大数据分析，以视图和报表的形式展示出来。">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -290,7 +290,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-01 10:03:48" itemprop="dateModified" datetime="2024-04-01T10:03:48+08:00">2024-04-01</time>
+      <time title="Modified: 2024-04-01 11:25:18" itemprop="dateModified" datetime="2024-04-01T11:25:18+08:00">2024-04-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -312,6 +312,7 @@
     </span>
 </div>
 
+            <div class="post-description">ELK 的优势是可以基于大量的 ES 数据实现大数据分析，以视图和报表的形式展示出来。</div>
         </div>
       </header>
 
@@ -840,6 +841,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/post/4748c1d.html" rel="next" title="Zookeeper 学习笔记">
+                  Zookeeper 学习笔记 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>

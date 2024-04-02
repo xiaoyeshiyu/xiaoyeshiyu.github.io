@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-04-01T02:03:48.191Z</updated>
+  <updated>2024-04-02T07:51:17.683Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,20 +17,33 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Zookeeper 学习笔记</title>
+    <link href="https://www.xiaoyeshiyu.com/post/4748c1d.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/4748c1d.html</id>
+    <published>2024-03-31T16:00:00.000Z</published>
+    <updated>2024-04-02T07:51:17.683Z</updated>
+    
+    
+    <summary type="html">Zookeeper 是一个应用非常广泛的分布式一致性系统。</summary>
+    
+    
+    
+    <category term="Zookeeper" scheme="https://www.xiaoyeshiyu.com/categories/Zookeeper/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Elasticsearch 利用 ELK 做大数据分析</title>
     <link href="https://www.xiaoyeshiyu.com/post/36f79291.html"/>
     <id>https://www.xiaoyeshiyu.com/post/36f79291.html</id>
     <published>2024-03-30T16:00:00.000Z</published>
-    <updated>2024-04-01T02:03:48.191Z</updated>
+    <updated>2024-04-01T03:25:18.358Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;Logstash-入门及架构介绍&quot;&gt;&lt;a href=&quot;#Logstash-入门及架构介绍&quot; class=&quot;headerlink&quot; title=&quot;Logstash 入门及架构介绍&quot;&gt;&lt;/a&gt;Logstash 入门及架构介绍&lt;/h1&gt;&lt;p&gt;Logstash：ELT</summary>
-        
-      
+    <summary type="html">ELK 的优势是可以基于大量的 ES 数据实现大数据分析，以视图和报表的形式展示出来。</summary>
     
     
     
@@ -46,16 +59,10 @@
     <link href="https://www.xiaoyeshiyu.com/post/944b9f5e.html"/>
     <id>https://www.xiaoyeshiyu.com/post/944b9f5e.html</id>
     <published>2024-03-29T16:00:00.000Z</published>
-    <updated>2024-03-31T09:36:35.334Z</updated>
+    <updated>2024-04-01T03:26:53.159Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;集群身份认证与用户鉴权&quot;&gt;&lt;a href=&quot;#集群身份认证与用户鉴权&quot; class=&quot;headerlink&quot; title=&quot;集群身份认证与用户鉴权&quot;&gt;&lt;/a&gt;集群身份认证与用户鉴权&lt;/h1&gt;&lt;p&gt;如果 es</summary>
-        
-      
+    <summary type="html">Elasticsearch 一般会以集群的方式部署在生产环境中，有更好的性能和更高的可用性。</summary>
     
     
     
@@ -71,16 +78,10 @@
     <link href="https://www.xiaoyeshiyu.com/post/f969d9e9.html"/>
     <id>https://www.xiaoyeshiyu.com/post/f969d9e9.html</id>
     <published>2024-03-27T16:00:00.000Z</published>
-    <updated>2024-04-01T02:03:41.898Z</updated>
+    <updated>2024-04-01T03:27:58.605Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;h1 id=&quot;基于词项和基于全文的检索&quot;&gt;&lt;a href=&quot;#基于词项和基于全文的检索&quot; class=&quot;headerlink&quot; title=&quot;基于词项和基于全文的检索&quot;&gt;&lt;/a&gt;基于词项和基于全文的检索&lt;/h1&gt;&lt;h2 id=&quot;基于-Term-的查询&quot;&gt;&lt;a</summary>
-        
-      
+    <summary type="html">Elasticsearch 的巨大优势体现在复杂检索、聚合能力上。</summary>
     
     
     
@@ -385,25 +386,6 @@
     
     
     <summary type="html">Go runtime 的垃圾回收（Garbage Collection）是实现自动内存管理的关键组成部分。Go 的垃圾回收器采用了一系列策略和算法，旨在提供高效的内存回收，并减少开发者对内存管理的负担。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go runtime之内存分配</title>
-    <link href="https://www.xiaoyeshiyu.com/post/ab88.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/ab88.html</id>
-    <published>2023-12-14T16:00:00.000Z</published>
-    <updated>2024-03-14T08:51:26.424Z</updated>
-    
-    
-    <summary type="html">Go runtime 的内存分配是其高效性和并发性的关键组成部分之一。Go 在内存分配方面采用了一些策略和算法，以提供快速的内存分配和高效的垃圾回收。</summary>
     
     
     
