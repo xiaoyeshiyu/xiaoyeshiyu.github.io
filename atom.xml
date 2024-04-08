@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-04-02T07:53:33.852Z</updated>
+  <updated>2024-04-07T13:42:18.905Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Canal</title>
+    <link href="https://www.xiaoyeshiyu.com/post/2040d45d.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/2040d45d.html</id>
+    <published>2024-04-06T16:00:00.000Z</published>
+    <updated>2024-04-07T13:42:18.905Z</updated>
+    
+    
+    <summary type="html">日常工作过程中，经常会有一些异步方案，将持久化的数据进一步处理，例如写入缓存、ES，以及数据变更订阅。最常用的中间件就是 canal。</summary>
+    
+    
+    
+    <category term="Canal" scheme="https://www.xiaoyeshiyu.com/categories/Canal/"/>
+    
+    
+    <category term="开发技巧" scheme="https://www.xiaoyeshiyu.com/tags/developer/"/>
+    
+  </entry>
   
   <entry>
     <title>Zookeeper 学习笔记</title>
@@ -154,7 +173,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/4b7bcf38.html"/>
     <id>https://www.xiaoyeshiyu.com/post/4b7bcf38.html</id>
     <published>2024-03-18T16:00:00.000Z</published>
-    <updated>2024-03-25T01:59:49.547Z</updated>
+    <updated>2024-04-03T06:20:17.461Z</updated>
     
     
     <summary type="html">Nginx 以其强大的性能闻名，核心是它的架构模型和请求处理过程和能力。</summary>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">通道是 Go 语言中用于协程之间通信的重要机制。通过阻塞和同步的方式，通道实现了安全的数据传递和协程之间的同步操作。通道的实现依赖于调度器和锁机制，通过队列和阻塞机制实现数据的传递。通道在并发编程中具有广泛的应用场景，可以提高程序的可靠性和性能。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Go runtime之 GC</title>
-    <link href="https://www.xiaoyeshiyu.com/post/ede3.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/ede3.html</id>
-    <published>2023-12-20T16:00:00.000Z</published>
-    <updated>2023-12-29T08:11:29.875Z</updated>
-    
-    
-    <summary type="html">Go runtime 的垃圾回收（Garbage Collection）是实现自动内存管理的关键组成部分。Go 的垃圾回收器采用了一系列策略和算法，旨在提供高效的内存回收，并减少开发者对内存管理的负担。</summary>
     
     
     

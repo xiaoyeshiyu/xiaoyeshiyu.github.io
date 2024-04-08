@@ -90,7 +90,7 @@
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F22%2F23-14-03-image-20240322231403898.png">
 <meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/homework%2FPicGo%2F2024%2F03%2F23%2F14-00-48-image-20240323140048843.png">
 <meta property="article:published_time" content="2024-03-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-03-25T01:59:49.547Z">
+<meta property="article:modified_time" content="2024-04-03T06:20:17.461Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -225,13 +225,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">144</span>
+          <span class="site-state-item-count">145</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -304,7 +304,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-03-25 09:59:49" itemprop="dateModified" datetime="2024-03-25T09:59:49+08:00">2024-03-25</time>
+      <time title="Modified: 2024-04-03 14:20:17" itemprop="dateModified" datetime="2024-04-03T14:20:17+08:00">2024-04-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -334,7 +334,7 @@
     
     
     <div class="post-body" itemprop="articleBody"><h1 id="初识-Nginx"><a href="#初识-Nginx" class="headerlink" title="初识 Nginx"></a>初识 Nginx</h1><h2 id="Nginx-三个主要应用场景"><a href="#Nginx-三个主要应用场景" class="headerlink" title="Nginx 三个主要应用场景"></a>Nginx 三个主要应用场景</h2><ol>
-<li>静态资源服务<ul>
+<li>mir静态资源服务<ul>
 <li>通过本地文件系统提供服务：例如直接提供一些 h5 资源（html,css）或者图片等静态资源</li>
 </ul>
 </li>
@@ -1320,7 +1320,7 @@
 <figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[error] 10156<span class="params">#0</span>: *10723 open() &quot;/html/first/2.txt/root/2.txt&quot; failed (2: No such file or directory)</span><br></pre></td></tr></table></figure>
 
 <h4 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h4><p><code>static</code> 模块实现了 <code>root/alias</code> 功能时，发现访问目标是目录，但 <code>URL</code> 末尾未加 <code>/</code> 时，会返回 301 重定向。</p>
-<p>此时可以根据不同的配置实现不同的效果：、</p>
+<p>此时可以根据不同的配置实现不同的效果：</p>
 <p>打开之后，重定向的 <code>Location</code> 内的内容就是主域名中的域名</p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2NvcmVfbW9kdWxlLmh0bWwjc2VydmVyX25hbWVfaW5fcmVkaXJlY3Q=">https://nginx.org/en/docs/http/ngx_http_core_module.html#server_name_in_redirect<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">server_name_in_redirect</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">server_name_in_redirect</span> <span class="literal">off</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
@@ -1333,7 +1333,7 @@
 <p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2NvcmVfbW9kdWxlLmh0bWwjYWJzb2x1dGVfcmVkaXJlY3Q=">https://nginx.org/en/docs/http/ngx_http_core_module.html#absolute_redirect<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">absolute_redirect</span> <span class="literal">on</span> | <span class="literal">off</span>;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">absolute_redirect</span> <span class="literal">on</span>;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br><span class="line">This directive appeared in version <span class="number">1</span>.<span class="number">11</span>.<span class="number">8</span>.</span><br></pre></td></tr></table></figure>
 
-<h4 id="index-模块"><a href="#index-模块" class="headerlink" title="index 模块"></a>index 模块</h4><p>指定&#x2F;访问时返回 <code>index</code> 文件内容（当访问的 <code>url</code> 以 <code>/</code> 结尾时，回去查找目录下是否有 <code>index.html</code> 文件）</p>
+<h4 id="index-模块"><a href="#index-模块" class="headerlink" title="index 模块"></a>index 模块</h4><p>指定&#x2F;访问时返回 <code>index</code> 文件内容（当访问的 <code>url</code> 以 <code>/</code> 结尾时，会去查找目录下是否有 <code>index.html</code> 文件）</p>
 <p><span class="exturl" data-url="aHR0cHM6Ly9uZ2lueC5vcmcvZW4vZG9jcy9odHRwL25neF9odHRwX2luZGV4X21vZHVsZS5odG1sI2luZGV4">https://nginx.org/en/docs/http/ngx_http_index_module.html#index<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	<span class="attribute">index</span> file ...;</span><br><span class="line">Default:	</span><br><span class="line"><span class="attribute">index</span> index.html;</span><br><span class="line">Context:	http, server, <span class="section">location</span></span><br></pre></td></tr></table></figure>
 
