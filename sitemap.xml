@@ -1380,7 +1380,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/MySQL/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/</loc>
     <lastmod>2024-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1401,14 +1401,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
-    <lastmod>2024-04-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/MySQL/</loc>
     <lastmod>2024-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1422,14 +1415,21 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/OpenStack/</loc>
     <lastmod>2024-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/Golang/</loc>
+    <lastmod>2024-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/git/</loc>
     <lastmod>2024-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1485,13 +1485,6 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/k8s/</loc>
-    <lastmod>2024-04-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://www.xiaoyeshiyu.com/categories/Zookeeper/</loc>
     <lastmod>2024-04-15</lastmod>
     <changefreq>weekly</changefreq>
@@ -1499,7 +1492,7 @@
   </url>
   
   <url>
-    <loc>https://www.xiaoyeshiyu.com/categories/microservice/</loc>
+    <loc>https://www.xiaoyeshiyu.com/categories/k8s/</loc>
     <lastmod>2024-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1507,6 +1500,13 @@
   
   <url>
     <loc>https://www.xiaoyeshiyu.com/categories/Redis/</loc>
+    <lastmod>2024-04-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.xiaoyeshiyu.com/categories/microservice/</loc>
     <lastmod>2024-04-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
