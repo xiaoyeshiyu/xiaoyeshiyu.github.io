@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.xiaoyeshiyu.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.19.1","exturl":true,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"fold":{"enable":true,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":false,"nav":null,"activeClass":"disqus"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在Go语言的开发过程中，良好的工程化实践是确保项目可维护性和可扩展性的关键。其中一个重要的方面是包管理，它涉及到如何有效地组织、引入和管理依赖的外部包。">
 <meta property="og:type" content="article">
@@ -181,7 +181,7 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -295,14 +295,14 @@
 
 <p>会将代码下载到 <code>$GOPATH/github.com/foo/bar</code></p>
 <p><code>GOPATH</code> 具体结构如下，必须包含三个文件夹，具体如下图所示：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GOPATH</span><br><span class="line">├── bin								// 编译生成的二进制文件</span><br><span class="line">├── pkg								// 预编译文件，以加快程序的后续编译速度</span><br><span class="line">└── src								// 所有源代码</span><br><span class="line">			├── gitee.com</span><br><span class="line">			├── github.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GOPATH</span><br><span class="line">├── bin                                // 编译生成的二进制文件</span><br><span class="line">├── pkg                                // 预编译文件，以加快程序的后续编译速度</span><br><span class="line">└── src                                // 所有源代码</span><br><span class="line">            ├── gitee.com</span><br><span class="line">            ├── github.com</span><br></pre></td></tr></table></figure>
 
 <h2 id="Using-Go-Modules"><a href="#Using-Go-Modules" class="headerlink" title="Using Go Modules"></a>Using Go Modules</h2><p>Go Modules 是从 Go 1.11 开始初步支持，解决了依赖版本的信息管理，并且保证安全性。</p>
 <p>主要通过 <code>go.mod</code> 和 <code>go.sum</code> 组成，主要包括依赖模块路径定义，以及通过 <code>checksum</code> 方式进行保证包的安全性。并且可以在 GOPATH 外进行创建和编译项目。</p>
 <p>通过 <code>go mod init xxx</code> 初始化一个项目</p>
 <p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017160148904.png" alt="image-20231017160148904"></p>
 <p>使用时</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> log <span class="string">&quot;github.com/sirupsen/logrus&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	log.Info(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> log <span class="string">&quot;github.com/sirupsen/logrus&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    log.Info(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>通过 <code>go get github.com/sirupsen/logrus </code> ，可以下载或者更新依赖包，也可以指定版本 <code>path@v1.8.1</code></p>
 <p><img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/10/image-20231017160804276.png" alt="image-20231017160804276"></p>
@@ -342,7 +342,7 @@
 
 <p>GOPROXY 配置信息</p>
 <p>goproxy 运行配置信息：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">./goproxy --help</span><br><span class="line">Usage of ./goproxy:</span><br><span class="line">  -cacheDir string</span><br><span class="line">    	Go Modules cache dir, default is $GOPATH/pkg/mod/cache/download 【指定 Go 模块的缓存目录】</span><br><span class="line">  -cacheExpire duration</span><br><span class="line">    	Go Modules cache expiration (min), default is 5 min (default 5m0s) 【缓存过期时间】</span><br><span class="line">  -exclude string</span><br><span class="line">    	exclude host pattern, you can exclude internal Git services   【proxy 模式下指定哪些 path 不经过上游服务器】</span><br><span class="line">  -listen string</span><br><span class="line">    	service listen address (default &quot;0.0.0.0:8081&quot;) 【服务监听端口，默认8081】</span><br><span class="line">  -proxy string</span><br><span class="line">    	next hop proxy for Go Modules, recommend use https://goproxy.io 【指定上游 proxy server，推荐 goproxy.io】</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">./goproxy --help</span><br><span class="line">Usage of ./goproxy:</span><br><span class="line">  -cacheDir string</span><br><span class="line">        Go Modules cache dir, default is $GOPATH/pkg/mod/cache/download 【指定 Go 模块的缓存目录】</span><br><span class="line">  -cacheExpire duration</span><br><span class="line">        Go Modules cache expiration (min), default is 5 min (default 5m0s) 【缓存过期时间】</span><br><span class="line">  -exclude string</span><br><span class="line">        exclude host pattern, you can exclude internal Git services   【proxy 模式下指定哪些 path 不经过上游服务器】</span><br><span class="line">  -listen string</span><br><span class="line">        service listen address (default &quot;0.0.0.0:8081&quot;) 【服务监听端口，默认8081】</span><br><span class="line">  -proxy string</span><br><span class="line">        next hop proxy for Go Modules, recommend use https://goproxy.io 【指定上游 proxy server，推荐 goproxy.io】</span><br></pre></td></tr></table></figure>
 
 <h2 id="GOPROXY-访问内网仓库"><a href="#GOPROXY-访问内网仓库" class="headerlink" title="GOPROXY 访问内网仓库"></a>GOPROXY 访问内网仓库</h2><p>goproxy 配置访问公司内网的 <code>git server</code>：</p>
 <ul>
@@ -379,8 +379,8 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/post/c73a.html" rel="prev" title="Go工程化实践之测试">
-                  <i class="fa fa-angle-left"></i> Go工程化实践之测试
+                <a href="/post/70.html" rel="prev" title="Go工程化实践之配置管理">
+                  <i class="fa fa-angle-left"></i> Go工程化实践之配置管理
                 </a>
             </div>
             <div class="post-nav-item">
