@@ -382,7 +382,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/52fe.html"/>
     <id>https://www.xiaoyeshiyu.com/post/52fe.html</id>
     <published>2023-12-24T16:00:00.000Z</published>
-    <updated>2023-12-26T01:21:17.740Z</updated>
+    <updated>2024-04-15T03:51:22.316Z</updated>
     
     
     <summary type="html">通道是 Go 语言中用于协程之间通信的重要机制。通过阻塞和同步的方式，通道实现了安全的数据传递和协程之间的同步操作。通道的实现依赖于调度器和锁机制，通过队列和阻塞机制实现数据的传递。通道在并发编程中具有广泛的应用场景，可以提高程序的可靠性和性能。</summary>
