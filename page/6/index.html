@@ -116,19 +116,15 @@
   <span class="search-icon">
     <i class="fa fa-search"></i>
   </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="Searching..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
+  <div class="search-input-container"></div>
   <span class="popup-btn-close" role="button">
     <i class="fa fa-times-circle"></i>
   </span>
 </div>
-<div class="search-result-container no-result">
-  <div class="search-result-icon">
-    <i class="fa fa-spinner fa-pulse fa-5x"></i>
-  </div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
 </div>
 
     </div>
@@ -208,7 +204,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/4a89.html">
+    <link itemprop="mainEntityOfPage" href="https://www.xiaoyeshiyu.com/post/6058.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -226,7 +222,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/post/4a89.html" class="post-title-link" itemprop="url">s3实现视频分片预览</a>
+          <a href="/post/6058.html" class="post-title-link" itemprop="url">使用protobuf validate自定义报错内容</a>
         </h2>
 
         <div class="post-meta-container">
@@ -244,7 +240,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-09-20 15:53:01" itemprop="dateModified" datetime="2023-09-20T15:53:01+08:00">2023-09-20</time>
+      <time title="Modified: 2023-09-07 17:39:03" itemprop="dateModified" datetime="2023-09-07T17:39:03+08:00">2023-09-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -252,12 +248,12 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Application/" itemprop="url" rel="index"><span itemprop="name">应用软件</span></a>
+          <a href="/categories/microservice/" itemprop="url" rel="index"><span itemprop="name">微服务</span></a>
         </span>
     </span>
 
   
-    <span id="/post/4a89.html" class="post-meta-item leancloud_visitors" data-flag-title="s3实现视频分片预览" title="Views">
+    <span id="/post/6058.html" class="post-meta-item leancloud_visitors" data-flag-title="使用protobuf validate自定义报错内容" title="Views">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -273,10 +269,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>在一些支持分段获取文件的服务中，通过Range获取指定分片，可以分段获取文件而不用将文件整个下载下来。</p>
+          <p>使用protocol之后，更加符合微服务开发规范，并且定义即文档，开发效率大大提高。但是protobuf无法实现自定义报错内容，所幸这个功能Google已经在考虑，并且在validate的beta版本已经实现。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/post/4a89.html">
+              <a class="btn" href="/post/6058.html">
                 Read more &raquo;
               </a>
             </div>
@@ -1237,8 +1233,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/js/third-party/search/local-search.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
 
 
 

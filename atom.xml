@@ -287,7 +287,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/ea1d.html"/>
     <id>https://www.xiaoyeshiyu.com/post/ea1d.html</id>
     <published>2024-01-17T16:00:00.000Z</published>
-    <updated>2024-01-24T10:25:04.918Z</updated>
+    <updated>2024-04-16T08:32:26.091Z</updated>
     
     
     <summary type="html">调度器和控制器是 Kubernetes 上非常重要的两个组件：调度器负责智能地分配容器化应用程序的工作负载到集群中的节点，以优化性能和资源利用率；控制器负责维护系统的期望状态，通过监控和自动化手段确保集群中的应用程序始终符合定义的规范。</summary>
@@ -344,7 +344,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/ff15.html"/>
     <id>https://www.xiaoyeshiyu.com/post/ff15.html</id>
     <published>2024-01-03T16:00:00.000Z</published>
-    <updated>2024-01-10T10:37:44.335Z</updated>
+    <updated>2024-04-16T08:27:26.465Z</updated>
     
     
     <summary type="html">探讨 Kubernetes 核心设计原理和对象模型，通过详细分析 Kubernetes 的架构设计原则，以及对象如何在 Kubernetes 中发挥作用，了解这个开源容器编排平台的内部运作机制理解 Kubernetes 的设计哲学和对象模型，并探索如何有效地利用这些概念来构建可靠、可扩展的容器化应用程序。</summary>

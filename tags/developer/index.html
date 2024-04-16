@@ -116,19 +116,15 @@
   <span class="search-icon">
     <i class="fa fa-search"></i>
   </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off" maxlength="80"
-           placeholder="Searching..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
+  <div class="search-input-container"></div>
   <span class="popup-btn-close" role="button">
     <i class="fa fa-times-circle"></i>
   </span>
 </div>
-<div class="search-result-container no-result">
-  <div class="search-result-icon">
-    <i class="fa fa-spinner fa-pulse fa-5x"></i>
-  </div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
 </div>
 
     </div>
@@ -291,8 +287,8 @@
       </div>
 
       <div class="post-title">
-        <a class="post-title-link" href="/post/6058.html" itemprop="url">
-          <span itemprop="name">使用protobuf validate自定义报错内容</span>
+        <a class="post-title-link" href="/post/4a89.html" itemprop="url">
+          <span itemprop="name">s3实现视频分片预览</span>
         </a>
       </div>
 
@@ -311,8 +307,8 @@
       </div>
 
       <div class="post-title">
-        <a class="post-title-link" href="/post/4a89.html" itemprop="url">
-          <span itemprop="name">s3实现视频分片预览</span>
+        <a class="post-title-link" href="/post/6058.html" itemprop="url">
+          <span itemprop="name">使用protobuf validate自定义报错内容</span>
         </a>
       </div>
 
@@ -340,13 +336,96 @@
     </header>
   </article>
 
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2023-01-16T00:00:00+08:00"
+              content="2023-01-16">
+          01-16
+        </time>
+      </div>
+
+      <div class="post-title">
+        <a class="post-title-link" href="/post/48a2.html" itemprop="url">
+          <span itemprop="name">Golang代码质量持续检测</span>
+        </a>
+      </div>
+
+      
+    </header>
+  </article>
+    <div class="collection-year">
+      <span class="collection-header">2022</span>
+    </div>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2022-09-27T00:00:00+08:00"
+              content="2022-09-27">
+          09-27
+        </time>
+      </div>
+
+      <div class="post-title">
+        <a class="post-title-link" href="/post/8e69.html" itemprop="url">
+          <span itemprop="name">使用md5盐值加密存储密码</span>
+        </a>
+      </div>
+
+      
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2022-09-26T00:00:00+08:00"
+              content="2022-09-26">
+          09-26
+        </time>
+      </div>
+
+      <div class="post-title">
+        <a class="post-title-link" href="/post/2755.html" itemprop="url">
+          <span itemprop="name">GORM学习笔记</span>
+        </a>
+      </div>
+
+      
+    </header>
+  </article>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2022-07-28T00:00:00+08:00"
+              content="2022-07-28">
+          07-28
+        </time>
+      </div>
+
+      <div class="post-title">
+        <a class="post-title-link" href="/post/cdfa.html" itemprop="url">
+          <span itemprop="name">Gin的参数校验器validator</span>
+        </a>
+      </div>
+
+      
+    </header>
+  </article>
+
     </div>
   </div>
   
   
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/tags/developer/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/tags/developer/page/4/">4</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/tags/developer/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/tags/developer/page/2/">2</a><a class="extend next" rel="next" title="Next page" aria-label="Next page" href="/tags/developer/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -392,8 +471,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
-<script src="/js/third-party/search/local-search.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/4.20.0/algoliasearch-lite.umd.js" integrity="sha256-DABVk+hYj0mdUzo+7ViJC6cwLahQIejFvC+my2M/wfM=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/4.60.0/instantsearch.production.min.js" integrity="sha256-9242vN47QUX50UG5Gf5XDO1YREWCEJRyXHofh5fsl24=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
 
 
 
