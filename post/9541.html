@@ -42,7 +42,8 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918122346214.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918130620395.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131049700.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20220918131605478.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F17-54-01-image-20240416175401351.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F17-54-28-image-20240416175408091.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131843777.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918132532871.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918133110695.png">
@@ -52,7 +53,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918134928006.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918135324085.png">
 <meta property="article:published_time" content="2022-09-17T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-08T01:53:30.045Z">
+<meta property="article:modified_time" content="2024-04-16T09:54:34.313Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -262,7 +263,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-09-08 09:53:30" itemprop="dateModified" datetime="2023-09-08T09:53:30+08:00">2023-09-08</time>
+      <time title="Modified: 2024-04-16 17:54:34" itemprop="dateModified" datetime="2024-04-16T17:54:34+08:00">2024-04-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -399,9 +400,9 @@
 <p> 先通过对象的大小，查找到具体的分类（二分法），然后在对应的span中申请内存。</p>
 <p>申请内存时都会给他们一个mspan这样的单元会不会产生浪费。</p>
 <p>其实mcache持有的这一系列的mspac并不都是统一大小的，而是啊按照大小，从8byte到32kb分了大概67*2类的mspan（指针类型和非指针类型，所以要乘以2）。</p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F17-54-01-image-20240416175401351.png" alt="image-20240416175401351"></p>
 <p>每个内存页分了多级固定大小的”空闲列表“，这有助于减少碎片。类似的思路在Linux Kernel，Memcache都可以见到Slab-Allactor。</p>
-<img data-src="../../../../../Library/Application%20Support/typora-user-images/image-20220918131605478.png" alt="image-20220918131605478" style="zoom:25%;" />
-
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F17-54-28-image-20240416175408091.png" alt="image-20240416175408091"></p>
 <p> 例如一个标记为黄色，代表该内存已经被使用。此时需要找到下一个空闲的object。</p>
 <p>如果分配内存时mcache里没有空闲的对口sizeclass的mspan了，Go里还为每种类别的mspan维护着一个mcentral。</p>
 <img data-src="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918131843777.png" alt="image-20220918131843777" style="zoom:33%;" />

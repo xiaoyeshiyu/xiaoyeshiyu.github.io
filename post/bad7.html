@@ -38,16 +38,16 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240116130437048.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117145603076.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117145823918.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20240117150609156.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20240117152456469.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-40-image-20240117150609156.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-43-image-20240117152456469.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117164936287.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117172551578.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20240117172909954.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-45-image-20240117172909954.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117173135949.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2024/01/image-20240117173434981.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20240117174933551.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-47-image-20240117174933551.png">
 <meta property="article:published_time" content="2024-01-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-01-18T09:03:38.183Z">
+<meta property="article:modified_time" content="2024-04-16T10:03:01.660Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -257,7 +257,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-18 17:03:38" itemprop="dateModified" datetime="2024-01-18T17:03:38+08:00">2024-01-18</time>
+      <time title="Modified: 2024-04-16 18:03:01" itemprop="dateModified" datetime="2024-04-16T18:03:01+08:00">2024-04-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -452,7 +452,7 @@
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span> </span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">    <span class="comment"># &quot;namespace&quot; omitted since ClusterRoles are not namespaced</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">secret-reader</span> </span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]</span><br><span class="line">    <span class="attr">resources:</span> [<span class="string">&quot;secrets&quot;</span>]</span><br><span class="line">    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;list&quot;</span>]</span><br></pre></td></tr></table></figure>
 
 <h2 id="binding"><a href="#binding" class="headerlink" title="binding"></a>binding</h2><p>将用户和角色绑定起来</p>
-<p><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117150609156.png" alt="image-20240117150609156"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-40-image-20240117150609156.png" alt="image-20240117150609156"></p>
 <p>RoleBinding 示例</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This role binding allows &quot;dave&quot; to read secrets in the &quot;development&quot; namespace.</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">RoleBinding</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">read-secrets</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">development</span> <span class="comment"># This only grants permissions within the &quot;development&quot; namespace.</span></span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">User</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">dave</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">secret-reader</span></span><br><span class="line">  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br></pre></td></tr></table></figure>
 
@@ -463,7 +463,7 @@
 <li>当与外部认证系统对接时，用户信息（<code>UserInfo</code>）可包含 <code>Group</code> 信息，授权可针对用户群组</li>
 <li>当对 <code>ServiceAccount</code> 授权时，<code>Group</code> 代表某个 Namespace 下的所有 <code>ServiceAccount</code></li>
 </ul>
-<p><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117152456469.png" alt="image-20240117152456469"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-43-image-20240117152456469.png" alt="image-20240117152456469"></p>
 <h3 id="针对群组授权"><a href="#针对群组授权" class="headerlink" title="针对群组授权"></a>针对群组授权</h3><p>将 <code>secret-reader</code> 这个 <code>clusterRole</code> 授权给 <code>manager</code> 这个群组</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span> </span><br><span class="line"><span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">read-secrets-global</span> </span><br><span class="line"><span class="attr">subjects:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">Group</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">manager</span> <span class="comment"># &#x27;name&#x27; 是区分大小写的</span></span><br><span class="line">    <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span> </span><br><span class="line"><span class="attr">roleRef:</span></span><br><span class="line">    <span class="attr">kind:</span> <span class="string">ClusterRole</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">secret-reader</span></span><br><span class="line">    <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span></span><br></pre></td></tr></table></figure>
 
@@ -605,7 +605,7 @@
 <p>当请求的时间大于当前窗口的最大时间时，则将计时窗口向前平移一个小窗口。</p>
 <p>平移时，将第一个小窗口的数据丢弃，然后将第二个小窗口设置为第一个小窗口，同时在最后面新增一个小窗口，将新的请求放在新增的小窗口中。</p>
 <p>同时要保证整个窗口中所有小窗口的请求数目之后不能超过设定的阈值。</p>
-<p><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117172909954.png" alt="image-20240117172909954"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-45-image-20240117172909954.png" alt="image-20240117172909954"></p>
 <p>这个算法不准确，一样会出现两个窗口峰值</p>
 <h2 id="漏斗算法"><a href="#漏斗算法" class="headerlink" title="漏斗算法"></a>漏斗算法</h2><p>漏斗算法的原理也很容易理解。请求来了之后，会首先进到漏斗里，然后漏斗以恒定的速率将请求流出进行处理，从而起到平滑流量的作用。</p>
 <p>当请求的流量过大时，漏斗达到最大容量时会溢出，此时请求被丢弃。</p>
@@ -677,7 +677,7 @@
 </ul>
 </li>
 </ul>
-<p><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20240117174933551.png" alt="image-20240117174933551"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-47-image-20240117174933551.png" alt="image-20240117174933551"></p>
 <p>不同的等级划分为不同的 Flow，当某个请求阻塞，不影响其他的 Flow。</p>
 <ul>
 <li>APF 的实现依赖两个非常重要的资源 FlowSchema, PriorityLevelConfiguration</li>

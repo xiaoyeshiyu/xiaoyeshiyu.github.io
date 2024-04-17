@@ -42,7 +42,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918215343800.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918220016592.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918220512045.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20220918221243078.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-07-image-20240416180207261.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918221939296.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918222917762.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/09/image-20220918223048189.png">
@@ -57,7 +57,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726101606183.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2022/07/image-20220726102814647.png">
 <meta property="article:published_time" content="2022-09-18T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-08T01:53:47.439Z">
+<meta property="article:modified_time" content="2024-04-16T10:02:11.033Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -267,7 +267,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-09-08 09:53:47" itemprop="dateModified" datetime="2023-09-08T09:53:47+08:00">2023-09-08</time>
+      <time title="Modified: 2024-04-16 18:02:11" itemprop="dateModified" datetime="2024-04-16T18:02:11+08:00">2024-04-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -416,8 +416,7 @@
 <p>扫描所有root对象，包括全局指针和goroutine（G）栈上的指针（扫描对应G栈时需要停止该G），将其加入扫描队列（灰色队列），并循环处理灰色队列的对象，直到灰色队列为空，该过程后台并行执行。</p>
 <p>完成标记工作，重新扫描（re-scan）全局指针和栈。因为Mark和mutator是并行的，所以在mark过程中可能会有新的对象分配和指针赋值，这个时候就需要通过写屏障记录下来，re-scan再检查一下，这个过程也是会STW的，按照标记结果回收所有的白色对象，该过程后台并发执行。</p>
 <h3 id="删屏障"><a href="#删屏障" class="headerlink" title="删屏障"></a>删屏障</h3><p>删除屏障 Yuasa，也是拦截写操作的，但是是通过保护灰色对象到白色对象的路径不会断来实现的。</p>
-<img data-src="../../../../../Library/Application%20Support/typora-user-images/image-20220918221243078.png" alt="image-20220918221243078" style="zoom:33%;" />
-
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-07-image-20240416180207261.png" alt="image-20240416180207261"></p>
 <p>如图，在删除指针e时，将对象C标记为灰色，这样下游的所有白色对象，即使会被黑色对象引用，最终也还是会被扫描标记的，满足了弱三色不变式。这种方式的回报精度低，一个对象即使被删除了最后一个指向它的指针也依旧可以活过这一轮在下一轮GC中被清理掉。</p>
 <h3 id="混合屏障"><a href="#混合屏障" class="headerlink" title="混合屏障"></a>混合屏障</h3><p>插入屏障和删除屏障各有优缺点。</p>
 <p>插入屏障在标记开始时无需STW，可直接开始，并发进行，但是结束时需要STW来重新扫描栈，标记栈上引用的白色对象的存活。</p>

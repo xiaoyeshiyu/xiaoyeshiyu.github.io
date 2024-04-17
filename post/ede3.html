@@ -47,7 +47,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231221173659501.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231221173723290.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231221174042797.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20231221174744989.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-23-image-20231221174744989.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231221175235970.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222095343409.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222095618791.png">
@@ -56,7 +56,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222103525738.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222103057305.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222103622421.png">
-<meta property="og:image" content="https://www.xiaoyeshiyu.com/Library/Application%20Support/typora-user-images/image-20231222104551165.png">
+<meta property="og:image" content="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-27-image-20231222104551165.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231229105910802.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222105747171.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222105854334.png">
@@ -72,7 +72,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222113231890.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/xiaoyeshiyu/image-hosting-service/main/uPic/2023/12/image-20231222113247773.png">
 <meta property="article:published_time" content="2023-12-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-12-29T08:11:29.875Z">
+<meta property="article:modified_time" content="2024-04-16T10:02:29.528Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -282,7 +282,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-29 16:11:29" itemprop="dateModified" datetime="2023-12-29T16:11:29+08:00">2023-12-29</time>
+      <time title="Modified: 2024-04-16 18:02:29" itemprop="dateModified" datetime="2024-04-16T18:02:29+08:00">2024-04-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -407,7 +407,7 @@
 <p>由于 <code>struct2</code> 的实例是在匿名函数中创建的，并且无法从堆栈访问，因此它保持为白色，可以清楚。</p>
 <p>颜色在内部实现原理：</p>
 <p>每个 <code>span</code> 中有一个名为 <code>gcmarkBits</code> 的位图属性，该属性跟踪扫描，并将相应的位设置为1.</p>
-<p><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20231221174744989.png" alt="image-20231221174744989"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-23-image-20231221174744989.png" alt="image-20231221174744989"></p>
 <p>可以看到 1.5 版本和之前的版本相比，在 GC 过程中 Pauses 的时间对比。到 1.5 版本已经优化的非常好了。</p>
 <h1 id="Write-Barrier"><a href="#Write-Barrier" class="headerlink" title="Write Barrier"></a>Write Barrier</h1><p>1.5 版本在标记过程中使用三色标记法。回收过程主要有四个阶段，其中，<strong>标记和清扫都并发执行</strong>的。但标记阶段的前后需要 STW 一定时间来做 GC 的准备工作和栈的 <code>re-scan</code>。</p>
 <p>使用并发的垃圾回收，也就是多个 <code>Mutator</code> 与 <code>Mark</code> 并发执行，想要在并发或者增量的标记算法中保证正确性，我们需要达成以下两种三色不变性（<code>Tri-color invariant</code>）中的任意一种：</p>
@@ -495,7 +495,7 @@
 <li>如果对象 B 在栈上，引用堆上的白色对象 C，将其引用关系删除，且新增一个黑色对象 A 到对象 C 的应用，那么就需要通过 <code>shade(ptr)</code> 来保护了，在指针 f 插入黑色对象时会触发对对象 C 的置灰操作。如果栈已经被扫描过了，那么栈上引用的对象都是灰色或受灰色保护的白色对象了，所以就没有必要再进行这步操作。</li>
 </ul>
 <p>由于结合 Yuasa 的删除写屏障和 Dijkstra 的插入写屏障的优点，只需要在开始时并发扫描各个 <code>goroutine</code> 的栈，使其变黑并一直保持，这个过程不需要 STW，而标记结束后，因为栈在扫描后始终是黑色的，也无需再进行 <code>re-scan</code> 操作了，减少了 STW 的时间。</p>
-<p><img data-src="/../../../../../../Library/Application%20Support/typora-user-images/image-20231222104551165.png" alt="image-20231222104551165"></p>
+<p><img data-src="https://image-hosting-xiaoyeshiyu-shanghai.oss-cn-shanghai.aliyuncs.com/img/PicGo%2F2024%2F04%2F16%2F18-02-27-image-20231222104551165.png" alt="image-20231222104551165"></p>
 <ul>
 <li><p>第一阶段：gc开始</p>
 <ol>
