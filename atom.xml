@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-04-08T01:24:51.815Z</updated>
+  <updated>2024-05-08T06:59:56.150Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>K8s源码阅读笔记之 API Server 生成和启动</title>
+    <link href="https://www.xiaoyeshiyu.com/post/7d689b97.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/7d689b97.html</id>
+    <published>2024-04-22T16:00:00.000Z</published>
+    <updated>2024-05-08T06:59:56.150Z</updated>
+    
+    
+    <summary type="html">无论是开发 kubernetes 还是开发上层应用，都需要对 k8s 源码有深入理解。因此这里记录一下源码阅读过程，增加记忆和理解。本篇主要是 API Server，版本是 1.29.4</summary>
+    
+    
+    
+    <category term="k8s 源码走读" scheme="https://www.xiaoyeshiyu.com/categories/k8s-%E6%BA%90%E7%A0%81%E8%B5%B0%E8%AF%BB/"/>
+    
+    
+    <category term="kubernetes" scheme="https://www.xiaoyeshiyu.com/tags/kubernetes/"/>
+    
+  </entry>
   
   <entry>
     <title>Canal</title>
@@ -371,25 +390,6 @@
     
     
     <category term="云原生训练营" scheme="https://www.xiaoyeshiyu.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>channel原理</title>
-    <link href="https://www.xiaoyeshiyu.com/post/52fe.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/52fe.html</id>
-    <published>2023-12-24T16:00:00.000Z</published>
-    <updated>2024-04-15T03:51:22.316Z</updated>
-    
-    
-    <summary type="html">通道是 Go 语言中用于协程之间通信的重要机制。通过阻塞和同步的方式，通道实现了安全的数据传递和协程之间的同步操作。通道的实现依赖于调度器和锁机制，通过队列和阻塞机制实现数据的传递。通道在并发编程中具有广泛的应用场景，可以提高程序的可靠性和性能。</summary>
-    
-    
-    
-    <category term="Go训练营" scheme="https://www.xiaoyeshiyu.com/categories/GoTrainingCamp/"/>
     
     
     <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
