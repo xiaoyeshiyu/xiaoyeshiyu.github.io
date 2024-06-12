@@ -35,7 +35,7 @@
 <meta property="og:description" content="面向对象编程的三大核心：封装、继承、多态。其中封装和继承通过结构体局部引用或者全局引用，接口体方法局部引用或全局引用实现，多态则是通过定义接口，而接口方法可以在多种结构体中实现而实现。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-09-08T01:53:17.433Z">
+<meta property="article:modified_time" content="2024-05-30T06:57:17.084Z">
 <meta property="article:author" content="Mitaka xu">
 <meta property="article:tag" content="学习笔记">
 <meta name="twitter:card" content="summary">
@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -244,7 +244,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-09-08 09:53:17" itemprop="dateModified" datetime="2023-09-08T09:53:17+08:00">2023-09-08</time>
+      <time title="Modified: 2024-05-30 14:57:17" itemprop="dateModified" datetime="2024-05-30T14:57:17+08:00">2024-05-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -354,7 +354,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type iface struct &#123;</span><br><span class="line">    tab  *itab							// 存放接口自身类型及方法指针信息</span><br><span class="line">    data unsafe.Pointer			// 数据信息</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>​	<code>iface</code>的结构有两个指针字段</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">itab 用来存放接口自身类型，和绑定的实例类型，以及实例相关的函数指针</span><br><span class="line">data 指向接口绑定的实力的副本，接口的初始化也是一种值烤白</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">itab 用来存放接口自身类型，和绑定的实例类型，以及实例相关的函数指针</span><br><span class="line">data 指向接口绑定的实力的副本，接口的初始化也是一种值拷贝</span><br></pre></td></tr></table></figure>
 
 <p><code>data</code>指向具体的实例数据，传递个接口的是值类型，则<code>data</code>指向指的副本，如果传递的是指针类型，<code>data</code>执行的是指针的副本。无论是接口的转换还是函数调用，都是值传递。</p>
 <p><code>itab</code>的数据结构</p>

@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-05-30T03:56:42.883Z</updated>
+  <updated>2024-06-12T07:21:39.904Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,30 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>LeetCode Hot100笔记-下</title>
+    <link href="https://www.xiaoyeshiyu.com/post/6663603b.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/6663603b.html</id>
+    <published>2024-06-06T16:00:00.000Z</published>
+    <updated>2024-06-12T07:21:39.904Z</updated>
+    
+    
+    <summary type="html">现在面试肯定有笔试环节，大部分的笔试题在 ht100 中又可以找到相似的思路。笔者在刷的时候对里面的知识点再次细化一下，感触颇深。本篇文章是下部分，包含另外的 50 道题。</summary>
+    
+    
+    
+    <category term="算法" scheme="https://www.xiaoyeshiyu.com/categories/algorithm/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>LeetCode Hot100笔记-上</title>
     <link href="https://www.xiaoyeshiyu.com/post/116450ad.html"/>
     <id>https://www.xiaoyeshiyu.com/post/116450ad.html</id>
     <published>2024-05-27T16:00:00.000Z</published>
-    <updated>2024-05-30T03:56:42.883Z</updated>
+    <updated>2024-06-12T07:21:54.878Z</updated>
     
     
     <summary type="html">现在面试肯定有笔试环节，大部分的笔试题在 ht100 中又可以找到相似的思路。笔者在刷的时候对里面的知识点再次细化一下，感触颇深。本篇文章是上部分，包含 50 道题。</summary>
@@ -78,7 +97,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/4748c1d.html"/>
     <id>https://www.xiaoyeshiyu.com/post/4748c1d.html</id>
     <published>2024-03-31T16:00:00.000Z</published>
-    <updated>2024-04-09T01:57:01.578Z</updated>
+    <updated>2024-05-30T07:13:23.909Z</updated>
     
     
     <summary type="html">Zookeeper 是一个应用非常广泛的分布式一致性系统。</summary>
@@ -116,7 +135,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/944b9f5e.html"/>
     <id>https://www.xiaoyeshiyu.com/post/944b9f5e.html</id>
     <published>2024-03-29T16:00:00.000Z</published>
-    <updated>2024-04-01T03:26:53.159Z</updated>
+    <updated>2024-05-30T09:22:59.652Z</updated>
     
     
     <summary type="html">Elasticsearch 一般会以集群的方式部署在生产环境中，有更好的性能和更高的可用性。</summary>
@@ -192,7 +211,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/4cec1707.html"/>
     <id>https://www.xiaoyeshiyu.com/post/4cec1707.html</id>
     <published>2024-03-22T16:00:00.000Z</published>
-    <updated>2024-03-25T03:59:19.569Z</updated>
+    <updated>2024-05-30T07:11:32.529Z</updated>
     
     
     <summary type="html">Nginx 使用的比较多的是它的负载均衡和反向代理能力，作为网关或者 LB。</summary>
@@ -211,7 +230,7 @@
     <link href="https://www.xiaoyeshiyu.com/post/4b7bcf38.html"/>
     <id>https://www.xiaoyeshiyu.com/post/4b7bcf38.html</id>
     <published>2024-03-18T16:00:00.000Z</published>
-    <updated>2024-04-03T06:20:17.461Z</updated>
+    <updated>2024-05-30T07:06:47.482Z</updated>
     
     
     <summary type="html">Nginx 以其强大的性能闻名，核心是它的架构模型和请求处理过程和能力。</summary>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">分布式键值存储系统 etcd 在 Kubernetes 架构中的关键作用。</summary>
-    
-    
-    
-    <category term="云原生训练营" scheme="https://www.xiaoyeshiyu.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Kubernetes 架构原则和对象设计</title>
-    <link href="https://www.xiaoyeshiyu.com/post/ff15.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/ff15.html</id>
-    <published>2024-01-03T16:00:00.000Z</published>
-    <updated>2024-04-16T08:27:26.465Z</updated>
-    
-    
-    <summary type="html">探讨 Kubernetes 核心设计原理和对象模型，通过详细分析 Kubernetes 的架构设计原则，以及对象如何在 Kubernetes 中发挥作用，了解这个开源容器编排平台的内部运作机制理解 Kubernetes 的设计哲学和对象模型，并探索如何有效地利用这些概念来构建可靠、可扩展的容器化应用程序。</summary>
     
     
     
