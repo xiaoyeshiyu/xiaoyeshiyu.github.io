@@ -6,7 +6,7 @@
   <link href="https://www.xiaoyeshiyu.com/atom.xml" rel="self"/>
   
   <link href="https://www.xiaoyeshiyu.com/"/>
-  <updated>2024-06-12T07:21:39.904Z</updated>
+  <updated>2024-06-30T09:00:42.281Z</updated>
   <id>https://www.xiaoyeshiyu.com/</id>
   
   <author>
@@ -17,11 +17,30 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>PHP 学习笔记</title>
+    <link href="https://www.xiaoyeshiyu.com/post/c2140f2a.html"/>
+    <id>https://www.xiaoyeshiyu.com/post/c2140f2a.html</id>
+    <published>2024-06-22T16:00:00.000Z</published>
+    <updated>2024-06-30T09:00:42.281Z</updated>
+    
+    
+    <summary type="html">近期接手的项目大多是老 PHP 语言的项目，需要维护和升级，甚至有些需要使用 golang 重构，以前零散学习的 PHP 就有点不够用，这里重新学习一遍，做笔记记录一下。</summary>
+    
+    
+    
+    <category term="PHP" scheme="https://www.xiaoyeshiyu.com/categories/PHP/"/>
+    
+    
+    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
+    
+  </entry>
+  
+  <entry>
     <title>LeetCode Hot100笔记-下</title>
     <link href="https://www.xiaoyeshiyu.com/post/6663603b.html"/>
     <id>https://www.xiaoyeshiyu.com/post/6663603b.html</id>
     <published>2024-06-06T16:00:00.000Z</published>
-    <updated>2024-06-12T07:21:39.904Z</updated>
+    <updated>2024-06-12T07:22:00.298Z</updated>
     
     
     <summary type="html">现在面试肯定有笔试环节，大部分的笔试题在 ht100 中又可以找到相似的思路。笔者在刷的时候对里面的知识点再次细化一下，感触颇深。本篇文章是下部分，包含另外的 50 道题。</summary>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">Kubernetes 控制平面的核心引擎之一，API Server 扮演着整个系统的关键角色。作为 Kubernetes 集群的掌控中心，API Server 负责接收、处理和管理集群中的所有资源对象，从而实现集群的协同工作和资源编排。</summary>
-    
-    
-    
-    <category term="云原生训练营" scheme="https://www.xiaoyeshiyu.com/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E8%AE%AD%E7%BB%83%E8%90%A5/"/>
-    
-    
-    <category term="学习笔记" scheme="https://www.xiaoyeshiyu.com/tags/Reference/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Kubernetes 控制平面组件：etcd</title>
-    <link href="https://www.xiaoyeshiyu.com/post/387e.html"/>
-    <id>https://www.xiaoyeshiyu.com/post/387e.html</id>
-    <published>2024-01-09T16:00:00.000Z</published>
-    <updated>2024-01-24T05:55:00.370Z</updated>
-    
-    
-    <summary type="html">分布式键值存储系统 etcd 在 Kubernetes 架构中的关键作用。</summary>
     
     
     
